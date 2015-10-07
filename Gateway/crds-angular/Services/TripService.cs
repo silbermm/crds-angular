@@ -456,6 +456,9 @@ namespace crds_angular.Services
             var answers = new List<FormAnswer>();
 
             var page2 = applicationData.PageTwo;
+            answers.Add(new FormAnswer {Response = page2.Allergies, FieldId = 90});
+
+
             FormatAnswer(page2.Allergies, answers);
             FormatAnswer(page2.Conditions, answers);
             FormatAnswer(page2.GuardianFirstName, answers);

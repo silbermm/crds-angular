@@ -40,199 +40,188 @@ namespace crds_angular.Models.Crossroads.Trip
         public class ApplicationPageTwo
         {
             [JsonProperty(PropertyName = "allergies")]
-            public TripApplicationField Allergies { get; set; }
+            public string Allergies { get; set; }
 
             [JsonProperty(PropertyName = "conditions")]
-            public TripApplicationField Conditions { get; set; }
+            public string Conditions { get; set; }
 
             [JsonProperty(PropertyName = "guardianFirstName")]
-            public TripApplicationField GuardianFirstName { get; set; }
+            public string GuardianFirstName { get; set; }
 
             [JsonProperty(PropertyName = "guardianLastName")]
-            public TripApplicationField GuardianLastName { get; set; }
+            public string GuardianLastName { get; set; }
 
             [JsonProperty(PropertyName = "referral")]
-            public TripApplicationField Referral { get; set; }
+            public string Referral { get; set; }
 
             [JsonProperty(PropertyName = "scrubSize")]
-            public TripApplicationField ScrubSize { get; set; }
+            public string ScrubSize { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeObedience")]
-            public TripApplicationField SpiritualLifeObedience { get; set; }
+            public string SpiritualLifeObedience { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeReceived")]
-            public TripApplicationField SpiritualLifeReceived { get; set; }
+            public string SpiritualLifeReceived { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeReplicating")]
-            public TripApplicationField SpiritualLifeReplicating { get; set; }
+            public string SpiritualLifeReplicating { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeSearching")]
-            public TripApplicationField SpiritualLifeSearching { get; set; }
+            public string SpiritualLifeSearching { get; set; }
 
             [JsonProperty(PropertyName = "tshirtSize")]
-            public TripApplicationField TshirtSize { get; set; }
+            public string TshirtSize { get; set; }
 
             [JsonProperty(PropertyName = "vegetarian")]
-            public TripApplicationField Vegetarian { get; set; }
+            public string Vegetarian { get; set; }
 
             [JsonProperty(PropertyName = "why")]
-            public TripApplicationField Why { get; set; }
+            public string Why { get; set; }
         }
 
         public class ApplicationPageThree
         {
             [JsonProperty(PropertyName = "emergencyContactEmail")]
-            public TripApplicationField EmergencyContactEmail { get; set; }
+            public string EmergencyContactEmail { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactFirstName")]
-            public TripApplicationField EmergencyContactFirstName { get; set; }
+            public string EmergencyContactFirstName { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactLastName")]
-            public TripApplicationField EmergencyContactLastName { get; set; }
+            public string EmergencyContactLastName { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactPrimaryPhone")]
-            public TripApplicationField EmergencyContactPrimaryPhone { get; set; }
+            public string EmergencyContactPrimaryPhone { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactSecondaryPhone")]
-            public TripApplicationField EmergencyContactSecondaryPhone { get; set; }
+            public string EmergencyContactSecondaryPhone { get; set; }
         }
 
         public class ApplicationPageFour
         {
             [JsonProperty(PropertyName = "groupCommonName")]
-            public TripApplicationField GroupCommonName { get; set; }
+            public string GroupCommonName { get; set; }
 
             [JsonProperty(PropertyName = "interestedInGroupLeader")]
-            public TripApplicationField InterestedInGroupLeader { get; set; }
+            public string InterestedInGroupLeader { get; set; }
 
             [JsonProperty(PropertyName = "lottery")]
-            public TripApplicationField Lottery { get; set; }
+            public string Lottery { get; set; }
 
             [JsonProperty(PropertyName = "roommateFirstChoice")]
-            public TripApplicationField RoommateFirstChoice { get; set; }
+            public string RoommateFirstChoice { get; set; }
 
             [JsonProperty(PropertyName = "roommateSecondChoice")]
-            public TripApplicationField RoommateSecondChoice { get; set; }
+            public string RoommateSecondChoice { get; set; }
 
             [JsonProperty(PropertyName = "supportPersonEmail")]
-            public TripApplicationField SupportPersonEmail { get; set; }
+            public string SupportPersonEmail { get; set; }
 
             [JsonProperty(PropertyName = "whyGroupLeader")]
-            public TripApplicationField WhyGroupLeader { get; set; }
+            public string WhyGroupLeader { get; set; }
         }
 
         public class ApplicationPageFive
         {
             [JsonProperty(PropertyName = "previousTripExperience")]
-            public TripApplicationField PreviousTripExperience { get; set; }
+            public string PreviousTripExperience { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillBusiness")]
-            public TripApplicationField ProfessionalSkillBusiness { get; set; }
+            public string ProfessionalSkillBusiness { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillConstruction")]
-            public TripApplicationField ProfessionalSkillConstruction { get; set; }
+            public string ProfessionalSkillConstruction { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillDental")]
-            public TripApplicationField ProfessionalSkillDental { get; set; }
+            public string ProfessionalSkillDental { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillEducation")]
-            public TripApplicationField ProfessionalSkillEducation { get; set; }
+            public string ProfessionalSkillEducation { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillInformationTech")]
-            public TripApplicationField ProfessionalSkillInformationTech { get; set; }
+            public string ProfessionalSkillInformationTech { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillMedia")]
-            public TripApplicationField ProfessionalSkillMedia { get; set; }
+            public string ProfessionalSkillMedia { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillMedical")]
-            public TripApplicationField ProfessionalSkillMedical { get; set; }
+            public string ProfessionalSkillMedical { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillMusic")]
-            public TripApplicationField ProfessionalSkillMusic { get; set; }
+            public string ProfessionalSkillMusic { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillOther")]
-            public TripApplicationField ProfessionalSkillOther { get; set; }
+            public string ProfessionalSkillOther { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillPhotography")]
-            public TripApplicationField ProfessionalSkillPhotography { get; set; }
+            public string ProfessionalSkillPhotography { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillSocialWorker")]
-            public TripApplicationField ProfessionalSkillSocialWorker { get; set; }
+            public string ProfessionalSkillSocialWorker { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillStudent")]
-            public TripApplicationField ProfessionalSkillStudent { get; set; }
+            public string ProfessionalSkillStudent { get; set; }
 
             [JsonProperty(PropertyName = "sponsorChildFirstName")]
-            public TripApplicationField SponsorChildFirstName { get; set; }
+            public string SponsorChildFirstName { get; set; }
 
             [JsonProperty(PropertyName = "sponsorChildInNicaragua")]
-            public TripApplicationField SponsorChildInNicaragua { get; set; }
+            public string SponsorChildInNicaragua { get; set; }
 
             [JsonProperty(PropertyName = "sponsorChildLastName")]
-            public TripApplicationField SponsorChildLastName { get; set; }
+            public string SponsorChildLastName { get; set; }
 
             [JsonProperty(PropertyName = "sponsorChildNumber")]
-            public TripApplicationField SponsorChildNumber { get; set; }
+            public string SponsorChildNumber { get; set; }
         }
 
         public class ApplicationPageSix
         {
             [JsonProperty(PropertyName = "validPassport")]
-            public TripApplicationField ValidPassport { get; set; }
+            public string ValidPassport { get; set; }
 
             [JsonProperty(PropertyName = "passportExpirationDate")]
-            public TripApplicationField PassportExpirationDate { get; set; }
+            public string PassportExpirationDate { get; set; }
 
             [JsonProperty(PropertyName = "passportFirstName")]
-            public TripApplicationField PassportFirstName { get; set; }
+            public string PassportFirstName { get; set; }
 
             [JsonProperty(PropertyName = "passportMiddleName")]
-            public TripApplicationField PassportMiddleName { get; set; }
+            public string PassportMiddleName { get; set; }
 
             [JsonProperty(PropertyName = "passportLastName")]
-            public TripApplicationField PassportLastName { get; set; }
+            public string PassportLastName { get; set; }
 
             [JsonProperty(PropertyName = "passportCountry")]
-            public TripApplicationField PassportCountry { get; set; }
+            public string PassportCountry { get; set; }
 
             [JsonProperty(PropertyName = "passportBirthday")]
-            public TripApplicationField PassportBirthday { get; set; }
+            public string PassportBirthday { get; set; }
 
             [JsonProperty(PropertyName = "deltaFrequentFlyer")]
-            public TripApplicationField DeltaFrequentFlyer { get; set; }
+            public string DeltaFrequentFlyer { get; set; }
 
             [JsonProperty(PropertyName = "southAfricanFrequentFlyer")]
-            public TripApplicationField SouthAfricanFrequentFlyer { get; set; }
+            public string SouthAfricanFrequentFlyer { get; set; }
 
             [JsonProperty(PropertyName = "unitedFrequentFlyer")]
-            public TripApplicationField UnitedFrequentFlyer { get; set; }
+            public string UnitedFrequentFlyer { get; set; }
 
             [JsonProperty(PropertyName = "usAirwaysFrequentFlyer")]
-            public TripApplicationField UsAirwaysFrequentFlyer { get; set; }
+            public string UsAirwaysFrequentFlyer { get; set; }
 
             [JsonProperty(PropertyName = "internationalTravelExpericence")]
-            public TripApplicationField InternationalTravelExpericence { get; set; }
+            public string InternationalTravelExpericence { get; set; }
 
             [JsonProperty(PropertyName = "experienceAbroad")]
-            public TripApplicationField ExperienceAbroad { get; set; }
+            public string ExperienceAbroad { get; set; }
 
             [JsonProperty(PropertyName = "describeExperienceAbroad")]
-            public TripApplicationField DescribeExperienceAbroad { get; set; }
+            public string DescribeExperienceAbroad { get; set; }
 
             [JsonProperty(PropertyName = "pastAbuseHistory")]
-            public TripApplicationField PastAbuseHistory { get; set; }
+            public string PastAbuseHistory { get; set; }
         }
 
-        public class TripApplicationField
-        {
-            [JsonProperty(PropertyName = "attributeId")]
-            public int AttributeId { get; set; }
-
-            [JsonProperty(PropertyName = "formFieldId")]
-            public int FormFieldId { get; set; }
-
-            [JsonProperty(PropertyName = "value")]
-            public string Value { get; set; }
-        }
     }
 }
