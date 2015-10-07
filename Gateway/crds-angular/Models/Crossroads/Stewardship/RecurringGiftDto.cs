@@ -40,6 +40,11 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [Required]
         public DateTime StartDate { get; set; }
         /// <summary>
+        /// The date on which the recurring gift should end.
+        /// </summary>
+        [JsonProperty(PropertyName = "end_date")]
+        public DateTime EndDate { get; set; }
+        /// <summary>
         /// The email address of the donor.  This is not required or used on input, but will be returned on output.
         /// </summary>
         [JsonProperty(PropertyName = "email")]
@@ -49,5 +54,30 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "recurring_gift_id")]
         public int RecurringGiftId { get; set; }
+        /// <summary>
+        /// The id of the donor of the recurring gift created in MinistryPlatform.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "donor_id")]
+        public int DonorID { get; set; }
+        /// <summary>
+        /// The recurrence of the recurring gift created in MinistryPlatform.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "recurrence")]
+        public int Recurrence { get; set; }
+        /// <summary>
+        /// The Congregation Name of the recurring gift created in MinistryPlatform.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "congregation_name")]
+        public int CongregationName { get; set; }
+        /// <summary>
+        /// The Donor Account of the recurring gift created in MinistryPlatform (Credit Card/Last 4/Visa).  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "donor_account")]
+        public int DonorAccount { get; set; }
+        /// <summary>
+        /// The Subscription ID of the recurring gift created in Strip.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "subscription_id")]
+        public int SubscriptionID { get; set; }
     }
 }

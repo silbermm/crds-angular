@@ -152,6 +152,20 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.HouseholdName, opts => opts.MapFrom(src => src.Household_Name))
                 .ForMember(dest => dest.AddressId, opts => opts.MapFrom(src => src.Address_ID))
                 .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age));
+
+            Mapper.CreateMap<RecurringGift, RecurringGiftDto>()
+                .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
+                .ForMember(dest => dest.DonorID, opts => opts.MapFrom(src => src.DonorID))
+                .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.EmailAddress))
+                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency))
+                .ForMember(dest => dest.Recurrence, opts => opts.MapFrom(src => src.Recurrence))
+                .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.PlanAmount, opts => opts.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramName))
+                .ForMember(dest => dest.CongregationName, opts => opts.MapFrom(src => src.CongregationName))
+                .ForMember(dest => dest.DonorAccount, opts => opts.MapFrom(src => src.DonorAccount))
+                .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID));
         }
     }
 }
