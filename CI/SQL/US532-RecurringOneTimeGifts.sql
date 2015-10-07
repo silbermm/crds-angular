@@ -74,4 +74,47 @@ UPDATE [dbo].[dp_Page_Views]
 			 Payment_Type_ID_Table.Payment_Type,
 		     Donation_Status_ID_Table.Donation_Status,
 			 Donations.Donation_Status_Date,Donations.Check_Scanner_Batch,Is_Recurring_Gift'
-	WHERE [Page_View_ID] = 92199	
+	WHERE [Page_View_ID] = 92199
+
+SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
+GO
+
+INSERT INTO [dbo].[dp_Page_Views]
+           ([Page_View_ID]
+		   ,[View_Title]
+           ,[Page_ID]
+           ,[Description]          
+           ,[View_Clause] )
+     VALUES
+           (92238
+		   ,'Recurring Gifts'
+		   ,297
+           ,'This view will display donations associated with a recurring gift'
+           ,'Is_Recurring_Gift = 1')
+GO
+
+SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
+GO
+
+
+SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
+GO
+
+INSERT INTO [dbo].[dp_Page_Views]
+           ([Page_View_ID]
+		   ,[View_Title]
+           ,[Page_ID]
+           ,[Description]          
+           ,[View_Clause] )
+     VALUES
+           (92239
+		   ,'One-Time Gifts'
+		   ,297
+           ,'This view will display donations associated with a one-time gift'
+           ,'Is_Recurring_Gift = 0')
+GO
+
+SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
+GO
+
+
