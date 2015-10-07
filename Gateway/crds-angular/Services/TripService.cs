@@ -456,104 +456,75 @@ namespace crds_angular.Services
             var answers = new List<FormAnswer>();
 
             var page2 = applicationData.PageTwo;
-            answers.Add(new FormAnswer {Response = page2.Allergies, FieldId = 90});
 
-
-            FormatAnswer(page2.Allergies, answers);
-            FormatAnswer(page2.Conditions, answers);
-            FormatAnswer(page2.GuardianFirstName, answers);
-            FormatAnswer(page2.GuardianLastName, answers);
-            FormatAnswer(page2.Referral, answers);
-            FormatAnswer(page2.ScrubSize, answers);
-            FormatAnswer(page2.SpiritualLifeObedience, answers);
-            FormatAnswer(page2.SpiritualLifeReceived, answers);
-            FormatAnswer(page2.SpiritualLifeReplicating, answers);
-            FormatAnswer(page2.SpiritualLifeSearching, answers);
-            FormatAnswer(page2.TshirtSize, answers);
-            FormatAnswer(page2.Vegetarian, answers);
-            FormatAnswer(page2.Why, answers);
+            answers.Add(new FormAnswer { Response = page2.Allergies, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Allergies") });
+            answers.Add(new FormAnswer { Response = page2.Conditions, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Conditions") });
+            answers.Add(new FormAnswer { Response = page2.GuardianFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianFirstName") });
+            answers.Add(new FormAnswer { Response = page2.GuardianLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianLastName") });
+            answers.Add(new FormAnswer { Response = page2.Referral, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Referral") });
+            answers.Add(new FormAnswer { Response = page2.ScrubSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSize") });
+            answers.Add(new FormAnswer { Response = page2.SpiritualLifeObedience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeObedience") });
+            answers.Add(new FormAnswer { Response = page2.SpiritualLifeReceived, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReceived") });
+            answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
+            answers.Add(new FormAnswer { Response = page2.SpiritualLifeSearching, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeSearching") });
+            answers.Add(new FormAnswer { Response = page2.TshirtSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.TshirtSize") });
+            answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
+            answers.Add(new FormAnswer { Response = page2.Why, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Why") });
 
             var page3 = applicationData.PageThree;
-            FormatAnswer(page3.EmergencyContactEmail, answers);
-            FormatAnswer(page3.EmergencyContactFirstName, answers);
-            FormatAnswer(page3.EmergencyContactLastName, answers);
-            FormatAnswer(page3.EmergencyContactPrimaryPhone, answers);
-            FormatAnswer(page3.EmergencyContactSecondaryPhone, answers);
+            answers.Add(new FormAnswer { Response = page3.EmergencyContactEmail, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.EmergencyContactEmail") }); 
+            answers.Add(new FormAnswer { Response = page3.EmergencyContactFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.EmergencyContactFirstName") }); 
+            answers.Add(new FormAnswer { Response = page3.EmergencyContactLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.EmergencyContactLastName") });
+            answers.Add(new FormAnswer { Response = page3.EmergencyContactPrimaryPhone, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.EmergencyContactPrimaryPhone") });
+            answers.Add(new FormAnswer { Response = page3.EmergencyContactSecondaryPhone, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.EmergencyContactSecondaryPhone") }); 
 
             var page4 = applicationData.PageFour;
-            FormatAnswer(page4.GroupCommonName, answers);
-            FormatAnswer(page4.InterestedInGroupLeader, answers);
-            FormatAnswer(page4.Lottery, answers);
-            FormatAnswer(page4.RoommateFirstChoice, answers);
-            FormatAnswer(page4.RoommateSecondChoice, answers);
-            FormatAnswer(page4.SupportPersonEmail, answers);
-            FormatAnswer(page4.WhyGroupLeader, answers);
+            answers.Add(new FormAnswer { Response = page4.GroupCommonName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GroupCommonName") });
+            answers.Add(new FormAnswer { Response = page4.InterestedInGroupLeader, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.InterestedInGroupLeader") });
+            answers.Add(new FormAnswer { Response = page4.Lottery, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Lottery") });
+            answers.Add(new FormAnswer { Response = page4.RoommateFirstChoice, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.RoommateFirstChoice") });
+            answers.Add(new FormAnswer { Response = page4.RoommateSecondChoice, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.RoommateSecondChoice") });
+            answers.Add(new FormAnswer { Response = page4.SupportPersonEmail, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SupportPersonEmail") });
+            answers.Add(new FormAnswer { Response = page4.WhyGroupLeader, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.WhyGroupLeader") });
 
             var page5 = applicationData.PageFive;
-            FormatAnswer(page5.PreviousTripExperience, answers);
-            FormatAnswer(page5.ProfessionalSkillBusiness, answers);
-            FormatAnswer(page5.ProfessionalSkillConstruction, answers);
-            FormatAnswer(page5.ProfessionalSkillDental, answers);
-            FormatAnswer(page5.ProfessionalSkillEducation, answers);
-            FormatAnswer(page5.ProfessionalSkillInformationTech, answers);
-            FormatAnswer(page5.ProfessionalSkillMedia, answers);
-            FormatAnswer(page5.ProfessionalSkillMedical, answers);
-            FormatAnswer(page5.ProfessionalSkillMusic, answers);
-            FormatAnswer(page5.ProfessionalSkillOther, answers);
-            FormatAnswer(page5.ProfessionalSkillPhotography, answers);
-            FormatAnswer(page5.ProfessionalSkillSocialWorker, answers);
-            FormatAnswer(page5.ProfessionalSkillStudent, answers);
-            FormatAnswer(page5.SponsorChildFirstName, answers);
-            FormatAnswer(page5.SponsorChildInNicaragua, answers);
-            FormatAnswer(page5.SponsorChildLastName, answers);
-            FormatAnswer(page5.SponsorChildNumber, answers);
+            answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillBusiness, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillBusiness") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillConstruction, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillConstruction") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillDental, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillDental") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillEducation, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillEducation") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillInformationTech, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillInformationTech") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedia, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedia") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedical, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedical") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMusic, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMusic") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillOther, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillOther") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillPhotography, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillPhotography") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillSocialWorker, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillSocialWorker") });
+            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillStudent, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillStudent") });
+            answers.Add(new FormAnswer { Response = page5.SponsorChildFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildFirstName") });
+            answers.Add(new FormAnswer { Response = page5.SponsorChildInNicaragua, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildInNicaragua") });
+            answers.Add(new FormAnswer { Response = page5.SponsorChildLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildLastName") });
+            answers.Add(new FormAnswer { Response = page5.SponsorChildNumber, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildNumber") });
 
             var page6 = applicationData.PageSix;
-            FormatAnswer(page6.DeltaFrequentFlyer, answers);
-            FormatAnswer(page6.DescribeExperienceAbroad, answers);
-            FormatAnswer(page6.ExperienceAbroad, answers);
-            FormatAnswer(page6.InternationalTravelExpericence, answers);
-            FormatAnswer(page6.PassportBirthday, answers);
-            FormatAnswer(page6.PassportCountry, answers);
-            FormatAnswer(page6.PassportExpirationDate, answers);
-            FormatAnswer(page6.PassportFirstName, answers);
-            FormatAnswer(page6.PassportLastName, answers);
-            FormatAnswer(page6.PassportMiddleName, answers);
-            FormatAnswer(page6.PastAbuseHistory, answers);
-            FormatAnswer(page6.SouthAfricanFrequentFlyer, answers);
-            FormatAnswer(page6.UnitedFrequentFlyer, answers);
-            FormatAnswer(page6.UsAirwaysFrequentFlyer, answers);
-            FormatAnswer(page6.ValidPassport, answers);
+            answers.Add(new FormAnswer { Response = page6.DeltaFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DeltaFrequentFlyer") });
+            answers.Add(new FormAnswer { Response = page6.DescribeExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DescribeExperienceAbroad") });
+            answers.Add(new FormAnswer { Response = page6.ExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ExperienceAbroad") });
+            answers.Add(new FormAnswer { Response = page6.InternationalTravelExpericence, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.InternationalTravelExpericence") });
+            answers.Add(new FormAnswer { Response = page6.PassportBirthday, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportBirthday") });
+            answers.Add(new FormAnswer { Response = page6.PassportCountry, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportCountry") });
+            answers.Add(new FormAnswer { Response = page6.PassportExpirationDate, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportExpirationDate") });
+            answers.Add(new FormAnswer { Response = page6.PassportFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportFirstName") });
+            answers.Add(new FormAnswer { Response = page6.PassportLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportLastName") });
+            answers.Add(new FormAnswer { Response = page6.PassportMiddleName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportMiddleName") });
+            answers.Add(new FormAnswer { Response = page6.PastAbuseHistory, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PastAbuseHistory") });
+            answers.Add(new FormAnswer { Response = page6.SouthAfricanFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SouthAfricanFrequentFlyer") });
+            answers.Add(new FormAnswer { Response = page6.UnitedFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UnitedFrequentFlyer") });
+            answers.Add(new FormAnswer { Response = page6.UsAirwaysFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UsAirwaysFrequentFlyer") });
+            answers.Add(new FormAnswer { Response = page6.ValidPassport, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ValidPassport") });
 
             return answers;
         }
 
-        private void FormatAnswer(TripApplicationDto.TripApplicationField field, List<FormAnswer> answers)
-        {
-            if (field == null)
-            {
-                return;
-            }
-            if (field.Value == null)
-            {
-                return;
-            }
-            answers.Add(FormatTripFormAnswer(field));
-        }
-
-        private FormAnswer FormatTripFormAnswer(TripApplicationDto.TripApplicationField field)
-        {
-            try
-            {
-                var answer = new FormAnswer();
-                answer.FieldId = field.FormFieldId;
-                answer.Response = field.Value;
-                return answer;
-            }
-            catch (Exception exception)
-            {
-                throw new ApplicationException(string.Format("Form Field Id: {0}", field.FormFieldId), exception);
-            }
-        }
     }
 }
