@@ -448,8 +448,11 @@ namespace crds_angular.Services
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
 
-            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-            
+            if (dto.InviteGUID != null)
+            {
+                _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            }
+
             return formResponseId;
         }
 
@@ -514,6 +517,7 @@ namespace crds_angular.Services
             FormatAnswer(page6.InternationalTravelExpericence, answers);
             FormatAnswer(page6.PassportBirthday, answers);
             FormatAnswer(page6.PassportCountry, answers);
+            FormatAnswer(page6.PassportNumber, answers);
             FormatAnswer(page6.PassportExpirationDate, answers);
             FormatAnswer(page6.PassportFirstName, answers);
             FormatAnswer(page6.PassportLastName, answers);
