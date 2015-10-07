@@ -25,7 +25,8 @@ INSERT INTO [dbo].[dp_Pages]([Page_ID]
   ,'Recurring_Gifts'
   ,'Recurring_Gift_ID'
   ,1
-  ,'Donor_ID_Table.[Donor_ID] AS [Donor ID]
+  ,'Recurring_Gifts.[Recurring_Gift_ID] AS [Recurring Gift ID]
+, Donor_ID_Table.[Donor_ID] AS [Donor ID]
 , Donor_ID_Table_Contact_ID_Table_User_Account_Table.[User_Email]
 , Frequency_ID_Table.[Frequency]
 , CASE(Frequency_ID_Table.Frequency_ID)
