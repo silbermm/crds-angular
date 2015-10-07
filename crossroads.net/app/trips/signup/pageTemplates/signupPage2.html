@@ -36,20 +36,32 @@
       </div><!--/form-group-->
     </div>
     <div class="row" ng-show="tripsSignup.destination == 'South Africa'">
-      <div class="form-group col-sm-6">
-        <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
+      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom') }">
+        <label for="scrub" ng-class="{'required': tripsSignup.destination == 'South Africa'}">Scrub Size Bottom</label>
         <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
           ng-model="tripsSignup.signupService.page2.scrubSizeBottom"
-          ng-options="bottom.value for bottom in tripsSignup.signupService.bottomScrubSizes track by bottom.attributeId">
+          ng-options="bottom.value for bottom in tripsSignup.signupService.bottomScrubSizes track by bottom.attributeId"
+          ng-required="tripsSignup.destination == 'South Africa'">
         </select>
+        <ng-messages for="tripsSignup.tripAppPage2.scrubBottom.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6">
-        <label for="scrub">Scrub Size Top<small class="text-muted">Only required for Topsy trips</small></label>
+      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop') }">
+        <label for="scrub" ng-class="{'required': tripsSignup.destination == 'South Africa'}">Scrub Size Top</label>
         <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
           ng-model="tripsSignup.signupService.page2.scrubSizeTop"
-          ng-options="top.value for top in tripsSignup.signupService.topScrubSizes track by top.attributeId">
+          ng-options="top.value for top in tripsSignup.signupService.topScrubSizes track by top.attributeId"
+          ng-required="tripsSignup.destination == 'South Africa'">
         </select>
+        <ng-messages for="tripsSignup.tripAppPage2.scrubTop.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div><!--/form-group-->
     </div>
 
@@ -95,12 +107,12 @@
           <label for="vegetarian-no" class="radio-inline">
               <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="no" name="vegetarian" for="vegetarian-no" ng-required='true'>No
           </label>
+          <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
       </div><!--/form-group-->
-      <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
-        <span ng-message="required">
-          <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
-        </span>
-      </ng-messages>
     </div><!--/row-->
 
     <div class="row">
@@ -111,13 +123,19 @@
     </div><!--/row-->
 
     <div class="row">
-      <div id="Site" class="form-group col-sm-6">
+      <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife') }">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeSearching.value" type="checkbox" name="slife" value="Searching" id="slife-searching"> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReceived.value" type="checkbox" name="slife" value="Received" id="slife-received"> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeObedience.value" type="checkbox" name="slife" value="Obedience" id="slife-obedience"> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReplicating.value" type="checkbox" name="slife" value="Replicating" id="slife-replicating"> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeSearching.value" type="checkbox" name="slife" value="Searching" id="slife-searching" ng-required='true'> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReceived.value" type="checkbox" name="slife" value="Received" id="slife-received" ng-required='true'> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeObedience.value" type="checkbox" name="slife" value="Obedience" id="slife-obedience" ng-required='true'> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReplicating.value" type="checkbox" name="slife" value="Replicating" id="slife-replicating" ng-required='true'> I'm actively replicating my faith in others </label> </div>
+
+        <ng-messages for="tripsSignup.tripAppPage2.slife.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
 
       </div><!--/form-group-->
     </div><!--/row-->
