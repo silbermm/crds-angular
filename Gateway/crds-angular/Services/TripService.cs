@@ -448,8 +448,11 @@ namespace crds_angular.Services
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
 
-            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-            
+            if (dto.InviteGUID != null)
+            {
+                _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            }
+
             return formResponseId;
         }
 
