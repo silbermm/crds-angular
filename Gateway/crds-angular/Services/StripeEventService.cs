@@ -60,13 +60,24 @@ namespace crds_angular.Services
 
         public void InvoiceCreated(DateTime? eventTimestamp, StripeInvoice invoice)
         {
-            _logger.Debug("Processing invoice.created event for subscription id " + invoice.Subscription);
+            _logger.Debug(string.Format("Processing invoice.created event for subscription id {0}", invoice.Subscription));
+            if (string.IsNullOrWhiteSpace(invoice.Charge) && invoice.Amount <= 0)
+            {
+                _logger.Info(string.Format("No charge or amount on invoice {0} for subscription {1} - this is likely a trial-period donation, skipping", invoice.Id, invoice.Subscription));
+                if (_logger.IsDebugEnabled)
+                {
+                    _logger.Debug(string.Format("Invoice: {0}", JsonConvert.SerializeObject(invoice)));
+                }
+                return;
+            }
             var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
             var charge = _paymentService.GetCharge(invoice.Charge);
+
             var donationStatus = charge.Status == "succeeded" ? DonationStatus.Succeeded : DonationStatus.Pending;
             var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
-            var amount = charge.Amount/Constants.StripeDecimalConversionValue;
-            _mpDonorService.CreateDonationAndDistributionRecord((int) amount,
+            var amount = charge.Amount / Constants.StripeDecimalConversionValue;
+
+            _mpDonorService.CreateDonationAndDistributionRecord((int)amount,
                                                                 fee, // Fee amount
                                                                 createDonation.DonorId,
                                                                 createDonation.ProgramId,
