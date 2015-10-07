@@ -37,10 +37,13 @@ $(document).ready(function() {
       var loadedSection = $(this);
 
       if (index == 1) {
-        tweenFade('.opening', .5);
-        tweenFadeUp('.opening', 2.3);
+        tweenFadeBg('.opening', .2);
+        tweenFade('.opening', 1);
+        tweenFadeUp('.opening', 3);
       }
       if (index == 2) {
+        TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: 1.5 }, 1);
+        TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: 1.5 }, 1);
       }
       if (index == 3) {
         var sizes = ["small", "medium", "large"];
@@ -48,13 +51,14 @@ $(document).ready(function() {
 
         var tl = new TimelineMax();
 
-        for (var i = 0; i < 20; i++) {
+        for (var i = 0; i < 10; i++) {
           var sizeIndex = randomNumber(0,2); //get random number between 0 and 2
+          var bubbleRotate = randomNumber(-20,20); //get random number between 0 and 2
           var size = sizes[sizeIndex]; //get random size
           var speed = (3 - sizeIndex) //larger faster
           var bubble = $('<div class="bubble ' + size + 'Bubble"/>').appendTo(demo); //create a bubble
           tl.set(bubble, {y:0, x:0}, 0) // place it at the bottom
-          tl.to(bubble, speed*5, {y:randomNumber(window.screen.height, -window.screen.height), x:-window.screen.width, repeatDelay:Math.random()*2, repeat:500}, Math.random() * 2)
+          tl.to(bubble, speed*5, {display:'block',rotation:bubbleRotate, y:randomNumber(window.screen.height, -window.screen.height), x:-window.screen.width, repeatDelay:Math.random()*2, repeat:500, ease: Power1.easeOut}, Math.random() * 2)
         }
 
         function randomNumber(min, max){
@@ -88,11 +92,9 @@ $(document).ready(function() {
           //after leaving section 2
           if (index == 1 && direction == 'down') {
             tweenFadeUp('.map', tweenFadeUpDelay);
-            TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: 1.25 }, 1);
-            TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: 1.25 }, 1);
           }
           if(index == 2 && direction == 'down'){
-              tweenFadeUp('.kidsclub', tweenFadeUpDelay);
+              tweenFadeUp('.kidsclub', .3);
               tweenFadeBg('.kidsclub');
           }
           if(index == 3 && direction == 'down'){
@@ -123,7 +125,7 @@ $(document).ready(function() {
 <div id="fullpage" class="explore">
 
   <section class="section opening">
-    <div class="imgix-fluid-bg img-background slide-bg" data-src="http://crossroads-media.imgix.net/images/explore/opening/explore_opening_bg.jpg"></div>
+    <div class="img-background slide-bg fade-bg" ></div>
     <div class="vertical-center">
       <div class="container">
         <div class="row">
