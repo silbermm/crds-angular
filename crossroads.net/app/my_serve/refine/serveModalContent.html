@@ -23,13 +23,13 @@
         <!--/input-group-->
         <span ng-messages="modal.filterdates.fromdate.$error" ng-show="modal.isFromError()">
           <span ng-message="fromDateToLarge" >
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fromDateToLarge].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fromDateToLarge.content | html"></span>
         </span>
         <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
         </span>
         <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
         </span>
         </span>
       </div>
@@ -57,13 +57,13 @@
         <!--/input-group-->
         <span ng-messages="modal.filterdates.todate.$error" ng-show="modal.isToError()">
           <span ng-message="fromDate">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.toDateToSmall].message | html"> </span>
+            <span ng-bind-html="$root.MESSAGES.toDateToSmall.content | html"> </span>
         </span>
         <span ng-message="required">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.fieldCanNotBeBlank].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
         </span>
         <span ng-message="date">
-            <span ng-bind-html="$root.messages[$root.MESSAGES.invalidData].message | html"></span>
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
         </span>
         </span>
       </div>

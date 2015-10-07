@@ -38,7 +38,7 @@ namespace crds_angular.Controllers.API
                     Debug.WriteLine("in the account controller");
                     return Ok(info);
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     return BadRequest();
                 }

@@ -1,13 +1,16 @@
 ﻿using System;
 using crds_angular.Exceptions;
-using crds_angular.Models.Crossroads;
 using crds_angular.Services;
 using Moq;
 using NUnit.Framework;
 using RestSharp;
 using System.Collections.Generic;
 using System.Net;
+using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Models;
+using MinistryPlatform.Models;
 
 namespace crds_angular.test.Services
 {
@@ -15,16 +18,32 @@ namespace crds_angular.test.Services
     {
         private Mock<IRestClient> _restClient;
         private Mock<IConfigurationWrapper> _configuration;
+        private Mock<IContentBlockService> _contentBlockService;
         private StripeService _fixture;
+        private Dictionary<string, ContentBlock> _errors;
 
         [SetUp]
         public void Setup()
         {
+            _errors = new Dictionary<string, ContentBlock>
+            {
+                {"paymentMethodProcessingError", new ContentBlock { Id = 123 }},
+                {"paymentMethodDeclined", new ContentBlock { Id = 456 }},
+                {"failedResponse", new ContentBlock { Id = 789 }},
+            };
+
             _restClient = new Mock<IRestClient>(MockBehavior.Strict);
             _configuration = new Mock<IConfigurationWrapper>();
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MaxStripeQueryResultsPerPage")).Returns(42);
 
-            _fixture = new StripeService(_restClient.Object, _configuration.Object);
+            _contentBlockService = new Mock<IContentBlockService>();
+            foreach (var e in _errors)
+            {
+                var e1 = e;
+                _contentBlockService.SetupGet(mocked => mocked[e1.Key]).Returns(e1.Value);
+            }
+
+            _fixture = new StripeService(_restClient.Object, _configuration.Object, _contentBlockService.Object);
         }
 
         [Test]
@@ -88,10 +107,10 @@ namespace crds_angular.test.Services
 
             Assert.IsNotNull(charges);
             Assert.AreEqual(4, charges.Count);
-            Assert.AreEqual("123", charges[0]);
-            Assert.AreEqual("last_one_in_first_page", charges[1]);
-            Assert.AreEqual("789", charges[2]);
-            Assert.AreEqual("90210", charges[3]);
+            Assert.AreEqual("123", charges[0].Id);
+            Assert.AreEqual("last_one_in_first_page", charges[1].Id);
+            Assert.AreEqual("789", charges[2].Id);
+            Assert.AreEqual("90210", charges[3].Id);
         }
 
         [Test]
@@ -172,7 +191,7 @@ namespace crds_angular.test.Services
             stripeResponse.SetupGet(mocked => mocked.Content).Returns("{error: {message:'Bad Request'}}").Verifiable();
             _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            Assert.Throws<StripeException>(() => _fixture.CreateCustomer("token"));
+            Assert.Throws<PaymentProcessorException>(() => _fixture.CreateCustomer("token"));
 
             _restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
                 It.Is<RestRequest>(o =>
@@ -200,11 +219,12 @@ namespace crds_angular.test.Services
                 _fixture.CreateCustomer("token");
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("abort", e.Type);
                 Assert.AreEqual("Doh!", e.DetailMessage);
                 Assert.AreEqual(HttpStatusCode.InternalServerError, e.StatusCode);
+                Assert.AreEqual(_errors["paymentMethodProcessingError"], e.GlobalMessage);
             }
 
 
@@ -215,7 +235,8 @@ namespace crds_angular.test.Services
         {
             var customer = new StripeCustomer
             {
-                id = "12345"
+                id = "856",
+                default_source = "123",
             };
 
             var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
@@ -236,7 +257,7 @@ namespace crds_angular.test.Services
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
 
-            Assert.AreEqual("12345", response);
+            Assert.AreEqual(customer, response);
         }
 
         [Test]
@@ -282,11 +303,12 @@ namespace crds_angular.test.Services
                 _fixture.UpdateCustomerDescription("token", 102030);
                 Assert.Fail("Expected exception was not thrown");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("Customer update failed", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Request", e.DetailMessage);
+                Assert.AreEqual(_errors["failedResponse"], e.GlobalMessage);
             }
         }
 
@@ -295,7 +317,12 @@ namespace crds_angular.test.Services
         {
             var charge = new StripeCharge
             {
-                Id = "90210"
+                Id = "90210",
+                BalanceTransaction = new StripeBalanceTransaction
+                {
+                    Id = "txn_123",
+                    Fee = 145
+                }
             };
             
 
@@ -306,22 +333,23 @@ namespace crds_angular.test.Services
 
             _restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            var response = _fixture.ChargeCustomer("cust_token", 9090, 98765, "cc");
+            var response = _fixture.ChargeCustomer("cust_token", 9090, 98765);
 
             _restClient.Verify(mocked => mocked.Execute<StripeCharge>(
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
-                    && ParameterMatches("amount", 9090 * 100, o.Parameters)
+                    && ParameterMatches("amount", 9090 *Constants.StripeDecimalConversionValue, o.Parameters)
                     && ParameterMatches("currency", "usd", o.Parameters)
                     && ParameterMatches("customer", "cust_token", o.Parameters)
                     && ParameterMatches("description", "Donor ID #98765", o.Parameters)
+                    && ParameterMatches("expand[]", "balance_transaction", o.Parameters)
                     )));
 
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
 
-            Assert.AreEqual("90210", response);
+            Assert.AreSame(charge, response);
         }
 
         private bool ParameterMatches(string name, object value, List<Parameter> parms)
@@ -354,14 +382,15 @@ namespace crds_angular.test.Services
             _restClient.Setup(mocked => mocked.Execute<StripeCharge>(It.IsAny<IRestRequest>())).Returns(chargeResponse.Object);
             try
             {
-                _fixture.ChargeCustomer("token", -900, 98765, "cc");
+                _fixture.ChargeCustomer("token", -900, 98765);
                 Assert.Fail("Should have thrown exception");
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 Assert.AreEqual("Invalid charge request", e.Message);
                 Assert.IsNotNull(e.DetailMessage);
                 Assert.AreEqual("Invalid Integer Amount", e.DetailMessage);
+                Assert.AreEqual(_errors["failedResponse"], e.GlobalMessage);
             }
 
         }
@@ -413,6 +442,162 @@ namespace crds_angular.test.Services
             Assert.AreEqual("45454", defaultSource.address_zip);
         }
 
+        [Test]
+        public void ShouldGetChargeRefund()
+        {
+
+            var data = new StripeRefund
+            {
+                Data = new List<StripeRefundData>()
+                {
+                    new StripeRefundData()
+                    {
+                        Id = "456",
+                        Amount = "987",
+                        Charge = new StripeCharge
+                        {
+                            Id = "ch_123456"
+                        }
+                    }
+
+                }
+            };
+        
+            var response = new Mock<IRestResponse<StripeRefund>>();
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(data).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeRefund>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var refund = _fixture.GetChargeRefund("456");
+            _restClient.Verify(mocked => mocked.Execute<StripeRefund>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("charges/456/refunds")
+            )));
+       
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            Assert.IsNotNull(refund.Data);
+        }
+
+        [Test]
+        public void ShouldGetRefund()
+        {
+
+            const string refundDataJson = "{id: '456', amount: 987, charge: { id: 'ch_123456'}}";
+
+            var response = new Mock<IRestResponse>();
+
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Content).Returns(refundDataJson).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var refund = _fixture.GetRefund("456");
+            _restClient.Verify(mocked => mocked.Execute(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("refunds/456")
+            )));
+
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            Assert.IsNotNull(refund);
+            Assert.AreEqual("456", refund.Id);
+            Assert.AreEqual("987", refund.Amount);
+            Assert.IsNotNull(refund.Charge);
+            Assert.AreEqual("ch_123456", refund.Charge.Id);
+        }
+
+        [Test]
+        public void TestCreatePlan()
+        {
+            const int expectedTrialDays = 3;
+            var recurringGiftDto = new RecurringGiftDto
+            {
+                StripeTokenId = "tok_123",
+                PlanAmount = 123.45M,
+                PlanInterval = "week",
+                Program = "987",
+                StartDate = DateTime.Now.AddDays(expectedTrialDays)
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                DonorId = 678,
+                ProcessorId = "cus_123"
+            };
+
+            var stripePlan = new StripePlan();
+
+            var stripeResponse = new Mock<IRestResponse<StripePlan>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripePlan).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripePlan>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = _fixture.CreatePlan(recurringGiftDto, contactDonor);
+            _restClient.Verify(mocked => mocked.Execute<StripePlan>(It.Is<IRestRequest>(o =>
+                o.Method == Method.POST
+                && o.Resource.Equals("plans")
+                && ParameterMatches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue, o.Parameters)
+                && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
+                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
+                && ParameterMatches("currency", "usd", o.Parameters)
+                && ParameterMatches("trial_period_days", expectedTrialDays, o.Parameters)
+                && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
+
+            Assert.AreSame(stripePlan, response);
+        }
+
+        [Test]
+        public void TestAddSourceToCustomer()
+        {
+            var stripeCustomer = new StripeCustomer();
+
+            var stripeResponse = new Mock<IRestResponse<StripeCustomer>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeCustomer).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            var response = _fixture.AddSourceToCustomer("cus_123", "card_123");
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeCustomer>(
+                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/cus_123/sources") && ParameterMatches("source", "card_123", o.Parameters))));
+
+            Assert.AreSame(stripeCustomer, response);
+        }
+
+        [Test]
+        public void TestCreateSubscription()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string plan = "Take over the world.";
+            const string customer = "cus_123";
+
+            var response = _fixture.CreateSubscription(plan, customer);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions") && ParameterMatches("plan", plan, o.Parameters))));
+
+            Assert.AreSame(stripeSubscription, response);
+        }
     }
 
 }

@@ -1,39 +1,35 @@
-
-require('./profile');
 require('./events');
-require('./give');
 require('./mp_tools');
-
-(function () {
+require('../lib/select.css');
+(function() {
   'use strict()';
 
   var MODULE = 'crossroads';
+  var constants = require('./constants');
 
-  angular.module(MODULE, [
-   'crossroads.core',
-   'crossroads.profile',
-   'crossroads.mptools',
-   'crossroads.give'
+  angular.module(constants.MODULES.CROSSROADS, [
+      constants.MODULES.CORE,
+      constants.MODULES.COMMON,
+      constants.MODULES.GIVE,
+      constants.MODULES.MEDIA,
+      constants.MODULES.MPTOOLS,
+      constants.MODULES.PROFILE,
+      constants.MODULES.SEARCH,
+      constants.MODULES.TRIPS
    ]);
 
-  angular.module(MODULE).config(require('./routes'));
+  angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
 
   require('./community_groups_signup');
-  require('./mytrips');
-  require('./profile/profile.html');
-  require('./profile/personal/profile_personal.html');
-  require('./profile/profile_account.html');
-  require('./profile/skills/profile_skills.html');
   require('./styleguide');
   require('./thedaily');
-  require('./give');
-  require('./media');
-  require('./myprofile');
+  require('./explore');
+  require('./gotrips');
   require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
-  require('./go_trip_giving');
   require('./volunteer_signup');
   require('./volunteer_application');
-  require('./search');
-  require('./blog');
+  require('./giving_history');
+  require('./myprofile');
+
 })();

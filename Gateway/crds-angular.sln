@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31010.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crds-angular", "crds-angular\crds-angular.csproj", "{DC3B7EDC-2B9A-49F4-A5C8-50BA4C3E2A7B}"
 EndProject
@@ -23,6 +23,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.Utilities", "Crossroads.Utilities\Crossroads.Utilities.csproj", "{61238A82-D410-4330-BD25-889239FC7873}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.Utilities.Test", "Crossroads.Utilities.Test\Crossroads.Utilities.Test.csproj", "{EF27AE14-DE4B-4F98-81F1-F16A9B00592B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.AsyncJobs", "Crossroads.AsyncJobs\Crossroads.AsyncJobs.csproj", "{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.AsyncJobs.Test", "Crossroads.AsyncJobs.Test\Crossroads.AsyncJobs.Test.csproj", "{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +92,22 @@ Global
 		{EF27AE14-DE4B-4F98-81F1-F16A9B00592B}.Integration|Any CPU.Build.0 = Release|Any CPU
 		{EF27AE14-DE4B-4F98-81F1-F16A9B00592B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF27AE14-DE4B-4F98-81F1-F16A9B00592B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Demo|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Demo|Any CPU.Build.0 = Debug|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Integration|Any CPU.ActiveCfg = Release|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Integration|Any CPU.Build.0 = Release|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Demo|Any CPU.ActiveCfg = Debug|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Demo|Any CPU.Build.0 = Debug|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Integration|Any CPU.ActiveCfg = Release|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Integration|Any CPU.Build.0 = Release|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

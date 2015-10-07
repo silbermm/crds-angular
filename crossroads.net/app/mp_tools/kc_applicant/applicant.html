@@ -1,5 +1,5 @@
 <div ng-if='applicant.showError()' class='alert alert-danger' role='alert'>
-  <span ng-bind-html='$root.messages[applicant.errorMessage].message | html'></span>
+  <span ng-bind-html='applicant.errorMessage.content | html'></span>
 </div>
 
 <preloader full-screen='true' ng-show="!applicant.viewReady"> </preloader>

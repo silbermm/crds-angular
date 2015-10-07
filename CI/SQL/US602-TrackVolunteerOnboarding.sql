@@ -65,16 +65,39 @@ WHERE [Sub_Page_ID] = 303
 GO
 
 /****** Object:  Table [dbo].[cr_Onboarding_Statuses]    Script Date: 6/9/2015 ******/
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_Onboarding_Statuses]') AND type in (N'U'))
+	ALTER TABLE [dbo].[Response_Attributes] DROP CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses]
+	DROP TABLE [dbo].[cr_Onboarding_Statuses]
+GO 
+
+BEGIN
 CREATE TABLE [dbo].[cr_Onboarding_Statuses](
 	[Onboarding_Status_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Onboarding_Status] [nvarchar](50) NOT NULL,
+	[Final_Status] [bit] NOT NULL CONSTRAINT [DF_cr_Onboarding_Statuses_Final_Status]  DEFAULT ((0)),
  CONSTRAINT [PK_cr_Onboarding_Status] PRIMARY KEY CLUSTERED 
 (
 	[Onboarding_Status_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
+END
+GO
 
+SET IDENTITY_INSERT [dbo].[cr_Onboarding_Statuses] ON
+GO
+
+INSERT INTO [dbo].[cr_Onboarding_Statuses]
+           ([Onboarding_Status_ID], [Onboarding_Status], [Final_Status])
+     VALUES
+           (1, 'Not Started', 0),
+		   (2, 'In Progress', 0),
+		   (3, 'Completed', 1),
+		   (4, 'Omit', 1)
+
+SET IDENTITY_INSERT [dbo].[cr_Onboarding_Statuses] OFF
+GO 
+ALTER TABLE [dbo].[Response_Attributes] WITH CHECK ADD CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses] FOREIGN KEY([Onboarding_Status_ID])
+REFERENCES [dbo].[cr_Onboarding_Statuses] ([Onboarding_Status_ID])
 GO
 
 /****** Object:  Table [dbo].[Response_Attributes]    Script Date: 6/9/2015 ******/
@@ -85,50 +108,48 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Response_Attributes]') AND type in (N'U'))
-CREATE TABLE [dbo].[Response_Attributes](
-	[Response_Attribute_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Attribute_ID] [int] NOT NULL,
-	[Response_ID] [int] NOT NULL,
-	[Domain_ID] [int] NOT NULL,
-	[Start_Date] [datetime] NOT NULL,
-	[End_Date] [datetime] NULL,
-	[Notes] [nvarchar](255) NULL,
-	[Order] [int] NULL,
-	[Onboarding_Status_ID] [int] NOT NULL,
- CONSTRAINT [PK_Response_Attributes] PRIMARY KEY CLUSTERED 
-(
-	[Response_Attribute_ID] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+BEGIN
+	CREATE TABLE [dbo].[Response_Attributes](
+		[Response_Attribute_ID] [int] IDENTITY(1,1) NOT NULL,
+		[Attribute_ID] [int] NOT NULL,
+		[Response_ID] [int] NOT NULL,
+		[Domain_ID] [int] NOT NULL,
+		[Start_Date] [datetime] NOT NULL,
+		[End_Date] [datetime] NULL,
+		[Notes] [nvarchar](255) NULL,
+		[Order] [int] NULL,
+		[Onboarding_Status_ID] [int] NOT NULL,
+	 CONSTRAINT [PK_Response_Attributes] PRIMARY KEY CLUSTERED 
+	(
+		[Response_Attribute_ID] ASC
+	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+	) ON [PRIMARY]
 
-GO
+	  ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_Attributes] FOREIGN KEY([Attribute_ID])
+	  REFERENCES [dbo].[Attributes] ([Attribute_ID])
 
-ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_Attributes] FOREIGN KEY([Attribute_ID])
-REFERENCES [dbo].[Attributes] ([Attribute_ID])
-GO
+	  ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_Attributes]
 
-ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_Attributes]
-GO
+	  ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_dp_Domains] FOREIGN KEY([Domain_ID])
+	  REFERENCES [dbo].[dp_Domains] ([Domain_ID])
 
-ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_dp_Domains] FOREIGN KEY([Domain_ID])
-REFERENCES [dbo].[dp_Domains] ([Domain_ID])
-GO
+	  ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_dp_Domains]
+	  
 
-ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_dp_Domains]
-GO
+	  ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_Responses] FOREIGN KEY([Response_ID])
+	  REFERENCES [dbo].[Responses] ([Response_ID])
+	  
 
-ALTER TABLE [dbo].[Response_Attributes]  WITH CHECK ADD  CONSTRAINT [FK_Response_Attributes_Responses] FOREIGN KEY([Response_ID])
-REFERENCES [dbo].[Responses] ([Response_ID])
-GO
+	  ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_Responses]
+	  
 
-ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_Responses]
-GO
+	  ALTER TABLE [dbo].[Response_Attributes] WITH CHECK ADD CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses] FOREIGN KEY([Onboarding_Status_ID])
+	  REFERENCES [dbo].[cr_Onboarding_Statuses] ([Onboarding_Status_ID])
 
-ALTER TABLE [dbo].[Response_Attributes] WITH CHECK ADD CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses] FOREIGN KEY([Onboarding_Status_ID])
-REFERENCES [dbo].[cr_Onboarding_Statuses] ([Onboarding_Status_ID])
+	  ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses]
+	  
+END
 
-ALTER TABLE [dbo].[Response_Attributes] CHECK CONSTRAINT [FK_Response_Attributes_cr_Onboarding_Statuses]
-GO
 
 /****** Add Lookup Table to MP Page ******/
 
@@ -250,38 +271,11 @@ ELSE
            ,'Response_ID'
            ,2)
 	END
+GO 
 
-/****** Object:  StoredProcedure [dbo].[cr_CopyOnboarding]    Script Date: 6/10/2015 ******/
--- =============================================
--- Author:		Canterbury, Andy
--- Create date: 06/10/2015
--- Description:	Copy Onboarding Steps to a Response
--- =============================================
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_CopyOnboardingSteps]') AND type in (N'P', N'PC'))
-BEGIN
-EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[cr_CopyOnboardingSteps] AS' 
-END
-GO
-
-ALTER PROCEDURE [dbo].[cr_CopyOnboardingSteps] 
-	-- Add the parameters for the stored procedure here
-	@ResponseID int 	
-AS
-BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
-	SET NOCOUNT ON;	
-
-	INSERT INTO [dbo].[Response_Attributes] 
-		([Attribute_ID], [Response_ID], [Domain_ID], [Start_Date], [Order], [Onboarding_Status_ID])
-    SELECT GA.[Attribute_ID], @ResponseID as Response_ID, 1 as Domain_ID, GETDATE() as Start_Date, GA.[Order],  1 as Onboarding_Status_ID FROM [dbo].[Group_Attributes] GA
-	JOIN [MinistryPlatform].[dbo].[Attributes] AT ON GA.Attribute_ID = AT.Attribute_ID
-	WHERE GA.Group_ID = (SELECT O.Add_to_Group FROM [dbo].[Responses] R JOIN [dbo].[Opportunities] O on O.Opportunity_ID = R.Opportunity_ID WHERE Response_ID = @ResponseID) and AT.Attribute_Type_ID = 58
-	ORDER BY GA.[Order]
-
-END
-
-GO
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Onboarding_Atrribute_Type_Id]') AND type in (N'U'))
+DROP TABLE [dbo].[Onboarding_Atrribute_Type_Id]
+CREATE TABLE [dbo].[Onboarding_Atrribute_Type_Id] (attribute_type_id int)
 
 /** Add AttributeType for OnBoarding **/
 DECLARE @attribute_type varchar(50);
@@ -298,9 +292,9 @@ IF EXISTS (
 	BEGIN
 		UPDATE [dbo].[Attribute_Types]
 		SET [Description] = 'Onboarding Steps'
-		OUTPUT INSERTED.Attribute_Type_ID INTO @attributeIds
+		OUTPUT INSERTED.Attribute_Type_ID INTO [dbo].[Onboarding_Atrribute_Type_Id]
 		WHERE [dbo].[Attribute_Types].[Attribute_Type] = @attribute_type 
-		SELECT TOP 1 @attribute_type_id = id from @attributeIds
+		SELECT TOP 1 @attribute_type_id = attribute_type_id from [dbo].[Onboarding_Atrribute_Type_Id]
 	END
 ELSE
 	BEGIN
@@ -435,5 +429,38 @@ INSERT INTO [dbo].[Group_Attributes]
 			  1,
 			  getDate(),
 			  4)
+
+/****** Object:  StoredProcedure [dbo].[cr_CopyOnboarding]    Script Date: 6/10/2015 ******/
+-- =============================================
+-- Author:		Canterbury, Andy
+-- Create date: 06/10/2015
+-- Description:	Copy Onboarding Steps to a Response
+-- =============================================
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[cr_CopyOnboardingSteps]') AND type in (N'P', N'PC'))
+BEGIN
+EXEC dbo.sp_executesql @statement = N'CREATE PROCEDURE [dbo].[cr_CopyOnboardingSteps] AS' 
+END
+GO
+
+ALTER PROCEDURE [dbo].[cr_CopyOnboardingSteps] 
+	-- Add the parameters for the stored procedure here
+	@ResponseID int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;	
+
+	DECLARE @attribute_type_id int
+	SET @attribute_type_id = (SELECT TOP 1 attribute_type_id from [dbo].[Onboarding_Atrribute_Type_Id])
+
+	INSERT INTO [dbo].[Response_Attributes] 
+		([Attribute_ID], [Response_ID], [Domain_ID], [Start_Date], [Order], [Onboarding_Status_ID])
+    SELECT GA.[Attribute_ID], @ResponseID as Response_ID, 1 as Domain_ID, GETDATE() as Start_Date, GA.[Order],  1 as Onboarding_Status_ID FROM [dbo].[Group_Attributes] GA
+	JOIN [MinistryPlatform].[dbo].[Attributes] AT ON GA.Attribute_ID = AT.Attribute_ID
+	WHERE GA.Group_ID = (SELECT O.Add_to_Group FROM [dbo].[Responses] R JOIN [dbo].[Opportunities] O on O.Opportunity_ID = R.Opportunity_ID WHERE Response_ID = @ResponseID) and AT.Attribute_Type_ID = @attribute_type_id
+	ORDER BY GA.[Order]
+
+END
 
 GO

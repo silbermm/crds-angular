@@ -1,5 +1,8 @@
 ﻿using MinistryPlatform.Models;
 using System;
+using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads.Stewardship;
+using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Services.Interfaces
 {
@@ -9,6 +12,18 @@ namespace crds_angular.Services.Interfaces
 
         ContactDonor GetContactDonorForAuthenticatedUser(string authToken);
 
-        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+        ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);
+
+        ContactDonor GetContactDonorForDonorId(int donorId);
+            
+        ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
+
+        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+
+        string DecryptValues(string value);
+
+        int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contact);
+
+        CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId);
     }
 }

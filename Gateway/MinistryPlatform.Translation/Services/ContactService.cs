@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Reflection;
+using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -11,39 +11,55 @@ namespace MinistryPlatform.Translation.Services
 {
     public class ContactService : BaseService, IContactService
     {
-        private readonly int _myProfilePageId = AppSettings("MyProfile");
-        private readonly int contactsPageId = AppSettings("Contacts");
-        private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly int _contactsPageId;
+        private readonly int _householdsPageId;
+        private readonly int _securityRolesSubPageId;
+        private readonly int _congregationDefaultId;
+        private readonly int _householdDefaultSourceId;
+        private readonly int _householdPositionDefaultId;
+        private readonly int _addressesPageId;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(ContactService));
 
-        private IMinistryPlatformService _ministryPlatformService;
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly IConfigurationWrapper _configurationWrapper;
 
-        public ContactService(IMinistryPlatformService ministryPlatformService)
+        public ContactService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configuration)
+            : base(authenticationService, configuration)
         {
-            this._ministryPlatformService = ministryPlatformService;
+            _ministryPlatformService = ministryPlatformService;
+            _configurationWrapper = configuration;
+
+            _householdsPageId = configuration.GetConfigIntValue("Households");
+            _securityRolesSubPageId = configuration.GetConfigIntValue("SecurityRolesSubPageId");
+            _congregationDefaultId = configuration.GetConfigIntValue("Congregation_Default_ID");
+            _householdDefaultSourceId = configuration.GetConfigIntValue("Household_Default_Source_ID");
+            _householdPositionDefaultId = configuration.GetConfigIntValue("Household_Position_Default_ID");
+            _addressesPageId = configuration.GetConfigIntValue("Addresses");
+            _contactsPageId = configuration.GetConfigIntValue("Contacts");
         }
 
         public string GetContactEmail(int contactId)
         {
             try
             {
-                var recordsDict = _ministryPlatformService.GetRecordDict(contactsPageId, contactId, apiLogin());
+                var recordsDict = _ministryPlatformService.GetRecordDict(_contactsPageId, contactId, ApiLogin());
 
                 var contactEmail = recordsDict["Email_Address"].ToString();
 
                 return contactEmail;
             }
-            catch (NullReferenceException ex)
+            catch (NullReferenceException)
             {
-                logger.Debug(String.Format("Trying to email address of {0} failed", contactId));
+                _logger.Debug(string.Format("Trying to email address of {0} failed", contactId));
                 return string.Empty;
             }
         }
 
         public MyContact GetContactById(int contactId)
         {
-            var searchString = string.Format(",{0}", contactId);
+            var searchString = string.Format(",\"{0}\"", contactId);
             
-            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", apiLogin(), searchString);
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
 
             if (pageViewRecords.Count > 1)
             {
@@ -52,6 +68,25 @@ namespace MinistryPlatform.Translation.Services
 
             return ParseProfileRecord(pageViewRecords[0]);
         }
+
+        public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
+        {
+            var token = ApiLogin();
+            var familyRecords = _ministryPlatformService.GetSubpageViewRecords("HouseholdMembers", householdId, token);
+            var family = familyRecords.Select(famRec => new HouseholdMember
+            {
+                ContactId = famRec.ToInt("Contact_ID"),
+                FirstName = famRec.ToString("First_Name"),
+                Nickname = famRec.ToString("Nickname"),
+                LastName = famRec.ToString("Last_Name"),
+                DateOfBirth = famRec.ToDate("Date_of_Birth"),
+                HouseholdPosition = famRec.ToString("Household_Position"),
+                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?)null,
+                DonorId = famRec.ContainsKey("Donor_ID") ? famRec.ToInt("Donor_ID") : (int?)null
+            }).ToList();
+            return family;
+        }
+
 
         public MyContact GetMyProfile(string token)
         {
@@ -76,10 +111,11 @@ namespace MinistryPlatform.Translation.Services
                 Address_Line_2 = recordsDict.ToString("Address_Line_2"),
                 Congregation_ID = recordsDict.ToNullableInt("Congregation_ID"),
                 Household_ID = recordsDict.ToInt("Household_ID"),
+                Household_Name = recordsDict.ToString("Household_Name"),
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),
-                Anniversary_Date = recordsDict.ToDateAsString("Anniversary_Date"),
+                Anniversary_Date = ParseAnniversaryDate(recordsDict.ToDate("Anniversary_Date")),
                 Contact_ID = recordsDict.ToInt("Contact_ID"),
                 Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
                 Email_Address = recordsDict.ToString("Email_Address"),
@@ -100,29 +136,134 @@ namespace MinistryPlatform.Translation.Services
             return contact;
         }
 
+        private static string ParseAnniversaryDate(DateTime anniversary)
+        {
+            return String.Format("{0:MM/yyyy}", anniversary);
+        }
+
+        public int CreateContactForNewDonor(ContactDonor contactDonor)
+        {
+            return (CreateContact(contactDonor));
+        }
+
         public int CreateContactForGuestGiver(string emailAddress, string displayName)
         {
-            var contactDictionary = new Dictionary<string, object>();
-            contactDictionary["Email_Address"] = emailAddress;
-            contactDictionary["Company"] = false; // default
-            contactDictionary["Display_Name"] = displayName;
-            contactDictionary["Nickname"] = displayName;
-            contactDictionary["Household_Position_ID"] =
-                Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
+            var contactDonor = new ContactDonor
+            {
+                Details = new ContactDetails
+                {
+                    DisplayName = displayName,
+                    EmailAddress = emailAddress
+                }
+            };
+            return (CreateContact(contactDonor));
+        }
+
+        private int CreateContact(ContactDonor contactDonor)
+        {
+            var token = ApiLogin();
+
+            var emailAddress = contactDonor.Details.EmailAddress;
+            var displayName = contactDonor.Details.DisplayName;
+            int? householdId = null;
+            if (contactDonor.Details.HasAddress)
+            {
+                try
+                {
+                    householdId = CreateHouseholdAndAddress(displayName, contactDonor.Details.Address, token);
+                }
+                catch (Exception e)
+                {
+                    var msg = string.Format("Error creating household and address for emailAddress: {0} displayName: {1}",
+                                            emailAddress,
+                                            displayName);
+                    _logger.Error(msg, e);
+                    throw (new ApplicationException(msg, e));
+                }
+            }
+
+            var contactDictionary = new Dictionary<string, object>
+            {
+                {"Email_Address", emailAddress},
+                {"Company", false},
+                {"Display_Name", displayName},
+                {"Nickname", displayName},
+                {"Household_ID", householdId},
+                {"Household_Position_ID", _householdPositionDefaultId}
+            };
 
             try
             {
-                var contactId = WithApiLogin<int>(apiToken =>
-                    _ministryPlatformService.CreateRecord(contactsPageId, contactDictionary, apiToken)
-                    );
-                return (contactId);
+                return(_ministryPlatformService.CreateRecord(_contactsPageId, contactDictionary, token));
             }
             catch (Exception e)
             {
-                throw (new ApplicationException(
-                    String.Format("Error creating contact for guest giver, emailAddress: {0} displayName: {1}",
-                        emailAddress, displayName), e));
+                var msg = string.Format("Error creating contact, emailAddress: {0} displayName: {1}",
+                                        emailAddress,
+                                        displayName);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
             }
+        }
+
+        private int CreateHouseholdAndAddress(string householdName, PostalAddress address, string apiToken)
+        {
+            var addressDictionary = new Dictionary<string, object>
+                {
+                    { "Address_Line_1", address.Line1 },
+                    { "Address_Line_2", address.Line2 },
+                    { "City", address.City },
+                    { "State/Region", address.State },
+                    { "Postal_Code", address.PostalCode }
+                };
+            var addressId = _ministryPlatformService.CreateRecord(_addressesPageId, addressDictionary, apiToken);
+
+            var householdDictionary = new Dictionary<string, object>
+                {
+                    {"Household_Name", householdName},
+                    {"Congregation_ID", _congregationDefaultId},
+                    {"Household_Source_ID", _householdDefaultSourceId},
+                    {"Address_ID", addressId}
+                };
+
+            return(_ministryPlatformService.CreateRecord(_householdsPageId, householdDictionary, apiToken));
+        }
+
+        public IList<int> GetContactIdByRoleId(int roleId, string token)
+        {
+            var records = _ministryPlatformService.GetSubPageRecords(_securityRolesSubPageId, roleId, token);
+
+            return records.Select(record => (int) record["Contact_ID"]).ToList();
+        }
+
+        public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary)
+        {
+
+            WithApiLogin<int>(token =>
+            {
+                try
+                {
+                    _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Contacts"), profileDictionary, token);
+                    if (addressDictionary["Address_ID"] != null)
+                    {
+                        //address exists, update it
+                        _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Addresses"), addressDictionary, token);
+                    }
+                    else
+                    {
+                        //address does not exist, create it, then attach to household
+                        var addressId = _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("Addresses"), addressDictionary, token);
+                        householdDictionary.Add("Address_ID", addressId);
+                    }
+                    _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Households"), householdDictionary, token);
+                    return 1;
+                }
+                catch (Exception e)
+                {
+                    return 0;
+                }
+
+            });
         }
     }
 }

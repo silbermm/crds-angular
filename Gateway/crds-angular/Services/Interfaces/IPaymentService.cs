@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using crds_angular.Models.Crossroads;
+﻿using System.Collections.Generic;
+using crds_angular.Controllers.API;
+using crds_angular.Models.Crossroads.Stewardship;
+using MinistryPlatform.Models;
 
 namespace crds_angular.Services.Interfaces
 {
     public interface IPaymentService
     {
-        string CreateCustomer(string customerToken);
-        string ChargeCustomer(string customerToken, int amount, int donorId, string paymentType);
+        StripeCustomer CreateCustomer(string customerToken);
+        string CreateToken(string accountNumber, string routingNumber);
+        StripeCharge ChargeCustomer(string customerToken, int amount, int donorId);
+        StripeCharge ChargeCustomer(string customerToken, string customerSourceId, int amount, int donorId);
         string UpdateCustomerDescription(string customerToken, int donorId);
         SourceData UpdateCustomerSource(string customerToken, string cardToken);
         SourceData GetDefaultSource(string customerToken);
-        List<string> GetChargesForTransfer(string transferId);
+        List<StripeCharge> GetChargesForTransfer(string transferId);
+        StripeRefund GetChargeRefund(string chargeId);
+        StripeRefundData GetRefund(string refundId);
+        StripeCharge GetCharge(string chargeId);
+        StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
+        StripeSubscription CreateSubscription(string planName, string customer);
+        StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);
     }
 }

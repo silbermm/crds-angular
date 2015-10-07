@@ -9,7 +9,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IProgramService
     {
-        List<Program> GetOnlineGivingPrograms(int programType);
+        List<Program> GetOnlineGivingPrograms(int? programType);
         Program GetProgramById(int programId);
     }
 }

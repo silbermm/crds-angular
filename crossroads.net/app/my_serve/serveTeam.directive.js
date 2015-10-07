@@ -1,25 +1,25 @@
 (function() {
   'use strict()';
-  
-  var moment = require('moment');  
-  
+
+  var moment = require('moment');
+
   module.exports = ServeTeam;
 
-  ServeTeam.$inject = ['$rootScope', 
-    '$log', 
-    'Session', 
-    'ServeOpportunities', 
-    'Capacity', 
-    '$modal', 
+  ServeTeam.$inject = ['$rootScope',
+    '$log',
+    'Session',
+    'ServeOpportunities',
+    'Capacity',
+    '$modal',
     'growl'
   ];
 
-  function ServeTeam( $rootScope, 
-      $log, 
-      Session, 
-      ServeOpportunities, 
-      Capacity, 
-      $modal, 
+  function ServeTeam($rootScope,
+      $log,
+      Session,
+      ServeOpportunities,
+      Capacity,
+      $modal,
       growl) {
 
     return {
@@ -71,6 +71,7 @@
       scope.modalInstance = {};
       scope.openFromDate = openFromDate;
       scope.openToDate = openToDate;
+      scope.passedDeadlineMsg = passedDeadlineMsg;
       scope.roleChanged = roleChanged;
       scope.roles = null;
       scope.saveRsvp = saveRsvp;
@@ -78,8 +79,8 @@
       scope.signedup = null;
       scope.showEdit = false;
       scope.showIcon = showIcon;
-      scope.togglePanel = togglePanel; 
-      
+      scope.togglePanel = togglePanel;
+
       //////////////////////////////////////
 
       function allowProfileEdit() {
@@ -91,20 +92,30 @@
         }
       }
 
-      function cancel(){
+      function cancel() {
         // panel is open, close it
         // but first, revert back to original state...
-        if(scope.panelStates[scope.currentMember.contactId] !== undefined){
+        if (scope.panelStates[scope.currentMember.contactId] !== undefined) {
           scope.currentMember.serveRsvp = scope.panelStates[scope.currentMember.contactId];
           scope.currentMember.showFrequency = false;
         }
+
         // reset panel states
         scope.panelStates[scope.currentMember.contactId] = undefined;
+
+        // should we reset the form to pristine
+        if (!isFormDirty()) {
+          var teamFormName = 'teamForm-' + scope.team.index;
+          var form = scope['teamForm-' + scope.team.index];
+          form.$setPristine();
+        }
+
         togglePanel(null);
+
       }
 
       function changeFromDate() {
-        if (scope.currentMember.currentOpportunity !== undefined && 
+        if (scope.currentMember.currentOpportunity !== undefined &&
             scope.currentMember.currentOpportunity.fromDt !== undefined) {
           var m = moment(scope.currentMember.currentOpportunity.fromDt);
           if (m.isValid()) {
@@ -129,9 +140,11 @@
         if (!emailAddress) {
           return false;
         }
+
         if (emailAddress.length > 0) {
           return true;
         }
+
         return false;
       }
 
@@ -139,7 +152,8 @@
         var modalInstance = $modal.open({
           templateUrl: 'profile/editProfile.html',
           backdrop: true,
-          controller: "ProfileModalController as modal",
+          controller: 'ProfileModalController as modal',
+
           // This is needed in order to get our scope
           // into the modal - by default, it uses $rootScope
           scope: scope,
@@ -151,25 +165,25 @@
         });
         modalInstance.result.then(function(person) {
           personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
-          $rootScope.$emit("personUpdated", person);
+          $rootScope.$emit('personUpdated', person);
         });
       };
 
       function getFrequency() {
-        var dateTime = moment(scope.oppServeDate + " " + scope.opportunity.time);
-        var weeklyLabel = moment(scope.oppServeDate).format("dddd") + "s" + " " + dateTime.format("h:mma");
+        var dateTime = moment(scope.oppServeDate + ' ' + scope.opportunity.time);
+        var weeklyLabel = moment(scope.oppServeDate).format('dddd') + 's' + ' ' + dateTime.format('h:mma');
 
         var once = {
           value: 0,
-          text: "Once " + dateTime.format("M/D/YYYY h:mma")
+          text: 'Once ' + dateTime.format('M/D/YYYY h:mma')
         };
         var everyWeek = {
           value: 1,
-          text: "Every Week " + weeklyLabel
+          text: 'Every Week ' + weeklyLabel
         };
         var everyOtherWeek = {
           value: 2,
-          text: "Every Other Week " + weeklyLabel
+          text: 'Every Other Week ' + weeklyLabel
         };
 
         return [once, everyWeek, everyOtherWeek];
@@ -177,7 +191,33 @@
 
       function isActiveTab(memberName) {
         return memberName === scope.currentActiveTab;
-      };
+      }
+
+      function isFormDirty() {
+        var dirty = false;
+
+        // are there any other unsaved changes
+        var possible = _.filter(scope.team.members, function(m) {
+          if (m.contactId === scope.currentMember.contactId) {
+            return false;
+          }
+
+          var keys = _.keys(scope.panelStates);
+          if (_.indexOf(keys, '' + m.contactId) > -1) {
+            return true;
+          }
+
+          return false;
+        });
+
+        _.each(possible, function(e) {
+          if (e.serveRsvp !== scope.panelStates[e.contactId]) {
+            dirty = true;
+          }
+        });
+
+        return dirty;
+      }
 
       function isFormValid() {
         var validForm = {
@@ -230,6 +270,7 @@
             }
           }
         }
+
         return validForm;
       }
 
@@ -249,18 +290,25 @@
         var m = moment(stringDate);
 
         if (!m.isValid()) {
-          var dateArr = stringDate.split("/");
-          var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+          var dateArr = stringDate.split('/');
+          var dateStr = dateArr[2] + ' ' + dateArr[0] + ' ' + dateArr[1];
+
           // https://github.com/moment/moment/issues/1407
           // moment("2014 04 25", "YYYY MM DD"); // string with format
-          m = moment(dateStr, "YYYY MM DD");
+          m = moment(dateStr, 'YYYY MM DD');
 
           if (!m.isValid()) {
-            throw new Error("Parse Date Failed Moment Validation");
+            throw new Error('Parse Date Failed Moment Validation');
           }
         }
+
         $log.debug('date: ' + m.format('X'));
         return m.format('X');
+      }
+
+      function passedDeadlineMsg(id)
+      {
+        return _.result(_.find($rootScope.MESSAGES, 'id', id), 'content');
       }
 
       function populateDates() {
@@ -273,6 +321,7 @@
               scope.datesDisabled = true;
               break;
             case 0:
+
               // once...
               scope.formErrors.frequency = false;
               scope.currentMember.currentOpportunity.fromDt = scope.oppServeDate;
@@ -280,6 +329,7 @@
               scope.datesDisabled = true;
               break;
             default:
+
               // every  or everyother
               scope.formErrors.frequency = false;
               var roleId = (scope.currentMember.serveRsvp.roleId === 0) ? scope.currentMember.roles[0].roleId : scope.currentMember.serveRsvp.roleId;
@@ -288,8 +338,9 @@
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
-                scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + "/" + toDate.getDate() + "/" + toDate.getFullYear();
+                scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + '/' + toDate.getDate() + '/' + toDate.getFullYear();
               });
+
               scope.datesDisabled = false;
               break;
           }
@@ -307,6 +358,7 @@
         } else {
           scope.currentMember.serveRsvp.isSaved = false;
         }
+
         if (scope.selectedRole === undefined) {
           scope.currentMember.serveRsvp.attending = false;
           scope.currentMember.showFrequency = false;
@@ -320,15 +372,17 @@
         }
       }
 
-      function savePanel(member, force){
-        if(force){
+      function savePanel(member, force) {
+        if (force) {
           scope.panelStates[member.contactId] = angular.copy(member.serveRsvp);
           return true;
         }
-        if(scope.panelStates[member.contactId] === undefined ){
+
+        if (scope.panelStates[member.contactId] === undefined) {
           scope.panelStates[member.contactId] = angular.copy(member.serveRsvp);
           return true;
         }
+
         return false;
       }
 
@@ -339,13 +393,15 @@
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           return false;
         }
+
         scope.processing = true;
-        var rsvp = new ServeOpportunities.SaveRsvp();
+        var rsvp = {};
         rsvp.contactId = scope.currentMember.contactId;
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
         rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role) {
           return role.roleId;
         });;
+
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
         rsvp.startDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
@@ -354,10 +410,11 @@
         } else {
           rsvp.signUp = false;
         }
+
         rsvp.alternateWeeks = (scope.currentMember.currentOpportunity.frequency.value === 2);
-        rsvp.$save(function(saved) {
+        ServeOpportunities.SaveRsvp.save(rsvp, function(updatedEvents) {
           if (rsvp.signUp) {
-            $rootScope.$emit("notify", $rootScope.MESSAGES.serveSignupSuccess);
+            $rootScope.$emit('notify', $rootScope.MESSAGES.SU2S_Saving_Message);
           } else {
             var saveMessage = 'You have indicated that [participant] is not available for [team] on [date]';
             saveMessage = saveMessage.replace('[participant]', scope.currentActiveTab);
@@ -365,13 +422,24 @@
             saveMessage = saveMessage.replace('[date]', scope.oppServeDate);
             growl['success'](saveMessage);
           }
+
           scope.currentMember.serveRsvp.isSaved = true;
           scope.processing = false;
           updateCapacity();
           savePanel(scope.currentMember, true);
+          $rootScope.$emit('updateAfterSave', {'member': scope.currentMember, 'groupId': scope.team.groupId, 'eventIds': updatedEvents.EventIds});
+
+          // should we reset the form to pristine
+          if (!isFormDirty()) {
+            var teamFormName = 'teamForm-' + scope.team.index;
+            var form = scope['teamForm-' + scope.team.index];
+            form.$setPristine();
+          }
+
           return true;
         }, function(err) {
-          $rootScope.$emit("notify", $rootScope.MESSAGES.generalError);
+
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           scope.processing = false;
           return false;
         });
@@ -380,7 +448,7 @@
       function setActiveTab(member) {
         // save the original state of the current tab
         savePanel(member);
-        
+
         // Reset form errors
         scope.formErrors = {
           role: false,
@@ -395,6 +463,7 @@
         } else if (member !== scope.currentMember && scope.isCollapsed) {
           scope.isCollapsed = !scope.isCollapsed;
         }
+
         scope.currentMember = member;
         updateCapacity();
 
@@ -403,6 +472,7 @@
             return r.roleId === scope.currentMember.serveRsvp.roleId;
           });
         };
+
         allowProfileEdit();
       }
 
@@ -419,17 +489,18 @@
       }
 
       function togglePanel(member) {
-        if (!scope.isCollapsed && 
-            ( scope.currentMember === member || member === null)) {
-                    scope.isCollapsed = true;
+        if (!scope.isCollapsed && (scope.currentMember === member || member === null)) {
+          scope.isCollapsed = true;
           scope.currentActiveTab = null;
           return false;
-        } 
+        }
+
         //if a member wasn't passed in, use default member
         if (member === null) {
           scope.currentMember = scope.team.members[0];
           member = scope.currentMember;
         }
+
         // save the original state of the member
         setActiveTab(member);
       }

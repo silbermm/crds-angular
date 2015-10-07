@@ -1,11 +1,9 @@
 <div class="row">
   <div class="col-sm-8 col-sm-offset-2">
-    <h1>The Daily</h1>
+    <h1 class="page-header">The Daily</h1>
     <h2 class="subheading">Spend time connecting with God on a daily basis.</h2>
 
-    <p>We make it easy for you with The Daily—an electronic tool that helps you regularly engage with the Bible and prayer. Able to be completed in just 15 minutes, each day follows a simple format of reading, reflection and response. You can subscribe to receive The Daily via e-mail below, or read it online <a ui-sref="content({link:'/blog/the-daily'})">here</a>.</p>
-
-    <p>If you're new to The Daily, <a ui-sref="content({link:'/the-daily-getting-started/'})">here are some tips on getting started</a>.</p>
+    <div ng-bind-html="$root.MESSAGES.thedaily_desc.content | html"></div>
 
     <hr>
 
@@ -20,7 +18,7 @@
             <div class="input-group">
               <input type="email" name="email" ng-model="mailchimp.EMAIL" placeholder="Email address" class="required email form-control">
               <span class="input-group-btn">
-                <input type="submit" value="Subscribe" ng-click="addSubscription(mailchimp)" class="btn btn-default">
+                <input type="submit" value="Subscribe" ng-click="addSubscription(mailchimp)" class="btn btn-primary">
               </span>
 
             </div><!-- /input-group -->
@@ -36,7 +34,7 @@
 
       </form>
 
-    <p>Looking to unsubscribe from The Daily emails? <a href="http://crossroads.us5.list-manage.com/unsubscribe?u=30fc95dac2caa1e536e62b5d2&amp;id=7900a9a5ab">Click here</a>.</p>
+    <div ng-bind-html="$root.MESSAGES.thedaily_unsub.content | html"></div>
 
   </div>
 </row><!--/row-->

@@ -1,7 +1,13 @@
-<!--- layout: default title: Style Guide published: true permalink: /styleguide/ categories: --->
-<div class="container">
+<div class="container-fluid">
+  <div class="col-sm-12">
+    <h1 class="page-header">Style Guide</h1>
+    <h2 class="subheading">Front end development &amp; design guide</h2>
+  </div>
+</div>
+
+<div class="container-fluid">
   <nav class="col-sm-3">
-    <ul class="nav nav-pills nav-stacked">
+    <ul class="nav nav-pills nav-stacked push-top">
       <li offset="30"><a ng-click="styleguide.scrollTo('getting-started')">Getting Started</a>
       </li>
       <li offset="30"><a ng-click="styleguide.scrollTo('coding-style')">Coding Style</a>
@@ -86,7 +92,6 @@
   <!--/col-sm-3-->
 
   <div class="col-sm-9 styleguide-content" id="top">
-    <h2 class="page-title">Crossroads.net Front End Development &amp; Design Guide</h2>
 
     <div id="getting-started">
       <h3>Getting Started</h3>
@@ -322,7 +327,7 @@
           <li>To add any of these icons to the project:
             <ol>
               <li>Clone the 'icon-library' repo. </li>
-              <li>Find the icon you would like to use in the project. Make sure to double check that we haven't already included it.</li>
+              <li>Find the icon you would like to use in the project. Make sure to double check that we haven&apos;t already included it.</li>
               <li>Copy the SVG file for the icon you want to use from the icon-library directory in to the "/app/icons/" directory in the crossroads.net repo.</li>
               <li>Run 'gulp' on the crossroads.net project. Your icon will now be included in the project. </li>
             </ol>
@@ -382,10 +387,10 @@
       <ul class="list-inline clearfix">
         <li class="col-sm-6">
           <div class="panel panel-default flush-bottom">
-            <div class="panel-heading">100% width</div>
+            <div class="panel-heading">No Side Bar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/one_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/one_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -395,10 +400,10 @@
         <!--/col-sm-6-->
         <li class="col-sm-6">
           <div class="panel panel-default flush-bottom">
-            <div class="panel-heading">100% full screen</div>
+            <div class="panel-heading">Screen Width</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_width_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/full_width_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -411,7 +416,7 @@
             <div class="panel-heading">Left Sidebar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/left_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/left_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -424,7 +429,7 @@
             <div class="panel-heading">Right Sidebar</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/right_column_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/right_column_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -434,10 +439,10 @@
         <!--/col-sm-6-->
         <li class="col-sm-6">
           <div class="panel panel-default flush-bottom">
-            <div class="panel-heading">No header footer</div>
+            <div class="panel-heading">No Header or Footer</div>
             <div class="panel-body">
               <a href="#">
-                <img src="http://crossroads-media.s3.amazonaws.com/images/layouts/full_page_example.png" class="img-responsive" />
+                <img data-src="//crossroads-media.imgix.net/images/layouts/full_page_example.png" class="img-responsive imgix-fluid" />
               </a>
             </div>
             <!--/panel-body-->
@@ -456,13 +461,13 @@
     <hr />
 
     <div id="the-kitchen-sink">
-      <h3>The Kitchen Sink</h3>
-      <h3 class="subheading">A list of all of our components</h3>
 
       <div class="panel panel-default" id="headings">
         <div class="panel-heading">Headings</div>
         <div class="panel-body">
-          <h1 class="page-header">Page Header <small>With Small Text</small></h1>
+          <h1 class="page-header">Page Header</h1>
+          <h1 class="page-header">Page Header</h1>
+          <h2 class="subheading">With A Subheading</h2>
           <h1>This is an h1 heading</h1>
           <h2>This is an h2 heading</h2>
           <h3>This is an h3 heading</h3>
@@ -628,12 +633,12 @@
               </div>
               <div class="form-group">
                 <label for="date">Date Picker</label>
-                  <p class="input-group datepicker">
-                    <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
-                    <span class="input-group-btn">
-                      <button type="button" class="btn btn-gray-light" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                    </span>
-                  </p>
+                <p class="input-group datepicker">
+                  <input type="text" class="form-control" placeholder="dd/mm/yyyy" datepicker-popup="dd/MM/yyyy" ng-model="styleguide.dt" ng-required="true" close-text="Close" is-open="styleguide.opened" />
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-standard" ng-click="styleguide.openDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+                </p>
               </div>
               <div class="checkbox">
                 <label>
@@ -698,72 +703,83 @@
         <div class="panel-heading">Buttons
         </div>
         <div class="panel-body">
+          <h4>Main Buttons</h4>
           <p>
-            <button type="button" class="btn btn-lg btn-default">Default</button>
-            <button type="button" class="btn btn-lg btn-primary">Primary</button>
-            <button type="button" class="btn btn-lg btn-success">Success</button>
-            <button type="button" class="btn btn-lg btn-info">Info</button>
-            <button type="button" class="btn btn-lg btn-warning">Warning</button>
-            <button type="button" class="btn btn-lg btn-danger">Danger</button>
-            <button type="button" class="btn btn-lg btn-gray">Gray</button>
-            <button type="button" class="btn btn-lg btn-gray-light">Gray Light</button>
-
-            <button type="button" class="btn btn-lg btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-lg btn-link">Link</button>
+            <button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-standard">Standard</button>
           </p>
+
+          <p>
+            The Primary <code>.btn-primary</code> is used as the Call to Action button. It should never be used as a standard button type. <br>
+            The Standard <code>.btn-standard</code> is to used for all buttons that aren't the Call to Action.
+          </p>
+
+          <h4>Alternative Buttons</h4>
+          <p>
+            <button type="button" class="btn btn-secondary">Secondary</button>
+            <button type="button" class="btn btn-standard-dark">Standard (Dark)</button>
+          </p>
+          <p>The Secondary <code>.btn-secondary</code> is used as a secondary call to action. It should never be used as a standard button type, or as the primary call to action.</p>
+          <p>The Standard (Dark) <code>.btn-standard-dark</code> is used as a standard button, but when the background color of the containing container calls for it.</p>
+
+          <h4>Default Button</h4>
           <p>
             <button type="button" class="btn btn-default">Default</button>
-            <button type="button" class="btn btn-primary">Primary</button>
-            <button type="button" class="btn btn-success">Success</button>
-            <button type="button" class="btn btn-info">Info</button>
-            <button type="button" class="btn btn-warning">Warning</button>
-            <button type="button" class="btn btn-danger">Danger</button>
-            <button type="button" class="btn btn-gray">Gray</button>
-            <button type="button" class="btn btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
+          </p>
+
+          <p>
+            This is the bootstrap default button <code>.btn-default</code> that is used by many third party libraries. It can be treated as a standard button, primarily, when attached to a form element. i.e. Datepicker.
+          </p>
+
+          <h4>Button Link</h4>
+          <p>
             <button type="button" class="btn btn-link">Link</button>
           </p>
+
+          <h4>Button Sizes</h4>
           <p>
-            <button type="button" class="btn btn-sm btn-default">Default</button>
-            <button type="button" class="btn btn-sm btn-primary">Primary</button>
-            <button type="button" class="btn btn-sm btn-success">Success</button>
-            <button type="button" class="btn btn-sm btn-info">Info</button>
-            <button type="button" class="btn btn-sm btn-warning">Warning</button>
-            <button type="button" class="btn btn-sm btn-danger">Danger</button>
-            <button type="button" class="btn btn-sm btn-gray">Gray</button>
-            <button type="button" class="btn btn-sm btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-sm btn-link">Link</button>
+            <button type="button" class="btn btn-default btn-xs">.btn-xs</button>
+            <button type="button" class="btn btn-default btn-sm">.btn-sm</button>
+            <button type="button" class="btn btn-default">Normal</button>
+            <button type="button" class="btn btn-default btn-lg">.btn-lg</button>
           </p>
+
           <p>
-            <button type="button" class="btn btn-xs btn-default">Default</button>
-            <button type="button" class="btn btn-xs btn-primary">Primary</button>
-            <button type="button" class="btn btn-xs btn-success">Success</button>
-            <button type="button" class="btn btn-xs btn-info">Info</button>
-            <button type="button" class="btn btn-xs btn-warning">Warning</button>
-            <button type="button" class="btn btn-xs btn-danger">Danger</button>
-            <button type="button" class="btn btn-xs btn-gray">Gray</button>
-            <button type="button" class="btn btn-xs btn-primary btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
-            </button>
-            <button type="button" class="btn btn-xs btn-link">Link</button>
+            <span>Use <code>.btn-block-mobile</code> on form submit buttons so they are smaller on desktop, and expand to full width on mobile.</span>
+            <button type="button" class="btn btn-default btn-block-mobile">Submit</button>
           </p>
+
+          <h4>Glyphicons</h4>
           <p>
             <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Glyphicons!</button>
-            <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span>
+            <button type="button" class="btn btn-standard btn-labeled">Label<span class="btn-label"><svg viewBox="0 0 32 32" class="icon icon-checkmark"><use xlink:href="#checkmark"></use></svg></span>
             </button>
-            <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span>
-            </button>
-            <button type="button" class="btn btn-info"><span class="glyphicon glyphicon-info-sign"></span>
-            </button>
-            <button type="button" class="btn btn-warning"><span class="glyphicon glyphicon-flash"></span>
-            </button>
-            <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-ban-circle"></span>
-            </button>
-            <button type="button" class="btn btn-gray"><span class="glyphicon glyphicon-ban-circle"></span>
-            </button>
-            <button type="button" class="btn btn-link"><span class="glyphicon glyphicon-arrow-right"></span>
-            </button>
+          </p>
+
+          <h4>Alert Buttons</h4>
+          <p>
+            <button type="button" class="btn btn-success">.success</button>
+            <button type="button" class="btn btn-info">.info</button>
+            <button type="button" class="btn btn-warning">.warning</button>
+            <button type="button" class="btn btn-danger">.danger</button>
+          </p>
+
+          <p>
+            These buttons are to be used only inside an alert as shown in the example below.
+          </p>
+
+          <h5>Example</h5>
+          <p>
+            <div class="crossroads-growl ng-isolate-scope">
+              <div class="growl-container">
+                <div class="growl-item alert ng-scope alert-info alert alert-dismissable">
+                  <h4 class="growl-title ng-binding ng-hide"></h4>
+                  <div class="growl-message ng-binding clearfix"><strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
+                    <button type="button" class="btn btn-info btn-sm pull-right">Got it!</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </p>
 
           <hr />
@@ -773,24 +789,55 @@
           <hr />
           <h4>Table Button</h4>
           <ul class="list-group">
-            <li class="list-group-item hard-sides hard-ends row-same-height">
-              <div class="col-xs-9 col-sm-10 col-xs-height col-top">
-                <p class="push-half-top">
-                  Table button example
-                </p>
-              </div>
-              <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
-                <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
+            <li class="list-group-item hard-sides hard-ends">
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-9 col-md-10 col-top">
+                  <p class="push-half-top">
+                    Primary button example
+                  </p>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-2 hard-sides mobile-soft-sides mobile-push-half-top">
+                  <a href="" class="table-btn btn-primary">Table Button</a>
+                </div>
               </div>
             </li>
-            <li class="list-group-item hard-sides hard-ends row-same-height">
-              <div class="col-xs-9 col-sm-10 col-xs-height col-top">
-                <p class="push-half-top">
-                  Table button example
-                </p>
+            <li class="list-group-item hard-sides hard-ends">
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-9 col-md-10 col-top">
+                  <p class="push-half-top">
+                    Primary button example
+                  </p>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-2 hard-sides mobile-soft-sides mobile-push-half-top">
+                  <a href="" class="table-btn btn-primary">Table Button</a>
+                </div>
               </div>
-              <div class="col-xs-3 col-sm-2 hard-right col-xs-height">
-                <a href="/#/demo/go-trip-giving" class="table-btn"><span>Table Button</span></a>
+            </li>
+          </ul>
+
+          <ul class="list-group">
+            <li class="list-group-item hard-sides hard-ends">
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-9 col-md-10 col-top">
+                  <p class="push-half-top">
+                    Standard button example
+                  </p>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-2 hard-sides mobile-soft-sides mobile-push-half-top">
+                  <a href="" class="table-btn btn-standard">Table Button</a>
+                </div>
+              </div>
+            </li>
+            <li class="list-group-item hard-sides hard-ends">
+              <div class="clearfix">
+                <div class="col-xs-12 col-sm-9 col-md-10 col-top">
+                  <p class="push-half-top">
+                    Standard button example
+                  </p>
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-2 hard-sides mobile-soft-sides mobile-push-half-top">
+                  <a href="" class="table-btn btn-standard">Table Button</a>
+                </div>
               </div>
             </li>
           </ul>
@@ -801,20 +848,54 @@
       </div>
       <!--/buttons-->
 
+      <!--Images-->
       <div class="panel panel-default" id="images">
         <div class="panel-heading">Images
         </div>
         <div class="panel-body">
-          <p><img src="http://placehold.it/100x100" class="img-rounded">
-            <img src="http://placehold.it/100x100" class="img-circle">
-            <img src="http://placehold.it/100x100" class="img-thumbnail">
-          </p>
-        </div>
-      </div>
+          <p>We use IMGIX to serve our images. This service assures the correct image size is delivered to the browser based on the size of the container and viewport of the device used to view the page.</p>
+          <p>Images are hosted on Amazon S3 but served from IMGIX, use the <code>data-src="//crossroads-media.imgix.net/images/</code> along with class <code>imgix-fluid</code> to take advantage of this service.</p>
+
+          <div class="row">
+            <div class="col-sm-12">
+              <img data-src="//crossroads-media.imgix.net/images/IanHenderson-GOmamaCSM.jpg" class="imgix-fluid img-responsive" >
+            </div>
+          </div>
+
+          <br>
+
+          <div class="row">
+            <div class="col-xs-4">
+              <h4>Rounded Edges with class <code>img-rounded</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-2.jpg" class="imgix-fluid img-responsive img-rounded" >
+            </div>
+            <div class="col-xs-4">
+              <h4>Circles with class <code>img-circle</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-3.jpg" class="imgix-fluid img-responsive img-circle" >
+            </div>
+            <div class="col-xs-4">
+              <h4>Thumbnails with class <code>img-thumbnail</code></h4>
+              <img data-src="//crossroads-media.imgix.net/images/styeguide-images-4.jpg" class="imgix-fluid img-responsive img-thumbnail" >
+            </div>
+          </div><!--/row-->
+
+          <br>
+
+          <div class="row">
+            <div class="col-sm-12" >
+              <p>For background images, the <code>data-src</code> needs to exist on the contain with the background along with class <code>imgix-fluid-bg</code>. Use class <code>img-background</code> to make the image cover the contain and center.</p>
+              <div class="imgix-fluid-bg img-background" data-src="//crossroads-media.imgix.net/images/thestory_image_copy1.jpg">
+                <h1 style="text-align: center; color: white; opacity: 0.2; font-size: 8vw; padding: 240px 15px;font-weight:bold;">BACKGROUND IMAGES</h1>
+              </div>
+            </div>
+          </div>
+
+        </div><!--/panel-body-->
+      </div><!--/#images-->
+
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
-      <!--/images-->
 
       <div class="panel panel-default" id="dropdowns">
         <div class="panel-heading">Dropdowns
@@ -851,8 +932,10 @@
         </div>
         <div class="panel-body">
           <div class="input-group">
-            <span class="input-group-btn">                <button class="btn btn-default" type="button">Go!</button>              </span>
             <input type="text" class="form-control" placeholder="Username">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button">Go!</button>
+            </span>
           </div>
           <br>
           <div class="input-group">
@@ -1062,10 +1145,14 @@
           <div class="panel panel-default push-top">
             <div class="panel-body text-muted small" role="alert">
               This is an example of a notice that we would put at the bottom of the page. This can be fine print or messages that aren't as important as an alert. It just uses a combination of the <code>.panel</code>, <code>.text-muted</code> and <code>.small</code> classes.
-            </div> <!--/panel-body-->
-          </div><!--/panel-->
-        </div><!--/panel-body-->
-      </div><!--/panel-->
+            </div>
+            <!--/panel-body-->
+          </div>
+          <!--/panel-->
+        </div>
+        <!--/panel-body-->
+      </div>
+      <!--/panel-->
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
       </div>
@@ -1145,6 +1232,10 @@
         </div>
         <div class="panel-body">
           <span class="label label-default">Default</span>
+          <span class="label label-primary">Primary</span>
+          <span class="label label-standard">Standard</span>
+          <span class="label label-secondary">Secondary</span>
+          <span class="label label-standard-dark">Standard (Dark)</span>
           <span class="label label-success">Success</span>
           <span class="label label-warning">Warning</span>
           <span class="label label-danger">Danger</span>
@@ -1384,7 +1475,7 @@
             </li>
             <li><a href="#">First Impressions</a>
             </li>
-            <li>Clifton Weekdays Signup</li>
+            <li>Uptown Weekdays Signup</li>
             <h5>Structure</h5>
             <ol class="breadcrumb">
               <li><a href="#">Category</a>
@@ -1421,7 +1512,7 @@
               <h4 class="billboard-subheadline">.billboard-subheadline</h4>
               <p class="billboard-content"> "It's a great feeling to serve others who are less fortunate in our city, and it's what God calls us to do."</p>
               <p>
-                <img src="http://crossroads-media.s3.amazonaws.com/images/spotlight_kristen.png" class="billboard-image-corner hidden-xs hidden-sm">
+                <img data-src="//crossroads-media.imgix.net/images/spotlight_kristen.png" class="billboard-image-corner hidden-xs hidden-sm">
               </p>
             </div>
           </div>
@@ -1474,45 +1565,11 @@
       <div class="panel panel-default" id="registerpattern">
         <div class="panel-heading">Register Form
         </div>
-        <!--/panel-heading-->
         <div class="panel-body">
-          <div class="col-sm-6 col-sm-offset-3 push-top">
-            <div class="dd_menu">
-              <div class="primary">
-                <form id="nav_login" role="form" ng-submit="login()" class="ng-pristine ng-valid">
-                  <div class="form-group">
-                    <div class="soft-half-bottom">
-                      <input class="form-control ng-pristine ng-untouched ng-valid" type="text" placeholder="First Name" />
-                    </div>
-                    <div class="soft-half-bottom">
-                      <input class="form-control ng-pristine ng-untouched ng-valid" type="text" placeholder="Last Name" />
-                    </div>
-                    <div class="soft-half-bottom">
-                      <input class="form-control" type="text" name="userName" id="username_nav" placeholder="Email" autocomplete="off" autocapitalize="off">
-                    </div>
-                    <div class="soft-half-bottom">
-
-                      <div class="input-group">
-                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="Password">
-                        <a class="input-group-addon btn-primary pointer" ng-click="pwprocessing = 'HIDE'"><small class="smaller">{{ pwprocessing || 'SHOW' }}</small></a>
-
-
-                      </div>
-
-                    </div>
-                    <div>
-                      <!-- ngIf: loginError -->
-                    </div>
-                    <p class="small push-half-bottom text-muted">Registering signifies that you have read and agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
-                    <input type="submit" name="submit_nav" value="Register" ng-class="{disabled: processing }" id="submit_nav" class="col-xs-12 btn btn-primary push-half-bottom">
-                  </div>
-                </form>
-              </div>
-            </div>
+          <div class="col-xs-12">
+            <register-form></register-form>
           </div>
-          <!--/col-sm-6-->
         </div>
-        <!--/panel-body-->
       </div>
       <div>
         <a ng-click="styleguide.scrollTo('top')">Back to top <i class="fa fa-caret-up"></i></a>
@@ -1526,7 +1583,7 @@
           <div class="col-sm-6 col-sm-offset-3 push-top">
             <script type="text/ng-template" id="styleModalContent.html">
               <div class="modal-header">
-                <h3 class="modal-title">I'm a modal and this is my header</h3>
+                <h3 class="modal-title">I&apos;m a modal and this is my header</h3>
               </div>
               <div class="modal-body">
                 I'm the modal body.
@@ -1610,22 +1667,19 @@
       <div class="panel panel-default" id="cards">
         <div class="panel-heading">Cards</div>
         <div class="panel-body">
-          <div class="card-item clearfix row-same-height" data-category="view">
-            <div class="col-sm-3 col-xs-4 card-img mobile-hard-left col-xs-height">
-              <img class="card-img-show" src="http://lorempixel.com/250/250/?random=331"> </div>
-            <div class="col-sm-9 col-xs-8 card-content card-dark col-xs-height col-top">
-              <div class="card-row card-header go-trip-card-header"> Profile Card Name </div>
+          <div class="card-item go-trip-card clearfix row-same-height" data-category="view">
+            <div class="col-sm-3 col-xs-4 card-img card-dark mobile-hard-left col-xs-height">
+              <img class="card-img-show" src="http://lorempixel.com/250/250/?random=331">
+            </div>
+            <!--/card-img-->
+            <div class="col-sm-9 col-xs-8 card-content col-xs-height col-top">
+              <div class="card-row card-header go-trip-card-header">
+                <h3>Profile Card Name</h3>
+                <p class="card-desc">
+                  Profile Card Text
+                </p>
+              </div>
               <ul class="list-group">
-                <li class="list-group-item hard-left row-same-height">
-                  <div class="go-trip-name col-xs-9 col-sm-10 col-xs-height col-top">
-                    <p> List Item </p>
-                  </div>
-                  <!--/go-trip-name-->
-                  <div class="go-trip-btn col-xs-3 col-sm-2 hard-right col-xs-height">
-                    <a href="/#/demo/go-trip-giving" class="table-btn"><span>Button</span></a>
-                  </div>
-                  <!--/go-trip-btn-->
-                </li>
                 <li class="list-group-item hard-left row-same-height">
                   <div class=" go-trip-name col-xs-12 col-xs-height col-top">
                     <h4 class="small-heading flush-left inline pull-left">SHARE:</h4>
@@ -1638,7 +1692,35 @@
                 </li>
               </ul>
             </div>
+            <!--/card-content-->
+          </div>
+          <!--/card-item-->
+          <div class="card-item" data-category="view">
+            <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark mobile-hard-left col-sm-height">
+              <img class="card-img-show" src="http://lorempixel.com/250/250/?random=331">
+            </div>
             <!--/card-img-->
+            <div class="col-sm-9 col-xs-12 card-content col-sm-height col-top">
+              <div class="card-row card-header go-trip-card-header">
+                <h3>Profile Card Name Stacked</h3>
+                <p class="card-desc">
+                  Profile Card Text
+                </p>
+              </div>
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <div class=" go-trip-name col-xs-12 col-xs-height col-top">
+                    <h4 class="small-heading flush-left inline pull-left">SHARE:</h4>
+                    <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_20x20_style pull-left push-half-left push-half-top">
+                        <a href class="addthis_button_facebook"></a>
+                        <a href class="addthis_button_twitter"></a>
+                        <a href class="addthis_button_email"></a>
+                    </sn-addthis-toolbox>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!--/card-content-->
           </div>
           <!--/card-item-->
         </div>
@@ -1656,53 +1738,54 @@
               <div class="col-sm-4">
                 <h5>Large (32 x 32px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
                 <h5>Medium (20 x 20px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_20x20_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
                 <h5>Small (16 x 16px)</h5>
                 <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_16x16_style">
-                    <a href class="addthis_button_facebook"></a>
-                    <a href class="addthis_button_twitter"></a>
-                    <a href class="addthis_button_email"></a>
+                  <a href class="addthis_button_facebook"></a>
+                  <a href class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_email"></a>
                 </sn-addthis-toolbox>
               </div>
-            </div><!--/col-sm-12-->
+            </div>
+            <!--/col-sm-12-->
             <div class="col-sm-12 push-top">
               <div class="col-sm-4">
-              <h5>With Tooltips</h5>
-              <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
+                <h5>With Tooltips</h5>
+                <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style">
                   <a href class="addthis_button_facebook" tooltip="Share your trip fundraising page with friends and family on Facebook" tooltip-append-to-body="true" tooltip-placement="right"></a>
-                  <a href  class="addthis_button_twitter" tooltip="Share your trip fundraising page with friends and family on Twitter" tooltip-append-to-body="true" tooltip-placement="right"></a>
+                  <a href class="addthis_button_twitter" tooltip="Share your trip fundraising page with friends and family on Twitter" tooltip-append-to-body="true" tooltip-placement="right"></a>
                   <a href class="addthis_button_email" tooltip="Share your trip fundraising page with friends and family via Email" tooltip-append-to-body="true" tooltip-placement="right"></a>
-              </sn-addthis-toolbox>
+                </sn-addthis-toolbox>
               </div>
               <div class="col-sm-4">
-              <h5>With Custom URL Info</h5>
-              <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.google.com" data-title="Google Homepage" data-description="Here is the Google homepage.">
+                <h5>With Custom URL Info</h5>
+                <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.google.com" data-title="Google Homepage" data-description="Here is the Google homepage.">
                   <a href class="addthis_button_facebook"></a>
-                  <a href  class="addthis_button_twitter"></a>
+                  <a href class="addthis_button_twitter"></a>
                   <a href class="addthis_button_email"></a>
-              </sn-addthis-toolbox>
+                </sn-addthis-toolbox>
               </div>
               <div class="col-sm-12 push-top">
-              <strong>Note: </strong>To set your own custom URL information, change the directive's opening tag from:
-              <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style"&gt;</pre>
-              With this (using example.com):
-              <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.example.com" data-title="Example Homepage" data-description="Here is the Example description."&gt; </pre>
+                <strong>Note: </strong>To set your own custom URL information, change the directive&apos;s opening tag from:
+                <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style"&gt;</pre> With this (using example.com):
+                <pre>&lt;sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_32x32_style" data-url="http://www.example.com" data-title="Example Homepage" data-description="Here is the Example description."&gt; </pre>
               </div>
             </div>
-          </div><!--/row-->
+          </div>
+          <!--/row-->
         </div>
         <!--/panel-body-->
       </div>

@@ -1,3 +1,6 @@
+require('crds-core');
+require('../../app/app');
+
 describe('Serve Modal Controller', function() {
 
   var controller, 
@@ -12,9 +15,9 @@ describe('Serve Modal Controller', function() {
     'toDate' : new Date() 
   };
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
-  beforeEach(module(function($provide){
+  beforeEach(angular.mock.module(function($provide){
     mockModalInstance = jasmine.createSpyObj('$modalInstance', ['close']);
     mockModalInstance.close.and.callFake(function(obj){
       return true;

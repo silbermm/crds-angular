@@ -2,7 +2,7 @@
 (function(){
   
   var moment = require('moment');
-  var formatDate = require('../../../core/crds_utilities').formatDate;
+  var formatDate = crds_utilities.formatDate;
 
   module.exports = ServeModalController;
 

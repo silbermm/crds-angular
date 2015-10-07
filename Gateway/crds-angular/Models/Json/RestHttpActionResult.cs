@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -50,6 +51,8 @@ namespace crds_angular.Models.Json
             {
                 Content = new StringContent(JsonConvert.SerializeObject(_content))
             };
+
+            response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
             return (Task.FromResult(response));
         }
 

@@ -5,6 +5,16 @@ The client facing website for crossroads church.
 ###Getting Started 
 The first thing you'll need to get started is NodeJS. Head over to [http://nodejs.org/](http://nodejs.org) and install based on your operating system. Once you pull down the code, just run `npm i` to install all dependencies locally.
 
+#### Core Functionality
+If you are developing a module that can be considered a core module (used throughout the site in different modules) then you will also need to pull down [crds-core](https://github.com/crdschurch/crds-corejs).
+
+To test the core-module in the main site, use the `npm link` tool. 
+* cd into crds-core and type `npm link`
+* cd into crds-angular/crossroads.net and type `npm link crds-core`
+This will create a symbolic link in your node_modules directory to your local copy of crds-core
+
+#### Builds
+
 We use gulp scripts to build and run webpack so you will also need to install gulp globally.  This is not required, but makes command-line tasks easier later on.  To install gulp globally, use one of the following commands.  Both will install gulp into the NodeJS path, which is presumably already on your OS's execution PATH.
 
 For Windows users (replace the prefix value below with the path to your NodeJS install):
@@ -72,8 +82,6 @@ To run tests in safari, you will need to download the safari plugin from (here)[
 
 You will now be able to run protractor by typing `protractor protractor.conf.js`. 
 
-
-
 ###Run
 To run the project, run `gulp start` and point your browser to `http://localhost:8080`. If you want live reload, use `http://localhost:8080/webpack-dev-server` but keep in mind that the angular inspector will not work correctly and routes will not show up correctly with live reload. 
 
@@ -135,4 +143,19 @@ Clone the crds-corkboard github repo to your local machine
 
 ##Angular Style Guide
 We will follow the [Crossroads Angular Style Guide](https://github.com/crdschurch/angular-styleguide).
+
+##Linting
+### JSHint
+First install jshint globally with npm `npm install -g jshint`
+A .jshintrc file has already been added to the project
+* For Atom, install [linter-jshint](https://github.com/AtomLinter/linter-jshint)
+* For Sublime Text, install [Sublime-jshint](https://github.com/victorporof/Sublime-JSHint)
+* For IntelliJ, supported out of the box
+
+### JSCS
+Install jscs with npm `npm install jscs -g`
+A .jscsrc file exists to use AirBnB styleguide
+* For Atom. [linter-jscs](https://atom.io/packages/linter-jscs)
+* For Sublime Text 3, [SublimeLinter](https://github.com/SublimeLinter/SublimeLinter-jscs/)
+* For IntelliJ, [jscs-plugin](https://github.com/idok/jscs-plugin)
 

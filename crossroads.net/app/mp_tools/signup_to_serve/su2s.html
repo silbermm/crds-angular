@@ -1,5 +1,5 @@
 <div ng-if="su2s.showError()" class="alert alert-danger" role="alert">
-  <strong>Sorry </strong> You cannot use this tool from that specific page. This tool only supports being called from the record view page.
+  <div ng-bind-html="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
 <form name="su2sForm">

@@ -27,6 +27,7 @@ namespace crds_angular.test.controllers
         private GroupController fixture;
         private Mock<crds_angular.Services.Interfaces.IGroupService> groupServiceMock;
         private Mock<IAuthenticationService> authenticationServiceMock;
+        private Mock<IParticipantService> participantServiceMock;
         private string authType;
         private string authToken;
         private const int GroupRoleId = 16;
@@ -36,7 +37,9 @@ namespace crds_angular.test.controllers
         {
             groupServiceMock = new Mock<crds_angular.Services.Interfaces.IGroupService>();
             authenticationServiceMock = new Mock<IAuthenticationService>();
-            fixture = new GroupController(groupServiceMock.Object, authenticationServiceMock.Object);
+            participantServiceMock = new Mock<IParticipantService>();
+
+            fixture = new GroupController(groupServiceMock.Object, authenticationServiceMock.Object,participantServiceMock.Object);
 
             authType = "auth_type";
             authToken = "auth_token";
@@ -113,7 +116,7 @@ namespace crds_angular.test.controllers
 
             Participant participant = new Participant();
             participant.ParticipantId = 90210;
-            authenticationServiceMock.Setup(
+            participantServiceMock.Setup(
                 mocked => mocked.GetParticipantRecord(fixture.Request.Headers.Authorization.ToString()))
                 .Returns(participant);
 

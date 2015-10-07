@@ -1,3 +1,6 @@
+require('crds-core');
+require('../../app/app');
+
 describe('MyServeController', function() {
 
   var mockSession;
@@ -8,9 +11,10 @@ describe('MyServeController', function() {
   var more = [ { "day":"5/17/2015", "serveTimes" : [ { "time": "8:30am", "name" : "Kids Club Nusery", "members" : [ { "name": "John", "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ] }, { "name":  "Jane", "roles" : [ {"name": "NuseryA"}, {"name": "NuseryB"}, {"name": "NuseryC"}, {"name": "NuseryD"} ], "signedup" : "yes" }, ] }, { "time": "8:30am", "name": "First Impressions", "members" : [ { "name": "John"}, {"name": "Jane" } ] } ] }];
 
 
-  beforeEach(module('crossroads'));
- 
-  beforeEach(module(function($provide){
+  beforeEach(angular.mock.module('crossroads'));
+
+  beforeEach(angular.mock.module(function($provide){
+    $provide.value('$state', {});
     $provide.value('Groups', retArray);
     mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
     mockSession.exists.and.callFake(function(something){
@@ -34,23 +38,30 @@ describe('MyServeController', function() {
 
     beforeEach(inject(function($log, $httpBackend){
       $scope = {};
+      $scope.serveForm = {
+        $dirty: false,
+        $setPristine : function(){
+          return true;
+        }
+      };
       controller = $controller('MyServeController', { $scope: $scope });
     }));
 
     it('should show the opportunities message', function(){
-      controller.groups = []; 
+      controller.groups = [];
       expect(controller.showNoOpportunitiesMsg()).toBe(true);
-    }); 
+    });
 
     it('should load more opportunities', function(){
       var lastDate = retArray[0].day
       var date = new Date(lastDate);
-      date.setDate(date.getDate() + 1); 
+      date.setDate(date.getDate() + 1);
       var newDate = new Date(lastDate);
       newDate.setDate(newDate.getDate() + 29);
       expect(controller.groups.length).toBe(1);
       $httpBackend.expect('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/family-serve-days/12345678?from='+ date/1000+ '&to=' + newDate/1000).respond(200, more);
       controller.loadNextMonth();
+
       $httpBackend.flush();
       expect(controller.groups.length).toBe(2);
     });

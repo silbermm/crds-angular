@@ -60,7 +60,7 @@
 
     <div class="row">
         <div class="form-group col-sm-6">
-            <label for="marital_status">Maritial Status</label>
+            <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12" ng-model="contact.maritalStatusId" ng-options="status.dpRecordid as status.dpRecordname for status in maritalStatuses">
             </select>
         </div>
@@ -89,7 +89,7 @@
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
             <label class="control-label">When did you start attending Crossroads?</label>
             </span>
-            <input type="text" class="form-control" id="anniversaryDate" placeholder="mm/dd/yyyy" ng-model="contact.anniversaryDate">
+            <input type="text" class="form-control" id="anniversaryDate" placeholder="mm/yyyy" ng-model="contact.anniversaryDate">
         </div>
     </div>
 
@@ -121,9 +121,9 @@
                     <br />
                     <strong>Tate Lucas</strong>, <strong>Christy Lucas</strong>, <strong>Sadie Lucas</strong>, <strong>Simon Lucas</strong>
                     <!--
-          <span ng-controller="crdsHouseholdModal">  
+          <span ng-controller="crdsHouseholdModal">
             <a href="#" class="btn btn-xs btn-light-gray push-half-left" ng-click="open()">Add or remove another person</a>
-            
+
             <script type="text/ng-template" id="myModalContent.html">
               <div class="modal-body clearfix household-choice-modal">
                 <a class="btn btn-link close-modal" ng-click="cancel()"><span class="glyphicon glyphicon-remove"></span></a>

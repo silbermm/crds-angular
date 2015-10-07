@@ -1,3 +1,6 @@
+require('crds-core');
+require('../../app/app');
+
 describe('Volunteer Application Controller', function() {
 
   var controller,
@@ -103,7 +106,7 @@ describe('Volunteer Application Controller', function() {
     opportunity: "115",
     pageType: "VolunteerApplicationPage",
     parent: 82,
-    renderedContent: "<p>Please complete this application.</p>",
+    content: "<p>Please complete this application.</p>",
     reportClass: null,
     showInMenus: "1",
     showInSearch: "1",
@@ -115,11 +118,15 @@ describe('Volunteer Application Controller', function() {
     }]
   };
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
+
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
 
   describe("Not in Family", function(){
 
-    beforeEach(module(function($provide){
+    beforeEach(angular.mock.module(function($provide){
       $provide.value('$stateParams', { id: 12345678});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
@@ -137,6 +144,7 @@ describe('Volunteer Application Controller', function() {
       $log = _$log_;
 
       $httpBackend = $injector.get('$httpBackend');
+
       Opportunity = $injector.get('Opportunity');
       PageInfo = $injector.get("PageInfo");
       Session = $injector.get("Session");
@@ -154,7 +162,7 @@ describe('Volunteer Application Controller', function() {
 
   describe("In Family", function(){
 
-    beforeEach(module(function($provide){
+    beforeEach(angular.mock.module(function($provide){
       $provide.value('$stateParams', { id: 2186211});
       mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
       mockSession.exists.and.callFake(function(something){
@@ -190,6 +198,7 @@ describe('Volunteer Application Controller', function() {
       $httpBackend.expectGET( window.__env__['CRDS_API_ENDPOINT'] +
           'api/opportunity/getResponseForOpportunity/'+
           mockPageInfo.pages[0].opportunity + '/' + controller.contactId ).respond(200);
+
       $httpBackend.flush();
     });
 

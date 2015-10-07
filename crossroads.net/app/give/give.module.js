@@ -1,12 +1,22 @@
 'use strict';
-var stripe = require ('stripe');
 
-require('angular-stripe');
-angular.module('crossroads.give', ['angular-stripe','crossroads.core']);
+var constants = require('../constants');
 
-require('./directives/donationDetails.directive');
-require('./directives/donationConfirmation.directive');
-require('./directives/bankInfo.directive');
-require('./directives/creditCardInfo.directive');
-require('./directives/currencyMask.directive');
-require('./directives/bankCreditCardDetails.directive');
+require('./templates/give.html');
+require('./templates/amount.html');
+require('./templates/register.html');
+
+var app = angular.module(constants.MODULES.GIVE, [
+    constants.MODULES.CORE,
+    constants.MODULES.COMMON
+])
+.constant('GIVE_PROGRAM_TYPES', { Fuel: 1, Events: 2, Trips: 3, NonFinancial: 4 })
+.constant('GIVE_ROLES', { StewardshipDonationProcessor: 7 })
+;
+
+app.config(require('./give.routes'));
+app.controller('GiveController', require('./give.controller'));
+
+require('./one_time');
+require('./recurring');
+

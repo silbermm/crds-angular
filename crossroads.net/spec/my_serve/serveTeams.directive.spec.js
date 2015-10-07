@@ -1,54 +1,58 @@
+require('crds-core');
+require('../../app/app');
+
 var $compile, $rootScope, element, scope, mockSession, mockServeDate, $httpBackend;
 
 var mockOpp = {"name": "NuseryA", "roleId": 145};
-var mockTeam = [{ 
-  "name" : "Kids Club Nusery", 
-  "eventTypeId": 100, 
-  "members" : [ 
-  { 
-    "name": "John", 
-    "contactId" : 12345678, 
+var mockTeam = [{
+  "index": 0,
+  "name" : "Kids Club Nusery",
+  "eventTypeId": 100,
+  "members" : [
+  {
+    "name": "John",
+    "contactId" : 12345678,
      "serveRsvp": {
-       "roleId": 145, 
-       "attending": true, 
+       "roleId": 145,
+       "attending": true,
        'isSaved': true
-     }, 
-    "roles" : [ 
+     },
+    "roles" : [
       mockOpp, {
-        "name": "NuseryB", 
+        "name": "NuseryB",
         "roleId": 146
       }, {
-        "name": "NuseryC", 
+        "name": "NuseryC",
         "roleId": 147
       }, {
-        "name": "NuseryD", 
+        "name": "NuseryD",
         "roleId": 148
-      } ] 
-    }, 
-    { 
-      "name":  "Jane", 
-      "contactId": 1234567890, 
+      } ]
+    },
+    {
+      "name":  "Jane",
+      "contactId": 1234567890,
       "serveRsvp": {
-       "roleId": 145, 
-       "attending": true, 
+       "roleId": 145,
+       "attending": true,
        'isSaved': true
-      }, 
-      "roles" : [ 
+      },
+      "roles" : [
         {
-          "name": "NuseryA", 
+          "name": "NuseryA",
           "roleId": 145
         }, {
-          "name": "NuseryB", 
+          "name": "NuseryB",
           "roleId": 146
         }, {
-          "name": "NuseryC", 
+          "name": "NuseryC",
           "roleId": 147
         }, {
-          "name": "NuseryD", 
+          "name": "NuseryD",
           "roleId": 148
         } ]
-      } 
-    ] 
+      }
+    ]
   }];
 
 var mockOpportunity = { "time": "8:30am", "team": mockTeam  };
@@ -58,8 +62,12 @@ var mockMatt = {"name":"Matt", "lastName": "Silbernagel", "contactId":1970611, "
 describe('Serve Teams Directive', function() {
 
   beforeEach(function(){
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
+
+  beforeEach(angular.mock.module(function($provide) {
+    $provide.value('$state', {});
+  }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
@@ -93,6 +101,7 @@ describe('Serve Teams Directive', function() {
     var isolated = element.isolateScope();
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
   });
@@ -101,6 +110,7 @@ describe('Serve Teams Directive', function() {
     var isolated = element.isolateScope();
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     isolated.togglePanel(mockTeam[0].members[1]);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[1]);
     expect(isolated.currentActiveTab).toBe(mockTeam[0].members[1].name);
@@ -112,6 +122,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
+
     $httpBackend.flush();
     // scope.currentMember.serveRsvp.roleId
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
@@ -126,6 +137,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
@@ -140,6 +152,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', rsvp ).respond(200, '');
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     isolated.currentMember.currentOpportunity = mockTeam[0].members[0].roles[0];
@@ -149,6 +162,13 @@ describe('Serve Teams Directive', function() {
     var dateArr = "10/15/2015".split("/");
     var d = moment(dateArr[2] + "-" + dateArr[0] + "-" + dateArr[1]);
     var dFormated = d.format('X');
+
+    isolated['teamForm-' + isolated.team.index] = {
+      $dirty : false,
+      $setPristine : function(){
+        return true;
+      }
+    }
 
     var rsvp = {
       contactId: mockTeam[0].members[0].contactId,
@@ -169,6 +189,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // set the opportuntity selected to null
@@ -181,6 +202,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // set the rsvp attending to null
@@ -193,6 +215,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // set the frequency to null
@@ -205,6 +228,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // set the todate to null
@@ -222,6 +246,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
     // set the todate to null
@@ -238,6 +263,7 @@ describe('Serve Teams Directive', function() {
     $httpBackend.when('GET', new RegExp(window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/opp-capacity\\?id=.*')).respond(200, {});
     $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/opportunity/getLastOpportunityDate/145').respond({'date': '1444552200'});
     isolated.togglePanel(null);
+
     $httpBackend.flush();
     expect(isolated.currentMember).toBe(mockTeam[0].members[0]);
 
@@ -257,7 +283,7 @@ describe('Serve Teams Directive', function() {
 
 describe("Serve Teams Directive Edit", function() {
   beforeEach(function(){
-    module('crossroads', function($provide){
+    angular.mock.module('crossroads', function($provide){
       mockSession= jasmine.createSpyObj('Session', ['exists']);
       mockSession.exists.and.callFake(function(something){
         return '12345678';
@@ -266,13 +292,14 @@ describe("Serve Teams Directive Edit", function() {
     });
   });
 
-  beforeEach(inject(function(_$compile_, _$rootScope_){
+  beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $httpBackend = $injector.get('$httpBackend');
     scope = $rootScope.$new();
     element = '<serve-team opportunity="opp" team="team" tab-index="tabIndex" team-index="teamIndex" day-index="dayIndex"> </serve-team>';
     scope.opp = mockOpportunity;
-    scope.team = mockTeam;
+    scope.team = mockTeam[0];
     scope.dayIndex = 0;
     scope.tabIndex = 0;
     scope.teamIndex = 3;

@@ -1,11 +1,31 @@
-'use strict()';
 (function(){
-
+  'use strict';
+  var moment = require('moment');
   module.exports = MyServeController;
 
-  MyServeController.$inject = ['$scope', '$rootScope', '$log', 'filterState', 'Session', 'ServeOpportunities', 'Groups', 'AUTH_EVENTS'];
+  MyServeController.$inject = [
+    '$scope',
+    '$rootScope',
+    '$window',
+    '$log',
+    'filterState',
+    'Session',
+    'ServeOpportunities',
+    'Groups',
+    'AUTH_EVENTS'
+  ];
 
-  function MyServeController($scope, $rootScope, $log, filterState, Session, ServeOpportunities, Groups, AUTH_EVENTS){
+  function MyServeController(
+    $scope,
+    $rootScope,
+    $window,
+    $log,
+    filterState,
+    Session,
+    ServeOpportunities,
+    Groups,
+    AUTH_EVENTS
+    ){
 
     var vm = this;
 
@@ -15,33 +35,33 @@
     vm.lastDate = null;
     vm.loadMore = false;
     vm.loadNextMonth = loadNextMonth;
-    vm.loadText = "Load More";
+    vm.loadText = 'Load More';
     vm.original = [];
     vm.showButton = showButton;
     vm.showNoOpportunitiesMsg = showNoOpportunitiesMsg;
 
     activate();
 
-    $rootScope.$on("personUpdated", personUpdateHandler);
+    //////////////////////////
+    // $rootScope listeners //
+    //////////////////////////
+    $rootScope.$on('personUpdated', personUpdateHandler);
 
-    $rootScope.$on("filterDone", function(event, data) {
+    $rootScope.$on('filterDone', function(event, data) {
       vm.groups = data;
     });
 
-    $rootScope.$on("filterByDates", function(event, data) {
-      loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
-        vm.groups = opps;
-        vm.original = opps;
-        $scope.$apply();
-        $rootScope.$broadcast('filterByDatesDone');
-      },function(err){
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      });
-    });
+    $rootScope.$on('filterByDates', filterByDates);
+
+    $rootScope.$on('updateAfterSave', updateAfterSave);
 
     $rootScope.$on(AUTH_EVENTS.logoutSuccess, function(event, data) {
       vm.filterState.clearAll();
     });
+
+    $rootScope.$on('$stateChangeStart', stateChangeStart);
+
+    $window.onbeforeunload = onBeforeUnload;
 
     ////////////////////////////
     // Implementation Details //
@@ -57,11 +77,38 @@
       return d;
     }
 
+    function checkChildForms(){
+      var form = $scope.serveForm;
+      var keys = _.keys(form);
+      var dirty = [];
+      _.each(keys, function(k){
+        if(_.startsWith(k, 'team')){
+          if(form[k].$dirty){
+            dirty.push(k);
+          }
+        }
+      });
+      if(dirty.length < 1){
+        $scope['serveForm'].$setPristine();
+      }
+    }
+
     function convertToDate(date){
       // date comes in as mm/dd/yyyy, convert to yyyy-mm-dd for moment to handle
       var d = new Date(date);
       return d;
-    };
+    }
+
+    function filterByDates(event,data){
+      loadOpportunitiesByDate(data.fromDate, data.toDate).then(function(opps){
+        vm.groups = opps;
+        vm.original = opps;
+        $scope.$apply();
+        $rootScope.$broadcast('filterByDatesDone');
+      },function(err){
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
+    }
 
     /**
      * Takes a javascript date and returns a
@@ -70,7 +117,10 @@
      * @param days to add - How many days to add to the original date passed in
      * @return string formatted in the way we want to display
      */
-    function formatDate(date, days=0){
+    function formatDate(date, days){
+      if(days === undefined){
+        days = 0;
+      }
       var d = moment(date);
       d.add(days, 'd');
       return d.format('MM/DD/YY');
@@ -95,7 +145,7 @@
     function loadNextMonth() {
       if(vm.groups[0].day !== undefined){
         vm.loadMore = true;
-        vm.loadText = "Loading..."
+        vm.loadText = 'Loading...';
 
         var lastDate = new Date(vm.groups[vm.groups.length -1].day);
         lastDate.setDate(lastDate.getDate() + 1);
@@ -112,14 +162,21 @@
             });
           }
           vm.loadMore = false;
-          vm.loadText = "Load More";
+          vm.loadText = 'Load More';
         }, function(e){
           // error
           vm.loadMore = false;
-          vm.loadText = "Load More";
+          vm.loadText = 'Load More';
         });
       }
-    };
+    }
+
+    function onBeforeUnload() {
+      checkChildForms();
+      if ($scope['serveForm'].$dirty) {
+        return '';
+      }
+    }
 
     function personUpdateHandler(event, data) {
       vm.groups = angular.copy(vm.original);
@@ -133,12 +190,12 @@
                 member.lastName = data.lastName;
                 member.emailAddress = data.emailAddress;
               }
-            })
-          })
-        })
-      })
+            });
+          });
+        });
+      });
       vm.original = angular.copy(vm.groups);
-      $rootScope.$broadcast("rerunFilters", vm.groups);
+      $rootScope.$broadcast('rerunFilters', vm.groups);
     }
 
     function showButton(){
@@ -153,12 +210,45 @@
       return vm.groups.length < 1 || totalServeTimesLength() === 0;
     }
 
+    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
+      if ($scope.serveForm !== undefined) {
+        checkChildForms();
+        if ($scope['serveForm'].$dirty) {
+          if(!$window.confirm('Are you sure you want to leave this page?')) {
+            event.preventDefault();
+            return;
+          }
+        }
+      }
+    }
+
     function totalServeTimesLength(){
       var len = _.reduce(vm.groups, function(total,n){
         return total + n.serveTimes.length;
       }, 0);
       return len;
     }
+
+   function updateAfterSave(event, data){
+      _.each(vm.groups, function(group) {
+        _.each(group.serveTimes, function(serveTime) {
+          _.each(serveTime.servingTeams, function(servingTeam) {
+            if (servingTeam.groupId === data.groupId) {
+              _.each(data.eventIds, function(eventId) {
+                if (servingTeam.eventId === eventId){
+                  _.each(servingTeam.members, function(member) {
+                    if (member.contactId === data.member.contactId) {
+                      member.serveRsvp = angular.copy(data.member.serveRsvp);
+                    }
+                  });
+                }
+              });
+            }
+          });
+        });
+      });
+    }
+
   }
 
 })();

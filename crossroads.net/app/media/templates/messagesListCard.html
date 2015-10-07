@@ -1,0 +1,9 @@
+<ul class="media-list">
+    <li class="col-sm-2 col-xs-6" ng-repeat="item in items | orderBy: '-date' | limitTo: limit">
+        <a ui-sref="messageSingle({id: {{item.id}}, title: '{{item.title | replaceNonAlphaNumeric}}'})">
+            <img data-src="{{item.messageVideo.still.filename}}" class="img-responsive imgix-fluid">
+            <h4 class="flush-bottom">{{item.title}}</h4>
+            <p class="text-muted">{{item.date | date: "MM.dd.yyyy"}}</p>
+        </a>
+    </li>
+</ul>

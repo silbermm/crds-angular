@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -15,13 +16,21 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private ParticipantService _fixture;
         private Mock<IMinistryPlatformService> _mpServiceMock;
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
 
         [SetUp]
         public void SetUp()
         {
             _mpServiceMock = new Mock<IMinistryPlatformService>();
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
 
-            _fixture = new ParticipantService(_mpServiceMock.Object);
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+
+            _fixture = new ParticipantService(_mpServiceMock.Object, _authService.Object, _configWrapper.Object);
         }
 
         [Test]

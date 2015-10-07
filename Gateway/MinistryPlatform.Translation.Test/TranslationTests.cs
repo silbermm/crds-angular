@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
 using NUnit.Framework;
-using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace MinistryPlatform.Translation.Test
 {
@@ -16,6 +19,20 @@ namespace MinistryPlatform.Translation.Test
         private const string PASSWORD = "changeme";
         private const string FIRSTNAME = "Test";
         private const string NEW_PASSWORD = "changemeagain";
+
+        private AuthenticationServiceImpl _fixture;
+        private PlatformServiceClient _platformService;
+        private MinistryPlatformServiceImpl _ministryPlatformService;
+        private IConfigurationWrapper _configurationWrapper;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _configurationWrapper = new ConfigurationWrapper();
+            _platformService = new PlatformServiceClient();
+            _ministryPlatformService = new MinistryPlatformServiceImpl(_platformService, _configurationWrapper);
+            _fixture = new AuthenticationServiceImpl(_platformService, _ministryPlatformService);
+        }
 
         [Test]
         public void ShouldFailLogin()
@@ -34,29 +51,34 @@ namespace MinistryPlatform.Translation.Test
         [Test]
         public void ShouldReturnContactId()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var obj = AuthenticationService.GetContactId(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var token = authData["token"].ToString();
+            var obj = _fixture.GetContactId(token);
             Assert.IsNotNull(obj, "Contact ID shouldn't be null");
         }
 
         [Test]
         public void ShouldChangePassword()
         {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var changed = AuthenticationService.ChangePassword(token, NEW_PASSWORD);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var token = authData["token"].ToString();
+            var changed = _fixture.ChangePassword(token, NEW_PASSWORD);
             Assert.IsTrue(changed);
             var obj = AuthenticationService.authenticate(USERNAME, NEW_PASSWORD);
             Assert.IsNotNull(obj);
-            var changedAgain = AuthenticationService.ChangePassword(token, PASSWORD);
+            var changedAgain = _fixture.ChangePassword(token, PASSWORD);
             Assert.IsTrue(changedAgain);
         }
 
         [Test]
         public void ShouldGetPageRecord()
         {
+
+            
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
+            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
+            var token = authData["token"].ToString();
+            var recordId = _fixture.GetContactId(token);
             Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
             Dictionary<string, object> record = MinistryPlatformService.GetRecordDict(pageId, recordId, token);
             Assert.IsNotNull(record);
@@ -69,8 +91,9 @@ namespace MinistryPlatform.Translation.Test
         {
             var uid = USERNAME;
             var pwd = PASSWORD;
-            var token = AuthenticationService.authenticate(uid, pwd);
-            var recordId = AuthenticationService.GetContactId(token);
+            var authData = AuthenticationService.authenticate(uid, pwd);
+            var token = authData["token"].ToString();
+            var recordId = _fixture.GetContactId(token);
 
             var householdDict = new Dictionary<string, object>
             {
@@ -88,90 +111,5 @@ namespace MinistryPlatform.Translation.Test
             //MinistryPlatformService.DeleteRecord(hhPageId, newRecordId, null, adminToken);
         }
 
-        [Test]
-        public void ShouldGetSubPageRecord()
-        {
-            var subGroupPageId = Convert.ToInt32(ConfigurationManager.AppSettings["GroupsSubgroups"]);
-             string token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-            var record = MinistryPlatformService.GetSubPageRecords(subGroupPageId, 6717,
-                token);
-            Assert.IsNotNull(record);
-            Assert.IsNotEmpty(record);
-        }
-
-
-        [Test]
-        public void GetAvailableSkills()
-        {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var records = MinistryPlatformService.GetRecords(pageId, token);
-            Assert.IsNotNull(records);
-        }
-
-        [Test]
-        public void GetMySkills()
-        {
-            //setup stuff
-            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-
-            //the good stuff
-            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
-            Assert.IsNotNull(attributes);
-        }
-
-        [Test]
-        public void UpdateMySkills()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var recordId = AuthenticationService.GetContactId(token);
-            Assert.IsNotNull(recordId, "Contact ID shouldn't be null");
-
-            var attributePageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-            var dentist = MinistryPlatformService.GetLookupRecord(attributePageId,
-                "Dentist", token, 1);
-            Assert.IsNotNull(dentist);
-
-            var attribute = new Attribute();
-            attribute.Start_Date = new DateTime(2013, 7, 1);
-            attribute.Attribute_ID = Convert.ToInt32(dentist["dp_RecordID"]);
-            var added = GetMyRecords.CreateAttribute(attribute, recordId, token);
-            Assert.IsNotNull(added);
-            Assert.IsFalse(added == 0);
-
-            //now try to delete just added attribute
-            var deleted = GetMyRecords.DeleteAttribute(added, token);
-            Assert.IsTrue(deleted);
-        }
-
-        
-
-        [Test]
-        public void GetParticipants()
-        {
-            var token = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            var participants = AuthenticationService.GetParticipantRecord(token);
-
-            Assert.IsNotNull(participants);
-        }
-        
-        [Test]
-        public void ShouldReturnTodaysEvents()
-        {
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            var configWrapper = new ConfigurationWrapper();
-            var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            string token = AuthenticationService.authenticate(apiUser, apiPassword);
-
-            var todaysEvents = MinistryPlatformService.GetRecordsDict(pageId, token, ",Mason", "5");
-
-            Assert.IsNotNull(todaysEvents);
-        }
     }
 }

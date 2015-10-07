@@ -1,6 +1,9 @@
+require('crds-core');
+require('../../app/app');
+
 describe('Refine List Directive', function() {
 
-  var $compile, $rootScope, element, scope, isolateScope, filterState;
+  var $compile, $rootScope, element, scope, isolateScope, filterState, $httpBackend;
 
   var mockMatt = setupMatt();
   var mockLeslie = setupLeslie();
@@ -9,7 +12,7 @@ describe('Refine List Directive', function() {
   var expectedTeam830 = setupExpectedTeam830();
 
 
-  
+
   var expectedTeam10 = [{
     'name': 'KC Oakley Nursery MP',
     'groupId': 6329,
@@ -80,12 +83,13 @@ describe('Refine List Directive', function() {
   }];
 
   beforeEach(function() {
-    module('crossroads');
+    angular.mock.module('crossroads');
   });
 
-  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_, _filterState_) {
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$q_, _filterState_, _$httpBackend_) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
+    $httpBackend = _$httpBackend_;
     $q = _$q_;
     filterState = _filterState_;
     filterState.addFamilyMember(1670885);
@@ -345,7 +349,7 @@ describe('Refine List Directive', function() {
       }]
     };
   }
-  
+
   function setupLeslie() {
     return {
       'name': 'Leslie',
@@ -364,7 +368,7 @@ describe('Refine List Directive', function() {
         'capacity': 0,
         'slotsTaken': 0
       }]
-    };  
+    };
   }
 
   function setupServeTeam830(){

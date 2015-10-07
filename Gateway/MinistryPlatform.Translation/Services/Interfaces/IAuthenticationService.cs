@@ -1,10 +1,12 @@
 ﻿using System;
-using MinistryPlatform.Models;
+using System.Collections.Generic;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IAuthenticationService
     {
+        Dictionary<string, object> Authenticate(string username, string password);
+
         Boolean ChangePassword(string token, string emailAddress, string firstName, string lastName, string password, string mobilephone);
 
         /// <summary>
@@ -15,14 +17,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         /// <returns></returns>
         Boolean ChangePassword(string token, string newPassword);
 
-        //get token using logged in user's credentials
-        String authenticate(string username, string password);
-
         //Get ID of currently logged in user
         int GetContactId(string token);
-
-        //Get Participant IDs of a contact
-        Participant GetParticipantRecord(string token);
-
     }
 }

@@ -1,15 +1,19 @@
+require('crds-core');
+require('../../../app/app');
+
 describe('KC Applicant Tool', function(){
-  
+
   var mockPageInfo = setupPageInfo();
   var mockVolunteer = setupVolunteer();
-  var pageParams = setupPageParams(); 
+  var pageParams = setupPageParams();
   var mockResponse = setupResponse();
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
-  beforeEach(module(function($provide){
+  beforeEach(angular.mock.module(function($provide){
     $provide.value('CmsInfo', mockPageInfo);
     $provide.value('Contact', mockVolunteer);
+    $provide.value('$state', {});
   }));
 
   beforeEach( inject(function(_$location_){
@@ -27,11 +31,11 @@ describe('KC Applicant Tool', function(){
     MPTools = _MPTools_;
     Contact = $injector.get('Contact');
     CmsInfo = $injector.get('CmsInfo');
-    $httpBackend = $injector.get('$httpBackend');  
+    $httpBackend = $injector.get('$httpBackend');
   }));
 
   it('should get the correct query parameters', function(){
-    expect(controller.params.userGuid).toBe(pageParams.ug); 
+    expect(controller.params.userGuid).toBe(pageParams.ug);
   });
 
   it('should have a null middle initial', function(){
@@ -43,24 +47,26 @@ describe('KC Applicant Tool', function(){
   });
 
   it('should query for a response', function(){
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, mockResponse);
+
     $httpBackend.flush();
     expect(controller.responseId).toBe(mockResponse.responseId);
   });
 
   it('should show error when no response if available', function(){
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity + 
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
+        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
         '/' + controller.params.recordId)
       .respond(200, null);
+
     $httpBackend.flush();
     expect(controller.error).toBeTruthy();
   });
 
- 
+
   // SETUPS FOR MOCK DATA //
   function setupPageInfo() {
     return {
@@ -84,7 +90,7 @@ describe('KC Applicant Tool', function(){
       opportunity: '115',
       pageType: 'VolunteerApplicationPage',
       parent: 82,
-      renderedContent: '<p>Please complete this application.</p>',
+      content: '<p>Please complete this application.</p>',
       reportClass: null,
       showInMenus: '1',
       showInSearch: '1',
@@ -123,7 +129,7 @@ describe('KC Applicant Tool', function(){
       mobilePhone: null,
       nickName: 'Miles',
       postalCode: '45223-1231',
-      state: 'OH' 
+      state: 'OH'
     };
   }
 

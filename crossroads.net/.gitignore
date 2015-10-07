@@ -29,10 +29,21 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+.idea
 
 assets/
 styles/main.css*
 styles/modules/*.css*
 styles/pages/*.css*
+corkboard
 
 .DS_Store
+
+corkboard
+karma_html/
+
+.htaccess
+index.html
+atriumevents.html
+webpack-assets.json
+robots.txt

@@ -10,43 +10,145 @@
     '$locationProvider'
   ];
 
-  function AppConfig($stateProvider, $urlRouterProvider, $httpProvider, $urlMatcherFactory, $locationProvider) {
+  function AppConfig($stateProvider,
+    $urlRouterProvider,
+    $httpProvider,
+    $urlMatcherFactory,
+    $locationProvider
+    ) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
+    crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
 
     $stateProvider
-      .state('home', {
-        url: '/',
-        templateUrl: 'home/home.html',
-        controller: 'HomeCtrl'
+      .state('root', {
+        abstract: true,
+        template: '<ui-view/>',
+        resolve: {
+          Meta: function(SystemPage, $state) {
+            return SystemPage.get({
+              state: $state.next.name
+            }).$promise.then(
+              function(systemPage) {
+                if(systemPage.systemPages[0]){
+                  if(!$state.next.data){
+                    $state.next.data = {};
+                  }
+                  $state.next.data.meta = systemPage.systemPages[0];
+                }
+              });
+          }
+        }
       })
-      .state('homealso', {
-        url: '/home',
-        templateUrl: 'home/home.html',
-        controller: 'HomeCtrl'
+      .state('noSideBar', {
+        parent: 'root',
+        abstract:true,
+        templateUrl: 'templates/noSideBar.html'
+      })
+      .state('leftSidebar', {
+        parent: 'root',
+        abstract:true,
+        templateUrl: 'templates/leftSidebar.html'
+      })
+      .state('rightSidebar', {
+        parent: 'root',
+        abstract:true,
+        templateUrl: 'templates/rightSidebar.html'
+      })
+      .state('screenWidth', {
+        parent: 'root',
+        abstract:true,
+        templateUrl: 'templates/screenWidth.html'
+      })
+      .state('noHeaderOrFooter', {
+        parent: 'root',
+        abstract:true,
+        templateUrl: 'templates/noHeaderOrFooter.html'
+      })
+      .state('giving_history', {
+        parent: 'noSideBar',
+        url: '/givinghistory',
+        templateUrl: 'giving_history/history.html',
+        controller: 'GivingHistoryController as giving_history_controller',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Personal Giving History',
+            description: ''
+          }
+        },
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin
+        }
       })
       .state('login', {
+        parent: 'noSideBar',
         url: '/login',
         templateUrl: 'login/login_page.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false,
+          meta: {
+            title: 'Login',
+            description: ''
+          }
+        }
+      })
+      .state('logout', {
+        url: '/logout',
+        controller: 'LogoutController',
+        data: {
+          isProtected: false,
+          meta: {
+            title: 'Logout',
+            description: ''
+          }
+        }
+      })
+      .state('register', {
+        parent: 'noSideBar',
+        url: '/register',
+        templateUrl: 'register/register_page.html',
+        controller: 'RegisterCtrl',
+        data: {
+          meta: {
+            title: 'Register',
+            description: ''
+          }
+        }
+      })
+      .state('forgotPassword', {
+        parent: 'noSideBar',
+        url: '/forgot-password',
+        templateUrl: 'login/forgot_password.html',
         controller: 'LoginCtrl',
         data: {
           isProtected: false
         }
       })
-      .state('register', {
-        url: '/register',
-        templateUrl: 'register/register_form.html',
-        controller: 'RegisterCtrl'
+      .state('resetPassword', {
+        parent: 'noSideBar',
+        url: '/reset-password',
+        templateUrl: 'login/reset_password.html',
+        controller: 'LoginCtrl',
+        data: {
+          isProtected: false
+        }
       })
       .state('profile', {
+        parent: 'noSideBar',
         url: '/profile',
         resolve: {
           loggedin: crds_utilities.checkLoggedin
         },
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Profile',
+            description: ''
+          }
         },
         views: {
           '': {
@@ -54,12 +156,6 @@
             controller: 'crdsProfileCtrl as profile',
             resolve: {
               loggedin: crds_utilities.checkLoggedin
-            },
-          },
-          'personal@profile': {
-            templateUrl: 'personal/profile_personal.html',
-            data: {
-              isProtected: true
             },
           },
           'account@profile': {
@@ -74,75 +170,56 @@
             data: {
               isProtected: true
             }
+          },
+          'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
+            templateUrl: 'giving/profile_giving.html',
+            data: {
+              isProtected: true
+            }
           }
         }
       })
       .state('myprofile', {
+        parent: 'noSideBar',
         url: '/myprofile',
         controller: 'MyProfileCtrl as myProfile',
         templateUrl: 'myprofile/myprofile.html',
         data: {
-          isProtected: true
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin
+          meta: {
+            title: 'Profile',
+            description: ''
+          }
         }
       })
-      .state("mytrips", {
-        url: "/mytrips",
-        templateUrl: "mytrips/mytrips.html"
-      })
-      .state("media", {
-        url: "/media",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all.html"
-      })
-      .state("media-music", {
-        url: "/media/music",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-music.html"
-      })
-      .state("media-messages", {
-        url: "/media/messages",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-messages.html"
-      })
-      .state("media-videos", {
-        url: "/media/videos",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/view-all-videos.html"
-      })
-      .state("media-series-single", {
-        url: "/media/series/single",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/series-single.html"
-      })
-      .state("media-series-single-lo-res", {
-        url: "/media/series/single/lores",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/series-single-lo-res.html"
-      })
-      .state("media-single", {
-        url: "/media/single",
-        controller: "MediaCtrl as media",
-        templateUrl: "media/media-single.html"
-      })
-      .state("blog", {
-        url: "/blog",
-        controller: "BlogCtrl as blog",
-        templateUrl: "blog/blog-index.html"
-      })
-      .state("blog-post", {
-        url: "/blog/post",
-        controller: "BlogCtrl as blog",
-        templateUrl: "blog/blog-post.html"
-      })
-      .state("serve-signup", {
-        url: "/serve-signup",
-        controller: "MyServeController as serve",
-        templateUrl: "my_serve/myserve.html",
+      .state('explore', {
+        parent: 'noHeaderOrFooter',
+        url: '/explore',
+        templateUrl: 'explore/explore.html',
         data: {
-          isProtected: true
+          meta: {
+            title: 'Explore',
+            description: ''
+          }
+        }
+      })
+      .state('adbox', {
+        parent: 'noSideBar',
+        url: '/adbox',
+        controller: 'AdboxCtrl as adbox',
+        templateUrl: 'adbox/adbox-index.html'
+      })
+      .state('serve-signup', {
+        parent: 'noSideBar',
+        url: '/serve-signup',
+        controller: 'MyServeController as serve',
+        templateUrl: 'my_serve/myserve.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Signup to Serve',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -156,145 +233,54 @@
         }
       })
       .state('styleguide', {
+        parent: 'noHeaderOrFooter',
         url: '/styleguide',
         controller: 'StyleguideCtrl as styleguide',
         templateUrl: 'styleguide/styleguide.html'
       })
       .state('thedaily', {
+        parent: 'noSideBar',
         url: '/thedaily',
         templateUrl: 'thedaily/thedaily.html'
       })
-      .state('give', {
-        url: '/give',
-        controller: 'GiveCtrl as give',
-        templateUrl: 'give/give.html',
-        resolve: {
-          programList: function(getPrograms) {
-            // TODO The number one relates to the programType in MP. At some point we should fetch
-            // that number from MP based in human readable input here.
-            return getPrograms.Programs.get({
-              programType: 1
-            }).$promise;
-          }
-        }
-      })
-      .state('give.amount', {
-        templateUrl: 'give/amount.html'
-      })
-      .state('give.login', {
-        controller: 'LoginCtrl',
-        templateUrl: 'give/login.html'
-      })
-      .state('give.register', {
-        controller: 'RegisterCtrl',
-        templateUrl: 'give/register.html'
-      })
-      .state('give.confirm', {
-        templateUrl: 'give/confirm.html'
-      })
-      .state('give.account', {
-        templateUrl: 'give/account.html'
-      })
-      .state("give.change", {
-        templateUrl: "give/change.html"
-      })
-      .state('give.thank-you', {
-        templateUrl: 'give/thank_you.html'
-      })
-      //Not a child route of give because I did not want to use the parent give template
-      .state('history', {
-        url: '/give/history',
-        templateUrl: 'give/history.html'
-      })
-      .state('demo', {
-        //abstract: true,
-        url: '/demo',
-        template: '<p>demo</p>'
-      })
-      .state('go_trip_giving', {
-        url: '/go_trip_giving',
-        controller: 'GoTripGivingCtrl as gotripsearch',
-        templateUrl: 'go_trip_giving/go_trip_giving.html'
-      })
       .state('go_trip_giving_results', {
+        parent: 'noSideBar',
         url: '/go_trip_giving_results',
-        controller: 'GoTripGivingCtrl as gotripresults',
-        templateUrl: 'go_trip_giving/go_trip_giving_results.html'
-      })
-      .state('/demo/guest-giver', {
-        url: '/demo/guest-giver',
-        templateUrl: 'guest_giver/give.html'
-      })
-      .state('/demo/guest-giver/login', {
-        url: '/demo/guest-giver/login',
-        templateUrl: 'guest_giver/give-login.html'
-      })
-      .state('/demo/guest-giver/login-guest', {
-        url: '/demo/guest-giver/login-guest',
-        controller: 'GiveCtrl as give',
-        templateUrl: 'guest_giver/give-login-guest.html'
-      })
-      .state('/demo/guest-giver/give-confirmation', {
-        url: '/demo/guest-giver/confirmation',
-        templateUrl: 'guest_giver/give-confirmation.html'
-      })
-      .state('/demo/guest-giver/give-register', {
-        url: '/demo/guest-giver/register',
-        templateUrl: 'guest_giver/give-register.html'
-      })
-      .state('/demo/guest-giver/give-logged-in-bank-info', {
-        url: '/demo/guest-giver/logged-in-bank-info',
-        controller: 'GiveCtrl as give',
-        templateUrl: 'guest_giver/give-logged-in-bank-info.html'
-      })
-      .state('/demo/guest-giver/give-confirm-amount', {
-        url: '/demo/guest_giver/give-confirm-amount',
-        templateUrl: 'guest_giver/give-confirm-amount.html'
-      })
-      .state('/demo/guest-giver/give-change-information', {
-        url: '/demo/guest_giver/give-change-information',
-        controller: 'GiveCtrl as give',
-        templateUrl: 'guest_giver/give-change-information.html'
-      })
-      .state('/demo/logged-in-giver/existing-giver', {
-        url: '/demo/logged-in-giver/existing-giver',
-        templateUrl: 'guest_giver/give-logged-in.html'
-      })
-      .state('/demo/logged-in-giver/change-information', {
-        url: '/demo/logged-in-giver/change-information',
-        controller: 'GiveCtrl as give',
-        templateUrl: 'guest_giver/give-change-information-logged-in.html'
-      })
-      .state('/demo/logged-in-giver/new-giver', {
-        url: '/demo/logged-in-giver/new-giver',
-        templateUrl: 'guest_giver/give-logged-in-new-giver.html'
+        controller: 'TripGivingCtrl as gotripresults',
+        templateUrl: 'tripgiving/tripgivingresults.html'
       })
       .state('/demo/go-trip-giving', {
+        parent: 'noSideBar',
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
       })
-      .state('search', {
-        url: '/search-results',
-        controller: 'SearchCtrl as search',
-        templateUrl: 'search/search-results.html'
-      })
       .state('community-groups-signup', {
+        parent: 'noSideBar',
         url: '{link:signupRouteType}',
         controller: 'GroupSignupController as groupsignup',
         templateUrl: 'community_groups_signup/group_signup_form.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Community Group Signup',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin
         }
       })
       .state('volunteer-request', {
+        parent: 'noSideBar',
         url: '{link:volunteerRouteType}',
         controller: 'VolunteerController as volunteer',
         templateUrl: 'volunteer_signup/volunteer_signup_form.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Volunteer Signup',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -307,11 +293,16 @@
         }
       })
       .state('volunteer-application', {
+        parent: 'noSideBar',
         url: '/volunteer-application/:appType/:id',
         controller: 'VolunteerApplicationController as volunteer',
         templateUrl: 'volunteer_application/volunteerApplicationForm.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Volunteer Signup',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -329,6 +320,7 @@
                 if ((age >= 10) && (age <= 15)) {
                   cmsPath = '/kids-club-applicant-form/student-applicant-form/';
                 }
+
                 Page.get({
                     url: cmsPath
                   }).$promise.then(function(cmsInfo) {
@@ -336,10 +328,13 @@
                         contact, cmsInfo
                       });
                     }
-                  )
+
+                  );
               });
+
             return deferred.promise;
           },
+
           Volunteer: 'VolunteerService',
           Family: function(Volunteer) {
             return Volunteer.Family.query({
@@ -348,21 +343,34 @@
           }
         }
       })
-      .state('errors/404', {
-        url: '/errors/404',
-        templateUrl: 'errors/404.html'
-      })
-      .state('errors/500', {
-        url: '/errors/500',
-        templateUrl: 'errors/500.html'
+      .state('corkboard', {
+        url: '{link:corkboardRouteType}',
+        resolve: {
+          RedirectToSubSite: function($window, $location) {
+            // Force browser to do a full reload to load corkboard's index.html
+            $window.location.href = $location.path();
+          }
+        },
+        data: {
+          preventRouteAuthentication: true,
+          meta: {
+            title: 'Corkboard',
+            description: ''
+          }
+        }
       })
       .state('tools', {
+        parent: 'noSideBar',
         abstract: true,
         url: '/mptools',
         templateUrl: 'mp_tools/tools.html',
         data: {
           hideMenu: true,
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Tools',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin
@@ -378,7 +386,11 @@
         controller: 'KCApplicantController as applicant',
         templateUrl: 'kc_applicant/applicant.html',
         data: {
-          isProtected: true
+          isProtected: true,
+          meta: {
+            title: 'Kids Club Application',
+            description: ''
+          }
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
@@ -390,21 +402,164 @@
               contactId: params.recordId
             }).$promise;
           },
+
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
             return Page.get({
               url: '/volunteer-application/kids-club/'
             }).$promise;
           }
-
         }
+      })
+      .state('tools.tripParticipants', {
+        url: '/tripParticipants',
+        controller: 'TripParticipantController as trip',
+        templateUrl: 'trip_participants/trip.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip',
+          PageInfo: function(MPTools, Trip) {
+            var params = MPTools.getParams();
+            return Trip.TripFormResponses.get({
+              selectionId: params.selectedRecord,
+              selectionCount: params.selectedCount,
+              recordId: params.recordId
+            }).$promise.then(function(data) {
+                  // promise fulfilled
+                  return data;
+                }, function(error) {
+                  // promise rejected, could log the error with: console.log('error', error);
+                  var data = {};
+                  data.errors = error;
+                  return error;
+                });
+          }
+        }
+      })
+      .state('tools.tripPrivateInvite', {
+        url: '/tripPrivateInvite',
+        controller: 'TripPrivateInviteController as invite',
+        templateUrl: 'trip_private_invite/invite.html',
+        resolve: {
+          MPTools: 'MPTools',
+          Trip: 'Trip'
+        }
+      })
+      .state('tools.checkBatchProcessor', {
+        url: '/checkBatchProcessor',
+        controller: 'CheckBatchProcessor as checkBatchProcessor',
+        templateUrl: 'check_batch_processor/checkBatchProcessor.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Check Batch Processor',
+            description: ''
+          }
+        }
+      })
+      .state('tools.adminGivingHistoryTool', {
+        // This is a "launch" page for the tool, it will check access, etc, then forward
+        // on to the actual page with the history.
+        url: '/adminGivingHistoryTool',
+        controller: 'AdminGivingHistoryController as AdminGivingHistory',
+        templateUrl: 'admin_giving_history/adminGivingHistoryTool.html'
+      })
+      .state('tools.adminGivingHistory', {
+        url: '/adminGivingHistory',
+        controller: 'GivingHistoryController as admin_giving_history_controller',
+        templateUrl: 'admin_giving_history/adminGivingHistory.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Giving History - Admin View',
+            description: ''
+          }
+        }
+      })
+      .state('tools.gpExport', {
+        url: '/gpExport',
+        controller: 'GPExportController as gpExport',
+        templateUrl: 'gp_export/gpExport.html'
       })
       .state('content', {
         // This url will match a slash followed by anything (including additional slashes).
         url: '{link:contentRouteType}',
-        controller: 'ContentCtrl',
-        templateUrl: 'content/content.html'
+        views: {
+          '': {
+            controller: 'ContentCtrl',
+            templateProvider: function($rootScope,
+              $templateFactory,
+              $stateParams,
+              Page,
+              ContentPageService) {
+              var promise;
+
+              var link = addTrailingSlashIfNecessary($stateParams.link);
+              promise = Page.get({ url: link }).$promise;
+
+              var childPromise = promise.then(function(originalPromise) {
+                if (originalPromise.pages.length > 0) {
+                  ContentPageService.page = originalPromise.pages[0];
+                  return originalPromise;
+                }
+
+                var notFoundPromise = Page.get({url: '/page-not-found/'}).$promise;
+
+                notFoundPromise.then(function(promise) {
+                  if (promise.pages.length > 0) {
+                    ContentPageService.page = promise.pages[0];
+                  } else {
+                    ContentPageService.page = {
+                      content: '404 Content not found',
+                      pageType: '',
+                      title: 'Page not found'
+                    };
+                  }
+                });
+
+                return notFoundPromise;
+              });
+
+              return childPromise.then(function() {
+                var metaDescription = ContentPageService.page.metaDescription;
+                if (!metaDescription){
+                  //If a meta description is not provided we'll use the Content
+                  //The description gets html stripped and shortened to 155 characters
+                  metaDescription = ContentPageService.page.content;
+                }
+                $rootScope.meta = {
+                  title: ContentPageService.page.title,
+                  description: metaDescription,
+                  card: ContentPageService.page.card,
+                  type: ContentPageService.page.type,
+                  image: ContentPageService.page.image,
+                  statusCode: ContentPageService.page.errorCode
+                };
+
+                switch (ContentPageService.page.pageType){
+                  case 'NoHeaderOrFooter':
+                    return $templateFactory.fromUrl('templates/noHeaderOrFooter.html');
+                  case 'LeftSidebar':
+                    return $templateFactory.fromUrl('templates/leftSideBar.html');
+                  case 'RightSidebar':
+                    return $templateFactory.fromUrl('templates/rightSideBar.html');
+                  case 'ScreenWidth':
+                    return $templateFactory.fromUrl('templates/screenWidth.html');
+                  default:
+                    return $templateFactory.fromUrl('templates/noSideBar.html');
+                }
+              });
+            }
+          },
+          '@content': {
+            templateUrl: 'content/content.html',
+          },
+          'sidebar@content': {
+            templateUrl: 'content/sidebarContent.html'
+          }
+        }
       });
+
     //Leave the comment below.  Once we have a true 404 page hosted in the same domain, this is how we
     //will handle the routing.
     //.state('404', {
@@ -413,4 +568,13 @@
 
     $urlRouterProvider.otherwise('/');
   }
+
+  function addTrailingSlashIfNecessary(link) {
+    if (_.endsWith(link, '/') === false) {
+      return link + '/';
+    }
+
+    return link;
+  }
+
 })();

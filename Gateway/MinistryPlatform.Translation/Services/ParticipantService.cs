@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -13,9 +18,42 @@ namespace MinistryPlatform.Translation.Services
     {
         private IMinistryPlatformService _ministryPlatformService;
 
-        public ParticipantService(IMinistryPlatformService ministryPlatformService)
+        public ParticipantService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService , IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             this._ministryPlatformService = ministryPlatformService;
+        }
+
+        //Get Participant IDs of a contact
+        public Participant GetParticipantRecord(string token)
+        {
+            var results = _ministryPlatformService.GetRecordsDict("MyParticipantRecords", token);
+            Dictionary<string, object> result = null;
+            try
+            {
+                result = results.SingleOrDefault();
+            }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message == "Sequence contains more than one element")
+                {
+                    throw new MultipleRecordsException("Multiple Participant records found! Only one participant allowed per Contact.");
+                }
+            }
+
+            if (result == null)
+            {
+                return null;
+            }
+            var participant = new Participant
+            {
+                ParticipantId = result.ToInt("dp_RecordID"),
+                EmailAddress = result.ToString("Email_Address"),
+                PreferredName = result.ToString("Nickname"),
+                DisplayName = result.ToString("Display_Name")
+            };
+
+            return participant;
         }
 
         public Participant GetParticipant(int contactId)

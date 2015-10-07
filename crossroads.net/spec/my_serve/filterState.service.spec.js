@@ -1,8 +1,11 @@
+require('crds-core');
+require('../../app/app');
+
 describe('Filter State Service', function() {
 
   var $rootScope, scope, filterState;
 
-  beforeEach(module('crossroads'));
+  beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(inject(function(_filterState_) {
     filterState = _filterState_;

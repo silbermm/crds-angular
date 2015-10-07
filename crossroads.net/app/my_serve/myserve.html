@@ -1,32 +1,37 @@
 <div class="serve-signup-wrapper">
-  <h1 class="page-header flush-bottom">Sign Up To Serve </h1>
-  <br>
+  <h1 class="page-header">Sign Up To Serve </h1>
+
   <p>
     <svg viewBox="0 0 32 32" class="icon icon-check-circle">
       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#check-circle">
       </use>
-    </svg>Signed Up Yes
-    &nbsp;&nbsp;
+    </svg>Signed Up Yes &nbsp;&nbsp;
     <svg viewBox="0 0 32 32" class="icon icon-minus-circle">
       <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#minus-circle">
       </use>
     </svg>Signed Up No
   </p>
-  <refine-list last-date="serve.lastDate" serving-days="serve.groups" original="serve.original" > </refine-list>
-  <div class="serve-signup-cont clearfix col-sm-9 col-sm-pull-3 soft-ends" >
+  <refine-list last-date="serve.lastDate" serving-days="serve.groups" original="serve.original"> </refine-list>
+  <div class="serve-signup-cont clearfix col-sm-9 col-sm-pull-3 soft-ends">
 
     <div data-ng-show="serve.showNoOpportunitiesMsg()">
-      <span ng-bind-html="$root.messages[$root.MESSAGES.noServingOpportunities].message | html"></span>
+      <span ng-bind-html="$root.MESSAGES.noServingOpportunities.content | html"></span>
     </div>
 
-    <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
-      <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
-      <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
-      </serve-tabs>
-    </div><!-- serve day -->
+    <form name='serveForm'>
+      <div class="serve-day push-bottom" data-ng-repeat="group in serve.groups" ng-show="group.serveTimes.length > 0">
+        <h4>{{::serve.convertToDate(group.day) | date:'EEEE, MMMM dd, yyyy' }}</h4>
+        <serve-tabs opportunity="opp" serve-date="group.day" ng-repeat="opp in group.serveTimes" ng-show="opp.servingTeams.length > 0" >
+        </serve-tabs>
+      </div>
+      <!-- serve day -->
+    </form>
 
-    <button class="btn btn-block btn-primary" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
-
+    <div class="row text-center">
+      <div class="col-sm-12">
+        <button class="btn btn-block-mobile btn-standard" ng-show="serve.showButton()"  ng-click="serve.loadNextMonth()" ng-disabled="serve.loadMore"> {{serve.loadText}} </button>
+      </div>
+    </div>
 
   </div>
 </div>

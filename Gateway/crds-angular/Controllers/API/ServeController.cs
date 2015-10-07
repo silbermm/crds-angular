@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Messaging;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -12,6 +13,8 @@ using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Messaging.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -20,10 +23,17 @@ namespace crds_angular.Controllers.API
     public class ServeController : MPAuth
     {
         private readonly IServeService _serveService;
+        private readonly IMessageFactory _messageFactory;
+        private readonly MessageQueue _eventQueue;
 
-        public ServeController(IServeService serveService)
+        public ServeController(IServeService serveService, IConfigurationWrapper configuration, IMessageFactory messageFactory, IMessageQueueFactory messageQueueFactory)
         {
             _serveService = serveService;
+            _messageFactory = messageFactory;
+
+            var eventQueueName = configuration.GetConfigValue("SignupToServeEventQueue");
+            _eventQueue = messageQueueFactory.CreateQueue(eventQueueName, QueueAccessMode.Send);
+            _messageFactory = messageFactory;
         }
 
         /// <summary>
@@ -66,7 +76,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception ex)
                 {
-                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    var apiError = new ApiErrorDto("GetFamily Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 
@@ -86,7 +96,7 @@ namespace crds_angular.Controllers.API
                 }
                 catch (Exception ex)
                 {
-                    var apiError = new ApiErrorDto("Save RSVP Failed", ex);
+                    var apiError = new ApiErrorDto("GetQualifiedServers Failed", ex);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
 
@@ -111,18 +121,22 @@ namespace crds_angular.Controllers.API
 
             return Authorized(token =>
             {
+
+                var message = _messageFactory.CreateMessage(saveRsvp);
+                _eventQueue.Send(message, MessageQueueTransactionType.None);
+
+                // get updated events and return them               
+                var updatedEvents = new UpdatedEvents();
                 try
                 {
-                    _serveService.SaveServeRsvp(token, saveRsvp.ContactId, saveRsvp.OpportunityId, saveRsvp.OpportunityIds,
-                        saveRsvp.EventTypeId, saveRsvp.StartDateUnix.FromUnixTime(),
-                        saveRsvp.EndDateUnix.FromUnixTime(), saveRsvp.SignUp, saveRsvp.AlternateWeeks);
+                    updatedEvents.EventIds.AddRange(_serveService.GetUpdatedOpportunities(token, saveRsvp));
                 }
                 catch (Exception exception)
                 {
                     var apiError = new ApiErrorDto("Save RSVP Failed", exception);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-                return Ok();
+                return Ok(updatedEvents);
             });
         }
 

@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Configuration;
-using Crossroads.Utilities.Services;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class BaseService
     {
+        protected readonly IAuthenticationService _authenticationService;
+        protected readonly IConfigurationWrapper _configurationWrapper;
+
+        public BaseService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+        {
+            this._authenticationService = authenticationService;
+            this._configurationWrapper = configurationWrapper;
+        }
+
         protected static int AppSettings(string pageKey)
         {
             int pageId;
@@ -16,17 +26,19 @@ namespace MinistryPlatform.Translation.Services
             return pageId;
         }
 
-        protected static T          WithApiLogin<T>(Func<string, T> doIt)
+        protected T WithApiLogin<T>(Func<string, T> doIt)
         {
-            return (doIt(apiLogin()));
+            return (doIt(ApiLogin()));
         }
 
-        protected static string apiLogin()
+        protected string ApiLogin()
         {
-            var configWrapper = new ConfigurationWrapper();
-            var apiUser = configWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPasword = configWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            return (AuthenticationService.authenticate(apiUser, apiPasword));
+            var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPasword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            var authData = _authenticationService.Authenticate(apiUser, apiPasword);
+            var token = authData["token"].ToString();
+
+            return (token);
         }
 
         protected static int AppSetting(string key)

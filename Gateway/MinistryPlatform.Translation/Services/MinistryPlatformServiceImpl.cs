@@ -3,20 +3,32 @@ using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Web.Security;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class MinistryPlatformServiceImpl : IMinistryPlatformService
     {
-        private PlatformServiceClient platformServiceClient;
+        private PlatformServiceClient _platformServiceClient;
         private IConfigurationWrapper _configurationWrapper;
+
+        /// <summary>
+        /// This is the cookie name MinistryPlatform looks for when impersonating a user.
+        /// </summary>
+        private readonly string _impersonateCookieName;
 
         public MinistryPlatformServiceImpl(PlatformServiceClient platformServiceClient, IConfigurationWrapper configurationWrapper)
         {
-            this.platformServiceClient = platformServiceClient;
-            this._configurationWrapper = configurationWrapper;
+            _platformServiceClient = platformServiceClient;
+            _configurationWrapper = configurationWrapper;
+
+            _impersonateCookieName = string.Format("{0}.1", FormsAuthentication.FormsCookieName);
         }
 
        public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
@@ -54,6 +66,31 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToList(GetRecords(GetMinistryPlatformId(pageKey), token, search, sort));
         }
 
+        public List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token)
+        {
+            var selections = GetSelectionsDict(selectionId, token);
+            var selectionPageRecords = new List<Dictionary<string, object>>();
+
+            foreach (var selection in selections)
+            {
+                object recordId;
+                selection.TryGetValue("dp_RecordID", out recordId);
+                selectionPageRecords.Add(GetRecordDict(pageId, Convert.ToInt32(recordId), token));
+            }
+
+            return selectionPageRecords;
+        }
+
+        public List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "")
+        {
+            return MPFormatConversion.MPFormatToList(GetSelectionRecords(selectionId, token, search, sort));
+        }
+
+        public SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "")
+        {
+            return Call(token, platformClient => platformClient.GetSelectionRecords(selectionId, search, sort, 0));
+        }
+
         public SelectQueryResult GetRecord(int pageId, int recordId, String token, bool quickadd = false)
         {
             return Call<SelectQueryResult>(token,
@@ -70,11 +107,25 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToDictionary(GetRecord(pageId, recordId, token, quickadd));
         }
 
+        public Dictionary<string, object> GetSubPageRecord(string subPageKey, int recordId, String token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            var result = Call<SelectQueryResult>(token,
+                                                 platformClient => platformClient.GetSubpageRecord(subPageId, recordId, false));
+            return MPFormatConversion.MPFormatToDictionary(result);
+        }
+
         public List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)
         {
             SelectQueryResult result = Call<SelectQueryResult>(token,
                 platformClient => platformClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0));
             return MPFormatConversion.MPFormatToList(result);
+        }
+
+        public List<Dictionary<string, object>> GetSubPageRecords(string subPageKey, int recordId, String token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            return GetSubPageRecords(subPageId, recordId, token);
         }
 
         public List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId,
@@ -130,16 +181,29 @@ namespace MinistryPlatform.Translation.Services
                 platformClient => platformClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, quickadd));
         }
 
+        public int CreateSubRecord(string subPageKey, int parentRecordId, Dictionary<string, object> dictionary,
+            String token, bool quickadd = false)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            return Call<int>(token,
+                platformClient => platformClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, quickadd));
+        }
+
+        public void RemoveSelection(int selectionId, int[] records, String token)
+        {
+            VoidCall(token, platformClient => platformClient.RemoveFromSelection(selectionId, records));
+        }
+
         public int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token)
         {
             VoidCall(token,
-                platfromClient => platfromClient.DeletePageRecord(pageId, recordId, deleteOptions));
+                platformClient => platformClient.DeletePageRecord(pageId, recordId, deleteOptions));
             return recordId;
         }
 
         public void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token)
         {
-            VoidCall(token, platfromClient => platfromClient.UpdatePageRecord(pageId, dictionary, false));
+            VoidCall(token, platformClient => platformClient.UpdatePageRecord(pageId, dictionary, false));
         }
 
         private int GetMinistryPlatformId(string mpKey)
@@ -147,26 +211,58 @@ namespace MinistryPlatform.Translation.Services
             return _configurationWrapper.GetConfigIntValue(mpKey);
         }
 
-        private T Call<T>(String token, Func<PlatformServiceClient, T> ministryPlatformFunc)
+        private T Call<T>(string token, Func<PlatformServiceClient, T> ministryPlatformFunc)
         {
             T result;
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(_platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                result = ministryPlatformFunc(platformServiceClient);
+                    Impersonate();
+                }
+
+                result = ministryPlatformFunc(_platformServiceClient);
             }
             return result;
         }
 
-        private void VoidCall(String token, Action<PlatformServiceClient> ministryPlatformFunc)
+        private void VoidCall(string token, Action<PlatformServiceClient> ministryPlatformFunc)
         {
-            using (new System.ServiceModel.OperationContextScope((System.ServiceModel.IClientChannel)platformServiceClient.InnerChannel))
+            using (new OperationContextScope(_platformServiceClient.InnerChannel))
             {
                 if (System.ServiceModel.Web.WebOperationContext.Current != null)
+                {
                     System.ServiceModel.Web.WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                ministryPlatformFunc(platformServiceClient);
+                    Impersonate();
+                }
+                ministryPlatformFunc(_platformServiceClient);
             }
+        }
+
+        /// <summary>
+        /// This method sets an impersonation cookie on the OutgoingMessageProperties.HttpRequest.  MinistryPlatform looks for this to be set
+        /// to a GUID of a User, and if set, all requests to MP will act as though that user is executing them, rather than the actual
+        /// authenticated user.  This looks at the <see cref="ImpersonatedUserGuid"/> ThreadLocal to see if there is a user to impersonate.
+        /// </summary>
+        private void Impersonate()
+        {
+            if (!ImpersonatedUserGuid.HasValue())
+            {
+                return;
+            }
+
+            var httpRequest = OperationContext.Current.OutgoingMessageProperties[HttpRequestMessageProperty.Name] as
+                HttpRequestMessageProperty;
+            if (httpRequest == null)
+            {
+                httpRequest = new HttpRequestMessageProperty();
+                OperationContext.Current.OutgoingMessageProperties.Add(HttpRequestMessageProperty.Name, httpRequest);
+            }
+
+            var cookies = new CookieContainer();
+            cookies.Add(_platformServiceClient.Endpoint.Address.Uri, new Cookie(_impersonateCookieName, ImpersonatedUserGuid.Get()));
+            httpRequest.Headers.Add(HttpRequestHeader.Cookie, cookies.GetCookieHeader(_platformServiceClient.Endpoint.Address.Uri));
         }
     }
 }

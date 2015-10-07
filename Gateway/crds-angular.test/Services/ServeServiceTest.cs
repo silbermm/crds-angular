@@ -5,6 +5,7 @@ using crds_angular.Models;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -57,9 +58,9 @@ namespace crds_angular.test.Services
             Subject = "Serving RSVP Confirmation"
         };
 
-        private readonly int rsvpYesId = 11430;
+        private readonly int rsvpYesId = 11366;
         private readonly int rsvpNoId = 11299;
-        private readonly int rsvpChangeId = 11430;
+        private readonly int rsvpChangeId = 11366;
 
         private Opportunity fakeOpportunity = new Opportunity();
         private MyContact fakeGroupContact = new MyContact();
@@ -72,7 +73,7 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
-            _personService = new Mock<IPersonService>();
+            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
             _eventService = new Mock<IEventService>();
             _serveService = new Mock<IServeService>();
             _participantService = new Mock<IParticipantService>();
@@ -457,8 +458,19 @@ namespace crds_angular.test.Services
                 OpportunityName = "Previous Opportunity"
             });
 
-            _fixture.SaveServeRsvp("1234567", contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015, 1, 1),
-                It.IsAny<DateTime>(), signUp, alternateWeeks);
+            SaveRsvpDto dto = new SaveRsvpDto
+            {
+                ContactId = contactId,
+                OpportunityId = opportunityId,
+                OpportunityIds = oppIds,
+                EventTypeId = eventTypeId,
+                AlternateWeeks = alternateWeeks,
+                StartDateUnix = new DateTime(2015, 1, 1).ToUnixTime(),
+                EndDateUnix = new DateTime(2016, 1, 1).ToUnixTime(),
+                SignUp = signUp
+            };
+
+            _fixture.SaveServeRsvp("1234567", dto);
 
             _participantService.VerifyAll();
             _eventService.Verify(
@@ -496,12 +508,13 @@ namespace crds_angular.test.Services
                 {"Room", It.IsAny<string>()},
                 {"Group_Contact", It.IsAny<string>()},
                 {"Group_Name", It.IsAny<string>()},
+                {"Volunteer_Name", It.IsAny<string>()},
                 {"Previous_Opportunity_Name", It.IsAny<string>()}
             };
 
             _communicationService.Setup(
                 m => m.SendMessage(It.IsAny<Communication>()))
-                .Callback((Communication communication, Dictionary<string, object> data) => { }).Verifiable();
+                .Callback((Communication communication) => { }).Verifiable();
             _communicationService.Verify(
                 m => m.SendMessage(It.IsAny<Communication>()));
         }
@@ -522,8 +535,19 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
                 .Returns(fakeOpportunity);
 
-            _fixture.SaveServeRsvp("1234567", contactId, opportunityId, oppIds, eventTypeId, new DateTime(2015, 1, 1),
-                It.IsAny<DateTime>(), signUp, alternateWeeks);
+            SaveRsvpDto dto = new SaveRsvpDto
+            {
+                ContactId = contactId,
+                OpportunityId = opportunityId,
+                OpportunityIds = oppIds,
+                EventTypeId = eventTypeId,
+                AlternateWeeks = alternateWeeks,
+                StartDateUnix = new DateTime(2015, 1, 1).ToUnixTime(),
+                EndDateUnix = new DateTime(2016, 1, 1).ToUnixTime(),
+                SignUp = signUp
+            };
+
+            _fixture.SaveServeRsvp("1234567", dto);
 
             _participantService.VerifyAll();
             _eventService.Verify(
@@ -543,51 +567,6 @@ namespace crds_angular.test.Services
             o.Room = "123";
 
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(o);
-        }
-
-        [Test]
-        public void RespondToServeOpportunityNoEveryWeek()
-        {
-            const int contactId = 8;
-            const int opportunityId = 0;
-            const int eventTypeId = 3;
-            const bool signUp = false;
-            const bool alternateWeeks = false;
-            var oppIds = new List<int>() {1, 2, 3, 4, 5};
-
-
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
-
-
-            // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
-                .Returns(fakeOpportunity);
-
-            _opportunityService.Setup(m => m.GetOpportunityById(1, It.IsAny<string>())).Returns(new Opportunity()
-            {
-                OpportunityId = 1,
-                OpportunityName = "Previous Opportunity",
-                GroupContactId = fakeOpportunity.GroupContactId
-            });
-
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
-                new DateTime(2015, 1, 1),
-                It.IsAny<DateTime>(), signUp, alternateWeeks);
-
-
-            _participantService.VerifyAll();
-            _eventService.Verify(
-                m =>
-                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
-                        It.IsAny<string>()), Times.Exactly(1));
-
-            _opportunityService.Verify(
-                (m => m.RespondToOpportunity(47, 1, It.IsAny<string>(), It.IsAny<int>(), signUp)),
-                Times.Exactly(5));
-            _opportunityService.Verify(
-                (m => m.RespondToOpportunity(47, 2, It.IsAny<string>(), It.IsAny<int>(), signUp)),
-                Times.Exactly(5));
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
         }
 
         [Test, TestCaseSource("AllMockEvents")]
@@ -614,9 +593,19 @@ namespace crds_angular.test.Services
                 GroupContactId = fakeOpportunity.GroupContactId
             });
 
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
-                new DateTime(2015, 1, 1),
-                It.IsAny<DateTime>(), signUp, alternateWeeks);
+            SaveRsvpDto dto = new SaveRsvpDto
+            {
+                ContactId = contactId,
+                OpportunityId = opportunityId,
+                OpportunityIds = oppIds,
+                EventTypeId = eventTypeId,
+                AlternateWeeks = alternateWeeks,
+                StartDateUnix = new DateTime(2015, 1, 1).ToUnixTime(),
+                EndDateUnix = new DateTime(2016, 1, 1).ToUnixTime(),
+                SignUp = signUp
+            };
+
+            _fixture.SaveServeRsvp(It.IsAny<string>(), dto);
 
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
@@ -645,52 +634,6 @@ namespace crds_angular.test.Services
             new[] {SetupWeekMutipleMissingInMySeriesMockEvents()},
             new[] {SetupWeekNotInSequentialOrderMockEvents()}
         };
-
-        [Test]
-        public void RespondToServeOpportunityNoForEveryOtherWeek()
-        {
-            const int contactId = 8;
-            const int opportunityId = 0;
-            const int eventTypeId = 3;
-            const bool signUp = false;
-            const bool alternateWeeks = true;
-            var expectedEventIds = new List<int> {1, 3, 5};
-            var oppIds = new List<int>() {1, 2, 3, 4, 5};
-
-            SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
-            // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
-                .Returns(fakeOpportunity);
-
-            _opportunityService.Setup(m => m.GetOpportunityById(1, It.IsAny<string>())).Returns(new Opportunity()
-            {
-                OpportunityId = 1,
-                OpportunityName = "Previous Opportunity",
-                GroupContactId = fakeOpportunity.GroupContactId
-            });
-
-
-            _fixture.SaveServeRsvp(It.IsAny<string>(), contactId, opportunityId, oppIds, eventTypeId,
-                new DateTime(2015, 1, 1),
-                It.IsAny<DateTime>(), signUp, alternateWeeks);
-
-            // The current Opportunity
-            _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
-                .Returns(fakeOpportunity);
-
-            _participantService.VerifyAll();
-            _eventService.Verify(
-                m =>
-                    m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
-                        It.IsAny<string>()), Times.Exactly(1));
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Never());
-
-            _opportunityService.Verify(
-                (m =>
-                    m.RespondToOpportunity(47, It.IsInRange(1, 5, Range.Inclusive), It.IsAny<string>(),
-                        It.IsIn<int>(expectedEventIds), signUp)),
-                Times.Exactly(15));
-        }
 
         private static List<Event> SetupMockEvents()
         {

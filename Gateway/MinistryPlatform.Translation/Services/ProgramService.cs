@@ -1,61 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Extensions;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class ProgramService : BaseService,IProgramService
     {
-        private IMinistryPlatformService ministryPlatformService;
-        private readonly int _onlineGivingProgramsPageViewId = Convert.ToInt32(AppSettings("OnlineGivingProgramsPageViewId"));
-        private readonly int programsPageId = AppSettings("Programs");
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly int _onlineGivingProgramsPageViewId;
+        private readonly int _programsPageId;
 
-        public ProgramService(IMinistryPlatformService ministryPlatformService)
+        public ProgramService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
-            this.ministryPlatformService = ministryPlatformService;
+            _ministryPlatformService = ministryPlatformService;
+            _onlineGivingProgramsPageViewId = configurationWrapper.GetConfigIntValue("OnlineGivingProgramsPageViewId");
+            _programsPageId = configurationWrapper.GetConfigIntValue("Programs");
         }
 
-        public List<Program> GetOnlineGivingPrograms(int programType)
+        public List<Program> GetOnlineGivingPrograms(int? programType)
         {
+            var searchString = programType == null ? null : string.Format(",,,{0}", programType);
             var programs =
-                WithApiLogin<List<Dictionary<string,Object>>>(
-                    apiToken =>
-                    {
-                        return (ministryPlatformService.GetPageViewRecords(_onlineGivingProgramsPageViewId, apiToken, ",,," + programType));
-                    });
+                WithApiLogin(
+                    apiToken => (_ministryPlatformService.GetPageViewRecords(_onlineGivingProgramsPageViewId, apiToken, searchString)));
 
             var programList = new List<Program>();
             if (programs == null || programs.Count == 0)
             {
                 return programList;
             }
-            foreach (var p in programs)
-            {
-                var program = new Program();
-                program.Name = (string)p["Program_Name"];
-                program.ProgramId = (int) p["Program_ID"];
-                programList.Add(program);
-            }
+            programList.AddRange(programs.Select(Mapper.Map<Program>));
 
             return programList;
         }
 
         public Program GetProgramById(int programId)
         {
-            var recordsDict = ministryPlatformService.GetRecordDict(programsPageId, programId, apiLogin());
-
-            var program = new Program
-            {
-                CommunicationTemplateId = recordsDict.ToInt("Communication_ID"),
-                ProgramId = recordsDict.ToInt("Program_ID"),
-                Name = recordsDict.ToString("Program_Name")
-            };
-            return program;
+            return (WithApiLogin(token => (Mapper.Map<Program>(_ministryPlatformService.GetRecordDict(_programsPageId, programId, token)))));
         }
     }
 }

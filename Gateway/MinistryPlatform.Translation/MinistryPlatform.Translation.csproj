@@ -59,6 +59,14 @@
     <Reference Include="log4net">
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -81,6 +89,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,30 +97,38 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enum\NumericDayOfWeek.cs" />
+    <Compile Include="Enum\PaymentType.cs" />
     <Compile Include="Exceptions\GroupFullException.cs" />
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
     <Compile Include="Exceptions\TemplateParseException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
-    <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
+    <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
+    <Compile Include="Services\CampaignService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\CreatePageRecordService.cs" />
+    <Compile Include="Services\DestinationService.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\EventParticipantService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
     <Compile Include="Services\FormSubmissionService.cs" />
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\Interfaces\ICampaignService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
     <Compile Include="Services\Interfaces\ICommunicationService.cs" />
     <Compile Include="Services\Interfaces\IContactRelationshipService.cs" />
     <Compile Include="Services\Interfaces\IContactService.cs" />
+    <Compile Include="Services\Interfaces\IDestinationService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IEventParticipantService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Services\Interfaces\IFormSubmissionService.cs" />
     <Compile Include="Services\Interfaces\IGroupParticipantService.cs" />
@@ -119,15 +136,22 @@
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
     <Compile Include="Services\Interfaces\IParticipantService.cs" />
+    <Compile Include="Services\Interfaces\IPledgeService.cs" />
+    <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
+    <Compile Include="Services\Interfaces\ISelectionService.cs" />
+    <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MessageInfo.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
     <Compile Include="Services\MinistryPlatformServiceImpl.cs" />
-    <Compile Include="Services\OpportunityService.cs" />
     <Compile Include="Services\OpportunityServiceImpl.cs" />
     <Compile Include="Services\ParticipantService.cs" />
+    <Compile Include="Services\PledgeService.cs" />
+    <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Services\SelectionService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />
     <Compile Include="Utils\MPFormatConversion.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

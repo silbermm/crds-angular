@@ -5,7 +5,9 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.PlatformService;
+using MinistryPlatform.Translation.Services.Interfaces;
 using Attribute = MinistryPlatform.Models.Attribute;
 using RoleDTO = MinistryPlatform.Models.DTO.RoleDto;
 
@@ -13,6 +15,12 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GetMyRecords : BaseService
     {
+        public GetMyRecords(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
+        {
+            
+        }
+
         public static List<RoleDTO> GetMyRoles(string token)
         {
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyRoles"]);
@@ -48,50 +56,34 @@ namespace MinistryPlatform.Translation.Services
 
         public static int CreateAttribute(Attribute attribute, int parentRecordId, string token)
         {
-            try
-            {
-                var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
-                var platformServiceClient = new PlatformServiceClient();
-                SelectQueryResult result;
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var platformServiceClient = new PlatformServiceClient();
 
-                using (
-                    new OperationContextScope(
-                        (IClientChannel) platformServiceClient.InnerChannel))
-                {
-                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
-                        "Bearer " + token);
-                    attribute.Start_Date = DateTime.Now;
-                    var dictionary = getDictionary(attribute);
-                    return platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
-                }
-            }
-            catch (Exception e)
+            using (
+                new OperationContextScope(
+                    (IClientChannel) platformServiceClient.InnerChannel))
             {
-                throw e;
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
+                                                                        "Bearer " + token);
+                attribute.Start_Date = DateTime.Now;
+                var dictionary = getDictionary(attribute);
+                return platformServiceClient.CreateSubpageRecord(subPageId, parentRecordId, dictionary, false);
             }
         }
 
         public static bool DeleteAttribute(int recordId, string token)
         {
-            try
-            {
-                var platformServiceClient = new PlatformServiceClient();
-                SelectQueryResult result;
+            var platformServiceClient = new PlatformServiceClient();
 
-                using (
-                    new OperationContextScope(
-                        (IClientChannel) platformServiceClient.InnerChannel))
-                {
-                    WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
-                        "Bearer " + token);
-                    platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"), recordId, null);
-                }
-                return true;
-            }
-            catch (Exception e)
+            using (
+                new OperationContextScope(
+                    (IClientChannel) platformServiceClient.InnerChannel))
             {
-                throw e;
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
+                                                                        "Bearer " + token);
+                platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"), recordId, null);
             }
+            return true;
         }
 
         private static Dictionary<string, object> getDictionary(Object input)

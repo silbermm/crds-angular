@@ -2,10 +2,10 @@ angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $moda
 
   $scope.items = ['item1', 'item2', 'item3'];
 
-  $scope.open = function (size) {
+  $scope.openRemoveGiftModal = function (size) {
 
     var modalInstance = $modal.open({
-      templateUrl: 'myModalContent.html',
+      templateUrl: 'profile_giving_remove_modal',
       controller: 'ModalInstanceCtrl',
       size: size,
       resolve: {
@@ -21,7 +21,30 @@ angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $moda
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
+  
+  $scope.openEditGiftModal = function (size) {
+
+    var modalInstance = $modal.open({
+      templateUrl: 'profile_giving_edit_modal',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (selectedItem) {
+      $scope.selected = selectedItem;
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
 });
+
+
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $modal service used above.

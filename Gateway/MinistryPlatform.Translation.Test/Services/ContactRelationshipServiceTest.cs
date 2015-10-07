@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -15,13 +16,16 @@ namespace MinistryPlatform.Translation.Test.Services
     {
         private ContactRelationshipService _fixture;
         private Mock<IMinistryPlatformService> _ministryPlatformService;
-        //private const int GetMyFamilyViewId = 75;
-
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
+        
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _fixture = new ContactRelationshipService(_ministryPlatformService.Object);
+            _authService = new Mock<IAuthenticationService>();
+            _configWrapper = new Mock<IConfigurationWrapper>();
+            _fixture = new ContactRelationshipService(_ministryPlatformService.Object,_authService.Object,_configWrapper.Object);
         }
 
         [Test]

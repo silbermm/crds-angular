@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
@@ -17,10 +18,13 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recipientsSubPageId = Convert.ToInt32(AppSettings("RecipientsSubpageId"));
         private readonly int _communicationStatusId = Convert.ToInt32(AppSettings("CommunicationStatusId"));
         private readonly int _actionStatusId = Convert.ToInt32(AppSettings("ActionStatusId"));
+        private readonly int _contactPageId = Convert.ToInt32(AppSettings("Contacts"));
+
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly IMinistryPlatformService _ministryPlatformService;
 
-        public CommunicationService(IMinistryPlatformService ministryPlatformService)
+        public CommunicationService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService,IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
         }
@@ -31,6 +35,19 @@ namespace MinistryPlatform.Translation.Services
             var profile = MinistryPlatformService.GetRecordDict(pNum, contactId, token);
 
             return (int) profile["User_Account"];
+        }
+
+        public int GetUserIdFromContactId(int contactId)
+        {
+            var profile = MinistryPlatformService.GetRecordDict(_contactPageId, contactId, ApiLogin());
+
+            return (int)profile["User_Account"];
+        }
+
+        public string GetEmailFromContactId(int contactId)
+        {
+            var contact = _ministryPlatformService.GetRecordDict(_contactPageId, contactId, ApiLogin());
+            return contact["Email_Address"].ToString();
         }
 
         public CommunicationPreferences GetPreferences(String token, int userId)
@@ -66,10 +83,10 @@ namespace MinistryPlatform.Translation.Services
         /// <param name="communication">The message properties </param>        
         public void SendMessage(Communication communication)
         {
-            var token = apiLogin();
+            var token = ApiLogin();
 
             var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, apiLogin());
+            AddCommunicationMessage(communication, communicationId, token);
         }
 
         private int AddCommunication(Communication communication, string token)
@@ -106,7 +123,7 @@ namespace MinistryPlatform.Translation.Services
 
         public MessageTemplate GetTemplate(int templateId)
         {
-            var pageRecords = _ministryPlatformService.GetRecordDict(_messagePageId, templateId, apiLogin());
+            var pageRecords = _ministryPlatformService.GetRecordDict(_messagePageId, templateId, ApiLogin());
 
             if (pageRecords == null)
             {

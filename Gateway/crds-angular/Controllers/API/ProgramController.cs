@@ -1,41 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Description;
-using crds_angular.Models.Crossroads;
+﻿using System.Web.Http;
 using crds_angular.Security;
-using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class ProgramController : MPAuth
     {
-        private IProgramService programService;
+        private readonly IProgramService _programService;
 
         public ProgramController(IProgramService programService)
         {
-            this.programService = programService;
+            _programService = programService;
+        }
+
+        [Route("api/programs")]
+        [HttpGet]
+        public IHttpActionResult GetAllPrograms([FromUri(Name = "excludeTypes")] int[] excludeTypes = null)
+        {
+            var result = _programService.GetOnlineGivingPrograms();
+            if (excludeTypes == null || excludeTypes.Length == 0)
+            {
+                return (Ok(result));
+            }
+
+            foreach (var t in excludeTypes)
+            {
+                result.RemoveAll(p => p.ProgramType == t);
+            }
+
+            return Ok(result);
         }
 
         [Route("api/programs/{programType}")]
-        public IHttpActionResult Get(int programType)
+        [HttpGet]
+        public IHttpActionResult GetProgramsByType(int programType)
         {
-                var programs = programService.GetOnlineGivingPrograms(programType);
-
-                var programList = new List<ProgramDTO>();
-
-                foreach (var program in programs)
-                {
-                    var programDTO = new ProgramDTO();
-                    programDTO.Name = program.Name;
-                    programDTO.ProgramId = program.ProgramId;
-                    programList.Add(programDTO);
-                }
-                return Ok(programList);
+            return Ok(_programService.GetOnlineGivingPrograms(programType));
         }
-
     }
 }

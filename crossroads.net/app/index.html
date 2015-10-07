@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="crossroads">
+
+<head>
+  <style>
+    /* Allow angular.js to be loaded in body, hiding cloaked elements until
+     * templates compile.  The !important is important given that there may be
+     * other selectors that are more specific or come later and might alter display.
+     */
+      [ng\:cloak],
+      [ng-cloak],
+      .ng-cloak {
+          display: none !important;
+      }
+  </style>
+  <title ng-bind="meta.title">Crossroads</title>
+  <meta name="fragment" content="!">
+  <meta name="description" content="{{meta.description | htmlToPlainText | truncate : 155}}">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="apple-touch-icon" sizes="57x57" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://crossroads-media.s3.amazonaws.com/images/favicon/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="http://crossroads-media.s3.amazonaws.com/images/favicon/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="http://crossroads-media.s3.amazonaws.com/images/favicon/favicon-194x194.png" sizes="194x194">
+  <link rel="icon" type="image/png" href="http://crossroads-media.s3.amazonaws.com/images/favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="http://crossroads-media.s3.amazonaws.com/images/favicon/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="http://crossroads-media.s3.amazonaws.com/images/favicon/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="http://crossroads-media.s3.amazonaws.com/images/favicon/manifest.json">
+  <link rel="shortcut icon" href="http://crossroads-media.s3.amazonaws.com/images/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="http://crossroads-media.s3.amazonaws.com/images/favicon/mstile-144x144.png">
+  <meta name="msapplication-config" content="http://crossroads-media.s3.amazonaws.com/images/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="prerender-status-code" content="{{meta.statusCode}}">
+
+  <!-- Site wide og/fb tags -->
+  <meta property="og:site_name" content="{{meta.siteconfig.title}}"/>
+  <meta property="og:locale" content="{{meta.siteconfig.locale}}" />
+  <!--<meta property="fb:app_id" content="[FB_APP_ID]" />-->   <!-- If and when we have a Facebook App ID, it goes here -->
+
+  <!-- URL specific og/fb tags. Using http://int.crossroads.net/media/single for example data-->
+  <meta property="og:title" content="{{meta.title}}" />
+  <meta property="og:url" content="{{meta.url}}" />
+  <meta property="og:image" content="{{meta.image.filename}}" />   <!-- Best if at least 1200x630 pixels -->
+  <meta property="og:description" content="{{meta.description | htmlToPlainText}}" />
+
+  <meta property="og:type" content="{{meta.type}}" />   <!-- Type of content. Use 'article' for blog posts & media pages. Use 'website' for content/static pages -->
+  <meta property="article:publisher" content="https://www.facebook.com/{{meta.siteconfig.facebook}}" /> <!-- Only valid for 'article' types (blog posts and media) -->
+  <!-- <meta property="article:author" content="https://www.facebook.com/tatelucas" /> -->   <!-- optional tag if you want to identify the author instead of just "Crossroads". Only valid for 'article' types (blog posts and media) -->
+
+  <!-- Site wide Twitter tags. Twitter will use og tags for url, title, image and description -->
+  <meta name="twitter:card" content="{{meta.card}}">
+  <meta name="twitter:site" content="{{meta.siteconfig.twitter}}">
+
+  <!-- URL specific twitter tags. Using http://int.crossroads.net/media/single for example data-->
+  <!-- <meta name="twitter:creator" content="@tatelucas" /> --> <!-- optional tag if you want to identify the author instead of just "Crossroads". -->
+
+  <script type="text/ng-template" id="on-submit-messages">
+      <span ng-message="required"><span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span></span>
+      <span ng-message="initiativeRequired"><span ng-bind-html="$root.MESSAGES.noInitiativeSelected.content | html"></span></span>
+  </script>
+  <script type="text/ng-template" id="on-pause-messages">
+      <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span></span>
+      <span ng-message="invalidDate"><span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span></span>
+      <span ng-message="invalidPaymentMethod"><span ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span></span>
+  </script>
+  <script type="text/ng-template" id="on-blur-messages">
+      <span ng-message="minlength"><span ng-bind-html="$root.MESSAGES.invalidPassword.content | html"></span></span>
+      <span ng-message="unique"><span ng-bind-html="$root.MESSAGES.emailInUse.content | html"></span></span>
+      <span ng-message="email"><span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span></span>
+      <span ng-message="invalidRouting"><span ng-bind-html="$root.MESSAGES.invalidRoutingTransit.content | html"></span></span>
+      <span ng-message="invalidAccount"><span ng-bind-html="$root.MESSAGES.invalidAccountNumber.content | html"></span></span>
+      <span ng-message="naturalNumber"><span ng-bind-html="$root.MESSAGES.invalidDonationAmount.content | html"></span></span>
+      <span ng-message="invalidZip"><span ng-bind-html="$root.MESSAGES.invalidZip.content | html"></span></span>
+  </script>
+  <ng-include src="'/assets/cr.svg'"></ng-include>
+  <!-- Hotjar Tracking Code for demo.crossroads.net -->
+  <script>
+      (function(f,b){
+          var c;
+          f.hj=f.hj||function(){(f.hj.q=f.hj.q||[]).push(arguments)};
+          f._hjSettings={hjid:40735, hjsv:4};
+          c=b.createElement("script");c.async=1;
+          c.src="//static.hotjar.com/c/hotjar-"+f._hjSettings.hjid+".js?sv="+f._hjSettings.hjsv;
+          b.getElementsByTagName("head")[0].appendChild(c);
+      })(window,document);
+  </script>
+  <!-- prerender.io - Prevent caching before page is rendered-->
+  <script>
+    window.prerenderReady = false;
+  </script>
+  <!-- build:corecss -->
+  <link href="/assets/core.css" rel="stylesheet" />
+  <!-- endbuild -->
+</head>
+
+<body ng-controller="coreController as app" ng-class="app.asideState.position">
+  <div growl class="crossroads-growl">
+  </div>
+  <div ui-view> </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#async=1"></script>
+<!-- build:corejs -->
+<script src="/assets/core.js"></script>
+<!-- endbuild -->
+<!-- build:commonjs -->
+<script src="/assets/common.js"></script>
+<!-- endbuild -->
+<!-- build:profilejs -->
+<script src="/assets/profile.js"></script>
+<!-- endbuild -->
+<!-- build:tripsjs -->
+<script src="/assets/trips.js"></script>
+<!-- endbuild -->
+<!-- build:givejs -->
+<script src="/assets/give.js"></script>
+<!-- endbuild -->
+<!-- build:mediajs -->
+<script src="/assets/media.js"></script>
+<!-- endbuild -->
+<!-- build:searchjs -->
+<script src="/assets/search.js"></script>
+<!-- endbuild -->
+<!-- build:js -->
+<script src="/assets/main.js"></script>
+<!-- endbuild -->
+
+</html>

@@ -1,0 +1,23 @@
+<div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div ng-bind-html="$root.MESSAGES.trip_disclaimer.content | html"></div>
+    </div>
+  </div>
+  <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>
+  <legend>Update Profile Information</legend>
+  <div class="row">
+    <div class='col-sm-12'>
+      <profile-personal
+         contact-id="tripsSignup.signupService.contactId"
+         allow-password-change="false"
+         require-mobile-phone="true"
+         allow-save="false"
+         submit-form-callback='tripsSignup.validateProfile(profile, household)'
+         button-text='tripsSignup.buttonText'
+         button-css='pull-right'
+         profile-data='tripsSignup.profileData'
+         for-trips='true' />
+    </div>
+  </div>
+</div>

@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
+using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
@@ -7,6 +10,7 @@ using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
+using RestSharp.Extensions;
 
 namespace crds_angular.Controllers.API
 {
@@ -14,9 +18,9 @@ namespace crds_angular.Controllers.API
     public class LoginController : MPAuth
     {
 
-        private IPersonService _personService;
+        private crds_angular.Services.Interfaces.IPersonService _personService;
 
-        public LoginController(IPersonService personService)
+        public LoginController(crds_angular.Services.Interfaces.IPersonService personService)
         {
             _personService = personService;
         }
@@ -45,7 +49,7 @@ namespace crds_angular.Controllers.API
                         return this.Ok(l);
                     }
                 }
-                catch (Exception e)
+                catch (Exception )
                 {
                     return this.Unauthorized();
                 }
@@ -57,8 +61,10 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
             // try to login 
-            var token = TranslationService.Login(cred.username, cred.password);
-            if (token == null)
+            var authData = TranslationService.Login(cred.username, cred.password);
+            var token = authData["token"].ToString();
+            var exp = authData["exp"].ToString();
+            if (token == "")
             {
                 return this.Unauthorized();
             }
@@ -67,11 +73,16 @@ namespace crds_angular.Controllers.API
             var r = new LoginReturn
             {
                 userToken = token,
+                userTokenExp = exp,
                 userId = p.ContactId,
                 username = p.FirstName,
                 userEmail = p.EmailAddress,
-                roles = userRoles
+                roles = userRoles,
+                age = p.Age
             };
+
+           //ttpResponseHeadersExtensions.AddCookies();
+           
             return this.Ok(r);
         }
     }
@@ -86,10 +97,12 @@ namespace crds_angular.Controllers.API
             this.roles = roles;
         }
         public string userToken { get; set; }
+        public string userTokenExp { get; set; }
         public int userId { get; set; }
         public string username { get; set; }
         public string userEmail { get; set;  }
         public List<RoleDto> roles { get; set; }
+        public int age { get; set; }
     }
 
     public class Credentials

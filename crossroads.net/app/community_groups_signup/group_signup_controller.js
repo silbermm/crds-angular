@@ -145,7 +145,7 @@ require('../services/group_service');
 					url: "page-not-found"
 				}, function() {
 					if (notFoundRequest.pages.length > 0) {
-						vm.content = notFoundRequest.pages[0].renderedContent;
+						vm.content = notFoundRequest.pages[0].content;
 					} else {
 						vm.content = "404 Content not found";
 					}

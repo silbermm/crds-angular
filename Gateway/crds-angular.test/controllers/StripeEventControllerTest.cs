@@ -1,34 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Messaging;
+using System.Net;
 using System.Web.Http.Results;
-using Moq;
-using NUnit.Framework;
 using crds_angular.Controllers.API;
-using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
+using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Messaging.Interfaces;
+using Moq;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 
 namespace crds_angular.test.controllers
 {
     public class StripeEventControllerTest
     {
         private StripeEventController _fixture;
-        private Mock<IPaymentService> _paymentService;
-        private Mock<IDonationService> _donationService;
+        private Mock<IStripeEventService> _stripeEventService;
+        private Mock<IMessageQueueFactory> _messageQueueFactory;
+        private Mock<IMessageFactory> _messageFactory;
 
         [SetUp]
         public void SetUp()
         {
             var configuration = new Mock<IConfigurationWrapper>();
-            configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeposited")).Returns(999);
-            configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusSucceeded")).Returns(888);
-            configuration.Setup(mocked => mocked.GetConfigIntValue("DonationStatusDeclined")).Returns(777);
             configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookLiveMode")).Returns("true");
+            configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookAsynchronousProcessingMode")).Returns("false");
+            configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookEventQueueName")).Returns("queue name");
 
-            _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
-            _donationService = new Mock<IDonationService>(MockBehavior.Strict);
-            _fixture = new StripeEventController(_paymentService.Object, _donationService.Object, configuration.Object);
+            _stripeEventService = new Mock<IStripeEventService>();
+            _messageFactory = new Mock<IMessageFactory>();
+            _messageQueueFactory = new Mock<IMessageQueueFactory>();
+
+            _fixture = new StripeEventController(configuration.Object, _stripeEventService.Object, _messageQueueFactory.Object, _messageFactory.Object);
         }
 
         [Test]
@@ -36,8 +42,9 @@ namespace crds_angular.test.controllers
         {
             var result = _fixture.ProcessStripeEvent(null);
             Assert.IsInstanceOf<InvalidModelStateResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
+            _stripeEventService.VerifyAll();
+            _messageQueueFactory.VerifyAll();
+            _messageFactory.VerifyAll();
         }
 
         [Test]
@@ -46,8 +53,9 @@ namespace crds_angular.test.controllers
             _fixture.ModelState.AddModelError("Data", new Exception("invalid"));
             var result = _fixture.ProcessStripeEvent(new StripeEvent());
             Assert.IsInstanceOf<InvalidModelStateResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
+            _stripeEventService.VerifyAll();
+            _messageQueueFactory.VerifyAll();
+            _messageFactory.VerifyAll();
         }
 
         [Test]
@@ -60,27 +68,13 @@ namespace crds_angular.test.controllers
 
             var result = _fixture.ProcessStripeEvent(e);
             Assert.IsInstanceOf<OkResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
+            _stripeEventService.VerifyAll();
+            _messageQueueFactory.VerifyAll();
+            _messageFactory.VerifyAll();
         }
 
         [Test]
-        public void TestProcessStripeEventNoMatchingEventHandler()
-        {
-            var e = new StripeEvent
-            {
-                LiveMode = true,
-                Type = "not.this.one"
-            };
-
-            var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
-        }
-
-        [Test]
-        public void TestChargeSucceeded()
+        public void TestProcessEventSynchronously()
         {
             var e = new StripeEvent
             {
@@ -96,114 +90,68 @@ namespace crds_angular.test.controllers
                 }
             };
 
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 888, e.Created, null));
+            var expectedResponse = new StripeEventResponseDTO();
+            _stripeEventService.Setup(mocked => mocked.ProcessStripeEvent(e)).Returns(expectedResponse);
             var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
-        }
-
-        [Test]
-        public void TestChargeFailed()
-        {
-            var e = new StripeEvent
-            {
-                LiveMode = true,
-                Type = "charge.failed",
-                Created = DateTime.Now.AddDays(-1),
-                Data = new StripeEventData
-                {
-                    Object = JObject.FromObject(new StripeCharge
-                    {
-                        Id = "9876",
-                        FailureCode = "invalid_routing_number",
-                        FailureMessage = "description from stripe"
-                    })
-                }
-            };
-
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("9876", 777, e.Created, "invalid_routing_number: description from stripe"));
-            var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkResult>(result);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
-        }
-
-        [Test]
-        public void TestTransferPaidNoChargesFound()
-        {
-            var e = new StripeEvent
-            {
-                LiveMode = true,
-                Type = "transfer.paid",
-                Created = DateTime.Now.AddDays(-1),
-                Data = new StripeEventData
-                {
-                    Object = JObject.FromObject(new StripeTransfer
-                    {
-                        Id = "tx9876",
-                    })
-                }
-            };
-
-            _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(new List<string>());
-            var result = _fixture.ProcessStripeEvent(e);
-            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>)result).Content;
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
+            Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
+            Assert.AreEqual(HttpStatusCode.OK, ((RestHttpActionResult<StripeEventResponseDTO>)result).StatusCode);
+            var dto = ((RestHttpActionResult<StripeEventResponseDTO>) result).Content;
             Assert.IsNotNull(dto);
-            Assert.AreEqual(0, dto.TotalTransactionCount);
-            Assert.AreEqual(0, dto.SuccessfulUpdates.Count);
-            Assert.AreEqual(0, dto.FailedUpdates.Count);
-
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
-        }
-
-        [Test]
-        public void TestTransferPaid()
-        {
-            var e = new StripeEvent
-            {
-                LiveMode = true,
-                Type = "transfer.paid",
-                Created = DateTime.Now.AddDays(-1),
-                Data = new StripeEventData
-                {
-                    Object = JObject.FromObject(new StripeTransfer
-                    {
-                        Id = "tx9876",
-                    })
-                }
-            };
-
-            var charges = new List<string>
-            {
-                "111",
-                "222",
-                "333",
-                "444"
-            };
-
-            _paymentService.Setup(mocked => mocked.GetChargesForTransfer("tx9876")).Returns(charges);
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("111", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("222", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("333", 999, e.Created, null));
-            _donationService.Setup(mocked => mocked.UpdateDonationStatus("444", 999, e.Created, null)).Throws(new Exception("Not gonna do it, wouldn't be prudent."));
-
-            var result = _fixture.ProcessStripeEvent(e);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<TransferPaidResponseDTO>>(result);
-            var dto = ((OkNegotiatedContentResult<TransferPaidResponseDTO>) result).Content;
-            Assert.IsNotNull(dto);
-            Assert.AreEqual(4, dto.TotalTransactionCount);
-            Assert.AreEqual(3, dto.SuccessfulUpdates.Count);
-            Assert.AreEqual(charges.GetRange(0, 3), dto.SuccessfulUpdates);
-            Assert.AreEqual(1, dto.FailedUpdates.Count);
-            Assert.AreEqual("444", dto.FailedUpdates[0].Key);
-            Assert.AreEqual("Not gonna do it, wouldn't be prudent.", dto.FailedUpdates[0].Value);
-            _paymentService.VerifyAll();
-            _donationService.VerifyAll();
+            Assert.AreSame(expectedResponse, dto);
+            _stripeEventService.VerifyAll();
+            _messageQueueFactory.VerifyAll();
+            _messageFactory.VerifyAll();
 
         }
+
+        // This test unfortunately does not work, as you cannot mock Message and MessageQueue.
+        // A possible refactor to wrap those into our own interfaces would allow for more thorough testing
+        //
+        //[Test]
+        //public void TestProcessEventAsynchronously()
+        //{
+        //    var configuration = new Mock<IConfigurationWrapper>();
+        //    configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookLiveMode")).Returns("true");
+        //    configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookAsynchronousProcessingMode")).Returns("true");
+        //    configuration.Setup(mocked => mocked.GetConfigValue("StripeWebhookEventQueueName")).Returns("queue name");
+        //
+        //    var mq = new Mock<MessageQueue>();
+        //
+        //    _messageQueueFactory.Setup(mocked => mocked.CreateQueue("queue name", QueueAccessMode.Send, null))
+        //        .Returns(mq.Object);
+        //
+        //    _fixture = new StripeEventController(configuration.Object, _stripeEventService.Object, _messageQueueFactory.Object, _messageFactory.Object);
+        //
+        //    var e = new StripeEvent
+        //    {
+        //        LiveMode = true,
+        //        Type = "charge.succeeded",
+        //        Created = DateTime.Now.AddDays(-1),
+        //        Data = new StripeEventData
+        //        {
+        //            Object = JObject.FromObject(new StripeCharge
+        //            {
+        //                Id = "9876"
+        //            })
+        //        }
+        //    };
+        //
+        //    var msg = new Mock<Message>();
+        //    _messageFactory.Setup(mocked => mocked.CreateMessage(e, null)).Returns(msg.Object);
+        //    mq.Setup(mocked => mocked.Send(msg.Object, MessageQueueTransactionType.None));
+        //
+        //    var result = _fixture.ProcessStripeEvent(e);
+        //    Assert.IsInstanceOf<RestHttpActionResult<StripeEventResponseDTO>>(result);
+        //    Assert.AreEqual(HttpStatusCode.OK, ((RestHttpActionResult<StripeEventResponseDTO>)result).StatusCode);
+        //    var dto = ((RestHttpActionResult<StripeEventResponseDTO>)result).Content;
+        //    Assert.IsNotNull(dto);
+        //    Assert.AreEqual("Queued event for asynchronous processing", dto.Message);
+        //    _stripeEventService.VerifyAll();
+        //    _messageQueueFactory.VerifyAll();
+        //    _messageFactory.VerifyAll();
+        //}
 
     }
+
+
 }

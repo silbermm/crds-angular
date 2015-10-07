@@ -1,7 +1,9 @@
-﻿using crds_angular.Models.Crossroads;
+﻿using System;
+using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 namespace crds_angular.Services
 {
@@ -21,9 +23,12 @@ namespace crds_angular.Services
             var communication = new Communication();
             communication.DomainId = 1;
 
-            var userId = _communicationService.GetUserIdFromContactId(token, email.FromContactId);
+            if (token == null && email.FromUserId == null)
+            {
+                throw (new InvalidOperationException("Must provide either email.FromUserId or an authentication token."));
+            }
 
-            communication.AuthorUserId = userId;
+            communication.AuthorUserId = email.FromUserId ?? _communicationService.GetUserIdFromContactId(token, email.FromContactId);
 
             var sender = _personService.GetPerson(email.FromContactId);
             communication.FromContactId = sender.ContactId;

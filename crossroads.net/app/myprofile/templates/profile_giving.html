@@ -10,9 +10,10 @@
       </div>
       <!--/row-->
 
+      <!--Recurring Giving-->
       <div class="row recurring-gifts push-bottom">
         <div class="col-sm-12">
-          <h3>Recurring Gifts</h3>
+          <h2>Recurring Gifts</h2>
           <table class="table gift-table">
             <tbody>
               <tr>
@@ -30,18 +31,20 @@
                   <p class="text-muted"><span>15th Monthly</span>
                   </p>
                 </td>
-                <td class="table-actions text-right">
-                  <a href="" ng-click="open()">Edit
-                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                        <use xlink:href="#pencil4"></use>
-                                    </svg>
-                                    </a>
-                  <a href="" ng-click="open()">Remove
-                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                        <use xlink:href="#trash-o"></use>
-                                    </svg>
-                                    </a>
-                </td>
+                  <td class="table-actions text-right">
+                    <a href="" ng-click="openEditGiftModal()">
+                      <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                          <use xlink:href="#pencil4"></use>
+                      </svg>
+                      Edit
+                    </a>
+                    <a href="" ng-click="openRemoveGiftModal()">
+                      <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                          <use xlink:href="#trash-o"></use>
+                      </svg>
+                      Remove
+                    </a>
+                  </td>
               </tr>
               <tr>
                 <td>
@@ -60,16 +63,18 @@
                   </p>
                 </td>
                 <td class="table-actions text-right">
-                  <a href="">Edit
-                                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                            <use xlink:href="#pencil4"></use>
-                                        </svg>
-                                    </a>
-                  <a href="">Remove
-                                        <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                            <use xlink:href="#trash-o"></use>
-                                        </svg>
-                                    </a>
+                  <a href="" ng-click="open()">
+                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                        <use xlink:href="#pencil4"></use>
+                    </svg>
+                    Edit
+                  </a>
+                  <a href="" ng-click="open()">
+                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                        <use xlink:href="#trash-o"></use>
+                    </svg>
+                    Remove
+                  </a>
                 </td>
               </tr>
               <tr>
@@ -89,16 +94,18 @@
                   </p>
                 </td>
                 <td class="table-actions text-right">
-                  <a href="">Edit
-                                        <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                            <use xlink:href="#pencil4"></use>
-                                        </svg>
-                                    </a>
-                  <a href="">Remove
-                                        <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                            <use xlink:href="#trash-o"></use>
-                                        </svg>
-                                    </a>
+                  <a href="" ng-click="open()">
+                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                        <use xlink:href="#pencil4"></use>
+                    </svg>
+                    Edit
+                  </a>
+                  <a href="" ng-click="open()">
+                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                        <use xlink:href="#trash-o"></use>
+                    </svg>
+                    Remove
+                  </a>
                 </td>
               </tr>
             </tbody>
@@ -111,9 +118,10 @@
         </div>
       </div><!--/row-->
 
+      <!--Recent Gifts-->
       <div class="row recent-gifts push-bottom">
           <div class="col-sm-12">
-              <h3>Recent Gifts</h3>
+              <h2>Recent Gifts</h2>
               <table class="table recent-gifts gift-table">
                   <tbody>
                       <tr>
@@ -170,91 +178,100 @@
               </table>
               <div class="row">
                   <div class="col-sm-12 text-center push-bottom">
-                      <a ui-sref="history" class="btn btn-primary">View All</a>
+                      <a ui-sref="history" class="btn btn-default">View All</a>
                   </div>
               </div>
           </div>
       </div><!--/row-->
 
-      <!--Removing for now until US1148. Need for context of the page while we designed the recurring giving section
-            <div class="row commitments">
-                <div class="col-sm-12">
-                    <h3>Commitments</h3>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    Ministry Fund
-                                </td>
-                                <td class="text-right">
-                                    <span class="dollar-amount">$100.00</span>
-                                    <p class="text-muted"><span>15th Monthly</span></p>
-                                </td>
-                                <td class="table-actions text-right">
-                                    <a href="">Edit
-                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                        <use xlink:href="#pencil4"></use>
-                                    </svg>
-                                    </a>
-                                    <a href="">Remove
-                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                        <use xlink:href="#trash-o"></use>
-                                    </svg>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Game Change Fund
-                                </td>
-                                <td class="text-right">
-                                    <span class="dollar-amount">$200.00</span>
-                                    <p class="text-muted"><span>5th Monthly</span></p>
-                                </td>
-                                <td class="table-actions text-right">
-                                    <a href="">Edit
-                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                        <use xlink:href="#pencil4"></use>
-                                    </svg>
-                                    </a>
-                                    <a href="">Remove
-                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                        <use xlink:href="#trash-o"></use>
-                                    </svg>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    OSG Fund
-                                </td>
-                                <td  class="text-right">
-                                    <span class="dollar-amount">$300.00</span>
-                                    <p class="text-muted"><span>Tuesdays Weekly</span></p>
-                                </td>
-                                <td class="table-actions text-right">
-                                    <a href="">Edit
-                                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                                        <use xlink:href="#pencil4"></use>
-                                    </svg>
-                                    </a>
-                                    <a href="">Remove
-                                    <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-                                        <use xlink:href="#trash-o"></use>
-                                    </svg>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="col-sm-12 text-middle">
-                            <a href="" class="btn btn-primary">Add New</a>
+      <!--Commitments-->
+      <div class="row commitments">
+          <div class="col-sm-12">
+              <h2>Commitments</h2>
+              <hr>
+
+              <!--Card 1: Active campaign midway through dates and progress-->
+              <div class="card-item" data-category="view">
+                  <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
+                    <img class="card-img-show" data-src="//crossroads-media.imgix.net/images/commitment-campaign-im-in.jpg">
+                  </div>
+                  <div class="col-sm-9 col-xs-12 card-content col-sm-height">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <h3>I'm In Campaign</h3>
+                          <p class="text-muted trip-date">January 1, 2016 - January 1, 2019</p>
                         </div>
+                      </div><!--/row-->
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <p class="flush-bottom text-right trip-funding" style="width: 1.4%">$500 Given</p>
+                          <progressbar class="progress-striped" type="success" max="35000" value="500">1&#37;</progressbar>
+                          <p class="pull-right funding-goal">$35,000 Committed</p>
+                        </div>
+                      </div><!--/row-->
                     </div>
+                  </div>
+              </div><!-- /card-item -->
+
+              <!--Card 2: Old campaign past date and progress complete-->
+              <div class="card-item" data-category="view">
+                  <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
+                    <img class="card-img-show" data-src="//crossroads-media.imgix.net/images/commitment-campaign-game-change.jpg">
+                  </div>
+                  <div class="col-sm-9 col-xs-12 card-content col-sm-height">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <h3>Game Change Campaign</h3>
+                          <p class="text-muted trip-date">January 1, 2010 - January 1, 2013</p>
+                        </div>
+                      </div><!--/row-->
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <p class="flush-bottom text-right trip-funding" style="width: 35%">$3,500 Given</p>
+                          <progressbar class="progress-striped" type="success" max="10000" value="3500">35&#37;</progressbar>
+                          <p class="pull-right funding-goal">$10,000 Committed</p>
+                        </div>
+                      </div><!--/row-->
+                    </div>
+                  </div>
+              </div><!-- /card-item -->
+
+              <!--Card 2: Old campaign past date and progress complete-->
+              <div class="card-item" data-category="view">
+                  <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
+                    <img class="card-img-show" data-src="//crossroads-media.imgix.net/images/commitment-campaign-crazy.jpg">
+                  </div>
+                  <div class="col-sm-9 col-xs-12 card-content col-sm-height">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <h3>Crazy Campaign</h3>
+                          <p class="text-muted trip-date">January 1, 2004 - January 1, 2007</p>
+                        </div>
+                      </div><!--/row-->
+                      <div class="row">
+                        <div class="col-sm-12">
+                          <p class="flush-bottom text-right trip-funding" style="width: 100%">$1,000 Given</p>
+                          <progressbar class="progress" type="success" max="1000" value="1000">100&#37;</progressbar>
+                          <p class="pull-right funding-goal">$1,000 Committed</p>
+                        </div>
+                      </div><!--/row-->
+                    </div>
+                  </div>
+              </div><!-- /card-item -->
+
+
+
+              <div class="row">
+                <div class="col-sm-12 text-center">
+                  <a href="" class="btn btn-primary">Add New</a>
                 </div>
-            </div>-->
-      <!--/row-->
+              </div><!--/row-->
+          </div>
+      </div><!--/row /commitments-->
+
 
       <div class="panel panel-default push-top">
         <div class="panel-body text-muted small" role="alert">
@@ -267,8 +284,8 @@
   </div>
   <!--/row-->
 
-  <ng-include src="'myprofile/templates/profile_giving_edit_modal.html'"></ng-include>
-  <ng-include src="'myprofile/templates/profile_giving_remove_modal.html'"></ng-include>
+  <ng-include src="'templates/profile_giving_edit_modal.html'"></ng-include>
+  <ng-include src="'templates/profile_giving_remove_modal.html'"></ng-include>
 
 </div>
 <!--/profile-giving-->

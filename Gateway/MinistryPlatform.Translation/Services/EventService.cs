@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.PlatformService;
@@ -21,10 +22,13 @@ namespace MinistryPlatform.Translation.Services
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
 
         private IMinistryPlatformService ministryPlatformService;
+        private readonly IGroupService _groupService;
 
-        public EventService(IMinistryPlatformService ministryPlatformService)
+        public EventService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IGroupService groupService)
+            : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
+            _groupService = groupService;
         }
 
         public int registerParticipantForEvent(int participantId, int eventId)
@@ -71,7 +75,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 // go get record id to delete
                 var recordId = GetEventParticipantRecordId(eventId, participantId);
-                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, apiLogin());
+                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, ApiLogin());
             }
             catch (Exception ex)
             {
@@ -88,8 +92,15 @@ namespace MinistryPlatform.Translation.Services
         public int GetEventParticipantRecordId(int eventId, int participantId)
         {
             var search = "," + eventId + "," + participantId;
-            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", apiLogin(), search).Single();
+            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).Single();
             return (int) participants["Event_Participant_ID"];
+        }
+
+        public bool EventHasParticipant(int eventId, int participantId)
+        {
+            var searchString = "," + eventId + "," + participantId;
+            var records = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), searchString);
+            return records.Count != 0;
         }
 
         public List<Event> GetEvents(string eventType, string token)
@@ -129,6 +140,11 @@ namespace MinistryPlatform.Translation.Services
                 events.Where(e => e.EventStartDate.Date >= startDate.Date && e.EventStartDate.Date <= endDate.Date)
                     .ToList();
             return filteredEvents;
+        }
+
+        public List<Group> GetGroupsForEvent(int eventId)
+        {
+            return _groupService.GetGroupsForEvent(eventId);
         }
     }
 }

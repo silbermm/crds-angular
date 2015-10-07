@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -11,13 +12,30 @@ namespace MinistryPlatform.Translation.Test.Services
     public class ContactServiceTest
     {
         private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IAuthenticationService> _authService;
         private ContactService _fixture;
+        private Mock<IConfigurationWrapper> _configuration;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _fixture = new ContactService(_ministryPlatformService.Object);
+            _authService = new Mock<IAuthenticationService>();
+            _configuration = new Mock<IConfigurationWrapper>();
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Contacts")).Returns(292);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Households")).Returns(327);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("SecurityRolesSubPageId")).Returns(363);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Congregation_Default_ID")).Returns(5);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Default_Source_ID")).Returns(30);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Household_Position_Default_ID")).Returns(1);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("Addresses")).Returns(271);
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+
+
+            _fixture = new ContactService(_ministryPlatformService.Object, _authService.Object, _configuration.Object);
         }
 
         [Test]
@@ -32,6 +50,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Address_Line_2", "address-line-2"},
                     {"Congregation_ID", 5},
                     {"Household_ID", 4},
+                    {"Household_Name", "hh name"},
                     {"City", "Cincinnati"},
                     {"State", "OH"},
                     {"Postal_Code", "45208"},
@@ -65,6 +84,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNotNull(myProfile);
             Assert.AreEqual(3, myProfile.Contact_ID);
             Assert.AreEqual(100, myProfile.Address_ID);
+            Assert.AreEqual("hh name", myProfile.Household_Name);
         }
 
         [Test]
@@ -79,6 +99,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Address_Line_2", "address-line-2"},
                     {"Congregation_ID", null},
                     {"Household_ID", 4},
+                    {"Household_Name", "hh name"},
                     {"City", "Cincinnati"},
                     {"State", "OH"},
                     {"Postal_Code", "45208"},
@@ -115,6 +136,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNull(myProfile.Gender_ID);
             Assert.IsNull(myProfile.Marital_Status_ID);
             Assert.IsNull(myProfile.Mobile_Carrier);
+            Assert.AreEqual("hh name", myProfile.Household_Name);
         }
 
         [Test]
@@ -126,13 +148,16 @@ namespace MinistryPlatform.Translation.Test.Services
 
             var contactId = _fixture.CreateContactForGuestGiver("me@here.com", "display name");
 
-            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(292, It.Is<Dictionary<string, object>>(d =>
-                d["Email_Address"].Equals("me@here.com")
-                && d["Company"].Equals(false)
-                && d["Display_Name"].Equals("display name")
-                && d["Nickname"].Equals("display name")
-                && d["Household_Position_ID"].Equals(1)
-                ), It.IsAny<string>(), false));
+            _ministryPlatformService.Verify(mocked => mocked.CreateRecord(292,
+                                                                          It.Is<Dictionary<string, object>>(d =>
+                                                                                                                d["Email_Address"].Equals("me@here.com")
+                                                                                                                && d["Company"].Equals(false)
+                                                                                                                && d["Display_Name"].Equals("display name")
+                                                                                                                && d["Nickname"].Equals("display name")
+                                                                                                                && d["Household_Position_ID"].Equals(1)
+                                                                              ),
+                                                                          It.IsAny<string>(),
+                                                                          false));
 
             Assert.AreEqual(123, contactId);
         }

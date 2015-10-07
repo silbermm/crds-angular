@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
     public class LookupService : BaseService
     {
-        public static Dictionary<string,object> EmailSearch(String email, string token)
+        public LookupService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
+            : base(authenticationService, configurationWrapper)
+        {
+        }
+
+        public static Dictionary<string, object> EmailSearch(String email, string token)
         {
             return MinistryPlatformService.GetLookupRecord(AppSettings("Emails"), email, token);
         }
@@ -15,7 +22,7 @@ namespace MinistryPlatform.Translation.Services
             return MinistryPlatformService.GetLookupRecords(AppSettings("Genders"), token);
         }
 
-        public static List<Dictionary<string,object>> MaritalStatus(string token)
+        public static List<Dictionary<string, object>> MaritalStatus(string token)
         {
             return MinistryPlatformService.GetLookupRecords(AppSettings("MaritalStatus"), token);
         }
@@ -40,5 +47,9 @@ namespace MinistryPlatform.Translation.Services
             return MinistryPlatformService.GetLookupRecords(AppSettings("CrossroadsLocations"), token);
         }
 
+        public static List<Dictionary<string, object>> WorkTeams(string token)
+        {
+            return MinistryPlatformService.GetLookupRecords(AppSettings("WorkTeams"), token);
+        }
     }
 }

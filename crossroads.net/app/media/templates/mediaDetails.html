@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="media-details">
+      <div class="row">
+        <div class="message-info col-sm-8 col-lg-8 col-lg-offset-1">
+          <header class="message-header">
+            <h2>{{singleMedia.media.title}}
+              <small ng-show="singleMedia.parentMedia">Series: {{singleMedia.parentMedia.title}}</small>
+            </h2>
+            <span class="message-date text-muted">{{singleMedia.media.created | date: 'fullDate'}}</span>
+
+            <sn-addthis-toolbox class="addthis_crossroads_sharing clearfix addthis_24x24_style pull-right" data-url="{{ singleMedia.shareUrl }}" data-title="{{ singleMedia.media.title }}" data-description="{{ singleMedia.media.description }}">
+              <a href class="addthis_button_facebook gray-share"></a>
+              <a href class="addthis_button_twitter gray-share"></a>
+              <a href class="addthis_button_email gray-share"></a>
+            </sn-addthis-toolbox>
+            <hr>
+          </header>
+          <div class="message-body" ng-bind-html="singleMedia.media.description" >
+          </div><!--/message-body-->
+          <div class="message-tags">
+            <div class="row push-top">
+              <div class="col-xs-3 col-md-2">
+                <span class="small-heading text-muted" data-ng-show="singleMedia.media.speakers">SPEAKER: </span>
+              </div>
+              <div class="col-xs-9 col-md-10" >
+                <a ng-repeat="speaker in singleMedia.media.speakers" ui-sref="search({type:'media',q:'speakers: \''+speaker.title+'\''})" class="label label-standard-dark">{{ speaker.title }}</a>
+              </div>
+              <div class="col-xs-3 col-md-2" data-ng-show="singleMedia.mediaTags.length > 0">
+                <span class="small-heading">TOPICS: </span>
+              </div>
+              <div class="col-xs-9 col-md-10">
+                <a ng-repeat="tag in singleMedia.mediaTags" ui-sref="search({type:'media',q:'tags: \''+tag.title+'\''})" class="label label-standard-dark">{{ tag.title }}</a>
+              </div>
+            </div><!--/row-->
+          </div>
+        </div><!--/message-info-->
+
+        <ng-include src="'templates/messageActionButtons.html'"> </ng-include>
+
+      </div><!--/media-details-->
+    </div><!--/col-sm-12-->
+  </div><!--/row-->

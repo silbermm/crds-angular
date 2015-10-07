@@ -6,21 +6,74 @@ using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class DonorController : MPAuth
     {
-        private readonly IDonorService _gatewayDonorService;
+        private readonly IDonorService _donorService;
         private readonly IPaymentService _stripePaymentService;
+        private readonly IDonationService _donationService;
+        private readonly MPInterfaces.IDonorService _mpDonorService;
+        private readonly MPInterfaces.IAuthenticationService _authenticationService;
 
-        public DonorController(IDonorService gatewayDonorService, IPaymentService stripePaymentService)
+        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService, MPInterfaces.IDonorService mpDonorService, MPInterfaces.IAuthenticationService authenticationService)
         {
-            _gatewayDonorService = gatewayDonorService;
+            _donorService = donorService;
             _stripePaymentService = stripePaymentService;
+            _donationService = donationService;
+            _authenticationService = authenticationService;
+            _mpDonorService = mpDonorService;
+        }
+
+        /// <summary>
+        /// Retrieve list of donations for the specified donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
+        /// </summary>
+        /// <param name="donorId"></param>
+        /// <param name="softCredit">A bool indicating if the result should contain soft-credit (true) or direct (false) donations.  Defaults to false.</param>
+        /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
+        /// <returns>A list of DonationDTOs</returns>
+        [Route("api/donor/{donorId:int}/donations/{donationYear:regex(\\d{4})?}")]
+        [HttpGet]
+        public IHttpActionResult GetDonations(int donorId, string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
+        {
+            return (Authorized(token =>
+            {
+                var donations = _donationService.GetDonationsForDonor(donorId, donationYear, softCredit.GetValueOrDefault(false));
+                if (donations == null || !donations.HasDonations)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                }
+
+                return (Ok(donations));
+            }));
+        }
+
+        /// <summary>
+        /// Retrieve a list of donation years for the specified donor.  This includes any year the donor has given either directly, or via soft-credit.
+        /// </summary>
+        /// <param name="donorId"></param>
+        /// <returns>A list of years (string)</returns>
+        [Route("api/donor/{donorId:int}/donations/years")]
+        [HttpGet]
+        public IHttpActionResult GetDonationYears(int donorId)
+        {
+            return (Authorized(token =>
+            {
+                var donationYears = _donationService.GetDonationYearsForDonor(donorId);
+                if (donationYears == null || !donationYears.HasYears)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
+                }
+
+                return (Ok(donationYears));
+            }));
         }
 
         [ResponseType(typeof(DonorDTO))]
@@ -42,7 +95,7 @@ namespace crds_angular.Controllers.API
             ContactDonor donor;
             try
             {
-                donor = _gatewayDonorService.GetContactDonorForEmail(dto.email_address);
+                donor = _donorService.GetContactDonorForEmail(dto.email_address);
             }
             catch (Exception e)
             {
@@ -58,9 +111,9 @@ namespace crds_angular.Controllers.API
 
             try
             {
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, dto.email_address, dto.stripe_token_id, DateTime.Now);
+                donor = _donorService.CreateOrUpdateContactDonor(donor, String.Empty, dto.email_address, dto.stripe_token_id, DateTime.Now);
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 return (e.GetStripeResult());
             }
@@ -92,8 +145,8 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(authToken);
-                donor = _gatewayDonorService.CreateOrUpdateContactDonor(donor, string.Empty, dto.stripe_token_id, DateTime.Now);
+                var donor = _donorService.GetContactDonorForAuthenticatedUser(authToken);
+                donor = _donorService.CreateOrUpdateContactDonor(donor, string.Empty, string.Empty, dto.stripe_token_id, DateTime.Now);
 
                 var response = new DonorDTO
                 {
@@ -105,7 +158,7 @@ namespace crds_angular.Controllers.API
 
                 return Ok(response);
             }
-            catch (StripeException e)
+            catch (PaymentProcessorException e)
             {
                 return (e.GetStripeResult());
             }
@@ -120,7 +173,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
+                var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
 
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
@@ -156,7 +209,7 @@ namespace crds_angular.Controllers.API
                     return Ok(response);
                 }
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }
@@ -171,7 +224,7 @@ namespace crds_angular.Controllers.API
         {
             try
             {
-                var donor = _gatewayDonorService.GetContactDonorForEmail(email);
+                var donor = _donorService.GetContactDonorForEmail(email);
                 if (donor == null || !donor.HasPaymentProcessorRecord)
                 {
                     return NotFound();
@@ -189,7 +242,7 @@ namespace crds_angular.Controllers.API
                     return Ok(response); 
                 }
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }
@@ -217,14 +270,13 @@ namespace crds_angular.Controllers.API
             {
                 contactDonor = 
                     token == null ? 
-                    _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress) 
+                    _donorService.GetContactDonorForEmail(dto.EmailAddress) 
                     : 
-                    _gatewayDonorService.GetContactDonorForAuthenticatedUser(token);
-
-                //Post apistripe/customer/{custID}/sources pass in the dto.stripe_token_id
+                    _donorService.GetContactDonorForAuthenticatedUser(token);
+              
                 sourceData = _stripePaymentService.UpdateCustomerSource(contactDonor.ProcessorId, dto.StripeTokenId);
             }
-            catch (StripeException stripeException)
+            catch (PaymentProcessorException stripeException)
             {
                 return (stripeException.GetStripeResult());
             }
@@ -259,6 +311,41 @@ namespace crds_angular.Controllers.API
             };
 
             return Ok(donor);
+        }
+
+        /// <summary>
+        /// Create a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(RecurringGiftDto))]
+        [Route("api/donor/recurrence")]
+        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
+                    var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
+
+                    recurringGiftDto.EmailAddress = donor.Email;
+                    recurringGiftDto.RecurringGiftId = recurringGift;
+                    return Ok(recurringGiftDto);
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
+            }));
         }
     }
 }
