@@ -514,6 +514,7 @@ namespace crds_angular.Services
             FormatAnswer(page6.InternationalTravelExpericence, answers);
             FormatAnswer(page6.PassportBirthday, answers);
             FormatAnswer(page6.PassportCountry, answers);
+            FormatAnswer(page6.PassportNumber, answers);
             FormatAnswer(page6.PassportExpirationDate, answers);
             FormatAnswer(page6.PassportFirstName, answers);
             FormatAnswer(page6.PassportLastName, answers);

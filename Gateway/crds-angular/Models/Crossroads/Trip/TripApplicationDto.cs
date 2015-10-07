@@ -195,6 +195,9 @@ namespace crds_angular.Models.Crossroads.Trip
             [JsonProperty(PropertyName = "passportCountry")]
             public TripApplicationField PassportCountry { get; set; }
 
+            [JsonProperty(PropertyName = "passportNumber")]
+            public TripApplicationField PassportNumber { get; set; }
+
             [JsonProperty(PropertyName = "passportBirthday")]
             public TripApplicationField PassportBirthday { get; set; }
 

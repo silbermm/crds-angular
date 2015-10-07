@@ -259,6 +259,7 @@
         passportMiddleName: {formFieldId: 1467, value: null},
         passportLastName: {formFieldId: 1468, value: null},
         passportCountry: {formFieldId: 1469, value: null},
+        passportNumber: {formFieldId: 1478, value: null},
         deltaFrequentFlyer: {formFieldId: 1471, value: null},
         southAfricanFrequentFlyer: {formFieldId: 1472, value: null},
         unitedFrequentFlyer: {formFieldId: 1473, value: null},
