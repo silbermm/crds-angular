@@ -445,10 +445,23 @@ namespace crds_angular.Services
             formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+            
+            SaveContact(dto);
+            SaveParticipant(dto);
 
             _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
             
             return formResponseId;
+        }
+
+        private Boolean SaveContact(TripApplicationDto dto)
+        {
+            return true;
+        }
+
+        private Boolean SaveParticipant(TripApplicationDto dto)
+        {
+            return false;
         }
 
         private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
