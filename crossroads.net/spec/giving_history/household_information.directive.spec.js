@@ -52,10 +52,10 @@ describe('HouseholdInformation Directive', function() {
         lastName: 'Van Halen',
         contactId: 123,
         householdMembers: [
-          { ContactId: 123, LastName: 'Van Halen', Nickname: 'Edward', StatementTypeId: 2 },
-          { ContactId: 456, LastName: 'VaN HaLeN', Nickname: 'Alex', StatementTypeId: 2 },
-          { ContactId: 789, LastName: 'Hagar', Nickname: 'Samuel', StatementTypeId: 1 },
           { ContactId: 678, LastName: 'Lee Roth', Nickname: 'David', StatementTypeId: 2 },
+          { ContactId: 123, LastName: 'Van Halen', Nickname: 'Edward', StatementTypeId: 2 },
+          { ContactId: 789, LastName: 'Hagar', Nickname: 'Samuel', StatementTypeId: 1 },
+          { ContactId: 456, LastName: 'VaN HaLeN', Nickname: 'Alex', StatementTypeId: 2 },
           { ContactId: 345, LastName: 'Anthony', Nickname: 'Michael', StatementTypeId: 2 },
           { ContactId: 234, LastName: 'vAN HALeN', Nickname: 'Wolfgang', StatementTypeId: 2 }
         ]
