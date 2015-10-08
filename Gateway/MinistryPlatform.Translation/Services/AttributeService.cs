@@ -22,9 +22,9 @@ namespace MinistryPlatform.Translation.Services
         {
             var token = base.ApiLogin();
 
-            var filter = ",," + attributeTypeId;
+            var filter = attributeTypeId.HasValue ? string.Format(",,\"{0}\"", attributeTypeId) : string.Empty;
 
-            var pageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["AttributesPageView"]);
+            var pageViewId = _configurationWrapper.GetConfigIntValue("AttributesPageView");
             var records = MinistryPlatformService.GetPageViewRecords(pageViewId, token, filter);
 
             var attributeTypes = new Dictionary<int, AttributeType>();
