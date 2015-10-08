@@ -22,6 +22,11 @@
       });
     }
 
+    // Returns a household name composed of nicknames separated by '&', with groupings of last names also
+    // separated by '&'.  Some examples:
+    //   1) Bob Jones, Sandy Smith = Bob Jones & Sandy Smith
+    //   2) Bob Jones, Sandy Jones = Bob & Sandy Jones
+    //   3) Bob Jones, Sandy Smith, Erin Jones = Bob & Erin Jones & Sandy Smith
     function getHouseholdName(profile) {
       var householdMembers = profile.householdMembers;
 
