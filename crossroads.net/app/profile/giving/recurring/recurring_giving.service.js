@@ -8,7 +8,7 @@
   function RecurringGivingService($resource) {
 
     return {
-      recurringGifts: $resource(__API_ENDPOINT__ + 'api/donor/recurrence')
+      recurringGifts: $resource(__API_ENDPOINT__ + 'api/donor/recurrence'),
     };
 
   }

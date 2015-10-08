@@ -19,6 +19,8 @@
 
     function activate() {
       vm.donation_view_ready = false;
+      vm.recurring_giving_view_ready = false;
+
       GivingHistoryService.donations.get({limit: 3}, function(data) {
         vm.donations = data.donations;
         vm.donation_view_ready = true;
@@ -28,7 +30,7 @@
         vm.donation_view_ready = true;
       });
 
-      RecurringGivingService.recurringGift.get({}, function(data){
+      RecurringGivingService.recurringGifts.query(function(data){
         vm.recurringGifts = data;
         vm.recurring_giving_view_ready = true;
         vm.recurring_giving = true;
