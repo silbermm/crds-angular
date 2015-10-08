@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using MinistryPlatform.Models;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
-using Attribute = MinistryPlatform.Models.Attribute;
 using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 
@@ -69,7 +69,7 @@ namespace crds_angular.Services
             var attributes = GetMyRecords.GetMyAttributes(recordId, token);
 
             var skills =
-                Mapper.Map<List<Attribute>, List<Skill>>(attributes);
+                Mapper.Map<List<ContactAttribute>, List<Skill>>(attributes);
 
             return skills;
         }

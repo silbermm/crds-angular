@@ -56,6 +56,8 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
+    <Compile Include="AttributeType.cs" />
+    <Compile Include="ContactAttribute.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />
