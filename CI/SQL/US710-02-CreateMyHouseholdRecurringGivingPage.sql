@@ -31,7 +31,7 @@ INSERT INTO [dbo].[dp_Pages]([Page_ID]
 , Frequency_ID_Table.[Frequency]
 , CASE(Frequency_ID_Table.Frequency_ID)
 WHEN 1 THEN
-  CONCAT(''Every '', Day_Of_Week_ID_Table.Day_Of_Week)
+  CONCAT(REPLACE(Day_Of_Week_ID_Table.Day_Of_Week, '' '', ''''), ''s Weekly'')
 ELSE
   CONCAT(
     CAST(Day_Of_Month AS VARCHAR),
@@ -41,7 +41,7 @@ ELSE
       WHEN 3 THEN ''rd''
       ELSE ''th''
     END,
-    '' of the month''
+    '' Monthly''
   )
 END AS Recurrence
 , Recurring_Gifts.[Start_Date]
@@ -49,8 +49,9 @@ END AS Recurrence
 , Recurring_Gifts.[Amount]
 , Program_ID_Table.[Program_Name]
 , Congregation_ID_Table.[Congregation_Name]
-, CONCAT(Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type], ''/'', Donor_Account_ID_Table.[Account_Number]
-, ''/'', Donor_Account_ID_Table.[Institution_Name]) AS [Donor_Account]
+, Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]
+, Donor_Account_ID_Table.[Account_Number]
+, Donor_Account_ID_Table.[Institution_Name]
 , Recurring_Gifts.[Subscription_ID]'
   ,'Program_ID_Table.Program_Name'
   ,'Recurring_Gifts.[Recurring_Gift_ID] IN (SELECT * FROM [dbo].[crds_udfGetRecurringGiftIdsForUser](dp_UserID))'
