@@ -52,6 +52,8 @@
     vm.destination = vm.campaign.nickname;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
+    vm.hasPassport = hasPassport;
+    vm.nicaRequired = nicaRequired;
     vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
@@ -159,42 +161,6 @@
       }
     }
 
-    function saveData() {
-      vm.profileData.person.$save(function() {
-        $log.debug('person save successful');
-      }, function() {
-
-        $log.debug('person save unsuccessful');
-      });
-
-      var application = new vm.signupService.TripApplication();
-      application.contactId = vm.signupService.contactId;
-      application.pledgeCampaignId = vm.signupService.campaign.id;
-      application.pageTwo = vm.signupService.page2;
-      application.pageThree = vm.signupService.page3;
-      application.pageFour = vm.signupService.page4;
-      application.pageFive = vm.signupService.page5;
-      application.pageSix = vm.signupService.page6;
-      application.inviteGUID = $stateParams.invite;
-      application.$save(function() {
-        $log.debug('trip application save successful');
-      }, function() {
-
-        $log.debug('trip application save unsuccessful');
-      });
-
-      _.each(vm.signupService.familyMembers, function(f) {
-        if (f.contactId === vm.signupService.contactId) {
-          f.signedUp = true;
-          f.signedUpDate = new Date();
-        }
-      });
-
-      vm.signupService.pageId = 'thanks';
-      vm.tpForm.$setPristine();
-      $state.go('tripsignup.application.thankyou');
-    }
-
     function handleSubmit(form) {
       $log.debug('handleSubmit start');
       if (form !== null) {
@@ -216,6 +182,14 @@
       if (vm.tpForm.$dirty) {
         return '';
       }
+    }
+
+    function nicaRequired() {
+      if (vm.destination === 'Nicaragua') {
+        return 'required';
+      }
+
+      return '';
     }
 
     function nolaRequired() {
@@ -274,6 +248,10 @@
       });
     }
 
+    function hasPassport() {
+      return (vm.signupService.page6.validPassport.value === 'yes');
+    }
+
     function progressLabel() {
       return vm.profileData.person.nickName + ' ' + vm.profileData.person.lastName;
     }
@@ -302,6 +280,42 @@
           }
         }
       });
+    }
+
+    function saveData() {
+      vm.profileData.person.$save(function() {
+        $log.debug('person save successful');
+      }, function() {
+
+        $log.debug('person save unsuccessful');
+      });
+
+      var application = new vm.signupService.TripApplication();
+      application.contactId = vm.signupService.contactId;
+      application.pledgeCampaignId = vm.signupService.campaign.id;
+      application.pageTwo = vm.signupService.page2;
+      application.pageThree = vm.signupService.page3;
+      application.pageFour = vm.signupService.page4;
+      application.pageFive = vm.signupService.page5;
+      application.pageSix = vm.signupService.page6;
+      application.inviteGUID = $stateParams.invite;
+      application.$save(function() {
+        $log.debug('trip application save successful');
+      }, function() {
+
+        $log.debug('trip application save unsuccessful');
+      });
+
+      _.each(vm.signupService.familyMembers, function(f) {
+        if (f.contactId === vm.signupService.contactId) {
+          f.signedUp = true;
+          f.signedUpDate = new Date();
+        }
+      });
+
+      vm.signupService.pageId = 'thanks';
+      vm.tpForm.$setPristine();
+      $state.go('tripsignup.application.thankyou');
     }
 
     function spiritualSelected() {
