@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Web.Optimization;
 using AutoMapper;
 using crds_angular.Models;
@@ -8,6 +9,7 @@ using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using Group = MinistryPlatform.Models.Group;
 using Response = MinistryPlatform.Models.Response;
 
 namespace crds_angular.App_Start
@@ -170,9 +172,14 @@ namespace crds_angular.App_Start
                     dest.Source = new DonationSourceDTO
                     {
                         SourceType = (int)AccountType.Checking == src.AccountTypeID ? PaymentType.Bank : PaymentType.CreditCard,
-                        CardType = (CreditCardType)System.Enum.Parse(typeof(CreditCardType), src.InstitutionName),
                         AccountNumberLast4 = src.AccountNumberLast4,
                     };
+
+                    if (src.InstitutionName.Equals("Bank"))
+                    {
+                        return;
+                    }
+                    dest.Source.CardType = (CreditCardType)System.Enum.Parse(typeof(CreditCardType), Regex.Replace(src.InstitutionName, @"\s+", ""));
                 });
         }
     }
