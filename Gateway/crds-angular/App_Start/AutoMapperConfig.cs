@@ -20,11 +20,11 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
 
-            Mapper.CreateMap<Attribute, Skill>()
+            Mapper.CreateMap<ContactAttribute, Skill>()
                 .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
 
-            Mapper.CreateMap<Skill, Attribute>()
+            Mapper.CreateMap<Skill, ContactAttribute>()
                 .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
 
             Mapper.CreateMap<Group, OpportunityGroup>()

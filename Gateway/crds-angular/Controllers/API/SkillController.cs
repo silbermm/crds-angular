@@ -9,8 +9,8 @@ using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using Newtonsoft.Json;
-using Attribute = MinistryPlatform.Models.Attribute;
 
 namespace crds_angular.Controllers.API
 {
@@ -33,7 +33,7 @@ namespace crds_angular.Controllers.API
                 var mySkills = GetMySkills(token, userid);
 
                 var mpObject = TranslationService.GetSkills(pageId, token);
-                var attributes = JsonConvert.DeserializeObject<List<Attribute>>(mpObject);
+                var attributes = JsonConvert.DeserializeObject<List<ContactAttribute>>(mpObject);
                 var skills = ConvertToSkills(attributes, mySkills);
 
                 return this.Ok(skills);
@@ -97,7 +97,7 @@ namespace crds_angular.Controllers.API
             return null;
         }
 
-        private List<SkillCategory> ConvertToSkills(List<Attribute> attributes, List<Skill> mySkills)
+        private List<SkillCategory> ConvertToSkills(List<ContactAttribute> attributes, List<Skill> mySkills)
         {
             //init our return variable
             var skillCategories = new List<SkillCategory>();
