@@ -46,6 +46,7 @@ BEGIN
       SELECT r.Recurring_Gift_ID
       FROM [dbo].[Recurring_Gifts] r
       WHERE r.Donor_ID = @Donor_ID
+      AND r.End_Date IS NULL
   END
   ELSE
   BEGIN
@@ -59,6 +60,7 @@ BEGIN
       INNER JOIN Contacts c on c.Contact_ID = d.Contact_ID
       WHERE d.Statement_Type_ID = 2
       AND c.Household_ID = @Household_ID
+      AND r.End_Date IS NULL
   END
   RETURN
 END
