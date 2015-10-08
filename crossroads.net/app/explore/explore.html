@@ -1,39 +1,59 @@
 <script type="text/javascript">
+
+var exploreTweens = [];
+var tweenFadeUpDelay = .5;
+
 function tweenFade(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.staggerTo(selecter+' .fade', 1, { autoAlpha: 1, delay: delay }, .15);
+          return TweenMax.staggerTo(selecter+' .fade', 1, { autoAlpha: 1, delay: delay }, .15);
 };
 function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.staggerTo(selecter+' .rise10', .8, { autoAlpha: 1, y: 0, delay: delay, ease: Back.easeOut.config(10) }, .3);
+          return TweenMax.staggerTo(selecter+' .rise10', .8, { autoAlpha: 1, y: 0, delay: delay, ease: Back.easeOut.config(10) }, .3);
 };
 function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.to(selecter+' .fade-bg', 1, { autoAlpha: 1, delay: delay });
+          return TweenMax.to(selecter+' .fade-bg', 1, { autoAlpha: 1, delay: delay });
 };
 function tweenRotateRight(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.staggerFrom(selecter+' .rotate-right', 1, {rotation:120, xPercent: 200, delay: delay }, .8);
+          return TweenMax.staggerFrom(selecter+' .rotate-right', 1, {rotation:120, xPercent: 200, delay: delay }, .8);
 };
 function tweenFadeFast(selecter, delay ){ if(!delay){ delay = 0; }
-          TweenMax.from(selecter+' .fade-fast', .1, {autoAlpha: 0, delay: delay });
+          return TweenMax.from(selecter+' .fade-fast', .1, {autoAlpha: 0, delay: delay });
 };
 
+function reverseTweens(tweenArray, timelinePosition) {
+  for (i = 0; i < tweenArray.length; i++) {
+    reverseTween(tweenArray[i],timelinePosition);
+  }
+}
+
+function reverseTween(tween, timelinePosition) {
+  if (timelinePosition) {
+    tween.reverse(timelinePosition);
+  } else {
+    tween.reverse();
+  }
+}
+
 $(document).ready(function() {
-
-
   $('#fullpage').fullpage({
     //navigation: true,
     //navigationPosition: 'right',
     easingcss3: 'cubic-bezier(0.645,.045,.355,1)',
     afterLoad: function(anchorLink, index) {
       var loadedSection = $(this);
-      var mapflagfade = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: 1.5 }, 1);
 
       if (index == 1) {
-        tweenFadeBg('.opening', .2);
-        tweenFade('.opening', 1);
+        exploreTweens['opening_bg'] = tweenFadeBg('.opening', .2);
+        exploreTweens['opening_fades'] = tweenFade('.opening', .75);
       }
       if (index == 2) {
-        mapflagfade //TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: 1.5 }, 1);
-        TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: 1.5 }, 1);
+        //Reverse opening tweens
+        reverseTweens(exploreTweens['opening_fades'], .1);
+
+        //Map names and flags come in
+        exploreTweens['map_names'] = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: .5 }, .5);
+        exploreTweens['map_flags'] = TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: .5 }, .5);
       }
+
       if (index == 3) {
         var sizes = ["small", "medium", "large"];
         var demo = $("#demo");
@@ -54,71 +74,146 @@ $(document).ready(function() {
           return Math.floor(Math.random() * (1 + max - min) + min);
         }
       }
+
       if (index == 4) {
       }
+
       if (index == 5) {
-        tweenFadeFast('.coffee');
-        TweenMax.from('.coffee .cup-coffee', 1, {yPercent: 5 });
-        TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: .8 });
-        TweenMax.from('.coffee .sugar', 1, {xPercent: -1000, yPercent: -1000, delay: 1.8 });
+        exploreTweens['coffee_liquid'] = tweenFadeFast('.coffee');
+        exploreTweens['coffee_cup'] = TweenMax.from('.coffee .cup-coffee', 1, {yPercent: 5 });
+        exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: .7 });
       }
+
       if (index == 6) {
         tweenFadeBg('.drums', .1);
       }
+
       if (index == 7) {
       }
+
       if (index == 8) {
         tweenRotateRight('.photos', .5);
         tweenFadeFast('.photos');
       }
+
       if (index == 9) {
       }
     },
 
       onLeave: function(index, nextIndex, direction){
           var leavingSection = $(this);
-          var tweenFadeUpDelay = .5;
 
-          //after leaving section 2
-          if (index == 1 && direction == 'down') {
-            tweenFadeUp('.map', tweenFadeUpDelay);
+          if (index == 1) {
+            if (direction == 'down') {
+              //Map paragraph
+              exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
+            }
           }
-          if(index == 2 && direction == 'down'){
-              tweenFadeUp('.kidsclub', .3);
+
+          if(index == 2 ) {
+            //Reverse map paragraph
+            reverseTweens(exploreTweens['map_text']);
+
+            //Reverse map names
+            reverseTweens(exploreTweens['map_names']);
+
+            //Reverse map flags
+            reverseTweens(exploreTweens['map_flags']);
+
+            if (direction == 'down') {
+              exploreTweens['kidsclub_text'] = tweenFadeUp('.kidsclub', .3);
               tweenFadeBg('.kidsclub');
+            }
+          }
 
+          if(index == 3) {
+            //Reverse opening tweens
+            reverseTweens(exploreTweens['kidsclub_text']);
+
+            if (direction == 'down') {
+                exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', 1.25);
+                tweenFadeBg('.studentministry', tweenFadeUpDelay);
+            } else if (direction == 'up') {
+                //Map paragraph
+                exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
+            }
           }
-          if(index == 3 && direction == 'down'){
-              tweenFadeUp('.studentministry', tweenFadeUpDelay);
-              tweenFadeBg('.studentministry', 1.6);
+
+          if(index == 4) {
+
+            //reverse student ministry text tween
+            reverseTweens(exploreTweens['studentministry_text']);
+
+            if (direction == 'down'){
+              exploreTweens['coffee_text'] = tweenFadeUp('.coffee', tweenFadeUpDelay);
+            }
+            if (direction == 'up') {
+              exploreTweens['kidsclub_text'] = tweenFadeUp('.kidsclub', .3);
+            }
           }
-          if(index == 4 && direction == 'down'){
-              tweenFadeUp('.coffee', tweenFadeUpDelay);
+
+          if(index == 5) {
+
+            //reverse coffee text
+            reverseTweens(exploreTweens['coffee_text']);
+            //reverseTween(exploreTweens['coffee_lid']);
+
+            if (direction == 'down'){
+              exploreTweens['drums_text'] = tweenFadeUp('.drums', tweenFadeUpDelay);
+            } else if (direction == 'up') {
+              exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', 1.25);
+            }
           }
-          if(index == 5 && direction == 'down'){
-              tweenFadeUp('.drums', tweenFadeUpDelay);
+
+          if(index == 6) {
+
+            //reverse drums text
+            reverseTweens(exploreTweens['drums_text']);
+
+            if (direction == 'down'){
+              exploreTweens['clothes_text'] = tweenFadeUp('.clothes', tweenFadeUpDelay);
+            } else if (direction == 'up'){
+              exploreTweens['coffee_text'] = tweenFadeUp('.coffee', tweenFadeUpDelay);
+            }
           }
-          if(index == 6 && direction == 'down'){
-              tweenFadeUp('.clothes', tweenFadeUpDelay);
+
+          if(index == 7) {
+
+            //reverse clothes text
+            reverseTweens(exploreTweens['clothes_text']);
+
+            if (direction == 'down'){
+              exploreTweens['photos_text'] = tweenFadeUp('.photos', tweenFadeUpDelay);
+            } else if (direction == 'up'){
+              exploreTweens['drums_text'] = tweenFadeUp('.drums', tweenFadeUpDelay);
+            }
           }
-          if(index == 7 && direction == 'down'){
-              tweenFadeUp('.photos', tweenFadeUpDelay);
+
+          if(index == 8) {
+
+            //reverse clothes text
+            reverseTweens(exploreTweens['photos_text']);
+
+            if (direction == 'down'){
+              exploreTweens['meet_text'] = tweenFadeUp('.meet', tweenFadeUpDelay);
+            } else if (direction == 'up') {
+              exploreTweens['clothes_text'] = tweenFadeUp('.clothes', tweenFadeUpDelay);
+            }
           }
-          if(index == 8 && direction == 'down'){
-              tweenFadeUp('.meet', tweenFadeUpDelay);
+
+          if(index == 9) {
+
+            //reverse meet text
+            reverseTweens(exploreTweens['meet_text']);
+
+            if (direction == 'up') {
+              exploreTweens['photos_text'] = tweenFadeUp('.photos', tweenFadeUpDelay);
+            }
           }
       }
-
-  });
-
-  $("#pause").click(function() {
-      alert("You're enimation should be paused now!");
-  		mapflagfade.kill();
   });
 });
 </script>
-
-<a href="" id="pause" class="btn btn-primary" style="position:fixed;z-index:1;">Kill Animation</a>
 
 <div id="fullpage" class="explore">
 
@@ -232,7 +327,7 @@ $(document).ready(function() {
             <img class="imgix-fluid img-responsive cup-coffee fade-fast" data-src="http://crossroads-media.imgix.net/images/explore/coffee/explore_coffee_coffee.png">
             <img class="imgix-fluid img-responsive cup-bottom" data-src="http://crossroads-media.imgix.net/images/explore/coffee/explore_coffee_cup_bottom.png">
             <img class="imgix-fluid img-responsive cup-lid fade-fast" data-src="http://crossroads-media.imgix.net/images/explore/coffee/explore_coffee_cup_lid.png">
-            <img class="imgix-fluid img-responsive sugar fade-fast" data-src="http://crossroads-media.imgix.net/images/explore/coffee/explore_coffee_splenda.png">
+            <img class="imgix-fluid img-responsive sugar" data-src="http://crossroads-media.imgix.net/images/explore/coffee/explore_coffee_splenda.png">
           </div><!--/col-->
         </div><!--/row-->
       </div><!--/container-->
