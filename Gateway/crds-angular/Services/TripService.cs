@@ -266,6 +266,7 @@ namespace crds_angular.Services
 
         public MyTripsDto GetMyTrips(int contactId)
         {
+            // US2086 - refactor GetMyTripDistributions to exclude Pledges with status = 'discontinued'
             var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
 
@@ -274,6 +275,7 @@ namespace crds_angular.Services
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
                 var eventParticipantId = 0;
+                // US2086 - verify TripParticipants is still valid
                 var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
                 if (eventParticipantIds != null)
                 {
@@ -449,8 +451,11 @@ namespace crds_angular.Services
             SaveContact(dto);
             SaveParticipant(dto);
 
-            _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-            
+            if (dto.InviteGUID != null)
+            {
+                _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+            }
+
             return formResponseId;
         }
 
@@ -521,10 +526,12 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page5.SponsorChildNumber, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildNumber") });
 
             var page6 = applicationData.PageSix;
+
             answers.Add(new FormAnswer { Response = page6.DeltaFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DeltaFrequentFlyer") });
             answers.Add(new FormAnswer { Response = page6.DescribeExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DescribeExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.ExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.InternationalTravelExpericence, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.InternationalTravelExpericence") });
+            answers.Add(new FormAnswer { Response = page6.PassportNumber, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportNumber")});
             answers.Add(new FormAnswer { Response = page6.PassportCountry, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportCountry") });
             answers.Add(new FormAnswer { Response = page6.PassportExpirationDate, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportExpirationDate") });
             answers.Add(new FormAnswer { Response = page6.PassportFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportFirstName") });

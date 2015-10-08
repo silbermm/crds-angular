@@ -318,6 +318,21 @@ namespace crds_angular.test.Services
         }
 
         [Test]
+        public void TestInvoiceCreatedNoAmountOrCharge()
+        {
+            var invoice = new StripeInvoice
+            {
+                Subscription = "sub_123",
+                Amount = 0,
+                Charge = "  ",
+            };
+
+            _fixture.InvoiceCreated(DateTime.Now, invoice);
+            _paymentService.VerifyAll();
+            _donorService.VerifyAll();
+        }
+
+        [Test]
         public void TestInvoiceCreated()
         {
             var eventTimestamp = DateTime.Now;

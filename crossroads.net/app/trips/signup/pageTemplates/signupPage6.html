@@ -23,7 +23,13 @@
             <span ng-bind-html="$root.MESSAGES.TripNoPassport.content | html"></span>
           </label>
         </div>
+      </div>
 
+        <div class="row">
+        <div class="form-group col-sm-6">
+            <label for="passport-number" class="required">Passport Number</label>
+            <input ng-model="tripsSignup.signupService.page6.passportNumber.value" type="text" class="form-control" id="passport-number" placeholder="Enter passport number">
+        </div>
         <div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
           <label for="passport-expire" class="control-label">When does your passport expire?</label>
           <input ng-model="tripsSignup.signupService.page6.passportExpirationDate" type="text" class="form-control" id="passport-expire" placeholder="mm/dd/yyyy">

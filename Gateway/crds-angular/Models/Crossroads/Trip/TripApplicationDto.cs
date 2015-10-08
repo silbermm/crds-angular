@@ -198,6 +198,9 @@ namespace crds_angular.Models.Crossroads.Trip
             [JsonProperty(PropertyName = "passportCountry")]
             public string PassportCountry { get; set; }
 
+            [JsonProperty(PropertyName = "passportNumber")]
+            public string PassportNumber { get; set; }
+
             [JsonProperty(PropertyName = "deltaFrequentFlyer")]
             public string DeltaFrequentFlyer { get; set; }
 

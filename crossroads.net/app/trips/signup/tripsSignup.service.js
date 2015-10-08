@@ -228,6 +228,7 @@
         passportMiddleName: null,
         passportLastName: null,
         passportCountry: null,
+        passportNumber: null,
         deltaFrequentFlyer: null,
         southAfricanFrequentFlyer: null,
         unitedFrequentFlyer: null,
