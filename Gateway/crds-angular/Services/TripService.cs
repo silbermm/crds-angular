@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Common.EntitySql;
 using System.Linq;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads.Trip;
@@ -13,6 +14,7 @@ using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorSer
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
 using log4net;
+using RestSharp.Deserializers;
 
 namespace crds_angular.Services
 {
@@ -29,6 +31,7 @@ namespace crds_angular.Services
         private readonly IPrivateInviteService _privateInviteService;
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
+        private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IPersonService _personService;
         private readonly IServeService _serveService;
@@ -46,6 +49,7 @@ namespace crds_angular.Services
                            IPrivateInviteService privateInviteService,
                            ICommunicationService communicationService,
                            IContactService contactService,
+                           IContactRelationshipService contactRelationshipService,
                            IConfigurationWrapper configurationWrapper,
                            IPersonService personService,
                            IServeService serveService,
@@ -62,6 +66,7 @@ namespace crds_angular.Services
             _privateInviteService = privateInviteService;
             _communicationService = communicationService;
             _contactService = contactService;
+            _contactRelationshipService = contactRelationshipService;
             _configurationWrapper = configurationWrapper;
             _personService = personService;
             _serveService = serveService;
@@ -442,6 +447,10 @@ namespace crds_angular.Services
 
         public int SaveApplication(TripApplicationDto dto)
         {
+            UpdatePassport(dto);
+            UpdateChildSponsorship(dto);
+            SaveParticipant(dto);
+
             var formResponse = new FormResponse();
             formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
             formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
@@ -451,8 +460,7 @@ namespace crds_angular.Services
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
             
-            UpdatePassport(dto);
-            SaveParticipant(dto);
+           
 
             if (dto.InviteGUID != null)
             {
@@ -467,17 +475,14 @@ namespace crds_angular.Services
             // Is there passport info to save?
             if (dto.PageSix.PassportFirstName != null)
             {
-
-                Person p = new Person
-                {
-                    ContactId = dto.ContactId,
-                    PassportFirstname = dto.PageSix.PassportFirstName,
-                    PassportMiddlename = dto.PageSix.PassportMiddleName,
-                    PassportLastname = dto.PageSix.PassportLastName,
-                    PassportCountry = dto.PageSix.PassportCountry,
-                    PassportExpiration = DateTime.Parse(dto.PageSix.PassportExpirationDate)
-                };
-                var contactDictionary = getDictionary(p);
+                MyContact c = _contactService.GetContactById(dto.ContactId);
+                c.Passport_Country = dto.PageSix.PassportCountry;
+                c.Passport_Expiration = DateTime.Parse(dto.PageSix.PassportExpirationDate);
+                c.Passport_Firstname = dto.PageSix.PassportFirstName;
+                c.Passport_Lastname = dto.PageSix.PassportLastName;
+                c.Passport_Middlename = dto.PageSix.PassportMiddleName;
+                c.Passport_Number = dto.PageSix.PassportNumber;
+                var contactDictionary = getDictionary(c);
                 try
                 {
                     _contactService.UpdateContact(dto.ContactId, contactDictionary);           
@@ -490,6 +495,49 @@ namespace crds_angular.Services
             }
             return true;
        }
+
+        private Boolean UpdateChildSponsorship(TripApplicationDto dto)
+        {
+            if (dto.PageFive.SponsorChildInNicaragua != null)
+            {
+                var childId = GetChildId(dto, (firstname, lastname, number) =>
+                                        {
+                                             try
+                                             {
+                                                return _contactService.CreateContactForSponsoredChild(firstname, lastname, number);
+                                             }
+                                             catch (ApplicationException e)
+                                             {
+                                                 _logger.Error("Unable to create the sponsored child: " + e.Message);
+                                                 return -1;
+                                             }
+
+                                         });
+                if (childId == -1)
+                {
+                    return false;
+                }
+                // Check if relationship exists...
+                var myRelationships = _contactRelationshipService.GetMyCurrentRelationships(dto.ContactId);
+
+                // Update the relationship
+                Relationship relationship = new Relationship
+                {
+                    RelationshipID = _configurationWrapper.GetConfigIntValue("SponsoredChildOf"),
+                    RelatedContactID = dto.ContactId,
+                    
+                };
+                _contactRelationshipService.AddRelationship(relationship);
+            }
+            return true;
+        }
+
+        private int GetChildId(TripApplicationDto dto, Func<string, string, string, int> createChild )
+        {
+            var child = _contactService.GetContactByIdCard(dto.PageFive.SponsorChildNumber);
+            if (child != null) return child.Contact_ID;
+            return createChild(dto.PageFive.SponsorChildFirstName, dto.PageFive.SponsorChildLastName, dto.PageFive.SponsorChildNumber);
+        }
 
         private Boolean SaveParticipant(TripApplicationDto dto)
         {

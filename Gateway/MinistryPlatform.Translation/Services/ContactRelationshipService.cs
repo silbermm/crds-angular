@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,8 +60,35 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
+
+        public int AddRelationship(Relationship relationship )
+        {
+            //var records = _ministryPlatformService.GetSubPageRecord("ContactRelationships",
+            //                                          5337888,
+            //                                          ApiLogin());
+            try
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    {"Relationship_ID", relationship.RelationshipID},
+                    {"Related_Contact_ID", relationship.RelatedContactID},
+                    {"Start_Date", relationship.StartDate},
+                    {"End_Date", relationship.EndDate}
+                };
+                return _ministryPlatformService.CreateSubRecord(_configurationWrapper.GetConfigIntValue("ContactRelationships"),
+                                                         _configurationWrapper.GetConfigIntValue("Contacts"),
+                                                         dict,
+                                                         ApiLogin());
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+            
+        }
+        
     }
 }

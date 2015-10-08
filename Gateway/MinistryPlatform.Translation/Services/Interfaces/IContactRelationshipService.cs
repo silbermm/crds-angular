@@ -7,6 +7,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         IEnumerable<ContactRelationship> GetMyImmediatieFamilyRelationships(int contactId, string token);
         IEnumerable<ContactRelationship> GetMyCurrentRelationships(int contactId, string token);
+        int AddRelationship(Relationship relationship);
     }
     
 }
