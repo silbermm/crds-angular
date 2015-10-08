@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Web.Optimization;
 using AutoMapper;
+using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -19,11 +20,11 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
 
-            Mapper.CreateMap<Attribute, Skill>()
+            Mapper.CreateMap<ContactAttribute, Skill>()
                 .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
 
-            Mapper.CreateMap<Skill, Attribute>()
+            Mapper.CreateMap<Skill, ContactAttribute>()
                 .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
 
             Mapper.CreateMap<Group, OpportunityGroup>()
@@ -123,6 +124,34 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<DonationDistribution, DonationDistributionDTO>()
                 .ForMember(dest => dest.Amount, opts => opts.MapFrom(src => src.donationDistributionAmt))
                 .ForMember(dest => dest.ProgramName, opts => opts.MapFrom(src => src.donationDistributionProgram));
+
+            Mapper.CreateMap<MyContact, Person>()
+                .ForMember(dest => dest.ContactId, opts => opts.MapFrom(src => src.Contact_ID))
+                .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.Email_Address))
+                .ForMember(dest => dest.NickName, opts => opts.MapFrom(src => src.Nickname))
+                .ForMember(dest => dest.FirstName, opts => opts.MapFrom(src => src.First_Name))
+                .ForMember(dest => dest.MiddleName, opts => opts.MapFrom(src => src.Middle_Name))
+                .ForMember(dest => dest.LastName, opts => opts.MapFrom(src => src.Last_Name))
+                .ForMember(dest => dest.MaidenName, opts => opts.MapFrom(src => src.Maiden_Name))
+                .ForMember(dest => dest.MobilePhone, opts => opts.MapFrom(src => src.Mobile_Phone))
+                .ForMember(dest => dest.MobileCarrierId, opts => opts.MapFrom(src => src.Mobile_Carrier))
+                .ForMember(dest => dest.DateOfBirth, opts => opts.MapFrom(src => src.Date_Of_Birth))
+                .ForMember(dest => dest.MaritalStatusId, opts => opts.MapFrom(src => src.Marital_Status_ID))
+                .ForMember(dest => dest.GenderId, opts => opts.MapFrom(src => src.Gender_ID))
+                .ForMember(dest => dest.EmployerName, opts => opts.MapFrom(src => src.Employer_Name))
+                .ForMember(dest => dest.AddressLine1, opts => opts.MapFrom(src => src.Address_Line_1))
+                .ForMember(dest => dest.AddressLine2, opts => opts.MapFrom(src => src.Address_Line_2))
+                .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City))
+                .ForMember(dest => dest.State, opts => opts.MapFrom(src => src.State))
+                .ForMember(dest => dest.PostalCode, opts => opts.MapFrom(src => src.Postal_Code))
+                .ForMember(dest => dest.AnniversaryDate, opts => opts.MapFrom(src => src.Anniversary_Date))
+                .ForMember(dest => dest.ForeignCountry, opts => opts.MapFrom(src => src.Foreign_Country))
+                .ForMember(dest => dest.HomePhone, opts => opts.MapFrom(src => src.Home_Phone))
+                .ForMember(dest => dest.CongregationId, opts => opts.MapFrom(src => src.Congregation_ID))
+                .ForMember(dest => dest.HouseholdId, opts => opts.MapFrom(src => src.Household_ID))
+                .ForMember(dest => dest.HouseholdName, opts => opts.MapFrom(src => src.Household_Name))
+                .ForMember(dest => dest.AddressId, opts => opts.MapFrom(src => src.Address_ID))
+                .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age));
         }
     }
 }
