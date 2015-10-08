@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -11,6 +12,7 @@ using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonat
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 using PledgeCampaign = crds_angular.Models.Crossroads.Stewardship.PledgeCampaign;
+using log4net;
 
 namespace crds_angular.Services
 {
@@ -31,6 +33,7 @@ namespace crds_angular.Services
         private readonly IPersonService _personService;
         private readonly IServeService _serveService;
         private readonly IDestinationService _destinationService;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(TripService));
 
         public TripService(IEventParticipantService eventParticipant,
                            IDonationService donationService,
@@ -448,7 +451,7 @@ namespace crds_angular.Services
 
             var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
             
-            SaveContact(dto);
+            UpdatePassport(dto);
             SaveParticipant(dto);
 
             if (dto.InviteGUID != null)
@@ -459,10 +462,34 @@ namespace crds_angular.Services
             return formResponseId;
         }
 
-        private Boolean SaveContact(TripApplicationDto dto)
+        private Boolean UpdatePassport(TripApplicationDto dto)
         {
+            // Is there passport info to save?
+            if (dto.PageSix.PassportFirstName != null)
+            {
+
+                Person p = new Person
+                {
+                    ContactId = dto.ContactId,
+                    PassportFirstname = dto.PageSix.PassportFirstName,
+                    PassportMiddlename = dto.PageSix.PassportMiddleName,
+                    PassportLastname = dto.PageSix.PassportLastName,
+                    PassportCountry = dto.PageSix.PassportCountry,
+                    PassportExpiration = DateTime.Parse(dto.PageSix.PassportExpirationDate)
+                };
+                var contactDictionary = getDictionary(p);
+                try
+                {
+                    _contactService.UpdateContact(dto.ContactId, contactDictionary);           
+                }
+                catch (ApplicationException e)
+                {
+                    _logger.Error("Unable to save contact: " + e.Message);
+                    return false;
+                }
+            }
             return true;
-        }
+       }
 
         private Boolean SaveParticipant(TripApplicationDto dto)
         {

@@ -236,6 +236,23 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(record => (int) record["Contact_ID"]).ToList();
         }
 
+        public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary)
+        {
+            var retValue = WithApiLogin<int>(token =>
+            {
+                try
+                {
+                    _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Contacts"), profileDictionary, token);
+                    return 1;
+                }
+                catch (Exception e)
+                {
+                    throw new ApplicationException("Error Saving contact: " + e.Message);
+                }
+            });
+            
+        }
+
         public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary)
         {
 
