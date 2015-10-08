@@ -126,47 +126,16 @@
     }
 
     function tshirtSizes() {
-      return [{
-        formFieldId: 1428,
-        attributeId: 3157,
-        value: 'Adult XS'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3158,
-        value: 'Adult S'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3159,
-        value: 'Adult M'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3160,
-        value: 'Adult L'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3161,
-        value: 'Adult XL'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3162,
-        value: 'Adult XXL'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3163,
-        value: 'Adult XXXL'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3164,
-        value: 'Child S'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3165,
-        value: 'Child M'
-      }, {
-        formFieldId: 1428,
-        attributeId: 3166,
-        value: 'Child L'
-      }];
+      return ['Adult XS',
+      'Adult S',
+      'Adult M',
+      'Adult L',
+      'Adult XL',
+      'Adult XXL',
+      'Adult XXXL',
+      'Child S',
+      'Child M',
+      'Child L'];
     }
 
     function reset(campaign) {

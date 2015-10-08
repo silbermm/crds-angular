@@ -475,7 +475,8 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page2.GuardianFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianFirstName") });
             answers.Add(new FormAnswer { Response = page2.GuardianLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianLastName") });
             answers.Add(new FormAnswer { Response = page2.Referral, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Referral") });
-            answers.Add(new FormAnswer { Response = page2.ScrubSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSize") });
+            answers.Add(new FormAnswer { Response = page2.ScrubSizeTop, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeTop") });
+            answers.Add(new FormAnswer { Response = page2.ScrubSizeBottom, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeBottom") });
             answers.Add(new FormAnswer { Response = page2.SpiritualLifeObedience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeObedience") });
             answers.Add(new FormAnswer { Response = page2.SpiritualLifeReceived, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReceived") });
             answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
@@ -524,7 +525,6 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page6.DescribeExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DescribeExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.ExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.InternationalTravelExpericence, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.InternationalTravelExpericence") });
-            answers.Add(new FormAnswer { Response = page6.PassportBirthday, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportBirthday") });
             answers.Add(new FormAnswer { Response = page6.PassportCountry, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportCountry") });
             answers.Add(new FormAnswer { Response = page6.PassportExpirationDate, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportExpirationDate") });
             answers.Add(new FormAnswer { Response = page6.PassportFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportFirstName") });

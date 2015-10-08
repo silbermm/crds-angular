@@ -54,8 +54,11 @@ namespace crds_angular.Models.Crossroads.Trip
             [JsonProperty(PropertyName = "referral")]
             public string Referral { get; set; }
 
-            [JsonProperty(PropertyName = "scrubSize")]
-            public string ScrubSize { get; set; }
+            [JsonProperty(PropertyName = "scrubSizeTop")]
+            public string ScrubSizeTop { get; set; }
+
+            [JsonProperty(PropertyName = "scrubSizeBottom")]
+            public string ScrubSizeBottom { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLifeObedience")]
             public string SpiritualLifeObedience { get; set; }
@@ -194,9 +197,6 @@ namespace crds_angular.Models.Crossroads.Trip
 
             [JsonProperty(PropertyName = "passportCountry")]
             public string PassportCountry { get; set; }
-
-            [JsonProperty(PropertyName = "passportBirthday")]
-            public string PassportBirthday { get; set; }
 
             [JsonProperty(PropertyName = "deltaFrequentFlyer")]
             public string DeltaFrequentFlyer { get; set; }
