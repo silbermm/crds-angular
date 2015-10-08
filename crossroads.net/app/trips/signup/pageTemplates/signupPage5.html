@@ -126,80 +126,86 @@
               </span>
             </ng-messages>
           </div>
-          <div id="profession" class="form-group col-sm-12" ng-class='tripsSignup.nolaRequired()'>
+          <div id="profession" class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice') }">
             <label class="control-label required">Are you a professional in any of the following fields?</label><br>
 
             <div class="checkbox">
               <label for="profession-business" >
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillBusiness.value" type="checkbox" name="professionchoice" value="business" id="profession-business"> Business
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillBusiness.value" type="checkbox" name="professionchoice" value="business" id="profession-business" ng-required='!tripsSignup.skillsSelected()'> Business
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-construction">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillConstruction.value" type="checkbox" name="professionchoice" value="construction" id="profession-construction"> Construction
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillConstruction.value" type="checkbox" name="professionchoice" value="construction" id="profession-construction" ng-required='!tripsSignup.skillsSelected()'> Construction
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-dental">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillDental.value" type="checkbox" name="professionchoice" value="dental" id="profession-dental"> Dental
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillDental.value" type="checkbox" name="professionchoice" value="dental" id="profession-dental" ng-required='!tripsSignup.skillsSelected()'> Dental
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-education">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillEducation.value" type="checkbox" name="professionchoice" value="education" id="profession-education"> Education
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillEducation.value" type="checkbox" name="professionchoice" value="education" id="profession-education" ng-required='!tripsSignup.skillsSelected()'> Education
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-it">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillInformationTech.value" type="checkbox" name="professionchoice" value="it" id="profession-it"> IT
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillInformationTech.value" type="checkbox" name="professionchoice" value="it" id="profession-it" ng-required='!tripsSignup.skillsSelected()'> IT
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-media">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedia.value" type="checkbox" name="professionchoice" value="media" id="profession-media"> Media/Journalism
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedia.value" type="checkbox" name="professionchoice" value="media" id="profession-media" ng-required='!tripsSignup.skillsSelected()'> Media/Journalism
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-medical">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedical.value" type="checkbox" name="professionchoice" value="medical" id="profession-medical"> Medical
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedical.value" type="checkbox" name="professionchoice" value="medical" id="profession-medical" ng-required='!tripsSignup.skillsSelected()'> Medical
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-music">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMusic.value" type="checkbox" name="professionchoice" value="music" id="profession-music"> Music
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillMusic.value" type="checkbox" name="professionchoice" value="music" id="profession-music" ng-required='!tripsSignup.skillsSelected()'> Music
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-photo">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillPhotography.value" type="checkbox" name="professionchoice" value="photography" id="profession-photo"> Photography
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillPhotography.value" type="checkbox" name="professionchoice" value="photography" id="profession-photo" ng-required='!tripsSignup.skillsSelected()'> Photography
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-social">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillSocialWorker.value" type="checkbox" name="professionchoice" value="social" id="profession-social"> Social Worker/Counselor
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillSocialWorker.value" type="checkbox" name="professionchoice" value="social" id="profession-social" ng-required='!tripsSignup.skillsSelected()'> Social Worker/Counselor
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-student">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillStudent.value" type="checkbox" name="professionchoice" value="student" id="profession-student"> Student
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillStudent.value" type="checkbox" name="professionchoice" value="student" id="profession-student" ng-required='!tripsSignup.skillsSelected()'> Student
               </label>
             </div><!--/checkbox-->
 
             <div class="checkbox">
               <label for="profession-other">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillOther.value" type="checkbox" name="professionchoice" value="other" id="profession-other"> Other
+                <input ng-model="tripsSignup.signupService.page5.professionalSkillOther.value" type="checkbox" name="professionchoice" value="other" id="profession-other" ng-required='!tripsSignup.skillsSelected()'> Other
               </label>
             </div><!--/checkbox-->
+
+            <ng-messages for="tripsSignup.tripAppPage5.professionchoice.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice')">
+              <span ng-message="required">
+                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              </span>
+            </ng-messages>
 
           </div>
         </div><!--/row-->

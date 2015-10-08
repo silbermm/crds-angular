@@ -53,6 +53,7 @@
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
     vm.hasPassport = hasPassport;
+    vm.indiaRequired = indiaRequired;
     vm.nicaRequired = nicaRequired;
     vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
@@ -62,7 +63,9 @@
     vm.profileData = {};
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
+    vm.requireInternational = requireInternational;
     vm.signupService = TripsSignupService;
+    vm.skillsSelected = skillsSelected;
     vm.spiritualSelected = spiritualSelected;
     vm.tripName = vm.campaign.name;
     vm.underAge = underAge;
@@ -129,19 +132,6 @@
       toTop();
     }
 
-    //this may be the way we handle validation in the next story
-    // function handleNextt(nextPage, target) {
-    //   var form = target.tripAppPage2;
-    //   form.$setSubmitted(true);
-    //
-    //   if (form.$valid) {
-    //     vm.currentPage = nextPage;
-    //     toTop();
-    //   } else {
-    //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-    //   }
-    // }
-
     function handlePageChange(pageId, form) {
       //var form = vm.tripAppPage2;
       if (form !== null) {
@@ -167,7 +157,7 @@
         form.$setSubmitted(true);
         if (form.$valid) {
           $log.debug('form valid');
-          // saveData();
+          saveData();
         } else {
           $log.debug('form INVALID');
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -182,6 +172,14 @@
       if (vm.tpForm.$dirty) {
         return '';
       }
+    }
+
+    function indiaRequired() {
+      if (vm.destination === 'India') {
+        return 'required';
+      }
+
+      return '';
     }
 
     function nicaRequired() {
@@ -282,6 +280,14 @@
       });
     }
 
+    function requireInternational() {
+      if (vm.destination === 'NOLA') {
+        return 'false';
+      }
+
+      return 'true';
+    }
+
     function saveData() {
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
@@ -316,6 +322,26 @@
       vm.signupService.pageId = 'thanks';
       vm.tpForm.$setPristine();
       $state.go('tripsignup.application.thankyou');
+    }
+
+    function skillsSelected() {
+      if (vm.signupService.page5.professionalSkillBusiness.value ||
+          vm.signupService.page5.professionalSkillConstruction.value ||
+          vm.signupService.page5.professionalSkillDental.value ||
+          vm.signupService.page5.professionalSkillEducation.value ||
+          vm.signupService.page5.professionalSkillInformationTech.value ||
+          vm.signupService.page5.professionalSkillMedia.value ||
+          vm.signupService.page5.professionalSkillMedical.value ||
+          vm.signupService.page5.professionalSkillMusic.value ||
+          vm.signupService.page5.professionalSkillPhotography.value ||
+          vm.signupService.page5.professionalSkillSocialWorker.value ||
+          vm.signupService.page5.professionalSkillStudent.value ||
+          vm.signupService.page5.professionalSkillOther.value)
+      {
+        return true;
+      }
+
+      return false;
     }
 
     function spiritualSelected() {
