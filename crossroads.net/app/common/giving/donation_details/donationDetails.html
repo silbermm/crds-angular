@@ -43,14 +43,14 @@
 
     <div class="input-group">
       <input type="text" name="recurringStartDate" class="form-control"
-        placeholder="I want my recurring gift to start on"
+        placeholder="When should your gift start&#63;"
         ng-required="givingType !== 'one_time' && allowRecurring"
         datepicker-popup="MM/dd/yyyy"
         ng-model="recurringStartDate" is-open="recurringStartDatePickerOpened"
         datepicker-options="dateOptions" close-text="Close" min-date="minDate"
         ng-click="openRecurringStartDate($event)"/>
       <span class="input-group-btn">
-        <button type="button" class="btn btn-gray-light" ng-click="openRecurringStartDate($event)">
+        <button type="button" class="btn btn-standard" ng-click="openRecurringStartDate($event)">
           <i class="glyphicon glyphicon-calendar"></i>
         </button>
       </span>
