@@ -6,17 +6,20 @@
     </legend>
 
       <div class="row">
-        <div class="form-group col-sm-12">
-
-          <span ng-bind-html="$root.MESSAGES.TripPassport.content | html"></span>
-
+        <div class="col-sm-12" ng-bind-html="$root.MESSAGES.TripPassport.content | html"></div>
+        <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport') }">
           <label class="block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline" ng-click="isCollapsed = false">
-              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="yes"  name="pssport" id="passport-yes">Yes
+              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="yes"  name="passport" id="passport-yes" ng-required="true">Yes
           </label>
           <label id="passport-no" class="radio-inline" ng-click="isCollapsed = true">
-              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="no" name="passport" id="passport-no">No
+              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="no" name="passport" id="passport-no" ng-required="true">No
           </label>
+          <ng-messages for="tripsSignup.tripAppPage6.passport.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
         </div>
         <div class="form-group col-sm-12"  collapse="!isCollapsed">
           <label for="why">
@@ -155,7 +158,7 @@
         </div>
       </div>
 
-      <a ng-click='tripsSignup.handleSubmit()' class="btn btn-primary pull-right">Submit Application</a>
+      <a ng-click='tripsSignup.handleSubmit(tripsSignup.tripAppPage6)' class="btn btn-primary pull-right">Submit Application</a>
     </ng-form>
   </div>
 </div><!--/row-->

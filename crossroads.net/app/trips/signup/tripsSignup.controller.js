@@ -55,11 +55,13 @@
     vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
+    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
     vm.signupService = TripsSignupService;
+    vm.spiritualSelected = spiritualSelected;
     vm.tripName = vm.campaign.name;
     vm.underAge = underAge;
     vm.validateProfile = validateProfile;
@@ -138,9 +140,9 @@
     //   }
     // }
 
-    function handlePageChange(pageId) {
-      var form = vm.tripAppPage2;
-      if (form !== undefined) {
+    function handlePageChange(pageId, form) {
+      //var form = vm.tripAppPage2;
+      if (form !== null) {
         form.$setSubmitted(true);
         if (form.$valid) {
           $log.debug('form valid');
@@ -157,9 +159,7 @@
       }
     }
 
-    function handleSubmit() {
-      $log.debug('handleSubmit start');
-
+    function saveData() {
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
@@ -193,6 +193,22 @@
       vm.signupService.pageId = 'thanks';
       vm.tpForm.$setPristine();
       $state.go('tripsignup.application.thankyou');
+    }
+
+    function handleSubmit(form) {
+      $log.debug('handleSubmit start');
+      if (form !== null) {
+        form.$setSubmitted(true);
+        if (form.$valid) {
+          $log.debug('form valid');
+          // saveData();
+        } else {
+          $log.debug('form INVALID');
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        }
+      } else {
+        saveData();
+      }
     }
 
     function onBeforeUnload() {
@@ -288,6 +304,17 @@
       });
     }
 
+    function spiritualSelected() {
+      if (vm.signupService.page2.spiritualLifeSearching.value ||
+          vm.signupService.page2.spiritualLifeReceived.value ||
+          vm.signupService.page2.spiritualLifeObedience.value ||
+          vm.signupService.page2.spiritualLifeReplicating.value) {
+        return true;
+      }
+
+      return false;
+    }
+
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
       if (fromState.name === 'tripsignup.application.thankyou') {
         if (toState.name === 'tripsignup.application.page') {
@@ -340,7 +367,7 @@
       vm.signupService.page1.profile = profile;
       vm.signupService.page1.household = household;
 
-      handlePageChange(2);
+      handlePageChange(2, null);
     }
   }
 

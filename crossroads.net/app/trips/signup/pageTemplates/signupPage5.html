@@ -9,10 +9,10 @@
         <div class="form-group col-sm-12">
           <label class="block required">Have you sponsored a child through Crossroads in Nicaragua?</label>
           <label class="radio-inline" ng-click="isCollapsed = true">
-              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="yes" name="leader" id="sponsor-yes">Yes
+              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="yes" name="sponsorChild" id="sponsor-yes">Yes
           </label>
           <label class="radio-inline" ng-click="isCollapsed = false">
-              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="no" name="leader" id="sponsor-no">No
+              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua.value" type="radio" value="no" name="sponsorChild" id="sponsor-no">No
           </label>
         </div>
         <div class="form-group col-sm-6" collapse="!isCollapsed">
@@ -74,9 +74,14 @@
         </div>
 
         <div class="row">
-          <div class="form-group col-sm-12" >
+          <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'tripExperience') }">
             <label for="trip-experience" class="required" ng-class='tripsSignup.nolaRequired()'>Describe any previous serving trip experience</label>
-            <textarea ng-model="tripsSignup.signupService.page5.previousTripExperience.value" cols="1" rows="4" class="form-control" id="trip-experience" maxlength="250" placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." ></textarea>
+            <textarea ng-model="tripsSignup.signupService.page5.previousTripExperience.value" cols="1" rows="4" class="form-control" name="tripExperience" id="trip-experience" maxlength="250" ng-required="true" placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." ></textarea>
+            <ng-messages for="tripsSignup.tripAppPage5.tripExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'tripExperience')">
+              <span ng-message="required">
+                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              </span>
+            </ng-messages>
           </div>
           <div id="profession" class="form-group col-sm-12" ng-class='tripsSignup.nolaRequired()'>
             <label class="required" ng-class='tripsSignup.nolaRequired()'>Are you a professional in any of the following fields?</label><br>
@@ -156,7 +161,7 @@
           </div>
         </div><!--/row-->
 
-        <a ng-click='tripsSignup.handlePageChange(6)' class="btn btn-primary pull-right" ng-show="tripsSignup.destination != 'NOLA'">Next</a>
+        <a ng-click='tripsSignup.handlePageChange(6, tripsSignup.tripAppPage5)' class="btn btn-primary pull-right" ng-show="tripsSignup.destination != 'NOLA'">Next</a>
         <a ng-click='tripsSignup.handleSubmit()' class="btn btn-primary pull-right" ng-show="tripsSignup.destination == 'NOLA'">Submit Application</a>
       </ng-form>
 </div><!--/row-->

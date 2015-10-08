@@ -99,7 +99,7 @@
     </div><!--/row-->
 
     <div class="row">
-      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral') }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'vegetarian') }">
           <label class="block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
           <label for="vegetarian-yes" class="radio-inline">
               <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="yes" name="vegetarian" id="vegetarian-yes" ng-required='true'>Yes
@@ -107,7 +107,7 @@
           <label for="vegetarian-no" class="radio-inline">
               <input ng-model="tripsSignup.signupService.page2.vegetarian.value" type="radio" value="no" name="vegetarian" for="vegetarian-no" ng-required='true'>No
           </label>
-          <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
+          <ng-messages for="tripsSignup.tripAppPage2.vegetarian.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'vegetarian')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
@@ -126,10 +126,10 @@
       <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife') }">
         <label for="slife" class="required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeSearching.value" type="checkbox" name="slife" value="Searching" id="slife-searching" ng-required='true'> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReceived.value" type="checkbox" name="slife" value="Received" id="slife-received" ng-required='true'> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeObedience.value" type="checkbox" name="slife" value="Obedience" id="slife-obedience" ng-required='true'> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReplicating.value" type="checkbox" name="slife" value="Replicating" id="slife-replicating" ng-required='true'> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox"> <label for="slife-searching"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeSearching.value" type="checkbox" name="slife" value="Searching" id="slife-searching" ng-required='!tripsSignup.spiritualSelected()'> Searching for answers </label> </div>
+        <div class="checkbox"> <label for="slife-received"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReceived.value" type="checkbox" name="slife" value="Received" id="slife-received" ng-required='!tripsSignup.spiritualSelected()'> I have received Jesus </label> </div>
+        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeObedience.value" type="checkbox" name="slife" value="Obedience" id="slife-obedience" ng-required='!tripsSignup.spiritualSelected()'> Focusing on obedience - I've quit negotiating with God </label> </div>
+        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReplicating.value" type="checkbox" name="slife" value="Replicating" id="slife-replicating" ng-required='!tripsSignup.spiritualSelected()'> I'm actively replicating my faith in others </label> </div>
 
         <ng-messages for="tripsSignup.tripAppPage2.slife.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife')">
           <span ng-message="required">
@@ -152,5 +152,5 @@
       </div><!--/form-group-->
     </div>
   </fieldset>
-  <a ng-click='tripsSignup.handlePageChange(3)' class="btn btn-primary pull-right">Next</a>
+  <a ng-click='tripsSignup.handlePageChange(3, tripsSignup.tripAppPage2)' class="btn btn-primary pull-right">Next</a>
 </ng-form>
