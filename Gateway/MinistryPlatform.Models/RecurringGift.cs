@@ -14,7 +14,9 @@ namespace MinistryPlatform.Models
         public decimal Amount { get; set; }
         public string ProgramName { get; set; }
         public string CongregationName { get; set; }
-        public string DonorAccount { get; set; }
+        public int AccountTypeID { get; set; }
+        public string AccountNumberLast4 { get; set; }
+        public string InstitutionName { get; set; }
         public string SubscriptionID { get; set; }
     }
 }

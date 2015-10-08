@@ -70,14 +70,14 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "congregation_name")]
         public int CongregationName { get; set; }
         /// <summary>
-        /// The Donor Account of the recurring gift created in MinistryPlatform (Credit Card/Last 4/Visa).  This is not required or used on input, but will be returned on output.
-        /// </summary>
-        [JsonProperty(PropertyName = "donor_account")]
-        public int DonorAccount { get; set; }
-        /// <summary>
         /// The Subscription ID of the recurring gift created in Strip.  This is not required or used on input, but will be returned on output.
         /// </summary>
         [JsonProperty(PropertyName = "subscription_id")]
         public int SubscriptionID { get; set; }
+        /// <summary>
+        /// The Source of the recurring gift created in MinistryPlatform (Credit Card/Last 4/Visa).  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "source", NullValueHandling = NullValueHandling.Ignore)]
+        public DonationSourceDTO Source { get; set; }
     }
 }

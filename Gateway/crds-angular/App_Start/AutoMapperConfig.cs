@@ -164,8 +164,16 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.PlanAmount, opts => opts.MapFrom(src => src.Amount))
                 .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramName))
                 .ForMember(dest => dest.CongregationName, opts => opts.MapFrom(src => src.CongregationName))
-                .ForMember(dest => dest.DonorAccount, opts => opts.MapFrom(src => src.DonorAccount))
-                .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID));
+                .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID))
+                .AfterMap((src, dest) =>
+                {
+                    dest.Source = new DonationSourceDTO
+                    {
+                        SourceType = (int)AccountType.Checking == src.AccountTypeID ? PaymentType.Bank : PaymentType.CreditCard,
+                        CardType = (CreditCardType)System.Enum.Parse(typeof(CreditCardType), src.InstitutionName),
+                        AccountNumberLast4 = src.AccountNumberLast4,
+                    };
+                });
         }
     }
 }

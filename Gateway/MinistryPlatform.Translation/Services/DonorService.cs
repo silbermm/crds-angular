@@ -735,7 +735,9 @@ namespace MinistryPlatform.Translation.Services
                 Amount = record["Amount"] as decimal? ?? 0,
                 ProgramName = record["Program_Name"] as string,
                 CongregationName = record["Congregation_Name"] as string,
-                DonorAccount = record["Donor_Account"] as string,
+                AccountTypeID = record["Account_Type_ID"] as int? ?? 0,
+                AccountNumberLast4 = record["Account_Number"] as string,
+                InstitutionName = record["Institution_Name"] as string,
                 SubscriptionID = record["Subscription_ID"] as string,
             };
         }
