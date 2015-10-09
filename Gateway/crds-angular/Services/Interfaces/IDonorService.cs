@@ -1,6 +1,6 @@
 ﻿using MinistryPlatform.Models;
 using System;
-using crds_angular.Controllers.API;
+using System.Collections.Generic;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
 
@@ -25,5 +25,7 @@ namespace crds_angular.Services.Interfaces
         int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contact);
 
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId);
+
+        List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken);
     }
 }

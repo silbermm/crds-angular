@@ -1,4 +1,5 @@
 ﻿
+﻿using System;
 ﻿using System.Collections.Generic;
 using crds_angular.Models.MP;
 using MinistryPlatform.Models;
@@ -92,6 +93,25 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "householdMembers")]
         public List<HouseholdMember> HouseholdMembers { get; set; }
 
+        [JsonProperty(PropertyName = "passportFirstname")]
+        public string PassportFirstname { get; set; }
+
+        [JsonProperty(PropertyName = "passportLastname")]
+        public string PassportLastname { get; set; }
+
+        [JsonProperty(PropertyName = "passportMiddlename")]
+        public string PassportMiddlename { get; set; }
+
+        [JsonProperty(PropertyName = "passportNumber")]
+        public string PassportNumber { get; set; }
+
+        [JsonProperty(PropertyName = "passportCountry")]
+        public string PassportCountry { get; set; }
+
+        [JsonProperty(PropertyName = "passportExpiration")]
+        public DateTime PassportExpiration { get; set; }
+
+
         public MyContact GetContact()
         {
             return new MyContact
@@ -117,7 +137,13 @@ namespace crds_angular.Models
                 State = State,
                 Postal_Code = PostalCode,
                 Congregation_ID = CongregationId,
-                Household_ID = HouseholdId
+                Household_ID = HouseholdId,
+                Passport_Firstname = PassportFirstname,
+                Passport_Lastname = PassportLastname,
+                Passport_Middlename = PassportMiddlename,
+                Passport_Country = PassportCountry,
+                Passport_Expiration = PassportExpiration,
+                Passport_Number = PassportNumber
             };
         }
 

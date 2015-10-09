@@ -33,5 +33,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscription);
         int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId);
         int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
+        List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -345,6 +347,35 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 
+            }));
+        }
+
+        /// <summary>
+        /// Retrieve list of recurring gifts for the logged-in donor.
+        /// </summary>
+        /// <returns>A list of RecurringGiftDto</returns>
+        [Route("api/donor/recurrence")]
+        [ResponseType(typeof(List<RecurringGiftDto>))]
+        [HttpGet]
+        public IHttpActionResult GetRecurringGifts()
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var recurringGifts = _donorService.GetRecurringGiftsForAuthenticatedUser(token);
+
+                    if (recurringGifts == null || !recurringGifts.Any())
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                    }
+
+                    return (Ok(recurringGifts));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
             }));
         }
     }

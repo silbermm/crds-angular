@@ -270,6 +270,7 @@
     <Compile Include="Controllers\API\StripeEventController.cs" />
     <Compile Include="Controllers\API\TripApplicationController.cs" />
     <Compile Include="Controllers\API\TripController.cs" />
+    <Compile Include="Controllers\API\AttributeTypeController.cs" />
     <Compile Include="Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
     <Compile Include="Models\Crossroads\Stewardship\RecurringGiftDto.cs" />
@@ -474,6 +475,7 @@
       <TransformOnBuild>true</TransformOnBuild>
       <SubType>Designer</SubType>
     </None>
+    <Content Include="TripFormMapping.config" />
     <None Include="Web.Demo.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

@@ -69,6 +69,24 @@ namespace MinistryPlatform.Translation.Services
             return ParseProfileRecord(pageViewRecords[0]);
         }
 
+        public MyContact GetContactByIdCard(string idCard)
+        {
+         
+            var searchString = string.Format(new String(',', 33) + "\"{0}\"", idCard);
+            var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
+            if (pageViewRecords.Count > 1)
+            {
+                throw new ApplicationException("GetContactById returned multiple records");
+            }
+
+            if (pageViewRecords.Count == 0)
+            {
+                return null;
+            }
+
+            return ParseProfileRecord(pageViewRecords[0]);
+        }
+
         public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
         {
             var token = ApiLogin();
@@ -131,8 +149,14 @@ namespace MinistryPlatform.Translation.Services
                 Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier_ID"),
                 Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
                 Nickname = recordsDict.ToString("Nickname"),
-                Age = recordsDict.ToInt("Age")
+                Age = recordsDict.ToInt("Age"),
+                
+                
             };
+            if (recordsDict.ContainsKey("ID_Card"))
+            {
+                contact.ID_Number = recordsDict.ToString("ID_Card");
+            }            
             return contact;
         }
 
@@ -146,6 +170,17 @@ namespace MinistryPlatform.Translation.Services
             return (CreateContact(contactDonor));
         }
 
+        public int CreateContactForSponsoredChild(string firstName, string lastName, string idCard)
+        {
+            var contact = new MyContact
+            {
+                First_Name = firstName,
+                Last_Name = lastName,
+                ID_Number = idCard
+            };
+             return CreateContact(contact);
+        }
+
         public int CreateContactForGuestGiver(string emailAddress, string displayName)
         {
             var contactDonor = new ContactDonor
@@ -157,6 +192,31 @@ namespace MinistryPlatform.Translation.Services
                 }
             };
             return (CreateContact(contactDonor));
+        }
+
+        private int CreateContact(MyContact contact)
+        {
+            var contactDictionary = new Dictionary<string, object>
+            {
+                {"Company", false},
+                {"Display_Name", contact.Last_Name + ", " + contact.First_Name},
+                {"Nickname", contact.First_Name},
+                {"ID_Card", contact.ID_Number}
+            };
+
+            try
+            {
+                return (_ministryPlatformService.CreateRecord(_contactsPageId, contactDictionary, ApiLogin()));
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error creating Sponsered Child Contact, firstName: {0} lastName: {1} idCard: {2}",
+                                        contact.First_Name,
+                                        contact.Last_Name,
+                                        contact.ID_Number);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
         }
 
         private int CreateContact(ContactDonor contactDonor)
@@ -234,6 +294,23 @@ namespace MinistryPlatform.Translation.Services
             var records = _ministryPlatformService.GetSubPageRecords(_securityRolesSubPageId, roleId, token);
 
             return records.Select(record => (int) record["Contact_ID"]).ToList();
+        }
+
+        public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary)
+        {
+            var retValue = WithApiLogin<int>(token =>
+            {
+                try
+                {
+                    _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Contacts"), profileDictionary, token);
+                    return 1;
+                }
+                catch (Exception e)
+                {
+                    throw new ApplicationException("Error Saving contact: " + e.Message);
+                }
+            });
+            
         }
 
         public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary)
