@@ -29,6 +29,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftBySubscription;
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
+        private readonly int _myHouseholdRecurringGiftsApiPageView;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -66,6 +67,7 @@ namespace MinistryPlatform.Translation.Services
             _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
+            _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
         }
 
 
@@ -678,6 +680,41 @@ namespace MinistryPlatform.Translation.Services
             }
 
             return recurringGiftId;
+        }
+
+        public CreateDonationDistDto GetRecurringGiftById(string authorizedUserToken, int recurringGiftId)
+        {
+            var searchStr = string.Format("\"{0}\",", recurringGiftId);
+            CreateDonationDistDto createDonation = null;
+            try
+            {
+                var records = _ministryPlatformService.GetPageViewRecords(_myHouseholdRecurringGiftsApiPageView, authorizedUserToken, searchStr);
+                if (records != null && records.Any())
+                {
+                    var record = records.First();
+                    createDonation = new CreateDonationDistDto
+                    {
+                        RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
+                        DonorId = record.ToInt("Donor_ID"),
+                        Frequency = record.ToInt("Frequency_ID"),
+                        DayOfWeek = record.ToInt("Day_Of_Week_ID"),
+                        DayOfMonth = record.ToInt("Day_Of_Month"),
+                        StartDate = record.ToDate("Start_Date"),
+                        Amount = record.ToInt("Amount"),
+                        ProgramId = record.ToString("Program_ID"),
+                        CongregationId = record.ToInt("Congregation_ID"),
+                        PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
+                        DonorAccountId = record.ToNullableInt("Donor_Account_ID")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetRecurringGift failed.  Recurring Gift Id: {0}", recurringGiftId), ex);
+            }
+
+            return createDonation;
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)

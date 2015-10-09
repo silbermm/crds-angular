@@ -24,6 +24,8 @@ namespace crds_angular.Services.Interfaces
 
         int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contact);
 
+        RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor);
+
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId);
 
         List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken);

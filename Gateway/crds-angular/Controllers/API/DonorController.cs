@@ -322,6 +322,7 @@ namespace crds_angular.Controllers.API
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
+        [HttpPost]
         [Route("api/donor/recurrence")]
         public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
@@ -347,6 +348,39 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
                 
+            }));
+        }
+
+        /// <summary>
+        /// Edit a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="editGift">The data required to edit the recurring gift in MinistryPlatform and/or Stripe.</param>
+        /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(RecurringGiftDto))]
+        [HttpPut]
+        [Route("api/donor/recurrence")]
+        public IHttpActionResult EditRecurringGift([FromBody] RecurringGiftDto editGift)
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var recurringGift = _donorService.EditRecurringGift(token, editGift, donor);
+
+                    return Ok(recurringGift);
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+
             }));
         }
 

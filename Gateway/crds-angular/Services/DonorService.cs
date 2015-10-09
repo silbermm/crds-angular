@@ -7,6 +7,7 @@ using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
+using Crossroads.Utilities;
 
 namespace crds_angular.Services
 {
@@ -193,6 +194,20 @@ namespace crds_angular.Services
                                                                 recurringGiftDto.Program,
                                                                 stripeSubscription.Id);
             return recurGiftId;
+        }
+
+        public RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor)
+        {
+            var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, editGift.RecurringGiftId);
+
+            // Assuming payment info is changed if a token is given.
+            var changedPayment = !string.IsNullOrWhiteSpace(editGift.StripeTokenId);
+            var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
+            var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
+            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? "week" : "month");
+
+            // TODO Implement edit recurring gift
+            throw new NotImplementedException();
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)
