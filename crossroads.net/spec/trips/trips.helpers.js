@@ -100,5 +100,78 @@ module.exports = {
     campaignId: 123456789,
     campaignName: 'test campaign',
     pledgeDonorId: 23232323
+  },
+  Campaign: {
+    id: 181,
+    name: '2015 December GO Nicaragua',
+    formId: 22,
+    nickname: 'Nicaragua',
+    ageLimit: 8,
+    registrationStart: '2015-05-20T00:00:00',
+    registrationEnd: '2015-08-31T00:00:00',
+    ageExceptions: []
+  },
+  WorkTeams: [
+    {
+      dp_RecordID: 1,
+      dp_RecordName: 'Habitat (must be 16 or older)'
+    },
+    {
+      dp_RecordID: 3,
+      dp_RecordName: 'Hands On - Neighborhood Restoration'
+    },
+    {
+      dp_RecordID:2,
+      dp_RecordName: 'Vacation Bible Camp'
+    }
+  ],
+  Person: {
+    addressId: 382387,
+    addressLine1: '555 Sesame St.',
+    addressLine2: 'Apartment B',
+    age: 8,
+    anniversaryDate: '01/2001',
+    city: 'Florence',
+    congregationId: 2,
+    contactId: 768386,
+    dateOfBirth: '05/29/2007',
+    emailAddress: 'contact@email.com',
+    employerName: null,
+    firstName: 'Claire',
+    foreignCountry: 'United States',
+    genderId: 2,
+    homePhone: '513-629-1595',
+    householdId: 627743,
+    householdName: 'Maddox',
+    lastName: 'Maddox',
+    maidenName: null,
+    maritalStatusId: null,
+    middleName: null,
+    mobileCarrierId: null,
+    mobilePhone: null,
+    nickName: 'Claire',
+    postalCode: '41042',
+    state: 'KY',
+    householdMembers: [
+      {
+        ContactId: 768379,
+        FirstName: 'Anthony',
+        Nickname: 'TJ',
+        LastName: 'Maddox',
+        DateOfBirth: '1972-08-06T00:00:00',
+        HouseholdPosition: 'Head of Household',
+        StatementTypeId: 1,
+        DonorId: 2631446
+      },
+      {
+        ContactId:768386,
+        FirstName: 'Claire',
+        Nickname: 'Claire',
+        LastName: 'Maddox',
+        DateOfBirth: '2007-05-29T00:00:00',
+        HouseholdPosition: 'Minor Child',
+        StatementTypeId: 0,
+        DonorId: 0}
+      ]
   }
 };
