@@ -60,7 +60,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     mocked.GetSubpageViewRecords("SelectedContactAttributes", contactId, It.IsAny<string>(), "", "", 0))
                 .Returns(getSubpageViewRecordsResponse);
 
-            var attributes = _fixture.GetCurrentContractAttributes(contactId).ToList();
+            var attributes = _fixture.GetCurrentContactAttributes(contactId).ToList();
 
             _ministryPlatformService.VerifyAll();
 

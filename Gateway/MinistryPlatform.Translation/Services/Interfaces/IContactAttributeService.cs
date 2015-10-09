@@ -5,6 +5,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IContactAttributeService
     {
-        List<ContactAttribute> GetCurrentContractAttributes(int contactId);
+        List<ContactAttribute> GetCurrentContactAttributes(int contactId);
     }
 }
