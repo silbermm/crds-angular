@@ -7,7 +7,7 @@ function tweenFade(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.staggerTo(selecter+' .fade', 1, { autoAlpha: 1, delay: delay }, .15);
 };
 function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0; }
-          return TweenMax.staggerTo(selecter+' .rise10', .8, { autoAlpha: 1, y: 0, delay: delay, ease: Back.easeOut.config(10) }, .3);
+          return TweenMax.staggerTo(selecter+' .rise10', 1, { autoAlpha: 1, y: 0, delay: delay, ease: Back.easeOut.config(4) }, .2);
 };
 function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.to(selecter+' .fade-bg', 1, { autoAlpha: 1, delay: delay });
@@ -16,7 +16,7 @@ function tweenRotateRight(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.staggerFrom(selecter+' .rotate-right', 1, {rotation:120, xPercent: 200, delay: delay }, .8);
 };
 function tweenFadeFast(selecter, delay ){ if(!delay){ delay = 0; }
-          return TweenMax.from(selecter+' .fade-fast', .1, {autoAlpha: 0, delay: delay });
+          return TweenMax.to(selecter+' .fade-fast', .3, {autoAlpha: 1, delay: delay });
 };
 
 function reverseTweens(tweenArray, timelinePosition) {
@@ -35,67 +35,66 @@ function reverseTween(tween, timelinePosition) {
 
 $(document).ready(function() {
   $('#fullpage').fullpage({
-    //navigation: true,
-    //navigationPosition: 'right',
     easingcss3: 'cubic-bezier(0.645,.045,.355,1)',
+    //scrollingSpeed: 4000,
     afterLoad: function(anchorLink, index) {
       var loadedSection = $(this);
 
       if (index == 1) {
-        exploreTweens['opening_bg'] = tweenFadeBg('.opening', .2);
-        exploreTweens['opening_fades'] = tweenFade('.opening', .75);
+        //Fade in content
+        exploreTweens['opening_bg'] = tweenFadeBg('.opening', .1);
+        exploreTweens['opening_fades'] = tweenFade('.opening', .8);
       }
       if (index == 2) {
-        //Reverse opening tweens
-        reverseTweens(exploreTweens['opening_fades'], .1);
-
         //Map names and flags come in
         exploreTweens['map_names'] = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: .5 }, .5);
         exploreTweens['map_flags'] = TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: .5 }, .5);
       }
-
       if (index == 3) {
-        var sizes = ["small", "medium", "large"];
-        var demo = $("#demo");
-
+        //setup bubbles and begin animating them with random size and rotation speeds
+        var sizes = ["small", "medium", "large"]; //three various sizes
+        var bubbles = $("#bubbles"); //
         var tl = new TimelineMax();
-
         for (var i = 0; i < 10; i++) {
           var sizeIndex = randomNumber(0,2); //get random number between 0 and 2
           var bubbleRotate = randomNumber(-20,20); //get random number between 0 and 2
           var size = sizes[sizeIndex]; //get random size
           var speed = (3 - sizeIndex) //larger faster
-          var bubble = $('<div class="bubble ' + size + 'Bubble"/>').appendTo(demo); //create a bubble
+          var bubble = $('<div class="bubble ' + size + 'Bubble"/>').appendTo(bubbles); //create a bubble
           tl.set(bubble, {y:0, x:0}, 0) // place it at the bottom
           tl.to(bubble, speed*5, {display:'block',rotation:bubbleRotate, y:randomNumber(window.screen.height, -window.screen.height), x:-window.screen.width, repeatDelay:Math.random()*2, repeat:500, ease: Power1.easeOut}, Math.random() * 2)
         }
-
         function randomNumber(min, max){
           return Math.floor(Math.random() * (1 + max - min) + min);
         }
       }
-
       if (index == 4) {
-      }
+        //fade in background
+        exploreTweens['studentministry_bg'] = tweenFadeBg('.studentministry', tweenFadeUpDelay);
+        //move background
+        exploreTweens['studentministry_bgmove'] = TweenMax.to('.studentministry'+' .fade-bg', 8, { x:20, scaleX:1.1, scaleY:1.1, ease: Power0.easeNone });
 
+      }
       if (index == 5) {
-        exploreTweens['coffee_liquid'] = tweenFadeFast('.coffee');
-        exploreTweens['coffee_cup'] = TweenMax.from('.coffee .cup-coffee', 1, {yPercent: 5 });
-        exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: .7 });
+        //make lid visible
+        exploreTweens['coffee_makevisible'] = tweenFadeFast('.coffee');
+        //fill the cup with coffee
+        exploreTweens['coffee_liquid'] = TweenMax.from('.coffee .cup-coffee', 1.5, {yPercent: 5 });
+        //put lid on cup
+        exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: 1 });
       }
-
       if (index == 6) {
-        tweenFadeBg('.drums', .1);
+        exploreTweens['drums_bg'] = tweenFadeBg('.drums', tweenFadeUpDelay);
+        exploreTweens['drums_bg_blur'] = TweenMax.to('.drums .img-background', 1, { css: {'-webkit-filter':"initial", 'filter':"initial"}, delay:1 }); //tweenFadeBg('.drums');
       }
-
       if (index == 7) {
       }
-
       if (index == 8) {
+        //make photos visible
+        exploreTweens['photos_fadefast'] = tweenFadeFast('.photos');
+        //flip photos in from the right
         tweenRotateRight('.photos', .5);
-        tweenFadeFast('.photos');
       }
-
       if (index == 9) {
       }
     },
@@ -104,6 +103,9 @@ $(document).ready(function() {
           var leavingSection = $(this);
 
           if (index == 1) {
+            //Reverse opening text
+            reverseTweens(exploreTweens['opening_fades'], .1);
+
             if (direction == 'down') {
               //Map paragraph
               exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
@@ -111,12 +113,10 @@ $(document).ready(function() {
           }
 
           if(index == 2 ) {
-            //Reverse map paragraph
+            //Reverse map text
             reverseTweens(exploreTweens['map_text']);
-
             //Reverse map names
             reverseTweens(exploreTweens['map_names']);
-
             //Reverse map flags
             reverseTweens(exploreTweens['map_flags']);
 
@@ -127,12 +127,11 @@ $(document).ready(function() {
           }
 
           if(index == 3) {
-            //Reverse opening tweens
+            //Reverse kidsclub text
             reverseTweens(exploreTweens['kidsclub_text']);
 
             if (direction == 'down') {
-                exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', 1.25);
-                tweenFadeBg('.studentministry', tweenFadeUpDelay);
+                exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', .3);
             } else if (direction == 'up') {
                 //Map paragraph
                 exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
@@ -140,9 +139,10 @@ $(document).ready(function() {
           }
 
           if(index == 4) {
-
-            //reverse student ministry text tween
+            //reverse student ministry text
             reverseTweens(exploreTweens['studentministry_text']);
+            //reverse student ministry bg
+            reverseTween(exploreTweens['studentministry_bg']);
 
             if (direction == 'down'){
               exploreTweens['coffee_text'] = tweenFadeUp('.coffee', tweenFadeUpDelay);
@@ -153,10 +153,11 @@ $(document).ready(function() {
           }
 
           if(index == 5) {
-
             //reverse coffee text
             reverseTweens(exploreTweens['coffee_text']);
-            //reverseTween(exploreTweens['coffee_lid']);
+            //reverse coffee fade
+            reverseTween(exploreTweens['coffee_makevisible']);
+
 
             if (direction == 'down'){
               exploreTweens['drums_text'] = tweenFadeUp('.drums', tweenFadeUpDelay);
@@ -166,9 +167,12 @@ $(document).ready(function() {
           }
 
           if(index == 6) {
-
             //reverse drums text
             reverseTweens(exploreTweens['drums_text']);
+            //reverse drums bg
+            reverseTween(exploreTweens['drums_bg']);
+            //reverse drums bg
+            reverseTween(exploreTweens['drums_bg_blur']);
 
             if (direction == 'down'){
               exploreTweens['clothes_text'] = tweenFadeUp('.clothes', tweenFadeUpDelay);
@@ -178,7 +182,6 @@ $(document).ready(function() {
           }
 
           if(index == 7) {
-
             //reverse clothes text
             reverseTweens(exploreTweens['clothes_text']);
 
@@ -190,9 +193,10 @@ $(document).ready(function() {
           }
 
           if(index == 8) {
-
             //reverse clothes text
             reverseTweens(exploreTweens['photos_text']);
+            //reverse clothes photo fade
+            reverseTween(exploreTweens['photos_fadefast']);
 
             if (direction == 'down'){
               exploreTweens['meet_text'] = tweenFadeUp('.meet', tweenFadeUpDelay);
@@ -202,7 +206,6 @@ $(document).ready(function() {
           }
 
           if(index == 9) {
-
             //reverse meet text
             reverseTweens(exploreTweens['meet_text']);
 
@@ -229,7 +232,7 @@ $(document).ready(function() {
               <span class="fade trans800">THIS</span>
               <span class="fade trans800">CHURCH</span>
               <span class="fade trans800">FOR</span>
-              <br>
+              <br class="hidden-xs">
               <span class="fade trans800">OUR</span>
               <span class="fade trans800">FRIENDS</span>
               <span class="fade trans800">WHO</span>
@@ -294,8 +297,10 @@ $(document).ready(function() {
         </div><!--/col-sm-6-->
       </div><!--/row-->
     </div><!--/container-->
-    <img class="imgix-fluid img-responsive bubble-stick fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/kidsclub/explore_kidsclub_bottle.png" alt="Bubbles"  />
-    <div id="demo"></div>
+    <div class="bubble-container">
+      <img class="imgix-fluid img-responsive bubble-stick fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/kidsclub/explore_kidsclub_bottle.png" alt="Bubbles"  />
+      <div id="bubbles" class="bubbles"></div>
+    </div>
   </section>
 
   <section class="section studentministry">
@@ -335,7 +340,7 @@ $(document).ready(function() {
   </section>
 
   <section class="section drums">
-    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/drums/explore_drums_bg.jpg"></div>
+    <div class="imgix-fluid-bg img-background slide-bg fade-bg trans1500" data-src="http://crossroads-media.imgix.net/images/explore/drums/explore_drums_bg.jpg"></div>
     <div class="vertical-80">
       <div class="container">
         <div class="row">
