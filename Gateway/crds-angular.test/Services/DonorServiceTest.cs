@@ -4,6 +4,8 @@ using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using crds_angular.App_Start;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 
@@ -31,6 +33,8 @@ namespace crds_angular.test.Services
         [SetUp]
         public void SetUp()
         {
+            AutoMapperConfig.RegisterMappings();
+
             mpDonorService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>(MockBehavior.Strict);
             mpContactService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService>(MockBehavior.Strict);
             paymentService = new Mock<crds_angular.Services.Interfaces.IPaymentService>(MockBehavior.Strict);
@@ -279,6 +283,116 @@ namespace crds_angular.test.Services
             paymentService.VerifyAll();
             mpDonorService.VerifyAll();
             Assert.AreEqual(recurringGiftId, response);
+        }
+
+        [Test]
+        public void TestGetRecurringGiftsForAuthenticatedUser()
+        {
+            var records = new List<RecurringGift>
+            {
+                new RecurringGift
+                {
+                    RecurringGiftId = 123,
+                    DonorID = 123123,
+                    EmailAddress = "test@example.com",
+                    Frequency = "Weekly",
+                    Recurrence = "Fridays Weekly",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    Amount = 950M,
+                    ProgramName = "Beans & Rice",
+                    CongregationName = "Uptown",
+                    AccountTypeID = 3,
+                    AccountNumberLast4= "4433",
+                    InstitutionName = "Visa",
+                    SubscriptionID = "sub_77L7hDGjQdoxRE",
+                },
+                new RecurringGift
+                {
+                    RecurringGiftId = 124,
+                    DonorID = 123123,
+                    EmailAddress = "test@example.com",
+                    Frequency = "Montly",
+                    Recurrence = "8th Monthly",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    Amount = 190M,
+                    ProgramName = "Crossroads",
+                    CongregationName = "",
+                    AccountTypeID = 1,
+                    AccountNumberLast4= "4093",
+                    InstitutionName = "Bank",
+                    SubscriptionID = "sub_77uaEIZLssR6xN",
+                },
+                new RecurringGift
+                {
+                    RecurringGiftId = 125,
+                    DonorID = 123123,
+                    EmailAddress = "test@example.com",
+                    Frequency = "Weekly",
+                    Recurrence = "Tuesdays Weekly",
+                    StartDate = DateTime.Now,
+                    EndDate = DateTime.Now,
+                    Amount = 50M,
+                    ProgramName = "Old St. George",
+                    CongregationName = "General",
+                    AccountTypeID = 3,
+                    AccountNumberLast4= "1984",
+                    InstitutionName = "American Express",
+                    SubscriptionID = "sub_77L8qFUF6QFZsO",
+                },
+            };
+
+            mpDonorService.Setup(mocked => mocked.GetRecurringGiftsForAuthenticatedUser(It.IsAny<string>())).Returns(records);
+            var result = fixture.GetRecurringGiftsForAuthenticatedUser("afdafsaaatewjrtjeretewtr");
+
+            mpDonorService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(records[0].RecurringGiftId, result[0].RecurringGiftId);
+            Assert.AreEqual(records[0].DonorID, result[0].DonorID);
+            Assert.AreEqual(records[0].EmailAddress, result[0].EmailAddress);
+            Assert.AreEqual(records[0].Frequency, result[0].PlanInterval);
+            Assert.AreEqual(records[0].Recurrence, result[0].Recurrence);
+            Assert.AreEqual(records[0].StartDate, result[0].StartDate);
+            Assert.AreEqual(records[0].EndDate, result[0].EndDate);
+            Assert.AreEqual(records[0].Amount, result[0].PlanAmount);
+            Assert.AreEqual(records[0].ProgramName, result[0].Program);
+            Assert.AreEqual(records[0].CongregationName, result[0].CongregationName);
+            Assert.AreEqual(PaymentType.CreditCard, result[0].Source.SourceType);
+            Assert.AreEqual(records[0].AccountNumberLast4, result[0].Source.AccountNumberLast4);
+            Assert.AreEqual(CreditCardType.Visa, result[0].Source.CardType);
+            Assert.AreEqual(records[0].SubscriptionID, result[0].SubscriptionID);
+
+            Assert.AreEqual(records[1].RecurringGiftId, result[1].RecurringGiftId);
+            Assert.AreEqual(records[1].DonorID, result[1].DonorID);
+            Assert.AreEqual(records[1].EmailAddress, result[1].EmailAddress);
+            Assert.AreEqual(records[1].Frequency, result[1].PlanInterval);
+            Assert.AreEqual(records[1].Recurrence, result[1].Recurrence);
+            Assert.AreEqual(records[1].StartDate, result[1].StartDate);
+            Assert.AreEqual(records[1].EndDate, result[1].EndDate);
+            Assert.AreEqual(records[1].Amount, result[1].PlanAmount);
+            Assert.AreEqual(records[1].ProgramName, result[1].Program);
+            Assert.AreEqual(records[1].CongregationName, result[1].CongregationName);
+            Assert.AreEqual(PaymentType.Bank, result[1].Source.SourceType);
+            Assert.AreEqual(records[1].AccountNumberLast4, result[1].Source.AccountNumberLast4);
+            Assert.AreEqual(null, result[1].Source.CardType);
+            Assert.AreEqual(records[1].SubscriptionID, result[1].SubscriptionID);
+
+            Assert.AreEqual(records[2].RecurringGiftId, result[2].RecurringGiftId);
+            Assert.AreEqual(records[2].DonorID, result[2].DonorID);
+            Assert.AreEqual(records[2].EmailAddress, result[2].EmailAddress);
+            Assert.AreEqual(records[2].Frequency, result[2].PlanInterval);
+            Assert.AreEqual(records[2].Recurrence, result[2].Recurrence);
+            Assert.AreEqual(records[2].StartDate, result[2].StartDate);
+            Assert.AreEqual(records[2].EndDate, result[2].EndDate);
+            Assert.AreEqual(records[2].Amount, result[2].PlanAmount);
+            Assert.AreEqual(records[2].ProgramName, result[2].Program);
+            Assert.AreEqual(records[2].CongregationName, result[2].CongregationName);
+            Assert.AreEqual(PaymentType.CreditCard, result[2].Source.SourceType);
+            Assert.AreEqual(records[2].AccountNumberLast4, result[2].Source.AccountNumberLast4);
+            Assert.AreEqual(CreditCardType.AmericanExpress, result[2].Source.CardType);
+            Assert.AreEqual(records[2].SubscriptionID, result[2].SubscriptionID);
         }
     }
 }
