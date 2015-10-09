@@ -39,15 +39,41 @@
                 </span>
               </ng-messages>
             </div>
-            <div class="form-group col-sm-6">
-              <label for="emergency-secondaryphone">Secondary Phone</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactSecondaryPhone.value" type="text" class="form-control" id="emergency-secondaryphone" placeholder="Enter emergency contact secondary phone number">
+            <div class="form-group col-sm-6" 
+              ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencySecondaryPhone') }">
+              <label class="control-label" for="emergency-secondaryphone">Secondary Phone</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactSecondaryPhone.value" 
+                     type="text" 
+                     name="emergencySecondaryPhone"
+                     class="form-control" 
+                     id="emergency-secondaryphone" 
+                     ng-pattern="tripsSignup.phoneFormat"
+                     ng-model-options="{updateOn: 'blur'}"
+                     placeholder="Enter emergency contact secondary phone number">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencySecondaryPhone.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencySecondaryPhone')">
+                <span ng-message="pattern">
+                  <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                </span>
+              </ng-messages>
             </div>
           </div>
           <div class="row">
-            <div class="form-group col-sm-6">
-              <label for="emergency-email">Email Address</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactEmail.value" type="text" class="form-control" id="emergency-email" placeholder="Enter emergency contact email address">
+            <div class="form-group col-sm-6"
+                 ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyContactEmail') }">
+              <label class="control-label" for="emergency-email">Email Address</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactEmail.value" 
+                     name="emergencyContactEmail"
+                     type="email" 
+                     class="form-control" 
+                     id="emergency-email" 
+                     ng-model-options="{updateOn: 'blur'}"
+                     placeholder="Enter emergency contact email address">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencyContactEmail.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyContactEmail')">
+                <span ng-message="email">
+                  <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
+                </span>
+              </ng-messages>
+
             </div>
         </div>
 
