@@ -24,6 +24,7 @@ namespace MinistryPlatform.Translation.Test.Extensions
                 {"Null_String", null},
                 {"Date_As_String", "01/01/2007"},
                 {"Null_Date_As_String", null},
+                {"Invalid_Date_As_String", "NotADate"},
                 {"Bool", true},
                 {"NullBool", null}
             };
@@ -108,6 +109,32 @@ namespace MinistryPlatform.Translation.Test.Extensions
         public void StringToDateString_Success()
         {
             Assert.AreEqual("01/01/2007", _mockDictionary.ToDateAsString("Date_As_String"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(FormatException))]
+        public void StringToNullableDate_InvalidDate_ThrowsError()
+        {
+            _mockDictionary.ToNullableDate("Invalid_Date_As_String", true);
+        }
+
+        [Test]
+        public void StringToNullableDate_ValidDate_Success()
+        {
+            Assert.AreEqual(new DateTime(2007, 1, 1), _mockDictionary.ToNullableDate("Date_As_String"));
+        }
+
+        [Test]
+        public void StringToNullableDate_NullDate_Success()
+        {
+            Assert.AreEqual(null, _mockDictionary.ToNullableDate("Null_Date_As_String"));
+        }
+
+        [Test]
+        [ExpectedException(typeof(KeyNotFoundException))]
+        public void StringToNullableDate_ColumnDoesNotExistInDictionarThrowsError()
+        {
+            _mockDictionary.ToNullableDate("Fake_Column");
         }
     }
 }

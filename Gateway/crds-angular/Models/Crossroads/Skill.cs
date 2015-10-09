@@ -20,10 +20,9 @@ namespace crds_angular.Models.Crossroads
         [DefaultValue(false)]
         public bool Selected { get; set; }
 
-        public MinistryPlatform.Models.ContactAttribute GetAttribute()
+        public MinistryPlatform.Models.SkillAttribute GetAttribute()
         {
-           //var tmp = Mapper.Map<MinistryPlatform.Models.ContactAttribute>(this);
-            return new MinistryPlatform.Models.ContactAttribute
+            return new MinistryPlatform.Models.SkillAttribute
             {
                  Attribute_Name = this.Name,
                  Attribute_ID = this.SkillId
