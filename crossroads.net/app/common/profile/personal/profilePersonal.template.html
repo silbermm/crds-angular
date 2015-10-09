@@ -134,22 +134,58 @@
         </div>
     </div>
 
+      <!--<div class="form-group col-sm-6" ng-controller="crdsDatePickerCtrl">
+          <label class="control-label">When did you start attending Crossroads?
+              <svg viewBox="0 0 32 32" class="icon icon-question-circle">
+                  <use xlink:href="#question-circle"></use>
+              </svg>
+          </label>
+          <input type="text" class="form-control" id="anniversaryDate" placeholder="mm/yyyy" ng-model="contact.anniversaryDate">
+      </div>
+      <div class="form-group col-sm-6">
+          <label for="whyattend">Why did you start attending Crossroads?
+              <svg viewBox="0 0 32 32" class="icon icon-question-circle">
+                  <use xlink:href="#question-circle"></use>
+              </svg>
+          </label>
+          <select id="whyattend" class="form-control col-sm-12">
+              <option></option>
+          </select>
+      </div>-->
+
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'anniversary-date')}" >
-        <label class="control-label">When did you start attending Crossroads?</label>
+      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'start-attend-date')}" >
+          <label for="start-attend-date" class="control-label">When did you start attending Crossroads?
+              <svg viewBox="0 0 32 32" class="icon icon-question-circle">
+                  <use xlink:href="#question-circle"></use>
+              </svg>
+          </label>
         </span>
         <input type="text"
                class="form-control"
-               id="anniversary-date"
-               name="anniversary-date"
+               id="start-attend-date"
+               name="start-attend-date"
                placeholder="mm/yyyy"
                validate-date='MM/YYYY'
                ng-model-options="{updateOn:'blur'}"
                ng-model="profile.profileData.person.anniversaryDate"  >
-        <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
+        <ng-messages for="profile.pform['start-attend-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'start-attend-date')">
           <ng-messages-include src="on-pause-messages"></ng-messages-include>
         </ng-messages>
       </div>
+        <div class="form-group col-sm-6" >
+            <label for="start-attend-reason">Why did you start attending Crossroads?</label>
+            <select name="start-attend-reason"
+                    class="form-control col-sm-12"
+                    id="start-attend-reason"
+                    ng-model="profile.profileData.person.start-attend-reason"
+                    ng-options="start-attend-reason.dp_RecordID as start-attend-reason.dp_RecordName for start-attend-reasons in profile.start-attend-reason" ><!-- JPC - THIS WILL NEED TO BE CODED STILL -->
+                <option value=""> -- Choose One -- </option>
+            </select>
+            <ng-messages for="profile.pform['start-attend-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'start-attend-date')">
+                <ng-messages-include src="on-pause-messages"></ng-messages-include>
+            </ng-messages>
+        </div>
     </div>
 
     <div class="row">

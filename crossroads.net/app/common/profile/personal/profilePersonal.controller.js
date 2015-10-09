@@ -47,6 +47,7 @@
     vm.validation = Validation;
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
+    debugger;
 
     activate();
 

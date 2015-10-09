@@ -137,49 +137,95 @@
           isProtected: false
         }
       })
-      .state('profile', {
-        parent: 'noSideBar',
-        url: '/profile',
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin
-        },
-        data: {
-          isProtected: true,
-          meta: {
-            title: 'Profile',
-            description: ''
+        .state('profilePersonal', {
+          parent: 'noSideBar',
+          url: '/profile',
+          templateUrl: 'common/profile/profilePersonal.template.html',
+          controller: 'ProfilePersonalController as profilePersonalController',
+          data: {
+            isProtected: true,
+            meta: {
+              title: 'Profile',
+              description: ''
+            }
+          },
+          resolve: {
+            loggedin: crds_utilities.checkLoggedin,
+            $cookies: '$cookies',
+            contactId: function($cookies) {
+              return $cookies.get('userId');
+            }
+
+            //debugger;
+            // leaving this in place as a reminder -- not sure we need to have a similar function in profile
+            //pageId: function() {
+            //  return 0;
+            //}
           }
-        },
-        views: {
-          '': {
-            templateUrl: 'profile/profile.html',
-            controller: 'crdsProfileCtrl as profile',
-            resolve: {
-              loggedin: crds_utilities.checkLoggedin
-            },
-          },
-          'account@profile': {
-            templateUrl: 'profile/profile_account.html',
-            data: {
-              isProtected: true
-            }
-          },
-          'skills@profile': {
-            controller: 'ProfileSkillsController as profile',
-            templateUrl: 'skills/profile_skills.html',
-            data: {
-              isProtected: true
-            }
-          },
-          'giving@profile': {
-            controller: 'ProfileGivingController as giving_profile_controller',
-            templateUrl: 'giving/profile_giving.html',
-            data: {
-              isProtected: true
-            }
-          }
-        }
-      })
+        })
+    //    .state('profile') {
+    //      parent: 'noSideBar',
+    //          url: '/profile',
+    //          templateUrl: 'common/profile/profilePersonal.template.html',
+    //          controller: 'TripsSignupController as tripsSignup',
+    //          resolve:
+    //  {
+    //    loggedin: crds_utilities.checkLoggedin
+    //  },
+    //  data: {
+    //    isProtected: true,
+    //        meta: {
+    //          title: 'Profile',
+    //              description: ''
+    //    },
+    //    views: {
+    //
+    //    }
+    //  }
+    //}
+      //.state('profile', {
+      //  parent: 'noSideBar',
+      //  url: '/profile',
+      //  resolve: {
+      //    loggedin: crds_utilities.checkLoggedin
+      //  },
+      //  data: {
+      //    isProtected: true,
+      //    meta: {
+      //      title: 'Profile',
+      //      description: ''
+      //    }
+      //  },
+      //  views: {
+      //    '': {
+      //      templateUrl: 'profile/profile.html',
+      //      controller: 'crdsProfileCtrl as profile',
+      //      resolve: {
+      //        loggedin: crds_utilities.checkLoggedin
+      //      },
+      //    },
+      //    'account@profile': {
+      //      templateUrl: 'profile/profile_account.html',
+      //      data: {
+      //        isProtected: true
+      //      }
+      //    },
+      //    'skills@profile': {
+      //      controller: 'ProfileSkillsController as profile',
+      //      templateUrl: 'skills/profile_skills.html',
+      //      data: {
+      //        isProtected: true
+      //      }
+      //    },
+      //    'giving@profile': {
+      //      controller: 'ProfileGivingController as giving_profile_controller',
+      //      templateUrl: 'giving/profile_giving.html',
+      //      data: {
+      //        isProtected: true
+      //      }
+      //    }
+      //  }
+      //})
       .state('myprofile', {
         parent: 'noSideBar',
         url: '/myprofile',
