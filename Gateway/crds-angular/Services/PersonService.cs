@@ -16,10 +16,12 @@ namespace crds_angular.Services
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
         private readonly IContactService _contactService;
+        private readonly IContactAttributeService _contactAttributeService;
 
-        public PersonService(IContactService contactService)
+        public PersonService(IContactService contactService, IContactAttributeService contactAttributeService)
         {
             _contactService = contactService;
+            _contactAttributeService = contactAttributeService;
         }
 
         public void SetProfile(String token, Person person)
@@ -44,6 +46,9 @@ namespace crds_angular.Services
 
             var family = _contactService.GetHouseholdFamilyMembers(person.HouseholdId);
             person.HouseholdMembers = family;
+
+            var attributes = _contactAttributeService.GetCurrentContractAttributes(contactId);
+            person.Attributes = attributes;
 
             return person;
         }

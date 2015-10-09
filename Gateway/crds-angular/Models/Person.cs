@@ -92,6 +92,8 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "householdMembers")]
         public List<HouseholdMember> HouseholdMembers { get; set; }
 
+        public List<ContractAttribute> Attributes { get; set; }
+
         public MyContact GetContact()
         {
             return new MyContact
