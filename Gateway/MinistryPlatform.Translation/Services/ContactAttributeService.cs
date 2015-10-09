@@ -7,8 +7,6 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    // TODO: Should this be more generic, possibly ObjectAttributeService? 
-
     public class ContactAttributeService : BaseService, IContactAttributeService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
