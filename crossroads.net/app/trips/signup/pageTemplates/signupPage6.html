@@ -93,7 +93,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="tripsSignup.destination != 'NOLA'">
+      <div class="row" ng-show="!tripsSignup.nolaRequired()">
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
@@ -101,7 +101,7 @@
             <label for="deltaff">Delta</label>
             <input ng-model="tripsSignup.signupService.page6.deltaFrequentFlyer.value" type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
-        <div class="form-group col-sm-6" ng-show="tripsSignup.destination == 'South Africa'">
+        <div class="form-group col-sm-6" ng-show="!tripsSignup.southAfricaRequired()">
             <label for="southafricaff">South African Airlines</label>
             <input ng-model="tripsSignup.signupService.page6.southAfricanFrequentFlyer.value" type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
         </div>
@@ -115,7 +115,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="tripsSignup.destination != 'NOLA'">
+      <div class="row" ng-show="!tripsSignup.nolaRequired()">
        <div class="col-sm-12">
         <legend>
           Travel Experience Information
@@ -123,7 +123,7 @@
       </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="tripsSignup.destination != 'NOLA'">
+      <div class="row" ng-show="!tripsSignup.nolaRequired()">
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'internationalTrips') }">
           <label class="control-label block required">International Travel Experience</label>
           <div>
@@ -177,7 +177,7 @@
         </div>
       </div>
 
-      <div class="col-sm-12" ng-show="tripsSignup.destination == 'India'">
+      <div class="col-sm-12" ng-show="tripsSignup.indiaRequired()">
         <div class="row">
           <legend>
             Past Abuse History

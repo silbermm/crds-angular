@@ -1,6 +1,6 @@
 <div>
   <ng-form name="tripsSignup.tripAppPage5" role="form">
-    <div ng-show="tripsSignup.destination == 'Nicaragua'">
+    <div ng-show="tripsSignup.nicaRequired()">
       <legend>
         Child Sponsorship
       </legend>
@@ -61,9 +61,9 @@
 
 
 
-        <div class="row" ng-show="tripsSignup.destination == 'NOLA'">
+        <div class="row" ng-show="tripsSignup.nolaRequired()">
           <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam') }">
-            <label for="workteam-first" class="control-label" ng-class='tripsSignup.nolaRequired()'>First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
+            <label for="workteam-first" class="control-label" ng-class="{'required': tripsSignup.nolaRequired() }">First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
 
             <div class="row">
               <div class="col-sm-6">
@@ -85,7 +85,7 @@
           </div>
 
           <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'workteamExperience') }">
-            <label for="workteam-experience" class="control-label" ng-class='tripsSignup.nolaRequired()'>Please describe your experience in this area</label>
+            <label for="workteam-experience" class="control-label" ng-class="{'required': tripsSignup.nolaRequired() }">Please describe your experience in this area</label>
             <textarea ng-model="tripsSignup.signupService.page5.nolaFirstChoiceExperience.value" cols="1" rows="4" class="form-control" name="workteamExperience" id="workteam-experience" ng-required="tripsSignup.nolaRequired()" maxlength="250"></textarea>
             <ng-messages for="tripsSignup.tripAppPage5.workteamExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'workteamExperience')">
               <span ng-message="required">
@@ -95,7 +95,7 @@
           </div>
 
           <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaSecondChoiceWorkTeam') }">
-            <label for="workteam-second" class="control-label" ng-class='tripsSignup.nolaRequired()'>Second Choice Work Team</label>
+            <label for="workteam-second" class="control-label" ng-class="{'required': tripsSignup.nolaRequired() }">Second Choice Work Team</label>
 
             <div class="row">
               <div class="col-sm-6">
@@ -210,7 +210,7 @@
           </div>
         </div><!--/row-->
 
-        <a ng-click='tripsSignup.handlePageChange(6, tripsSignup.tripAppPage5)' class="btn btn-primary pull-right" ng-show="tripsSignup.destination != 'NOLA'">Next</a>
-        <a ng-click='tripsSignup.handleSubmit(tripsSignup.tripAppPage5)' class="btn btn-primary pull-right" ng-show="tripsSignup.destination == 'NOLA'">Submit Application</a>
+        <a ng-click='tripsSignup.handlePageChange(6, tripsSignup.tripAppPage5)' class="btn btn-primary pull-right" ng-show="!tripsSignup.nolaRequired()">Next</a>
+        <a ng-click='tripsSignup.handleSubmit(tripsSignup.tripAppPage5)' class="btn btn-primary pull-right" ng-show="tripsSignup.nolaRequired()">Submit Application</a>
       </ng-form>
 </div><!--/row-->

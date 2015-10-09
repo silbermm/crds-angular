@@ -58,7 +58,7 @@
     vm.nolaRequired = nolaRequired;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
+    // vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
     vm.progressLabel = '';
@@ -71,6 +71,7 @@
     vm.underAge = underAge;
     vm.validateProfile = validateProfile;
     vm.validation = Validation;
+    vm.phoneFormat = vm.validation.phoneFormat();
     vm.viewReady = false;
     vm.whyPlaceholder = '';
     vm.workTeams = WorkTeams;
@@ -176,26 +177,34 @@
 
     function indiaRequired() {
       if (vm.destination === 'India') {
-        return 'required';
+        return true;
       }
 
-      return '';
+      return false;
     }
 
     function nicaRequired() {
       if (vm.destination === 'Nicaragua') {
-        return 'required';
+        return true;
       }
 
-      return '';
+      return false;
     }
 
     function nolaRequired() {
       if (vm.destination === 'NOLA') {
-        return 'required';
+        return true;
       }
 
-      return '';
+      return false;
+    }
+
+    function southAfricaRequired() {
+      if (vm.destination === 'South Africa') {
+        return true;
+      }
+
+      return false;
     }
 
     function preliminaryAgeCheck() {
