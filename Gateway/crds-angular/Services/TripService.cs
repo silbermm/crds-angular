@@ -517,17 +517,22 @@ namespace crds_angular.Services
                 {
                     return false;
                 }
+                
+
                 // Check if relationship exists...
                 var myRelationships = _contactRelationshipService.GetMyCurrentRelationships(dto.ContactId);
-
-                // Update the relationship
-                Relationship relationship = new Relationship
+                var rel = myRelationships.Where(r => r.Relationship_Id == _configurationWrapper.GetConfigIntValue("SponsoredChild") && r.Contact_Id == childId);
+                if (!rel.Any())
                 {
-                    RelationshipID = _configurationWrapper.GetConfigIntValue("SponsoredChildOf"),
-                    RelatedContactID = dto.ContactId,
-                    
-                };
-                _contactRelationshipService.AddRelationship(relationship);
+                    // Update the relationship
+                    Relationship relationship = new Relationship
+                    {
+                        RelationshipID = _configurationWrapper.GetConfigIntValue("SponsoredChild"),
+                        RelatedContactID = childId,
+                    };
+                    _contactRelationshipService.AddRelationship(relationship, dto.ContactId);     
+                }
+               
             }
             return true;
         }

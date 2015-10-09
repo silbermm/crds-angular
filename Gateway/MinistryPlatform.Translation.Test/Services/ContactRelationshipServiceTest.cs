@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
+using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -18,6 +21,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configWrapper;
+
+        private readonly int CONTACT_RELATIONSHIP_PAGE = 265;
         
         [SetUp]
         public void SetUp()
@@ -26,6 +31,79 @@ namespace MinistryPlatform.Translation.Test.Services
             _authService = new Mock<IAuthenticationService>();
             _configWrapper = new Mock<IConfigurationWrapper>();
             _fixture = new ContactRelationshipService(_ministryPlatformService.Object,_authService.Object,_configWrapper.Object);
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
+            _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
+
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+            _configWrapper.Setup(mocked => mocked.GetConfigIntValue("ContactRelationships")).Returns(CONTACT_RELATIONSHIP_PAGE);
+
+        }
+
+        [Test]
+        public void AddRelationship()
+        {
+            const int childId = 4384766;
+            const int myId = 2186211;
+
+            
+           
+            Relationship r = new Relationship
+            {
+                RelationshipID = 43,
+                EndDate = null,
+                StartDate = DateTime.Now,
+                RelatedContactID = childId
+            };
+
+            var dict = new Dictionary<string, object>
+                {
+                    {"Relationship_ID", r.RelationshipID},
+                    {"Related_Contact_ID", r.RelatedContactID},
+                    {"Start_Date", r.StartDate},
+                    {"End_Date", r.EndDate}
+                };
+
+           
+            _ministryPlatformService.Setup(mocked =>
+                                               mocked.CreateSubRecord(CONTACT_RELATIONSHIP_PAGE,
+                                                                      myId,
+                                                                      dict,
+                                                                      It.IsAny<string>(),
+                                                                      true)).Returns(1);
+
+            var id = _fixture.AddRelationship(r, myId);
+            Assert.AreEqual(1, id);
+            _ministryPlatformService.VerifyAll();
+
+        }
+
+        [Test]
+        public void GetSomeonesRelationships()
+        {
+            PlatformServiceClient p = new PlatformServiceClient();
+            IConfigurationWrapper config = new ConfigurationWrapper();
+            IMinistryPlatformService m = new MinistryPlatformServiceImpl(p, config);
+            IAuthenticationService a = new AuthenticationServiceImpl(p, m);
+            ContactRelationshipService s = new ContactRelationshipService(m, a, config);
+
+            const int childId = 4384766;
+            const int myId = 2186211;
+
+            var relationships = new List<Relationship>
+            {
+                new Relationship
+                {
+                    RelationshipID = 43,
+                    RelatedContactID = childId,
+                    StartDate = It.IsAny<DateTime>(),
+                    EndDate = null
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetSubPageRecords())
+
+            s.GetMyCurrentRelationships(myId);
+
         }
 
         [Test]

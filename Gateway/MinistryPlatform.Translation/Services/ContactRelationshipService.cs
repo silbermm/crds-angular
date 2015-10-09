@@ -42,6 +42,27 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
+        public IEnumerable<Relationship> GetMyCurrentRelationships(int contactId)
+        {
+            var viewRecords = _ministryPlatformService.GetSubPageRecords(_configurationWrapper.GetConfigIntValue("ContactRelationships"), 
+                                                                         contactId, 
+                                                                         ApiLogin());
+            try
+            {
+                return viewRecords.Select(viewRecord => new Relationship
+                {
+                    RelationshipID = (int)viewRecord["Relationship_ID"],
+                    RelatedContactID = (int)viewRecord["Related_Contact_ID"],
+                    EndDate = (DateTime)viewRecord["End_Date"],
+                    StartDate = (DateTime)viewRecord["Start_Date"]
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
         public IEnumerable<ContactRelationship> GetMyCurrentRelationships(int contactId, string token)
         {
             var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId,
@@ -64,7 +85,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public int AddRelationship(Relationship relationship )
+        public int AddRelationship(Relationship relationship, int toContact )
         {
             //var records = _ministryPlatformService.GetSubPageRecord("ContactRelationships",
             //                                          5337888,
@@ -79,9 +100,9 @@ namespace MinistryPlatform.Translation.Services
                     {"End_Date", relationship.EndDate}
                 };
                 return _ministryPlatformService.CreateSubRecord(_configurationWrapper.GetConfigIntValue("ContactRelationships"),
-                                                         _configurationWrapper.GetConfigIntValue("Contacts"),
+                                                         toContact,
                                                          dict,
-                                                         ApiLogin());
+                                                         ApiLogin(), true);
             }
             catch (Exception e)
             {
