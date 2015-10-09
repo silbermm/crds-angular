@@ -2,6 +2,9 @@
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
 
@@ -195,6 +198,12 @@ namespace crds_angular.Services
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)
         {
             return (_mpDonorService.GetRecurringGiftForSubscription(subscriptionId));  
+        }
+
+        public List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken)
+        {
+            var records = _mpDonorService.GetRecurringGiftsForAuthenticatedUser(userToken);
+            return records.Select(Mapper.Map<RecurringGift, RecurringGiftDto>).ToList();
         }
     }
 }
