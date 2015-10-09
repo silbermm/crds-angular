@@ -11,7 +11,7 @@
     vm.donation_history = false;
     vm.donation_view_ready = false;
 
-    vm.recurringGifts = [];
+    vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
 
@@ -31,7 +31,7 @@
       });
 
       RecurringGivingService.recurringGifts.query(function(data){
-        vm.recurringGifts = data;
+        vm.recurring_gifts = data;
         vm.recurring_giving_view_ready = true;
         vm.recurring_giving = true;
       }, function(/*error*/) {
