@@ -1,12 +1,8 @@
-﻿
-﻿using System;
+﻿﻿using System;
 ﻿using System.Collections.Generic;
-using crds_angular.Models.MP;
-using MinistryPlatform.Models;
-using Newtonsoft.Json;
-using Household = crds_angular.Models.MP.Household;
-using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
-
+﻿using MinistryPlatform.Models;
+﻿using Newtonsoft.Json;
+﻿using Address = crds_angular.Models.MP.Address;
 
 namespace crds_angular.Models
 {
@@ -111,6 +107,7 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "passportExpiration")]
         public DateTime PassportExpiration { get; set; }
 
+        public List<ContactAttribute> Attributes { get; set; }
 
         public MyContact GetContact()
         {
@@ -147,9 +144,9 @@ namespace crds_angular.Models
             };
         }
 
-        public MinistryPlatform.Models.Household GetHousehold()
+        public Household GetHousehold()
         {
-            return new MinistryPlatform.Models.Household
+            return new Household
             {
                 Household_ID = HouseholdId,
                 Home_Phone = HomePhone,
@@ -157,9 +154,9 @@ namespace crds_angular.Models
             };
         }
 
-        public crds_angular.Models.MP.Address GetAddress()
+        public Address GetAddress()
         {
-            return new crds_angular.Models.MP.Address
+            return new Address
             {
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,
