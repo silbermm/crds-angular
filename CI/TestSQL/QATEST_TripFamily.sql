@@ -185,9 +185,6 @@ set @currentContactId = IDENT_CURRENT('Contacts');
 DECLARE @contactID as int
 set @contactID = 100000002;
 
-DECLARE @contactID as int
-set @contactID = IDENT_CURRENT('Contacts')+1;
-
 INSERT INTO [dbo].Contacts 
 (Contact_ID,Company,Company_Name,Display_Name      ,Prefix_ID,First_Name,Middle_Name,Last_Name,Suffix_ID,Nickname ,Date_of_Birth   ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                    ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
 (@contactID,0      ,null        ,'Wallace, Marlene',null     ,'Marlene' ,null       ,'Wallace',null     ,'Marlene',{d '2001-01-01'},2        ,1                ,1                ,@houseHoldID,2                    ,null              ,null        ,'mpcrds+marlenewallace@gmail.com',null          ,0                 ,0               ,'123-548-4232',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
