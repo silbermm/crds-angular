@@ -172,7 +172,7 @@ namespace crds_angular.Services
             return (_mpDonorService.DecryptCheckValue(value));
         }
 
-        public int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
+        public int CreateRecurringGift(string authorizedUserToken, RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
             var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
 
@@ -186,7 +186,7 @@ namespace crds_angular.Services
                                                            contactDonor.ProcessorId);
             var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
            
-            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(contactDonor.DonorId,
+            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
                                                                 donorAccountId,
                                                                 recurringGiftDto.PlanInterval,
                                                                 recurringGiftDto.PlanAmount,
@@ -206,8 +206,8 @@ namespace crds_angular.Services
             var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
             var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
             var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? "week" : "month");
-            var changedDayOfWeek = (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek;
-            var changedDayOfMonth = editGift.StartDate.Day != existingGift.DayOfMonth;
+            var changedDayOfWeek = changedFrequency || (editGift.PlanInterval.Equals("week") && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
+            var changedDayOfMonth = changedFrequency || (editGift.PlanInterval.Equals("month") && editGift.StartDate.Day != existingGift.DayOfMonth);
             var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.Value.Date;
 
             var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
@@ -219,6 +219,8 @@ namespace crds_angular.Services
             if (changedPayment)
             {
                 var customer = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+
+                // TODO Need to change this to accept a user's token
                 donorAccountId = _mpDonorService.CreateDonorAccount(customer.brand,
                                                                     DonorRoutingNumberDefault,
                                                                     customer.last4,
@@ -244,7 +246,9 @@ namespace crds_angular.Services
                 }
 
                 // TODO Need to call an _mpDonorService.CancelRecurringGift method
-                recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(donor.DonorId,
+
+                recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
+                                                                            donor.DonorId,
                                                                             donorAccountId,
                                                                             editGift.PlanInterval,
                                                                             editGift.PlanAmount,

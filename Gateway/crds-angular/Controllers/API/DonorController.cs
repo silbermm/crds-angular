@@ -332,7 +332,7 @@ namespace crds_angular.Controllers.API
                 {
                     var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
-                    var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
+                    var recurringGift = _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
 
                     recurringGiftDto.EmailAddress = donor.Email;
                     recurringGiftDto.RecurringGiftId = recurringGift;
@@ -383,6 +383,21 @@ namespace crds_angular.Controllers.API
 
             }));
         }
+
+        /// <summary>
+        /// Cancel a recurring gift for the authenticated user.  This simply end-dates the gift, and cancels the subscription at Stripe.
+        /// </summary>
+        /// <param name="recurringGiftId">The recurring gift ID to delete in MinistryPlatform and Stripe.</param>
+        /// <returns>The RecurringGiftDto representing the gift that was deleted</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(RecurringGiftDto))]
+        [HttpDelete]
+        [Route("api/donor/recurrence/{recurringGiftId:int}")]
+        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId)
+        {
+            return (RestHttpActionResult<ApiErrorDto>.ServerError(new ApiErrorDto("CancelRecurringGift is not implemented")));
+        }
+
 
         /// <summary>
         /// Retrieve list of recurring gifts for the logged-in donor.

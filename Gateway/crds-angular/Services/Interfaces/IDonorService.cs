@@ -22,7 +22,7 @@ namespace crds_angular.Services.Interfaces
 
         string DecryptValues(string value);
 
-        int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contact);
+        int CreateRecurringGift(string authorizedUserToken, RecurringGiftDto recurringGiftDto, ContactDonor contact);
 
         RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor);
 

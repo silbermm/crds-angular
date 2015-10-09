@@ -42,8 +42,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// <summary>
         /// The date on which the recurring gift should end.
         /// </summary>
-        [JsonProperty(PropertyName = "end_date")]
-        public DateTime EndDate { get; set; }
+        [JsonProperty(PropertyName = "end_date", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTime? EndDate { get; set; }
         /// <summary>
         /// The email address of the donor.  This is not required or used on input, but will be returned on output.
         /// </summary>

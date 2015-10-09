@@ -638,7 +638,7 @@ namespace MinistryPlatform.Translation.Services
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
 
-        public int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
+        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
         {
             int? dayOfWeek = null;
             int? dayOfMonth = null;
@@ -668,11 +668,10 @@ namespace MinistryPlatform.Translation.Services
                 {"Subscription_ID", subscriptionId}
             };
 
-            var apiToken = ApiLogin();
             int recurringGiftId;
             try
             {
-                recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
+                recurringGiftId = _ministryPlatformService.CreateRecord(_myHouseholdDonationRecurringGifts, values, authorizedUserToken, true);
             }
             catch (Exception e)
             {
@@ -700,7 +699,7 @@ namespace MinistryPlatform.Translation.Services
                         DayOfWeek = record.ToInt("Day_Of_Week_ID"),
                         DayOfMonth = record.ToInt("Day_Of_Month"),
                         StartDate = record.ToDate("Start_Date"),
-                        Amount = record.ToInt("Amount"),
+                        Amount = (int)((record["Amount"] as decimal? ?? 0.00M) * Constants.StripeDecimalConversionValue),
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
@@ -766,10 +765,10 @@ namespace MinistryPlatform.Translation.Services
                 RecurringGiftId = record["Recurring_Gift_ID"] as int? ?? 0,
                 DonorID = record["Donor_ID"] as int? ?? 0,
                 EmailAddress = record["User_Email"] as string,
-                Frequency = record["Frequency"] as string,
+                Frequency = (record["Frequency"] as string ?? string.Empty).Trim(),
                 Recurrence = record["Recurrence"] as string,
                 StartDate = record["Start_Date"] as DateTime? ?? DateTime.Now,
-                EndDate = record["End_Date"] as DateTime? ?? DateTime.Now,
+                EndDate = record["End_Date"] as DateTime?,
                 Amount = record["Amount"] as decimal? ?? 0,
                 ProgramName = record["Program_Name"] as string,
                 CongregationName = record["Congregation_Name"] as string,
