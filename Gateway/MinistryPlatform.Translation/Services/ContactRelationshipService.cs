@@ -44,7 +44,8 @@ namespace MinistryPlatform.Translation.Services
 
         public IEnumerable<Relationship> GetMyCurrentRelationships(int contactId)
         {
-            var viewRecords = _ministryPlatformService.GetSubPageRecords(_configurationWrapper.GetConfigIntValue("ContactRelationships"), 
+            var blah = _configurationWrapper.GetConfigIntValue("ContactRelationshipsIds");
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(blah, 
                                                                          contactId, 
                                                                          ApiLogin());
             try
@@ -53,7 +54,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     RelationshipID = (int)viewRecord["Relationship_ID"],
                     RelatedContactID = (int)viewRecord["Related_Contact_ID"],
-                    EndDate = (DateTime)viewRecord["End_Date"],
+                    EndDate = (viewRecord["End_Date"] != null) ? viewRecord.ToDate("End_Date") : (DateTime?) null,
                     StartDate = (DateTime)viewRecord["Start_Date"]
                 }).ToList();
             }

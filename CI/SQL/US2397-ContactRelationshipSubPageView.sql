@@ -17,7 +17,7 @@ BEGIN
 			   ,'Relationships With IDs'
 			   ,265
 			   ,'Page View used to find/create relationships from CR.net'
-			   ,'Relationship_ID_Table.[Relationship_ID], Related_Contact_ID_Table.[Contact_ID]
+			   ,'Relationship_ID_Table.[Relationship_ID], Related_Contact_ID_Table.[Contact_ID] AS ''Related_Contact_ID''
 					, Related_Contact_ID_Table.[Nickname], Related_Contact_ID_Table.[Last_Name]
 					, Contact_Relationships.[Start_Date], Contact_Relationships.[End_Date]'
 			   ,'1=1'

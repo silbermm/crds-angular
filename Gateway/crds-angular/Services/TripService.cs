@@ -521,7 +521,7 @@ namespace crds_angular.Services
 
                 // Check if relationship exists...
                 var myRelationships = _contactRelationshipService.GetMyCurrentRelationships(dto.ContactId);
-                var rel = myRelationships.Where(r => r.Relationship_Id == _configurationWrapper.GetConfigIntValue("SponsoredChild") && r.Contact_Id == childId);
+                var rel = myRelationships.Where(r => r.RelationshipID == _configurationWrapper.GetConfigIntValue("SponsoredChild") && r.RelatedContactID == childId);
                 if (!rel.Any())
                 {
                     // Update the relationship
@@ -529,6 +529,7 @@ namespace crds_angular.Services
                     {
                         RelationshipID = _configurationWrapper.GetConfigIntValue("SponsoredChild"),
                         RelatedContactID = childId,
+                        StartDate = DateTime.Today
                     };
                     _contactRelationshipService.AddRelationship(relationship, dto.ContactId);     
                 }
