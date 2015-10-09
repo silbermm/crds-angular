@@ -16,6 +16,62 @@ describe('ProfileGivingController', function() {
     $provide.value('$state', {});
   }));
 
+  var mockRecurringGiftsRespons = [
+    {
+      amount: 1000,
+      recurrence: 'Fridays Weekly',
+      program: 'Crossroads',
+      source:
+      {
+        type: 'CreditCard',
+        brand: 'Visa',
+        last4: '1000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 1000',
+        expectedIcon: 'cc_visa'
+      }
+    },
+    {
+      amount: 2000,
+      recurrence: '8th Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'MasterCard',
+        last4: '2000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 2000',
+        expectedIcon: 'cc_mastercard'
+      }
+    },
+    {
+      amount: 3000,
+      recurrence: '30th Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'AmericanExpress',
+        last4: '3000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 3000',
+        expectedIcon: 'cc_american_express'
+      }
+    },
+    {
+      amount: 4000,
+      recurrence: '21st Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'Discover',
+        last4: '4000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 4000',
+        expectedIcon: 'cc_discover'
+      }
+    }
+  ];
+
   var mockDonationResponse =
   {
     donations: [
@@ -100,24 +156,39 @@ describe('ProfileGivingController', function() {
     it('should retrieve most recent giving year donations for current user', function() {
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3')
                              .respond(mockDonationResponse);
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence')
+                             .respond(mockRecurringGiftsRespons);
       httpBackend.flush();
 
       expect(sut.donation_history).toBeTruthy();
       expect(sut.donation_view_ready).toBeTruthy();
+      expect(sut.recurring_giving).toBeTruthy();
+      expect(sut.recurring_giving_view_ready).toBeTruthy();
 
       expect(sut.donations.length).toBe(3);
       expect(sut.donations[0].distributions[0].program_name).toEqual('Crossroads');
       expect(sut.donations[1].distributions[0].program_name).toEqual('Game Change');
       expect(sut.donations[2].distributions[0].program_name).toEqual('Beans & Rice');
+
+      expect(sut.recurring_gifts.length).toBe(4);
+      expect(sut.recurring_gifts[0].recurrence).toEqual('Fridays Weekly');
+      expect(sut.recurring_gifts[1].recurrence).toEqual('8th Monthly');
+      expect(sut.recurring_gifts[2].recurrence).toEqual('30th Monthly');
+      expect(sut.recurring_gifts[3].recurrence).toEqual('21st Monthly');
     });
 
     it('should not have history if there are no donations', function() {
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3').respond(404, {});
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence').respond(404, {});
       httpBackend.flush();
 
       expect(sut.donation_history).toBeFalsy();
       expect(sut.donation_view_ready).toBeTruthy();
       expect(sut.donations.length).toBe(0);
+
+      expect(sut.recurring_giving).toBeFalsy();
+      expect(sut.recurring_giving_view_ready).toBeTruthy();
+      expect(sut.recurring_gifts.length).toBe(0);
     });
   });
 });

@@ -38,6 +38,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _contactService = new Mock<IContactService>();
             _crypto = new Mock<ICryptoProvider>();
             _configuration = new Mock<IConfigurationWrapper>();
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdDonationRecurringGifts")).Returns(523);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donors")).Returns(299);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Donations")).Returns(297);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("Distributions")).Returns(296);
@@ -1178,6 +1179,116 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(donorAccountId, result);
 
+        }
+
+        [Test]
+        public void TestGetRecurringGiftsForAuthenticatedUser()
+        {
+            var records = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Recurring_Gift_ID", 123},
+                    {"Donor_ID", 123123},
+                    {"User_Email", "test@example.com"},
+                    {"Frequency", "Weekly"},
+                    {"Recurrence", "Fridays Weekly"},
+                    {"Start_Date", DateTime.Now},
+                    {"End_Date", DateTime.Now},
+                    {"Amount", 950.0M},
+                    {"Program_Name", "Beans & Rice"},
+                    {"Congregation_Name", "Upton"},
+                    {"Account_Type_ID", 3},
+                    {"Account_Number", "4433"},
+                    {"Institution_Name", "Visa"},
+                    {"Subscription_ID", "sub_77L7hDGjQdoxRE"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Recurring_Gift_ID", 124},
+                    {"Donor_ID", 123123},
+                    {"User_Email", "test@example.com"},
+                    {"Frequency", "Montly"},
+                    {"Recurrence", "8th Monthly"},
+                    {"Start_Date", DateTime.Now},
+                    {"End_Date", DateTime.Now},
+                    {"Amount", 190.0M},
+                    {"Program_Name", "Crossroads"},
+                    {"Congregation_Name", ""},
+                    {"Account_Type_ID", 1},
+                    {"Account_Number", "4093"},
+                    {"Institution_Name", "Bank"},
+                    {"Subscription_ID", "sub_77uaEIZLssR6xN"},
+                },
+                new Dictionary<string, object>
+                {
+                    {"Recurring_Gift_ID", 125},
+                    {"Donor_ID", 123123},
+                    {"User_Email", "test@example.com"},
+                    {"Frequency", "Weekly"},
+                    {"Recurrence", "Tuesdays Weekly"},
+                    {"Start_Date", DateTime.Now},
+                    {"End_Date", DateTime.Now},
+                    {"Amount", 50.0M},
+                    {"Program_Name", "Old St. George"},
+                    {"Congregation_Name", "General"},
+                    {"Account_Type_ID", 3},
+                    {"Account_Number", "1984"},
+                    {"Institution_Name", "American Express"},
+                    {"Subscription_ID", "sub_77L8qFUF6QFZsO"},
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordsDict(523, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(records);
+            var result = _fixture.GetRecurringGiftsForAuthenticatedUser("afdafsaaatewjrtjeretewtr");
+
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(records[0]["Recurring_Gift_ID"], result[0].RecurringGiftId);
+            Assert.AreEqual(records[0]["Donor_ID"], result[0].DonorID);
+            Assert.AreEqual(records[0]["User_Email"], result[0].EmailAddress);
+            Assert.AreEqual(records[0]["Frequency"], result[0].Frequency);
+            Assert.AreEqual(records[0]["Recurrence"], result[0].Recurrence);
+            Assert.AreEqual(records[0]["Start_Date"], result[0].StartDate);
+            Assert.AreEqual(records[0]["End_Date"], result[0].EndDate);
+            Assert.AreEqual(records[0]["Amount"], result[0].Amount);
+            Assert.AreEqual(records[0]["Program_Name"], result[0].ProgramName);
+            Assert.AreEqual(records[0]["Congregation_Name"], result[0].CongregationName);
+            Assert.AreEqual(records[0]["Account_Type_ID"], result[0].AccountTypeID);
+            Assert.AreEqual(records[0]["Account_Number"], result[0].AccountNumberLast4);
+            Assert.AreEqual(records[0]["Institution_Name"], result[0].InstitutionName);
+            Assert.AreEqual(records[0]["Subscription_ID"], result[0].SubscriptionID);
+
+            Assert.AreEqual(records[1]["Recurring_Gift_ID"], result[1].RecurringGiftId);
+            Assert.AreEqual(records[1]["Donor_ID"], result[1].DonorID);
+            Assert.AreEqual(records[1]["User_Email"], result[1].EmailAddress);
+            Assert.AreEqual(records[1]["Frequency"], result[1].Frequency);
+            Assert.AreEqual(records[1]["Recurrence"], result[1].Recurrence);
+            Assert.AreEqual(records[1]["Start_Date"], result[1].StartDate);
+            Assert.AreEqual(records[1]["End_Date"], result[1].EndDate);
+            Assert.AreEqual(records[1]["Amount"], result[1].Amount);
+            Assert.AreEqual(records[1]["Program_Name"], result[1].ProgramName);
+            Assert.AreEqual(records[1]["Congregation_Name"], result[1].CongregationName);
+            Assert.AreEqual(records[1]["Account_Type_ID"], result[1].AccountTypeID);
+            Assert.AreEqual(records[1]["Account_Number"], result[1].AccountNumberLast4);
+            Assert.AreEqual(records[1]["Institution_Name"], result[1].InstitutionName);
+            Assert.AreEqual(records[1]["Subscription_ID"], result[1].SubscriptionID);
+
+            Assert.AreEqual(records[2]["Recurring_Gift_ID"], result[2].RecurringGiftId);
+            Assert.AreEqual(records[2]["Donor_ID"], result[2].DonorID);
+            Assert.AreEqual(records[2]["User_Email"], result[2].EmailAddress);
+            Assert.AreEqual(records[2]["Frequency"], result[2].Frequency);
+            Assert.AreEqual(records[2]["Recurrence"], result[2].Recurrence);
+            Assert.AreEqual(records[2]["Start_Date"], result[2].StartDate);
+            Assert.AreEqual(records[2]["End_Date"], result[2].EndDate);
+            Assert.AreEqual(records[2]["Amount"], result[2].Amount);
+            Assert.AreEqual(records[2]["Program_Name"], result[2].ProgramName);
+            Assert.AreEqual(records[2]["Congregation_Name"], result[2].CongregationName);
+            Assert.AreEqual(records[2]["Account_Type_ID"], result[2].AccountTypeID);
+            Assert.AreEqual(records[2]["Account_Number"], result[2].AccountNumberLast4);
+            Assert.AreEqual(records[2]["Institution_Name"], result[2].InstitutionName);
+            Assert.AreEqual(records[2]["Subscription_ID"], result[2].SubscriptionID);
         }
     }
 }

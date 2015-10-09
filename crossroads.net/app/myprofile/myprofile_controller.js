@@ -5,6 +5,7 @@
 
     //METHODS
     _this.openModal = openModal;
+    _this.confirmPassword = confirmPassword;
 
     //VARIABLES
     _this.profileImage = "//crossroads-media.s3.amazonaws.com/images/avatar.svg";
@@ -37,6 +38,14 @@
       });
 
     };
+
+    function confirmPassword() {
+      var confirmPassword = $modal.open({
+        templateUrl: 'templates/confirmPassword.html',
+        controller: 'ConfirmPasswordCtrl as modal',
+        backdrop: true
+      });
+    }
 
   };
 })();

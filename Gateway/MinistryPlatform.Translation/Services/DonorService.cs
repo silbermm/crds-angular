@@ -28,6 +28,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _myHouseholdDonationDistributions;
         private readonly int _recurringGiftBySubscription;
         private readonly int _recurringGiftPageId;
+        private readonly int _myHouseholdDonationRecurringGifts;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -64,6 +65,7 @@ namespace MinistryPlatform.Translation.Services
             _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
             _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
+            _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
         }
 
 
@@ -710,6 +712,34 @@ namespace MinistryPlatform.Translation.Services
             }
 
            return createDonation;
+        }
+
+        public List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken)
+        {
+            var records = _ministryPlatformService.GetRecordsDict(_myHouseholdDonationRecurringGifts, userToken);
+            return records.Select(MapRecordToRecurringGift).ToList();
+        }
+
+        // ReSharper disable once FunctionComplexityOverflow
+        private RecurringGift MapRecordToRecurringGift(Dictionary<string, object> record)
+        {
+            return new RecurringGift
+            {
+                RecurringGiftId = record["Recurring_Gift_ID"] as int? ?? 0,
+                DonorID = record["Donor_ID"] as int? ?? 0,
+                EmailAddress = record["User_Email"] as string,
+                Frequency = record["Frequency"] as string,
+                Recurrence = record["Recurrence"] as string,
+                StartDate = record["Start_Date"] as DateTime? ?? DateTime.Now,
+                EndDate = record["End_Date"] as DateTime? ?? DateTime.Now,
+                Amount = record["Amount"] as decimal? ?? 0,
+                ProgramName = record["Program_Name"] as string,
+                CongregationName = record["Congregation_Name"] as string,
+                AccountTypeID = record["Account_Type_ID"] as int? ?? 0,
+                AccountNumberLast4 = record["Account_Number"] as string,
+                InstitutionName = record["Institution_Name"] as string,
+                SubscriptionID = record["Subscription_ID"] as string,
+            };
         }
     }
 

@@ -6,9 +6,9 @@ using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
-using Attribute = MinistryPlatform.Models.Attribute;
 using RoleDTO = MinistryPlatform.Models.DTO.RoleDto;
 
 namespace MinistryPlatform.Translation.Services
@@ -31,15 +31,15 @@ namespace MinistryPlatform.Translation.Services
                 Id = (int) record["Role_ID"], Name = (string) record["Role_Name"]
             }).ToList();
         }
-        public static List<Attribute> GetMyAttributes(int recordId, string token)
+        public static List<ContactAttribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
             var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, recordId, token);
-            var attributes = new List<Attribute>();
+            var attributes = new List<ContactAttribute>();
 
             foreach (var record in subPageRecords)
             {
-                var attribute = new Attribute
+                var attribute = new ContactAttribute
                 {
                     Attribute_Name = (string) record["Attribute_Name"],
                     Attribute_Type = (string) record["Attribute_Type"],
@@ -54,7 +54,7 @@ namespace MinistryPlatform.Translation.Services
             return attributes;
         }
 
-        public static int CreateAttribute(Attribute attribute, int parentRecordId, string token)
+        public static int CreateAttribute(ContactAttribute attribute, int parentRecordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
             var platformServiceClient = new PlatformServiceClient();
