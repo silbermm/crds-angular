@@ -86,7 +86,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Description]          
            ,[View_Clause] )
      VALUES
-           (92241
+           (2183
 		   ,'Recurring Gifts'
 		   ,297
            ,'This view will display donations associated with a recurring gift'
@@ -107,7 +107,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Description]          
            ,[View_Clause] )
      VALUES
-           (92242
+           (2184
 		   ,'One-Time Gifts'
 		   ,297
            ,'This view will display donations associated with a one-time gift'

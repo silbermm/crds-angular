@@ -12,7 +12,19 @@
       <div class="row recurring-gifts push-bottom">
         <div class="col-sm-12">
           <h2>Recurring Gifts</h2>
-          <hr>
+          <preloader full-screen='false' ng-show="!giving_profile_controller.recurring_giving_view_ready"> </preloader>
+
+          <!-- IS RECURRING GIVING - ng-show or ng-if on data from resource-->
+          <div ng-show="giving_profile_controller.recurring_giving && giving_profile_controller.recurring_giving_view_ready">
+            <div class="row">
+              <div class="col-lg-12">
+                <recurring-giving-list
+                  recurring-gifts-input="giving_profile_controller.recurring_gifts">
+                </recurring-giving-list>
+              </div>
+            </div>
+          </div>
+          <!-- END OF IS GIVING HISTORY -->
 
           <div class="row">
             <div class="col-sm-12 text-center">
@@ -91,9 +103,6 @@
     <!--/col-sm-12-->
   </div>
   <!--/row-->
-
-  <ng-include src="'templates/profile_giving_edit_modal.html'"></ng-include>
-  <ng-include src="'templates/profile_giving_remove_modal.html'"></ng-include>
 
 </div>
 <!--/profile-giving-->

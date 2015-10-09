@@ -1,9 +1,14 @@
 (function() {
   'use strict()';
 
-  var module = 'crossroads.profile';
+  var constants = require('../../constants');
 
   require('./profile_giving.html');
-  angular.module(module).controller('ProfileGivingController', require('./profile_giving.controller'));
+  require('./recurring/templates/recurring_giving_list.html');
+
+  var app = angular.module(constants.MODULES.PROFILE);
+  app.controller('ProfileGivingController', require('./profile_giving.controller'));
+  app.factory('RecurringGivingService', require('./recurring/recurring_giving.service'));
+  app.directive('recurringGivingList', require('./recurring/recurring_giving_list.directive'));
 
 })();

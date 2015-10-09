@@ -90,6 +90,7 @@
     <Compile Include="PrivateInvite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecurringGift.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
