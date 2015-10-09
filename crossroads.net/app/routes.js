@@ -141,7 +141,7 @@
           parent: 'noSideBar',
           url: '/profile',
           templateUrl: 'personal/profilePersonal.template.html',
-          controller: 'ProfilePersonalController as profilePersonalController',
+          controller: 'ProfilePersonalController as profile',
           data: {
             isProtected: true,
             meta: {
