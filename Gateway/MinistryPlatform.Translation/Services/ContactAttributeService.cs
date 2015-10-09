@@ -19,14 +19,14 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public List<ContractAttribute> GetCurrentContractAttributes(int contactId)
+        public List<ContactAttribute> GetCurrentContractAttributes(int contactId)
         {
             var token = ApiLogin();
             var records = _ministryPlatformService.GetSubpageViewRecords("SelectedContactAttributes", contactId, token);
 
-            var contractAttributes = records.Select(record => new ContractAttribute
+            var contractAttributes = records.Select(record => new ContactAttribute
             {
-                ContractAttributeId = record.ToInt("Contact_Attribute_ID"),                
+                ContactAttributeId = record.ToInt("Contact_Attribute_ID"),                
                 StartDate = record.ToDate("Start_Date"),
                 EndDate = record.ToNullableDate("End_Date"),
                 Notes = record.ToString("Notes"),

@@ -74,7 +74,7 @@ namespace crds_angular.Services
             var attributes = GetMyRecords.GetMyAttributes(recordId, token);
 
             var skills =
-                Mapper.Map<List<ContactAttribute>, List<Skill>>(attributes);
+                Mapper.Map<List<SkillAttribute>, List<Skill>>(attributes);
 
             return skills;
         }
