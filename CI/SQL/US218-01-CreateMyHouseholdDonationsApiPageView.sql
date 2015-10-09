@@ -32,7 +32,8 @@ BEGIN
           , Program_ID_Table.[Program_ID]
           , Congregation_ID_Table.[Congregation_ID]
           , Donor_Account_ID_Table.[Donor_Account_ID]
-          , Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]'
+          , Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]
+          , Recurring_Gifts.[Subscription_ID]'
         ,'1 = 1'
         ,NULL
         ,NULL

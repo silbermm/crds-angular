@@ -202,12 +202,72 @@ namespace crds_angular.Services
 
             // Assuming payment info is changed if a token is given.
             var changedPayment = !string.IsNullOrWhiteSpace(editGift.StripeTokenId);
+
             var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
             var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
             var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? "week" : "month");
+            var changedDayOfWeek = (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek;
+            var changedDayOfMonth = editGift.StartDate.Day != existingGift.DayOfMonth;
+            var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.Value.Date;
 
-            // TODO Implement edit recurring gift
-            throw new NotImplementedException();
+            var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
+            var needsNewMpRecurringGift = changedAmount || changedProgram || needsNewStripePlan;
+
+            var recurringGiftId = existingGift.RecurringGiftId;
+
+            int donorAccountId;
+            if (changedPayment)
+            {
+                var customer = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+                donorAccountId = _mpDonorService.CreateDonorAccount(customer.brand,
+                                                                    DonorRoutingNumberDefault,
+                                                                    customer.last4,
+                                                                    existingGift.DonorId,
+                                                                    customer.id,
+                                                                    donor.ProcessorId);
+                // TODO Need to call an _mpDonorService.UpdateRecurringGift method
+            }
+            else
+            {
+                donorAccountId = existingGift.DonorAccountId.Value;
+            }
+
+            var stripeSubscription = new StripeSubscription {Id = existingGift.SubscriptionId};
+;
+            if (needsNewMpRecurringGift)
+            {
+                if (needsNewStripePlan)
+                {
+                    // TODO Need to call a _paymentService.CancelPlan and _paymentService.CancelSubscription
+                    var plan = _paymentService.CreatePlan(editGift, donor);
+                    stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
+                }
+
+                // TODO Need to call an _mpDonorService.CancelRecurringGift method
+                recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(donor.DonorId,
+                                                                            donorAccountId,
+                                                                            editGift.PlanInterval,
+                                                                            editGift.PlanAmount,
+                                                                            editGift.StartDate,
+                                                                            editGift.Program,
+                                                                            stripeSubscription.Id);
+
+            }
+
+            var newGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.Value);
+
+            var newRecurringGift = new RecurringGiftDto
+            {
+                RecurringGiftId = newGift.RecurringGiftId.Value,
+                StartDate = newGift.StartDate.Value,
+                PlanAmount = newGift.Amount,
+                PlanInterval = newGift.Frequency == 1 ? "week" : "month",
+                Program = newGift.ProgramId,
+                DonorID = newGift.DonorId,
+                EmailAddress = donor.Email,
+                SubscriptionID = stripeSubscription.Id
+            };
+            return (newRecurringGift);
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)

@@ -15,5 +15,6 @@ namespace MinistryPlatform.Models.DTO
         public int? DayOfWeek { get; set; }
         public int? DayOfMonth { get; set; }
         public DateTime? StartDate { get; set; }
+        public string SubscriptionId { get; set; }
     }
 }

@@ -106,6 +106,16 @@ namespace crds_angular.Services
             return response.Data;
         }
 
+        public StripeCustomer GetCustomer(string customerId)
+        {
+            var request = new RestRequest(string.Format("/customers/{0}", customerId));
+
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer creation failed", response);
+
+            return response.Data;
+        }
+
         public string CreateToken(string accountNumber, string routingNumber)
         {
             var request = new RestRequest("tokens", Method.POST);
