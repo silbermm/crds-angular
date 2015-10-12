@@ -1079,7 +1079,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(45243, expectedParms, It.IsAny<string>(), true)).Returns(recurringGiftId);
 
-            var result = _fixture.CreateRecurringGiftRecord(donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
+            var result = _fixture.CreateRecurringGiftRecord("auth", donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
             _ministryPlatformService.VerifyAll();
 
             Assert.AreEqual(recurringGiftId, result);

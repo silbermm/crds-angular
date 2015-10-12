@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
+using RestSharp.Extensions;
 
 namespace crds_angular.test.Services
 {
@@ -272,14 +273,14 @@ namespace crds_angular.test.Services
             paymentService.Setup(mocked => mocked.CreateSubscription(stripePlan.Id, contactDonor.ProcessorId)).Returns(stripeSubscription);
             mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateRecurringGiftRecord(contactDonor.DonorId,
+                    mocked.CreateRecurringGiftRecord("auth", contactDonor.DonorId,
                                                      donorAccountId,
                                                      recurringGiftDto.PlanInterval,
                                                      recurringGiftDto.PlanAmount,
                                                      recurringGiftDto.StartDate,
                                                      recurringGiftDto.Program,
                                                      stripeSubscription.Id)).Returns(recurringGiftId);
-            var response = fixture.CreateRecurringGift(recurringGiftDto, contactDonor);
+            var response = fixture.CreateRecurringGift("auth", recurringGiftDto, contactDonor);
             paymentService.VerifyAll();
             mpDonorService.VerifyAll();
             Assert.AreEqual(recurringGiftId, response);
@@ -312,7 +313,7 @@ namespace crds_angular.test.Services
                     RecurringGiftId = 124,
                     DonorID = 123123,
                     EmailAddress = "test@example.com",
-                    Frequency = "Montly",
+                    Frequency = "Monthly",
                     Recurrence = "8th Monthly",
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now,
@@ -352,7 +353,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[0].RecurringGiftId, result[0].RecurringGiftId);
             Assert.AreEqual(records[0].DonorID, result[0].DonorID);
             Assert.AreEqual(records[0].EmailAddress, result[0].EmailAddress);
-            Assert.AreEqual(records[0].Frequency, result[0].PlanInterval);
+            Assert.AreEqual(records[0].Frequency.Matches("^.*Weekly") ? "week" : "month", result[0].PlanInterval);
             Assert.AreEqual(records[0].Recurrence, result[0].Recurrence);
             Assert.AreEqual(records[0].StartDate, result[0].StartDate);
             Assert.AreEqual(records[0].EndDate, result[0].EndDate);
@@ -367,7 +368,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[1].RecurringGiftId, result[1].RecurringGiftId);
             Assert.AreEqual(records[1].DonorID, result[1].DonorID);
             Assert.AreEqual(records[1].EmailAddress, result[1].EmailAddress);
-            Assert.AreEqual(records[1].Frequency, result[1].PlanInterval);
+            Assert.AreEqual(records[1].Frequency.Matches("^.*Weekly") ? "week" : "month", result[1].PlanInterval);
             Assert.AreEqual(records[1].Recurrence, result[1].Recurrence);
             Assert.AreEqual(records[1].StartDate, result[1].StartDate);
             Assert.AreEqual(records[1].EndDate, result[1].EndDate);
@@ -382,7 +383,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[2].RecurringGiftId, result[2].RecurringGiftId);
             Assert.AreEqual(records[2].DonorID, result[2].DonorID);
             Assert.AreEqual(records[2].EmailAddress, result[2].EmailAddress);
-            Assert.AreEqual(records[2].Frequency, result[2].PlanInterval);
+            Assert.AreEqual(records[2].Frequency.Matches("^.*Weekly") ? "week" : "month", result[2].PlanInterval);
             Assert.AreEqual(records[2].Recurrence, result[2].Recurrence);
             Assert.AreEqual(records[2].StartDate, result[2].StartDate);
             Assert.AreEqual(records[2].EndDate, result[2].EndDate);
