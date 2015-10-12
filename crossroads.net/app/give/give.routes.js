@@ -32,20 +32,26 @@
             }).$promise;
           },
 
-          giveType: function($location) {
-            if ($location.search().recurring !== undefined) {
-              if (!!$location.search().recurring) {
-                return 'month';
-              } else {
-                return 'one_time';
-              }
-            }
+          OneTimeGiving: 'OneTimeGiving',
+          giveService: function(OneTimeGiving) {
+            OneTimeGiving.resetGiveTransferServiceGiveType();
+            return OneTimeGiving;
           }
         },
         data: {
           meta: {
             title: 'Give',
             description: ''
+          }
+        }
+      })
+      .state('give.recurring', {
+        controller: 'GiveController as give',
+        resolve: {
+          RecurringGiving: 'RecurringGiving',
+          giveService: function(RecurringGiving) {
+            RecurringGiving.resetGiveTransferServiceGiveType();
+            return RecurringGiving;
           }
         }
       })

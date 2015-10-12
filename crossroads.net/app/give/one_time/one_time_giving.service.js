@@ -7,6 +7,7 @@
 
   function OneTimeGiving(GiveTransferService, DonationService, GiveFlow, Session, $state) {
     var service = {
+      name: 'OneTimeGiving',
       initDefaultState: initDefaultState,
       goToAccount: goToAccount,
       stateName: stateName,
@@ -18,6 +19,7 @@
       processChange: processChange,
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
       resetGiveFlow: resetGiveFlow,
+      resetGiveTransferServiceGiveType: resetGiveTransferServiceGiveType,
     };
 
     function initDefaultState() {
@@ -26,6 +28,7 @@
 
       resetGiveFlow();
       GiveTransferService.initialized = true;
+      GiveTransferService.givingType = 'one_time';
 
       Session.removeRedirectRoute();
       $state.go(GiveFlow.amount);
@@ -41,6 +44,10 @@
         change: 'give.one_time_change',
         thankYou: 'give.one_time_thank-you'
       });
+    }
+
+    function resetGiveTransferServiceGiveType() {
+      GiveTransferService.givingType = 'one_time';
     }
 
     function stateName(state) {
