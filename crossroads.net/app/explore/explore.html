@@ -42,6 +42,7 @@ $(document).ready(function() {
         //Fade in content
         exploreTweens['opening_bg'] = tweenFadeBg('.opening', .1);
         exploreTweens['opening_fades'] = tweenFade('.opening', .8);
+        exploreTweens['opening_home'] = tweenFadeUp('.opening', 3);
       }
       if (index == 2) {
         //Map names and flags come in
@@ -213,13 +214,91 @@ $(document).ready(function() {
           }
       }
   });
+
+  $(".meet-scroll-top").click(function() {
+      $.fn.fullpage.moveTo(1, 2);
+  });
+
+  $(".opening-scroll-down").click(function() {
+      $.fn.fullpage.moveTo(2, 2);
+  });
+
+  $(".map .explore-up").click(function() {
+      $.fn.fullpage.moveTo(1, 2);
+  });
+
+  $(".map .explore-down").click(function() {
+      $.fn.fullpage.moveTo(3, 2);
+  });
+
+  $(".kidsclub .explore-up").click(function() {
+      $.fn.fullpage.moveTo(2, 2);
+  });
+
+  $(".kidsclub .explore-down").click(function() {
+      $.fn.fullpage.moveTo(4, 2);
+  });
+
+  $(".studentministry .explore-up").click(function() {
+      $.fn.fullpage.moveTo(3, 2);
+  });
+
+  $(".studentministry .explore-down").click(function() {
+      $.fn.fullpage.moveTo(5, 2);
+  });
+
+  $(".coffee .explore-up").click(function() {
+      $.fn.fullpage.moveTo(4, 2);
+  });
+
+  $(".coffee .explore-down").click(function() {
+      $.fn.fullpage.moveTo(6, 2);
+  });
+
+  $(".drums .explore-up").click(function() {
+      $.fn.fullpage.moveTo(5, 2);
+  });
+
+  $(".drums .explore-down").click(function() {
+      $.fn.fullpage.moveTo(7, 2);
+  });
+
+  $(".clothes .explore-up").click(function() {
+      $.fn.fullpage.moveTo(6, 2);
+  });
+
+  $(".clothes .explore-down").click(function() {
+      $.fn.fullpage.moveTo(8, 2);
+  });
+
+  $(".photos .explore-up").click(function() {
+      $.fn.fullpage.moveTo(7, 2);
+  });
+
+  $(".photos .explore-down").click(function() {
+      $.fn.fullpage.moveTo(9, 2);
+  });
+
+  $(".meet .explore-up").click(function() {
+      $.fn.fullpage.moveTo(8, 2);
+  });
 });
 </script>
 
 <div id="fullpage" class="explore">
-
   <section class="section opening">
     <div class="img-background slide-bg fade-bg" ></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 push-top">
+          <a href="/" class="explore-home rise10 trans1000">
+            <svg viewBox="0 0 32 32" class="icon home2 icon-xlarge">
+              <use xlink:href="#home2"></use>
+            </svg>
+          </a>
+        </div><!--/col-sm-12-->
+      </div><!--/row-->
+    </div> <!--/container-->
     <div class="vertical-center">
       <div class="container">
         <div class="row">
@@ -236,8 +315,7 @@ $(document).ready(function() {
               <span class="fade trans800">WHO</span>
               <span class="fade trans800">DIDN'T</span>
               <span class="fade trans800">LIKE</span>
-              <span class="fade trans800">CHURCH</span>
-              <span class="fade trans800">.</span>
+              <span class="fade trans800">CHURCH.</span>
             </h2>
             <p class="opening-desc fade trans800">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing it.</p>
             <p class="opening-more fade trans800">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
@@ -245,9 +323,29 @@ $(document).ready(function() {
         </div><!--/row-->
       </div><!--/container-->
     </div><!--/vertical-center-->
+    <a href="" class="opening-scroll-down fade trans800">
+      <svg viewBox="0 0 32 32" class="icon icon-arrow-down9 icon-xlarge">
+      	<use xlink:href="#arrow-down9"></use>
+      </svg>
+    </a>
+    <img data-src="http://crossroads-media.s3.amazonaws.com/images/explore/kidsclub/explore_kidsclub_bubble.png" class="preload-bubble" />
   </section><!--/opening-->
 
   <section class="section map">
+
+      <div class="explore-nav">
+        <a href="" class="explore-up">
+          <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          	<use xlink:href="#arrow-up9"></use>
+          </svg>
+        </a>
+        <a href="" class="explore-down">
+          <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          	<use xlink:href="#arrow-down10"></use>
+          </svg>
+        </a>
+      </div><!--/explore-nav-->
+
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
@@ -282,6 +380,20 @@ $(document).ready(function() {
   </section><!--/map-->
 
   <section class="section kidsclub">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="container">
       <div class="row">
         <div class="col-sm-6 push-top mobile-flush-top">
@@ -290,7 +402,7 @@ $(document).ready(function() {
         </div><!--/col-sm-3-->
       </div><!--/row-->
       <div class="row">
-        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">
+        <div class="col-xs-6 col-xs-offset-3 col-sm-6 col-sm-offset-3 hard-sides">
           <img class="img-responsive kc-logo push-top" data-src="http://crossroads-media.imgix.net/images/explore/kidsclub/explore_kidsclub_logo.png" alt="Kids Club" >
         </div><!--/col-sm-6-->
       </div><!--/row-->
@@ -302,6 +414,20 @@ $(document).ready(function() {
   </section>
 
   <section class="section studentministry">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/studentministry/explore_studentministry_bg.jpg"></div>
     <div class="vertical-center">
       <div class="container">
@@ -316,6 +442,20 @@ $(document).ready(function() {
   </section>
 
   <section class="section coffee">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="vertical-20">
       <div class="container">
         <div class="row">
@@ -338,6 +478,20 @@ $(document).ready(function() {
   </section>
 
   <section class="section drums">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="imgix-fluid-bg img-background slide-bg fade-bg trans1500" data-src="http://crossroads-media.imgix.net/images/explore/drums/explore_drums_bg.jpg"></div>
     <div class="vertical-80">
       <div class="container">
@@ -352,6 +506,20 @@ $(document).ready(function() {
   </section>
 
   <section class="section clothes">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="vertical-20">
       <div class="container">
         <div class="row">
@@ -370,6 +538,21 @@ $(document).ready(function() {
   </section>
 
   <section class="section photos">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+      <a href="" class="explore-down">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-down10"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
+
     <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/photos/explore_photos_bg.jpg"></div>
     <img data-src="http://crossroads-media.s3.amazonaws.com/images/explore/photos/explore_camera.jpg" class="camera" />
     <div class="photo-copy-container">
@@ -394,6 +577,15 @@ $(document).ready(function() {
   </section>
 
   <section class="section meet">
+
+    <div class="explore-nav">
+      <a href="" class="explore-up">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-up9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+      </a>
+    </div><!--/explore-nav-->
+
     <div class="vertical-20">
       <div class="container">
         <div class="row">
@@ -422,12 +614,24 @@ $(document).ready(function() {
                     <use xlink:href="#instagram"></use>
                   </svg>
                 </a>
-              </div>
-            </div>
-          </div>
+              </div><!--/meet-social-->
+            </div><!--/meet-container-->
+          </div><!--/col-sm-12-->
         </div>
       </div>
     </div>
+    <div class="col-sm-12 text-center push-top meet-scroll-top-cont">
+      <a href="" class="meet-scroll-top">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-down9 icon-xlarge">
+          <use xlink:href="#arrow-up9"></use>
+        </svg>
+        <span class="small-heading">
+        Back to top
+        </span>
+      </a>
+    </div><!--/col-sm-12-->
   </section>
+
+
 
 </div><!--/explore-->
