@@ -169,6 +169,26 @@ namespace crds_angular.Services
             return sourceData;
         }
 
+        public StripeSubscription CancelSubscription(string customerId, string subscriptionId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.DELETE);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Stripe Subscription Cancel failed", response);
+
+            return (response.Data);
+        }
+
+        public StripePlan CancelPlan(string planId)
+        {
+            var request = new RestRequest(string.Format("plans/{0}", planId), Method.DELETE);
+
+            var response = _stripeRestClient.Execute<StripePlan>(request);
+            CheckStripeResponse("Stripe Plan Cancel failed", response);
+
+            return (response.Data);
+        }
+
         public string UpdateCustomerDescription(string customerToken, int donorId)
         {
             var request = new RestRequest("customers/" + customerToken, Method.POST);

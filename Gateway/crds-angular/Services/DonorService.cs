@@ -235,18 +235,19 @@ namespace crds_angular.Services
             }
 
             var stripeSubscription = new StripeSubscription {Id = existingGift.SubscriptionId};
-;
+
             if (needsNewMpRecurringGift)
             {
                 if (needsNewStripePlan)
                 {
-                    // TODO Need to call a _paymentService.CancelPlan and _paymentService.CancelSubscription
+                    var subscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
+                    _paymentService.CancelPlan(subscription.Plan.Id);
+
                     var plan = _paymentService.CreatePlan(editGift, donor);
                     stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
                 }
 
                 // TODO Need to call an _mpDonorService.CancelRecurringGift method
-
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
                                                                             donor.DonorId,
                                                                             donorAccountId,

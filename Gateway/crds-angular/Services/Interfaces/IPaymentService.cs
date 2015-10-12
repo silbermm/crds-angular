@@ -22,5 +22,7 @@ namespace crds_angular.Services.Interfaces
         StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
         StripeSubscription CreateSubscription(string planName, string customer);
         StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);
+        StripeSubscription CancelSubscription(string customerId, string subscriptionId);
+        StripePlan CancelPlan(string planId);
     }
 }
