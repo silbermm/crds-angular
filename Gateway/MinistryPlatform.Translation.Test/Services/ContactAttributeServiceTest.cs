@@ -16,22 +16,22 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configWrapper;
-        
+
         [SetUp]
         public void SetUp()
-        {      
+        {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _authService = new Mock<IAuthenticationService>();
             _configWrapper = new Mock<IConfigurationWrapper>();
 
-            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
-            _fixture = new ContactAttributeService(_authService.Object,_configWrapper.Object, _ministryPlatformService.Object);
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
+            _fixture = new ContactAttributeService(_authService.Object, _configWrapper.Object, _ministryPlatformService.Object);
         }
 
         [Test]
         public void GetContactAttributes()
         {
-            const int contactId = 123456;            
+            const int contactId = 123456;
 
             //mock GetSubpageViewRecords
             var getSubpageViewRecordsResponse = new List<Dictionary<string, object>>
@@ -74,7 +74,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("These are my notes", attribute.Notes);
             Assert.AreEqual(2, attribute.AttributeId);
             Assert.AreEqual(3, attribute.AttributeTypeId);
-            
+
             attribute = attributes[1];
             Assert.AreEqual(4, attribute.ContactAttributeId);
             Assert.AreEqual(new DateTime(2015, 11, 11), attribute.StartDate);
