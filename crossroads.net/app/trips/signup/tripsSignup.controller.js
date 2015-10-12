@@ -291,10 +291,10 @@
 
     function requireInternational() {
       if (vm.destination === 'NOLA') {
-        return 'false';
+        return false;
       }
 
-      return 'true';
+      return true;
     }
 
     function saveData() {

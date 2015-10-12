@@ -4,7 +4,7 @@ require('../../../app/trips/trips.module');
 
 var tripHelpers = require('../trips.helpers');
 
-describe('GOTrip Signup Application Controller', function() {
+describe('GOTrip NOLA Signup Application Controller', function() {
   var controller;
   var mockSession;
   var $rootScope;
@@ -19,7 +19,7 @@ describe('GOTrip Signup Application Controller', function() {
   beforeEach(angular.mock.module('crossroads.trips'));
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('Campaign', tripHelpers.Campaign);
+    $provide.value('Campaign', tripHelpers.Nola);
     $provide.value('WorkTeams', tripHelpers.WorkTeams);
     $provide.value('contactId', 123456);
     $provide.value('Person', tripHelpers.Person);
@@ -36,7 +36,7 @@ describe('GOTrip Signup Application Controller', function() {
   beforeEach(inject(function(_$controller_, _$log_, $injector, _MESSAGES_) {
     $rootScope = $injector.get('$rootScope');
     MESSAGES = _MESSAGES_;
-    MESSAGES.NicaraguaSignUpThankYou = 1;
+    MESSAGES.NOLASignUpThankYou = 1;
     $scope = $rootScope.$new();
     controller = _$controller_('TripsSignupController', {$scope: $scope});
     $log = _$log_;
@@ -46,24 +46,24 @@ describe('GOTrip Signup Application Controller', function() {
     AUTH_EVENTS = $injector.get('AUTH_EVENTS');
   }));
 
-  it('should have correct destination of Nicaragua', function() {
-    expect(controller.destination).toBe('Nicaragua');
+  it('should have correct destination of NOLA', function() {
+    expect(controller.destination).toBe('NOLA');
   });
 
-  it('should set nicaRequired to required', function() {
-    expect(controller.nicaRequired()).toBe('required');
+  it('should set nolaRequired to required', function() {
+    expect(controller.nolaRequired()).toBe(true);
   });
 
-  it('should set nolaRequired to empty string', function() {
-    expect(controller.nolaRequired()).toBe('');
+  it('should set nicaRequired to empty string', function() {
+    expect(controller.nicaRequired()).toBe(false);
   });
 
-  it('should set requireInternational to true', function() {
-    expect(controller.requireInternational()).toBe('true');
+  it('should set requireInternational to false', function() {
+    expect(controller.requireInternational()).toBe(false);
   });
 
-  it('should set numberOfPages to 4', function() {
-    expect(controller.numberOfPages).toBe(6);
+  it('should set numberOfPages to 5', function() {
+    expect(controller.numberOfPages).toBe(5);
   });
 
 });

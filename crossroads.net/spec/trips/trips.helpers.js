@@ -101,7 +101,7 @@ module.exports = {
     campaignName: 'test campaign',
     pledgeDonorId: 23232323
   },
-  Campaign: {
+  Nicaragua: {
     id: 181,
     name: '2015 December GO Nicaragua',
     formId: 22,
@@ -109,6 +109,16 @@ module.exports = {
     ageLimit: 8,
     registrationStart: '2015-05-20T00:00:00',
     registrationEnd: '2015-08-31T00:00:00',
+    ageExceptions: []
+  },
+  Nola: {
+    id: 179,
+    name: '2015 December GO NOLA',
+    formId: 21,
+    nickname: 'NOLA',
+    ageLimit: 8,
+    registrationStart: '2015-05-20T00:00:00',
+    registrationEnd: '2015-12-21T00:00:00',
     ageExceptions: []
   },
   WorkTeams: [
