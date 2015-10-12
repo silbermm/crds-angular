@@ -50,12 +50,12 @@ describe('GOTrip NOLA Signup Application Controller', function() {
     expect(controller.destination).toBe('NOLA');
   });
 
-  it('should set nolaRequired to required', function() {
-    expect(controller.nolaRequired()).toBe(true);
+  it('should set isNola to required', function() {
+    expect(controller.isNola()).toBe(true);
   });
 
-  it('should set nicaRequired to empty string', function() {
-    expect(controller.nicaRequired()).toBe(false);
+  it('should set isNica to empty string', function() {
+    expect(controller.isNica()).toBe(false);
   });
 
   it('should set requireInternational to false', function() {
