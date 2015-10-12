@@ -12,6 +12,7 @@ namespace MinistryPlatform.Models
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public decimal Amount { get; set; }
+        public int ProgramID { get; set; }
         public string ProgramName { get; set; }
         public string CongregationName { get; set; }
         public int AccountTypeID { get; set; }
