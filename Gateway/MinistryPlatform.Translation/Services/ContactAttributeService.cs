@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Crossroads.Utilities.Interfaces;
+using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
-using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -13,7 +14,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _contactAttributesSubPage = Convert.ToInt32((AppSettings("ContactAttributesSubPage")));
-
+        private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ContactAttributeService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService)
             : base(authenticationService, configurationWrapper)
@@ -40,33 +41,14 @@ namespace MinistryPlatform.Translation.Services
 
         public void SaveContactAttributes(int contactId, List<ContactAttribute> contactAttributes)
         {
-            var token = ApiLogin();
+            var token = ApiLogin();       
             var attributesToSave = contactAttributes.ToList();
 
             // Get current list of attributes
             var attributesPersisted = GetCurrentContactAttributes(contactId);
 
             // Remove all matches from list, since there is nothing to do with them
-            for (int index = attributesToSave.Count - 1; index >= 0; index--)
-            {
-                var attribute = attributesToSave[index];
-
-                for (int currentIndex = attributesPersisted.Count - 1; currentIndex >= 0; currentIndex--)
-                {
-                    var currentAttribute = attributesPersisted[currentIndex];
-                    
-                    if (currentAttribute.ContactAttributeId == attribute.ContactAttributeId)
-                    {
-                        // match by Id
-                        // TODO: Do we need to look at other fields here like attribute.AttributeId & attribute.AttributeTypeId
-                        // Or would a Contains be more correct and remove the looping?
-                        
-                        attributesPersisted.RemoveAt(currentIndex);
-                        attributesToSave.RemoveAt(index);
-                        break;
-                    }
-                }
-            }
+            RemoveMatchesFromBothLists(attributesToSave, attributesPersisted);
 
             foreach (var attribute in attributesToSave)
             {
@@ -82,6 +64,30 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
+        private void RemoveMatchesFromBothLists(List<ContactAttribute> attributesToSave, List<ContactAttribute> attributesPersisted)
+        {
+            for (int index = attributesToSave.Count - 1; index >= 0; index--)
+            {
+                var attribute = attributesToSave[index];
+
+                for (int currentIndex = attributesPersisted.Count - 1; currentIndex >= 0; currentIndex--)
+                {
+                    var currentAttribute = attributesPersisted[currentIndex];
+
+                    if (currentAttribute.ContactAttributeId == attribute.ContactAttributeId)
+                    {
+                        // match by Id
+                        // TODO: Do we need to look at other fields here like attribute.AttributeId & attribute.AttributeTypeId
+                        // Or would a Contains be more correct and remove the looping?
+
+                        attributesPersisted.RemoveAt(currentIndex);
+                        attributesToSave.RemoveAt(index);
+                        break;
+                    }
+                }
+            }
+        }
+
         private void SaveAttribute(string token, int contactId, ContactAttribute attribute)
         {
             var attributeDictionary = TranslateContactAttributeToDictionary(attribute);
@@ -92,10 +98,10 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                var msg = string.Format("Error creating contact attribute, contact: {0} attributeId: {1}",
+                var msg = string.Format("Error creating contact attribute, contactId: {0} attributeId: {1}",
                                         contactId,
                                         attribute.AttributeId);
-                //_logger.Error(msg, e);
+                _logger.Error(msg, e);
                 throw (new ApplicationException(msg, e));
             }
         }
@@ -112,7 +118,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 var msg = string.Format("Error updating contact attribute, contactAttributeId: {0} attributeId: {1}",                                        
                                         attribute.ContactAttributeId, attribute.AttributeId);
-                //_logger.Error(msg, e);
+                _logger.Error(msg, e);
                 throw (new ApplicationException(msg, e));
             }
         }
@@ -130,6 +136,5 @@ namespace MinistryPlatform.Translation.Services
             };
             return attributeDictionary;
         }
-
     }
 }
