@@ -125,81 +125,28 @@
               </span>
             </ng-messages>
           </div>
-          <div id="profession" class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice') }">
-            <label class="control-label required">Are you a professional in any of the following fields?</label><br>
+          
+          <div id="profession" 
+               class="form-group col-sm-12"
+               ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice') }">
+            <label class="control-label required">
+              Are you a professional in any of the following fields?
+            </label>
+            
+            <br>
 
-            <div class="checkbox">
-              <label for="profession-business" >
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillBusiness" type="checkbox" name="professionchoice" value="business" id="profession-business" ng-required='!tripsSignup.skillsSelected()'> Business
+            <div class="checkbox" ng-repeat="skills in signupStep.tripSkills.attributes" >
+              <label for="professional-{{skill.attributeId}}" >
+                <input ng-model="tripsSignup.signupService.page5.professionalSkill[skills.attributeId]" 
+                       type="checkbox"
+                       name="professionchoice"
+                       ng-value="skills.attributeId"
+                       id="professional-{{skills.attributeId}}"
+                       ng-required='!tripsSignup.skillsSelected()'>
+                {{ skills.name }} 
               </label>
             </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-construction">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillConstruction" type="checkbox" name="professionchoice" value="construction" id="profession-construction" ng-required='!tripsSignup.skillsSelected()'> Construction
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-dental">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillDental" type="checkbox" name="professionchoice" value="dental" id="profession-dental" ng-required='!tripsSignup.skillsSelected()'> Dental
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-education">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillEducation" type="checkbox" name="professionchoice" value="education" id="profession-education" ng-required='!tripsSignup.skillsSelected()'> Education
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-it">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillInformationTech" type="checkbox" name="professionchoice" value="it" id="profession-it" ng-required='!tripsSignup.skillsSelected()'> IT
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-media">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedia" type="checkbox" name="professionchoice" value="media" id="profession-media" ng-required='!tripsSignup.skillsSelected()'> Media/Journalism
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-medical">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMedical" type="checkbox" name="professionchoice" value="medical" id="profession-medical" ng-required='!tripsSignup.skillsSelected()'> Medical
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-music">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillMusic" type="checkbox" name="professionchoice" value="music" id="profession-music" ng-required='!tripsSignup.skillsSelected()'> Music
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-photo">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillPhotography" type="checkbox" name="professionchoice" value="photography" id="profession-photo" ng-required='!tripsSignup.skillsSelected()'> Photography
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-social">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillSocialWorker" type="checkbox" name="professionchoice" value="social" id="profession-social" ng-required='!tripsSignup.skillsSelected()'> Social Worker/Counselor
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-student">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillStudent" type="checkbox" name="professionchoice" value="student" id="profession-student" ng-required='!tripsSignup.skillsSelected()'> Student
-              </label>
-            </div><!--/checkbox-->
-
-            <div class="checkbox">
-              <label for="profession-other">
-                <input ng-model="tripsSignup.signupService.page5.professionalSkillOther" type="checkbox" name="professionchoice" value="other" id="profession-other" ng-required='!tripsSignup.skillsSelected()'> Other
-              </label>
-            </div><!--/checkbox-->
-
+            
             <ng-messages for="tripsSignup.tripAppPage5.professionchoice.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>

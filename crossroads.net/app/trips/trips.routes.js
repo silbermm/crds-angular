@@ -226,6 +226,14 @@
             return;
           },
 
+          DietaryRestrictions: function(AttributeTypeService, $stateParams){
+            if ($stateParams.stepId === '2') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.DIETARY_RESTRICTIONS}).$promise;
+            }
+
+            return;
+          },
+
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
           },

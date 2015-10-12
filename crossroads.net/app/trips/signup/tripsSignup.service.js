@@ -1,3 +1,4 @@
+var attributes = require('crds-constants').ATTRIBUTE_IDS;
 (function() {
   'use strict';
 
@@ -155,7 +156,7 @@
     }
 
     function page2() {
-      return {
+      var page2Obj = {
         guardianFirstName: null,
         guardianLastName: null,
         tshirtSize: null,
@@ -165,12 +166,15 @@
         conditions: null,
         vegetarian: null,
         allergies: null,
-        spiritualLifeSearching: null,
-        spiritualLifeReceived: null,
-        spiritualLifeObedience: null,
-        spiritualLifeReplicating: null,
         why: null
       };
+      page2Obj.spiritualLife = {};
+      page2Obj.spiritualLife[attributes.OBEDIENCE] = null;
+      page2Obj.spiritualLife[attributes.SEARCHING_FOR_ANSWERS] = null;
+      page2Obj.spiritualLife[attributes.RECEIVED_JESUS] = null;
+      page2Obj.spiritualLife[attributes.REPLICATING] = null;
+
+      return page2Obj;
     }
 
     function page3() {
@@ -205,18 +209,7 @@
         nolaFirstChoiceExperience: null,
         nolaSecondChoiceWorkTeam: null,
         previousTripExperience: null,
-        professionalSkillBusiness: null,
-        professionalSkillConstruction: null,
-        professionalSkillDental: null,
-        professionalSkillEducation: null,
-        professionalSkillInformationTech: null,
-        professionalSkillMedia: null,
-        professionalSkillMedical: null,
-        professionalSkillMusic: null,
-        professionalSkillOther: null,
-        professionalSkillPhotography: null,
-        professionalSkillSocialWorker: null,
-        professionalSkillStudent: null
+        professionalSkill: {}
       };
     }
 

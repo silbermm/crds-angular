@@ -29,7 +29,8 @@
                 id="tshirt"
                 ng-required='true'
                 ng-model="tripsSignup.signupService.page2.tshirtSize"
-                ng-options="tshirt.name for tshirt in signupStep.tshirtSizes.attributes track by tshirt.attributeId">
+                ng-options="tshirt.name for tshirt in signupStep.tshirtSizes.attributes | orderBy: 'attributeId'  track by tshirt.attributeId">
+          <option value=""> -- Please Select a T-Shirt Size -- </option> 
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
           <span ng-message="required">
@@ -43,8 +44,9 @@
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Bottom</label>
         <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
           ng-model="tripsSignup.signupService.page2.scrubSizeBottom"
-          ng-options="bottom.name for bottom in signupStep.scrubBottomSizes track by bottom.attributeId"
+          ng-options="bottom.name for bottom in signupStep.scrubBottomSizes.attributes | orderBy: 'attributeId' track by bottom.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
+          <option value=""> -- Please Select a Scrub Bottom Size -- </option> 
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubBottom.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom')">
           <span ng-message="required">
@@ -57,8 +59,9 @@
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Top</label>
         <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
           ng-model="tripsSignup.signupService.page2.scrubSizeTop"
-          ng-options="top.name for top in signupStep.scrubTopSizes track by top.attributeId"
+          ng-options="top.name for top in signupStep.scrubTopSizes.attributes | orderBy: 'attributeId'  track by top.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
+          <option value=""> -- Please Select a Scrub Top Size -- </option> 
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubTop.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop')">
           <span ng-message="required">
@@ -101,6 +104,31 @@
       </div><!--/form-group-->
     </div><!--/row-->
 
+    <!--<div class="row">-->
+      <!--<div class="form-group col-sm-6">-->
+        <!--<label for="dietary"-->
+               <!--class="control-label required">-->
+          <!--Please indicate any dietary restrictions <small class="text-muted"> Pick as many as neccesary </small>-->
+        <!--</label>-->
+        
+        <!--<br>-->
+         
+        <!--<div class="checkbox" ng-repeat="diet in signupStep.dietaryRestrictions.attributes"> -->
+          <!--<label for="dietary-restrictions-{{diet.attributeId}}"> -->
+            <!--<input ng-model="tripsSignup.signupService.page2.dietary[diet.attributeId]"-->
+                   <!--type="checkbox"-->
+                   <!--name="dietary-restrictions-{{diet.attributeId}}"-->
+                   <!--ng-value="diet.attributeId"-->
+                   <!--id="dietary-restrictions-{{diet.attributeId}}">-->
+            <!--{{ diet.name }} -->
+          <!--</label>-->
+          <!--<input type='text'  />-->
+        <!--</div>-->
+      <!--</div>[>/form-group<]-->
+    <!--</div>[>/row<]-->
+
+
+
     <div class="row">
       <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'vegetarian') }">
           <label class="control-label block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
@@ -120,19 +148,31 @@
 
     <div class="row">
       <div class="form-group col-sm-12">
-          <label for="allergies">Please describe all food allergies <small class="text-muted">Leave blank if it doesn't apply</small</label>
-          <textarea ng-model="tripsSignup.signupService.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250"></textarea>
+        <label for="allergies"> Please describe all food allergies <small class="text-muted"> Leave blank if it doesn't apply </small> </label>
+          <textarea ng-model="tripsSignup.signupService.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250">
+          </textarea>
       </div><!--/form-group-->
     </div><!--/row-->
 
     <div class="row">
       <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife') }">
-        <label for="slife" class="control-label required">How would you define your spiritual life? <small class="text-muted">Pick as many as you like</small></label><br>
+        <label for="slife" class="control-label required">
+          How would you define your spiritual life? <small class="text-muted"> Pick as many as you like </small>
+        </label>
+        
+        <br>
 
-        <div class="checkbox"> <label for="slife-searching"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeSearching" type="checkbox" name="slife" value="Searching" id="slife-searching" ng-required='!tripsSignup.spiritualSelected()'> Searching for answers </label> </div>
-        <div class="checkbox"> <label for="slife-received"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReceived" type="checkbox" name="slife" value="Received" id="slife-received" ng-required='!tripsSignup.spiritualSelected()'> I have received Jesus </label> </div>
-        <div class="checkbox"> <label for="slife-obedience"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeObedience" type="checkbox" name="slife" value="Obedience" id="slife-obedience" ng-required='!tripsSignup.spiritualSelected()'> Focusing on obedience - I've quit negotiating with God </label> </div>
-        <div class="checkbox"> <label for="slife-replicating"> <input ng-model="tripsSignup.signupService.page2.spiritualLifeReplicating" type="checkbox" name="slife" value="Replicating" id="slife-replicating" ng-required='!tripsSignup.spiritualSelected()'> I'm actively replicating my faith in others </label> </div>
+        <div class="checkbox" ng-repeat="slife in signupStep.spiritualJourney.attributes" > 
+          <label for="slife-{{slife.attributeId}}"> 
+            <input ng-model="tripsSignup.signupService.page2.spiritualLife[slife.attributeId]" 
+                   type="checkbox" 
+                   name="slife" 
+                   ng-value="slife.attributeId" 
+                   id="slife-{{slife.attributeId}}" 
+                   ng-required='!tripsSignup.spiritualSelected()'> 
+            {{slife.name}} 
+          </label> 
+        </div>
 
         <ng-messages for="tripsSignup.tripAppPage2.slife.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife')">
           <span ng-message="required">

@@ -1,3 +1,4 @@
+var attributes = require('crds-constants').ATTRIBUTE_IDS;
 (function() {
   'use strict';
 
@@ -87,6 +88,7 @@
       }
 
       vm.signupService.pageId = 1;
+      vm.signupService.person = Person;
 
       if (vm.destination === 'India') {
         vm.whyPlaceholder = 'Please be specific. ' +
@@ -251,7 +253,7 @@
     }
 
     function hasPassport() {
-      return (vm.signupService.page6.validPassport.value === 'yes');
+      return (vm.signupService.page6.validPassport === 'yes');
     }
 
     function progressLabel() {
@@ -329,18 +331,18 @@
     }
 
     function skillsSelected() {
-      if (vm.signupService.page5.professionalSkillBusiness.value ||
-          vm.signupService.page5.professionalSkillConstruction.value ||
-          vm.signupService.page5.professionalSkillDental.value ||
-          vm.signupService.page5.professionalSkillEducation.value ||
-          vm.signupService.page5.professionalSkillInformationTech.value ||
-          vm.signupService.page5.professionalSkillMedia.value ||
-          vm.signupService.page5.professionalSkillMedical.value ||
-          vm.signupService.page5.professionalSkillMusic.value ||
-          vm.signupService.page5.professionalSkillPhotography.value ||
-          vm.signupService.page5.professionalSkillSocialWorker.value ||
-          vm.signupService.page5.professionalSkillStudent.value ||
-          vm.signupService.page5.professionalSkillOther.value)
+      if (vm.signupService.page5.professionalSkillBusiness ||
+          vm.signupService.page5.professionalSkillConstruction ||
+          vm.signupService.page5.professionalSkillDental ||
+          vm.signupService.page5.professionalSkillEducation ||
+          vm.signupService.page5.professionalSkillInformationTech ||
+          vm.signupService.page5.professionalSkillMedia ||
+          vm.signupService.page5.professionalSkillMedical ||
+          vm.signupService.page5.professionalSkillMusic ||
+          vm.signupService.page5.professionalSkillPhotography ||
+          vm.signupService.page5.professionalSkillSocialWorker ||
+          vm.signupService.page5.professionalSkillStudent ||
+          vm.signupService.page5.professionalSkillOther)
       {
         return true;
       }
@@ -349,10 +351,10 @@
     }
 
     function spiritualSelected() {
-      if (vm.signupService.page2.spiritualLifeSearching.value ||
-          vm.signupService.page2.spiritualLifeReceived.value ||
-          vm.signupService.page2.spiritualLifeObedience.value ||
-          vm.signupService.page2.spiritualLifeReplicating.value) {
+      if (vm.signupService.page2.spiritualLife[attributes.SEARCHING_FOR_ANSWERS] ||
+          vm.signupService.page2.spiritualLife[attributes.RECEIVED_JESUS] ||
+          vm.signupService.page2.spiritualLife[attributes.OBEDIENCE] ||
+          vm.signupService.page2.spiritualLife[attributes.REPLICATING]) {
         return true;
       }
 
