@@ -6,14 +6,14 @@
     </tr>
     </thead>
     <tbody ng-repeat="donation in donations track by $index">
-    <tr ng-repeat="distribution in donation.distributions track by $index" ng-class="{'pending hidden-print' : donation.status == 'Pending'}">
+    <tr ng-repeat="distribution in donation.distributions track by $index" ng-class="{'hidden-print' : donation.status == 'Pending'}">
         <td>
             {{distribution.program_name}}
             <span ng-if="donation.status == 'Pending'" class="label label-default" tooltip-placement="right" tooltip="This payment is still in the process of being cleared by our accounting team.">Pending</span>
             <span ng-if="donation.status == 'Declined'" class="label label-danger" tooltip-placement="right" tooltip="This payment has been declined.">Declined</span>
             <span ng-if="donation.status == 'Refunded'" class="label label-info" tooltip-placement="right" tooltip="This is a refund that has been issued to you.">Refund</span>
             <div class="text-muted">
-              <div ng-show="donation.source.icon" style="display: inline">
+              <div ng-show="donation.source.icon" class="giving-bank-icon">
                 <svg ng-attr-viewBox="{{donation.source.viewBox}}" ng-class="'icon icon-' + donation.source.icon + 'payment-type-icon'">
                     <use ng-attr-xlink:href="{{'#' + donation.source.icon}}" xlink:href=""></use>
                 </svg>
