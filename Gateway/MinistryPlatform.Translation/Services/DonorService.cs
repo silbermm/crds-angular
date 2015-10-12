@@ -118,13 +118,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId)
         {
-           var apiToken = ApiLogin();
-
-            //string encryptedAcct = null;
-            //if (routingNumber == DonorRoutingNumberDefault)
-            //{
-            //    encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
-            //}
+            var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
             var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;

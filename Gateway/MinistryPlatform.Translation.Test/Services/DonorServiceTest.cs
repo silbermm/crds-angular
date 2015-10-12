@@ -121,7 +121,9 @@ namespace MinistryPlatform.Translation.Test.Services
             var donorPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donors"]);
             var expectedDonorId = 585858;
             var setupDate = DateTime.Now;
-
+            const string account = "1234";
+            const string routing = "0";
+            
             var expectedValues = new Dictionary<string, object>
             {
                 {"Contact_ID", 888888},
@@ -131,12 +133,20 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Setup_Date", setupDate},    //default to current date/time
                 {"Processor_ID", "cus_crds123456"}    
             };
+            
+            var donorAcct = new DonorAccount
+            {
+                AccountNumber = account,
+                RoutingNumber = routing,
+                Type = AccountType.Checking,
+                EncryptedAccount = null
+            };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
                It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
                It.IsAny<string>(), true)).Returns(expectedDonorId);
 
-            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7);
+            var response = _fixture.CreateDonorRecord(888888, "cus_crds123456", setupDate, 5, 6, 7, donorAcct);
 
             _ministryPlatformService.Verify(mocked => mocked.CreateRecord(donorPageId, expectedValues, It.IsAny<string>(), true));
 
@@ -1124,6 +1134,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donorId = 123;
             const string processorAcctId = "ba_123";
             const string processorId = "cust_123";
+            var encrypt = _fixture.CreateHashedAccountAndRoutingNumber(accountNumber, routingNumber);
 
             const int donorAccountId = 456;
 
@@ -1142,7 +1153,7 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
 
-            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, encrypt, donorId, processorAcctId, processorId);
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(donorAccountId, result);
 
@@ -1175,7 +1186,7 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(298, expectedParms, It.IsAny<string>(), false)).Returns(donorAccountId);
 
-            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, donorId, processorAcctId, processorId);
+            var result = _fixture.CreateDonorAccount(giftType, routingNumber, accountNumber, null, donorId, processorAcctId, processorId);
             _ministryPlatformService.VerifyAll();
             Assert.AreEqual(donorAccountId, result);
 
