@@ -3,9 +3,9 @@
 
   module.exports = ProfileGivingController;
 
-  ProfileGivingController.$inject = ['$log', '$filter', '$state'];
+  ProfileGivingController.$inject = ['$log', '$filter', '$state', 'GivingHistoryService', 'RecurringGivingService'];
 
-  function ProfileGivingController($log, $filter, $state) {
+  function ProfileGivingController($log, $filter, $state, GivingHistoryService, RecurringGivingService) {
     var vm = this;
     vm.donations = [];
     vm.donation_history = false;
