@@ -7,6 +7,7 @@
 
   function RecurringGiving(GiveTransferService, DonationService, GiveFlow, Session, $state) {
     var service = {
+      name: 'RecurringGiving',
       initDefaultState: initDefaultState,
       resetGiveFlow: resetGiveFlow,
       goToAccount: goToAccount,
@@ -16,6 +17,7 @@
       submitBankInfo: submitBankInfo,
       processChange: processChange,
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
+      resetGiveTransferServiceGiveType: resetGiveTransferServiceGiveType,
     };
 
     function initDefaultState() {
@@ -24,6 +26,7 @@
 
       resetGiveFlow();
       GiveTransferService.initialized = true;
+      GiveTransferService.givingType = 'month';
 
       Session.removeRedirectRoute();
       $state.go(GiveFlow.amount);
@@ -40,6 +43,10 @@
         change: 'give.recurring_change',
         thankYou: 'give.recurring_thank-you'
       });
+    }
+
+    function resetGiveTransferServiceGiveType() {
+      GiveTransferService.givingType = 'month';
     }
 
     function stateName(state) {
