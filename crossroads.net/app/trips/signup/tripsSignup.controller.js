@@ -53,12 +53,12 @@
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
     vm.hasPassport = hasPassport;
-    vm.indiaRequired = indiaRequired;
-    vm.nicaRequired = nicaRequired;
-    vm.nolaRequired = nolaRequired;
+    vm.isIndia = isIndia;
+    vm.isNica = isNica;
+    vm.isNola = isNola;
+    vm.isSouthAfrica = isSouthAfrica;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
-    // vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
     vm.progressLabel = '';
@@ -175,7 +175,7 @@
       }
     }
 
-    function indiaRequired() {
+    function isIndia() {
       if (vm.destination === 'India') {
         return true;
       }
@@ -183,7 +183,7 @@
       return false;
     }
 
-    function nicaRequired() {
+    function isNica() {
       if (vm.destination === 'Nicaragua') {
         return true;
       }
@@ -191,7 +191,7 @@
       return false;
     }
 
-    function nolaRequired() {
+    function isNola() {
       if (vm.destination === 'NOLA') {
         return true;
       }
@@ -199,7 +199,7 @@
       return false;
     }
 
-    function southAfricaRequired() {
+    function isSouthAfrica() {
       if (vm.destination === 'South Africa') {
         return true;
       }

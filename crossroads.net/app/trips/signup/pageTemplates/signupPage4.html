@@ -1,6 +1,6 @@
 <div >
   <ng-form name="tripsSignup.tripAppPage4" role="form">
-    <div class="row" ng-show="!tripsSignup.indiaRequired()">
+    <div class="row" ng-show="!tripsSignup.isIndia()">
       <div class="col-sm-12">
         <legend>
           Lottery
@@ -14,27 +14,27 @@
           <label class="control-label block required">Please select one choice below</label>
           <div>
             <label for="lottery-go" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="As long as I am selected, I will go on the trip." name="lottery" id="lottery-go" ng-required="!tripsSignup.indiaRequired()">As long as I am selected, I will go on the trip.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="As long as I am selected, I will go on the trip." name="lottery" id="lottery-go" ng-required="!tripsSignup.isIndia()">As long as I am selected, I will go on the trip.
             </label>
           </div>
           <div>
             <label for="lottery-spouse" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, none of us will go." name="lottery" id="lottery-spouse" ng-required="!tripsSignup.indiaRequired()">If my spouse or any member of my family is not selected, none of us will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, none of us will go." name="lottery" id="lottery-spouse" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my family is not selected, none of us will go.
             </label>
           </div>
           <div>
             <label for="lottery-no-spouse" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, all others will go." name="lottery" id="lottery-no-spouse" ng-required="!tripsSignup.indiaRequired()">If my spouse or any member of my family is not selected, all others will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family is not selected, all others will go." name="lottery" id="lottery-no-spouse" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my family is not selected, all others will go.
             </label>
           </div>
           <div>
             <label for="lottery-family" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go." name="lottery" id="lottery-family" ng-required="!tripsSignup.indiaRequired()">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go." name="lottery" id="lottery-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my family OR any member of our larger group of friends is not selected, none of us will go.
             </label>
           </div>
           <div>
             <label for="lottery-no-family" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.indiaRequired()">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
             </label>
           </div>
           <ng-messages for="tripsSignup.tripAppPage4.lottery.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'lottery')">
@@ -52,11 +52,11 @@
           </legend>
         </div><!--/col-sm-12-->
 
-        <div class="col-md-12" ng-show="!tripsSignup.indiaRequired()">
+        <div class="col-md-12" ng-show="!tripsSignup.isIndia()">
           <span ng-bind-html="$root.MESSAGES.TripGroupCommonName.content | html"></span>
         </div>
 
-        <div class="form-group col-md-6" ng-show="!tripsSignup.indiaRequired()">
+        <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()">
           <label for="common-name" class="control-label">Common Name</label>
           <input ng-model="tripsSignup.signupService.page4.groupCommonName.value" type="text" class="form-control" id="common-name" placeholder="Common Name">
         </div>
