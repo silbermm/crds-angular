@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
 {
     public class TripApplicationDto
     {
         [JsonProperty(PropertyName = "contactId")]
+        [Required]
         public int ContactId { get; set; }
 
         [JsonProperty(PropertyName = "inviteGUID")]
@@ -31,9 +33,11 @@ namespace crds_angular.Models.Crossroads.Trip
         public class ApplicationPageOne
         {
             [JsonProperty(PropertyName = "firstName")]
+            [Required]
             public string FirstName { get; set; }
 
             [JsonProperty(PropertyName = "lastName")]
+            [Required]
             public string LastName { get; set; }
         }
 
@@ -52,6 +56,7 @@ namespace crds_angular.Models.Crossroads.Trip
             public string GuardianLastName { get; set; }
 
             [JsonProperty(PropertyName = "referral")]
+            [Required]
             public string Referral { get; set; }
 
             [JsonProperty(PropertyName = "scrubSizeTop")]
@@ -73,12 +78,15 @@ namespace crds_angular.Models.Crossroads.Trip
             public string SpiritualLifeSearching { get; set; }
 
             [JsonProperty(PropertyName = "tshirtSize")]
+            [Required]
             public string TshirtSize { get; set; }
 
             [JsonProperty(PropertyName = "vegetarian")]
+            [Required]
             public string Vegetarian { get; set; }
 
             [JsonProperty(PropertyName = "why")]
+            [Required]
             public string Why { get; set; }
         }
 
@@ -88,12 +96,15 @@ namespace crds_angular.Models.Crossroads.Trip
             public string EmergencyContactEmail { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactFirstName")]
+            [Required]
             public string EmergencyContactFirstName { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactLastName")]
+            [Required]
             public string EmergencyContactLastName { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactPrimaryPhone")]
+            [Required]
             public string EmergencyContactPrimaryPhone { get; set; }
 
             [JsonProperty(PropertyName = "emergencyContactSecondaryPhone")]
@@ -106,6 +117,7 @@ namespace crds_angular.Models.Crossroads.Trip
             public string GroupCommonName { get; set; }
 
             [JsonProperty(PropertyName = "interestedInGroupLeader")]
+            [Required]
             public string InterestedInGroupLeader { get; set; }
 
             [JsonProperty(PropertyName = "lottery")]
@@ -127,6 +139,7 @@ namespace crds_angular.Models.Crossroads.Trip
         public class ApplicationPageFive
         {
             [JsonProperty(PropertyName = "previousTripExperience")]
+            [Required]
             public string PreviousTripExperience { get; set; }
 
             [JsonProperty(PropertyName = "professionalSkillBusiness")]

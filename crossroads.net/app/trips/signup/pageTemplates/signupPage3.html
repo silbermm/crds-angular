@@ -7,28 +7,76 @@
 
       <ng-form name="tripsSignup.tripAppPage3" role="form">
         <div class="row">
-            <div class="form-group col-sm-6">
-              <label for="emergency-firstname" class="required">First Name</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactFirstName" type="text" class="form-control" id="emergency-firstname" placeholder="Enter emergency contact first name">
+            <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyFirstName') }">
+              <label for="emergency-firstname" class="control-label required">First Name</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactFirstName" type="text" class="form-control" name="emergencyFirstName" id="emergency-firstname" placeholder="Enter emergency contact first name" ng-required="true">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencyFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyFirstName')">
+                <span ng-message="required">
+                  <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                </span>
+              </ng-messages>
             </div>
-            <div class="form-group col-sm-6">
-              <label for="emergency-lastname" class="required">Last Name</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactLastName" type="text" class="form-control" id="emergency-lastname" placeholder="Enter emergency contact last name">
+            <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyLastName') }">
+              <label for="emergency-lastname" class="control-label required">Last Name</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactLastName" type="text" class="form-control" name="emergencyLastName" id="emergency-lastname" placeholder="Enter emergency contact last name" ng-required="true">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencyLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyLastName')">
+                <span ng-message="required">
+                  <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                </span>
+              </ng-messages>
             </div>
-            <div class="form-group col-sm-6">
-              <label for="emergency-primaryphone" class="required">Primary Phone</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactPrimaryPhone" type="text" class="form-control" id="emergency-primaryphone" placeholder="Enter emergency contact primary phone number">
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyPrimaryPhone') }">
+              <label for="emergency-primaryphone" class="control-label required">Primary Phone</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactPrimaryPhone" type="text" class="form-control" name="emergencyPrimaryPhone" id="emergency-primaryphone" placeholder="Enter emergency contact primary phone number" ng-required="true" ng-pattern="tripsSignup.phoneFormat" ng-model-options="{updateOn: 'blur'}">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencyPrimaryPhone.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyPrimaryPhone')">
+                <span ng-message="required">
+                  <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                </span>
+                <span ng-message="pattern">
+                  <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                </span>
+              </ng-messages>
             </div>
-            <div class="form-group col-sm-6">
-              <label for="emergency-secondaryphone">Secondary Phone</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactSecondaryPhone" type="text" class="form-control" id="emergency-secondaryphone" placeholder="Enter emergency contact secondary phone number">
+            <div class="form-group col-sm-6" 
+              ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencySecondaryPhone') }">
+              <label class="control-label" for="emergency-secondaryphone">Secondary Phone</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactSecondaryPhone" 
+                     type="text" 
+                     name="emergencySecondaryPhone"
+                     class="form-control" 
+                     id="emergency-secondaryphone" 
+                     ng-pattern="tripsSignup.phoneFormat"
+                     ng-model-options="{updateOn: 'blur'}"
+                     placeholder="Enter emergency contact secondary phone number">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencySecondaryPhone.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencySecondaryPhone')">
+                <span ng-message="pattern">
+                  <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                </span>
+              </ng-messages>
             </div>
-            <div class="form-group col-sm-6">
-              <label for="emergency-email">Email Address</label>
-              <input ng-model="tripsSignup.signupService.page3.emergencyContactEmail" type="text" class="form-control" id="emergency-email" placeholder="Enter emergency contact email address">
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-6"
+                 ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyContactEmail') }">
+              <label class="control-label" for="emergency-email">Email Address</label>
+              <input ng-model="tripsSignup.signupService.page3.emergencyContactEmail" 
+                     name="emergencyContactEmail"
+                     type="email" 
+                     class="form-control" 
+                     id="emergency-email" 
+                     ng-model-options="{updateOn: 'blur'}"
+                     placeholder="Enter emergency contact email address">
+              <ng-messages for="tripsSignup.tripAppPage3.emergencyContactEmail.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage3, 'emergencyContactEmail')">
+                <span ng-message="email">
+                  <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
+                </span>
+              </ng-messages>
+
             </div>
         </div>
 
-        <a ng-click='tripsSignup.handlePageChange(4)' class="btn btn-primary pull-right">Next</a>
+        <a ng-click='tripsSignup.handlePageChange(4, tripsSignup.tripAppPage3)' class="btn btn-primary pull-right">Next</a>
       </ng-form>
 </div><!--/row-->

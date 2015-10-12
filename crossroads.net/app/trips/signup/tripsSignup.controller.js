@@ -48,18 +48,26 @@
     vm.destination = vm.campaign.nickname;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
-    vm.nolaRequired = nolaRequired;
+    vm.hasPassport = hasPassport;
+    vm.isIndia = isIndia;
+    vm.isNica = isNica;
+    vm.isNola = isNola;
+    vm.isSouthAfrica = isSouthAfrica;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
+    vm.requireInternational = requireInternational;
     vm.signupService = TripsSignupService;
+    vm.skillsSelected = skillsSelected;
+    vm.spiritualSelected = spiritualSelected;
     vm.tripName = vm.campaign.name;
     vm.underAge = underAge;
     vm.validateProfile = validateProfile;
     vm.validation = Validation;
+    vm.phoneFormat = vm.validation.phoneFormat();
     vm.viewReady = false;
     vm.whyPlaceholder = '';
 
@@ -120,60 +128,39 @@
       toTop();
     }
 
-    //this may be the way we handle validation in the next story
-    // function handleNextt(nextPage, target) {
-    //   var form = target.tripAppPage2;
-    //   form.$setSubmitted(true);
-    //
-    //   if (form.$valid) {
-    //     vm.currentPage = nextPage;
-    //     toTop();
-    //   } else {
-    //     $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-    //   }
-    // }
-
-    function handlePageChange(pageId) {
-      var route = 'tripsignup.application.page';
-      $state.go(route, {stepId: pageId});
+    function handlePageChange(pageId, form) {
+      //var form = vm.tripAppPage2;
+      if (form !== null) {
+        form.$setSubmitted(true);
+        if (form.$valid) {
+          $log.debug('form valid');
+          var route = 'tripsignup.application.page';
+          $state.go(route, {stepId: pageId});
+        } else {
+          $log.debug('form INVALID');
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        }
+      } else {
+        //find a way to make this more generic
+        var route = 'tripsignup.application.page';
+        $state.go(route, {stepId: pageId});
+      }
     }
 
-    function handleSubmit() {
+    function handleSubmit(form) {
       $log.debug('handleSubmit start');
-
-      vm.profileData.person.$save(function() {
-        $log.debug('person save successful');
-      }, function() {
-
-        $log.debug('person save unsuccessful');
-      });
-
-      var application = new vm.signupService.TripApplication();
-      application.contactId = vm.signupService.contactId;
-      application.pledgeCampaignId = vm.signupService.campaign.id;
-      application.pageTwo = vm.signupService.page2;
-      application.pageThree = vm.signupService.page3;
-      application.pageFour = vm.signupService.page4;
-      application.pageFive = vm.signupService.page5;
-      application.pageSix = vm.signupService.page6;
-      application.inviteGUID = $stateParams.invite;
-      application.$save(function() {
-        $log.debug('trip application save successful');
-      }, function() {
-
-        $log.debug('trip application save unsuccessful');
-      });
-
-      _.each(vm.signupService.familyMembers, function(f) {
-        if (f.contactId === vm.signupService.contactId) {
-          f.signedUp = true;
-          f.signedUpDate = new Date();
+      if (form !== null) {
+        form.$setSubmitted(true);
+        if (form.$valid) {
+          $log.debug('form valid');
+          saveData();
+        } else {
+          $log.debug('form INVALID');
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         }
-      });
-
-      vm.signupService.pageId = 'thanks';
-      vm.tpForm.$setPristine();
-      $state.go('tripsignup.application.thankyou');
+      } else {
+        saveData();
+      }
     }
 
     function onBeforeUnload() {
@@ -183,12 +170,36 @@
       }
     }
 
-    function nolaRequired() {
-      if (vm.destination === 'NOLA') {
-        return 'required';
+    function isIndia() {
+      if (vm.destination === 'India') {
+        return true;
       }
 
-      return '';
+      return false;
+    }
+
+    function isNica() {
+      if (vm.destination === 'Nicaragua') {
+        return true;
+      }
+
+      return false;
+    }
+
+    function isNola() {
+      if (vm.destination === 'NOLA') {
+        return true;
+      }
+
+      return false;
+    }
+
+    function isSouthAfrica() {
+      if (vm.destination === 'South Africa') {
+        return true;
+      }
+
+      return false;
     }
 
     function preliminaryAgeCheck() {
@@ -239,6 +250,10 @@
       });
     }
 
+    function hasPassport() {
+      return (vm.signupService.page6.validPassport.value === 'yes');
+    }
+
     function progressLabel() {
       return vm.profileData.person.nickName + ' ' + vm.profileData.person.lastName;
     }
@@ -267,6 +282,81 @@
           }
         }
       });
+    }
+
+    function requireInternational() {
+      if (vm.destination === 'NOLA') {
+        return false;
+      }
+
+      return true;
+    }
+
+    function saveData() {
+      vm.profileData.person.$save(function() {
+        $log.debug('person save successful');
+      }, function() {
+
+        $log.debug('person save unsuccessful');
+      });
+
+      var application = new vm.signupService.TripApplication();
+      application.contactId = vm.signupService.contactId;
+      application.pledgeCampaignId = vm.signupService.campaign.id;
+      application.pageTwo = vm.signupService.page2;
+      application.pageThree = vm.signupService.page3;
+      application.pageFour = vm.signupService.page4;
+      application.pageFive = vm.signupService.page5;
+      application.pageSix = vm.signupService.page6;
+      application.inviteGUID = $stateParams.invite;
+      application.$save(function() {
+        $log.debug('trip application save successful');
+      }, function() {
+
+        $log.debug('trip application save unsuccessful');
+      });
+
+      _.each(vm.signupService.familyMembers, function(f) {
+        if (f.contactId === vm.signupService.contactId) {
+          f.signedUp = true;
+          f.signedUpDate = new Date();
+        }
+      });
+
+      vm.signupService.pageId = 'thanks';
+      vm.tpForm.$setPristine();
+      $state.go('tripsignup.application.thankyou');
+    }
+
+    function skillsSelected() {
+      if (vm.signupService.page5.professionalSkillBusiness.value ||
+          vm.signupService.page5.professionalSkillConstruction.value ||
+          vm.signupService.page5.professionalSkillDental.value ||
+          vm.signupService.page5.professionalSkillEducation.value ||
+          vm.signupService.page5.professionalSkillInformationTech.value ||
+          vm.signupService.page5.professionalSkillMedia.value ||
+          vm.signupService.page5.professionalSkillMedical.value ||
+          vm.signupService.page5.professionalSkillMusic.value ||
+          vm.signupService.page5.professionalSkillPhotography.value ||
+          vm.signupService.page5.professionalSkillSocialWorker.value ||
+          vm.signupService.page5.professionalSkillStudent.value ||
+          vm.signupService.page5.professionalSkillOther.value)
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    function spiritualSelected() {
+      if (vm.signupService.page2.spiritualLifeSearching.value ||
+          vm.signupService.page2.spiritualLifeReceived.value ||
+          vm.signupService.page2.spiritualLifeObedience.value ||
+          vm.signupService.page2.spiritualLifeReplicating.value) {
+        return true;
+      }
+
+      return false;
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
@@ -323,7 +413,7 @@
       vm.signupService.page1.profile = profile;
       vm.signupService.page1.household = household;
 
-      handlePageChange(2);
+      handlePageChange(2, null);
     }
   }
 

@@ -101,57 +101,87 @@ module.exports = {
     campaignName: 'test campaign',
     pledgeDonorId: 23232323
   },
-  Campaign: {
-    ageExceptions: [],
-    ageLimit: 20,
+  Nicaragua: {
+    id: 181,
+    name: '2015 December GO Nicaragua',
     formId: 22,
-    id: 178,
-    name: '2015 December GO South Africa',
-    nickname: 'South Africa',
-    registrationEnd: '2015-12-21T00:00:00',
-    registrationStart: '2015-05-20T00:00:00'
+    nickname: 'Nicaragua',
+    ageLimit: 8,
+    registrationStart: '2015-05-20T00:00:00',
+    registrationEnd: '2015-08-31T00:00:00',
+    ageExceptions: []
   },
-
-  // This is a mock of the person for whom we are filling out the application
-  Person: {
-    addressId: 2928137,
-    addressLine1: '2322 Raeburn Terr',
-    addressLine2: null,
-    age: 35,
-    anniversaryDate: '01/2015',
-    city: 'Cincinnati',
-    congregationId: 5,
-    contactId: 2186211,
-    dateOfBirth: '02/21/1980',
-    emailAddress: 'matt.silbernagel@ingagepartners.com',
-    employerName: null,
-    firstName: 'Matt',
-    foreignCountry: 'United States',
-    genderId: 1,
-    homePhone: null,
-    householdId: 1709940,
-    householdMembers: [
+  Nola: {
+    id: 179,
+    name: '2015 December GO NOLA',
+    formId: 21,
+    nickname: 'NOLA',
+    ageLimit: 8,
+    registrationStart: '2015-05-20T00:00:00',
+    registrationEnd: '2015-12-21T00:00:00',
+    ageExceptions: []
+  },
+  WorkTeams: [
     {
-      ContactId: 2186211,
-      FirstName: 'Matt',
-      Nickname: ' Matt',
-      LastName: 'Silbernagel',
-    }],
-    householdName: 'Silbernagel',
-    lastName: 'Silbernagel',
+      dp_RecordID: 1,
+      dp_RecordName: 'Habitat (must be 16 or older)'
+    },
+    {
+      dp_RecordID: 3,
+      dp_RecordName: 'Hands On - Neighborhood Restoration'
+    },
+    {
+      dp_RecordID:2,
+      dp_RecordName: 'Vacation Bible Camp'
+    }
+  ],
+  Person: {
+    addressId: 382387,
+    addressLine1: '555 Sesame St.',
+    addressLine2: 'Apartment B',
+    age: 8,
+    anniversaryDate: '01/2001',
+    city: 'Florence',
+    congregationId: 2,
+    contactId: 768386,
+    dateOfBirth: '05/29/2007',
+    emailAddress: 'contact@email.com',
+    employerName: null,
+    firstName: 'Claire',
+    foreignCountry: 'United States',
+    genderId: 2,
+    homePhone: '513-629-1595',
+    householdId: 627743,
+    householdName: 'Maddox',
+    lastName: 'Maddox',
     maidenName: null,
     maritalStatusId: null,
     middleName: null,
     mobileCarrierId: null,
-    mobilePhone: '123-456-7890',
-    nickName: ' Matt',
-    passportCountry: null,
-    passportExpiration: '0001-01-01T00:00:00',
-    passportFirstname: null,
-    passportLastname: null,
-    passportMiddlename: null,
-    passportNumber: null,
-    postalCode: '45223',
-    state: 'OH',
+    mobilePhone: null,
+    nickName: 'Claire',
+    postalCode: '41042',
+    state: 'KY',
+    householdMembers: [
+      {
+        ContactId: 768379,
+        FirstName: 'Anthony',
+        Nickname: 'TJ',
+        LastName: 'Maddox',
+        DateOfBirth: '1972-08-06T00:00:00',
+        HouseholdPosition: 'Head of Household',
+        StatementTypeId: 1,
+        DonorId: 2631446
+      },
+      {
+        ContactId:768386,
+        FirstName: 'Claire',
+        Nickname: 'Claire',
+        LastName: 'Maddox',
+        DateOfBirth: '2007-05-29T00:00:00',
+        HouseholdPosition: 'Minor Child',
+        StatementTypeId: 0,
+        DonorId: 0}
+      ]
   }
 };
