@@ -9,6 +9,7 @@ using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using RestSharp.Extensions;
 
@@ -339,9 +340,12 @@ namespace crds_angular.Services
         public StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
             var request = new RestRequest("plans", Method.POST);
+
+            var interval = EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval);
+
             request.AddParameter("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue);
-            request.AddParameter("interval", recurringGiftDto.PlanInterval);
-            request.AddParameter("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly");
+            request.AddParameter("interval", interval);
+            request.AddParameter("name", string.Format("Donor ID #{0} {1}ly", contactDonor.DonorId, interval));
             request.AddParameter("currency", "usd");
             request.AddParameter("trial_period_days", recurringGiftDto.StartDate.Date.Subtract(DateTime.Today).Days);
             request.AddParameter("id", contactDonor.DonorId + " " + DateTime.Now);

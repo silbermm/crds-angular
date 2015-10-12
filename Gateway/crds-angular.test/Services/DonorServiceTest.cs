@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities.Services;
 using RestSharp.Extensions;
 
 namespace crds_angular.test.Services
@@ -228,7 +229,7 @@ namespace crds_angular.test.Services
             {
                 StripeTokenId = "tok_123",
                 PlanAmount = 123.45M,
-                PlanInterval = "week",
+                PlanInterval = PlanInterval.Weekly,
                 Program = "987",
                 StartDate = DateTime.Parse("1973-10-15")
             };
@@ -275,7 +276,7 @@ namespace crds_angular.test.Services
                 mocked =>
                     mocked.CreateRecurringGiftRecord("auth", contactDonor.DonorId,
                                                      donorAccountId,
-                                                     recurringGiftDto.PlanInterval,
+                                                     EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval),
                                                      recurringGiftDto.PlanAmount,
                                                      recurringGiftDto.StartDate,
                                                      recurringGiftDto.Program,
@@ -353,7 +354,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[0].RecurringGiftId, result[0].RecurringGiftId);
             Assert.AreEqual(records[0].DonorID, result[0].DonorID);
             Assert.AreEqual(records[0].EmailAddress, result[0].EmailAddress);
-            Assert.AreEqual(records[0].Frequency.Matches("^.*Weekly") ? "week" : "month", result[0].PlanInterval);
+            Assert.AreEqual(records[0].Frequency.Matches("^.*Weekly") ? PlanInterval.Weekly : PlanInterval.Monthly, result[0].PlanInterval);
             Assert.AreEqual(records[0].Recurrence, result[0].Recurrence);
             Assert.AreEqual(records[0].StartDate, result[0].StartDate);
             Assert.AreEqual(records[0].EndDate, result[0].EndDate);
@@ -368,7 +369,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[1].RecurringGiftId, result[1].RecurringGiftId);
             Assert.AreEqual(records[1].DonorID, result[1].DonorID);
             Assert.AreEqual(records[1].EmailAddress, result[1].EmailAddress);
-            Assert.AreEqual(records[1].Frequency.Matches("^.*Weekly") ? "week" : "month", result[1].PlanInterval);
+            Assert.AreEqual(records[1].Frequency.Matches("^.*Weekly") ? PlanInterval.Weekly : PlanInterval.Monthly, result[1].PlanInterval);
             Assert.AreEqual(records[1].Recurrence, result[1].Recurrence);
             Assert.AreEqual(records[1].StartDate, result[1].StartDate);
             Assert.AreEqual(records[1].EndDate, result[1].EndDate);
@@ -383,7 +384,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[2].RecurringGiftId, result[2].RecurringGiftId);
             Assert.AreEqual(records[2].DonorID, result[2].DonorID);
             Assert.AreEqual(records[2].EmailAddress, result[2].EmailAddress);
-            Assert.AreEqual(records[2].Frequency.Matches("^.*Weekly") ? "week" : "month", result[2].PlanInterval);
+            Assert.AreEqual(records[2].Frequency.Matches("^.*Weekly") ? PlanInterval.Weekly : PlanInterval.Monthly, result[2].PlanInterval);
             Assert.AreEqual(records[2].Recurrence, result[2].Recurrence);
             Assert.AreEqual(records[2].StartDate, result[2].StartDate);
             Assert.AreEqual(records[2].EndDate, result[2].EndDate);

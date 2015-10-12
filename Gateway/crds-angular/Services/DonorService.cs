@@ -8,6 +8,7 @@ using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
+using Crossroads.Utilities.Services;
 
 namespace crds_angular.Services
 {
@@ -188,7 +189,7 @@ namespace crds_angular.Services
            
             var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
                                                                 donorAccountId,
-                                                                recurringGiftDto.PlanInterval,
+                                                                EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval),
                                                                 recurringGiftDto.PlanAmount,
                                                                 recurringGiftDto.StartDate,
                                                                 recurringGiftDto.Program,
@@ -228,6 +229,8 @@ namespace crds_angular.Services
                                                                     customer.id,
                                                                     donor.ProcessorId);
                 // TODO Need to call an _mpDonorService.UpdateRecurringGift method
+
+                // TODO Need to update source in Stripe - depends on solution for DE494
             }
             else
             {
@@ -251,7 +254,7 @@ namespace crds_angular.Services
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
                                                                             donor.DonorId,
                                                                             donorAccountId,
-                                                                            editGift.PlanInterval,
+                                                                            EnumMemberSerializationUtils.ToEnumString(editGift.PlanInterval),
                                                                             editGift.PlanAmount,
                                                                             editGift.StartDate,
                                                                             editGift.Program,
@@ -266,7 +269,7 @@ namespace crds_angular.Services
                 RecurringGiftId = newGift.RecurringGiftId.Value,
                 StartDate = newGift.StartDate.Value,
                 PlanAmount = newGift.Amount,
-                PlanInterval = newGift.Frequency == 1 ? "week" : "month",
+                PlanInterval = newGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly,
                 Program = newGift.ProgramId,
                 DonorID = newGift.DonorId,
                 EmailAddress = donor.Email,

@@ -10,6 +10,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 
 namespace crds_angular.test.Services
@@ -520,10 +521,11 @@ namespace crds_angular.test.Services
             {
                 StripeTokenId = "tok_123",
                 PlanAmount = 123.45M,
-                PlanInterval = "week",
+                PlanInterval = PlanInterval.Weekly,
                 Program = "987",
                 StartDate = DateTime.Now.AddDays(expectedTrialDays)
             };
+            var interval = EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval);
 
             var contactDonor = new ContactDonor
             {
@@ -545,8 +547,8 @@ namespace crds_angular.test.Services
                 o.Method == Method.POST
                 && o.Resource.Equals("plans")
                 && ParameterMatches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue, o.Parameters)
-                && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
-                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
+                && ParameterMatches("interval", interval, o.Parameters)
+                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + interval + "ly", o.Parameters)
                 && ParameterMatches("currency", "usd", o.Parameters)
                 && ParameterMatches("trial_period_days", expectedTrialDays, o.Parameters)
                 && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
