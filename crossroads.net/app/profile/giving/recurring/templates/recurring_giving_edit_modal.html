@@ -4,24 +4,24 @@
   </div>
 
   <div class="modal-body">
-    <donation-details amount="recurringGift.donation.amount"
-                     program="recurringGift.donation.program"
-                     amount-submitted="recurringGift.donation.amountSubmitted"
-                     programs-in="recurringGift.donation.programsInput"
-                     giving-type="recurringGift.donation.givingType"
-                     recurring-start-date="recurringGift.donation.recurringStartDate">
+    <donation-details amount="recurringGift.dto.amount"
+                     program="recurringGift.dto.program"
+                     amount-submitted="recurringGift.dto.amountSubmitted"
+                     programs-in="recurringGift.programsInput"
+                     giving-type="recurringGift.dto.givingType"
+                     recurring-start-date="recurringGift.dto.recurringStartDate">
     </donation-details>
 
     <bank-credit-card-details
-          dto='give.dto'
-          bank-info-submitted='give.dto.bankinfoSubmitted'
-          show-check-class='give.showCheckClass'
-          show-message='give.showMessage'
-          donor='give.dto.donor'
-          email='give.dto.email'
+          dto='recurringGift.dto'
+          bank-info-submitted='recurringGift.dto.bankinfoSubmitted'
+          show-check-class='recurringGift.showCheckClass'
+          show-message='recurringGift.showMessage'
+          donor='recurringGift.dto.donor'
+          email='recurringGift.dto.email'
           set-valid-card='setValidCard'
           set-valid-cvc='setValidCvc'
-          account-state-name='give.account'>
+          account-state-name='recurringGift.account'>
         </bank-credit-card-details>
     </bank-credit-card-details>
   </div>
