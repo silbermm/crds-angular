@@ -10,7 +10,6 @@
     '$state',
     'Session',
     'Campaign',
-    'WorkTeams',
     '$location',
     'Trip',
     '$q',
@@ -20,7 +19,7 @@
     'Validation',
     '$window',
     '$anchorScroll',
-    '$stateParams'
+    '$stateParams',
   ];
 
   function TripsSignupController(
@@ -30,7 +29,6 @@
       $state,
       Session,
       Campaign,
-      WorkTeams,
       $location,
       Trip,
       $q,
@@ -40,9 +38,7 @@
       Validation,
       $window,
       $anchorScroll,
-      $stateParams
-    )
-    {
+      $stateParams) {
 
     var vm = this;
     vm.ageLimitReached = true;
@@ -66,7 +62,6 @@
     vm.validation = Validation;
     vm.viewReady = false;
     vm.whyPlaceholder = '';
-    vm.workTeams = WorkTeams;
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
     $scope.$on('$viewContentLoaded', stateChangeSuccess);
@@ -289,6 +284,8 @@
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
+
+        return;
       }
 
       if (toState.name === 'tripsignup') {

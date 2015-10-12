@@ -100,5 +100,58 @@ module.exports = {
     campaignId: 123456789,
     campaignName: 'test campaign',
     pledgeDonorId: 23232323
+  },
+  Campaign: {
+    ageExceptions: [],
+    ageLimit: 20,
+    formId: 22,
+    id: 178,
+    name: '2015 December GO South Africa',
+    nickname: 'South Africa',
+    registrationEnd: '2015-12-21T00:00:00',
+    registrationStart: '2015-05-20T00:00:00'
+  },
+
+  // This is a mock of the person for whom we are filling out the application
+  Person: {
+    addressId: 2928137,
+    addressLine1: '2322 Raeburn Terr',
+    addressLine2: null,
+    age: 35,
+    anniversaryDate: '01/2015',
+    city: 'Cincinnati',
+    congregationId: 5,
+    contactId: 2186211,
+    dateOfBirth: '02/21/1980',
+    emailAddress: 'matt.silbernagel@ingagepartners.com',
+    employerName: null,
+    firstName: 'Matt',
+    foreignCountry: 'United States',
+    genderId: 1,
+    homePhone: null,
+    householdId: 1709940,
+    householdMembers: [
+    {
+      ContactId: 2186211,
+      FirstName: 'Matt',
+      Nickname: ' Matt',
+      LastName: 'Silbernagel',
+    }],
+    householdName: 'Silbernagel',
+    lastName: 'Silbernagel',
+    maidenName: null,
+    maritalStatusId: null,
+    middleName: null,
+    mobileCarrierId: null,
+    mobilePhone: '123-456-7890',
+    nickName: ' Matt',
+    passportCountry: null,
+    passportExpiration: '0001-01-01T00:00:00',
+    passportFirstname: null,
+    passportLastname: null,
+    passportMiddlename: null,
+    passportNumber: null,
+    postalCode: '45223',
+    state: 'OH',
   }
 };

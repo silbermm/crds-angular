@@ -38,17 +38,23 @@
     <div class="row" ng-show="tripsSignup.destination == 'South Africa'">
       <div class="form-group col-sm-6">
         <label for="scrub">Scrub Size Bottom<small class="text-muted">Only required for Topsy trips</small></label>
-        <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
-          ng-model="tripsSignup.signupService.page2.scrubSizeBottom"
-          ng-options="bottom for bottom in tripsSignup.signupService.bottomScrubSizes track by bottom.attributeId">
+        <select class="form-control col-sm-12" 
+                name="scrubBottom" 
+                id="scrubBottom"
+                ng-model="tripsSignup.signupService.page2.scrubSizeBottom"
+                ng-options="bottom.Name for bottom in signupStep.scrubBottomSizes.Attributes | orderBy: 'AttributeId' track by bottom.AttributeId">
+          <option value=""> -- Please Select One -- </option>
         </select>
       </div>
 
       <div class="form-group col-sm-6">
         <label for="scrub">Scrub Size Top<small class="text-muted">Only required for Topsy trips</small></label>
-        <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
-          ng-model="tripsSignup.signupService.page2.scrubSizeTop"
-          ng-options="top for top in tripsSignup.signupService.topScrubSizes track by top.attributeId">
+        <select class="form-control col-sm-12"
+                name="scrubTop"
+                id="scrubTop"
+                ng-model="tripsSignup.signupService.page2.scrubSizeTop"
+                ng-options="top.Name for top in signupStep.scrubTopSizes.Attributes | orderBy: 'AttributeId' track by top.AttributeId ">
+          <option value=""> -- Please Select One -- </option>
         </select>
       </div><!--/form-group-->
     </div>
