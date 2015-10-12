@@ -165,7 +165,8 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate))
                 .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EndDate))
                 .ForMember(dest => dest.PlanAmount, opts => opts.MapFrom(src => src.Amount))
-                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramName))
+                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramID))
+                .ForMember(dest => dest.ProgramName, opts => opts.MapFrom(src => src.ProgramName))
                 .ForMember(dest => dest.CongregationName, opts => opts.MapFrom(src => src.CongregationName))
                 .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID))
                 .AfterMap((src, dest) =>

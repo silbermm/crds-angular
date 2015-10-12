@@ -302,6 +302,7 @@ namespace crds_angular.test.Services
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now,
                     Amount = 950M,
+                    ProgramID = 2,
                     ProgramName = "Beans & Rice",
                     CongregationName = "Uptown",
                     AccountTypeID = 3,
@@ -319,6 +320,7 @@ namespace crds_angular.test.Services
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now,
                     Amount = 190M,
+                    ProgramID = 1,
                     ProgramName = "Crossroads",
                     CongregationName = "",
                     AccountTypeID = 1,
@@ -336,6 +338,7 @@ namespace crds_angular.test.Services
                     StartDate = DateTime.Now,
                     EndDate = DateTime.Now,
                     Amount = 50M,
+                    ProgramID = 3,
                     ProgramName = "Old St. George",
                     CongregationName = "General",
                     AccountTypeID = 3,
@@ -359,7 +362,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[0].StartDate, result[0].StartDate);
             Assert.AreEqual(records[0].EndDate, result[0].EndDate);
             Assert.AreEqual(records[0].Amount, result[0].PlanAmount);
-            Assert.AreEqual(records[0].ProgramName, result[0].Program);
+            Assert.AreEqual(records[0].ProgramID.ToString(), result[0].Program);
+            Assert.AreEqual(records[0].ProgramName, result[0].ProgramName);
             Assert.AreEqual(records[0].CongregationName, result[0].CongregationName);
             Assert.AreEqual(PaymentType.CreditCard, result[0].Source.SourceType);
             Assert.AreEqual(records[0].AccountNumberLast4, result[0].Source.AccountNumberLast4);
@@ -374,7 +378,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[1].StartDate, result[1].StartDate);
             Assert.AreEqual(records[1].EndDate, result[1].EndDate);
             Assert.AreEqual(records[1].Amount, result[1].PlanAmount);
-            Assert.AreEqual(records[1].ProgramName, result[1].Program);
+            Assert.AreEqual(records[1].ProgramID.ToString(), result[1].Program);
+            Assert.AreEqual(records[1].ProgramName, result[1].ProgramName);
             Assert.AreEqual(records[1].CongregationName, result[1].CongregationName);
             Assert.AreEqual(PaymentType.Bank, result[1].Source.SourceType);
             Assert.AreEqual(records[1].AccountNumberLast4, result[1].Source.AccountNumberLast4);
@@ -389,7 +394,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[2].StartDate, result[2].StartDate);
             Assert.AreEqual(records[2].EndDate, result[2].EndDate);
             Assert.AreEqual(records[2].Amount, result[2].PlanAmount);
-            Assert.AreEqual(records[2].ProgramName, result[2].Program);
+            Assert.AreEqual(records[2].ProgramID.ToString(), result[2].Program);
+            Assert.AreEqual(records[2].ProgramName, result[2].ProgramName);
             Assert.AreEqual(records[2].CongregationName, result[2].CongregationName);
             Assert.AreEqual(PaymentType.CreditCard, result[2].Source.SourceType);
             Assert.AreEqual(records[2].AccountNumberLast4, result[2].Source.AccountNumberLast4);

@@ -770,6 +770,7 @@ namespace MinistryPlatform.Translation.Services
                 StartDate = record["Start_Date"] as DateTime? ?? DateTime.Now,
                 EndDate = record["End_Date"] as DateTime?,
                 Amount = record["Amount"] as decimal? ?? 0,
+                ProgramID = record["Program_ID"] as int? ?? 0,
                 ProgramName = record["Program_Name"] as string,
                 CongregationName = record["Congregation_Name"] as string,
                 AccountTypeID = record["Account_Type_ID"] as int? ?? 0,

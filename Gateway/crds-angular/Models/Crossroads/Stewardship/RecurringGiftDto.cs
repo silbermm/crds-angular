@@ -81,6 +81,11 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "source", NullValueHandling = NullValueHandling.Ignore)]
         public DonationSourceDTO Source { get; set; }
+        /// <summary>
+        /// The Name of the program this recurring gift will give to.
+        /// </summary>
+        [JsonProperty(PropertyName = "program_name")]
+        public string ProgramName { get; set; }
     }
 
     [DataContract]
