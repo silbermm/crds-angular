@@ -156,6 +156,46 @@ namespace MinistryPlatform.Translation.Services
            
         }
 
+        public void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"Donor_Account_ID", donorAccountId}
+            };
+
+            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+        }
+
+        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"End_Date", DateTime.Now.Date}
+            };
+
+            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+        }
+
+        private void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
+        {
+            recurringGiftValues["Recurring_Gift_ID"] = recurringGiftId;
+
+            try
+            {
+                _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "Update Recurring Gift Donor Account failed.  Recurring Gift Id: {0}, Updates: {1}"
+                        , recurringGiftId
+                        , string.Join(";", recurringGiftValues)),
+                    e);
+            }
+            
+        }
+
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;

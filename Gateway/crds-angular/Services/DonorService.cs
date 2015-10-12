@@ -206,31 +206,31 @@ namespace crds_angular.Services
 
             var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
             var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
-            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? "week" : "month");
-            var changedDayOfWeek = changedFrequency || (editGift.PlanInterval.Equals("week") && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
-            var changedDayOfMonth = changedFrequency || (editGift.PlanInterval.Equals("month") && editGift.StartDate.Day != existingGift.DayOfMonth);
+            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly);
+            var changedDayOfWeek = changedFrequency || (editGift.PlanInterval == PlanInterval.Weekly && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
+            var changedDayOfMonth = changedFrequency || (editGift.PlanInterval == PlanInterval.Monthly && editGift.StartDate.Day != existingGift.DayOfMonth);
             var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.Value.Date;
 
             var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
             var needsNewMpRecurringGift = changedAmount || changedProgram || needsNewStripePlan;
 
-            var recurringGiftId = existingGift.RecurringGiftId;
+            var recurringGiftId = existingGift.RecurringGiftId.GetValueOrDefault(-1);
 
             int donorAccountId;
             if (changedPayment)
             {
                 var customer = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+                // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
 
-                // TODO Need to change this to accept a user's token
+                // TODO Need to change this to accept a user's token in order to facilitate Admin edit
                 donorAccountId = _mpDonorService.CreateDonorAccount(customer.brand,
                                                                     DonorRoutingNumberDefault,
                                                                     customer.last4,
                                                                     existingGift.DonorId,
                                                                     customer.id,
                                                                     donor.ProcessorId);
-                // TODO Need to call an _mpDonorService.UpdateRecurringGift method
 
-                // TODO Need to update source in Stripe - depends on solution for DE494
+                _mpDonorService.UpdateRecurringGiftDonorAccount(authorizedUserToken, recurringGiftId, donorAccountId);
             }
             else
             {
@@ -243,14 +243,15 @@ namespace crds_angular.Services
             {
                 if (needsNewStripePlan)
                 {
-                    var subscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
-                    _paymentService.CancelPlan(subscription.Plan.Id);
+                    var oldSubscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
+                    _paymentService.CancelPlan(oldSubscription.Plan.Id);
 
                     var plan = _paymentService.CreatePlan(editGift, donor);
                     stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
                 }
 
-                // TODO Need to call an _mpDonorService.CancelRecurringGift method
+                _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
                                                                             donor.DonorId,
                                                                             donorAccountId,
@@ -262,7 +263,7 @@ namespace crds_angular.Services
 
             }
 
-            var newGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.Value);
+            var newGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
 
             var newRecurringGift = new RecurringGiftDto
             {

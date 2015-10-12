@@ -34,6 +34,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         CreateDonationDistDto GetRecurringGiftById(string authorizedUserToken, int recurringGiftId);
         int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId);
         int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
+        void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId);
+        void CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
     }
 }
