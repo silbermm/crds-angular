@@ -290,13 +290,20 @@ namespace crds_angular.test.controllers
             };
 
             var pledgeId = 3456;
+            var pledge = new Pledge
+            {
+                DonorId = 1,
+                PledgeCampaignId = 2,
+                PledgeId = pledgeId,
+                PledgeStatusId = 1
+            };
 
             authenticationServiceMock.Setup(mocked => mocked.GetContactId(authType + " " + authToken)).Returns(contactId);
 
             donorServiceMock.Setup(mocked => mocked.GetContactDonor(contactId))
                 .Returns(donor);
 
-            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledgeId);
+            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledge);
 
             mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
 
@@ -365,11 +372,19 @@ namespace crds_angular.test.controllers
             };
 
             var pledgeId = 3456;
+            var pledge = new Pledge
+            {
+                DonorId = 1,
+                PledgeCampaignId = 2,
+                PledgeId = pledgeId,
+                PledgeStatusId = 1
+            };
+
 
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
 
-            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledgeId);
+            mpPledgeService.Setup(mocked => mocked.GetPledgeByCampaignAndDonor(createDonationDTO.PledgeCampaignId.Value, createDonationDTO.PledgeDonorId.Value)).Returns(pledge);
 
             mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
 

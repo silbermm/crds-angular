@@ -31,15 +31,15 @@ namespace MinistryPlatform.Translation.Services
                 Id = (int) record["Role_ID"], Name = (string) record["Role_Name"]
             }).ToList();
         }
-        public static List<ContactAttribute> GetMyAttributes(int recordId, string token)
+        public static List<SkillAttribute> GetMyAttributes(int recordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
             var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, recordId, token);
-            var attributes = new List<ContactAttribute>();
+            var attributes = new List<SkillAttribute>();
 
             foreach (var record in subPageRecords)
             {
-                var attribute = new ContactAttribute
+                var attribute = new SkillAttribute
                 {
                     Attribute_Name = (string) record["Attribute_Name"],
                     Attribute_Type = (string) record["Attribute_Type"],
@@ -54,7 +54,7 @@ namespace MinistryPlatform.Translation.Services
             return attributes;
         }
 
-        public static int CreateAttribute(ContactAttribute attribute, int parentRecordId, string token)
+        public static int CreateAttribute(SkillAttribute attribute, int parentRecordId, string token)
         {
             var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
             var platformServiceClient = new PlatformServiceClient();

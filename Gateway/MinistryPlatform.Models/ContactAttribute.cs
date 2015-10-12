@@ -1,18 +1,21 @@
-﻿using System;
+using System;
+using Newtonsoft.Json;
 
 namespace MinistryPlatform.Models
 {
     public class ContactAttribute
     {
-        public int dp_RecordID { get; set; }
-        public string dp_RecordName { get; set; }
-        public int dp_Selected { get; set; }
-        public int? dp_FileID { get; set; }
-        public int dp_RecordStatus { get; set; }
-        public int Attribute_ID { get; set; }
-        public string Attribute_Type { get; set; }
-        public string Attribute_Category { get; set; }
-        public string Attribute_Name { get; set; }
-        public DateTime Start_Date { get; set; }
+        [JsonProperty(PropertyName = "contactAttributeId")]
+        public int ContactAttributeId { get; set; }
+        [JsonProperty(PropertyName = "startDate")]
+        public DateTime StartDate { get; set; }
+        [JsonProperty(PropertyName = "endDate")]
+        public DateTime? EndDate { get; set; }
+        [JsonProperty(PropertyName = "notes")]
+        public string Notes { get; set; }
+        [JsonProperty(PropertyName = "attributeId")]
+        public int AttributeId { get; set; }
+        [JsonProperty(PropertyName = "attributeTypeId")]
+        public int AttributeTypeId { get; set; }
     }
 }
