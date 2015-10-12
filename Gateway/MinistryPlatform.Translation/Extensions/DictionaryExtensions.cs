@@ -97,6 +97,26 @@ namespace MinistryPlatform.Translation.Extensions
             return result;
         }
 
+        public static DateTime? ToNullableDate(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
+        {
+            var dictVal = DictVal(input, key);
+            if (dictVal == null)
+            {
+                return null;
+            }
+
+            DateTime result;
+            var valid = DateTime.TryParse(dictVal.ToString(), out result);
+            if (valid)
+            {
+                return result;
+            }
+
+            if (throwExceptionIfFailed)
+                throw new FormatException(string.Format("'{0}' cannot be converted as DateTime", key));
+            return result;
+        }
+
         public static string ToDateAsString(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
         {
             var dictVal = DictVal(input, key);

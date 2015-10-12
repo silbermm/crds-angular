@@ -14,6 +14,10 @@
 
         return false;
       },
+
+      phoneFormat: function() {
+        return /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
+      }
     };
   }
 })();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Web.Optimization;
 using AutoMapper;
 using crds_angular.Models;
@@ -8,6 +9,7 @@ using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using Group = MinistryPlatform.Models.Group;
 using Response = MinistryPlatform.Models.Response;
 
 namespace crds_angular.App_Start
@@ -20,11 +22,11 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
 
-            Mapper.CreateMap<ContactAttribute, Skill>()
+            Mapper.CreateMap<SkillAttribute, Skill>()
                 .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
 
-            Mapper.CreateMap<Skill, ContactAttribute>()
+            Mapper.CreateMap<Skill, SkillAttribute>()
                 .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
 
             Mapper.CreateMap<Group, OpportunityGroup>()
@@ -152,6 +154,29 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.HouseholdName, opts => opts.MapFrom(src => src.Household_Name))
                 .ForMember(dest => dest.AddressId, opts => opts.MapFrom(src => src.Address_ID))
                 .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age));
+
+            Mapper.CreateMap<RecurringGift, RecurringGiftDto>()
+                .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
+                .ForMember(dest => dest.DonorID, opts => opts.MapFrom(src => src.DonorID))
+                .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.EmailAddress))
+                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency))
+                .ForMember(dest => dest.Recurrence, opts => opts.MapFrom(src => src.Recurrence))
+                .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.PlanAmount, opts => opts.MapFrom(src => src.Amount))
+                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramName))
+                .ForMember(dest => dest.CongregationName, opts => opts.MapFrom(src => src.CongregationName))
+                .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID))
+                .AfterMap((src, dest) =>
+                {
+                    dest.Source = new DonationSourceDTO
+                    {
+                        SourceType = (int)AccountType.Checking == src.AccountTypeID ? PaymentType.Bank : PaymentType.CreditCard,
+                        AccountNumberLast4 = src.AccountNumberLast4,
+                        // Have to remove space to match to enum for things like American Express which needs to be AmericanExpress
+                        CardType = src.InstitutionName.Equals("Bank") ? (CreditCardType?) null : (CreditCardType)System.Enum.Parse(typeof(CreditCardType), Regex.Replace(src.InstitutionName, @"\s+", "")),
+                    };
+                });
         }
     }
 }

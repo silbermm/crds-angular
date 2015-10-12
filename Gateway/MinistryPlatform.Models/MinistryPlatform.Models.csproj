@@ -57,10 +57,11 @@
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="AttributeType.cs" />
-    <Compile Include="ContactAttribute.cs" />
+    <Compile Include="SkillAttribute.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />
+    <Compile Include="ContactAttribute.cs" />
     <Compile Include="Deposit.cs" />
     <Compile Include="DonationBatch.cs" />
     <Compile Include="DonationDistribution.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="PrivateInvite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecurringGift.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
     <Compile Include="TripDistribution.cs" />
