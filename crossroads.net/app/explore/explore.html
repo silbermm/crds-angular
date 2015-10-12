@@ -1,13 +1,12 @@
 <script type="text/javascript">
 
 var exploreTweens = [];
-var tweenFadeUpDelay = .5;
 
 function tweenFade(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.staggerTo(selecter+' .fade', 1, { autoAlpha: 1, delay: delay }, .15);
 };
-function tweenFadeUp(selecter, delay ){ if(!delay){ delay = 0; }
-          return TweenMax.staggerTo(selecter+' .rise10', 1, { autoAlpha: 1, y: 0, delay: delay, ease: Back.easeOut.config(4) }, .2);
+function tweenFadeUp(selecter, delay ){ if(!delay){ delay = .4; }
+          return TweenMax.staggerTo(selecter+' .rise10', 1, { autoAlpha: 1, y: 0, delay: delay }, .2);
 };
 function tweenFadeBg(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.to(selecter+' .fade-bg', 1, { autoAlpha: 1, delay: delay });
@@ -36,7 +35,6 @@ function reverseTween(tween, timelinePosition) {
 $(document).ready(function() {
   $('#fullpage').fullpage({
     easingcss3: 'cubic-bezier(0.645,.045,.355,1)',
-    //scrollingSpeed: 4000,
     afterLoad: function(anchorLink, index) {
       var loadedSection = $(this);
 
@@ -47,8 +45,8 @@ $(document).ready(function() {
       }
       if (index == 2) {
         //Map names and flags come in
-        exploreTweens['map_names'] = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: .5 }, .5);
-        exploreTweens['map_flags'] = TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: .5 }, .5);
+        exploreTweens['map_names'] = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: .8 }, .5);
+        exploreTweens['map_flags'] = TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: .8 }, .5);
       }
       if (index == 3) {
         //setup bubbles and begin animating them with random size and rotation speeds
@@ -70,21 +68,21 @@ $(document).ready(function() {
       }
       if (index == 4) {
         //fade in background
-        exploreTweens['studentministry_bg'] = tweenFadeBg('.studentministry', tweenFadeUpDelay);
+        exploreTweens['studentministry_bg'] = tweenFadeBg('.studentministry', .8);
         //move background
-        exploreTweens['studentministry_bgmove'] = TweenMax.to('.studentministry'+' .fade-bg', 8, { x:20, scaleX:1.1, scaleY:1.1, ease: Power0.easeNone });
+        exploreTweens['studentministry_bgmove'] = TweenMax.to('.studentministry'+' .fade-bg', 8, { x:-20, scaleX:1.1, scaleY:1.1, ease: Power0.easeNone, delay: .8 });
 
       }
       if (index == 5) {
         //make lid visible
         exploreTweens['coffee_makevisible'] = tweenFadeFast('.coffee');
         //fill the cup with coffee
-        exploreTweens['coffee_liquid'] = TweenMax.from('.coffee .cup-coffee', 1.5, {yPercent: 5 });
+        exploreTweens['coffee_liquid'] = TweenMax.from('.coffee .cup-coffee', 1.5, {yPercent: 5, delay: .8 });
         //put lid on cup
-        exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: 1 });
+        exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: 1.8 });
       }
       if (index == 6) {
-        exploreTweens['drums_bg'] = tweenFadeBg('.drums', tweenFadeUpDelay);
+        exploreTweens['drums_bg'] = tweenFadeBg('.drums', .5);
         exploreTweens['drums_bg_blur'] = TweenMax.to('.drums .img-background', 1, { css: {'-webkit-filter':"initial", 'filter':"initial"}, delay:1 }); //tweenFadeBg('.drums');
       }
       if (index == 7) {
@@ -108,7 +106,7 @@ $(document).ready(function() {
 
             if (direction == 'down') {
               //Map paragraph
-              exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
+              exploreTweens['map_text'] = tweenFadeUp('.map');
             }
           }
 
@@ -134,7 +132,7 @@ $(document).ready(function() {
                 exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', .3);
             } else if (direction == 'up') {
                 //Map paragraph
-                exploreTweens['map_text'] = tweenFadeUp('.map', tweenFadeUpDelay);
+                exploreTweens['map_text'] = tweenFadeUp('.map');
             }
           }
 
@@ -145,7 +143,7 @@ $(document).ready(function() {
             reverseTween(exploreTweens['studentministry_bg']);
 
             if (direction == 'down'){
-              exploreTweens['coffee_text'] = tweenFadeUp('.coffee', tweenFadeUpDelay);
+              exploreTweens['coffee_text'] = tweenFadeUp('.coffee');
             }
             if (direction == 'up') {
               exploreTweens['kidsclub_text'] = tweenFadeUp('.kidsclub', .3);
@@ -160,7 +158,7 @@ $(document).ready(function() {
 
 
             if (direction == 'down'){
-              exploreTweens['drums_text'] = tweenFadeUp('.drums', tweenFadeUpDelay);
+              exploreTweens['drums_text'] = tweenFadeUp('.drums');
             } else if (direction == 'up') {
               exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', 1.25);
             }
@@ -175,9 +173,9 @@ $(document).ready(function() {
             reverseTween(exploreTweens['drums_bg_blur']);
 
             if (direction == 'down'){
-              exploreTweens['clothes_text'] = tweenFadeUp('.clothes', tweenFadeUpDelay);
+              exploreTweens['clothes_text'] = tweenFadeUp('.clothes');
             } else if (direction == 'up'){
-              exploreTweens['coffee_text'] = tweenFadeUp('.coffee', tweenFadeUpDelay);
+              exploreTweens['coffee_text'] = tweenFadeUp('.coffee');
             }
           }
 
@@ -186,9 +184,9 @@ $(document).ready(function() {
             reverseTweens(exploreTweens['clothes_text']);
 
             if (direction == 'down'){
-              exploreTweens['photos_text'] = tweenFadeUp('.photos', tweenFadeUpDelay);
+              exploreTweens['photos_text'] = tweenFadeUp('.photos');
             } else if (direction == 'up'){
-              exploreTweens['drums_text'] = tweenFadeUp('.drums', tweenFadeUpDelay);
+              exploreTweens['drums_text'] = tweenFadeUp('.drums');
             }
           }
 
@@ -199,9 +197,9 @@ $(document).ready(function() {
             reverseTween(exploreTweens['photos_fadefast']);
 
             if (direction == 'down'){
-              exploreTweens['meet_text'] = tweenFadeUp('.meet', tweenFadeUpDelay);
+              exploreTweens['meet_text'] = tweenFadeUp('.meet');
             } else if (direction == 'up') {
-              exploreTweens['clothes_text'] = tweenFadeUp('.clothes', tweenFadeUpDelay);
+              exploreTweens['clothes_text'] = tweenFadeUp('.clothes');
             }
           }
 
@@ -210,7 +208,7 @@ $(document).ready(function() {
             reverseTweens(exploreTweens['meet_text']);
 
             if (direction == 'up') {
-              exploreTweens['photos_text'] = tweenFadeUp('.photos', tweenFadeUpDelay);
+              exploreTweens['photos_text'] = tweenFadeUp('.photos');
             }
           }
       }
@@ -432,4 +430,4 @@ $(document).ready(function() {
     </div>
   </section>
 
-</div>
+</div><!--/explore-->
