@@ -121,6 +121,8 @@
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
+    <None Include="Services\FileService.delete" />
+    <Compile Include="Services\Interfaces\IFileService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
     <Compile Include="Services\Interfaces\ICampaignService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
