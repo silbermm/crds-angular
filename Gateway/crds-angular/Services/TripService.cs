@@ -266,8 +266,7 @@ namespace crds_angular.Services
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }
-
-            return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
+            return participants.Values.Where(x => x.Trips.Count > 0).OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
         public MyTripsDto GetMyTrips(int contactId)
