@@ -24,16 +24,13 @@
         scope.recurringGifts = PaymentDisplayDetailService.postProcess(recurringGifts);
       });
 
-
-      scope.items = ['item1', 'item2', 'item3'];
-      function openRemoveGiftModal(size) {
+      function openRemoveGiftModal(selectedDonation) {
         var modalInstance = $modal.open({
           templateUrl: 'recurring_giving_remove_modal',
-          controller: 'ModalInstanceCtrl',
-          size: size,
+          controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            items: function () {
-              return scope.items;
+            donation: function () {
+              return selectedDonation;
             }
           }
         });
@@ -45,20 +42,19 @@
         });
       };
 
-      function openEditGiftModal(size) {
+      function openEditGiftModal(selectedDonation) {
         var modalInstance = $modal.open({
           templateUrl: 'recurring_giving_edit_modal',
-          controller: 'ModalInstanceCtrl',
-          size: size,
+          controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            items: function () {
-              return scope.items;
+            donation: function () {
+              return selectedDonation;
             }
           }
         });
 
         modalInstance.result.then(function (selectedItem) {
-          $scope.selected = selectedItem;
+          scope.selected = selectedItem;
         }, function () {
           $log.info('Modal dismissed at: ' + new Date());
         });
