@@ -235,13 +235,13 @@ namespace crds_angular.Services
                 // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
 
                 // TODO Need to change this to accept a user's token in order to facilitate Admin edit
-                donorAccountId = _mpDonorService.CreateDonorAccount(customer.brand,
+                donorAccountId = _mpDonorService.CreateDonorAccount(authorizedUserToken,
+                                                                    customer.brand,
                                                                     DonorRoutingNumberDefault,
                                                                     customer.last4,
                                                                     existingGift.DonorId,
                                                                     customer.id,
                                                                     donor.ProcessorId);
-
                 _mpDonorService.UpdateRecurringGiftDonorAccount(authorizedUserToken, recurringGiftId, donorAccountId);
             }
             else
