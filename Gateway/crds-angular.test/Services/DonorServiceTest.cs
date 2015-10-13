@@ -9,6 +9,7 @@ using crds_angular.App_Start;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Services;
+using MinistryPlatform.Models.DTO;
 using RestSharp.Extensions;
 
 namespace crds_angular.test.Services
@@ -401,6 +402,43 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[2].AccountNumberLast4, result[2].Source.AccountNumberLast4);
             Assert.AreEqual(CreditCardType.AmericanExpress, result[2].Source.CardType);
             Assert.AreEqual(records[2].SubscriptionID, result[2].SubscriptionID);
+        }
+
+        [Test]
+        public void TestCancelRecurringGift()
+        {
+            const string authUserToken = "auth";
+            const int recurringGiftId = 123;
+            var gift = new CreateDonationDistDto
+            {
+                DonorId = 456,
+                SubscriptionId = "sub_123"
+            };
+
+            var contactDonor = new ContactDonor
+            {
+                ProcessorId = "cus_123"
+            };
+
+            var plan = new StripePlan
+            {
+                Id = "plan_123"
+            };
+
+            var subscription = new StripeSubscription
+            {
+                Plan = plan
+            };
+
+            mpDonorService.Setup(mocked => mocked.GetRecurringGiftById(authUserToken, recurringGiftId)).Returns(gift);
+            mpDonorService.Setup(mocked => mocked.GetEmailViaDonorId(gift.DonorId)).Returns(contactDonor);
+            paymentService.Setup(mocked => mocked.CancelSubscription(contactDonor.ProcessorId, gift.SubscriptionId)).Returns(subscription);
+            paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
+            mpDonorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, recurringGiftId));
+
+            fixture.CancelRecurringGift(authUserToken, recurringGiftId);
+            mpDonorService.VerifyAll();
+            paymentService.VerifyAll();
         }
     }
 }
