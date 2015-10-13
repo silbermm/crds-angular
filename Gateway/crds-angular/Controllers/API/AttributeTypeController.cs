@@ -19,7 +19,7 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (List<AttributeTypeDTO>))]
-        [Route("api/AttributeType")]
+        [Route("api/attributetype")]
         public IHttpActionResult Get()
         {
             return Authorized(token =>
@@ -31,7 +31,7 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof(AttributeTypeDTO))]
-        [Route("api/AttributeType/{attributeTypeId}")]
+        [Route("api/attributetype/{attributeTypeId}")]
         public IHttpActionResult Get(int attributeTypeId)
         {
             return Authorized(token =>

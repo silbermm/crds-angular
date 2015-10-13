@@ -12,17 +12,14 @@ namespace crds_angular.Services
     public class ContactAttributeService : IContactAttributeService
     {
         private readonly MPInterfaces.IContactAttributeService _mpContactAttributeService;
-        private readonly IConfigurationWrapper _configurationWrapper;
-        private readonly MPInterfaces.IAuthenticationService _mpAuthenticationService;
+        private readonly MPInterfaces.IApiUserService _apiUserService;
 
         public ContactAttributeService(
             MPInterfaces.IContactAttributeService mpContactAttributeService, 
-            IConfigurationWrapper configurationWrapper, 
-            MPInterfaces.IAuthenticationService mpAuthenticationService)
+            MPInterfaces.IApiUserService apiUserService)
         {
             _mpContactAttributeService = mpContactAttributeService;
-            _configurationWrapper = configurationWrapper;
-            _mpAuthenticationService = mpAuthenticationService;
+            _apiUserService = apiUserService;
         }
 
         public List<ContactAttributeTypeDTO> GetContactAttributes(int contactId)
@@ -71,7 +68,7 @@ namespace crds_angular.Services
             // Remove all matches from list, since there is nothing to do with them
             RemoveMatchesFromBothLists(attributesToSave, attributesPersisted);
 
-            var apiUserToken = GetApiUserToken();
+            var apiUserToken = _apiUserService.GetToken();
             foreach (var attribute in attributesToSave)
             {
                 // These are new so add them
@@ -108,15 +105,6 @@ namespace crds_angular.Services
                 }
             }
             return results;
-        }
-
-        private string GetApiUserToken()
-        {
-            var apiUser = this._configurationWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = this._configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            var authData = _mpAuthenticationService.Authenticate(apiUser, apiPassword);
-            var token = authData["token"].ToString();
-            return token;
         }
 
         private void RemoveMatchesFromBothLists(List<ContactAttribute> attributesToSave, List<ContactAttribute> attributesPersisted)

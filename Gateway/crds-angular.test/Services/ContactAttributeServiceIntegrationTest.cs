@@ -20,9 +20,10 @@ namespace crds_angular.test.Services
             var platformService = new PlatformServiceClient();
             var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
+            var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
 
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
+            var service = new ContactAttributeService(mpService, apiUserService);
 
             var contactId = 2399608;
             var attributes = service.GetContactAttributes(contactId);
@@ -37,9 +38,10 @@ namespace crds_angular.test.Services
             var platformService = new PlatformServiceClient();
             var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
+            var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
             
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
+            var service = new ContactAttributeService(mpService, apiUserService);
             
             var contactId = 2399608;
             var attributes = service.GetContactAttributes(contactId);
@@ -69,9 +71,10 @@ namespace crds_angular.test.Services
             var platformService = new PlatformServiceClient();
             var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
+            var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
 
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
+            var service = new ContactAttributeService(mpService, apiUserService);
 
             var contactId = 2399608;
             var attributes = service.GetContactAttributes(contactId);
@@ -82,6 +85,5 @@ namespace crds_angular.test.Services
             // Add all back
             service.SaveContactAttributes(contactId, attributes);
         }
-
     }
 }
