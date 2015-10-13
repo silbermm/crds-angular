@@ -53,8 +53,37 @@ namespace crds_angular.Controllers.API
             }));
         }
 
+
+
         [Route("api/image/")]
         [HttpPost]
+        public HttpResponseMessage Post()
+        {
+            var result = new HttpResponseMessage(HttpStatusCode.OK);
+            var imageBytes = new byte[10000];
+            if (Request.Content.IsMimeMultipartContent())
+            {
+                Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                {
+                    MultipartMemoryStreamProvider provider = task.Result;
+                    foreach (HttpContent content in provider.Contents)
+                    {
+                        Stream imageStream = content.ReadAsStreamAsync().Result;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            imageStream.CopyTo(memoryStream);
+                            imageBytes = memoryStream.ToArray();
+                        }
+                    }
+                });
+                return result;
+            }
+            else
+            {
+                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+            }
+        }
+
         public async Task<HttpResponseMessage> PostFormData()
         {
             if (!Request.Content.IsMimeMultipartContent())
@@ -62,6 +91,7 @@ namespace crds_angular.Controllers.API
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
+            var bytes = new byte[10000];
             string root = HttpContext.Current.Server.MapPath("~/App_Data");
             var provider = new MultipartFormDataStreamProvider(root);
 
@@ -82,8 +112,23 @@ namespace crds_angular.Controllers.API
                 {
                     Trace.WriteLine(file.Headers.ContentDisposition.FileName);
                     Trace.WriteLine("Server file path: " + file.LocalFileName);
+                    /*
+                    await file.ReadAsByteArrayAsync().ContinueWith(b =>
+                    {
+                        bytes = b;
+                    });
+                     */
                 }
-
+                /*
+                (Authorized(token =>
+                {
+                    return _mpService.CreateFile(
+                        provider.FormData.Get("pageName"),
+                        provider.FormData.Get("recordId"),
+                        provider.FileData[0].
+                    );
+                }));
+                */
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (System.Exception e)
