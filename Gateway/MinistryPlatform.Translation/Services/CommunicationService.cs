@@ -144,7 +144,7 @@ namespace MinistryPlatform.Translation.Services
             var template = GetTemplate(templateId);
             return new Communication
             {
-                AuthorUserId = _configurationWrapper.GetConfigIntValue("ChurchAdminUser"),
+                AuthorUserId = _configurationWrapper.GetConfigIntValue("DefaultAuthorUser"),
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
@@ -162,6 +162,10 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
+                if (record == null)
+                {
+                    return templateBody;
+                }
                 return record.Aggregate(templateBody,
                     (current, field) => current.Replace("[" + field.Key + "]", field.Value.ToString()));
             }

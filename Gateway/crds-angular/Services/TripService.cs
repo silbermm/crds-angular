@@ -445,19 +445,22 @@ namespace crds_angular.Services
         {
             try
             {
-                var formResponse = new FormResponse();
-                formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-                formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
-                formResponse.PledgeCampaignId = dto.PledgeCampaignId;
+                //var formResponse = new FormResponse();
+                //formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+                //formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
+                //formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
-                formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
+                //formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
-                var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+                //var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+                var trash = _configurationWrapper.GetConfigIntValue("EventsSubPageGroups");
+                var formResponseId = 0;
+                var tmp = 5/formResponseId;
 
-                if (dto.InviteGUID != null)
-                {
-                    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-                }
+                //if (dto.InviteGUID != null)
+                //{
+                //    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+                //}
 
                 SendTripApplicantSuccessMessage(dto.ContactId);
 
@@ -479,7 +482,7 @@ namespace crds_angular.Services
         private void SendMessage(string templateKey, int toContactId)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
-            var fromContactId = _configurationWrapper.GetConfigIntValue("ChurchAdminUser");
+            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,
