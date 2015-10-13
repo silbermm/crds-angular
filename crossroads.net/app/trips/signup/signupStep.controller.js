@@ -88,11 +88,40 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function evaluateFrequentFlyers() {
-      if (!vm.signupService.page6.deltaFrequentFlyer) {
-        // try to get the persons delta frequent flyer
+      if (vm.signupService.page6.frequentFlyers){
+        return;
       }
+      
+      var attrs = AttributeTypeService.transformPersonMultiAttributes(attributeTypes.FREQUENT_FLYERS,
+          vm.signupService.person.attributes,
+          vm.frequentFlyers.attributes, function(attr) {
+             return attr.isChecked = true; 
+          });
 
-      if(!vm.signupService.page6.
+      vm.signupService.page6.frequentFlyers = attrs;
+
+
+      //if (!vm.signupService.page6.deltaFrequentFlyer) {
+        //// try to get the persons delta frequent flyer
+        //var found = _.find(vm.signupService.person.attributes, function(attr) {
+          //return attr.attributeId === attributes.;
+        //});
+
+        //vm.signupService.page6.deltaFrequentFlyer = vm.signupService.person.attributes.
+      //}
+
+      //if (!vm.signupService.page6.southAfricanFrequentFlyer) {
+        //// try to get the persons south african frequent flyer
+      //}
+
+      //if (!vm.signupService.page6.unitedFrequentFlyer) {
+        //// try to get the persons south african frequent flyer
+      //}
+
+      //if (!vm.signupService.page6.usAirwaysFrequentFlyer) {
+        //// try to get the persons south african frequent flyer
+      /*}*/
+
     }
 
     function evaluatePreviousTripExp() {

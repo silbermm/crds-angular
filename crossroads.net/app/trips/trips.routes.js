@@ -122,7 +122,6 @@
             return Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}).$promise;
           },
 
-
         }
       })
       .state('tripsignup.application', {
@@ -221,14 +220,14 @@
           },
 
           FrequentFlyers: function(AttributeTypeService, $stateParams) {
-            if ($stateParams.stepId === '5') {
+            if ($stateParams.stepId === '6') {
               return AttributeTypeService.AttributeTypes().get({ id: attributes.FREQUENT_FLYERS }).$promise;
             }
 
             return;
           },
 
-          DietaryRestrictions: function(AttributeTypeService, $stateParams){
+          DietaryRestrictions: function(AttributeTypeService, $stateParams) {
             if ($stateParams.stepId === '2') {
               return AttributeTypeService.AttributeTypes().get({ id: attributes.DIETARY_RESTRICTIONS}).$promise;
             }
