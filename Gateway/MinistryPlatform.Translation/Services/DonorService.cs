@@ -102,13 +102,16 @@ namespace MinistryPlatform.Translation.Services
                 throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
    
-            CreateDonorAccount(DefaultInstitutionName,
+            if (donorAccount!= null)
+            {
+                CreateDonorAccount(DefaultInstitutionName,
                                    DonorAccountNumberDefault,
                                    DonorRoutingNumberDefault,
                                    donorAccount.EncryptedAccount,
                                    donorId,
                                    donorAccount.ProcessorAccountId,
                                    processorId);
+            }
             
             return donorId;
         }
