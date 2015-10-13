@@ -34,16 +34,17 @@ namespace crds_angular.Services
             _contentBlockService = contentBlockService;
         }
 
-        private static bool IsBadResponse(IRestResponse response)
+        private static bool IsBadResponse(IRestResponse response, bool errorNotFound = false)
         {
-            return (response.ResponseStatus != ResponseStatus.Completed 
+            return (response.ResponseStatus != ResponseStatus.Completed
+                    || (errorNotFound && response.StatusCode == HttpStatusCode.NotFound)
                     || response.StatusCode == HttpStatusCode.BadRequest
                     || response.StatusCode == HttpStatusCode.PaymentRequired);
         }
 
-        private void CheckStripeResponse(string errorMessage, IRestResponse response)
+        private void CheckStripeResponse(string errorMessage, IRestResponse response, bool errorNotFound = false)
         {
-            if (!IsBadResponse(response))
+            if (!IsBadResponse(response, errorNotFound))
             {
                 return;
             }
@@ -175,7 +176,7 @@ namespace crds_angular.Services
             var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.DELETE);
 
             var response = _stripeRestClient.Execute<StripeSubscription>(request);
-            CheckStripeResponse("Stripe Subscription Cancel failed", response);
+            CheckStripeResponse("Stripe Subscription Cancel failed", response, true);
 
             return (response.Data);
         }

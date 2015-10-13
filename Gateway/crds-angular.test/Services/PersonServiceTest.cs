@@ -10,7 +10,8 @@ namespace crds_angular.test.Services
 {
     internal class PersonServiceTest
     {
-        private Mock<IContactRelationshipService> _contactRelationshipService;
+        private Mock<IContactAttributeService> _contactAttributeService;
+        private Mock<IContactRelationshipService> _contactRelationshipService;        
         private Mock<IContactService> _contactService;
         private Mock<IOpportunityService> _opportunityService;
         private Mock<IAuthenticationService> _authenticationService;
@@ -19,15 +20,18 @@ namespace crds_angular.test.Services
         private PersonService _fixture;
         private MyContact _myContact;
         private List<HouseholdMember> _householdMembers;
+        
 
         [SetUp]
         public void SetUp()
         {
+            _contactAttributeService = new Mock<IContactAttributeService>();
             _contactRelationshipService = new Mock<IContactRelationshipService>();
-            _contactService = new Mock<IContactService>();
+            _contactService = new Mock<IContactService>();            
             _opportunityService = new Mock<IOpportunityService>();
             _authenticationService = new Mock<IAuthenticationService>();
             _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
+            
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             _myContact = new MyContact
@@ -60,7 +64,7 @@ namespace crds_angular.test.Services
             };
             _householdMembers = new List<HouseholdMember>();
 
-            _fixture = new PersonService(_contactService.Object);
+            _fixture = new PersonService(_contactService.Object, _contactAttributeService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();

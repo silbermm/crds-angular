@@ -474,14 +474,16 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 {"Event_Type_ID_Text", "KC Nursery Oakley Sunday 8:30"}
             };
+            var eventDate = DateTime.Today.AddDays(10);
+            var expectedDateAsString = eventDate.ToString("MM/dd/yy hh:mmtt");
             var expectedEvents = new List<Dictionary<string, object>>
             {
                 new Dictionary<string, object>
                 {
-                    {"Event_Start_Date", "10/11/15 08:30am"}
+                    {"Event_Start_Date", expectedDateAsString}
                 }
             };
-            var expectedLastDate = DateTime.Parse("10/11/15 08:30am");
+            var expectedLastDate = eventDate;
 
             _ministryPlatformService.Setup(
                 mock => mock.GetRecordDict(_opportunityPageId, opportunityId, It.IsAny<string>(), false))
