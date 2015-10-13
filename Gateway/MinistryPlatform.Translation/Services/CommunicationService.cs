@@ -139,6 +139,25 @@ namespace MinistryPlatform.Translation.Services
             return template;
         }
 
+        public Communication GetTemplateAsCommunication(int templateId, int fromContactId, string fromEmailAddress, int replyContactId, string replyEmailAddress, int toContactId, string toEmailAddress)
+        {
+            var template = GetTemplate(templateId);
+            return new Communication
+            {
+                AuthorUserId = _configurationWrapper.GetConfigIntValue("ChurchAdminUser"),
+                DomainId = 1,
+                EmailBody = template.Body,
+                EmailSubject = template.Subject,
+                FromContactId = fromContactId,
+                FromEmailAddress = fromEmailAddress,
+                ReplyContactId = replyContactId,
+                ReplyToEmailAddress = replyEmailAddress,
+                ToContactId = toContactId,
+                ToEmailAddress = toEmailAddress
+            };
+            // should Merge Data be included as well?  tm 10/12
+        }
+
         public string ParseTemplateBody(string templateBody, Dictionary<string, object> record)
         {
             try

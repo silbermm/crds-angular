@@ -204,10 +204,10 @@
     <Content Include="Unity.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="MinistryPlatform.config">
+    <None Include="MinistryPlatform.config">
       <SubType>Designer</SubType>
       <TransformOnBuild>true</TransformOnBuild>
-    </Content>
+    </None>
     <None Include="MinistryPlatform.Debug.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
@@ -224,6 +224,12 @@
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="MinistryPlatform.local test.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+    </Content>
+    <Content Include="MinistryPlatform.MPTest01.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+    </Content>
     <None Include="MinistryPlatform.Release.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
