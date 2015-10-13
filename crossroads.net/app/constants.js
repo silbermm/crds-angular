@@ -21,6 +21,8 @@
       SPIRITUAL_JOURNEY: 60,
       TRIP_SKILLS: 61,
       TSHIRT_SIZES: 21,
+      PERSONAL: 1,
+      TRIP_EXPERIENCE: 62,
     },
     ATTRIBUTE_IDS: {
       VEGETARIAN: 3961,

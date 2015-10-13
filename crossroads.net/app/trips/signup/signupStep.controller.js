@@ -68,6 +68,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         break;
       case '6':
         evaluateFrequentFlyers();
+        break;
       default:
         break;
     }
@@ -77,7 +78,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      var found = _.find(vm.signupService.person.attributes, function(attr) {
+      var found = _.find(vm.signupService.person.attributeTypes[attributeTypes.PERSONAL].attributes, function(attr) {
         return attr.attributeId === attributes.FOOD_ALLERGIES;
       });
 
@@ -88,40 +89,17 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function evaluateFrequentFlyers() {
-      if (vm.signupService.page6.frequentFlyers){
+      if (vm.signupService.page6.frequentFlyers) {
         return;
       }
-      
-      var attrs = AttributeTypeService.transformPersonMultiAttributes(attributeTypes.FREQUENT_FLYERS,
-          vm.signupService.person.attributes,
-          vm.frequentFlyers.attributes, function(attr) {
-             return attr.isChecked = true; 
+
+      var attrs = AttributeTypeService.transformPersonMultiAttributes(
+          vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes,
+          vm.frequentFlyers.attributes, function(contactAttr, attr) {
+            attr.notes = contactAttr.notes;
           });
 
       vm.signupService.page6.frequentFlyers = attrs;
-
-
-      //if (!vm.signupService.page6.deltaFrequentFlyer) {
-        //// try to get the persons delta frequent flyer
-        //var found = _.find(vm.signupService.person.attributes, function(attr) {
-          //return attr.attributeId === attributes.;
-        //});
-
-        //vm.signupService.page6.deltaFrequentFlyer = vm.signupService.person.attributes.
-      //}
-
-      //if (!vm.signupService.page6.southAfricanFrequentFlyer) {
-        //// try to get the persons south african frequent flyer
-      //}
-
-      //if (!vm.signupService.page6.unitedFrequentFlyer) {
-        //// try to get the persons south african frequent flyer
-      //}
-
-      //if (!vm.signupService.page6.usAirwaysFrequentFlyer) {
-        //// try to get the persons south african frequent flyer
-      /*}*/
-
     }
 
     function evaluatePreviousTripExp() {
@@ -129,7 +107,8 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      var found = _.find(vm.signupService.person.attributes, function(attr) {
+      var found =
+        _.find(vm.signupService.person.attributeTypes[attributeTypes.TRIP_EXPERIENCE].attributes, function(attr) {
         return attr.attributeId === attributes.PREVIOUS_TRIP_EXPERIENCE;
       });
 
@@ -143,9 +122,10 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      vm.signupService.page2.scrubSizeBottom = _.find(vm.signupService.person.attributes, function(attr) {
-        return attr.attributeTypeId === attributeTypes.SCRUB_BOTTOM_SIZES;
-      });
+      if (vm.signupService.person.attributeTypes[attributeTypes.SCRUB_BOTTOM_SIZES] !== undefined) {
+        vm.signupService.page2.scrubSizeBottom =
+          vm.signupService.person.attributeTypes[attributeTypes.SCRUB_BOTTOM_SIZES].attributes[0];
+      }
     }
 
     function evaluateScrubSizeTop() {
@@ -153,18 +133,18 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      vm.signupService.page2.scrubSizeTop = _.find(vm.signupService.person.attributes, function(attr) {
-        return attr.attributeTypeId === attributeTypes.SCRUB_TOP_SIZES;
-      });
+      if (vm.signupService.person.attributeTypes[attributeTypes.SCRUB_TOP_SIZES] !== undefined) {
+        vm.signupService.page2.scrubSizeTop =
+          vm.signupService.person.attributeTypes[attributeTypes.SCRUB_TOP_SIZES].attributes[0];
+      }
     }
 
     function evaluateSpiritualLife() {
-      if (vm.signupService.page2.spiritualLife) { 
+      if (vm.signupService.page2.spiritualLife) {
         return;
       }
-      
+
       vm.signupService.page2.spiritualLife = vm.spiritualJourney.attributes;
-            
     }
 
     function evaluateTripSkills() {
@@ -172,10 +152,10 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      var attrs = AttributeTypeService.transformPersonMultiAttributes(attributeTypes.TRIP_SKILLS,
-          vm.signupService.person.attributes,
-          vm.tripSkills.attributes, function(attr) {
-             return attr.isChecked = true; 
+      var attrs = AttributeTypeService.transformPersonMultiAttributes(
+          vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes,
+          vm.tripSkills.attributes, function(personAttr, attr) {
+            attr.isChecked = true;
           });
 
       vm.signupService.page5.professionalSkills = attrs;
@@ -186,9 +166,10 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      vm.signupService.page2.tshirtSize = _.find(vm.signupService.person.attributes, function(attr) {
-        return attr.attributeTypeId === attributeTypes.TSHIRT_SIZES;
-      });
+      if (vm.signupService.person.attributeTypes[attributeTypes.TSHIRT_SIZES] !== undefined) {
+        vm.signupService.page2.tshirtSize =
+          vm.signupService.person.attributeTypes[attributeTypes.TSHIRT_SIZES].attributes[0];
+      }
     }
 
     function evaluateVegetarian() {
@@ -196,12 +177,17 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         return;
       }
 
-      var found = _.find(vm.signupService.person.attributes, function(attr) {
-        return attr.attributeId === attributes.VEGETARIAN;
-      });
+      if (vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS] !== undefined) {
 
-      if (found) {
-        vm.signupService.page2.vegetarian = 'yes';
+        var found =
+          _.find(
+              vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS].attributes, function(attr) {
+          return attr.attributeId === attributes.VEGETARIAN;
+        });
+
+        if (found) {
+          vm.signupService.page2.vegetarian = 'yes';
+        }
       }
     }
 
