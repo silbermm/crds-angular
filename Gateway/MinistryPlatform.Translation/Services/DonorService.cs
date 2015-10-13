@@ -121,7 +121,7 @@ namespace MinistryPlatform.Translation.Services
             var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
-            var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;
+            var accountType = (giftType == "Bank") ? AccountType.Checking : AccountType.Credit;
 
             try
             {
