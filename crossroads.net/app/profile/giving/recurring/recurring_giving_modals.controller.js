@@ -21,6 +21,8 @@
     vm.programsInput = programList;
     vm.donation = donation;
     vm.cancel = cancel;
+    vm.remove = remove;
+    vm.edit = edit;
 
     activate($filter);
 
@@ -49,6 +51,18 @@
 
     function cancel() {
       $modalInstance.dismiss("cancel");
+    }
+
+    function remove() {
+      RecurringGivingService.recurringGifts.delete({ recurringGiftId: vm.donation.recurring_gift_id }, function(){
+        $modalInstance.close(true);
+      }, function(/*error*/) {
+        $modalInstance.close(false);
+      });
+    }
+
+    function edit() {
+      $modalInstance.close(vm.donation, true);
     }
 
   };

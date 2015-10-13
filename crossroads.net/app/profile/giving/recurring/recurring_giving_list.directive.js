@@ -3,9 +3,9 @@
 
   module.exports = RecurringGivingList;
 
-  RecurringGivingList.$inject = ['$log', '$modal', 'PaymentDisplayDetailService'];
+  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService'];
 
-  function RecurringGivingList($log, $modal, PaymentDisplayDetailService) {
+  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -24,7 +24,7 @@
         scope.recurringGifts = PaymentDisplayDetailService.postProcess(recurringGifts);
       });
 
-      function openRemoveGiftModal(selectedDonation) {
+      function openRemoveGiftModal(selectedDonation, index) {
         var modalInstance = $modal.open({
           templateUrl: 'recurring_giving_remove_modal',
           controller: 'RecurringGivingModals as recurringGift',
@@ -43,8 +43,13 @@
           }
         });
 
-        modalInstance.result.then(function (selectedItem) {
-          scope.selected = selectedItem;
+        modalInstance.result.then(function (success) {
+          if (success) {
+            scope.recurringGifts.splice(index, 1);
+            $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
+          } else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+          }
         }, function () {
           $log.info('Modal dismissed at: ' + new Date());
         });
@@ -69,7 +74,7 @@
           }
         });
 
-        modalInstance.result.then(function (selectedItem) {
+        modalInstance.result.then(function (selectedItem, success) {
           scope.selected = selectedItem;
         }, function () {
           $log.info('Modal dismissed at: ' + new Date());
