@@ -1,5 +1,6 @@
 <script type="text/ng-template" id="recurring_giving_remove_modal">
   <div class="modal-header">
+    <a type="button" class="close" ng-click="recurringGift.cancel()">x</a>
     <h3 class="modal-title">Confirm Removal</h3>
   </div>
 
@@ -8,15 +9,15 @@
 
     <p>
       You will be removing the recurring gift of
-      <strong>$100 Monthly</strong>
+      <strong>{{ recurringGift.dto.amount | currency:'$' }} {{ recurringGift.dto.interval }}</strong>
       to the
-      <strong>General Giving</strong>
+      <strong>{{ recurringGift.dto.program.Name }}</strong>
       fund from
       <span>
-        <svg viewBox="0 0 160 100" class="icon icon-cc_visa payment-type-icon">
-          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cc_visa"></use>
+        <svg ng-attr-viewBox="{{recurringGift.donation.source.viewBox}}" ng-class="'icon icon-' + recurringGift.donation.source.icon + 'payment-type-icon'">
+          <use ng-attr-xlink:href="{{'#' + recurringGift.donation.source.icon}}" xlink:href=""></use>
         </svg>
-        <strong>ending in 3459</strong>
+        <strong>ending in {{ recurringGift.dto.last4 }}</strong>
       </span>.
     </p>
 
@@ -26,8 +27,6 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-standard" ng-click="ok()">Cancel</button>
-
     <button class="btn btn-danger" ng-click="ok()">
       <svg viewBox="0 0 25 32" class="icon icon-trash-o">
         <use xlink:href="#trash-o"></use>

@@ -32,6 +32,14 @@
             donation: function () {
               return selectedDonation;
             },
+            programList: function() {
+              return [
+                {
+                  ProgramId: selectedDonation.program,
+                  Name: selectedDonation.program_name,
+                }
+              ];
+            },
           }
         });
 
