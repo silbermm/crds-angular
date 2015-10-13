@@ -8,6 +8,7 @@ namespace crds_angular.Services.Interfaces
     public interface IPaymentService
     {
         StripeCustomer CreateCustomer(string customerToken);
+        StripeCustomer GetCustomer(string customerId);
         string CreateToken(string accountNumber, string routingNumber);
         StripeCharge ChargeCustomer(string customerToken, int amount, int donorId);
         StripeCharge ChargeCustomer(string customerToken, string customerSourceId, int amount, int donorId);
@@ -21,5 +22,7 @@ namespace crds_angular.Services.Interfaces
         StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
         StripeSubscription CreateSubscription(string planName, string customer);
         StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);
+        StripeSubscription CancelSubscription(string customerId, string subscriptionId);
+        StripePlan CancelPlan(string planId);
     }
 }

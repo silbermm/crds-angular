@@ -10,6 +10,7 @@ using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using RestSharp.Extensions;
 using Group = MinistryPlatform.Models.Group;
 using Response = MinistryPlatform.Models.Response;
 
@@ -160,12 +161,13 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
                 .ForMember(dest => dest.DonorID, opts => opts.MapFrom(src => src.DonorID))
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.EmailAddress))
-                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency))
+                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency.Matches("^.*Monthly") ? PlanInterval.Monthly : PlanInterval.Weekly))
                 .ForMember(dest => dest.Recurrence, opts => opts.MapFrom(src => src.Recurrence))
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate))
                 .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EndDate))
                 .ForMember(dest => dest.PlanAmount, opts => opts.MapFrom(src => src.Amount))
-                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramName))
+                .ForMember(dest => dest.Program, opts => opts.MapFrom(src => src.ProgramID))
+                .ForMember(dest => dest.ProgramName, opts => opts.MapFrom(src => src.ProgramName))
                 .ForMember(dest => dest.CongregationName, opts => opts.MapFrom(src => src.CongregationName))
                 .ForMember(dest => dest.SubscriptionID, opts => opts.MapFrom(src => src.SubscriptionID))
                 .AfterMap((src, dest) =>
