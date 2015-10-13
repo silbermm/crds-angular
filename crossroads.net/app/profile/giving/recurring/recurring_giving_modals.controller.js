@@ -44,8 +44,7 @@
       vm.dto.view = vm.donation.source.type === 'CreditCard' ? 'cc' : 'bank';
 
       if (vm.donation.interval !== null) {
-        var interval = vm.donation.interval.toLowerCase();
-        vm.dto.interval = interval.substring(0,1).toUpperCase() + interval.substring(1) + 'ly';
+        vm.dto.interval = _.capitalize(vm.donation.interval.toLowerCase()) + 'ly';
       }
     }
 
