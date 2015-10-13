@@ -101,29 +101,24 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
-
-            // Create a new DonorAccount for this donor, if we have account info
-            if (donorAccount != null)
+   
+            if (donorAccount!= null)
             {
                 CreateDonorAccount(DefaultInstitutionName,
                                    DonorAccountNumberDefault,
                                    DonorRoutingNumberDefault,
+                                   donorAccount.EncryptedAccount,
                                    donorId,
                                    donorAccount.ProcessorAccountId,
                                    processorId);
             }
+            
             return donorId;
         }
 
-        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId)
+        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId)
         {
-           var apiToken = ApiLogin();
-
-            string encryptedAcct = null;
-            if (routingNumber != DonorRoutingNumberDefault)
-            {
-                encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
-            }
+            var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
             var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;
