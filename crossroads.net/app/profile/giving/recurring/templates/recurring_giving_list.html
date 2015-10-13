@@ -2,7 +2,7 @@
   <tbody ng-repeat="recurringGift in recurringGifts track by $index">
     <tr>
       <td>
-          {{recurringGift.program}}
+          {{recurringGift.program_name}}
           <div class="text-muted">
             <div ng-show="recurringGift.source.icon" style="display: inline">
               <svg ng-attr-viewBox="{{recurringGift.source.viewBox}}" ng-class="'icon icon-' + recurringGift.source.icon + 'payment-type-icon'">
