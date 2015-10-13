@@ -129,12 +129,8 @@ namespace crds_angular.Services
                 {
                     var currentAttribute = attributesPersisted[currentIndex];
 
-                    if (currentAttribute.ContactAttributeId == attribute.ContactAttributeId)
+                    if (currentAttribute.AttributeId == attribute.AttributeId && currentAttribute.AttributeTypeId == attribute.AttributeTypeId)
                     {
-                        // match by Id
-                        // TODO: Do we need to look at other fields here like attribute.AttributeId & attribute.AttributeTypeId
-                        // Or would a Contains be more correct and remove the looping?
-
                         attributesPersisted.RemoveAt(currentIndex);
                         attributesToSave.RemoveAt(index);
                         break;
