@@ -185,7 +185,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", chargeId},
-                {"Registered_Donor", true}, 
+                {"Registered_Donor", true},
+                {"Anonymous", false},
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", donationStatus},
@@ -291,7 +292,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", chargeId},
-                {"Registered_Donor", true}, 
+                {"Registered_Donor", true},
+                {"Anonymous", false},
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
