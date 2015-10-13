@@ -1296,5 +1296,23 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[2]["Institution_Name"], result[2].InstitutionName);
             Assert.AreEqual(records[2]["Subscription_ID"], result[2].SubscriptionID);
         }
+
+        [Test]
+        public void TestCancelRecurringGift()
+        {
+            const string authUserToken = "auth";
+            const int recurringGiftId = 123;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                { "End_Date", DateTime.Now.Date },
+                { "Recurring_Gift_ID", recurringGiftId}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(523, expectedParms, authUserToken));
+
+            _fixture.CancelRecurringGift(authUserToken, recurringGiftId);
+            _ministryPlatformService.VerifyAll();
+        }
     }
 }

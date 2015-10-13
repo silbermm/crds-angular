@@ -699,13 +699,70 @@ namespace crds_angular.test.controllers
         }
 
         [Test]
-        public void TestCreateRecurringGifyMinistryPlatformException()
+        public void TestCreateRecurringGiftMinistryPlatformException()
         {
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(_authType + " " + _authToken)).Throws<ApplicationException>();
 
             try
             {
                 _fixture.CreateRecurringGift(new RecurringGiftDto());
+                Assert.Fail("expected exception was not thrown");
+            }
+            catch (HttpResponseException)
+            {
+                // expected
+            }
+            _donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestCancelRecurringGift()
+        {
+            var authUserToken = _authType + " " + _authToken;
+            const int recurringGiftId = 123;
+
+            _donorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, recurringGiftId));
+            var response = _fixture.CancelRecurringGift(recurringGiftId);
+            _donorService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkResult>(response);
+        }
+
+        [Test]
+        public void TestCancelRecurringGiftStripeError()
+        {
+            var authUserToken = _authType + " " + _authToken;
+            const int recurringGiftId = 123;
+
+            var stripeException = new PaymentProcessorException(HttpStatusCode.Forbidden,
+                                                                "aux message",
+                                                                "error type",
+                                                                "message",
+                                                                "code",
+                                                                "decline code",
+                                                                "param",
+                                                                new ContentBlock());
+
+            _donorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, recurringGiftId)).Throws(stripeException);
+
+            var response = _fixture.CancelRecurringGift(recurringGiftId);
+            _donorService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<PaymentProcessorErrorResponse>>(response);
+            var err = (RestHttpActionResult<PaymentProcessorErrorResponse>)response;
+            Assert.AreEqual(HttpStatusCode.Forbidden, err.StatusCode);
+        }
+
+        [Test]
+        public void TestCancelRecurringGiftMinistryPlatformException()
+        {
+            var authUserToken = _authType + " " + _authToken;
+            const int recurringGiftId = 123;
+            _donorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, recurringGiftId)).Throws<ApplicationException>();
+
+            try
+            {
+                _fixture.CancelRecurringGift(recurringGiftId);
                 Assert.Fail("expected exception was not thrown");
             }
             catch (HttpResponseException)

@@ -390,12 +390,27 @@ namespace crds_angular.Controllers.API
         /// <param name="recurringGiftId">The recurring gift ID to delete in MinistryPlatform and Stripe.</param>
         /// <returns>The RecurringGiftDto representing the gift that was deleted</returns>
         [RequiresAuthorization]
-        [ResponseType(typeof(RecurringGiftDto))]
         [HttpDelete]
         [Route("api/donor/recurrence/{recurringGiftId:int}")]
         public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId)
         {
-            return (RestHttpActionResult<ApiErrorDto>.ServerError(new ApiErrorDto("CancelRecurringGift is not implemented")));
+            return(Authorized(token =>
+            {
+                try
+                {
+                    _donorService.CancelRecurringGift(token, recurringGiftId);
+                    return (Ok());
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            }));
         }
 
 

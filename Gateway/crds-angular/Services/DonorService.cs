@@ -197,6 +197,17 @@ namespace crds_angular.Services
             return recurGiftId;
         }
 
+        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        {
+            var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
+            var donor = GetContactDonorForDonorId(existingGift.DonorId);
+
+            var subscription = _paymentService.CancelSubscription(donor.ProcessorId, existingGift.SubscriptionId);
+            _paymentService.CancelPlan(subscription.Plan.Id);
+
+            _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+        }
+
         public RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, editGift.RecurringGiftId);
