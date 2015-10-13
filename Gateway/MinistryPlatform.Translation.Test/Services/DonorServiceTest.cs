@@ -49,6 +49,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdDonationDistributions")).Returns(516);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGifts")).Returns(45243);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftBySubscription")).Returns(45208);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView")).Returns(45209);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
@@ -1300,6 +1301,63 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void TestGetRecurringGifyById()
+        {
+            const string authUserToken = "auth";
+            const int recurringGiftId = 123;
+
+            const int donorId = 456;
+            const int frequencyId = 789;
+            const int dayOfWeekId = 1;
+            const int dayOfMonth = 15;
+            var startDate = DateTime.Parse("1973-10-15");
+            const decimal amount = 123.45M;
+            const int programId = 4;
+            const int congragationId = 5;
+            const int accountTypeId = 2;
+            const int donorAccountId = 987;
+            const string subscriptionId = "sub_123";
+
+            var records = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Recurring_Gift_ID", recurringGiftId},
+                    {"Donor_ID", donorId},
+                    {"Frequency_ID", frequencyId},
+                    {"Day_Of_Week_ID", dayOfWeekId},
+                    {"Day_Of_Month", dayOfMonth},
+                    {"Start_Date", startDate},
+                    {"Amount", amount},
+                    {"Program_ID", programId},
+                    {"Congregation_ID", congragationId},
+                    {"Account_Type_ID", accountTypeId},
+                    {"Donor_Account_ID", donorAccountId},
+                    {"Subscription_ID", subscriptionId},
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45209, authUserToken, "\"123\",", string.Empty, 0)).Returns(records);
+
+            var result = _fixture.GetRecurringGiftById(authUserToken, recurringGiftId);
+            _ministryPlatformService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(recurringGiftId, result.RecurringGiftId);
+            Assert.AreEqual(donorId, result.DonorId);
+            Assert.AreEqual(frequencyId, result.Frequency);
+            Assert.AreEqual(dayOfWeekId, result.DayOfWeek);
+            Assert.AreEqual(dayOfMonth, result.DayOfMonth);
+            Assert.AreEqual(startDate, result.StartDate);
+            Assert.AreEqual(amount * 100, result.Amount);
+            Assert.AreEqual(programId+"", result.ProgramId);
+            Assert.AreEqual(congragationId, result.CongregationId);
+            Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
+            Assert.AreEqual(donorAccountId, result.DonorAccountId);
+            Assert.AreEqual(subscriptionId, result.SubscriptionId);
+        }
+
+        [Test]
         public void TestCancelRecurringGift()
         {
             const string authUserToken = "auth";
@@ -1314,6 +1372,25 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(523, expectedParms, authUserToken));
 
             _fixture.CancelRecurringGift(authUserToken, recurringGiftId);
+            _ministryPlatformService.VerifyAll();
+        }
+
+        [Test]
+        public void TestUpdateRecurringGiftDonorAccount()
+        {
+            const string authUserToken = "auth";
+            const int recurringGiftId = 123;
+            const int donorAccountId = 123;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                { "Donor_Account_ID", donorAccountId },
+                { "Recurring_Gift_ID", recurringGiftId}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(523, expectedParms, authUserToken));
+
+            _fixture.UpdateRecurringGiftDonorAccount(authUserToken, recurringGiftId, donorAccountId);
             _ministryPlatformService.VerifyAll();
         }
     }

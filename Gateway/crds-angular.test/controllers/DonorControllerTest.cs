@@ -771,5 +771,75 @@ namespace crds_angular.test.controllers
             }
             _donorService.VerifyAll();
         }
+
+        [Test]
+        public void TestEditRecurringGift()
+        {
+            var authorizedUserToken = _authType + " " + _authToken;
+            var donor = new ContactDonor();
+            var editGift = new RecurringGiftDto();
+            var newGift = new RecurringGiftDto();
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
+            _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Returns(newGift);
+
+            var response = _fixture.EditRecurringGift(editGift);
+            _donorService.VerifyAll();
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<RecurringGiftDto>>(response);
+            var dtoResponse = ((OkNegotiatedContentResult<RecurringGiftDto>)response).Content;
+            Assert.IsNotNull(dtoResponse);
+            Assert.AreSame(newGift, dtoResponse);
+        }
+
+        [Test]
+        public void TestEditRecurringGiftStripeError()
+        {
+            var authorizedUserToken = _authType + " " + _authToken;
+            var donor = new ContactDonor();
+            var editGift = new RecurringGiftDto();
+
+            var stripeException = new PaymentProcessorException(HttpStatusCode.Forbidden,
+                                                                "aux message",
+                                                                "error type",
+                                                                "message",
+                                                                "code",
+                                                                "decline code",
+                                                                "param",
+                                                                new ContentBlock());
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
+            _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Throws(stripeException);
+
+            var response = _fixture.EditRecurringGift(editGift);
+            _donorService.VerifyAll();
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<RestHttpActionResult<PaymentProcessorErrorResponse>>(response);
+            var err = (RestHttpActionResult<PaymentProcessorErrorResponse>)response;
+            Assert.AreEqual(HttpStatusCode.Forbidden, err.StatusCode);
+        }
+
+        [Test]
+        public void TestEditRecurringGiftMinistryPlatformException()
+        {
+            var authorizedUserToken = _authType + " " + _authToken;
+            var donor = new ContactDonor();
+            var editGift = new RecurringGiftDto();
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
+            _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Throws<ApplicationException>();
+
+            try
+            {
+                _fixture.EditRecurringGift(editGift);
+                Assert.Fail("expected exception was not thrown");
+            }
+            catch (HttpResponseException)
+            {
+                // expected
+            }
+            _donorService.VerifyAll();
+        }
     }
 }
