@@ -25,15 +25,15 @@ namespace MinistryPlatform.Translation.Services
         public List<ContactAttribute> GetCurrentContactAttributes(int contactId)
         {
             var token = ApiLogin();
-            var records = _ministryPlatformService.GetSubpageViewRecords("SelectedContactAttributes", contactId, token);
+            var records = _ministryPlatformService.GetSubpageViewRecords("SelectedContactAttributes", contactId, token);            
 
             var contactAttributes = records.Select(record => new ContactAttribute
             {
-                ContactAttributeId = record.ToInt("Contact_Attribute_ID"),                
+                ContactAttributeId = record.ToInt("Contact_Attribute_ID"),
+                AttributeId = record.ToInt("Attribute_ID"),
                 StartDate = record.ToDate("Start_Date"),
                 EndDate = record.ToNullableDate("End_Date"),
-                Notes = record.ToString("Notes"),
-                AttributeId = record.ToInt("Attribute_ID"),
+                Notes = record.ToString("Notes"),                
                 AttributeTypeId = record.ToInt("Attribute_Type_ID")
             }).ToList();
             return contactAttributes;

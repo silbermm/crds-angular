@@ -86,6 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\AttributeServiceTest.cs" />
+    <Compile Include="Services\ContactAttributeServiceIntegrationTest.cs" />
     <Compile Include="Extensions\DictionaryExtensionTests.cs" />
     <Compile Include="LookupTest.cs" />
     <Compile Include="Services\ContactAttributeServiceTest.cs" />

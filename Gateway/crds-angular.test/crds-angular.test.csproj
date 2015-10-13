@@ -178,6 +178,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\MPAuthTest.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
+    <Compile Include="Services\AttributeServiceTest.cs" />
+    <Compile Include="Services\ContactAttributeTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\EzScanCheckScannerServiceTest.cs" />
