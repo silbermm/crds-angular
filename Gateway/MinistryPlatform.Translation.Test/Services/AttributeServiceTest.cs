@@ -104,6 +104,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Category #1", attribute.Category);
             Assert.AreEqual(3, attribute.AttributeTypeId);
             Assert.AreEqual("AttributeType #1", attribute.AttributeTypeName);
+            Assert.AreEqual(false, attribute.PreventMultipleSelection);
 
             attribute = attributes[1];
             Assert.AreEqual(4, attribute.AttributeId);
@@ -112,6 +113,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("Category #2", attribute.Category);
             Assert.AreEqual(6, attribute.AttributeTypeId);
             Assert.AreEqual("AttributeType #1", attribute.AttributeTypeName);
+            Assert.AreEqual(false, attribute.PreventMultipleSelection);
 
             attribute = attributes[2];
             Assert.AreEqual(7, attribute.AttributeId);
@@ -120,6 +122,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(null, attribute.Category);
             Assert.AreEqual(9, attribute.AttributeTypeId);
             Assert.AreEqual("AttributeType #2", attribute.AttributeTypeName);
+            Assert.AreEqual(true, attribute.PreventMultipleSelection);
         }
 
         private static List<Dictionary<string, object>> GetPageViewRecordsResponse()
@@ -133,7 +136,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category_ID", 2},
                     {"Attribute_Category", "Category #1"},
                     {"Attribute_Type_ID", 3},
-                    {"Attribute_Type", "AttributeType #1"}
+                    {"Attribute_Type", "AttributeType #1"},
+                    {"Prevent_Multiple_Selection", "False"}
                 },
                 new Dictionary<string, object>()
                 {
@@ -142,7 +146,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category_ID", 5},
                     {"Attribute_Category", "Category #2"},
                     {"Attribute_Type_ID", 6},
-                    {"Attribute_Type", "AttributeType #1"}
+                    {"Attribute_Type", "AttributeType #1"},
+                    {"Prevent_Multiple_Selection", "False"}
                 },
                 new Dictionary<string, object>()
                 {
@@ -151,7 +156,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category_ID", null},
                     {"Attribute_Category", null},
                     {"Attribute_Type_ID", 9},
-                    {"Attribute_Type", "AttributeType #2"}
+                    {"Attribute_Type", "AttributeType #2"},
+                    {"Prevent_Multiple_Selection", "True"}
                 }
             };
         }

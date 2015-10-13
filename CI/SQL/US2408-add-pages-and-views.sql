@@ -21,7 +21,7 @@ INSERT INTO dbo.dp_Page_Views
         'Attributes With Type', 
         277, 
         'Attribute List with Type and Category information', 
-        'Attributes.[Attribute_ID], Attributes.[Attribute_Name], Attribute_Type_ID_Table.[Attribute_Type_ID], Attribute_Type_ID_Table.[Attribute_Type], Attribute_Category_ID_Table.[Attribute_Category_ID], Attribute_Category_ID_Table.[Attribute_Category]', 
+		'Attributes.[Attribute_ID], Attributes.[Attribute_Name], Attribute_Type_ID_Table.[Attribute_Type_ID], Attribute_Type_ID_Table.[Attribute_Type], Attribute_Type_ID_Table.[Prevent_Multiple_Selection], Attribute_Category_ID_Table.[Attribute_Category_ID], Attribute_Category_ID_Table.[Attribute_Category]',
         'Attributes.[Attribute_ID] IS NOT NULL', 
         'Attribute_Type_ID_Table.[Attribute_Type_ID], Attributes.[Attribute_Name]', 
         NULL, 

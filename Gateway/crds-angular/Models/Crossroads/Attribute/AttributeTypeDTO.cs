@@ -11,6 +11,8 @@ namespace crds_angular.Models.Crossroads.Attribute
         public List<crds_angular.Models.Crossroads.Attribute.AttributeDTO> Attributes { get; private set;  }
         [JsonProperty(PropertyName = "attributeTypeId")]
         public int AttributeTypeId { get; set; }
+        [JsonProperty(PropertyName = "allowMultipleSelections")]
+        public bool AllowMultipleSelections { get; set; }
 
         public AttributeTypeDTO()
         { 

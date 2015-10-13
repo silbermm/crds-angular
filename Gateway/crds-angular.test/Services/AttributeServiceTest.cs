@@ -32,8 +32,12 @@ namespace crds_angular.test.Services
             Assert.IsNotNull(result);
             Assert.AreEqual(result.Count, 2, "Records are not grouped by attributeType");
             Assert.AreEqual(result[0].Name, "AttributeType #1", "attributeType name not correct");
+            Assert.AreEqual(result[0].AllowMultipleSelections, true);
             Assert.AreEqual(result[0].Attributes.Count, 2, "Number of attributes for attributeType not correct");
+
+
             Assert.AreEqual(result[1].Name, "AttributeType #2", "attributeType name not correct");
+            Assert.AreEqual(result[1].AllowMultipleSelections, false);
             Assert.AreEqual(result[1].Attributes.Count, 1, "Number of attributes for attributeType not correct");
         }
 
@@ -48,7 +52,8 @@ namespace crds_angular.test.Services
                     CategoryId = 2,
                     Category = "Category #1",
                     AttributeTypeId = 3,
-                    AttributeTypeName = "AttributeType #1"
+                    AttributeTypeName = "AttributeType #1",
+                    PreventMultipleSelection = false
                 },
                 new Attribute()
                 {
@@ -57,7 +62,8 @@ namespace crds_angular.test.Services
                     CategoryId = 5,
                     Category = "Category #2",
                     AttributeTypeId = 3,
-                    AttributeTypeName = "AttributeType #1"
+                    AttributeTypeName = "AttributeType #1",
+                    PreventMultipleSelection = false
                 },
                 new Attribute()
                 {
@@ -66,7 +72,8 @@ namespace crds_angular.test.Services
                     CategoryId = null,
                     Category = null,
                     AttributeTypeId = 9,
-                    AttributeTypeName = "AttributeType #2"
+                    AttributeTypeName = "AttributeType #2",
+                    PreventMultipleSelection = true
                 }
             };
         }

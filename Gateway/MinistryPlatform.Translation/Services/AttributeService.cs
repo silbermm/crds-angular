@@ -32,7 +32,8 @@ namespace MinistryPlatform.Translation.Services
                 CategoryId = record.ToNullableInt("Attribute_Category_ID"), 
                 Category = record.ToString("Attribute_Category"), 
                 AttributeTypeId = record.ToInt("Attribute_Type_ID"), 
-                AttributeTypeName = record.ToString("Attribute_Type")
+                AttributeTypeName = record.ToString("Attribute_Type"),
+                PreventMultipleSelection = record.ToBool("Prevent_Multiple_Selection")
             }).ToList();
         }
     }

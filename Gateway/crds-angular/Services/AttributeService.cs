@@ -29,7 +29,7 @@ namespace crds_angular.Services
                     AttributeId = attribute.AttributeId,
                     Name = attribute.Name,
                     CategoryId = attribute.CategoryId,
-                    Category = attribute.Category,
+                    Category = attribute.Category                    
                 };
 
                 var key = GetOrCreateAttributeTypeDto(attribute, attributeTypes);
@@ -45,7 +45,8 @@ namespace crds_angular.Services
             var attributeTypeDto = new AttributeTypeDTO()
             {
                 AttributeTypeId = attribute.AttributeTypeId,
-                Name = attribute.AttributeTypeName
+                Name = attribute.AttributeTypeName,
+                AllowMultipleSelections = !attribute.PreventMultipleSelection
             };
 
             var key = attributeTypeDto.AttributeTypeId;
