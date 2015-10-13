@@ -26,6 +26,7 @@
 
       function openRemoveGiftModal(selectedDonation, index) {
         var modalInstance = $modal.open({
+          parent: 'noSideBar',
           templateUrl: 'recurring_giving_remove_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
@@ -57,6 +58,7 @@
 
       function openEditGiftModal(selectedDonation) {
         var modalInstance = $modal.open({
+          parent: 'noSideBar',
           templateUrl: 'recurring_giving_edit_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
