@@ -21,7 +21,7 @@ INSERT INTO dbo.dp_Page_Views
         'Attributes With Type', 
         277, 
         'Attribute List with Type and Category information', 
-        'Attributes.[Attribute_ID], Attributes.[Attribute_Name], Attribute_Type_ID_Table.[Attribute_Type_ID], Attribute_Type_ID_Table.[Attribute_Type], Attribute_Category_ID_Table.[Attribute_Category_ID], Attribute_Category_ID_Table.[Attribute_Category]', 
+		'Attributes.[Attribute_ID], Attributes.[Attribute_Name], Attribute_Type_ID_Table.[Attribute_Type_ID], Attribute_Type_ID_Table.[Attribute_Type], Attribute_Type_ID_Table.[Prevent_Multiple_Selection], Attribute_Category_ID_Table.[Attribute_Category_ID], Attribute_Category_ID_Table.[Attribute_Category]',
         'Attributes.[Attribute_ID] IS NOT NULL', 
         'Attribute_Type_ID_Table.[Attribute_Type_ID], Attributes.[Attribute_Name]', 
         NULL, 
@@ -50,7 +50,7 @@ INSERT INTO dbo.dp_Sub_Page_Views
         'Current Selected', 
         269, 
         'Currently selected contract attributes with AttributeType', 
-        'Contact_Attributes.[Contact_Attribute_ID], Contact_Attributes.[Start_Date], Contact_Attributes.[End_Date], Contact_Attributes.[Notes], Attribute_ID_Table.[Attribute_ID], Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type_ID]', 
+        'Contact_Attributes.[Contact_Attribute_ID], Contact_Attributes.[Start_Date], Contact_Attributes.[End_Date], Contact_Attributes.[Notes], Attribute_ID_Table.[Attribute_ID], Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type_ID],  Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type]', 
         'GetDate() BETWEEN Contact_Attributes.Start_Date AND ISNULL(Contact_Attributes.End_Date, GetDate())', 
         NULL,
         NULL
