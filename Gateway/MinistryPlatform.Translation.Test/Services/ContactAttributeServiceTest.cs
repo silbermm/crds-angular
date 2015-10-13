@@ -43,7 +43,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"End_Date", null},
                     {"Notes", "These are my notes"},
                     {"Attribute_ID", 2},
-                    {"Attribute_Type_ID", 3}
+                    {"Attribute_Type_ID", 3},
+                    {"Attribute_Type", "AttributeType #1"}
                 },
                 new Dictionary<string, object>()
                 {
@@ -52,7 +53,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"End_Date", null},
                     {"Notes", ""},
                     {"Attribute_ID", 5},
-                    {"Attribute_Type_ID", 6}
+                    {"Attribute_Type_ID", 6},
+                    {"Attribute_Type", "AttributeType #2"}
                 }
             };
             _ministryPlatformService.Setup(

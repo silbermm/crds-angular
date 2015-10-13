@@ -274,6 +274,8 @@
     <Compile Include="Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeTypeDTO.cs" />
+    <Compile Include="Models\Crossroads\Profile\ContactAttributeDTO.cs" />
+    <Compile Include="Models\Crossroads\Profile\ContactAttributeTypeDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
     <Compile Include="Models\Crossroads\Stewardship\RecurringGiftDto.cs" />
     <Compile Include="Models\Crossroads\Stewardship\UpdateDonorDTO.cs" />

@@ -34,7 +34,8 @@ namespace MinistryPlatform.Translation.Services
                 StartDate = record.ToDate("Start_Date"),
                 EndDate = record.ToNullableDate("End_Date"),
                 Notes = record.ToString("Notes"),                
-                AttributeTypeId = record.ToInt("Attribute_Type_ID")
+                AttributeTypeId = record.ToInt("Attribute_Type_ID"),
+                AttributeTypeName = record.ToString("Attribute_Type")
             }).ToList();
             return contactAttributes;
         }

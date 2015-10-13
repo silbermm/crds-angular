@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services;
 using Crossroads.Utilities.Services;
-using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
 using MPServices = MinistryPlatform.Translation.Services;
 
@@ -10,50 +10,59 @@ using NUnit.Framework;
 
 namespace crds_angular.test.Services
 {
+    [Category("IntegrationTests")]
     class ContactAttributeServiceIntegrationTest
     {
-
-        // TODO: These are integration tests. Removed before merging
-        [Test]
-        [Ignore]
-        public void SaveContactAttributes()
+        [Test]    
+        public void LoadContactAttributes()
         {
             var configWrapper = new ConfigurationWrapper();
             var platformService = new PlatformServiceClient();
             var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
 
-            
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
             var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
 
+            var contactId = 2399608;
+            var attributes = service.GetContactAttributes(contactId);
+
+            Assert.That(attributes.Count > 0);
+        }
+
+        [Test]        
+        public void SaveContactAttributes()
+        {
+            var configWrapper = new ConfigurationWrapper();
+            var platformService = new PlatformServiceClient();
+            var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
+            var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
+            
+            var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
+            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
             
             var contactId = 2399608;
             var attributes = service.GetContactAttributes(contactId);
 
+            var firstAttributeType = attributes[0];
 
-            var attributeToRemove = attributes[0];
-            attributes.Remove(attributeToRemove);
+            var attributeToRemove = firstAttributeType.Attributes[0];
+            firstAttributeType.Attributes.Remove(attributeToRemove);
             service.SaveContactAttributes(contactId, attributes);
 
-
-            var attributeToAdd = new ContactAttribute()
+            var attributeToAdd = new ContactAttributeDTO()
             {
                 AttributeId = attributeToRemove.AttributeId,
-                AttributeTypeId = attributeToRemove.AttributeTypeId,
                 StartDate = DateTime.Today,
                 EndDate = null,
                 Notes = string.Empty
             };
 
-            attributes.Add(attributeToAdd);
+            firstAttributeType.Attributes.Add(attributeToAdd);
             service.SaveContactAttributes(contactId, attributes);
         }
-
-
-        // TODO: These are integration tests. Removed before merging
+        
         [Test]
-        [Ignore]
         public void RemoveAndThenAddAllContactAttributes()
         {
             var configWrapper = new ConfigurationWrapper();
@@ -68,7 +77,7 @@ namespace crds_angular.test.Services
             var attributes = service.GetContactAttributes(contactId);
 
             // Remove all items            
-            service.SaveContactAttributes(contactId, new List<ContactAttribute>());
+            service.SaveContactAttributes(contactId, new List<ContactAttributeTypeDTO>());
 
             // Add all back
             service.SaveContactAttributes(contactId, attributes);

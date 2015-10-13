@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
@@ -24,17 +25,45 @@ namespace crds_angular.Services
             _mpAuthenticationService = mpAuthenticationService;
         }
 
-        // TODO: Switch out ContactAttributes with ContactAttributesDTO
-        public List<ContactAttribute> GetContactAttributes(int contactId)
+        public List<ContactAttributeTypeDTO> GetContactAttributes(int contactId)
         {
-            var contactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);            
-            return contactAttributes;
+            var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+
+            var resultList = TranslateToAttributeTypeDtos(mpContactAttributes);
+            return resultList;
         }
 
-        // TODO: Switch out ContactAttributes with ContactAttributesDTO
-        public void SaveContactAttributes(int contactId, List<ContactAttribute> contactAttributes)
+        private List<ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(List<ContactAttribute> mpContactAttributes)
         {            
-            var attributesToSave = contactAttributes.ToList();            
+            var attributeTypesDictionary = mpContactAttributes
+                .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
+                .Distinct()
+                .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
+                              mpAttributeType => new ContactAttributeTypeDTO()
+                              {
+                                  AttributeTypeId = mpAttributeType.AttributeTypeId,
+                                  Name = mpAttributeType.AttributeTypeName,
+                              });
+
+            foreach (var mpContactAttribute in mpContactAttributes)
+            {
+                var contactAttribute = new ContactAttributeDTO()
+                {
+                    AttributeId = mpContactAttribute.AttributeId,
+                    StartDate = mpContactAttribute.StartDate,
+                    EndDate = mpContactAttribute.EndDate,
+                    Notes = mpContactAttribute.Notes
+                };
+
+                attributeTypesDictionary[mpContactAttribute.AttributeTypeId].Attributes.Add(contactAttribute);
+            }
+
+            return attributeTypesDictionary.Values.ToList();
+        }
+        
+        public void SaveContactAttributes(int contactId, List<ContactAttributeTypeDTO> contactAttributes)
+        {
+            var attributesToSave = TranslateToMPAttributes(contactAttributes);
 
             // Get current list of attributes
             var attributesPersisted = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
@@ -55,6 +84,30 @@ namespace crds_angular.Services
                 attribute.EndDate = DateTime.Today;
                 _mpContactAttributeService.UpdateAttribute(apiUserToken, attribute);
             }
+        }
+
+        private List<ContactAttribute> TranslateToMPAttributes(List<ContactAttributeTypeDTO> contactAttributesTypes)
+        {
+            var results = new List<ContactAttribute>();
+
+            foreach (var contactAttributeType in contactAttributesTypes)
+            {
+                foreach (var contactAttribute in contactAttributeType.Attributes)
+                {
+                    var mpContactAttribute = new ContactAttribute()
+                    {
+                        AttributeId = contactAttribute.AttributeId,
+                        AttributeTypeId = contactAttributeType.AttributeTypeId,
+                        AttributeTypeName = contactAttributeType.Name,
+                        StartDate = contactAttribute.StartDate,
+                        EndDate = contactAttribute.EndDate,
+                        Notes = contactAttribute.Notes
+                    };
+
+                    results.Add(mpContactAttribute);
+                }
+            }
+            return results;
         }
 
         private string GetApiUserToken()

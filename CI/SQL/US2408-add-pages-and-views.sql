@@ -50,7 +50,7 @@ INSERT INTO dbo.dp_Sub_Page_Views
         'Current Selected', 
         269, 
         'Currently selected contract attributes with AttributeType', 
-        'Contact_Attributes.[Contact_Attribute_ID], Contact_Attributes.[Start_Date], Contact_Attributes.[End_Date], Contact_Attributes.[Notes], Attribute_ID_Table.[Attribute_ID], Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type_ID]', 
+        'Contact_Attributes.[Contact_Attribute_ID], Contact_Attributes.[Start_Date], Contact_Attributes.[End_Date], Contact_Attributes.[Notes], Attribute_ID_Table.[Attribute_ID], Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type_ID],  Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type]', 
         'GetDate() BETWEEN Contact_Attributes.Start_Date AND ISNULL(Contact_Attributes.End_Date, GetDate())', 
         NULL,
         NULL
