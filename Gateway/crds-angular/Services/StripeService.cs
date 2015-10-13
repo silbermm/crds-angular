@@ -183,7 +183,10 @@ namespace crds_angular.Services
 
         public StripePlan CancelPlan(string planId)
         {
-            var request = new RestRequest(string.Format("plans/{0}", planId), Method.DELETE);
+            // We need to replace "/" with the URL-encoded "%2F" b/c our plan IDs have slashes in them, but this is
+            // part of the URI, which means it will not work properly if not encoded.
+            // For example: "2015344 10/13/2015 10:57:17"
+            var request = new RestRequest(string.Format("plans/{0}", planId.Replace("/", "%2F")), Method.DELETE);
 
             var response = _stripeRestClient.Execute<StripePlan>(request);
             CheckStripeResponse("Stripe Plan Cancel failed", response);

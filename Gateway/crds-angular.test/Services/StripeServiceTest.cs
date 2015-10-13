@@ -637,13 +637,13 @@ namespace crds_angular.test.Services
 
             _restClient.Setup(mocked => mocked.Execute<StripePlan>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
 
-            const string plan = "plan_123";
+            const string plan = "plan_123/456/789";
 
             var response = _fixture.CancelPlan(plan);
             _restClient.Verify(
                 mocked =>
                     mocked.Execute<StripePlan>(
-                        It.Is<IRestRequest>(o => o.Method == Method.DELETE && o.Resource.Equals("plans/" + plan))));
+                        It.Is<IRestRequest>(o => o.Method == Method.DELETE && o.Resource.Equals("plans/" + plan.Replace("/", "%2F")))));
 
             Assert.AreSame(stripePlan, response);
         }
