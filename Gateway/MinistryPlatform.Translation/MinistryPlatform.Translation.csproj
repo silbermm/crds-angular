@@ -107,6 +107,7 @@
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CampaignService.cs" />
+    <Compile Include="Services\ContactAttributeService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\CreatePageRecordService.cs" />
@@ -121,8 +122,7 @@
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
-    <None Include="Services\FileService.delete" />
-    <Compile Include="Services\Interfaces\IFileService.cs" />
+    <Compile Include="Services\Interfaces\IContactAttributeService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
     <Compile Include="Services\Interfaces\ICampaignService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />
@@ -296,7 +296,7 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <Import Project="$(SlowCheetahTargets)" Condition="Exists('$(SlowCheetahTargets)')" Label="SlowCheetah" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
