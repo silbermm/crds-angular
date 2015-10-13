@@ -1080,7 +1080,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(45243, expectedParms, It.IsAny<string>(), true)).Returns(recurringGiftId);
 
-            var result = _fixture.CreateRecurringGiftRecord(donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
+            var result = _fixture.CreateRecurringGiftRecord("auth", donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
             _ministryPlatformService.VerifyAll();
 
             Assert.AreEqual(recurringGiftId, result);
@@ -1198,6 +1198,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Start_Date", DateTime.Now},
                     {"End_Date", DateTime.Now},
                     {"Amount", 950.0M},
+                    {"Program_ID", 2},
                     {"Program_Name", "Beans & Rice"},
                     {"Congregation_Name", "Upton"},
                     {"Account_Type_ID", 3},
@@ -1215,6 +1216,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Start_Date", DateTime.Now},
                     {"End_Date", DateTime.Now},
                     {"Amount", 190.0M},
+                    {"Program_ID", 1},
                     {"Program_Name", "Crossroads"},
                     {"Congregation_Name", ""},
                     {"Account_Type_ID", 1},
@@ -1232,6 +1234,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Start_Date", DateTime.Now},
                     {"End_Date", DateTime.Now},
                     {"Amount", 50.0M},
+                    {"Program_ID", 3},
                     {"Program_Name", "Old St. George"},
                     {"Congregation_Name", "General"},
                     {"Account_Type_ID", 3},
@@ -1255,6 +1258,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["Start_Date"], result[0].StartDate);
             Assert.AreEqual(records[0]["End_Date"], result[0].EndDate);
             Assert.AreEqual(records[0]["Amount"], result[0].Amount);
+            Assert.AreEqual(records[0]["Program_ID"], result[0].ProgramID);
             Assert.AreEqual(records[0]["Program_Name"], result[0].ProgramName);
             Assert.AreEqual(records[0]["Congregation_Name"], result[0].CongregationName);
             Assert.AreEqual(records[0]["Account_Type_ID"], result[0].AccountTypeID);
@@ -1270,6 +1274,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["Start_Date"], result[1].StartDate);
             Assert.AreEqual(records[1]["End_Date"], result[1].EndDate);
             Assert.AreEqual(records[1]["Amount"], result[1].Amount);
+            Assert.AreEqual(records[1]["Program_ID"], result[1].ProgramID);
             Assert.AreEqual(records[1]["Program_Name"], result[1].ProgramName);
             Assert.AreEqual(records[1]["Congregation_Name"], result[1].CongregationName);
             Assert.AreEqual(records[1]["Account_Type_ID"], result[1].AccountTypeID);
@@ -1285,12 +1290,31 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[2]["Start_Date"], result[2].StartDate);
             Assert.AreEqual(records[2]["End_Date"], result[2].EndDate);
             Assert.AreEqual(records[2]["Amount"], result[2].Amount);
+            Assert.AreEqual(records[2]["Program_ID"], result[2].ProgramID);
             Assert.AreEqual(records[2]["Program_Name"], result[2].ProgramName);
             Assert.AreEqual(records[2]["Congregation_Name"], result[2].CongregationName);
             Assert.AreEqual(records[2]["Account_Type_ID"], result[2].AccountTypeID);
             Assert.AreEqual(records[2]["Account_Number"], result[2].AccountNumberLast4);
             Assert.AreEqual(records[2]["Institution_Name"], result[2].InstitutionName);
             Assert.AreEqual(records[2]["Subscription_ID"], result[2].SubscriptionID);
+        }
+
+        [Test]
+        public void TestCancelRecurringGift()
+        {
+            const string authUserToken = "auth";
+            const int recurringGiftId = 123;
+
+            var expectedParms = new Dictionary<string, object>
+            {
+                { "End_Date", DateTime.Now.Date },
+                { "Recurring_Gift_ID", recurringGiftId}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.UpdateRecord(523, expectedParms, authUserToken));
+
+            _fixture.CancelRecurringGift(authUserToken, recurringGiftId);
+            _ministryPlatformService.VerifyAll();
         }
     }
 }

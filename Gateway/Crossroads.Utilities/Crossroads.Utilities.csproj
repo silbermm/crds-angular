@@ -83,6 +83,7 @@
     <Compile Include="Models\ContentBlock.cs" />
     <Compile Include="Services\ContentBlockService.cs" />
     <Compile Include="Services\DbConnectionStringTypeConverter.cs" />
+    <Compile Include="Services\EnumMemberSerializationUtils.cs" />
     <Compile Include="Services\EnumTypeConverter.cs" />
     <Compile Include="Services\EnvironmentVariableTypeConverter.cs" />
     <Compile Include="Services\AppSettingsTypeConverter.cs" />
