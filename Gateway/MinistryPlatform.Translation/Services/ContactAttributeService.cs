@@ -39,62 +39,13 @@ namespace MinistryPlatform.Translation.Services
             return contactAttributes;
         }
 
-        public void SaveContactAttributes(int contactId, List<ContactAttribute> contactAttributes)
-        {
-            var token = ApiLogin();       
-            var attributesToSave = contactAttributes.ToList();
-
-            // Get current list of attributes
-            var attributesPersisted = GetCurrentContactAttributes(contactId);
-
-            // Remove all matches from list, since there is nothing to do with them
-            RemoveMatchesFromBothLists(attributesToSave, attributesPersisted);
-
-            foreach (var attribute in attributesToSave)
-            {
-                // These are new so add them
-                SaveAttribute(token, contactId, attribute);
-            }
-
-            foreach (var attribute in attributesPersisted)
-            {
-                // These are old so end-date them to remove them
-                attribute.EndDate = DateTime.Today;
-                UpdateAttribute(token, attribute);
-            }
-        }
-
-        private void RemoveMatchesFromBothLists(List<ContactAttribute> attributesToSave, List<ContactAttribute> attributesPersisted)
-        {
-            for (int index = attributesToSave.Count - 1; index >= 0; index--)
-            {
-                var attribute = attributesToSave[index];
-
-                for (int currentIndex = attributesPersisted.Count - 1; currentIndex >= 0; currentIndex--)
-                {
-                    var currentAttribute = attributesPersisted[currentIndex];
-
-                    if (currentAttribute.ContactAttributeId == attribute.ContactAttributeId)
-                    {
-                        // match by Id
-                        // TODO: Do we need to look at other fields here like attribute.AttributeId & attribute.AttributeTypeId
-                        // Or would a Contains be more correct and remove the looping?
-
-                        attributesPersisted.RemoveAt(currentIndex);
-                        attributesToSave.RemoveAt(index);
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void SaveAttribute(string token, int contactId, ContactAttribute attribute)
+        public int CreateAttribute(string token, int contactId, ContactAttribute attribute)
         {
             var attributeDictionary = TranslateContactAttributeToDictionary(attribute);
 
             try
             {                
-                _ministryPlatformService.CreateSubRecord(_contactAttributesSubPage, contactId, attributeDictionary, token);
+                return _ministryPlatformService.CreateSubRecord(_contactAttributesSubPage, contactId, attributeDictionary, token);
             }
             catch (Exception e)
             {
@@ -106,7 +57,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private void UpdateAttribute(string token, ContactAttribute attribute)
+        public void UpdateAttribute(string token, ContactAttribute attribute)
         {
             var attributeDictionary = TranslateContactAttributeToDictionary(attribute);
 

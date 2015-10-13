@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using crds_angular.Services;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.PlatformService;
-using MinistryPlatform.Translation.Services;
+using MPServices = MinistryPlatform.Translation.Services;
+
 using NUnit.Framework;
 
-namespace MinistryPlatform.Translation.Test.Services
+namespace crds_angular.test.Services
 {
     class ContactAttributeServiceIntegrationTest
     {
@@ -18,14 +20,16 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var configWrapper = new ConfigurationWrapper();
             var platformService = new PlatformServiceClient();
-            var ministryPlatformService = new MinistryPlatformServiceImpl(platformService, configWrapper);
-            var authenticationService = new AuthenticationServiceImpl(platformService, ministryPlatformService);
+            var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
+            var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
 
             
-            var service = new ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
+            var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
+            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
+
             
             var contactId = 2399608;
-            var attributes = service.GetCurrentContactAttributes(contactId);
+            var attributes = service.GetContactAttributes(contactId);
 
 
             var attributeToRemove = attributes[0];
@@ -54,13 +58,14 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var configWrapper = new ConfigurationWrapper();
             var platformService = new PlatformServiceClient();
-            var ministryPlatformService = new MinistryPlatformServiceImpl(platformService, configWrapper);
-            var authenticationService = new AuthenticationServiceImpl(platformService, ministryPlatformService);
+            var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
+            var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
 
-            var service = new ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
+            var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
+            var service = new ContactAttributeService(mpService, configWrapper, authenticationService);
 
             var contactId = 2399608;
-            var attributes = service.GetCurrentContactAttributes(contactId);
+            var attributes = service.GetContactAttributes(contactId);
 
             // Remove all items            
             service.SaveContactAttributes(contactId, new List<ContactAttribute>());
