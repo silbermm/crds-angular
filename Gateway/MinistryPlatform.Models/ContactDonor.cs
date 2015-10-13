@@ -62,6 +62,7 @@ namespace MinistryPlatform.Models
         public AccountType Type { get; set; }
         public string ProcessorAccountId { get; set; }
         public string ProcessorId { get; set; }
+        public string EncryptedAccount { get; set; }
     }
 
     public enum AccountType
