@@ -5,6 +5,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IAttributeService
     {
-        List<AttributeType> GetAttributeTypes(int? attributeTypeId);
+        List<Attribute> GetAttributes(int? attributeTypeId);
     }
 }

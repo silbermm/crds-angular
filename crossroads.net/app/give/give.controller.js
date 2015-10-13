@@ -5,7 +5,7 @@
   GiveCtrl.$inject = ['$rootScope',
                       '$state',
                       '$timeout',
-                      'giveType',
+                      'giveService',
                       'Session',
                       'programList',
                       'GiveTransferService',
@@ -22,7 +22,7 @@
   function GiveCtrl($rootScope,
     $state,
     $timeout,
-    giveType,
+    giveService,
     Session,
     programList,
     GiveTransferService,
@@ -35,12 +35,12 @@
     vm.dto = GiveTransferService;
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
     vm.emailPrefix = 'give';
-    vm.initDefaultState = OneTimeGiving.initDefaultState;
+    vm.service = giveService;
+    vm.initDefaultState = vm.service.initDefaultState();
     vm.onEmailFound = onEmailFound;
     vm.onEmailNotFound = onEmailNotFound;
     vm.programsInput = programList;
     vm.branchOnGivingType = branchOnGivingType;
-    vm.service = OneTimeGiving;
 
     $rootScope.$on('$stateChangeStart', function(event, toState, toParams) {
 
@@ -57,9 +57,6 @@
         return;
       }
 
-      if (vm.dto.givingType == undefined) {
-        vm.dto.givingType = giveType;
-      }
       vm.service.getLoggedInUserDonorPaymentInfo(event, toState);
     });
 

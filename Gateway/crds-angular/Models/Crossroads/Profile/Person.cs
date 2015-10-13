@@ -1,10 +1,10 @@
-﻿﻿using System;
 ﻿using System.Collections.Generic;
-﻿using MinistryPlatform.Models;
-﻿using Newtonsoft.Json;
-﻿using Address = crds_angular.Models.MP.Address;
+using MinistryPlatform.Models;
+using Newtonsoft.Json;
+using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
 
-namespace crds_angular.Models
+
+namespace crds_angular.Models.Crossroads.Profile
 {
     public class Person
     {
@@ -89,25 +89,8 @@ namespace crds_angular.Models
         [JsonProperty(PropertyName = "householdMembers")]
         public List<HouseholdMember> HouseholdMembers { get; set; }
 
-        [JsonProperty(PropertyName = "passportFirstname")]
-        public string PassportFirstname { get; set; }
-
-        [JsonProperty(PropertyName = "passportLastname")]
-        public string PassportLastname { get; set; }
-
-        [JsonProperty(PropertyName = "passportMiddlename")]
-        public string PassportMiddlename { get; set; }
-
-        [JsonProperty(PropertyName = "passportNumber")]
-        public string PassportNumber { get; set; }
-
-        [JsonProperty(PropertyName = "passportCountry")]
-        public string PassportCountry { get; set; }
-
-        [JsonProperty(PropertyName = "passportExpiration")]
-        public DateTime PassportExpiration { get; set; }
-
-        public List<ContactAttribute> Attributes { get; set; }
+        [JsonProperty(PropertyName = "attributesTypes")]
+        public List<ContactAttributeTypeDTO> AttributesTypes { get; set; }
 
         public MyContact GetContact()
         {
@@ -134,19 +117,13 @@ namespace crds_angular.Models
                 State = State,
                 Postal_Code = PostalCode,
                 Congregation_ID = CongregationId,
-                Household_ID = HouseholdId,
-                Passport_Firstname = PassportFirstname,
-                Passport_Lastname = PassportLastname,
-                Passport_Middlename = PassportMiddlename,
-                Passport_Country = PassportCountry,
-                Passport_Expiration = PassportExpiration,
-                Passport_Number = PassportNumber
+                Household_ID = HouseholdId
             };
         }
 
-        public Household GetHousehold()
+        public MinistryPlatform.Models.Household GetHousehold()
         {
-            return new Household
+            return new MinistryPlatform.Models.Household
             {
                 Household_ID = HouseholdId,
                 Home_Phone = HomePhone,
@@ -154,9 +131,9 @@ namespace crds_angular.Models
             };
         }
 
-        public Address GetAddress()
+        public crds_angular.Models.MP.Address GetAddress()
         {
-            return new Address
+            return new crds_angular.Models.MP.Address
             {
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,

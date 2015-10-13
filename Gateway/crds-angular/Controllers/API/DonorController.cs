@@ -322,6 +322,7 @@ namespace crds_angular.Controllers.API
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
+        [HttpPost]
         [Route("api/donor/recurrence")]
         public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
         {
@@ -331,7 +332,7 @@ namespace crds_angular.Controllers.API
                 {
                     var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
-                    var recurringGift = _donorService.CreateRecurringGift(recurringGiftDto, donor);
+                    var recurringGift = _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
 
                     recurringGiftDto.EmailAddress = donor.Email;
                     recurringGiftDto.RecurringGiftId = recurringGift;
@@ -349,6 +350,69 @@ namespace crds_angular.Controllers.API
                 
             }));
         }
+
+        /// <summary>
+        /// Edit a recurring gift for the authenticated user.
+        /// </summary>
+        /// <param name="editGift">The data required to edit the recurring gift in MinistryPlatform and/or Stripe.</param>
+        /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
+        [RequiresAuthorization]
+        [ResponseType(typeof(RecurringGiftDto))]
+        [HttpPut]
+        [Route("api/donor/recurrence")]
+        public IHttpActionResult EditRecurringGift([FromBody] RecurringGiftDto editGift)
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var recurringGift = _donorService.EditRecurringGift(token, editGift, donor);
+
+                    return Ok(recurringGift);
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+
+            }));
+        }
+
+        /// <summary>
+        /// Cancel a recurring gift for the authenticated user.  This simply end-dates the gift, and cancels the subscription at Stripe.
+        /// </summary>
+        /// <param name="recurringGiftId">The recurring gift ID to delete in MinistryPlatform and Stripe.</param>
+        /// <returns>The RecurringGiftDto representing the gift that was deleted</returns>
+        [RequiresAuthorization]
+        [HttpDelete]
+        [Route("api/donor/recurrence/{recurringGiftId:int}")]
+        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId)
+        {
+            return(Authorized(token =>
+            {
+                try
+                {
+                    _donorService.CancelRecurringGift(token, recurringGiftId);
+                    return (Ok());
+                }
+                catch (PaymentProcessorException stripeException)
+                {
+                    return (stripeException.GetStripeResult());
+                }
+                catch (ApplicationException applicationException)
+                {
+                    var apiError = new ApiErrorDto("Error calling Ministry Platform " + applicationException.Message, applicationException);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            }));
+        }
+
 
         /// <summary>
         /// Retrieve list of recurring gifts for the logged-in donor.

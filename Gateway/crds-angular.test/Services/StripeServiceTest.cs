@@ -10,6 +10,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 
 namespace crds_angular.test.Services
@@ -520,10 +521,11 @@ namespace crds_angular.test.Services
             {
                 StripeTokenId = "tok_123",
                 PlanAmount = 123.45M,
-                PlanInterval = "week",
+                PlanInterval = PlanInterval.Weekly,
                 Program = "987",
                 StartDate = DateTime.Now.AddDays(expectedTrialDays)
             };
+            var interval = EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval);
 
             var contactDonor = new ContactDonor
             {
@@ -545,8 +547,8 @@ namespace crds_angular.test.Services
                 o.Method == Method.POST
                 && o.Resource.Equals("plans")
                 && ParameterMatches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue, o.Parameters)
-                && ParameterMatches("interval", recurringGiftDto.PlanInterval, o.Parameters)
-                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly", o.Parameters)
+                && ParameterMatches("interval", interval, o.Parameters)
+                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + interval + "ly", o.Parameters)
                 && ParameterMatches("currency", "usd", o.Parameters)
                 && ParameterMatches("trial_period_days", expectedTrialDays, o.Parameters)
                 && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
@@ -598,6 +600,52 @@ namespace crds_angular.test.Services
 
             Assert.AreSame(stripeSubscription, response);
         }
-    }
 
+        [Test]
+        public void TestCancelSubscription()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string sub = "sub_123";
+            const string customer = "cus_123";
+
+            var response = _fixture.CancelSubscription(customer, sub);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(o => o.Method == Method.DELETE && o.Resource.Equals("customers/" + customer + "/subscriptions/" + sub))));
+
+            Assert.AreSame(stripeSubscription, response);
+        }
+
+        [Test]
+        public void TestCancelPlan()
+        {
+            var stripePlan = new StripePlan();
+
+            var stripeResponse = new Mock<IRestResponse<StripePlan>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripePlan).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripePlan>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string plan = "plan_123/456/789";
+
+            var response = _fixture.CancelPlan(plan);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripePlan>(
+                        It.Is<IRestRequest>(o => o.Method == Method.DELETE && o.Resource.Equals("plans/" + plan.Replace("/", "%2F")))));
+
+            Assert.AreSame(stripePlan, response);
+        }
+    }
 }

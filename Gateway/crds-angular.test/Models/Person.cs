@@ -6,7 +6,7 @@ namespace crds_angular.test.Models
     [TestFixture]
     class Person
     {
-        private crds_angular.Models.Person _person;
+        private crds_angular.Models.Crossroads.Profile.Person _person;
 
         [Test]
         public void ShouldReturnContactType()
@@ -38,7 +38,7 @@ namespace crds_angular.test.Models
         [SetUp]
         public void SetUp()
         {
-            _person = new crds_angular.Models.Person();
+            _person = new crds_angular.Models.Crossroads.Profile.Person();
             _person.EmailAddress = "test@crossroads.net";
             _person.LastName = "Crossroads";
             _person.CongregationId = 6;
