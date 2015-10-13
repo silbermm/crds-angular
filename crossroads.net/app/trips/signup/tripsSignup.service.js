@@ -1,4 +1,5 @@
 var attributes = require('crds-constants').ATTRIBUTE_IDS;
+var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 (function() {
   'use strict';
 
@@ -9,6 +10,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
   function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
+      evaluateTripSkills: evaluateTripSkills,
       pages: [],
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application'),
@@ -60,6 +62,27 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           signupService.numberOfPages = 6;
           break;
       }
+    }
+
+    function evaluateTripSkills(tripSkills) {
+      var mySkills = _.filter(signupService.person.attributes, function(attr) {
+        return attr.attributeTypeId === attributeTypes.TRIP_SKILLS;
+      });
+
+      _.forEach(tripSkills, function(skill) {
+        _.forEach(mySkills, function(mine) {
+          if (mine.attributeId === skill.attributeId) {
+            skill.isChecked = true;
+          }
+        });
+      });
+
+      _.forEach(tripSkills, function(skill) {
+        if (skill.isChecked === undefined) {
+          skill.isChecked = false;
+        }
+      });
+      signupService.page5.professionalSkills = tripSkills;
     }
 
     function bottomScrubSizes() {
@@ -156,7 +179,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function page2() {
-      var page2Obj = {
+      return {
         guardianFirstName: null,
         guardianLastName: null,
         tshirtSize: null,
@@ -166,15 +189,9 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         conditions: null,
         vegetarian: null,
         allergies: null,
-        why: null
+        why: null,
+        spiritualLife: null,
       };
-      page2Obj.spiritualLife = {};
-      page2Obj.spiritualLife[attributes.OBEDIENCE] = null;
-      page2Obj.spiritualLife[attributes.SEARCHING_FOR_ANSWERS] = null;
-      page2Obj.spiritualLife[attributes.RECEIVED_JESUS] = null;
-      page2Obj.spiritualLife[attributes.REPLICATING] = null;
-
-      return page2Obj;
     }
 
     function page3() {
@@ -209,7 +226,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         nolaFirstChoiceExperience: null,
         nolaSecondChoiceWorkTeam: null,
         previousTripExperience: null,
-        professionalSkill: {}
+        professionalSkills: null,
       };
     }
 

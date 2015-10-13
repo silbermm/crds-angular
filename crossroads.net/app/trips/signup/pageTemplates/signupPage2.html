@@ -162,9 +162,9 @@
         
         <br>
 
-        <div class="checkbox" ng-repeat="slife in signupStep.spiritualJourney.attributes" > 
+        <div class="checkbox" ng-repeat="slife in tripsSignup.page2.spiritualLife" > 
           <label for="slife-{{slife.attributeId}}"> 
-            <input ng-model="tripsSignup.signupService.page2.spiritualLife[slife.attributeId]" 
+            <input ng-model="slife.isChecked" 
                    type="checkbox" 
                    name="slife" 
                    ng-value="slife.attributeId" 

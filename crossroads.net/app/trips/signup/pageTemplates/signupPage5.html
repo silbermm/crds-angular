@@ -135,15 +135,15 @@
             
             <br>
 
-            <div class="checkbox" ng-repeat="skills in signupStep.tripSkills.attributes" >
+            <div class="checkbox" ng-repeat="skill in tripsSignup.signupService.page5.professionalSkills" >
               <label for="professional-{{skill.attributeId}}" >
-                <input ng-model="tripsSignup.signupService.page5.professionalSkill[skills.attributeId]" 
+                <input ng-model="skill.isChecked" 
                        type="checkbox"
                        name="professionchoice"
-                       ng-value="skills.attributeId"
-                       id="professional-{{skills.attributeId}}"
+                       ng-value="skill.attributeId"
+                       id="professional-{{skill.attributeId}}"
                        ng-required='!tripsSignup.skillsSelected()'>
-                {{ skills.name }} 
+                {{ skill.name }} 
               </label>
             </div><!--/checkbox-->
             

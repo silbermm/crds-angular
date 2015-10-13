@@ -39,7 +39,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       Validation,
       $window,
       $anchorScroll,
-      $stateParams) {
+      $stateParams ) {
 
     var vm = this;
     vm.ageLimitReached = true;
@@ -82,13 +82,14 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
     function activate() {
-
+      
+      vm.signupService.person = Person;
+      
       if (vm.signupService.campaign === undefined) {
         vm.signupService.reset(vm.campaign);
       }
 
       vm.signupService.pageId = 1;
-      vm.signupService.person = Person;
 
       if (vm.destination === 'India') {
         vm.whyPlaceholder = 'Please be specific. ' +
@@ -331,19 +332,8 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function skillsSelected() {
-      if (vm.signupService.page5.professionalSkillBusiness ||
-          vm.signupService.page5.professionalSkillConstruction ||
-          vm.signupService.page5.professionalSkillDental ||
-          vm.signupService.page5.professionalSkillEducation ||
-          vm.signupService.page5.professionalSkillInformationTech ||
-          vm.signupService.page5.professionalSkillMedia ||
-          vm.signupService.page5.professionalSkillMedical ||
-          vm.signupService.page5.professionalSkillMusic ||
-          vm.signupService.page5.professionalSkillPhotography ||
-          vm.signupService.page5.professionalSkillSocialWorker ||
-          vm.signupService.page5.professionalSkillStudent ||
-          vm.signupService.page5.professionalSkillOther)
-      {
+      _.find
+      if ( vm.signupService.page5.professionalSkills.length > 0 ) {
         return true;
       }
 
