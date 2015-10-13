@@ -445,22 +445,19 @@ namespace crds_angular.Services
         {
             try
             {
-                //var formResponse = new FormResponse();
-                //formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-                //formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
-                //formResponse.PledgeCampaignId = dto.PledgeCampaignId;
+                var formResponse = new FormResponse();
+                formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+                formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
+                formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
-                //formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
+                formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
 
-                //var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
-                var trash = _configurationWrapper.GetConfigIntValue("EventsSubPageGroups");
-                var formResponseId = 0;
-                var tmp = 5/formResponseId;
+                var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
 
-                //if (dto.InviteGUID != null)
-                //{
-                //    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-                //}
+                if (dto.InviteGUID != null)
+                {
+                    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+                }
 
                 SendTripApplicantSuccessMessage(dto.ContactId);
 
