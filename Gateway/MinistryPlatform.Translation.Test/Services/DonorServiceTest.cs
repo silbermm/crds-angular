@@ -1119,7 +1119,7 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void TestCreateDonorAccountForBankAccount()
         {
-            const string giftType = null;
+            const string giftType = "Bank";
             const string routingNumber = "110000000";
             const string accountNumber = "7890";
             const int donorId = 123;
