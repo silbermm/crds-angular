@@ -66,6 +66,8 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         evaluatePreviousTripExp();
         evaluateTripSkills();
         break;
+      case '6':
+        evaluateFrequentFlyers();
       default:
         break;
     }
@@ -83,6 +85,14 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
         vm.signupService.page2.allergies = found.notes;
       }
 
+    }
+
+    function evaluateFrequentFlyers() {
+      if (!vm.signupService.page6.deltaFrequentFlyer) {
+        // try to get the persons delta frequent flyer
+      }
+
+      if(!vm.signupService.page6.
     }
 
     function evaluatePreviousTripExp() {

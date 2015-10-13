@@ -341,10 +341,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function spiritualSelected() {
-      if (vm.signupService.page2.spiritualLife[attributes.SEARCHING_FOR_ANSWERS] ||
-          vm.signupService.page2.spiritualLife[attributes.RECEIVED_JESUS] ||
-          vm.signupService.page2.spiritualLife[attributes.OBEDIENCE] ||
-          vm.signupService.page2.spiritualLife[attributes.REPLICATING]) {
+      if (vm.signupService.page2.spiritualLife.length > 0) {
         return true;
       }
 

@@ -97,13 +97,22 @@
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
+
         <div class="form-group col-sm-6">
             <label for="deltaff">Delta</label>
-            <input ng-model="tripsSignup.signupService.page6.deltaFrequentFlyer" type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
+            <input ng-model="tripsSignup.signupService.page6.deltaFrequentFlyer"
+                   type="text" 
+                   class="form-control" 
+                   id="deltaff"
+                   placeholder="Enter Delta frequent flyer number">
         </div>
         <div class="form-group col-sm-6" ng-show="!tripsSignup.isSouthAfrica()">
             <label for="southafricaff">South African Airlines</label>
-            <input ng-model="tripsSignup.signupService.page6.southAfricanFrequentFlyer" type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
+            <input ng-model="tripsSignup.signupService.page6.southAfricanFrequentFlyer"
+                   type="text"
+                   class="form-control"
+                   id="southafricaff"
+                   placeholder="Enter South African Airlines frequent flyer number">
         </div>
         <div class="form-group col-sm-6">
             <label for="unitedff">United Airlines</label>

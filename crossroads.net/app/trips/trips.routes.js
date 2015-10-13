@@ -146,7 +146,6 @@
 
           Trip: 'Trip',
           $stateParams: '$stateParams',
-          AttributeTypeService: 'AttributeTypeService',
           Campaign: function(Trip, $stateParams) {
             return Trip.Campaign.get({campaignId: $stateParams.campaignId}).$promise;
           },
@@ -159,10 +158,6 @@
             }
 
             return Profile.Person.get({contactId: cid}).$promise;
-          },
-
-          TripSkills: function(AttributeTypeService, $stateParams) {
-            return AttributeTypeService.AttributeTypes().get({ id: attributes.TRIP_SKILLS }).$promise;
           },
 
           pageId: function() {
@@ -217,7 +212,14 @@
             return;
           },
 
-          
+          TripSkills: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '5') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.TRIP_SKILLS }).$promise;
+            }
+
+            return;
+          },
+
           FrequentFlyers: function(AttributeTypeService, $stateParams) {
             if ($stateParams.stepId === '5') {
               return AttributeTypeService.AttributeTypes().get({ id: attributes.FREQUENT_FLYERS }).$promise;

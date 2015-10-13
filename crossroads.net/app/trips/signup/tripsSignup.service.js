@@ -65,25 +65,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function evaluateTripSkills(tripSkills) {
-      var mySkills = _.filter(signupService.person.attributes, function(attr) {
-        return attr.attributeTypeId === attributeTypes.TRIP_SKILLS;
-      });
-
-      _.forEach(tripSkills, function(skill) {
-        _.forEach(mySkills, function(mine) {
-          if (mine.attributeId === skill.attributeId) {
-            skill.isChecked = true;
           }
-        });
-      });
-
-      _.forEach(tripSkills, function(skill) {
-        if (skill.isChecked === undefined) {
-          skill.isChecked = false;
-        }
-      });
-      signupService.page5.professionalSkills = tripSkills;
-    }
 
     function bottomScrubSizes() {
       return [{
