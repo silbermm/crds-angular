@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using Moq;

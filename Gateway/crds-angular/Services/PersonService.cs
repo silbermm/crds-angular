@@ -4,22 +4,21 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Profile;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
-using MPServices=MinistryPlatform.Translation.Services.Interfaces;
+using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
-using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 
 namespace crds_angular.Services
 {
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        private readonly IContactService _contactService;
+        private readonly MPServices.IContactService _contactService;
         private readonly IContactAttributeService _contactAttributeService;
 
-        public PersonService(IContactService contactService, IContactAttributeService contactAttributeService)
+        public PersonService(MPServices.IContactService contactService, IContactAttributeService contactAttributeService)
         {
             _contactService = contactService;
             _contactAttributeService = contactAttributeService;

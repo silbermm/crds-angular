@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MinistryPlatform.Models;
 
-namespace crds_angular.Services
+namespace crds_angular.Services.Interfaces
 {
     public interface IContactAttributeService
     {
