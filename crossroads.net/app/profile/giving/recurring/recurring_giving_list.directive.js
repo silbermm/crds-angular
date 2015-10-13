@@ -31,7 +31,7 @@
           resolve: {
             donation: function () {
               return selectedDonation;
-            }
+            },
           }
         });
 
@@ -49,7 +49,15 @@
           resolve: {
             donation: function () {
               return selectedDonation;
-            }
+            },
+            Programs: 'Programs',
+            programList: function(Programs) {
+              // TODO The number one relates to the programType in MP. At some point we should fetch
+              // that number from MP based in human readable input here.
+              return Programs.Programs.query({
+                programType: 1
+              }).$promise;
+            },
           }
         });
 
