@@ -94,12 +94,17 @@ namespace crds_angular.Services
                                                                 (int)donationStatus);
          }
 
+        private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
+        {
+            _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
+        }
+
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
             _logger.Debug("Processing transfer.paid event for transfer id " + transfer.Id);
 
             var response = new TransferPaidResponseDTO();
-
+            
             // Don't process this transfer if we already have a batch for the same transfer id
             var existingBatch = _donationService.GetDonationBatchByProcessorTransferId(transfer.Id);
             if (existingBatch != null)
@@ -254,6 +259,9 @@ namespace crds_angular.Services
                         break;
                     case "invoice.created":
                         InvoiceCreated(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
+                        break;
+                    case "invoice.payment_failed":
+                        InvoicePaymentFailed(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
                         break;
                     default:
                         _logger.Debug("Ignoring event " + stripeEvent.Type);
