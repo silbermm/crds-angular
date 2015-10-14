@@ -4,13 +4,13 @@ namespace MinistryPlatform.Models
 {
     public class Attribute
     {
-        [JsonProperty(PropertyName = "attributeId")]
         public int AttributeId { get; set; }
-        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
-        [JsonProperty(PropertyName = "category")]
         public string Category { get; set; }
-        [JsonProperty(PropertyName = "categoryId")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
+
+        public int AttributeTypeId { get; set; }
+        public string AttributeTypeName { get; set; }
+        public bool PreventMultipleSelection { get; set; }
     }
 }

@@ -13,25 +13,21 @@ namespace crds_angular.Controllers.API
 {
     public class EventLocationController : MPAuth
     {
-        private IMinistryPlatformService _ministryPlatformService;
-        private IConfigurationWrapper _configurationWrapper;
+        private IMinistryPlatformService _ministryPlatformService;        
+        private readonly IApiUserService _apiUserService;
 
-        public EventLocationController(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper)
+        public EventLocationController(IMinistryPlatformService ministryPlatformService, IApiUserService apiUserService)
         {
-            this._ministryPlatformService = ministryPlatformService;
-            this._configurationWrapper = configurationWrapper;
+            this._ministryPlatformService = ministryPlatformService;            
+            _apiUserService = apiUserService;
         }
 
         [ResponseType(typeof(List<Event>))]
         [Route("api/events/{site}")]
         public IHttpActionResult Get(string site)
         {
-            //TODO Move logic to service?
-            //var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["TodaysEventLocationRecords"]);
-            var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            var authData =  AuthenticationService.authenticate(apiUser, apiPassword);
-            var token = authData["token"].ToString();
+            var token = _apiUserService.GetToken();
+
             var todaysEvents = _ministryPlatformService.GetRecordsDict("TodaysEventLocationRecords", token, site, "5 asc");//Why 5 you ask... Think Ministry
 
             var events = ConvertToEvents(todaysEvents);

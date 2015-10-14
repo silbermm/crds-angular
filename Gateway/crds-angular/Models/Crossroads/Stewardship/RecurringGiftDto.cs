@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace crds_angular.Models.Crossroads.Stewardship
 {
@@ -30,9 +32,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// <summary>
         /// Either "week" or "month", indicating the recurrence interval.
         /// </summary>
-        [JsonProperty(PropertyName = "interval")]
+        [JsonProperty(PropertyName = "interval"), JsonConverter(typeof(StringEnumConverter))]
         [Required]
-        public string PlanInterval { get; set; }
+        public PlanInterval PlanInterval { get; set; }
         /// <summary>
         /// The date on which the recurring gift should begin.
         /// </summary>
@@ -42,8 +44,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// <summary>
         /// The date on which the recurring gift should end.
         /// </summary>
-        [JsonProperty(PropertyName = "end_date")]
-        public DateTime EndDate { get; set; }
+        [JsonProperty(PropertyName = "end_date", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTime? EndDate { get; set; }
         /// <summary>
         /// The email address of the donor.  This is not required or used on input, but will be returned on output.
         /// </summary>
@@ -79,5 +81,19 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "source", NullValueHandling = NullValueHandling.Ignore)]
         public DonationSourceDTO Source { get; set; }
+        /// <summary>
+        /// The Name of the program this recurring gift will give to.
+        /// </summary>
+        [JsonProperty(PropertyName = "program_name")]
+        public string ProgramName { get; set; }
+    }
+
+    [DataContract]
+    public enum PlanInterval
+    {
+        [EnumMember(Value = "week")]
+        Weekly,
+        [EnumMember(Value = "month")]
+        Monthly
     }
 }
