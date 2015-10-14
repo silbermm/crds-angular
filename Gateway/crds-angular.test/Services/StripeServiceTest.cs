@@ -446,7 +446,6 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetChargeRefund()
         {
-
             var data = new StripeRefund
             {
                 Data = new List<StripeRefundData>()
@@ -646,6 +645,83 @@ namespace crds_angular.test.Services
                         It.Is<IRestRequest>(o => o.Method == Method.DELETE && o.Resource.Equals("plans/" + plan.Replace("/", "%2F")))));
 
             Assert.AreSame(stripePlan, response);
+        }
+
+        [Test]
+        public void TestGetSource()
+        {
+            var expectedSource = new SourceData
+            {
+                id = "ba_456"
+            };
+
+            var customer = new StripeCustomer
+            {
+                sources = new Sources
+                {
+                    data = new List<SourceData>
+                    {
+                        new SourceData
+                        {
+                            id = "card_123"
+                        },
+                        expectedSource,
+                        new SourceData
+                        {
+                            id = "card_789"
+                        }
+                    }
+                }
+            };
+
+            var response = new Mock<IRestResponse<StripeCustomer>>();
+
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var result = _fixture.GetSource("cus_123", "ba_456");
+
+            _restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("/customers/cus_123")
+            )));
+
+            _restClient.VerifyAll();
+            response.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.AreSame(expectedSource, result);
+        }
+
+        [Test]
+        public void TestGetCustomer()
+        {
+            var customer = new StripeCustomer();
+
+            var response = new Mock<IRestResponse<StripeCustomer>>();
+
+            response.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            response.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            response.SetupGet(mocked => mocked.Data).Returns(customer).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeCustomer>(It.IsAny<IRestRequest>())).Returns(response.Object);
+
+            var result = _fixture.GetCustomer("cus_123");
+
+            _restClient.Verify(mocked => mocked.Execute<StripeCustomer>(
+                It.Is<RestRequest>(o =>
+                    o.Method == Method.GET
+                    && o.Resource.Equals("/customers/cus_123")
+            )));
+
+            _restClient.VerifyAll();
+            response.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreSame(customer, result);
         }
     }
 }

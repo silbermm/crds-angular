@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities.Services;
@@ -312,6 +313,8 @@ namespace crds_angular.test.Services
                     AccountNumberLast4= "4433",
                     InstitutionName = "Visa",
                     SubscriptionID = "sub_77L7hDGjQdoxRE",
+                    ProcessorId = "cus_123",
+                    ProcessorAccountId = "card_123"
                 },
                 new RecurringGift
                 {
@@ -330,6 +333,8 @@ namespace crds_angular.test.Services
                     AccountNumberLast4= "4093",
                     InstitutionName = "Bank",
                     SubscriptionID = "sub_77uaEIZLssR6xN",
+                    ProcessorId = "cus_456",
+                    ProcessorAccountId = "ba_456"
                 },
                 new RecurringGift
                 {
@@ -348,10 +353,36 @@ namespace crds_angular.test.Services
                     AccountNumberLast4= "1984",
                     InstitutionName = "American Express",
                     SubscriptionID = "sub_77L8qFUF6QFZsO",
+                    ProcessorId = "cus_789",
+                    ProcessorAccountId = "card_789"
                 },
             };
 
+            var sourceData = new SourceData[]
+            {
+                new SourceData
+                {
+                    address_zip = "12345",
+                    exp_month = "11",
+                    exp_year = "2012"
+                },
+                new SourceData
+                {
+                    routing_number = "123456789"
+                },
+                new SourceData
+                {
+                    address_zip = "67890",
+                    exp_month = "12",
+                    exp_year = "2013"
+                }
+            };
+
             _mpDonorService.Setup(mocked => mocked.GetRecurringGiftsForAuthenticatedUser(It.IsAny<string>())).Returns(records);
+            _paymentService.Setup(mocked => mocked.GetSource(records[0].ProcessorId, records[0].ProcessorAccountId)).Returns(sourceData[0]);
+            _paymentService.Setup(mocked => mocked.GetSource(records[1].ProcessorId, records[1].ProcessorAccountId)).Returns(sourceData[1]);
+            _paymentService.Setup(mocked => mocked.GetSource(records[2].ProcessorId, records[2].ProcessorAccountId)).Returns(sourceData[2]);
+
             var result = _fixture.GetRecurringGiftsForAuthenticatedUser("afdafsaaatewjrtjeretewtr");
 
             _mpDonorService.VerifyAll();
@@ -372,6 +403,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[0].AccountNumberLast4, result[0].Source.AccountNumberLast4);
             Assert.AreEqual(CreditCardType.Visa, result[0].Source.CardType);
             Assert.AreEqual(records[0].SubscriptionID, result[0].SubscriptionID);
+            Assert.AreEqual(sourceData[0].address_zip, result[0].Source.PostalCode);
+            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[0].exp_month, sourceData[0].exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[0].Source.ExpirationDate);
 
             Assert.AreEqual(records[1].RecurringGiftId, result[1].RecurringGiftId);
             Assert.AreEqual(records[1].DonorID, result[1].DonorID);
@@ -388,6 +421,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[1].AccountNumberLast4, result[1].Source.AccountNumberLast4);
             Assert.AreEqual(null, result[1].Source.CardType);
             Assert.AreEqual(records[1].SubscriptionID, result[1].SubscriptionID);
+            Assert.AreEqual(sourceData[1].routing_number, result[1].Source.RoutingNumber);
 
             Assert.AreEqual(records[2].RecurringGiftId, result[2].RecurringGiftId);
             Assert.AreEqual(records[2].DonorID, result[2].DonorID);
@@ -404,6 +438,8 @@ namespace crds_angular.test.Services
             Assert.AreEqual(records[2].AccountNumberLast4, result[2].Source.AccountNumberLast4);
             Assert.AreEqual(CreditCardType.AmericanExpress, result[2].Source.CardType);
             Assert.AreEqual(records[2].SubscriptionID, result[2].SubscriptionID);
+            Assert.AreEqual(sourceData[2].address_zip, result[2].Source.PostalCode);
+            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[2].exp_month, sourceData[2].exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[2].Source.ExpirationDate);
         }
 
         [Test]

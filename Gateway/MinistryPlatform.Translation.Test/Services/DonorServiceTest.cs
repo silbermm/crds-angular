@@ -1206,6 +1206,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Account_Number", "4433"},
                     {"Institution_Name", "Visa"},
                     {"Subscription_ID", "sub_77L7hDGjQdoxRE"},
+                    {"Processor_ID", "cus_123"},
+                    {"Processor_Account_ID", "card_123"}
                 },
                 new Dictionary<string, object>
                 {
@@ -1224,6 +1226,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Account_Number", "4093"},
                     {"Institution_Name", "Bank"},
                     {"Subscription_ID", "sub_77uaEIZLssR6xN"},
+                    {"Processor_ID", "cus_456"},
+                    {"Processor_Account_ID", "card_456"}
                 },
                 new Dictionary<string, object>
                 {
@@ -1242,6 +1246,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Account_Number", "1984"},
                     {"Institution_Name", "American Express"},
                     {"Subscription_ID", "sub_77L8qFUF6QFZsO"},
+                    {"Processor_ID", "cus_789"},
+                    {"Processor_Account_ID", "card_789"}
                 }
             };
 
@@ -1266,6 +1272,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["Account_Number"], result[0].AccountNumberLast4);
             Assert.AreEqual(records[0]["Institution_Name"], result[0].InstitutionName);
             Assert.AreEqual(records[0]["Subscription_ID"], result[0].SubscriptionID);
+            Assert.AreEqual(records[0]["Processor_ID"], result[0].ProcessorId);
+            Assert.AreEqual(records[0]["Processor_Account_ID"], result[0].ProcessorAccountId);
 
             Assert.AreEqual(records[1]["Recurring_Gift_ID"], result[1].RecurringGiftId);
             Assert.AreEqual(records[1]["Donor_ID"], result[1].DonorID);
@@ -1282,6 +1290,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["Account_Number"], result[1].AccountNumberLast4);
             Assert.AreEqual(records[1]["Institution_Name"], result[1].InstitutionName);
             Assert.AreEqual(records[1]["Subscription_ID"], result[1].SubscriptionID);
+            Assert.AreEqual(records[1]["Processor_ID"], result[1].ProcessorId);
+            Assert.AreEqual(records[1]["Processor_Account_ID"], result[1].ProcessorAccountId);
 
             Assert.AreEqual(records[2]["Recurring_Gift_ID"], result[2].RecurringGiftId);
             Assert.AreEqual(records[2]["Donor_ID"], result[2].DonorID);
@@ -1298,6 +1308,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[2]["Account_Number"], result[2].AccountNumberLast4);
             Assert.AreEqual(records[2]["Institution_Name"], result[2].InstitutionName);
             Assert.AreEqual(records[2]["Subscription_ID"], result[2].SubscriptionID);
+            Assert.AreEqual(records[2]["Processor_ID"], result[2].ProcessorId);
+            Assert.AreEqual(records[2]["Processor_Account_ID"], result[2].ProcessorAccountId);
         }
 
         [Test]
