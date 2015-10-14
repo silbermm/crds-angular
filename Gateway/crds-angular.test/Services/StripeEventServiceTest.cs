@@ -318,22 +318,37 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestInvoiceCreatedNoAmountOrCharge()
+        public void TestInvoicePaymentSucceededNoAmount()
         {
             var invoice = new StripeInvoice
             {
                 Subscription = "sub_123",
                 Amount = 0,
-                Charge = "  ",
+                Charge = "ch_123",
             };
 
-            _fixture.InvoiceCreated(DateTime.Now, invoice);
+            _fixture.InvoicePaymentSucceeded(DateTime.Now, invoice);
             _paymentService.VerifyAll();
             _donorService.VerifyAll();
         }
 
         [Test]
-        public void TestInvoiceCreated()
+        public void TestInvoicePaymentSucceededNoCharge()
+        {
+            var invoice = new StripeInvoice
+            {
+                Subscription = "sub_123",
+                Amount = 123,
+                Charge = "   ",
+            };
+
+            _fixture.InvoicePaymentSucceeded(DateTime.Now, invoice);
+            _paymentService.VerifyAll();
+            _donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestInvoicePaymentSucceeded()
         {
             var eventTimestamp = DateTime.Now;
             const string processorId = "cus_123";
@@ -400,7 +415,7 @@ namespace crds_angular.test.Services
                                                                null,
                                                                donationStatus)).Returns(123);
 
-            _fixture.InvoiceCreated(eventTimestamp, invoice);
+            _fixture.InvoicePaymentSucceeded(eventTimestamp, invoice);
             _paymentService.VerifyAll();
             _mpDonorService.VerifyAll();
             _donorService.VerifyAll();
