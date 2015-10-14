@@ -406,5 +406,34 @@ namespace crds_angular.test.Services
             _mpDonorService.VerifyAll();
             _donorService.VerifyAll();
         }
+
+        [Test]
+        public void TestInvoicePaymentFailed()
+        {
+            const string processorId = "cus_123";
+            const string subscriptionId = "sub_123";
+
+            var e = new StripeEvent
+            {
+                LiveMode = true,
+                Type = "invoice.payment_failed",
+                Created = DateTime.Now.AddDays(-1),
+                Data = new StripeEventData
+                {
+                    Object = JObject.FromObject(new StripeInvoice()
+                    {
+                        Id = "9876",
+                        Customer = processorId,
+                        Subscription = subscriptionId
+                    })
+                }
+            };
+
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDeclinedEmail(subscriptionId));
+            Assert.IsNull(_fixture.ProcessStripeEvent(e));
+            _mpDonorService.VerifyAll();
+
+ 
+        }
     }
 }

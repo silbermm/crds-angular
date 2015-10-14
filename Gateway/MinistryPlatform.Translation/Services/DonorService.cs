@@ -792,6 +792,11 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(MapRecordToRecurringGift).ToList();
         }
 
+        public void ProcessRecurringGiftDeclinedEmail(string subscription_id)
+        {
+            throw new NotImplementedException();
+        }
+
         // ReSharper disable once FunctionComplexityOverflow
         private RecurringGift MapRecordToRecurringGift(Dictionary<string, object> record)
         {
