@@ -2,9 +2,9 @@
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using crds_angular.Models.Crossroads.Attribute;
 using crds_angular.Security;
-using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -18,8 +18,8 @@ namespace crds_angular.Controllers.API
             _attributeService = attributeService;
         }
 
-        [ResponseType(typeof (List<AttributeType>))]
-        [Route("api/AttributeType")]
+        [ResponseType(typeof (List<AttributeTypeDTO>))]
+        [Route("api/attributetype")]
         public IHttpActionResult Get()
         {
             return Authorized(token =>
@@ -30,8 +30,8 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(AttributeType))]
-        [Route("api/AttributeType/{attributeTypeId}")]
+        [ResponseType(typeof(AttributeTypeDTO))]
+        [Route("api/attributetype/{attributeTypeId}")]
         public IHttpActionResult Get(int attributeTypeId)
         {
             return Authorized(token =>

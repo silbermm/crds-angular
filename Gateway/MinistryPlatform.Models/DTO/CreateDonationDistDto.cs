@@ -1,4 +1,6 @@
-﻿namespace MinistryPlatform.Models.DTO
+﻿using System;
+
+namespace MinistryPlatform.Models.DTO
 {
    public class CreateDonationDistDto
     {
@@ -9,5 +11,10 @@
         public string ProgramId { get; set; }
         public int? RecurringGiftId { get; set; }
         public int? DonorAccountId { get; set; }
+        public int Frequency { get; set; }
+        public int? DayOfWeek { get; set; }
+        public int? DayOfMonth { get; set; }
+        public DateTime? StartDate { get; set; }
+        public string SubscriptionId { get; set; }
     }
 }

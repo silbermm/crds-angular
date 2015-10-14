@@ -14,6 +14,7 @@
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
+    vm.recurring_service = RecurringGivingService;
     vm.createRecurring = createRecurring;
 
     activate();
