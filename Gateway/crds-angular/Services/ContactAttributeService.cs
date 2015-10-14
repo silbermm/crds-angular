@@ -22,7 +22,7 @@ namespace crds_angular.Services
             _apiUserService = apiUserService;
         }
 
-        public List<ContactAttributeTypeDTO> GetContactAttributes(int contactId)
+        public Dictionary<int, ContactAttributeTypeDTO> GetContactAttributes(int contactId)
         {
             var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
 
@@ -30,7 +30,7 @@ namespace crds_angular.Services
             return resultList;
         }
 
-        private List<ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(List<ContactAttribute> mpContactAttributes)
+        private Dictionary<int, ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(List<ContactAttribute> mpContactAttributes)
         {            
             var attributeTypesDictionary = mpContactAttributes
                 .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
@@ -55,10 +55,10 @@ namespace crds_angular.Services
                 attributeTypesDictionary[mpContactAttribute.AttributeTypeId].Attributes.Add(contactAttribute);
             }
 
-            return attributeTypesDictionary.Values.ToList();
+            return attributeTypesDictionary;
         }
         
-        public void SaveContactAttributes(int contactId, List<ContactAttributeTypeDTO> contactAttributes)
+        public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes)
         {
             var attributesToSave = TranslateToMPAttributes(contactAttributes);
 
@@ -83,11 +83,11 @@ namespace crds_angular.Services
             }
         }
 
-        private List<ContactAttribute> TranslateToMPAttributes(List<ContactAttributeTypeDTO> contactAttributesTypes)
+        private List<ContactAttribute> TranslateToMPAttributes(Dictionary<int, ContactAttributeTypeDTO> contactAttributesTypes)
         {
             var results = new List<ContactAttribute>();
 
-            foreach (var contactAttributeType in contactAttributesTypes)
+            foreach (var contactAttributeType in contactAttributesTypes.Values)
             {
                 foreach (var contactAttribute in contactAttributeType.Attributes)
                 {
