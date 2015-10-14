@@ -813,6 +813,8 @@ namespace MinistryPlatform.Translation.Services
                 AccountNumberLast4 = record["Account_Number"] as string,
                 InstitutionName = record["Institution_Name"] as string,
                 SubscriptionID = record["Subscription_ID"] as string,
+                ProcessorAccountId = record["Processor_Account_ID"] as string,
+                ProcessorId = record["Processor_ID"] as string
             };
         }
     }

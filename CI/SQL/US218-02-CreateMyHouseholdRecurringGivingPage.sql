@@ -27,7 +27,9 @@ END AS Recurrence
 , Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]
 , Donor_Account_ID_Table.[Account_Number]
 , Donor_Account_ID_Table.[Institution_Name]
-, Recurring_Gifts.[Subscription_ID]'
+, Recurring_Gifts.[Subscription_ID]
+, Donor_Account_ID_Table.[Processor_ID]
+, Donor_Account_ID_Table.[Processor_Account_ID]'
 where [Page_ID] = 523
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF

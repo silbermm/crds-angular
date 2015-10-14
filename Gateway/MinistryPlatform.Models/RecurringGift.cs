@@ -19,5 +19,7 @@ namespace MinistryPlatform.Models
         public string AccountNumberLast4 { get; set; }
         public string InstitutionName { get; set; }
         public string SubscriptionID { get; set; }
+        public string ProcessorAccountId { get; set; }
+        public string ProcessorId { get; set; }
     }
 }

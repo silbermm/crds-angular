@@ -46,7 +46,9 @@ END AS Recurrence
 , Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]
 , Donor_Account_ID_Table.[Account_Number]
 , Donor_Account_ID_Table.[Institution_Name]
-, Recurring_Gifts.[Subscription_ID]'
+, Recurring_Gifts.[Subscription_ID]
+, Donor_Account_ID_Table.[Processor_ID]
+, Donor_Account_ID_Table.[Processor_Account_ID]'
   ,'Program_ID_Table.Program_Name'
   ,'Recurring_Gifts.[Recurring_Gift_ID] IN (SELECT * FROM [dbo].[crds_udfGetRecurringGiftIdsForUser](dp_UserID))'
   ,'Donor_ID_Table_Contact_ID_Table.[Contact_ID]'

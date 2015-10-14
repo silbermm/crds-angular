@@ -3,6 +3,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -307,7 +308,7 @@ namespace crds_angular.Services
                 Program = newGift.ProgramId,
                 DonorID = newGift.DonorId,
                 EmailAddress = donor.Email,
-                SubscriptionID = stripeSubscription.Id
+                SubscriptionID = stripeSubscription.Id,
             };
             return (newRecurringGift);
         }
@@ -320,7 +321,32 @@ namespace crds_angular.Services
         public List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken)
         {
             var records = _mpDonorService.GetRecurringGiftsForAuthenticatedUser(userToken);
-            return records.Select(Mapper.Map<RecurringGift, RecurringGiftDto>).ToList();
+            var recurringGifts = records.Select(Mapper.Map<RecurringGift, RecurringGiftDto>).ToList();
+
+            // We're not currently storing routing number, postal code, or expiration date in the DonorAccount table.
+            // We need these for editing a gift, so populate them from Stripe
+            foreach (var gift in recurringGifts)
+            {
+                PopulateStripeInfoOnRecurringGiftSource(gift.Source);
+            }
+
+            return (recurringGifts);
+        }
+
+        private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)
+        {
+            var source = _paymentService.GetSource(donationSource.PaymentProcessorId, donationSource.ProcessorAccountId);
+            if (source == null)
+            {
+                return;
+            }
+
+            donationSource.PostalCode = source.address_zip;
+            donationSource.RoutingNumber = source.routing_number;
+            if (!string.IsNullOrWhiteSpace(source.exp_month) && !string.IsNullOrWhiteSpace(source.exp_year))
+            {
+                donationSource.ExpirationDate = DateTime.ParseExact(string.Format("{0}/01/{1}", source.exp_month, source.exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo);
+            }
         }
     }
 }
