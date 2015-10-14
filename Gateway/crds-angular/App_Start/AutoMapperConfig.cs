@@ -6,6 +6,7 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -177,6 +178,8 @@ namespace crds_angular.App_Start
                         AccountNumberLast4 = src.AccountNumberLast4,
                         // Have to remove space to match to enum for things like American Express which needs to be AmericanExpress
                         CardType = src.InstitutionName.Equals("Bank") ? (CreditCardType?) null : (CreditCardType)System.Enum.Parse(typeof(CreditCardType), Regex.Replace(src.InstitutionName, @"\s+", "")),
+                        ProcessorAccountId = src.ProcessorAccountId,
+                        PaymentProcessorId = src.ProcessorId
                     };
                 });
         }

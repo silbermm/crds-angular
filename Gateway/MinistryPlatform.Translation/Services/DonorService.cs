@@ -118,12 +118,13 @@ namespace MinistryPlatform.Translation.Services
             return donorId;
         }
 
+        // TODO Need this method to accept an authorized user token in order to facilitate admin setup/edit
         public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId)
         {
             var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
-            var accountType = (giftType == "Bank") ? AccountType.Checking : AccountType.Credit;
+            var accountType = (institutionName == "Bank") ? AccountType.Checking : AccountType.Credit;
 
             try
             {
@@ -190,8 +191,7 @@ namespace MinistryPlatform.Translation.Services
             }
             
         }
-
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -207,6 +207,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Date", setupTime},
                 {"Transaction_code", chargeId},
                 {"Registered_Donor", registeredDonor},
+                {"Anonymous", anonymous},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", donationStatus ?? 1}, //hardcoded to pending if no status specified
@@ -812,6 +813,8 @@ namespace MinistryPlatform.Translation.Services
                 AccountNumberLast4 = record["Account_Number"] as string,
                 InstitutionName = record["Institution_Name"] as string,
                 SubscriptionID = record["Subscription_ID"] as string,
+                ProcessorAccountId = record["Processor_Account_ID"] as string,
+                ProcessorId = record["Processor_ID"] as string
             };
         }
     }

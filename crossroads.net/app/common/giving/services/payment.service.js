@@ -64,7 +64,7 @@
       return apiRecurringGift('QUERY', null, null);
     }
 
-    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type) {
+    function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type, anonymous) {
       var def = $q.defer();
       var donationRequest = {
         program_id: program_id,
@@ -74,7 +74,8 @@
         amount: amount,
         donor_id: donor_id,
         email_address: email_address,
-        pymt_type: pymt_type
+        pymt_type: pymt_type,
+        anonymous: anonymous
       };
       $http({
         method: 'POST',

@@ -6,6 +6,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
