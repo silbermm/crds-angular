@@ -24,3 +24,28 @@ GO
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 GO
 
+
+
+SET IDENTITY_INSERT [dbo].[dp_Sub_Page_Views] ON
+GO
+
+
+INSERT INTO [dbo].[dp_Sub_Page_Views]
+           ([Sub_Page_view_ID]
+           ,[View_Title]
+           ,[Sub_Page_ID]           
+           ,[Field_List]
+           ,[View_Clause])
+     VALUES
+           (104
+          ,'Heads'
+          ,307         
+          ,'Household_Position_ID_Table.[Household_Position],Contact_Status_ID_Table.[Contact_Status],
+          Contacts.[Display_Name]'
+          ,'Household_Position_ID_Table.[Household_Position] = ''Head of Household''
+          AND Contact_Status_ID_Table.[Contact_Status_ID] = ''1''')
+GO
+
+SET IDENTITY_INSERT [dbo].[dp_Sub_Page_Views] OFF
+GO
+
