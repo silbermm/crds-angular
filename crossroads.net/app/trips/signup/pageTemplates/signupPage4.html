@@ -81,9 +81,15 @@
           <div class="col-md-12">
             <p>Content block explaining support person email.</p>
           </div>
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail') }">
             <label for="support-person-email" class="control-label">Support Person Email Address</label>
-            <input ng-model="tripsSignup.signupService.page4.supportPersonEmail.value" type="text" class="form-control" name="supportPersonEmail" id="support-person-email" placeholder="Support Person Email Address">
+            <input
+              ng-model="tripsSignup.signupService.page4.supportPersonEmail.value"
+              type="email"
+              class="form-control"
+              name="supportPersonEmail"
+              id="support-person-email"
+              placeholder="Support Person Email Address">
             <ng-messages for="tripsSignup.tripAppPage4.supportPersonEmail.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail')">
               <span ng-message="email">
                 <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
