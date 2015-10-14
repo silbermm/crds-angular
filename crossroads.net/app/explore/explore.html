@@ -48,6 +48,8 @@ $(document).ready(function() {
           exploreTweens['opening_home'] = tweenFadeUp('.opening', 3);
           break;
         case 2:
+          //Map paragraph
+          exploreTweens['map_text'] = tweenFadeUp('.map');
           //Map names and flags come in
           exploreTweens['map_names'] = TweenMax.staggerTo('.map .map-name', .5, { autoAlpha: 1, delay: .8 }, .5);
           exploreTweens['map_flags'] = TweenMax.staggerTo('.map .map-flag', .5, { autoAlpha: 1, delay: .8 }, .5);
@@ -77,6 +79,7 @@ $(document).ready(function() {
           exploreTweens['studentministry_bgmove'] = TweenMax.to('.studentministry'+' .fade-bg', 8, { x:-20, scaleX:1.1, scaleY:1.1, ease: Power0.easeNone, delay: .8 });
           break;
         case 5:
+          exploreTweens['coffee_text'] = tweenFadeUp('.coffee');
           //make lid visible
           exploreTweens['coffee_makevisible'] = tweenFadeFast('.coffee');
           //fill the cup with coffee
@@ -92,6 +95,7 @@ $(document).ready(function() {
           //no animations triggered in this section, left blank intentionally
           break;
         case 8:
+          exploreTweens['photos_text'] = tweenFadeUp('.photos');
           //make photos visible
           exploreTweens['photos_fadefast'] = tweenFadeFast('.photos');
           //flip photos in from the right
@@ -115,11 +119,6 @@ $(document).ready(function() {
         case 1:
           //Reverse opening text
           reverseTweens(exploreTweens['opening_fades'], .1);
-
-          if (direction == 'down') {
-            //Map paragraph
-            exploreTweens['map_text'] = tweenFadeUp('.map');
-          }
           break;
         case 2:
           //Reverse map text
@@ -140,9 +139,6 @@ $(document).ready(function() {
 
           if (direction == 'down') {
               exploreTweens['studentministry_text'] = tweenFadeUp('.studentministry', .3);
-          } else if (direction == 'up') {
-              //Map paragraph
-              exploreTweens['map_text'] = tweenFadeUp('.map');
           }
           break;
         case 4:
@@ -151,9 +147,6 @@ $(document).ready(function() {
           //reverse student ministry bg
           reverseTween(exploreTweens['studentministry_bg']);
 
-          if (direction == 'down'){
-            exploreTweens['coffee_text'] = tweenFadeUp('.coffee');
-          }
           if (direction == 'up') {
             exploreTweens['kidsclub_text'] = tweenFadeUp('.kidsclub', .3);
           }
@@ -180,17 +173,13 @@ $(document).ready(function() {
 
           if (direction == 'down'){
             exploreTweens['clothes_text'] = tweenFadeUp('.clothes');
-          } else if (direction == 'up'){
-            exploreTweens['coffee_text'] = tweenFadeUp('.coffee');
           }
           break;
         case 7:
           //reverse clothes text
           reverseTweens(exploreTweens['clothes_text']);
 
-          if (direction == 'down'){
-            exploreTweens['photos_text'] = tweenFadeUp('.photos');
-          } else if (direction == 'up'){
+          if (direction == 'up'){
             exploreTweens['drums_text'] = tweenFadeUp('.drums');
           }
           break;
@@ -210,9 +199,6 @@ $(document).ready(function() {
           //reverse meet text
           reverseTweens(exploreTweens['meet_text']);
 
-          if (direction == 'up') {
-            exploreTweens['photos_text'] = tweenFadeUp('.photos');
-          }
           break;
         default:
           //Reverse opening text
