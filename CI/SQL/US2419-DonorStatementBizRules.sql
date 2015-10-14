@@ -28,9 +28,11 @@ GO
 
 
 
+USE [MinistryPlatform]
+GO
+/****** Object:  StoredProcedure [dbo].[crds_Update_Donor_Statement_Type]    Script Date: 10/14/2015 8:57:30 AM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 -- =======================================================================
@@ -44,35 +46,31 @@ CREATE PROCEDURE  [dbo].[crds_Update_Donor_Statement_Type]
 AS
 BEGIN
   
-  SET NOCOUNT ON;
-  DECLARE @Donors_Cursor CURSOR;
-  
-  SET @Donors_Cursor = CURSOR FOR
-    SELECT D.Donor_ID 
+  DECLARE @DonorIdTbl TABLE (ID INT, New_Stmt_Type INT, Prev_Stmt_Type INT)
+
+  UPDATE  D
+  SET Statement_Type_ID = 1 
+  OUTPUT INSERTED.Donor_ID, INSERTED.Statement_Type_ID, DELETED.Statement_Type_ID INTO @DonorIdTbl
   FROM Donors D 
     INNER JOIN Contacts C ON C.Contact_ID = D.Contact_ID
     INNER JOIN Households H ON H.Household_ID = C.Household_ID
     INNER JOIN Statement_Types S ON S.Statement_Type_ID =  D.Statement_Type_ID
   WHERE D.Statement_Type_ID = 2  and C.Household_Position_ID > 1
   
-  DECLARE @Update_Donor_ID INT;
-  OPEN @Donors_Cursor
-    FETCH NEXT FROM @Donors_Cursor INTO @Update_Donor_ID
-    WHILE @@FETCH_STATUS = 0
-    
-    BEGIN
-      UPDATE Donors
-      SET Statement_Type_ID = 1
-      WHERE Donor_ID = @Update_Donor_ID
+  DECLARE @AuditLogTbl TABLE (AID INT)
+    INSERT INTO dbo.dp_Audit_Log
+       (Table_Name, Record_ID, Audit_Description, User_Name, User_ID, Date_Time)
+        OUTPUT INSERTED.Audit_Item_ID INTO @AuditLogTbl    
+       SELECT 'Donors', ID,'Updated','crds_Update_Donor_Statement_Type', -1, GETDATE() FROM @DonorIdTbl
       
-    FETCH NEXT FROM @Donors_Cursor INTO @Update_Donor_ID
-    END
-
-  CLOSE @Donors_Cursor
-  DEALLOCATE @Donors_Cursor 
+  INSERT INTO dbo.dp_Audit_Detail
+    (Audit_Item_ID, Field_Name, Field_Label, Previous_Value, New_Value, Previous_ID, New_ID)
+  SELECT AId, 'Statement_Type_ID','Stmt Type','Family', 'Individual', Prev_Stmt_Type, New_Stmt_Type FROM @AuditLogTbl, @DonorIdTbl
+      
+   
 END
 
-GO
+
 
 
 
