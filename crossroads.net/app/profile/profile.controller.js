@@ -4,13 +4,15 @@
   module.exports = ProfileController;
   ProfileController.$inject = [
     'contactId',
-    'Person'];
+    'Person',
+    'AttributeTypes'];
 
-  function ProfileController(contactId, Person) {
+  function ProfileController(contactId, Person, AttributeTypes) {
     var vm = this;
 
-    vm.contactId = contactId;
+    vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
+    vm.contactId = contactId;
     vm.profileData = { person:  Person };
   }
 })()

@@ -141,7 +141,10 @@
         parent: 'noSideBar',
         url: '/profile',
         resolve: {
-          loggedin: crds_utilities.checkLoggedin
+          loggedin: crds_utilities.checkLoggedin,
+          AttributeTypes: function(AttributeTypeService) {
+            return AttributeTypeService.AttributeTypes().query().$promise;
+          },
         },
         data: {
           isProtected: true,

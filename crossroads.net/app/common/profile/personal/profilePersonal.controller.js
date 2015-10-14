@@ -25,6 +25,20 @@
       Validation) {
 
     var vm = this;
+    var constants = require('./../../../constants');
+    // TODO: Should these be on global scope?
+    vm.attributeIds = constants.ATTRIBUTE_IDS;
+    vm.attributeTypeIds = constants.ATTRIBUTE_TYPE_IDS;
+
+    vm.ethnicitiesOld = _.filter(vm.attributeTypes,
+      function(attributeType) {
+        return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
+      });
+
+    vm.ethnicities = _.find(vm.attributeTypes,
+      function(attributeType) {
+        return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
+      }).attributes;
 
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
