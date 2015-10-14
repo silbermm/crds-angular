@@ -363,7 +363,7 @@ namespace crds_angular.test.Services
                 new SourceData
                 {
                     address_zip = "12345",
-                    exp_month = "11",
+                    exp_month = "8",
                     exp_year = "2012"
                 },
                 new SourceData
@@ -404,7 +404,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(CreditCardType.Visa, result[0].Source.CardType);
             Assert.AreEqual(records[0].SubscriptionID, result[0].SubscriptionID);
             Assert.AreEqual(sourceData[0].address_zip, result[0].Source.PostalCode);
-            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[0].exp_month, sourceData[0].exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[0].Source.ExpirationDate);
+            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[0].exp_month, sourceData[0].exp_year), "M/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[0].Source.ExpirationDate);
 
             Assert.AreEqual(records[1].RecurringGiftId, result[1].RecurringGiftId);
             Assert.AreEqual(records[1].DonorID, result[1].DonorID);
@@ -439,7 +439,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(CreditCardType.AmericanExpress, result[2].Source.CardType);
             Assert.AreEqual(records[2].SubscriptionID, result[2].SubscriptionID);
             Assert.AreEqual(sourceData[2].address_zip, result[2].Source.PostalCode);
-            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[2].exp_month, sourceData[2].exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[2].Source.ExpirationDate);
+            Assert.AreEqual(DateTime.ParseExact(string.Format("{0}/01/{1}", sourceData[2].exp_month, sourceData[2].exp_year), "M/dd/yyyy", DateTimeFormatInfo.CurrentInfo), result[2].Source.ExpirationDate);
         }
 
         [Test]
