@@ -61,6 +61,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
     vm.requireInternational = requireInternational;
+    vm.showFrequentFlyer = showFrequentFlyer;
     vm.signupService = TripsSignupService;
     vm.skillsSelected = skillsSelected;
     vm.spiritualSelected = spiritualSelected;
@@ -171,6 +172,17 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       if (vm.tpForm.$dirty) {
         return '';
       }
+    }
+
+    function showFrequentFlyer(airline) {
+      if (airline.attributeId === attributes.SOUTHAFRICA_FREQUENT_FLYER) {
+        if (isSouthAfrica()) {
+          return true;
+        }
+        return false;
+      }
+      
+      return true;
     }
 
     function isIndia() {
@@ -296,6 +308,9 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function saveData() {
+      // put the selected attributes on the person object....
+      vm.profileData.person.attributeTypes = vm.signupService.evaluateAttributes();
+      
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
@@ -332,8 +347,12 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function skillsSelected() {
-      _.find
-      if ( vm.signupService.page5.professionalSkills.length > 0 ) {
+
+      var checked = _.filter(vm.signupService.page5.professionalSkills, function(skill) {
+        return skill.isChecked;
+      });
+
+      if (checked.length > 0) {
         return true;
       }
 
@@ -341,7 +360,11 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function spiritualSelected() {
-      if (vm.signupService.page2.spiritualLife.length > 0) {
+      var checked = _.filter(vm.signupService.page2.spiritualLife, function(spirit) {
+        return spirit.isChecked;
+      });
+
+      if (checked.length > 0) {
         return true;
       }
 

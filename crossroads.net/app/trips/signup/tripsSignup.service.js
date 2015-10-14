@@ -10,15 +10,11 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
   function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
-      evaluateTripSkills: evaluateTripSkills,
+      evaluateAttributes: evaluateAttributes,
       pages: [],
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application'),
       thankYouMessage: '',
-      tshirtSizes: tshirtSizes(),
-      topScrubSizes: topScrubSizes(),
-      bottomScrubSizes: bottomScrubSizes(),
-      frmPage2: {}
     };
 
     function activate() {
@@ -63,85 +59,21 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
           break;
       }
     }
+    
+    function evaluateAttributes() {
+      
+      var personAttributeTypes = signupService.person.attributeTypes;
+      personAttributeTypes = mapAttribute(
+          signupService.page2.scrubSizeBottom,
+          personAttributeTypes,
+          attributeTypes.SCRUB_BOTTOM_SIZES);
 
-    function evaluateTripSkills(tripSkills) {
-          }
-
-    function bottomScrubSizes() {
-      return [{
-        formFieldId: 1429,
-        attributeId: 3174,
-        value: 'Adult XS'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3175,
-        value: 'Adult S'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3176,
-        value: 'Adult M'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3177,
-        value: 'Adult L'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3178,
-        value: 'Adult XL'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3179,
-        value: 'Adult XXL'
-      }, {
-        formFieldId: 1429,
-        attributeId: 3180,
-        value: 'Adult XXXL'
-      }];
-    }
-
-    function topScrubSizes() {
-      return [{
-        formFieldId: 1477,
-        attributeId: 3167,
-        value: 'Adult XS'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3168,
-        value: 'Adult S'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3169,
-        value: 'Adult M'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3170,
-        value: 'Adult L'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3171,
-        value: 'Adult XL'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3172,
-        value: 'Adult XXL'
-      }, {
-        formFieldId: 1477,
-        attributeId: 3173,
-        value: 'Adult XXXL'
-      }];
-    }
-
-    function tshirtSizes() {
-      return ['Adult XS',
-      'Adult S',
-      'Adult M',
-      'Adult L',
-      'Adult XL',
-      'Adult XXL',
-      'Adult XXXL',
-      'Child S',
-      'Child M',
-      'Child L'];
+      personAttributeTypes = mapAttribute(
+          signupService.page2.scrubSizeTop,
+          personAttributeTypes, 
+          attributeTypes.SCRUB_TOP_SIZES);
+        
+        return personAttributeTypes;
     }
 
     function reset(campaign) {
@@ -232,6 +164,18 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       };
     }
 
+    function mapAttribute(from, currentAttributeTypes, attributeTypeId) {
+      if ( currentAttributeTypes[attributeTypeId] === undefined ) {
+        currentAttributeTypes[attributeTypeId] = {};
+      }
+      currentAttributeTypes[attributeTypeId] = {
+        attributeTypeId: attributeTypeId,
+        attributes: [from ]  
+      };
+
+      return currentAttributeTypes;
+    }
+    
     return signupService;
   }
 })();
