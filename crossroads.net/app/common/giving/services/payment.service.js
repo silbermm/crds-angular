@@ -53,15 +53,21 @@
     }
 
     function deleteRecurringGift(recurringGiftId) {
-      return apiRecurringGift('DELETE', null, recurringGiftId);
+      var def = $q.defer();
+      apiRecurringGift('DELETE', def, null, recurringGiftId);
+      return def.promise;
     }
 
     function getRecurringGift(recurringGiftId) {
-      return apiRecurringGift('GET', null, null);
+      var def = $q.defer();
+      apiRecurringGift('GET', def, null, null);
+      return def.promise;
     }
 
     function queryRecurringGifts() {
-      return apiRecurringGift('QUERY', null, null);
+      var def = $q.defer();
+      apiRecurringGift('QUERY', def, null, null);
+      return def.promise;
     }
 
     function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type, anonymous) {
@@ -202,6 +208,7 @@
 
     function buildNewRecurringGift(donorInfo, stripeFunc, apiMethod, recurringGiftId = null) {
       var def = $q.defer();
+
       stripeFunc.createToken(donorInfo, function(status, response) {
         if (response.error) {
           def.reject(_addGlobalErrorMessage(response.error, status));
@@ -214,16 +221,14 @@
             start_date: GiveTransferService.recurringStartDate
           };
 
-          return apiRecurringGift(apiMethod, recurringGiftRequest, recurringGiftId);
+          apiRecurringGift(apiMethod, def, recurringGiftRequest, recurringGiftId);
         }
       });
 
       return def.promise;
     }
 
-    function apiRecurringGift(apiMethod, recurringGiftRequest = null, recurringGiftId = null) {
-      var def = $q.defer();
-
+    function apiRecurringGift(apiMethod, def, recurringGiftRequest = null, recurringGiftId = null) {
       $http({
         method: apiMethod === 'QUERY' ? 'GET' : apiMethod,
         isArray: (apiMethod === 'QUERY'),
@@ -235,10 +240,12 @@
       }).success(function(data) {
         def.resolve(data);
       }).error(function(response, statusCode) {
-        def.reject(_addGlobalErrorMessage(response.error, statusCode));
+        if (response !== null && response !== undefined) {
+          def.reject(_addGlobalErrorMessage(response.error, statusCode));
+        } else {
+          def.reject();
+        }
       });
-
-      return def.promise;
     }
 
     function apiRecurringGiftUrl(apiMethod, recurringGiftId = null) {

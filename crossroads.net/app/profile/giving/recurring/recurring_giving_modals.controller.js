@@ -85,7 +85,7 @@
     }
 
     function remove() {
-      DonationService.deleteRecurringGift.then(function() {
+      DonationService.deleteRecurringGift().then(function() {
         $modalInstance.close(true);
       }, function(/*error*/) {
 

@@ -9,7 +9,7 @@ describe('RecurringGivingModals', function() {
   var scope;
   var modalInstance;
   var filter;
-  var RecurringGivingService;
+  var DonationService;
   var GiveTransferService;
   var donation;
   var programList;
@@ -21,22 +21,6 @@ describe('RecurringGivingModals', function() {
       Name: 'Crossroads'
     }
   ];
-
-      vm.dto.donor = {
-        id: donation.donor_id,
-        default_source: {
-          credit_card: {
-            last4: null,
-            brand: null,
-            address_zip: null,
-            exp_date: null,
-          },
-          bank_account: {
-            routing: null,
-            last4: null,
-          },
-        },
-      };
 
   var mockRecurringGift =
   {
@@ -70,7 +54,7 @@ describe('RecurringGivingModals', function() {
 
     scope = rootScope.$new();
     filter = $injector.get('$filter');
-    RecurringGivingService = $injector.get('RecurringGivingService');
+    DonationService = $injector.get('DonationService');
     GiveTransferService = $injector.get('GiveTransferService');
 
     modalInstance = {                    // Create a mock object using spies
@@ -84,7 +68,7 @@ describe('RecurringGivingModals', function() {
     vm = _$controller_('RecurringGivingModals',
                            {$modalInstance: modalInstance,
                              $filter: filter,
-                             RecurringGivingService: RecurringGivingService,
+                             DonationService: DonationService,
                              GiveTransferService: GiveTransferService,
                              donation: mockRecurringGift,
                              programList: mockProgramList});
