@@ -779,13 +779,15 @@ namespace crds_angular.test.controllers
             var donor = new ContactDonor();
             var editGift = new RecurringGiftDto();
             var newGift = new RecurringGiftDto();
+            const int recurringGiftId = 123;
 
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
             _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Returns(newGift);
 
-            var response = _fixture.EditRecurringGift(editGift);
+            var response = _fixture.EditRecurringGift(recurringGiftId, editGift);
             _donorService.VerifyAll();
 
+            Assert.AreEqual(recurringGiftId, editGift.RecurringGiftId);
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<OkNegotiatedContentResult<RecurringGiftDto>>(response);
             var dtoResponse = ((OkNegotiatedContentResult<RecurringGiftDto>)response).Content;
@@ -799,6 +801,7 @@ namespace crds_angular.test.controllers
             var authorizedUserToken = _authType + " " + _authToken;
             var donor = new ContactDonor();
             var editGift = new RecurringGiftDto();
+            const int recurringGiftId = 123;
 
             var stripeException = new PaymentProcessorException(HttpStatusCode.Forbidden,
                                                                 "aux message",
@@ -812,8 +815,9 @@ namespace crds_angular.test.controllers
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
             _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Throws(stripeException);
 
-            var response = _fixture.EditRecurringGift(editGift);
+            var response = _fixture.EditRecurringGift(recurringGiftId, editGift);
             _donorService.VerifyAll();
+            Assert.AreEqual(recurringGiftId, editGift.RecurringGiftId);
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<RestHttpActionResult<PaymentProcessorErrorResponse>>(response);
             var err = (RestHttpActionResult<PaymentProcessorErrorResponse>)response;
@@ -826,13 +830,14 @@ namespace crds_angular.test.controllers
             var authorizedUserToken = _authType + " " + _authToken;
             var donor = new ContactDonor();
             var editGift = new RecurringGiftDto();
+            const int recurringGiftId = 123;
 
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(authorizedUserToken)).Returns(donor);
             _donorService.Setup(mocked => mocked.EditRecurringGift(authorizedUserToken, editGift, donor)).Throws<ApplicationException>();
 
             try
             {
-                _fixture.EditRecurringGift(editGift);
+                _fixture.EditRecurringGift(recurringGiftId, editGift);
                 Assert.Fail("expected exception was not thrown");
             }
             catch (HttpResponseException)
@@ -840,6 +845,8 @@ namespace crds_angular.test.controllers
                 // expected
             }
             _donorService.VerifyAll();
+
+            Assert.AreEqual(recurringGiftId, editGift.RecurringGiftId);
         }
     }
 }
