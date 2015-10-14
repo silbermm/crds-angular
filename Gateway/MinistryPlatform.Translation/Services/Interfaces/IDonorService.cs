@@ -38,5 +38,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId);
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
         void ProcessRecurringGiftDeclinedEmail(string subscription_id);
+        void UpdateRecurringGiftFailureCount(int recurringGiftId, int failureCount);
+        void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues);
     }
 }

@@ -171,7 +171,18 @@ namespace MinistryPlatform.Translation.Services
             UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
-        private void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
+        public void UpdateRecurringGiftFailureCount(int recurringGiftId, int failCount)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"Consecutive_Failure_Count", failCount}
+            };
+            var apiToken = ApiLogin();
+            UpdateRecurringGift(apiToken, recurringGiftId, recurringGiftValues);
+        }
+
+
+        public void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
         {
             recurringGiftValues["Recurring_Gift_ID"] = recurringGiftId;
 
