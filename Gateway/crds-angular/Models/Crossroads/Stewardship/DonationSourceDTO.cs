@@ -28,7 +28,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string PaymentProcessorId { get; set; }
 
         [JsonProperty(PropertyName = "exp_date", NullValueHandling = NullValueHandling.Ignore)]
-        public DateTime ExpirationDate;
+        public DateTime? ExpirationDate;
 
         [JsonProperty(PropertyName = "address_zip", NullValueHandling = NullValueHandling.Ignore)]
         public string PostalCode;
