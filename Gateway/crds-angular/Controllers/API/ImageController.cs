@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -55,86 +57,57 @@ namespace crds_angular.Controllers.API
 
 
 
-        [Route("api/image/")]
+        [Route("api/image/profile/")]
         [HttpPost]
-        public HttpResponseMessage Post()
+        public IHttpActionResult Post()
         {
-            var result = new HttpResponseMessage(HttpStatusCode.OK);
-            var imageBytes = new byte[10000];
-            if (Request.Content.IsMimeMultipartContent())
+            return (Authorized(token =>
             {
-                Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
+                var imageBytes = new byte[0];
+                var fileName = "";
+                var recordId = "";
+                if (Request.Content.IsMimeMultipartContent())
                 {
-                    MultipartMemoryStreamProvider provider = task.Result;
-                    foreach (HttpContent content in provider.Contents)
+                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
                     {
-                        Stream imageStream = content.ReadAsStreamAsync().Result;
-                        using (var memoryStream = new MemoryStream())
+                        MultipartMemoryStreamProvider provider = task.Result;
+                        foreach (HttpContent content in provider.Contents)
                         {
-                            imageStream.CopyTo(memoryStream);
-                            imageBytes = memoryStream.ToArray();
+                            switch (content.Headers.ContentDisposition.Name)
+                            {
+                                case "\"file\"":
+                                    imageBytes = content.ReadAsByteArrayAsync().Result;
+                                    fileName = content.Headers.ContentDisposition.FileName;
+                                    fileName = fileName.Replace("\"", "");
+                                    break;
+                                case "\"recordId\"":
+                                    recordId = content.ReadAsStringAsync().Result;
+                                    break;
+                                default:
+                                    //Should we throw an exception?
+                                    break;
+
+                            }
                         }
-                    }
-                });
-                return result;
-            }
-            else
-            {
-                throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
-            }
-        }
+                        return _mpService.CreateFile(
+                            "Contacts",
+                            Int32.Parse(recordId),
+                            fileName,
+                            "Profile Image",
+                            true,
+                            -1,
+                            imageBytes,
+                            token
+                            );
 
-        public async Task<HttpResponseMessage> PostFormData()
-        {
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-
-            var bytes = new byte[10000];
-            string root = HttpContext.Current.Server.MapPath("~/App_Data");
-            var provider = new MultipartFormDataStreamProvider(root);
-
-            try
-            {
-                await Request.Content.ReadAsMultipartAsync(provider);
-
-                // Show all the key-value pairs.
-                foreach (var key in provider.FormData.AllKeys)
-                {
-                    foreach (var val in provider.FormData.GetValues(key))
-                    {
-                        Trace.WriteLine(string.Format("{0}: {1}", key, val));
-                    }
-                }
-                // This illustrates how to get the file names.
-                foreach (MultipartFileData file in provider.FileData)
-                {
-                    Trace.WriteLine(file.Headers.ContentDisposition.FileName);
-                    Trace.WriteLine("Server file path: " + file.LocalFileName);
-                    /*
-                    await file.ReadAsByteArrayAsync().ContinueWith(b =>
-                    {
-                        bytes = b;
                     });
-                     */
                 }
-                /*
-                (Authorized(token =>
+                else
                 {
-                    return _mpService.CreateFile(
-                        provider.FormData.Get("pageName"),
-                        provider.FormData.Get("recordId"),
-                        provider.FileData[0].
-                    );
-                }));
-                */
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (System.Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-            }
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+                }
+                return null;
+            }));
         }
     }
 }
