@@ -95,8 +95,7 @@
                placeholder="mm/dd/yyyy"
                ng-required="true"
                ng-model='profile.profileData.person.dateOfBirth'
-               validate-date
-               min-date="{{ profile.currentDate }}" invalid-past-date>
+               validate-date>
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <ng-messages-include src="on-pause-messages"></ng-messages-include>
