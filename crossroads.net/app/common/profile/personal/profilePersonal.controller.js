@@ -30,11 +30,6 @@
     vm.attributeIds = constants.ATTRIBUTE_IDS;
     vm.attributeTypeIds = constants.ATTRIBUTE_TYPE_IDS;
 
-    vm.ethnicitiesOld = _.filter(vm.attributeTypes,
-      function(attributeType) {
-        return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
-      });
-
     vm.ethnicities = _.find(vm.attributeTypes,
       function(attributeType) {
         return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);

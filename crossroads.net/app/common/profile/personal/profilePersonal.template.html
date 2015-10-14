@@ -126,82 +126,13 @@
 
     <div class="row" ng-if='!profile.forTrips'>
       <div class="form-group col-sm-12">
-        <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
-        <div class="row">
-            <div class="col-sm-6 flush checkbox" ng-repeat="ethnicity in profile.ethnicities">
-                <label><input type="checkbox">{{ethnicity.name}}</label>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6 flush checkbox" ng-repeat="ethnicity in profile.ethnicities">
-                <label><input type="checkbox">{{ethnicity.name}}</label>
-            </div>
-        </div>
+         <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
+         <div class="profile-ethnicity">
+           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
+              <label><input type="checkbox">{{ethnicity.name}}</label>
 
-          Step #0 <br/>
-          <div ng-repeat="ethnicity in profile.ethnicities"
-               ng-class="($index==selectedIndex) ? 'row' : ''">
-
-              <div class="col-sm-6 checkbox">
-                  <label><input type="checkbox">{{ethnicity.name}}</label>
-              </div>
+           </div>
           </div>
-
-
-          Step #1 <br/>
-
-        <div>
-            <div class="row">
-                <div class="col-sm-6 checkbox" ng-repeat="ethnicity in profile.ethnicities">
-                    <label><input type="checkbox">{{ethnicities[$index].name}}</label>
-                </div>
-            </div>
-        </div>
-
-          Step #2 <br/>
-
-        <div class="row">
-            <!-- Works, except I'm loosing one -->
-            <div class="col-sm-6">
-                <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities | limitTo: profile.ethnicities.length / 2 + 0.99">
-                    <label><input type="checkbox">{{ethnicity.name}}</label>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities | limitTo: -1 * profile.ethnicities.length / 2">
-                    <label><input type="checkbox">{{ethnicity.name}}</label>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">White</label>
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">Black or African American</label>
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">Latino or Hispanic</label>
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">Asian</label>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">American Indian or Alaska Native</label>
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">Pacific Islander</label>
-            </div>
-            <div class="checkbox">
-              <label><input type="checkbox" name="ethnicity">Some other race</label>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
