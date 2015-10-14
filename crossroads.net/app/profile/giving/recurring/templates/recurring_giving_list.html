@@ -2,7 +2,7 @@
   <tbody ng-repeat="recurringGift in recurringGifts track by $index">
     <tr>
       <td>
-          {{recurringGift.program}}
+          {{recurringGift.program_name}}
           <div class="text-muted">
             <div ng-show="recurringGift.source.icon" style="display: inline">
               <svg ng-attr-viewBox="{{recurringGift.source.viewBox}}" ng-class="'icon icon-' + recurringGift.source.icon + 'payment-type-icon'">
@@ -18,13 +18,15 @@
         </p>
       </td>
       <td class="table-actions text-right">
-        <a href="" >
+        <!--
+        <a href="" ng-click="openEditGiftModal(recurringGift)">
           <svg viewBox="0 0 32 32" class="icon icon-pencil4">
             <use xlink:href="#pencil4"></use>
           </svg>
           Edit
         </a>
-        <a href="" >
+        -->
+        <a href="" ng-click="openRemoveGiftModal(recurringGift, $index)">
           <svg viewBox="0 0 25 32" class="icon icon-trash-o">
             <use xlink:href="#trash-o"></use>
           </svg>

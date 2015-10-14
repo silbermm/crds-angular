@@ -7,6 +7,8 @@ using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
+using Crossroads.Utilities;
+using Crossroads.Utilities.Services;
 
 namespace crds_angular.Services
 {
@@ -171,7 +173,7 @@ namespace crds_angular.Services
             return (_mpDonorService.DecryptCheckValue(value));
         }
 
-        public int CreateRecurringGift(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
+        public int CreateRecurringGift(string authorizedUserToken, RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
             var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
 
@@ -186,14 +188,107 @@ namespace crds_angular.Services
                                                            contactDonor.ProcessorId);
             var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
            
-            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(contactDonor.DonorId,
+            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
                                                                 donorAccountId,
-                                                                recurringGiftDto.PlanInterval,
+                                                                EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval),
                                                                 recurringGiftDto.PlanAmount,
                                                                 recurringGiftDto.StartDate,
                                                                 recurringGiftDto.Program,
                                                                 stripeSubscription.Id);
             return recurGiftId;
+        }
+
+        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        {
+            var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
+            var donor = GetContactDonorForDonorId(existingGift.DonorId);
+
+            var subscription = _paymentService.CancelSubscription(donor.ProcessorId, existingGift.SubscriptionId);
+            _paymentService.CancelPlan(subscription.Plan.Id);
+
+            _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+        }
+
+        public RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor)
+        {
+            var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, editGift.RecurringGiftId);
+
+            // Assuming payment info is changed if a token is given.
+            var changedPayment = !string.IsNullOrWhiteSpace(editGift.StripeTokenId);
+
+            var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
+            var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
+            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly);
+            var changedDayOfWeek = changedFrequency || (editGift.PlanInterval == PlanInterval.Weekly && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
+            var changedDayOfMonth = changedFrequency || (editGift.PlanInterval == PlanInterval.Monthly && editGift.StartDate.Day != existingGift.DayOfMonth);
+            var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.Value.Date;
+
+            var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
+            var needsNewMpRecurringGift = changedAmount || changedProgram || needsNewStripePlan;
+
+            var recurringGiftId = existingGift.RecurringGiftId.GetValueOrDefault(-1);
+
+            int donorAccountId;
+            if (changedPayment)
+            {
+                var customer = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+                // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
+
+                // TODO Need to change this to accept a user's token in order to facilitate Admin edit
+                donorAccountId = _mpDonorService.CreateDonorAccount(authorizedUserToken,
+                                                                    customer.brand,
+                                                                    DonorRoutingNumberDefault,
+                                                                    customer.last4,
+                                                                    existingGift.DonorId,
+                                                                    customer.id,
+                                                                    donor.ProcessorId);
+                _mpDonorService.UpdateRecurringGiftDonorAccount(authorizedUserToken, recurringGiftId, donorAccountId);
+            }
+            else
+            {
+                donorAccountId = existingGift.DonorAccountId.Value;
+            }
+
+            var stripeSubscription = new StripeSubscription {Id = existingGift.SubscriptionId};
+
+            if (needsNewMpRecurringGift)
+            {
+                if (needsNewStripePlan)
+                {
+                    var oldSubscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
+                    _paymentService.CancelPlan(oldSubscription.Plan.Id);
+
+                    var plan = _paymentService.CreatePlan(editGift, donor);
+                    stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
+                }
+
+                _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+
+                recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
+                                                                            donor.DonorId,
+                                                                            donorAccountId,
+                                                                            EnumMemberSerializationUtils.ToEnumString(editGift.PlanInterval),
+                                                                            editGift.PlanAmount,
+                                                                            editGift.StartDate,
+                                                                            editGift.Program,
+                                                                            stripeSubscription.Id);
+
+            }
+
+            var newGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
+
+            var newRecurringGift = new RecurringGiftDto
+            {
+                RecurringGiftId = newGift.RecurringGiftId.Value,
+                StartDate = newGift.StartDate.Value,
+                PlanAmount = newGift.Amount,
+                PlanInterval = newGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly,
+                Program = newGift.ProgramId,
+                DonorID = newGift.DonorId,
+                EmailAddress = donor.Email,
+                SubscriptionID = stripeSubscription.Id
+            };
+            return (newRecurringGift);
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId)
