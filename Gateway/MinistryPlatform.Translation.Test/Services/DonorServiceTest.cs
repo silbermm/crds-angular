@@ -186,7 +186,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", chargeId},
-                {"Registered_Donor", true}, 
+                {"Registered_Donor", true},
+                {"Anonymous", false},
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", donationStatus},
@@ -238,7 +239,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, null, donorAcctId, checkScannerBatchName, donationStatus);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, false, null, donorAcctId, checkScannerBatchName, donationStatus);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -292,7 +293,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Payment_Type_ID", 4}, //hardcoded as credit card until ACH stories are worked
                 {"Donation_Date", setupDate},
                 {"Transaction_code", chargeId},
-                {"Registered_Donor", true}, 
+                {"Registered_Donor", true},
+                {"Anonymous", false},
                 {"Processor_ID", processorId},
                 {"Donation_Status_Date", setupDate},
                 {"Donation_Status_ID", 1},
@@ -355,6 +357,7 @@ namespace MinistryPlatform.Translation.Test.Services
                                                                         processorId,
                                                                         setupDate,
                                                                         true,
+                                                                        false,
                                                                         false,
                                                                         null,
                                                                         null,
