@@ -3,9 +3,9 @@
 
   var moment = require('moment');
 
-  module.exports = ProfilePersonalDirective;
+  module.exports = ProfilePersonalController;
 
-  ProfilePersonalDirective.$inject = [
+  ProfilePersonalController.$inject = [
     '$rootScope',
     '$log',
     '$timeout',
@@ -15,7 +15,7 @@
     'Validation'
   ];
 
-  function ProfilePersonalDirective(
+  function ProfilePersonalController(
       $rootScope,
       $log,
       $timeout,
