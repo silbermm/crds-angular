@@ -2,6 +2,8 @@
 
 var exploreTweens = [];
 
+TweenMax.set(".fade, .rise10, .fade-bg", {force3D:true});
+
 function tweenFade(selecter, delay ){ if(!delay){ delay = 0; }
           return TweenMax.staggerTo(selecter+' .fade', 1, { autoAlpha: 1, delay: delay }, .15);
 };
@@ -78,7 +80,7 @@ $(document).ready(function() {
           //make lid visible
           exploreTweens['coffee_makevisible'] = tweenFadeFast('.coffee');
           //fill the cup with coffee
-          exploreTweens['coffee_liquid'] = TweenMax.from('.coffee .cup-coffee', 1.5, {yPercent: 5, delay: .8 });
+          exploreTweens['coffee_liquid'] = TweenMax.from('.coffee .cup-coffee', 1.5, {yPercent: 6, delay: .8 });
           //put lid on cup
           exploreTweens['coffee_lid'] = TweenMax.from('.coffee .cup-lid', 1, {yPercent: -226, delay: 1.8 });
           break;
@@ -300,7 +302,7 @@ $(document).ready(function() {
     <div class="container">
       <div class="row">
         <div class="col-sm-12 push-top">
-          <a href="/" class="explore-home rise10 trans1000">
+          <a href="/" class="explore-home rise10">
             <svg viewBox="0 0 32 32" class="icon home2 icon-xlarge">
               <use xlink:href="#home2"></use>
             </svg>
@@ -313,26 +315,25 @@ $(document).ready(function() {
         <div class="row">
           <div class="col-sm-8 col-sm-offset-2">
             <h2 class="opening-title">
-              <span class="fade trans800">WE</span>
-              <span class="fade trans800">STARTED</span>
-              <span class="fade trans800">THIS</span>
-              <span class="fade trans800">CHURCH</span>
-              <span class="fade trans800">FOR</span>
-              <br class="hidden-xs">
-              <span class="fade trans800">OUR</span>
-              <span class="fade trans800">FRIENDS</span>
-              <span class="fade trans800">WHO</span>
-              <span class="fade trans800">DIDN'T</span>
-              <span class="fade trans800">LIKE</span>
-              <span class="fade trans800">CHURCH.</span>
+              <span class="fade">WE</span>
+              <span class="fade">STARTED</span>
+              <span class="fade">THIS</span>
+              <span class="fade">CHURCH</span>
+              <span class="fade">FOR</span>
+              <span class="fade">OUR</span>
+              <span class="fade">FRIENDS</span>
+              <span class="fade">WHO</span>
+              <span class="fade">DIDN'T</span>
+              <span class="fade">LIKE</span>
+              <span class="fade">CHURCH.</span>
             </h2>
-            <p class="opening-desc fade trans800">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing it.</p>
-            <p class="opening-more fade trans800">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
+            <p class="opening-desc fade">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing it.</p>
+            <p class="opening-more fade">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
           </div><!--/col-sm-6-->
         </div><!--/row-->
       </div><!--/container-->
     </div><!--/vertical-center-->
-    <a href="" class="opening-scroll-down fade trans800">
+    <a href="" class="opening-scroll-down fade">
       <svg viewBox="0 0 32 32" class="icon icon-arrow-down9 icon-xlarge">
       	<use xlink:href="#arrow-down9"></use>
       </svg>
@@ -372,8 +373,8 @@ $(document).ready(function() {
         <div class="container">
           <div class="row">
             <div class="col-sm-6">
-              <h2 class="map-title rise10 trans1000 hard-top flush-top ">Crossroads is one church in five locations.</h2>
-              <p class="map-desc rise10 trans1000">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
+              <h2 class="map-title rise10 hard-top flush-top ">Crossroads is one church in five locations.</h2>
+              <p class="map-desc rise10">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
               <p class="map-more">
                 <a class="map-name " href="/locations/mason">Mason</a>
                 <a class="map-name " href="/locations/westside">West Side</a>
@@ -406,8 +407,8 @@ $(document).ready(function() {
     <div class="container">
       <div class="row">
         <div class="col-sm-6 push-top mobile-flush-top">
-          <h2 class="kidsclub-title rise10 trans1000">Oh, and kids love this place.</h2>
-          <p class="kidsclub-desc rise10 trans1000">We have <a class="link-secondary" href="http://www.crossroadskidsclub.net">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
+          <h2 class="kidsclub-title rise10">Oh, and kids love this place.</h2>
+          <p class="kidsclub-desc rise10">We have <a class="link-secondary" href="http://www.crossroadskidsclub.net">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
         </div><!--/col-sm-3-->
       </div><!--/row-->
       <div class="row">
@@ -442,8 +443,8 @@ $(document).ready(function() {
       <div class="container">
         <div class="row">
           <div class="studentministry-container col-sm-6 col-sm-offset-3">
-            <h2 class="studentministry-title flush-bottom rise10 trans1000">STUDENT MINISTRY</h2>
-            <p class="studentministry-desc rise10 trans1000"><a href="/next-step/serve/student-ministry/middle-school-ministry">Middle School</a> and <a href="/next-step/serve/student-ministry/high-school">High School</a> students have a place to call their own. Students are challenged and encouraged through relevant teaching and fun events, and opportunities are provided for them to grow as they connect with God and with each other. </p>
+            <h2 class="studentministry-title flush-bottom rise10">STUDENT MINISTRY</h2>
+            <p class="studentministry-desc rise10"><a href="/next-step/serve/student-ministry/middle-school-ministry">Middle School</a> and <a href="/next-step/serve/student-ministry/high-school">High School</a> students have a place to call their own. Students are challenged and encouraged through relevant teaching and fun events, and opportunities are provided for them to grow as they connect with God and with each other. </p>
           </div><!--/studentministry-container-->
         </div><!--/row-->
       </div><!--/container-->
@@ -469,8 +470,8 @@ $(document).ready(function() {
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-sm-offset-1 map-content">
-            <h2 class="coffee-title rise10 trans1000">We don't sell things.</h2>
-            <p class="coffee-desc rise10 trans1000">From coffee to CDs, from Bibles to Wi-Fi, it's all free. We believe God is generous, and we want to reflect that in everything we do.</p>
+            <h2 class="coffee-title rise10">We don't sell things.</h2>
+            <p class="coffee-desc rise10">From coffee to CDs, from Bibles to Wi-Fi, it's all free. We believe God is generous, and we want to reflect that in everything we do.</p>
           </div><!--/col-->
         </div><!--/row-->
         <div class="row">
@@ -501,13 +502,13 @@ $(document).ready(function() {
       </a>
     </div><!--/explore-nav-->
 
-    <div class="imgix-fluid-bg img-background slide-bg fade-bg trans1500" data-src="http://crossroads-media.imgix.net/images/explore/drums/explore_drums_bg.jpg"></div>
+    <div class="imgix-fluid-bg img-background slide-bg fade-bg" data-src="http://crossroads-media.imgix.net/images/explore/drums/explore_drums_bg.jpg"></div>
     <div class="vertical-80">
       <div class="container">
         <div class="row">
-          <div class="drums-container col-sm-12 col-md-8 col-md-offset-2">
-            <h2 class="drums-title flush-bottom rise10 trans1000">THIS IS NOT YOUR GRANDMA'S CHURCH.<br> BUT BRING HER.</h2>
-            <p class="drums-desc rise10 trans1000">We're fans of creativity and biblical truth.<br> And of turning it up to 11.</p>
+          <div class="drums-container col-sm-12 col-md-10 col-md-offset-1">
+            <h2 class="drums-title flush-bottom rise10">THIS IS NOT YOUR GRANDMA'S CHURCH.<br class="hidden-xs"> BUT BRING HER.</h2>
+            <p class="drums-desc rise10">We're fans of creativity and biblical truth.<br> And of turning it up to 11.</p>
           </div><!--/studentministry-container-->
         </div><!--/row-->
       </div><!--/container-->
@@ -533,8 +534,8 @@ $(document).ready(function() {
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-sm-offset-1 clothes-content">
-            <h2 class="clothes-title rise10 trans1000">Come as you are.</h2>
-            <p class="clothes-desc rise10 trans1000">You're invited to challenge and be challenged. We don't expect you to agree. We just ask that you're open to considering the possibility that there is a God who loves and pursues you.</p>
+            <h2 class="clothes-title rise10">Come as you are.</h2>
+            <p class="clothes-desc rise10">You're invited to challenge and be challenged. We don't expect you to agree. We just ask that you're open to considering the possibility that there is a God who loves and pursues you.</p>
           </div><!--/col-->
         </div><!--/row-->
         <div class="row">
@@ -568,8 +569,8 @@ $(document).ready(function() {
       <div class="container">
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-5 col-md-offset-1 photos-content-container">
-          <h2 class="photos-title flush-bottom rise10 trans1000">We believe God doesn't just work weekends.</h2>
-          <p class="photos-desc rise10 trans1000">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
+          <h2 class="photos-title rise10">We believe God doesn't just work weekends.</h2>
+          <p class="photos-desc rise10">So we mobilize hundreds of people-sometimes thousands-and we respond to God's call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
         </div><!--/col-->
         <div class="col-xs-12 col-sm-6 photos-container">
           <div class="">
@@ -600,13 +601,13 @@ $(document).ready(function() {
         <div class="row">
           <div class="col-sm-12">
             <div id="meet-container" class="meet-container">
-              <h2 class="meet-title rise10 trans1000">Come on over.</h2>
-              <p class="meet-desc rise10 trans1000">
-                <a href="/locations">Stop by a service this weekend</a> to check out this place for yourself. And drink some free coffee, for the love.
+              <h2 class="meet-title rise10">Come on over.</h2>
+              <p class="meet-desc rise10">
+                <a href="/locations">Stop by a service this weekend</a> to check out this place for yourself. <br class="hidden-xs visible-sm" />And drink some free coffee, for the love.
               <br />
                 Explore more: <a href="/next-step">Next Steps</a>, <a href="/media">Media</a>, <a href="/give">Give</a>, <a href="event">Events</a> or <a href="/contact-us">Contact Us</a>.
               </p>
-              <div class="push-top meet-social rise10 trans1000">
+              <div class="push-top meet-social rise10">
                 <h5 class="small-heading explore-small-heading pull-left push-half-right">Follow us : </h5>
                 <a href="https://twitter.com/crdschurch" target="_blank" class="explore-social">
                   <svg viewBox="0 0 32 32" class="icon icon-large icon-twitter">
