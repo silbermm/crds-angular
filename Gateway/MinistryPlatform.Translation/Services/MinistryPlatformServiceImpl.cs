@@ -206,6 +206,11 @@ namespace MinistryPlatform.Translation.Services
             VoidCall(token, platformClient => platformClient.UpdatePageRecord(pageId, dictionary, false));
         }
 
+        public void UpdateSubRecord(int subpageId, Dictionary<string, object> dictionary, String token)
+        {            
+            VoidCall(token, platformClient => platformClient.UpdateSubpageRecord(subpageId, dictionary, false));
+        }
+
         private int GetMinistryPlatformId(string mpKey)
         {
             return _configurationWrapper.GetConfigIntValue(mpKey);

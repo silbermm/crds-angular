@@ -6,6 +6,7 @@ using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;

@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
