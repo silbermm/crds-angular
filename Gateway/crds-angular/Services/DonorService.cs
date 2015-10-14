@@ -346,7 +346,7 @@ namespace crds_angular.Services
             donationSource.RoutingNumber = source.routing_number;
             if (!string.IsNullOrWhiteSpace(source.exp_month) && !string.IsNullOrWhiteSpace(source.exp_year))
             {
-                donationSource.ExpirationDate = DateTime.ParseExact(string.Format("{0}/01/{1}", source.exp_month, source.exp_year), "MM/dd/yyyy", DateTimeFormatInfo.CurrentInfo);
+                donationSource.ExpirationDate = DateTime.ParseExact(string.Format("{0}/01/{1}", source.exp_month, source.exp_year), "M/dd/yyyy", DateTimeFormatInfo.CurrentInfo);
             }
         }
     }
