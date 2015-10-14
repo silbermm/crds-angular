@@ -156,7 +156,7 @@
               vm.closeModal(true);
             }
           }, function() {
-
+            //TODO: Should we be emiting error message here?
             $log.debug('person save unsuccessful');
           });
         }
