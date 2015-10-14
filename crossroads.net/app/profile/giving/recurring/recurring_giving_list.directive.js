@@ -30,9 +30,10 @@
           templateUrl: 'recurring_giving_remove_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            donation: function () {
+            donation: function() {
               return selectedDonation;
             },
+
             programList: function() {
               return [
                 {
@@ -44,14 +45,15 @@
           }
         });
 
-        modalInstance.result.then(function (success) {
+        modalInstance.result.then(function(success) {
           if (success) {
             scope.recurringGifts.splice(index, 1);
             $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
           }
-        }, function () {
+        }, function() {
+
           $log.info('Modal dismissed at: ' + new Date());
         });
       };
@@ -62,9 +64,10 @@
           templateUrl: 'recurring_giving_edit_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            donation: function () {
+            donation: function() {
               return selectedDonation;
             },
+
             Programs: 'Programs',
             programList: function(Programs) {
               // TODO The number one relates to the programType in MP. At some point we should fetch
@@ -76,9 +79,10 @@
           }
         });
 
-        modalInstance.result.then(function (selectedItem, success) {
+        modalInstance.result.then(function(selectedItem, success) {
           scope.selected = selectedItem;
-        }, function () {
+        }, function() {
+
           $log.info('Modal dismissed at: ' + new Date());
         });
       };

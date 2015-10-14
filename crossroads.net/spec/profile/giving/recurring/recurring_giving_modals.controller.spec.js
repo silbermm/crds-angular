@@ -22,6 +22,22 @@ describe('RecurringGivingModals', function() {
     }
   ];
 
+      vm.dto.donor = {
+        id: donation.donor_id,
+        default_source: {
+          credit_card: {
+            last4: null,
+            brand: null,
+            address_zip: null,
+            exp_date: null,
+          },
+          bank_account: {
+            routing: null,
+            last4: null,
+          },
+        },
+      };
+
   var mockRecurringGift =
   {
     recurring_gift_id: 12,

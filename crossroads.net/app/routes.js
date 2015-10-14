@@ -32,10 +32,11 @@
               state: $state.next.name
             }).$promise.then(
               function(systemPage) {
-                if(systemPage.systemPages[0]){
-                  if(!$state.next.data){
+                if (systemPage.systemPages[0]) {
+                  if (!$state.next.data) {
                     $state.next.data = {};
                   }
+
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
@@ -157,12 +158,6 @@
             resolve: {
               loggedin: crds_utilities.checkLoggedin
             },
-          },
-          'account@profile': {
-            templateUrl: 'profile/profile_account.html',
-            data: {
-              isProtected: true
-            }
           },
           'skills@profile': {
             controller: 'ProfileSkillsController as profile',
@@ -522,11 +517,12 @@
 
               return childPromise.then(function() {
                 var metaDescription = ContentPageService.page.metaDescription;
-                if (!metaDescription){
+                if (!metaDescription) {
                   //If a meta description is not provided we'll use the Content
                   //The description gets html stripped and shortened to 155 characters
                   metaDescription = ContentPageService.page.content;
                 }
+
                 $rootScope.meta = {
                   title: ContentPageService.page.title,
                   description: metaDescription,

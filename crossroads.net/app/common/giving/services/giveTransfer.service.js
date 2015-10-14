@@ -31,6 +31,7 @@
         this.savedPayment = '';
         this.view = 'bank';
         this.recurringStartDate = undefined;
+        this.recurringGiftId = undefined;
 
         if (!Session.isActive()) {
           User.email = '';

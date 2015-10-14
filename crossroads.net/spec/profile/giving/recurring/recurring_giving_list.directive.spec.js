@@ -77,7 +77,7 @@ describe('RecurringGivingList Directive', function() {
           },
           {
             amount: 5000,
-            recurrence: "Tuesdays Weekly",
+            recurrence: 'Tuesdays Weekly',
             program: 'Crossroads',
             source: {
               type: 'CreditCard',
@@ -90,7 +90,7 @@ describe('RecurringGivingList Directive', function() {
           },
           {
             amount: 6000,
-            recurrence: "Mondays Weekly",
+            recurrence: 'Mondays Weekly',
             program: 'Crossroads',
             source: {
               type: 'Bank',
@@ -102,7 +102,7 @@ describe('RecurringGivingList Directive', function() {
           },
           {
             amount: 7000,
-            recurrence: "1st Montly",
+            recurrence: '1st Montly',
             program: 'Crossroads',
             source: {
               type: 'Bank',
@@ -114,7 +114,7 @@ describe('RecurringGivingList Directive', function() {
           },
           {
             amount: 8000,
-            recurrence: "Sundays Weekly",
+            recurrence: 'Sundays Weekly',
             program: 'Crossroads',
             source: {
               type: 'Bank',
@@ -162,7 +162,7 @@ describe('RecurringGivingList Directive', function() {
       originalRecurringGifts.push(
           {
             amount: 9000,
-            recurrence: "10th Montly",
+            recurrence: '10th Montly',
             program: 'Crossroads',
             source: {
               type: 'CreditCard',

@@ -30,6 +30,9 @@
       submitBankInfo: submitBankInfo,
       submitChangedBankInfo: submitChangedBankInfo,
       updateDonorAndDonate: updateDonorAndDonate,
+      deleteRecurringGift: deleteRecurringGift,
+      getRecurringGift: getRecurringGift,
+      queryRecurringGifts: queryRecurringGifts,
     };
 
     function createBank() {
@@ -95,6 +98,18 @@
             $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       }
+    }
+
+    function deleteRecurringGift() {
+      return PaymentService.deleteRecurringGift(GiveTransferService.recurringGiftId);
+    }
+
+    function getRecurringGift() {
+      return PaymentService.getRecurringGift(GiveTransferService.recurringGiftId);
+    }
+
+    function queryRecurringGifts() {
+      return PaymentService.queryRecurringGifts();
     }
 
     function confirmDonation(programsInput) {
