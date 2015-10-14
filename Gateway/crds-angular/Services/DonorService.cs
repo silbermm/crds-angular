@@ -22,6 +22,7 @@ namespace crds_angular.Services
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
+        public const int RecurringGiftFrequencyWeekly = 1;
         
         private readonly string _guestGiverDisplayName;
 
@@ -228,7 +229,7 @@ namespace crds_angular.Services
 
             var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
             var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
-            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly);
+            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == RecurringGiftFrequencyWeekly ? PlanInterval.Weekly : PlanInterval.Monthly);
             var changedDayOfWeek = changedFrequency || (editGift.PlanInterval == PlanInterval.Weekly && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
             var changedDayOfMonth = changedFrequency || (editGift.PlanInterval == PlanInterval.Monthly && editGift.StartDate.Day != existingGift.DayOfMonth);
             var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.GetValueOrDefault().Date;
@@ -304,7 +305,7 @@ namespace crds_angular.Services
                 RecurringGiftId = newGift.RecurringGiftId.GetValueOrDefault(),
                 StartDate = newGift.StartDate.GetValueOrDefault(),
                 PlanAmount = newGift.Amount,
-                PlanInterval = newGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly,
+                PlanInterval = newGift.Frequency == RecurringGiftFrequencyWeekly ? PlanInterval.Weekly : PlanInterval.Monthly,
                 Program = newGift.ProgramId,
                 DonorID = newGift.DonorId,
                 EmailAddress = donor.Email,
