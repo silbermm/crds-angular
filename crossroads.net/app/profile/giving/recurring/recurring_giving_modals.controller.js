@@ -93,8 +93,25 @@
       });
     }
 
-    function edit() {
-      $modalInstance.close(vm.donation, true);
+    function edit(recurringGiveForm) {
+      if ((recurringGiveForm.creditCardForm !== undefined && recurringGiveForm.creditCardForm.$dirty) ||
+          (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
+        DonationService.updateRecurringGift(true).then(function() {
+          $modalInstance.close(true);
+        }, function(/*error*/) {
+
+          $modalInstance.close(false);
+        });
+      } else if (recurringGiveForm.donationDetailsForm.$dirty) {
+        DonationService.updateRecurringGift(false).then(function() {
+          $modalInstance.close(true);
+        }, function(/*error*/) {
+
+          $modalInstance.close(false);
+        });
+      } else {
+        $modalInstance.close(true);
+      }
     }
 
   };

@@ -3,9 +3,9 @@
 
   module.exports = RecurringGivingList;
 
-  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService'];
+  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService', 'DonationService'];
 
-  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService) {
+  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService, DonationService) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -79,8 +79,19 @@
           }
         });
 
-        modalInstance.result.then(function(selectedItem, success) {
-          scope.selected = selectedItem;
+        modalInstance.result.then(function(success) {
+          if (success) {
+            DonationService.queryRecurringGifts().then(function(data) {
+              scope.recurringGiftsInput = data;
+            }, function(/*error*/) {
+
+              $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+            });
+
+            $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
+          } else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
+          }
         }, function() {
 
           $log.info('Modal dismissed at: ' + new Date());

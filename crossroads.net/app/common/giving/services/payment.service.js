@@ -19,6 +19,7 @@
       updateDonorWithCard:updateDonorWithCard,
       updateRecurringGiftWithBankAcct: updateRecurringGiftWithBankAcct,
       updateRecurringGiftWithCard: updateRecurringGiftWithBankAcct,
+      updateRecurringGiftDonorOnlyInformation: updateRecurringGiftDonorOnlyInformation,
       deleteRecurringGift: deleteRecurringGift,
       queryRecurringGifts: queryRecurringGifts,
       getRecurringGift: getRecurringGift,
@@ -50,6 +51,12 @@
 
     function updateRecurringGiftWithCard(card, recurringGiftId) {
       return buildNewRecurringGift(card, stripe.card, 'PUT', recurringGiftId);
+    }
+
+    function updateRecurringGiftDonorOnlyInformation(recurringGiftId) {
+      var def = $q.defer();
+      apiRecurringGift('PUT', def, createRecurringGiftRequest(), recurringGiftId);
+      return def.promise;
     }
 
     function deleteRecurringGift(recurringGiftId) {
@@ -213,19 +220,27 @@
         if (response.error) {
           def.reject(_addGlobalErrorMessage(response.error, status));
         } else {
-          var recurringGiftRequest = {
-            stripe_token_id: response.id,
-            amount: GiveTransferService.amount,
-            program: GiveTransferService.program.ProgramId,
-            interval: GiveTransferService.givingType,
-            start_date: GiveTransferService.recurringStartDate
-          };
-
+          var recurringGiftRequest = createRecurringGiftRequest(response.id);
           apiRecurringGift(apiMethod, def, recurringGiftRequest, recurringGiftId);
         }
       });
 
       return def.promise;
+    }
+
+    function createRecurringGiftRequest(token_id = null) {
+      var recurringGiftRequest = {
+        amount: GiveTransferService.amount,
+        program: GiveTransferService.program.ProgramId,
+        interval: GiveTransferService.givingType,
+        start_date: GiveTransferService.recurringStartDate
+      };
+
+      if (token_id !== null) {
+        recurringGiftRequest.stripe_token_id = token_id;
+      }
+
+      return recurringGiftRequest;
     }
 
     function apiRecurringGift(apiMethod, def, recurringGiftRequest = null, recurringGiftId = null) {
