@@ -137,33 +137,68 @@
           isProtected: false
         }
       })
-        .state('profilePersonal', {
-          parent: 'noSideBar',
-          url: '/profile',
-          templateUrl: 'personal/profilePersonal.template.html',
-          controller: 'ProfilePersonalController as profile',
-          data: {
-            isProtected: true,
-            meta: {
-              title: 'Profile',
-              description: ''
+      .state('profile', {
+        parent: 'noSideBar',
+        url: '/profile',
+        resolve: {
+          loggedin: crds_utilities.checkLoggedin,
+          AttributeTypes: function(AttributeTypeService) {
+            return AttributeTypeService.AttributeTypes().query().$promise;
+          },
+        },
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Profile',
+            description: ''
+          }
+        },
+        views: {
+          '': {
+            templateUrl: 'profile/profile.html',
+            resolve: {
+              loggedin: crds_utilities.checkLoggedin
+            },
+          },
+          'personal@profile': {
+            templateUrl: 'profile/profilePersonal.html',
+            controller: 'ProfileController as profile',
+            data: {
+              isProtected: true
+            },
+            resolve: {
+              $cookies: '$cookies',
+              contactId: function($cookies) {
+                return $cookies.get('userId');
+              },
+              Profile: 'Profile',
+              Person: function(Profile, contactId) {
+                return Profile.Person.get({contactId: contactId}).$promise;
+              },
             }
           },
-          resolve: {
-            loggedin: crds_utilities.checkLoggedin,
-            $cookies: '$cookies',
-            contactId: function($cookies) {
-              return $cookies.get('userId');
+          'account@profile': {
+            templateUrl: 'profile/profile_account.html',
+            data: {
+              isProtected: true
             }
-
-            //debugger;
-            // leaving this in place as a reminder -- not sure we need to have a similar function in profile
-            //pageId: function() {
-            //  return 0;
-            //}
+          },
+          'skills@profile': {
+            controller: 'ProfileSkillsController as profile',
+            templateUrl: 'skills/profile_skills.html',
+            data: {
+              isProtected: true
+            }
+          },
+          'giving@profile': {
+            controller: 'ProfileGivingController as giving_profile_controller',
+            templateUrl: 'giving/profile_giving.html',
+            data: {
+              isProtected: true
+            }
           }
-        })
-
+        }
+      })
       .state('myprofile', {
         parent: 'noSideBar',
         url: '/myprofile',

@@ -3,9 +3,6 @@
     <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
 
     <div class="row">
-
-      <profile-picture ng-if='!profile.forTrips'> </profile-picture>
-
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
         <label for="firstname" class="required">First Name</label>
         <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.profileData.person.firstName" required>
@@ -125,6 +122,18 @@
             <ng-messages-include src="on-pause-messages"></ng-messages-include>
           </ng-messages>
         </div>
+    </div>
+
+    <div class="row" ng-if='!profile.forTrips'>
+      <div class="form-group col-sm-12">
+         <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
+         <div class="profile-ethnicity">
+           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
+              <label><input type="checkbox" ng-model="ethnicity.selected">{{ethnicity.name}}</label>
+
+           </div>
+          </div>
+      </div>
     </div>
 
     <div class="row">
