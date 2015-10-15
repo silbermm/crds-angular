@@ -42,7 +42,8 @@ namespace MinistryPlatform.Translation.Services
                         YoungestAgeAllowed = result.ToInt("Youngest_Age_Allowed"),
                         RegistrationEnd = result.ToDate("Registration_End"),
                         RegistrationStart = result.ToDate("Registration_Start"),
-                        AgeExceptions = exceptions
+                        AgeExceptions = exceptions,
+                        EventId = result.ToInt("Event_ID")
                     };
                     campaigns.Add(campaign);
                 }

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
 using Crossroads.Utilities.Interfaces;
-using Crossroads.Utilities.Services;
-using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -36,17 +32,20 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
-            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
-        
-            fixture = new EventService(ministryPlatformService.Object, _authService.Object, _configWrapper.Object,_groupService.Object);
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
+
+            fixture = new EventService(ministryPlatformService.Object, _authService.Object, _configWrapper.Object, _groupService.Object);
         }
 
         [Test]
         public void testRegisterParticipantForEvent()
         {
             ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
-                It.IsAny<int>(), It.IsAny<int>(), It.IsAny<Dictionary<string, object>>(),
-                It.IsAny<string>(), It.IsAny<Boolean>())).Returns(987);
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(),
+                It.IsAny<Boolean>())).Returns(987);
 
             var expectedValues = new Dictionary<string, object>
             {
@@ -58,7 +57,11 @@ namespace MinistryPlatform.Translation.Test.Services
             int eventParticipantId = fixture.registerParticipantForEvent(123, 456);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
-                EventParticipantPageId, 456, expectedValues, It.IsAny<string>(), true));
+                EventParticipantPageId,
+                456,
+                expectedValues,
+                It.IsAny<string>(),
+                true));
 
             Assert.AreEqual(987, eventParticipantId);
         }
@@ -84,11 +87,11 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService.Setup(mock => mock.GetPageViewRecords(EventsWithEventTypeId, It.IsAny<string>(), search, "", 0))
                 .Returns(MockEventsDictionaryByEventTypeId());
 
-            var startDate = new DateTime(2015,4,1);
-            var endDate = new DateTime(2015,4,30);
+            var startDate = new DateTime(2015, 4, 1);
+            var endDate = new DateTime(2015, 4, 30);
             var events = fixture.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>());
             Assert.IsNotNull(events);
-            Assert.AreEqual(3,events.Count);
+            Assert.AreEqual(3, events.Count);
             Assert.AreEqual("event-title-200", events[0].EventTitle);
         }
 
@@ -180,10 +183,11 @@ namespace MinistryPlatform.Translation.Test.Services
             const string pageKey = "EventParticipantByEventIdAndParticipantId";
             var mockEventParticipants = MockEventParticipantsByEventIdAndParticipantId();
 
-            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>())).Returns(mockEventParticipants);
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(mockEventParticipants);
 
             var participant = fixture.GetEventParticipantRecordId(eventId, participantId);
-            
+
             ministryPlatformService.VerifyAll();
             Assert.IsNotNull(participant);
             Assert.AreEqual(8634, participant);
@@ -191,14 +195,49 @@ namespace MinistryPlatform.Translation.Test.Services
 
         private List<Dictionary<string, object>> MockEventParticipantsByEventIdAndParticipantId()
         {
-            return new List<Dictionary<string, object>>{
+            return new List<Dictionary<string, object>>
+            {
                 new Dictionary<string, object>
                 {
                     {"Event_Participant_ID", 8634},
                     {"Event_ID", 93},
                     {"Participant_ID", 134}
-                }    
+                }
             };
+        }
+
+        [Test]
+        public void GetEvent()
+        {
+            //Arrange
+            const int eventId = 999;
+            const string pageKey = "EventsWithDetail";
+            var mockEventDictionary = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Event_ID", 999},
+                    {"Event_Title", "event-title-100"},
+                    {"Event_Type", "event-type-100"},
+                    {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Contact_ID", 12345},
+                    {"Email_Address", "thecinnamonbagel@react.js"}
+                }
+            };
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), eventId.ToString(), string.Empty, 0)).Returns(mockEventDictionary);
+
+            //Act
+            var theEvent = fixture.GetEvent(eventId);
+
+            //Assert
+            ministryPlatformService.VerifyAll();
+
+            Assert.AreEqual(eventId, theEvent.EventId);
+            Assert.AreEqual("event-title-100", theEvent.EventTitle);
+            Assert.AreEqual(12345, theEvent.PrimaryContact.ContactId);
+            Assert.AreEqual("thecinnamonbagel@react.js", theEvent.PrimaryContact.EmailAddress);
         }
     }
 }
