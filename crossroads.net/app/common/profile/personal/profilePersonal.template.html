@@ -145,7 +145,7 @@
                placeholder="mm/yyyy"
                validate-date='MM/YYYY'
                ng-model-options="{updateOn:'blur'}"
-               ng-model="profile.profileData.person.anniversaryDate"  >
+               ng-model="profile.profileData.person.anniversaryDate" ng-required="true">
         <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
           <ng-messages-include src="on-pause-messages"></ng-messages-include>
         </ng-messages>
