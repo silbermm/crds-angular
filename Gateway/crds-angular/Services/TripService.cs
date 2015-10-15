@@ -355,7 +355,7 @@ namespace crds_angular.Services
             return groupParticipants;
         }
 
-        private int AddGroupParticipant(int groupId, int groupRoleId, DateTime groupStartDate, IList<Event> events, crds_angular.Models.Crossroads.Trip.TripApplicant applicant)
+        private int AddGroupParticipant(int groupId, int groupRoleId, DateTime groupStartDate, IList<Event> events, TripApplicant applicant)
         {
             if (_groupService.ParticipantGroupMember(groupId, applicant.ParticipantId))
             {

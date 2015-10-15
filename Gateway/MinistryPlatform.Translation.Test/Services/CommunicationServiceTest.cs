@@ -45,7 +45,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var templateDictionary = new Dictionary<string, object> {{"Body", mockBody}, {"Subject", mockSubject}};
             _ministryPlatformService.Setup(m => m.GetRecordDict(341, templateId, It.IsAny<string>(), false)).Returns(templateDictionary);
 
-            var communication = _fixture.GetTemplateAsCommunication(templateId, fromContactId, fromEmailAddress, replyContactId, replyEmailAddress, toContactId, toEmailAddress, null);
+            var communication = _fixture.GetTemplateAsCommunication(templateId, fromContactId, fromEmailAddress, replyContactId, replyEmailAddress, toContactId, toEmailAddress);
 
             _configWrapper.VerifyAll();
             _ministryPlatformService.VerifyAll();
