@@ -136,7 +136,7 @@
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'anniversary-date')}" >
-        <label class="control-label required">When did you start attending Crossroads?</label>
+        <label class="control-label">When did you start attending Crossroads?</label>
         </span>
         <input type="text"
                class="form-control"
@@ -145,7 +145,7 @@
                placeholder="mm/yyyy"
                validate-date='MM/YYYY'
                ng-model-options="{updateOn:'blur'}"
-               ng-model="profile.profileData.person.anniversaryDate" ng-required="true">
+               ng-model="profile.profileData.person.anniversaryDate">
         <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
           <ng-messages-include src="on-pause-messages"></ng-messages-include>
         </ng-messages>
