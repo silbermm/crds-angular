@@ -348,8 +348,9 @@ namespace crds_angular.Services
                 }
 
                 CreatePledge(dto, applicant);
-
                 EventRegistration(events, applicant, dto.Campaign.DestinationId);
+                SendMessage("TripParticipantSuccessTemplate", applicant.ContactId);
+
             }
 
             return groupParticipants;
