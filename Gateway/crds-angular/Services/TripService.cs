@@ -270,7 +270,21 @@ namespace crds_angular.Services
             return participants.Values.Where(x => x.Trips.Count > 0).OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDto GetMyTrips(int contactId)
+        public MyTripsDto GetMyTrips(int contactId, string token)
+        {
+            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var familyTrips = new MyTripsDto();
+
+            foreach (var member in family)
+            {
+                var trips = TripForContact(member.ContactId);
+                familyTrips.MyTrips.AddRange(trips.MyTrips);
+            }
+
+            return familyTrips;
+        }
+
+        private MyTripsDto TripForContact(int contactId)
         {
             var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
@@ -279,24 +293,26 @@ namespace crds_angular.Services
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
-                var eventParticipantId = 0;
-                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
-                if (eventParticipantIds != null)
-                {
-                    eventParticipantId = eventParticipantIds.EventParticipantId;
-                }
                 eventIds.Add(trip.EventId);
-                events.Add(new Trip
+
+                var t = new Trip();
+                t.EventId = trip.EventId;
+                t.EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy");
+                t.EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy");
+                t.EventTitle = trip.EventTitle;
+                t.EventType = trip.EventTypeId.ToString();
+                t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
+                t.FundraisingGoal = trip.TotalPledge;
+
+                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (tripParticipant != null)
                 {
-                    EventId = trip.EventId,
-                    EventType = trip.EventTypeId.ToString(),
-                    EventTitle = trip.EventTitle,
-                    EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
-                    EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
-                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
-                    FundraisingGoal = trip.TotalPledge,
-                    EventParticipantId = eventParticipantId
-                });
+                    t.EventParticipantId = tripParticipant.EventParticipantId;
+                    t.EventParticipantFirstName = tripParticipant.Nickname;
+                    t.EventParticipantLastName = tripParticipant.Lastname;
+                }
+
+                events.Add(t);
             }
 
             foreach (var e in events)
