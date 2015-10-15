@@ -426,7 +426,7 @@ namespace crds_angular.test.Services
         {
             const string processorId = "cus_123";
             const string subscriptionId = "sub_123";
-            const int failCount = 1;
+            const int failCount = 0;
             const int recurringGiftId = 123456;
 
             var e = new StripeEvent
