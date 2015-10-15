@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using crds_angular.Models.Crossroads.Attribute;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -43,13 +42,13 @@ namespace crds_angular.Services
         }
 
 
-        private Dictionary<int, ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(
-            List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
+        private Dictionary<int, ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
         {
+            var mpFilteredAttributes = mpAttributes.Where(x => x.PreventMultipleSelection == false).ToList();
+
             // TODO: See if we can push this down to the MP Layer to get this data from the select directly
             // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
-            var attributeTypesDictionary = mpAttributes
-                .Where(x => x.PreventMultipleSelection == false)
+            var attributeTypesDictionary = mpFilteredAttributes
                 .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
                 .Distinct()
                 .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
@@ -59,7 +58,9 @@ namespace crds_angular.Services
                                   Name = mpAttributeType.AttributeTypeName,
                               });
 
-            foreach (var mpAttribute in mpAttributes)
+            
+
+            foreach (var mpAttribute in mpFilteredAttributes)
             {
                 var contactAttribute = new ContactAttributeDTO()
                 {
@@ -68,23 +69,11 @@ namespace crds_angular.Services
                     Selected = false
                 };
 
-                // TODO: Remove hack to prevent single selections from being returned 
-                if (mpAttribute.PreventMultipleSelection)
-                {
-                    continue;
-                }
-
                 attributeTypesDictionary[mpAttribute.AttributeTypeId].Attributes.Add(contactAttribute);
             }
 
             foreach (var mpContactAttribute in mpContactAttributes)
             {
-                // TODO: Remove hack to prevent single selections from being returned 
-                if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
-                {
-                    continue;
-                }
-
                 var contactAttributeType = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
                 var contactAttribute = contactAttributeType.Attributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
                 contactAttribute.StartDate = mpContactAttribute.StartDate;
@@ -99,10 +88,11 @@ namespace crds_angular.Services
         private Dictionary<int, ContactSingleAttributeDTO> TranslateToSingleAttributeTypeDtos(
             List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
         {
+            var mpFilteredAttributes = mpAttributes.Where(x => x.PreventMultipleSelection == true).ToList();
+
             // TODO: See if we can push this down to the MP Layer to get this data from the select directly
             // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
-            var attributeTypesDictionary = mpAttributes
-                .Where(x => x.PreventMultipleSelection == true)
+            var attributeTypesDictionary = mpFilteredAttributes
                 .Select(x => new { x.AttributeTypeId, x.AttributeTypeName })
                 .Distinct()
                 .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
@@ -110,14 +100,7 @@ namespace crds_angular.Services
 
             foreach (var mpContactAttribute in mpContactAttributes)
             {                
-                // Lookup by attributeId
                 var mpAttribute = mpAttributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
-
-                // TODO: Remove hack to prevent single selections from being returned 
-                if (!mpAttribute.PreventMultipleSelection)
-                {
-                    continue;
-                }                
 
                 var attribute = _attributeService.ConvertAttributeToAttributeDto(mpAttribute);
                 var contactSingleAttribute = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
@@ -130,15 +113,11 @@ namespace crds_angular.Services
         }
 
         public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes, Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
-        {            
-            // TODO: Add logic to merge single-select and mutli-select lists   
-            
+        {
             var currentAttributes = TranslateMultiToMPAttributes(contactAttributes);
             currentAttributes.AddRange(TranslateSingleToMPAttribute(contactSingleAttributes));
 
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
-
-
 
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
@@ -149,11 +128,8 @@ namespace crds_angular.Services
             }
         }
 
-
-
         private void SaveAttribute(int contactId, ContactAttribute attribute, string apiUserToken)
-        {
-            // TODO: can we make this nullable and use null instead of 0?
+        {            
             if (attribute.ContactAttributeId == 0)
             {
                 // These are new so add them
