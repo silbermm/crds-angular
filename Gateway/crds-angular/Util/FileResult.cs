@@ -12,12 +12,12 @@ namespace crds_angular.Util
 {
     internal class FileResult : IHttpActionResult
     {
-        private readonly MemoryStream _stream;
+        private readonly Stream _stream;
         private readonly string _fileName;
         private readonly string _contentType;
         private readonly bool _asAttachment;
 
-        public FileResult(MemoryStream stream, String fileName, String contentType = null, bool asAttachment = true)
+        public FileResult(Stream stream, String fileName, String contentType = null, bool asAttachment = true)
         {
             if (stream == null)
             {

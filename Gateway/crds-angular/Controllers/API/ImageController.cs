@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Web;
@@ -9,7 +8,6 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Util;
 using log4net;
-using RestSharp.Extensions;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -47,7 +45,7 @@ namespace crds_angular.Controllers.API
                     }
 
                     HttpContext.Current.Response.Buffer = true;
-                    return (new FileResult(new MemoryStream(imageStream.ReadAsBytes()), imageDescription.FileName, null, false));
+                    return (new FileResult(imageStream, imageDescription.FileName, null, false));
                 }));
             }
             catch (Exception e)
