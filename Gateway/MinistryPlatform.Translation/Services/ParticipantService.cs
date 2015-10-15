@@ -74,7 +74,8 @@ namespace MinistryPlatform.Translation.Services
                     ParticipantId = record.ToInt("dp_RecordID"),
                     EmailAddress = record.ToString("Email Address"),
                     PreferredName = record.ToString("Nickname"), 
-                    DisplayName =  record.ToString("Display Name")
+                    DisplayName =  record.ToString("Display Name"), 
+                    Age = record.ToInt("Age")
                 };
             }
             catch (Exception ex)

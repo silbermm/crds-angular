@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
+using MvcContrib.TestHelper.Ui;
 using MPServices = MinistryPlatform.Translation.Services;
 
 using NUnit.Framework;
@@ -13,8 +15,10 @@ namespace crds_angular.test.Services
     [Category("IntegrationTests")]
     class ContactAttributeServiceIntegrationTest
     {
-        [Test]    
-        public void LoadContactAttributes()
+        private ContactAttributeService _service;
+
+        [SetUp]
+        public void SetUp()
         {
             var configWrapper = new ConfigurationWrapper();
             var platformService = new PlatformServiceClient();
@@ -22,11 +26,16 @@ namespace crds_angular.test.Services
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
             var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
 
+            var mpAttributeService = new MPServices.AttributeService(ministryPlatformService, authenticationService, configWrapper);
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, apiUserService);
+            _service = new ContactAttributeService(mpService, apiUserService, mpAttributeService);
+        }
 
+        [Test]    
+        public void LoadContactAttributes()
+        {
             var contactId = 2399608;
-            var attributes = service.GetContactAttributes(contactId);
+            var attributes = _service.GetContactAttributes(contactId);
 
             Assert.That(attributes.Count > 0);
         }
@@ -34,23 +43,14 @@ namespace crds_angular.test.Services
         [Test]        
         public void SaveContactAttributes()
         {
-            var configWrapper = new ConfigurationWrapper();
-            var platformService = new PlatformServiceClient();
-            var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
-            var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
-            var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
-            
-            var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, apiUserService);
-            
             var contactId = 2399608;
-            var attributes = service.GetContactAttributes(contactId);
+            var attributes = _service.GetContactAttributes(contactId);
 
-            var firstAttributeType = attributes[0];
+            var firstAttributeType = attributes.Values.First(x => x.Attributes.Exists(attribute => attribute.Selected));
 
-            var attributeToRemove = firstAttributeType.Attributes[0];
-            firstAttributeType.Attributes.Remove(attributeToRemove);
-            service.SaveContactAttributes(contactId, attributes);
+            var attributeToRemove = firstAttributeType.Attributes.First(x => x.Selected);
+            attributeToRemove.Selected = false;            
+            _service.SaveContactAttributes(contactId, attributes);
 
             var attributeToAdd = new ContactAttributeDTO()
             {
@@ -60,30 +60,28 @@ namespace crds_angular.test.Services
                 Notes = string.Empty
             };
 
+            // Unset the values that were set from last save
+            attributeToRemove.Selected = true;
+            attributeToRemove.EndDate = null; 
+
             firstAttributeType.Attributes.Add(attributeToAdd);
-            service.SaveContactAttributes(contactId, attributes);
+            _service.SaveContactAttributes(contactId, attributes);
         }
         
         [Test]
         public void RemoveAndThenAddAllContactAttributes()
         {
-            var configWrapper = new ConfigurationWrapper();
-            var platformService = new PlatformServiceClient();
-            var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
-            var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
-            var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
-
-            var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            var service = new ContactAttributeService(mpService, apiUserService);
-
             var contactId = 2399608;
-            var attributes = service.GetContactAttributes(contactId);
+            var originalAttributes = _service.GetContactAttributes(contactId);
+            var deletedAttributes = _service.GetContactAttributes(contactId);
+
+            deletedAttributes.Values.ForEach(attributeType => attributeType.Attributes.ForEach(attribute => attribute.Selected = false));
 
             // Remove all items            
-            service.SaveContactAttributes(contactId, new List<ContactAttributeTypeDTO>());
+            _service.SaveContactAttributes(contactId, deletedAttributes);
 
             // Add all back
-            service.SaveContactAttributes(contactId, attributes);
+            _service.SaveContactAttributes(contactId, originalAttributes);
         }
     }
 }

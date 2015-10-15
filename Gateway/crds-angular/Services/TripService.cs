@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Core.Common.EntitySql;
 using System.Linq;
 using crds_angular.Models;
+using System.Runtime.InteropServices;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -450,27 +451,73 @@ namespace crds_angular.Services
 
         public int SaveApplication(TripApplicationDto dto)
         {
-            UpdatePassport(dto);
-            UpdateChildSponsorship(dto);
-            SaveParticipant(dto);
-
-            var formResponse = new FormResponse();
-            formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-            formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
-            formResponse.PledgeCampaignId = dto.PledgeCampaignId;
-
-            formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
-
-            var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
-            
-           
-
-            if (dto.InviteGUID != null)
+            try
             {
-                _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-            }
+                UpdatePassport(dto);
+                UpdateChildSponsorship(dto);
+                SaveParticipant(dto);
+                var formResponse = new FormResponse();
+                formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+                formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
+                formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
-            return formResponseId;
+                formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
+
+                var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+
+                if (dto.InviteGUID != null)
+                {
+                    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+                }
+
+                SendTripApplicantSuccessMessage(dto.ContactId);
+
+                return formResponseId;
+            }
+            catch (Exception ex)
+            {
+                // send applicant message
+                SendApplicantErrorMessage(dto.ContactId);
+
+                // send trip admin message
+                SendTripAdminErrorMessage(dto.PledgeCampaignId);
+
+                //then re-throw or eat it?
+                return 0;
+            }
+        }
+
+        private void SendMessage(string templateKey, int toContactId)
+        {
+            var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
+            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
+            var fromContact = _contactService.GetContactById(fromContactId);
+            var toContact = _contactService.GetContactById(toContactId);
+            var template = _communicationService.GetTemplateAsCommunication(templateId,
+                                                                                fromContact.Contact_ID,
+                                                                                fromContact.Email_Address,
+                                                                                fromContact.Contact_ID,
+                                                                                fromContact.Email_Address,
+                                                                                toContact.Contact_ID,
+                                                                                toContact.Email_Address);
+            _communicationService.SendMessage(template);
+        }
+
+        private void SendTripApplicantSuccessMessage(int contactId)
+        {
+            SendMessage("TripApplicantSuccessTemplate", contactId);
+        }
+
+        private void SendTripAdminErrorMessage(int campaignId)
+        {
+            var campaign = _campaignService.GetPledgeCampaign(campaignId);
+            var tripEvent = _mpEventService.GetEvent(campaign.EventId);
+            SendMessage("TripAdminErrorTemplate", tripEvent.PrimaryContact.ContactId);
+        }
+
+        private void SendApplicantErrorMessage(int contactId)
+        {
+            SendMessage("TripApplicantErrorTemplate", contactId);
         }
 
         private Boolean UpdatePassport(TripApplicationDto dto)

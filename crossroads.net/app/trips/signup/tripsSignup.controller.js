@@ -45,6 +45,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.ageLimitReached = true;
     vm.buttonText = 'Next';
     vm.campaign = Campaign;
+    vm.commonNameRequired = commonNameRequired;
     vm.contactId = contactId;
     vm.destination = vm.campaign.nickname;
     vm.handlePageChange = handlePageChange;
@@ -132,21 +133,33 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       toTop();
     }
 
+    function commonNameRequired() {
+      switch (vm.signupService.page4.lottery.value) {
+        case null:
+          return false;
+        case 'As long as I am selected, I will go on the trip.':
+          return false;
+        default:
+          return true;
+      }
+    }
+
     function handlePageChange(pageId, form) {
-      //var form = vm.tripAppPage2;
+      var route;
       if (form !== null) {
         form.$setSubmitted(true);
         if (form.$valid) {
           $log.debug('form valid');
-          var route = 'tripsignup.application.page';
+          route = 'tripsignup.application.page';
           $state.go(route, {stepId: pageId});
         } else {
           $log.debug('form INVALID');
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          return false;
         }
       } else {
         //find a way to make this more generic
-        var route = 'tripsignup.application.page';
+        route = 'tripsignup.application.page';
         $state.go(route, {stepId: pageId});
       }
     }
@@ -180,6 +193,14 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           return true;
         }
         return false;
+      }
+
+      if(airline.attributeID === attributes.INDIA_FREQUENT_FLYER) {
+        if (isIndia()) {
+          return false;
+        }
+
+        return true;
       }
       
       return true;

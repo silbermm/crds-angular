@@ -1,5 +1,5 @@
 <div >
-  <ng-form name="tripsSignup.tripAppPage4" role="form">
+  <ng-form name="tripsSignup.tripAppPage4" role="form" novalidate>
     <div class="row" ng-show="!tripsSignup.isIndia()">
       <div class="col-sm-12">
         <legend>
@@ -34,7 +34,7 @@
           </div>
           <div>
             <label for="lottery-no-family" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+                <input ng-model="tripsSignup.signupService.page4.lottery" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my family OR any member of our larger group of friends is not selected, my spouse or family will still go.
             </label>
           </div>
           <ng-messages for="tripsSignup.tripAppPage4.lottery.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'lottery')">
@@ -56,9 +56,14 @@
           <span ng-bind-html="$root.MESSAGES.TripGroupCommonName.content | html"></span>
         </div>
 
-        <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()">
-          <label for="common-name" class="control-label">Common Name</label>
-          <input ng-model="tripsSignup.signupService.page4.groupCommonName" type="text" class="form-control" id="common-name" placeholder="Common Name">
+        <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'commonName') }">
+          <label for="common-name" class="control-label" ng-class="{ 'required': tripsSignup.commonNameRequired() }">Common Name</label>
+          <input ng-model="tripsSignup.signupService.page4.groupCommonName" type="text" class="form-control" name="commonName" id="common-name" placeholder="Common Name" ng-required="tripsSignup.commonNameRequired()">
+          <ng-messages for="tripsSignup.tripAppPage4.commonName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'commonName')">
+            <span ng-message="required">
+              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
         </div>
 
         <div class="col-md-12">
@@ -76,9 +81,20 @@
           <div class="col-md-12">
             <p>Content block explaining support person email.</p>
           </div>
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail') }">
             <label for="support-person-email" class="control-label">Support Person Email Address</label>
-            <input ng-model="tripsSignup.signupService.page4.supportPersonEmail" type="text" class="form-control" id="support-person-email" placeholder="Support Person Email Address">
+            <input
+              ng-model="tripsSignup.signupService.page4.supportPersonEmail"
+              type="email"
+              class="form-control"
+              name="supportPersonEmail"
+              id="support-person-email"
+              placeholder="Support Person Email Address">
+            <ng-messages for="tripsSignup.tripAppPage4.supportPersonEmail.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail')">
+              <span ng-message="email">
+                <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
+              </span>
+            </ng-messages>
           </div>
         </div><!--/row-->
 
