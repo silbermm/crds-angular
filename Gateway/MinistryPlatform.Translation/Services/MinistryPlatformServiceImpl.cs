@@ -195,9 +195,15 @@ namespace MinistryPlatform.Translation.Services
             VoidCall(token, platformClient => platformClient.RemoveFromSelection(selectionId, records));
         }
 
+        public void UpdateFile(Int32 fileId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token)
+        {
+            VoidCall(token, platformClient => 
+                platformClient.UpdateFile(fileId, fileName, description, isDefaultImage, longestDimension, file));
+        }
+
         public FileDescription CreateFile(String pageName, Int32 recordId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token)
         {
-            var result = Call<FileDescription>(token, platformClient => 
+            var result = Call<FileDescription>(token, platformClient =>
                 platformClient.CreateFile(GetMinistryPlatformId(pageName), recordId, fileName, description, isDefaultImage, longestDimension, file));
             return result;
         }
