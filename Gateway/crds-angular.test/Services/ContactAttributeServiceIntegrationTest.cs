@@ -25,10 +25,12 @@ namespace crds_angular.test.Services
             var ministryPlatformService = new MPServices.MinistryPlatformServiceImpl(platformService, configWrapper);
             var authenticationService = new MPServices.AuthenticationServiceImpl(platformService, ministryPlatformService);
             var apiUserService = new MPServices.ApiUserService(configWrapper, authenticationService);
+            
 
             var mpAttributeService = new MPServices.AttributeService(ministryPlatformService, authenticationService, configWrapper);
             var mpService = new MPServices.ContactAttributeService(authenticationService, configWrapper, ministryPlatformService);
-            _service = new ContactAttributeService(mpService, apiUserService, mpAttributeService);
+            var attributeService = new AttributeService(mpAttributeService);
+            _service = new ContactAttributeService(mpService, attributeService, apiUserService, mpAttributeService);
         }
 
         [Test]    
@@ -37,14 +39,16 @@ namespace crds_angular.test.Services
             var contactId = 2399608;
             var attributes = _service.GetContactAttributes(contactId);
 
-            Assert.That(attributes.Count > 0);
+            Assert.That(attributes.MultiSelect.Count > 0);
+            Assert.That(attributes.SingleSelect.Count > 0);
         }
 
         [Test]        
         public void SaveContactAttributes()
         {
             var contactId = 2399608;
-            var attributes = _service.GetContactAttributes(contactId);
+            var allAttributes = _service.GetContactAttributes(contactId);
+            var attributes = allAttributes.MultiSelect;
 
             var firstAttributeType = attributes.Values.First(x => x.Attributes.Exists(attribute => attribute.Selected));
 
@@ -75,13 +79,13 @@ namespace crds_angular.test.Services
             var originalAttributes = _service.GetContactAttributes(contactId);
             var deletedAttributes = _service.GetContactAttributes(contactId);
 
-            deletedAttributes.Values.ForEach(attributeType => attributeType.Attributes.ForEach(attribute => attribute.Selected = false));
+            deletedAttributes.MultiSelect.Values.ForEach(attributeType => attributeType.Attributes.ForEach(attribute => attribute.Selected = false));
 
             // Remove all items            
-            _service.SaveContactAttributes(contactId, deletedAttributes);
+            _service.SaveContactAttributes(contactId, deletedAttributes.MultiSelect);
 
             // Add all back
-            _service.SaveContactAttributes(contactId, originalAttributes);
+            _service.SaveContactAttributes(contactId, originalAttributes.MultiSelect);
         }
     }
 }

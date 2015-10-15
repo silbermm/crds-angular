@@ -53,7 +53,8 @@ namespace crds_angular.Services
 
             // TODO: Should this move to _contactService or should update move it's call out to this service?
             var attributesTypes = _contactAttributeService.GetContactAttributes(contactId);
-            person.AttributeTypes = attributesTypes;
+            person.AttributeTypes = attributesTypes.MultiSelect;
+            person.SingleAttributes = attributesTypes.SingleSelect;
 
             return person;
         }
