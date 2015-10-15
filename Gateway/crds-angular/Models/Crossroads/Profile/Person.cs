@@ -90,7 +90,7 @@ namespace crds_angular.Models.Crossroads.Profile
         public List<HouseholdMember> HouseholdMembers { get; set; }
 
         [JsonProperty(PropertyName = "attributesTypes")]
-        public List<ContactAttributeTypeDTO> AttributesTypes { get; set; }
+        public Dictionary<int, ContactAttributeTypeDTO> AttributesTypes { get; set; }
 
         public MyContact GetContact()
         {

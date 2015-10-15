@@ -80,7 +80,7 @@ namespace crds_angular.test.Services
             var attributes = service.GetContactAttributes(contactId);
 
             // Remove all items            
-            service.SaveContactAttributes(contactId, new List<ContactAttributeTypeDTO>());
+            service.SaveContactAttributes(contactId, new Dictionary<int, ContactAttributeTypeDTO>());
 
             // Add all back
             service.SaveContactAttributes(contactId, attributes);

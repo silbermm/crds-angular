@@ -64,7 +64,7 @@ namespace MinistryPlatform.Translation.Test.Services
                         "", 0))
                 .Returns(getSubpageViewRecordsResponse);
 
-            var family = _fixture.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+            var family = _fixture.GetMyImmediateFamilyRelationships(contactId, token).ToList();
 
             _ministryPlatformService.VerifyAll();
 
