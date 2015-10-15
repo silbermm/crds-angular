@@ -57,6 +57,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="DonationAndDistributionRecord.cs" />
     <Compile Include="Pledge.cs" />
     <Compile Include="SkillAttribute.cs" />
     <Compile Include="Communication.cs" />

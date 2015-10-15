@@ -8,22 +8,44 @@
 
       <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'guardianFirstName') }">
         <label for='firstName' class='control-label required'> First Name </label>
+<<<<<<< Updated upstream
         <input ng-model="tripsSignup.signupService.page2.guardianFirstName" type='text' class='form-control' name="guardianFirstName" id='guardian-first-name' placeholder='First Name' ng-required="tripsSignup.underAge()">
+=======
+<<<<<<< HEAD
+        <input ng-model="tripsSignup.signupService.page2.guardianFirstName" type='text' class='form-control' id='guardian-first-name' placeholder='First Name'>
+=======
+        <input ng-model="tripsSignup.signupService.page2.guardianFirstName.value" type='text' class='form-control' name="guardianFirstName" id='guardian-first-name' placeholder='First Name' ng-required="tripsSignup.underAge()">
+>>>>>>> Stashed changes
         <ng-messages for="tripsSignup.tripAppPage2.guardianLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'guardianLastName')">
           <span ng-message="required">
             <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
+<<<<<<< Updated upstream
+=======
+>>>>>>> development
+>>>>>>> Stashed changes
       </div>
 
       <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'guardianLastName') }">
         <label for='lastName' class='control-label required'> Last Name </label>
+<<<<<<< Updated upstream
         <input ng-model="tripsSignup.signupService.page2.guardianLastName" type='text' class='form-control' name="guardianLastName" id='guardian-last-name' placeholder='Last Name' ng-required="tripsSignup.underAge()">
+=======
+<<<<<<< HEAD
+        <input ng-model="tripsSignup.signupService.page2.guardianLastName" type='text' class='form-control' id='guardian-last-name' placeholder='Last Name'>
+=======
+        <input ng-model="tripsSignup.signupService.page2.guardianLastName.value" type='text' class='form-control' name="guardianLastName" id='guardian-last-name' placeholder='Last Name' ng-required="tripsSignup.underAge()">
+>>>>>>> Stashed changes
         <ng-messages for="tripsSignup.tripAppPage2.guardianLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'guardianLastName')">
           <span ng-message="required">
             <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
+<<<<<<< Updated upstream
+=======
+>>>>>>> development
+>>>>>>> Stashed changes
       </div>
     </div>
 
@@ -179,8 +201,17 @@
 
     <div class="row">
       <div class="form-group col-sm-12" ng-class="{ 'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'why') }">
+<<<<<<< Updated upstream
           <label for="why" class="control-label required">Tell us why you want to go on this trip (Please be specific)</label>
+=======
+<<<<<<< HEAD
+          <label for="why" class="control-label required">Tell us why you want to go on this trip</label>
+>>>>>>> Stashed changes
           <textarea ng-model="tripsSignup.signupService.page2.why" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{ tripsSignup.whyPlaceholder }}"></textarea>
+=======
+          <label for="why" class="control-label required">Tell us why you want to go on this trip (Please be specific)</label>
+          <textarea ng-model="tripsSignup.signupService.page2.why.value" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{ tripsSignup.whyPlaceholder }}"></textarea>
+>>>>>>> development
           <ng-messages for="tripsSignup.tripAppPage2.why.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'why')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>

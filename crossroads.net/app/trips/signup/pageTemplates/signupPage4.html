@@ -56,14 +56,29 @@
           <span ng-bind-html="$root.MESSAGES.TripGroupCommonName.content | html"></span>
         </div>
 
+<<<<<<< Updated upstream
         <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'commonName') }">
           <label for="common-name" class="control-label" ng-class="{ 'required': tripsSignup.commonNameRequired() }">Common Name</label>
           <input ng-model="tripsSignup.signupService.page4.groupCommonName" type="text" class="form-control" name="commonName" id="common-name" placeholder="Common Name" ng-required="tripsSignup.commonNameRequired()">
+=======
+<<<<<<< HEAD
+        <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()">
+          <label for="common-name" class="control-label">Common Name</label>
+          <input ng-model="tripsSignup.signupService.page4.groupCommonName" type="text" class="form-control" id="common-name" placeholder="Common Name">
+=======
+        <div class="form-group col-md-6" ng-show="!tripsSignup.isIndia()" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'commonName') }">
+          <label for="common-name" class="control-label" ng-class="{ 'required': tripsSignup.commonNameRequired() }">Common Name</label>
+          <input ng-model="tripsSignup.signupService.page4.groupCommonName.value" type="text" class="form-control" name="commonName" id="common-name" placeholder="Common Name" ng-required="tripsSignup.commonNameRequired()">
+>>>>>>> Stashed changes
           <ng-messages for="tripsSignup.tripAppPage4.commonName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'commonName')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
+<<<<<<< Updated upstream
+=======
+>>>>>>> development
+>>>>>>> Stashed changes
         </div>
 
         <div class="col-md-12">
@@ -83,8 +98,16 @@
           </div>
           <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail') }">
             <label for="support-person-email" class="control-label">Support Person Email Address</label>
+<<<<<<< Updated upstream
             <input
               ng-model="tripsSignup.signupService.page4.supportPersonEmail"
+=======
+<<<<<<< HEAD
+            <input ng-model="tripsSignup.signupService.page4.supportPersonEmail" type="text" class="form-control" id="support-person-email" placeholder="Support Person Email Address">
+=======
+            <input
+              ng-model="tripsSignup.signupService.page4.supportPersonEmail.value"
+>>>>>>> Stashed changes
               type="email"
               class="form-control"
               name="supportPersonEmail"
@@ -95,6 +118,10 @@
                 <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
               </span>
             </ng-messages>
+<<<<<<< Updated upstream
+=======
+>>>>>>> development
+>>>>>>> Stashed changes
           </div>
         </div><!--/row-->
 
