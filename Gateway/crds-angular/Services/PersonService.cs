@@ -48,7 +48,7 @@ namespace crds_angular.Services
             person.HouseholdMembers = family;
 
             var attributesTypes = _contactAttributeService.GetContactAttributes(contactId);
-            person.AttributesTypes = attributesTypes;
+            person.AttributeTypes = attributesTypes;
 
             return person;
         }

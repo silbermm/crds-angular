@@ -129,7 +129,7 @@
          <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
          <div class="profile-ethnicity">
            <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
-              <label><input type="checkbox">{{ethnicity.name}}</label>
+              <label><input type="checkbox" ng-model="ethnicity.selected">{{ethnicity.name}}</label>
 
            </div>
           </div>

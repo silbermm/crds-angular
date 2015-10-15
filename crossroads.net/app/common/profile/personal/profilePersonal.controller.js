@@ -30,10 +30,12 @@
     vm.attributeIds = constants.ATTRIBUTE_IDS;
     vm.attributeTypeIds = constants.ATTRIBUTE_TYPE_IDS;
 
-    vm.ethnicities = _.find(vm.attributeTypes,
-      function(attributeType) {
-        return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
-      }).attributes;
+    //vm.ethnicities = _.find(vm.profileData.person.attributeTypes,
+    //  function(attributeType) {
+    //    return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
+    //  }).attributes;
+
+    vm.ethnicities = vm.profileData.person.attributeTypes[vm.attributeTypeIds.ETHNICITY].attributes;
 
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
