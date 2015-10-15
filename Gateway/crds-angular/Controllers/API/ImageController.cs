@@ -64,10 +64,15 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var imageBytes = new byte[0];
-                var fileName = "";
-                var recordId = "";
+                string fileName = null;
+                // Getting contact ID from logged-in user token, rather than requiring it to be passed in
+                //var recordId = "";
+                var contactId = _authenticationService.GetContactId(token);
                 if (Request.Content.IsMimeMultipartContent())
                 {
+                    // Load content into buffer once, to allow multiple reads, per SO:
+                    // http://stackoverflow.com/a/24252108
+                    Request.Content.LoadIntoBufferAsync().Wait();
                     Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith((task) =>
                     {
                         MultipartMemoryStreamProvider provider = task.Result;
@@ -80,18 +85,27 @@ namespace crds_angular.Controllers.API
                                     fileName = content.Headers.ContentDisposition.FileName;
                                     fileName = fileName.Replace("\"", "");
                                     break;
-                                case "\"recordId\"":
-                                    recordId = content.ReadAsStringAsync().Result;
-                                    break;
+                                // Don't need recordId, can get it from authenticated user
+                                //case "\"recordId\"":
+                                //    recordId = content.ReadAsStringAsync().Result;
+                                //    break;
                                 default:
                                     //Should we throw an exception?
                                     break;
 
                             }
                         }
+
+                        // Check to make sure we got a profile file uploaded
+                        if(string.IsNullOrEmpty(fileName) || imageBytes.Length == 0)
+                        {
+                            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
+                        }
+
                         return _mpService.CreateFile(
                             "Contacts",
-                            Int32.Parse(recordId),
+                            //recordId,
+                            contactId,
                             fileName,
                             "Profile Image",
                             true,
@@ -101,12 +115,15 @@ namespace crds_angular.Controllers.API
                             );
 
                     });
+                    // Need to return something here so client gets a 200
+                    return (Ok());
                 }
                 else
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
                 }
-                return null;
+                // Don't return null - client needs a good response code (above)
+                //return null;
             }));
         }
     }
