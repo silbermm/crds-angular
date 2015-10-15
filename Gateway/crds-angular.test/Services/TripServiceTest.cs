@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
@@ -122,23 +123,35 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetMyTrips()
         {
+            const int contactId = 12345;
+            const string token = "faker";
+            var mockFamily = new List<FamilyMember> { new FamilyMember { ContactId = 12345 }, new FamilyMember { ContactId = 98765 } };
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, token)).Returns(mockFamily);
+
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
+            var myTrips = _fixture.GetMyTrips(contactId, token);
 
+            _serveService.VerifyAll();
             _donationService.VerifyAll();
+            _eventParticipantService.VerifyAll();
 
             Assert.IsNotNull(myTrips);
-            Assert.AreEqual(1, myTrips.MyTrips.Count);
+            Assert.AreEqual(2, myTrips.MyTrips.Count);
             Assert.AreEqual(2, myTrips.MyTrips[0].TripGifts.Count);
         }
 
         [Test]
         public void FundraisingDaysLeftShouldNotBeNegative()
         {
+            const int contactId = 12345;
+            const string token = "faker";
+            var mockFamily = new List<FamilyMember> { new FamilyMember { ContactId = 12345 } };
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, token)).Returns(mockFamily);
+
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockFundingPastTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(It.IsAny<int>());
+            var myTrips = _fixture.GetMyTrips(contactId, token);
 
             Assert.IsNotNull(myTrips);
             Assert.AreEqual(0, myTrips.MyTrips[0].FundraisingDaysLeft);
@@ -249,8 +262,8 @@ namespace crds_angular.test.Services
                     EventType = "Go Trip",
                     Lastname = "Subject",
                     Nickname = "Test",
-                    ParticipantId = 9999, 
-                    CampaignId = 1, 
+                    ParticipantId = 9999,
+                    CampaignId = 1,
                     DonorId = 1
                 },
                 new TripParticipant
@@ -264,8 +277,8 @@ namespace crds_angular.test.Services
                     EventType = "Go Trip",
                     Lastname = "Subject",
                     Nickname = "Test",
-                    ParticipantId = 9999, 
-                    CampaignId = 2, 
+                    ParticipantId = 9999,
+                    CampaignId = 2,
                     DonorId = 2
                 },
                 new TripParticipant
@@ -279,8 +292,8 @@ namespace crds_angular.test.Services
                     EventType = "Go Trip",
                     Lastname = "Dummy",
                     Nickname = "Crash",
-                    ParticipantId = 5555, 
-                    CampaignId = 3, 
+                    ParticipantId = 5555,
+                    CampaignId = 3,
                     DonorId = 3
                 }
             };
