@@ -60,6 +60,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         Stream GetFile(Int32 fileId, String token);
 
+        FileDescription GetFileDescription(Int32 fileId, String token);
+
         FileDescription[] GetFileDescriptions(String pageName, Int32 recordId, String token);
 
         List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId, string token, string searchString="", string sort="", int top=0);

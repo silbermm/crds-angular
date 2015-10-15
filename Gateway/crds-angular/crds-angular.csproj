@@ -259,6 +259,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Util\FileResult.cs" />
     <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\EmailCommunicationController.cs" />
     <Compile Include="Controllers\API\DonationController.cs" />

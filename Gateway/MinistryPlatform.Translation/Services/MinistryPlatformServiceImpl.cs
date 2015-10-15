@@ -214,6 +214,12 @@ namespace MinistryPlatform.Translation.Services
             return result;
         }
 
+        public FileDescription GetFileDescription(Int32 fileId, String token)
+        {
+            var result = Call<FileDescription>(token, platformClient => platformClient.GetFileDescription(fileId));
+            return result;
+        }
+
         public FileDescription[] GetFileDescriptions(String pageName, Int32 recordId, String token)
         {
             var result = Call<FileDescription[]>(token,

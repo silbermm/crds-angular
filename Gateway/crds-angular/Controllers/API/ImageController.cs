@@ -6,6 +6,7 @@ using System.Web.Http;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
 using crds_angular.Security;
+using crds_angular.Util;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -32,36 +33,23 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var image = _mpService.GetFile(fileId, token);
-                if (image == null)
+                var imageStream = _mpService.GetFile(fileId, token);
+                var imageDescription = _mpService.GetFileDescription(fileId, token);
+                if (imageStream == null)
                 {
                     return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
                 }
                 using (var memoryStream = new MemoryStream())
                 {
-                    image.CopyTo(memoryStream);
-                    return (Ok(memoryStream.ToArray()));
+                    imageStream.CopyTo(memoryStream);
+                    return new FileResult(memoryStream, imageDescription.FileName);
                 }
             }));
         }
 
-
-
-        [Route("api/image/profile/")]
-        [HttpPost]
-        public IHttpActionResult Post()
-        {
-            return UpdateOrCreate(-1);
-        }
-
-        [Route("api/image/profile/{fileId:int}")]
+        [Route("api/image/profile/{fileId:int=-1}")]
         [HttpPost]
         public IHttpActionResult Post(Int32 fileId)
-        {
-            return UpdateOrCreate(fileId);
-        }
-
-        private IHttpActionResult UpdateOrCreate(Int32 fileId)
         {
             return (Authorized(token =>
             {
