@@ -77,23 +77,28 @@ namespace crds_angular.Services
         
         public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes)
         {
-            var attributesToSave = TranslateToMPAttributes(contactAttributes);
+            var currentAttributes = TranslateToMPAttributes(contactAttributes);
+            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
 
-            // Get current list of attributes
-            var attributesPersisted = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
-
-            // Remove all matches from list, since there is nothing to do with them
-            RemoveMatchesFromBothLists(attributesToSave, attributesPersisted);
+            var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
             var apiUserToken = _apiUserService.GetToken();
             // TODO: Can we determine insert / update by looking at ContactAttributeID?
             foreach (var attribute in attributesToSave)
             {
+                SaveAttribute(contactId, attribute, apiUserToken);
+            }
+        }
+
+        private void SaveAttribute(int contactId, ContactAttribute attribute, string apiUserToken)
+        {
+            // TODO: can we make this nullable and use null instead of 0?
+            if (attribute.ContactAttributeId == 0)
+            {
                 // These are new so add them
                 _mpContactAttributeService.CreateAttribute(apiUserToken, contactId, attribute);
             }
-
-            foreach (var attribute in attributesPersisted)
+            else
             {
                 // These are existing so update them
                 _mpContactAttributeService.UpdateAttribute(apiUserToken, attribute);
@@ -129,26 +134,30 @@ namespace crds_angular.Services
             return results;
         }
 
-        private void RemoveMatchesFromBothLists(List<ContactAttribute> attributesToSave, List<ContactAttribute> attributesPersisted)
+        private List<ContactAttribute> GetDataToSave(List<ContactAttribute> currentAttributes, List<ContactAttribute> persistedAttributes)
         {
-            for (int index = attributesToSave.Count - 1; index >= 0; index--)
+            // prevent side effects by cloning lists
+            currentAttributes = new List<ContactAttribute>(currentAttributes);
+            persistedAttributes = new List<ContactAttribute>(persistedAttributes);
+
+            for (int index = currentAttributes.Count - 1; index >= 0; index--)
             {
-                var attributeToSave = attributesToSave[index];
+                var attributeToSave = currentAttributes[index];
 
                 bool foundMatch = false;
 
-                for (int currentIndex = attributesPersisted.Count - 1; currentIndex >= 0; currentIndex--)
+                for (int currentIndex = persistedAttributes.Count - 1; currentIndex >= 0; currentIndex--)
                 {
-                    var currentAttribute = attributesPersisted[currentIndex];
+                    var currentAttribute = persistedAttributes[currentIndex];
 
                     if (currentAttribute.AttributeId == attributeToSave.AttributeId)
                     {
                         if (attributeToSave.Notes == currentAttribute.Notes)
                         {
-                            attributesPersisted.RemoveAt(currentIndex);
+                            persistedAttributes.RemoveAt(currentIndex);
                         }
 
-                        attributesToSave.RemoveAt(index);
+                        currentAttributes.RemoveAt(index);
                         foundMatch = true;
                         break;
                     }
@@ -161,11 +170,15 @@ namespace crds_angular.Services
                 }
             }
 
-            foreach (var persisted in attributesPersisted)
+            foreach (var persisted in persistedAttributes)
             {
                 // Existing entry with no match, so effectively remove it by end-dating it
                 persisted.EndDate = DateTime.Today;
             }
+
+            var dataToSave = new List<ContactAttribute>(currentAttributes);
+            dataToSave.AddRange(persistedAttributes);
+            return dataToSave;
         }
     }
 }
