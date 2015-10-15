@@ -66,11 +66,11 @@
       if (vm.donation.source.type === 'CreditCard') {
         vm.dto.donor.default_source.credit_card.last4 = vm.donation.source.last4;
         vm.dto.donor.default_source.credit_card.brand = vm.donation.source.brand;
-        vm.dto.donor.default_source.credit_card.address_zip = '41076';
-        vm.dto.donor.default_source.credit_card.exp_date = '0919';
+        vm.dto.donor.default_source.credit_card.address_zip = vm.donation.source.address_zip;
+        vm.dto.donor.default_source.credit_card.exp_date = moment(vm.donation.source.exp_date).format('MMYY');
       } else {
         vm.dto.donor.default_source.bank_account.last4 = vm.donation.source.last4;
-        vm.dto.donor.default_source.bank_account.routing = '110000000';
+        vm.dto.donor.default_source.bank_account.routing = vm.donation.source.routing;
       }
     }
 

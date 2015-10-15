@@ -18,7 +18,7 @@
       updateDonorWithBankAcct:updateDonorWithBankAcct,
       updateDonorWithCard:updateDonorWithCard,
       updateRecurringGiftWithBankAcct: updateRecurringGiftWithBankAcct,
-      updateRecurringGiftWithCard: updateRecurringGiftWithBankAcct,
+      updateRecurringGiftWithCard: updateRecurringGiftWithCard,
       updateRecurringGiftDonorOnlyInformation: updateRecurringGiftDonorOnlyInformation,
       deleteRecurringGift: deleteRecurringGift,
       queryRecurringGifts: queryRecurringGifts,
