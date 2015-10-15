@@ -440,6 +440,7 @@ namespace crds_angular.test.Services
                     {
                         Id = "9876",
                         Customer = processorId,
+                        Charge = "ch_2468",
                         Subscription = subscriptionId
                     })
                 }
@@ -454,6 +455,8 @@ namespace crds_angular.test.Services
 
             _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
             _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, failCount));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch_2468", 777, e.Created, null)).Returns(123);
+            
             _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDeclinedEmail(subscriptionId));
 
             _fixture.ProcessStripeEvent(e);

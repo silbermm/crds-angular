@@ -99,6 +99,9 @@ namespace crds_angular.Services
             var recurringGift = _mpDonorService.GetRecurringGiftForSubscription(invoice.Subscription);
             _mpDonorService.UpdateRecurringGiftFailureCount((int)recurringGift.RecurringGiftId, recurringGift.ConsecutiveFailureCount);
             
+            _logger.Debug("Updating charge id " + invoice.Charge + " to Declined status");
+            _donationService.UpdateDonationStatus(invoice.Charge, _donationStatusDeclined, created);
+           
             _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
         }
 
