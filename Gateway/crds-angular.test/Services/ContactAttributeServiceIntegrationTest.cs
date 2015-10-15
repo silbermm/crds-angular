@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
+using MvcContrib.TestHelper.Ui;
 using MPServices = MinistryPlatform.Translation.Services;
 
 using NUnit.Framework;
@@ -44,10 +46,10 @@ namespace crds_angular.test.Services
             var contactId = 2399608;
             var attributes = _service.GetContactAttributes(contactId);
 
-            var firstAttributeType = attributes[0];
+            var firstAttributeType = attributes.Values.First(x => x.Attributes.Exists(attribute => attribute.Selected));
 
-            var attributeToRemove = firstAttributeType.Attributes[0];
-            firstAttributeType.Attributes.Remove(attributeToRemove);
+            var attributeToRemove = firstAttributeType.Attributes.First(x => x.Selected);
+            attributeToRemove.Selected = false;            
             _service.SaveContactAttributes(contactId, attributes);
 
             var attributeToAdd = new ContactAttributeDTO()
@@ -58,6 +60,10 @@ namespace crds_angular.test.Services
                 Notes = string.Empty
             };
 
+            // Unset the values that were set from last save
+            attributeToRemove.Selected = true;
+            attributeToRemove.EndDate = null; 
+
             firstAttributeType.Attributes.Add(attributeToAdd);
             _service.SaveContactAttributes(contactId, attributes);
         }
@@ -66,13 +72,16 @@ namespace crds_angular.test.Services
         public void RemoveAndThenAddAllContactAttributes()
         {
             var contactId = 2399608;
-            var attributes = _service.GetContactAttributes(contactId);
+            var originalAttributes = _service.GetContactAttributes(contactId);
+            var deletedAttributes = _service.GetContactAttributes(contactId);
+
+            deletedAttributes.Values.ForEach(attributeType => attributeType.Attributes.ForEach(attribute => attribute.Selected = false));
 
             // Remove all items            
-            _service.SaveContactAttributes(contactId, new Dictionary<int, ContactAttributeTypeDTO>());
+            _service.SaveContactAttributes(contactId, deletedAttributes);
 
             // Add all back
-            _service.SaveContactAttributes(contactId, attributes);
+            _service.SaveContactAttributes(contactId, originalAttributes);
         }
     }
 }
