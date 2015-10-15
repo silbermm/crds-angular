@@ -10,10 +10,10 @@
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport') }">
           <label class="control-label block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page6.validPassport" type="radio" value="yes"  name="passport" id="passport-yes" ng-required="true">Yes
+              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="yes"  name="passport" id="passport-yes" ng-required="true">Yes
           </label>
           <label id="passport-no" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page6.validPassport" type="radio" value="no" name="passport" id="passport-no" ng-required="true">No
+              <input ng-model="tripsSignup.signupService.page6.validPassport.value" type="radio" value="no" name="passport" id="passport-no" ng-required="true">No
           </label>
           <ng-messages for="tripsSignup.tripAppPage6.passport.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport')">
             <span ng-message="required">
@@ -31,7 +31,7 @@
         <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber') }">
             <label for="passport-number" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Passport Number</label>
-            <input ng-model="tripsSignup.signupService.page6.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport number">
+            <input ng-model="tripsSignup.signupService.page6.passportNumber.value" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport number">
             <ng-messages for="tripsSignup.tripAppPage6.passportNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -40,7 +40,7 @@
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire') }" ng-controller="crdsDatePickerCtrl">
           <label for="passport-expire" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">When does your passport expire?</label>
-          <input ng-model="tripsSignup.signupService.page6.passportExpirationDate" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="tripsSignup.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy">
+          <input ng-model="tripsSignup.signupService.page6.passportExpirationDate.value" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="tripsSignup.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy">
           <ng-messages for="tripsSignup.tripAppPage6.passportExpire.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -58,7 +58,7 @@
           <div class="row">
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName') }">
                 <label for="passport-firstname" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">First Name</label>
-                <input ng-model="tripsSignup.signupService.page6.passportFirstName" type="text" class="form-control" name="passportFirstName" id="passport-firstname" ng-required="tripsSignup.hasPassport()" placeholder="Enter first name">
+                <input ng-model="tripsSignup.signupService.page6.passportFirstName.value" type="text" class="form-control" name="passportFirstName" id="passport-firstname" ng-required="tripsSignup.hasPassport()" placeholder="Enter first name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -67,13 +67,13 @@
             </div>
             <div class="form-group col-sm-6">
                 <label for="passport-middlename" class="control-label">Middle Name <small class="text-muted">Exactly as printed on your passport</small></label>
-                <input ng-model="tripsSignup.signupService.page6.passportMiddleName" type="text" class="form-control" name="passportMiddlename" id="passport-middlename" placeholder="Enter middle name">
+                <input ng-model="tripsSignup.signupService.page6.passportMiddleName.value" type="text" class="form-control" name="passportMiddlename" id="passport-middlename" placeholder="Enter middle name">
             </div>
           </div>
           <div class="row">
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportLastName') }">
                 <label for="passport-lastname" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Last Name</label>
-                <input ng-model="tripsSignup.signupService.page6.passportLastName" type="text" class="form-control" name="passportLastName" id="passport-lastname" ng-required="tripsSignup.hasPassport()" placeholder="Enter last name">
+                <input ng-model="tripsSignup.signupService.page6.passportLastName.value" type="text" class="form-control" name="passportLastName" id="passport-lastname" ng-required="tripsSignup.hasPassport()" placeholder="Enter last name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportLastName')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -82,7 +82,7 @@
             </div>
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportCountry') }">
                 <label for="passport-country" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Country of Passport</label>
-                <input ng-model="tripsSignup.signupService.page6.passportCountry" type="text" class="form-control" name="passportCountry" id="passport-country" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport country">
+                <input ng-model="tripsSignup.signupService.page6.passportCountry.value" type="text" class="form-control" name="passportCountry" id="passport-country" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport country">
                 <ng-messages for="tripsSignup.tripAppPage6.passportCountry.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportCountry')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -97,16 +97,24 @@
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
-
-        <div class="form-group col-sm-6" ng-repeat="flyer in signupStep.frequentFlyers" ng-show="tripsSignup.showFrequentFlyer(flyer)" >
-          <label for="{{flyer.attributeId}}-ff">{{flyer.name}}</label>
-          <input ng-model="flyer.notes"
-                 type="text" 
-                 class="form-control" 
-                 id="{flyer.attributeId}-ff"
-                 placeholder="Enter {{flyer.name}} frequent flyer number"
-                 ng-change="tripsSignup.frequentFlyerChanged(flyer) ">
+        <div class="form-group col-sm-6">
+            <label for="deltaff">Delta</label>
+            <input ng-model="tripsSignup.signupService.page6.deltaFrequentFlyer.value" type="text" class="form-control" id="deltaff" placeholder="Enter Delta frequent flyer number">
         </div>
+        <div class="form-group col-sm-6" ng-show="tripsSignup.isSouthAfrica()">
+            <label for="southafricaff">South African Airlines</label>
+            <input ng-model="tripsSignup.signupService.page6.southAfricanFrequentFlyer.value" type="text" class="form-control" id="southafricaff" placeholder="Enter South African Airlines frequent flyer number">
+        </div>
+        <div class="form-group col-sm-6">
+            <label for="unitedff">United Airlines</label>
+            <input ng-model="tripsSignup.signupService.page6.unitedFrequentFlyer.value" type="text" class="form-control" id="unitedff" placeholder="Enter United Airlines frequent flyer number">
+        </div>
+        <div class="form-group col-sm-6" ng-show="tripsSignup.isNica() || tripsSignup.isNola()">
+            <label for="usairff">US Airways</label>
+            <input ng-model="tripsSignup.signupService.page6.usAirwaysFrequentFlyer.value" type="text" class="form-control" id="usairff" placeholder="Enter USAirways frequent flyer number">
+        </div>
+      </div><!--/row-->
+
       <div class="row" ng-show="!tripsSignup.nolaRequired()">
        <div class="col-sm-12">
         <legend>
@@ -118,30 +126,22 @@
       <div class="row" ng-show="!tripsSignup.nolaRequired()">
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'internationalTrips') }">
           <label class="control-label block required">International Travel Experience</label>
-
-          <div ng-repeat="exp in signupStep.interExperience.attributes">
-            <label for="international-trips-{{exp.attributeId}}" class="radio-inline">
-              <input ng-model="signupStep.internationalExpSelected.attribute.attributeId"
-                     type="radio"
-                     ng-value="exp.attributeId"
-                     name="internationalTrips"
-                     id="international-trips-{{exp.attributeId}}"
-                     ng-required="tripsSignup.requireInternational()"> 
-              {{exp.name}}
+          <div>
+            <label for="international-trips-multi" class="radio-inline">
+                <input ng-model="tripsSignup.signupService.page6.internationalTravelExpericence.value" type="radio" value="multi"  name="internationalTrips" id="international-trips-multi" ng-required="tripsSignup.requireInternational()"> I take three or more international trips a year.
             </label>
           </div>
+          <div>
+            <label for="international-trips-some" class="radio-inline">
+                <input ng-model="tripsSignup.signupService.page6.internationalTravelExpericence.value" type="radio" value="some"  name="internationalTrips" id="international-trips-some" ng-required="tripsSignup.requireInternational()"> I take less than three international trips per year.
 
-          <!--<div>-->
-            <!--<label for="international-trips-some" class="radio-inline">-->
-            <!--<input ng-model="tripsSignup.signupService.page6.internationalTravelExpericence" type="radio" value="some"  name="internationalTrips" id="international-trips-some" ng-required="tripsSignup.requireInternational()"> I take less than three international trips per year.-->
-
-            <!--</label>-->
-          <!--</div>-->
-          <!--<div>-->
-            <!--<label for="international-trips-none" class="radio-inline">-->
-                <!--<input ng-model="tripsSignup.signupService.page6.internationalTravelExpericence" type="radio" value="none"  name="internationalTrips" id="international-trips-none" ng-required="tripsSignup.requireInternational()"> I have not traveled internationally.-->
-            <!--</label>-->
-          <!--</div>-->
+            </label>
+          </div>
+          <div>
+            <label for="international-trips-none" class="radio-inline">
+                <input ng-model="tripsSignup.signupService.page6.internationalTravelExpericence.value" type="radio" value="none"  name="internationalTrips" id="international-trips-none" ng-required="tripsSignup.requireInternational()"> I have not traveled internationally.
+            </label>
+          </div>
           <ng-messages for="tripsSignup.tripAppPage6.internationalTrips.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'internationalTrips')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -153,10 +153,10 @@
           <label class="control-label block required">Do you have outside experience with serving abroad outside of Crossroads GO Trips?</label>
 
           <label for="travel-experience-yes" class="radio-inline" ng-click="isCollapsed = true">
-              <input ng-model="tripsSignup.signupService.page6.experienceAbroad" type="radio" value="yes"  name="travelExperience" id="travel-experience-yes" ng-required="tripsSignup.requireInternational()">Yes
+              <input ng-model="tripsSignup.signupService.page6.experienceAbroad.value" type="radio" value="yes"  name="travelExperience" id="travel-experience-yes" ng-required="tripsSignup.requireInternational()">Yes
           </label>
           <label for="travel-experience-no" class="radio-inline" ng-click="isCollapsed = false">
-              <input ng-model="tripsSignup.signupService.page6.experienceAbroad" type="radio" value="no" name="travelExperience" id="travel-experience-no" ng-required="tripsSignup.requireInternational()">No
+              <input ng-model="tripsSignup.signupService.page6.experienceAbroad.value" type="radio" value="no" name="travelExperience" id="travel-experience-no" ng-required="tripsSignup.requireInternational()">No
           </label>
           <ng-messages for="tripsSignup.tripAppPage6.travelExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'travelExperience')">
             <span ng-message="required">
@@ -167,7 +167,7 @@
         <div class="col-sm-12 push-bottom" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'describeExperienceAbroad') }">
           <div class="form-group push-top" collapse="!isCollapsed">
             <label for="describeExperienceAbroad" ng-class="{'required': isCollapsed}">Please describe your experience</label>
-            <textarea ng-model="tripsSignup.signupService.page6.describeExperienceAbroad" cols="1" rows="4" class="form-control" name="describeExperienceAbroad" id="travelExperienceDetail" maxlength="250" ng-required="isCollapsed"></textarea>
+            <textarea ng-model="tripsSignup.signupService.page6.describeExperienceAbroad.value" cols="1" rows="4" class="form-control" name="describeExperienceAbroad" id="travelExperienceDetail" maxlength="250" ng-required="isCollapsed"></textarea>
             <ng-messages for="tripsSignup.tripAppPage6.describeExperienceAbroad.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'describeExperienceAbroad')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -187,17 +187,17 @@
             <label class="control-label block required">Have you ever been a victim of any form of abuse?</label>
             <div class="radio">
               <label for="abuse-yes">
-                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory" type="radio" value="yes" name="abuse" id="abuse-yes" ng-required="tripsSignup.isIndia()">Yes
+                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory.value" type="radio" value="yes" name="abuse" id="abuse-yes" ng-required="tripsSignup.isIndia()">Yes
               </label>
             </div>
             <div class="radio">
               <label for="abuse-no" class="radio">
-                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory" type="radio" value="no" name="abuse" id="abuse-no" ng-required="tripsSignup.isIndia()">No
+                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory.value" type="radio" value="no" name="abuse" id="abuse-no" ng-required="tripsSignup.isIndia()">No
               </label>
             </div>
             <div class="radio">
               <label for="abuse-talk" class="radio">
-                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory" type="radio" value="talk confidentially" name="abuse" id="abuse-talk" ng-required="tripsSignup.isIndia()">I'd prefer to talk with someone confidentially
+                  <input ng-model="tripsSignup.signupService.page6.pastAbuseHistory.value" type="radio" value="talk confidentially" name="abuse" id="abuse-talk" ng-required="tripsSignup.isIndia()">I'd prefer to talk with someone confidentially
               </label>
             </div>
             <ng-messages for="tripsSignup.tripAppPage6.abuse.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'abuse')">
