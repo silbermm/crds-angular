@@ -1,4 +1,6 @@
-﻿namespace MinistryPlatform.Models
+﻿using System.Collections.Generic;
+
+namespace MinistryPlatform.Models
 {
     public class MyContact
     {

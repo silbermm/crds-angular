@@ -3,9 +3,9 @@
 
   module.exports = ProfileGivingController;
 
-  ProfileGivingController.$inject = ['$log', '$filter', 'GivingHistoryService', 'RecurringGivingService'];
+  ProfileGivingController.$inject = ['$log', '$filter', '$state', 'GivingHistoryService', 'RecurringGivingService'];
 
-  function ProfileGivingController($log, $filter, GivingHistoryService, RecurringGivingService) {
+  function ProfileGivingController($log, $filter, $state, GivingHistoryService, RecurringGivingService) {
     var vm = this;
     vm.donations = [];
     vm.donation_history = false;
@@ -14,6 +14,8 @@
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
+    vm.recurring_service = RecurringGivingService;
+    vm.createRecurring = createRecurring;
 
     activate();
 
@@ -38,6 +40,10 @@
         vm.recurring_giving = false;
         vm.recurring_giving_view_ready = true;
       });
+    }
+
+    function createRecurring() {
+      $state.go('give.recurring');
     }
   }
 })();

@@ -103,10 +103,12 @@
     <Compile Include="Exceptions\MultipleRecordsException.cs" />
     <Compile Include="Exceptions\TemplateParseException.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Services\ApiUserService.cs" />
     <Compile Include="Services\AuthenticationService.cs" />
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CampaignService.cs" />
+    <Compile Include="Services\ContactAttributeService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
     <Compile Include="Services\CreatePageRecordService.cs" />
@@ -121,6 +123,8 @@
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\Interfaces\IApiUserService.cs" />
+    <Compile Include="Services\Interfaces\IContactAttributeService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
     <Compile Include="Services\Interfaces\ICampaignService.cs" />
     <Compile Include="Services\Interfaces\IAuthenticationService.cs" />

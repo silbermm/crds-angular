@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace MinistryPlatform.Models
 {
     public class Attribute
@@ -5,6 +7,10 @@ namespace MinistryPlatform.Models
         public int AttributeId { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
+
+        public int AttributeTypeId { get; set; }
+        public string AttributeTypeName { get; set; }
+        public bool PreventMultipleSelection { get; set; }
     }
 }

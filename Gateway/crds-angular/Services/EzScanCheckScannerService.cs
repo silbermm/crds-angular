@@ -95,6 +95,7 @@ namespace crds_angular.Services
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
                                                                                          contactDonor.RegisteredUser,
+                                                                                         false, //Anonymous gift
                                                                                          false,
                                                                                          null,
                                                                                          donorAccountId,
@@ -140,7 +141,8 @@ namespace crds_angular.Services
             var account = _mpDonorService.DecryptCheckValue(checkDetails.AccountNumber);
             var routing = _mpDonorService.DecryptCheckValue(checkDetails.RoutingNumber);
             var token = _paymentService.CreateToken(account, routing);
-
+            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
+            
             contactDonor.Details = new ContactDetails
             {
                 DisplayName = checkDetails.Name1,
@@ -158,11 +160,10 @@ namespace crds_angular.Services
             {
                 AccountNumber = account,
                 RoutingNumber = routing,
-                Type = AccountType.Checking
+                Type = AccountType.Checking,
+                EncryptedAccount = encryptedKey
             };
-            
-            var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
-            
+           
             return _donorService.CreateOrUpdateContactDonor(contactDonor, encryptedKey, string.Empty, token, DateTime.Now);
         }
     }

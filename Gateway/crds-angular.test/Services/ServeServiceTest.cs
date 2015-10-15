@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -157,7 +158,7 @@ namespace crds_angular.test.Services
         {
             var contactId = 123456;
 
-            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(m => m.GetMyImmediateFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockContactRelationships());
 
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))

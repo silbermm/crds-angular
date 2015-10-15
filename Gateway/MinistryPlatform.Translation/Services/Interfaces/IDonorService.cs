@@ -14,7 +14,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
             DonorAccount donorAccount = null
             );
 
-        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupDate, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null);
+        int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupDate, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null);
         ContactDonor GetContactDonor(int contactId);
         ContactDonor GetPossibleGuestContactDonor(string email);
         ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);
@@ -31,8 +31,11 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Donation> GetSoftCreditDonations(IEnumerable<int> donorIds, string donationYear = null);
         List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null);
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscription);
-        int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId);
-        int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
+        CreateDonationDistDto GetRecurringGiftById(string authorizedUserToken, int recurringGiftId);
+        int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
+        void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId);
+        void CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
+        int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId);
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
     }
 }

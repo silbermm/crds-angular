@@ -131,7 +131,7 @@ describe('GiveController', function() {
           $scope: $scope,
           $state: $state,
           $timeout: $timeout,
-          giveType: 'one_time',
+          giveService: OneTimeGiving,
           Session: Session,
           programList:programList,
           GiveTransferService: GiveTransferService,
@@ -140,7 +140,7 @@ describe('GiveController', function() {
           RecurringGiving: RecurringGiving
         });
 
-      controller.initDefaultState();
+      controller.service.initDefaultState();
       controller.dto.brand = '';
       controller.dto.donor = {};
       controller.dto.donorError = false;
@@ -250,7 +250,7 @@ describe('GiveController', function() {
     it('should go to give.amount if starting at give', function() {
 
       controller.dto.initialized = false;
-      controller.initDefaultState();
+      controller.service.initDefaultState();
 
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(Session.removeRedirectRoute).toHaveBeenCalled();
@@ -258,7 +258,7 @@ describe('GiveController', function() {
 
     it('should go to give.amount if starting at give II', function() {
       controller.dto.initialized = false;
-      controller.initDefaultState();
+      controller.service.initDefaultState();
 
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.dto.initialized).toBeTruthy();
@@ -268,7 +268,7 @@ describe('GiveController', function() {
     it('should do nothing special if starting at give.amount', function() {
 
       controller.dto.initialized = false;
-      controller.initDefaultState();
+      controller.service.initDefaultState();
 
       expect($state.go).toHaveBeenCalled();
       expect(controller.dto.initialized).toBeTruthy();
@@ -278,7 +278,7 @@ describe('GiveController', function() {
     it('should go to give.amount if starting at an unknown state and not initialized', function() {
 
       controller.dto.initialized = false;
-      controller.initDefaultState();
+      controller.service.initDefaultState();
 
       expect($state.go).toHaveBeenCalledWith('give.amount');
       expect(controller.dto.initialized).toBeTruthy();
@@ -621,7 +621,7 @@ describe('GiveController', function() {
         return false;
       });
 
-      controller.initDefaultState();
+      controller.service.initDefaultState();
 
       spyOn($state, 'go');
       spyOn(mockEvent, 'preventDefault');
@@ -635,7 +635,7 @@ describe('GiveController', function() {
     });
 
     it('should transition to give.one_time_account for a logged-in Giver without an existing donor', function() {
-      controller.initDefaultState();
+      controller.service.initDefaultState();
       mockSession.isActive.and.callFake(function() {
         return true;
       });
@@ -860,7 +860,7 @@ describe('GiveController', function() {
     it('should call success callback if donation is successful', function() {
 
       mockPaymentServiceGetPromise.setSuccess(true);
-      controller.initDefaultState();
+      controller.service.initDefaultState();
       controller.dto.amount = 123;
       controller.dto.donor = { donorId: '2' };
       controller.dto.email = 'test@here.com';
@@ -881,7 +881,7 @@ describe('GiveController', function() {
 
       $rootScope.$apply();
 
-      expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 321, 123, '2', 'test@here.com', 'cc');
+      expect(mockPaymentService.donateToProgram).toHaveBeenCalledWith(1, 321, 123, '2', 'test@here.com', 'cc', false);
       expect(callback.onSuccess).toHaveBeenCalled();
       expect(callback.onFailure).not.toHaveBeenCalled();
     });

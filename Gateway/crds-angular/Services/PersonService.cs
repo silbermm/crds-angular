@@ -1,25 +1,28 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Profile;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
-using MPServices=MinistryPlatform.Translation.Services.Interfaces;
+using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
-using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 
 
 namespace crds_angular.Services
 {
     public class PersonService : MinistryPlatformBaseService, IPersonService
     {
-        private readonly IContactService _contactService;
+        private readonly MPServices.IContactService _contactService;
+        private readonly IContactAttributeService _contactAttributeService;
 
-        public PersonService(IContactService contactService)
+        public PersonService(MPServices.IContactService contactService, IContactAttributeService contactAttributeService)
         {
             _contactService = contactService;
+            _contactAttributeService = contactAttributeService;
         }
 
         public void SetProfile(String token, Person person)
@@ -30,6 +33,8 @@ namespace crds_angular.Services
             addressDictionary.Add("State/Region", addressDictionary["State"]);
 
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
+
+            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
@@ -44,6 +49,11 @@ namespace crds_angular.Services
 
             var family = _contactService.GetHouseholdFamilyMembers(person.HouseholdId);
             person.HouseholdMembers = family;
+
+            // TODO: Should this move to _contactService or should update move it's call out to this service?
+            var attributesTypes = _contactAttributeService.GetContactAttributes(contactId);
+            person.AttributeTypes = attributesTypes.MultiSelect;
+            person.SingleAttributes = attributesTypes.SingleSelect;
 
             return person;
         }
@@ -69,7 +79,7 @@ namespace crds_angular.Services
             var attributes = GetMyRecords.GetMyAttributes(recordId, token);
 
             var skills =
-                Mapper.Map<List<ContactAttribute>, List<Skill>>(attributes);
+                Mapper.Map<List<SkillAttribute>, List<Skill>>(attributes);
 
             return skills;
         }

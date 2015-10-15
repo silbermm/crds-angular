@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -242,6 +243,12 @@ namespace crds_angular.Services
 
             foreach (var result in results)
             {
+                // check status of pledge for campaign
+                var pledge = _mpPledgeService.GetPledgeByCampaignAndDonor(result.CampaignId, result.DonorId);
+                if (pledge == null || pledge.PledgeStatusId == 3)
+                {
+                    continue;
+                }
                 var tp = new TripDto
                 {
                     EventParticipantId = result.EventParticipantId,
@@ -260,13 +267,25 @@ namespace crds_angular.Services
                 var participant = participants[result.ParticipantId];
                 participant.Trips.Add(tp);
             }
-
-            return participants.Values.OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
+            return participants.Values.Where(x => x.Trips.Count > 0).OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDto GetMyTrips(int contactId)
+        public MyTripsDto GetMyTrips(int contactId, string token)
         {
-            // US2086 - refactor GetMyTripDistributions to exclude Pledges with status = 'discontinued'
+            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var familyTrips = new MyTripsDto();
+
+            foreach (var member in family)
+            {
+                var trips = TripForContact(member.ContactId);
+                familyTrips.MyTrips.AddRange(trips.MyTrips);
+            }
+
+            return familyTrips;
+        }
+
+        private MyTripsDto TripForContact(int contactId)
+        {
             var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
 
@@ -274,25 +293,26 @@ namespace crds_angular.Services
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
-                var eventParticipantId = 0;
-                // US2086 - verify TripParticipants is still valid
-                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
-                if (eventParticipantIds != null)
-                {
-                    eventParticipantId = eventParticipantIds.EventParticipantId;
-                }
                 eventIds.Add(trip.EventId);
-                events.Add(new Trip
+
+                var t = new Trip();
+                t.EventId = trip.EventId;
+                t.EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy");
+                t.EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy");
+                t.EventTitle = trip.EventTitle;
+                t.EventType = trip.EventTypeId.ToString();
+                t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
+                t.FundraisingGoal = trip.TotalPledge;
+
+                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (tripParticipant != null)
                 {
-                    EventId = trip.EventId,
-                    EventType = trip.EventTypeId.ToString(),
-                    EventTitle = trip.EventTitle,
-                    EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
-                    EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
-                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
-                    FundraisingGoal = trip.TotalPledge,
-                    EventParticipantId = eventParticipantId
-                });
+                    t.EventParticipantId = tripParticipant.EventParticipantId;
+                    t.EventParticipantFirstName = tripParticipant.Nickname;
+                    t.EventParticipantLastName = tripParticipant.Lastname;
+                }
+
+                events.Add(t);
             }
 
             foreach (var e in events)
@@ -439,21 +459,70 @@ namespace crds_angular.Services
 
         public int SaveApplication(TripApplicationDto dto)
         {
-            var formResponse = new FormResponse();
-            formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
-            formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
-            formResponse.PledgeCampaignId = dto.PledgeCampaignId;
-
-            formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
-
-            var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
-
-            if (dto.InviteGUID != null)
+            try
             {
-                _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
-            }
+                var formResponse = new FormResponse();
+                formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
+                formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
+                formResponse.PledgeCampaignId = dto.PledgeCampaignId;
 
-            return formResponseId;
+                formResponse.FormAnswers = new List<FormAnswer>(FormatFormAnswers(dto));
+
+                var formResponseId = _formSubmissionService.SubmitFormResponse(formResponse);
+
+                if (dto.InviteGUID != null)
+                {
+                    _privateInviteService.MarkAsUsed(dto.PledgeCampaignId, dto.InviteGUID);
+                }
+
+                SendTripApplicantSuccessMessage(dto.ContactId);
+
+                return formResponseId;
+            }
+            catch (Exception ex)
+            {
+                // send applicant message
+                SendApplicantErrorMessage(dto.ContactId);
+
+                // send trip admin message
+                SendTripAdminErrorMessage(dto.PledgeCampaignId);
+
+                //then re-throw or eat it?
+                return 0;
+            }
+        }
+
+        private void SendMessage(string templateKey, int toContactId)
+        {
+            var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
+            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
+            var fromContact = _contactService.GetContactById(fromContactId);
+            var toContact = _contactService.GetContactById(toContactId);
+            var template = _communicationService.GetTemplateAsCommunication(templateId,
+                                                                                fromContact.Contact_ID,
+                                                                                fromContact.Email_Address,
+                                                                                fromContact.Contact_ID,
+                                                                                fromContact.Email_Address,
+                                                                                toContact.Contact_ID,
+                                                                                toContact.Email_Address);
+            _communicationService.SendMessage(template);
+        }
+
+        private void SendTripApplicantSuccessMessage(int contactId)
+        {
+            SendMessage("TripApplicantSuccessTemplate", contactId);
+        }
+
+        private void SendTripAdminErrorMessage(int campaignId)
+        {
+            var campaign = _campaignService.GetPledgeCampaign(campaignId);
+            var tripEvent = _mpEventService.GetEvent(campaign.EventId);
+            SendMessage("TripAdminErrorTemplate", tripEvent.PrimaryContact.ContactId);
+        }
+
+        private void SendApplicantErrorMessage(int contactId)
+        {
+            SendMessage("TripApplicantErrorTemplate", contactId);
         }
 
         private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)

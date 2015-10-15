@@ -5,18 +5,18 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
-using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
-using System.Threading.Tasks;
-using System.Web;
-using crds_angular.Models.Json;
 using Microsoft.Ajax.Utilities;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
@@ -31,8 +31,14 @@ namespace crds_angular.Controllers.API
         private readonly MPInterfaces.IDonationService _mpDonationService;
         private readonly MPInterfaces.IPledgeService _mpPledgeService;
 
-        public DonationController(MPInterfaces.IDonorService mpDonorService, IPaymentService stripeService,
-            MPInterfaces.IAuthenticationService authenticationService, IDonorService gatewayDonorService, IDonationService gatewayDonationService, MPInterfaces.IDonationService mpDonationService, MPInterfaces.IPledgeService mpPledgeService, IUserImpersonationService impersonationService)
+        public DonationController(MPInterfaces.IDonorService mpDonorService,
+                                  IPaymentService stripeService,
+                                  MPInterfaces.IAuthenticationService authenticationService,
+                                  IDonorService gatewayDonorService,
+                                  IDonationService gatewayDonationService,
+                                  MPInterfaces.IDonationService mpDonationService,
+                                  MPInterfaces.IPledgeService mpPledgeService,
+                                  IUserImpersonationService impersonationService)
         {
             _mpDonorService = mpDonorService;
             _stripeService = stripeService;
@@ -54,7 +60,10 @@ namespace crds_angular.Controllers.API
         /// <returns>A list of DonationDTOs</returns>
         [Route("api/donations/{donationYear:regex(\\d{4})?}")]
         [HttpGet]
-        public IHttpActionResult GetDonations(string donationYear = null, int? limit = null, [FromUri(Name = "softCredit")]bool? softCredit = null, [FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
+        public IHttpActionResult GetDonations(string donationYear = null,
+                                              int? limit = null,
+                                              [FromUri(Name = "softCredit")] bool? softCredit = null,
+                                              [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
@@ -88,7 +97,7 @@ namespace crds_angular.Controllers.API
         /// <returns>A list of years (string)</returns>
         [Route("api/donations/years")]
         [HttpGet]
-        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
+        public IHttpActionResult GetDonationYears([FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
@@ -113,13 +122,13 @@ namespace crds_angular.Controllers.API
             }));
         }
 
-        [ResponseType(typeof(DonationDTO))]
+        [ResponseType(typeof (DonationDTO))]
         [Route("api/donation")]
         public IHttpActionResult Post([FromBody] CreateDonationDTO dto)
         {
-            return (Authorized(token => 
-                CreateDonationAndDistributionAuthenticated(token, dto), 
-                () => CreateDonationAndDistributionUnauthenticated(dto)));
+            return (Authorized(token =>
+                                   CreateDonationAndDistributionAuthenticated(token, dto),
+                               () => CreateDonationAndDistributionUnauthenticated(dto)));
         }
 
         [Route("api/donation/message")]
@@ -130,7 +139,7 @@ namespace crds_angular.Controllers.API
                 var contactId = _authenticationService.GetContactId(token);
                 _gatewayDonationService.SendMessageToDonor(dto.DonorId, dto.DonationDistributionId, contactId, dto.Message, dto.TripName);
                 return Ok();
-            }));       
+            }));
         }
 
 
@@ -157,7 +166,7 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(List<DepositDTO>))]
+        [ResponseType(typeof (List<DepositDTO>))]
         [Route("api/gpexport/filenames/{selectionId}")]
         [HttpGet]
         public IHttpActionResult GetGPExportFileNames(int selectionId)
@@ -179,7 +188,8 @@ namespace crds_angular.Controllers.API
 
         private IHttpActionResult CreateDonationAndDistributionAuthenticated(String token, CreateDonationDTO dto)
         {
-            try{
+            try
+            {
                 var contactId = _authenticationService.GetContactId(token);
                 var donor = _mpDonorService.GetContactDonor(contactId);
                 var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
@@ -188,33 +198,50 @@ namespace crds_angular.Controllers.API
                 int? pledgeId = null;
                 if (dto.PledgeCampaignId != null && dto.PledgeDonorId != null)
                 {
-                  pledgeId  = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
+                    var pledge = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
+                    if (pledge != null)
+                    {
+                        pledgeId = pledge.PledgeId;
+                    }
                 }
-                                                                                        
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, true, false, null, null);
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount,
+                                                                                     fee,
+                                                                                     donor.DonorId,
+                                                                                     dto.ProgramId,
+                                                                                     pledgeId,
+                                                                                     charge.Id,
+                                                                                     dto.PaymentType,
+                                                                                     donor.ProcessorId,
+                                                                                     DateTime.Now,
+                                                                                     true,
+                                                                                     dto.Anonymous,
+                                                                                     false,
+                                                                                     null,
+                                                                                     null);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
                 }
                 var response = new DonationDTO
                 {
-                        ProgramId = dto.ProgramId,
-                        Amount = dto.Amount,
-                        Id = donationId.ToString(),
-                        Email = donor.Email
-                    };
+                    ProgramId = dto.ProgramId,
+                    Amount = dto.Amount,
+                    Id = donationId.ToString(),
+                    Email = donor.Email
+                };
 
-                    return Ok(response);
-                }
-                catch (PaymentProcessorException stripeException)
-                {
-                    return (stripeException.GetStripeResult());
-                }
-                catch (Exception exception)
-                {
-                    var apiError = new ApiErrorDto("Donation Post Failed", exception);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }       
+                return Ok(response);
+            }
+            catch (PaymentProcessorException stripeException)
+            {
+                return (stripeException.GetStripeResult());
+            }
+            catch (Exception exception)
+            {
+                var apiError = new ApiErrorDto("Donation Post Failed", exception);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
         }
 
         private IHttpActionResult CreateDonationAndDistributionUnauthenticated(CreateDonationDTO dto)
@@ -227,10 +254,27 @@ namespace crds_angular.Controllers.API
                 int? pledgeId = null;
                 if (dto.PledgeCampaignId != null && dto.PledgeDonorId != null)
                 {
-                    pledgeId = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
+                    var pledge = _mpPledgeService.GetPledgeByCampaignAndDonor(dto.PledgeCampaignId.Value, dto.PledgeDonorId.Value);
+                    if (pledge != null)
+                    {
+                        pledgeId = pledge.PledgeId;
+                    }
                 }
-                                                                                                                                    
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount, fee, donor.DonorId, dto.ProgramId, pledgeId, charge.Id, dto.PaymentType, donor.ProcessorId, DateTime.Now, false, false, null, null);
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(dto.Amount,
+                                                                                     fee,
+                                                                                     donor.DonorId,
+                                                                                     dto.ProgramId,
+                                                                                     pledgeId,
+                                                                                     charge.Id,
+                                                                                     dto.PaymentType,
+                                                                                     donor.ProcessorId,
+                                                                                     DateTime.Now,
+                                                                                     false,
+                                                                                     dto.Anonymous,
+                                                                                     false,
+                                                                                     null,
+                                                                                     null);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
@@ -254,7 +298,7 @@ namespace crds_angular.Controllers.API
             {
                 var apiError = new ApiErrorDto("Donation Post Failed", exception);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
-            }       
+            }
         }
 
         private void SendMessageFromDonor(int pledgeId, string message)
@@ -263,7 +307,7 @@ namespace crds_angular.Controllers.API
         }
     }
 
-    class FileResult : IHttpActionResult
+    internal class FileResult : IHttpActionResult
     {
         private readonly MemoryStream _stream;
         private readonly string _fileName;
@@ -271,7 +315,10 @@ namespace crds_angular.Controllers.API
 
         public FileResult(MemoryStream stream, string fileName, string contentType = null)
         {
-            if (stream == null) throw new ArgumentNullException("stream");
+            if (stream == null)
+            {
+                throw new ArgumentNullException("stream");
+            }
 
             _stream = stream;
             _fileName = fileName;
@@ -295,8 +342,8 @@ namespace crds_angular.Controllers.API
                 };
 
                 return response;
-
-            }, cancellationToken);
+            },
+                            cancellationToken);
         }
     }
 }

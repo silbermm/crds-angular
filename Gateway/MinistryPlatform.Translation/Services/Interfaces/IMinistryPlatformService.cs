@@ -45,6 +45,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token);
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
+        void UpdateSubRecord(int subPageId, Dictionary<string, object> dictionary, String token);
 
         List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId, string token, string searchString="", string sort="", int top=0);
         List<Dictionary<string, object>> GetSubpageViewRecords(string viewKey, int recordId, string token, string searchString = "", string sort = "", int top = 0);

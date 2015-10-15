@@ -56,11 +56,13 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
-    <Compile Include="AttributeType.cs" />
-    <Compile Include="ContactAttribute.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="Pledge.cs" />
+    <Compile Include="SkillAttribute.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />
+    <Compile Include="ContactAttribute.cs" />
     <Compile Include="Deposit.cs" />
     <Compile Include="DonationBatch.cs" />
     <Compile Include="DonationDistribution.cs" />
