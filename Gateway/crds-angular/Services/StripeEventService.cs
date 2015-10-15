@@ -97,8 +97,7 @@ namespace crds_angular.Services
         private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
         {
             var recurringGift = _mpDonorService.GetRecurringGiftForSubscription(invoice.Subscription);
-            var failCount = recurringGift.ConsecutiveFailureCount + 1;
-            _mpDonorService.UpdateRecurringGiftFailureCount((int) recurringGift.RecurringGiftId , failCount);
+            _mpDonorService.UpdateRecurringGiftFailureCount((int)recurringGift.RecurringGiftId, recurringGift.ConsecutiveFailureCount);
             
             _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
         }

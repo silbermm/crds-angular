@@ -175,7 +175,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var recurringGiftValues = new Dictionary<string, object>
             {
-                {"Consecutive_Failure_Count", failCount}
+                {"Consecutive_Failure_Count", failCount + 1}
             };
             var apiToken = ApiLogin();
             UpdateRecurringGift(apiToken, recurringGiftId, recurringGiftValues);
