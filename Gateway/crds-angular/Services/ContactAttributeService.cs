@@ -49,6 +49,7 @@ namespace crds_angular.Services
             // TODO: See if we can push this down to the MP Layer to get this data from the select directly
             // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
             var attributeTypesDictionary = mpAttributes
+                .Where(x => x.PreventMultipleSelection == false)
                 .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
                 .Distinct()
                 .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
@@ -78,6 +79,12 @@ namespace crds_angular.Services
 
             foreach (var mpContactAttribute in mpContactAttributes)
             {
+                // TODO: Remove hack to prevent single selections from being returned 
+                if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
+                {
+                    continue;
+                }
+
                 var contactAttributeType = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
                 var contactAttribute = contactAttributeType.Attributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
                 contactAttribute.StartDate = mpContactAttribute.StartDate;
@@ -95,6 +102,7 @@ namespace crds_angular.Services
             // TODO: See if we can push this down to the MP Layer to get this data from the select directly
             // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
             var attributeTypesDictionary = mpAttributes
+                .Where(x => x.PreventMultipleSelection == true)
                 .Select(x => new { x.AttributeTypeId, x.AttributeTypeName })
                 .Distinct()
                 .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
@@ -103,9 +111,15 @@ namespace crds_angular.Services
             foreach (var mpContactAttribute in mpContactAttributes)
             {                
                 // Lookup by attributeId
-                var mpAttribute = mpAttributes.FirstOrDefault(x => x.AttributeId == mpContactAttribute.AttributeId);
-                var attribute = _attributeService.ConvertAttributeToAttributeDto(mpAttribute);
+                var mpAttribute = mpAttributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
 
+                // TODO: Remove hack to prevent single selections from being returned 
+                if (!mpAttribute.PreventMultipleSelection)
+                {
+                    continue;
+                }                
+
+                var attribute = _attributeService.ConvertAttributeToAttributeDto(mpAttribute);
                 var contactSingleAttribute = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
 
                 contactSingleAttribute.Value = attribute;
@@ -114,23 +128,16 @@ namespace crds_angular.Services
 
             return attributeTypesDictionary;
         }
-        
-        public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes)
-        {
-            // TODO: Add logic to merge single-select and mutli-select lists            
-            var currentAttributes = TranslateToMPAttributes(contactAttributes);
+
+        public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes, Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
+        {            
+            // TODO: Add logic to merge single-select and mutli-select lists   
+            
+            var currentAttributes = TranslateMultiToMPAttributes(contactAttributes);
+            currentAttributes.AddRange(TranslateSingleToMPAttribute(contactSingleAttributes));
+
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
 
-            // TODO: Remove this filtering. For now it is used just exclude single-select from lists
-            var mpAttributes = _mpAttributeService.GetAttributes(null);
-            var mpSingleSelectionAttributes = mpAttributes
-                .Where(mpAttributeType => mpAttributeType.PreventMultipleSelection = true)
-                .Select(attributeType => new {attributeType.AttributeTypeId})
-                .ToList();
-
-            currentAttributes = currentAttributes.Where(x => mpSingleSelectionAttributes.Contains(new {x.AttributeTypeId})).ToList();
-            persistedAttributes = persistedAttributes.Where(x => mpSingleSelectionAttributes.Contains(new { x.AttributeTypeId })).ToList();
-            // TODO: Remove until here
 
 
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
@@ -141,6 +148,8 @@ namespace crds_angular.Services
                 SaveAttribute(contactId, attribute, apiUserToken);
             }
         }
+
+
 
         private void SaveAttribute(int contactId, ContactAttribute attribute, string apiUserToken)
         {
@@ -157,7 +166,7 @@ namespace crds_angular.Services
             }
         }
 
-        private List<ContactAttribute> TranslateToMPAttributes(Dictionary<int, ContactAttributeTypeDTO> contactAttributesTypes)
+        private List<ContactAttribute> TranslateMultiToMPAttributes(Dictionary<int, ContactAttributeTypeDTO> contactAttributesTypes)
         {
             var results = new List<ContactAttribute>();
 
@@ -182,6 +191,31 @@ namespace crds_angular.Services
 
                     results.Add(mpContactAttribute);
                 }
+            }
+            return results;
+        }
+
+        private List<ContactAttribute> TranslateSingleToMPAttribute(Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
+        {
+            var results = new List<ContactAttribute>();
+
+            foreach (var contactSingleAttribute in contactSingleAttributes)
+            {
+                var contactAttribute = contactSingleAttribute.Value;
+
+                if (contactAttribute.Value == null)
+                {
+                    continue;
+                }
+
+                var mpContactAttribute = new ContactAttribute()
+                {
+                    AttributeId = contactAttribute.Value.AttributeId,
+                    AttributeTypeId = contactSingleAttribute.Key,
+                    Notes = contactAttribute.Notes
+                };
+
+                results.Add(mpContactAttribute);
             }
             return results;
         }
