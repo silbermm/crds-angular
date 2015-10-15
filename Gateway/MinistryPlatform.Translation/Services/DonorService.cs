@@ -158,7 +158,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donor_Account_ID", donorAccountId}
             };
 
-            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+            UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
         public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
@@ -168,7 +168,7 @@ namespace MinistryPlatform.Translation.Services
                 {"End_Date", DateTime.Now.Date}
             };
 
-            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+            UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
         public void UpdateRecurringGiftFailureCount(int recurringGiftId, int failCount)
@@ -178,17 +178,18 @@ namespace MinistryPlatform.Translation.Services
                 {"Consecutive_Failure_Count", failCount + 1}
             };
             var apiToken = ApiLogin();
-            UpdateRecurringGift(apiToken, recurringGiftId, recurringGiftValues);
+            UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
         }
 
 
-        public void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
+        public void UpdateRecurringGift(int pageView, string token, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
         {
             recurringGiftValues["Recurring_Gift_ID"] = recurringGiftId;
 
             try
             {
-                _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
+               // _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
+                _ministryPlatformService.UpdateRecord(pageView, recurringGiftValues, token);
             }
             catch (Exception e)
             {
@@ -201,6 +202,7 @@ namespace MinistryPlatform.Translation.Services
             }
             
         }
+        
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;

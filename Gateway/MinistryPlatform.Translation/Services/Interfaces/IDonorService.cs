@@ -39,6 +39,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
         void ProcessRecurringGiftDeclinedEmail(string subscription_id);
         void UpdateRecurringGiftFailureCount(int recurringGiftId, int failureCount);
-        void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues);
+        void UpdateRecurringGift(int pageView, string token, int recurringGiftId, Dictionary<string, object> recurringGiftValues);
     }
 }
