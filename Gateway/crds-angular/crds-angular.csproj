@@ -403,7 +403,7 @@
     <Compile Include="Models\Crossroads\Profile\ContactAllAttributesDTO.cs" />
     <Compile Include="Services\AttributeService.cs" />
     <Compile Include="Services\ContactAttributeService.cs" />
-    <Compile Include="Models\Crossroads\Profile\ContactSingleAttributeDto.cs" />
+    <Compile Include="Models\Crossroads\Profile\ContactSingleAttributeDTO.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
     <Compile Include="Services\EmailCommunication.cs" />
