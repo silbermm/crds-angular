@@ -185,12 +185,12 @@ namespace MinistryPlatform.Translation.Services
         {
             var events = new List<Event>();
             var apiToken = ApiLogin();
-            var tmpEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
-            if (tmpEvents == null || tmpEvents.Count == 0)
+            var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
+            if (groupEvents == null || groupEvents.Count == 0)
             {
                 return null;
             }
-            foreach (var tmpEvent in tmpEvents)
+            foreach (var tmpEvent in groupEvents)
             {
                 var newEvent = new Event();
                 newEvent.EventId = tmpEvent.ToInt("Event_ID");
@@ -201,40 +201,6 @@ namespace MinistryPlatform.Translation.Services
                 events.Add(newEvent);
             }
             return events;
-
-            // Get all the Groups->Events sub-page records
-            //var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
-            //if (mpEvents == null || mpEvents.Count == 0)
-            //{
-            //    return (null);
-            //}
-
-            
-            //foreach (Dictionary<string, object> e in mpEvents)
-            //{
-            //    // The dp_RecordID in this case is the key of the Event_Group, now need to get the Event_ID
-            //    object recordId = null;
-            //    if (e.TryGetValue("dp_RecordID", out recordId))
-            //    {
-            //        var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId,
-            //                                                               (int) recordId,
-            //                                                               apiToken,
-            //                                                               false);
-            //        if (eventGroup == null)
-            //        {
-            //            continue;
-            //        }
-
-            //        object eventId = null;
-            //        if (eventGroup.TryGetValue("Event_ID", out eventId))
-            //        {
-            //            Event evt = new Event();
-            //            evt.EventId = (int) eventId;
-            //            events.Add(evt);
-            //        }
-            //    }
-            //}
-            //return (events);
         }
 
         public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)
