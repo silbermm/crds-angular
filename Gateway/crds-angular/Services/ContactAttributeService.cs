@@ -39,6 +39,7 @@ namespace crds_angular.Services
             List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
         {
             // TODO: See if we can push this down to the MP Layer to get this data from the select directly
+            // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
             var attributeTypesDictionary = mpAttributes
                 .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
                 .Distinct()
@@ -107,6 +108,11 @@ namespace crds_angular.Services
             {
                 foreach (var contactAttribute in contactAttributeType.Attributes)
                 {
+                    if (!contactAttribute.Selected)
+                    {
+                        continue;
+                    }
+
                     var mpContactAttribute = new ContactAttribute()
                     {
                         AttributeId = contactAttribute.AttributeId,
