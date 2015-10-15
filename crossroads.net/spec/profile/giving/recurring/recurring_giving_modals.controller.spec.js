@@ -140,16 +140,16 @@ describe('RecurringGivingModals', function() {
       };
     });
 
-    it('should call the close(true) on $modalInstance when remove is called', function() {
-      httpBackend.expectDELETE(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(200);
+    it('should call the close(true) on $modalInstance when edit is called', function() {
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(200);
       vm.edit(recurringGiveForm);
 
       expect(modalInstance.close).toHaveBeenCalled();
       expect(modalInstance.dismiss).not.toHaveBeenCalled();
     });
 
-    it('should call the close(false) on $modalInstance when remove is called', function() {
-      httpBackend.expectDELETE(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(404);
+    it('should call the close(false) on $modalInstance when edit is called', function() {
+      httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(404);
       vm.edit(recurringGiveForm);
 
       expect(modalInstance.dismiss).not.toHaveBeenCalled();
