@@ -6,7 +6,11 @@ namespace crds_angular.Models.Crossroads.Profile
     public class ContactAttributeDTO
     {        
         [JsonProperty(PropertyName = "attributeId")]
-        public int AttributeId { get; set; }        
+        public int AttributeId { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+        [JsonProperty(PropertyName = "selected")]
+        public bool Selected { get; set; }
         [JsonProperty(PropertyName = "startDate")]
         public DateTime StartDate { get; set; }
         [JsonProperty(PropertyName = "endDate")]
