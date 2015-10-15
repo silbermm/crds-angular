@@ -203,33 +203,9 @@
             return;
           },
 
-          SpiritualJourney: function(AttributeTypeService, $stateParams) {
-            if ($stateParams.stepId === '2') {
-              return AttributeTypeService.AttributeTypes().get({ id: attributes.SPIRITUAL_JOURNEY }).$promise;
-            }
-
-            return;
-          },
-
-          TripSkills: function(AttributeTypeService, $stateParams) {
-            if ($stateParams.stepId === '5') {
-              return AttributeTypeService.AttributeTypes().get({ id: attributes.TRIP_SKILLS }).$promise;
-            }
-
-            return;
-          },
-
-          FrequentFlyers: function(AttributeTypeService, $stateParams) {
+          InternationalExperience: function(AttributeTypeService, $stateParams) {
             if ($stateParams.stepId === '6') {
-              return AttributeTypeService.AttributeTypes().get({ id: attributes.FREQUENT_FLYERS }).$promise;
-            }
-
-            return;
-          },
-
-          DietaryRestrictions: function(AttributeTypeService, $stateParams) {
-            if ($stateParams.stepId === '2') {
-              return AttributeTypeService.AttributeTypes().get({ id: attributes.DIETARY_RESTRICTIONS}).$promise;
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.INTERNATIONAL_EXPERIENCE }).$promise;
             }
 
             return;

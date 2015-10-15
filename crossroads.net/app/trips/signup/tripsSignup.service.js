@@ -1,5 +1,3 @@
-var attributes = require('crds-constants').ATTRIBUTE_IDS;
-var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 (function() {
   'use strict';
 
@@ -10,7 +8,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
   function TripsSignupService($resource, $location, $log, Session) {
     var signupService = {
       activate: activate,
-      evaluateAttributes: evaluateAttributes,
       pages: [],
       reset: reset,
       TripApplication: $resource(__API_ENDPOINT__ + 'api/trip-application'),
@@ -60,28 +57,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       }
     }
     
-    function evaluateAttributes() {
-      
-      var personAttributeTypes = signupService.person.attributeTypes;
-
-      personAttributeTypes = mapAttribute(
-          signupService.page2.scrubSizeBottom,
-          personAttributeTypes,
-          attributeTypes.SCRUB_BOTTOM_SIZES);
-
-      personAttributeTypes = mapAttribute(
-          signupService.page2.scrubSizeTop,
-          personAttributeTypes, 
-          attributeTypes.SCRUB_TOP_SIZES);
-      
-      personAttributeTypes = mapAttribute(
-          signupService.page2.tshirtSize,
-          personAttributeTypes,
-          attributeTypes.TSHIRT_SIZES);
-
-      return personAttributeTypes;
-    }
-
     function reset(campaign) {
       signupService.campaign = campaign;
       signupService.ageLimitReached = false;
@@ -102,15 +77,9 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       return {
         guardianFirstName: null,
         guardianLastName: null,
-        tshirtSize: null,
-        scrubSizeBottom: null,
-        scrubSizeTop: null,
         referral: null,
         conditions: null,
-        vegetarian: null,
-        allergies: null,
         why: null,
-        spiritualLife: null,
       };
     }
 
@@ -145,8 +114,8 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         nolaFirstChoiceWorkTeam: null,
         nolaFirstChoiceExperience: null,
         nolaSecondChoiceWorkTeam: null,
-        previousTripExperience: null,
-        professionalSkills: null,
+        //previousTripExperience: null,
+        //professionalSkills: null,
       };
     }
 
@@ -159,37 +128,15 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         passportLastName: null,
         passportCountry: null,
         passportNumber: null,
-        deltaFrequentFlyer: null,
-        southAfricanFrequentFlyer: null,
-        unitedFrequentFlyer: null,
-        usAirwaysFrequentFlyer: null,
-        internationalTravelExpericence: null,
+        //deltaFrequentFlyer: null,
+        //southAfricanFrequentFlyer: null,
+        //junitedFrequentFlyer: null,
+        //usAirwaysFrequentFlyer: null,
+        //internationalTravelExpericence: null,
         experienceAbroad: null,
         describeExperienceAbroad: null,
         pastAbuseHistory: null,
       };
-    }
-
-    function mapAttribute(from, currentAttributeTypes, attributeTypeId) {
-      if ( currentAttributeTypes[attributeTypeId] === undefined ) {
-        currentAttributeTypes[attributeTypeId] = {};
-      }
-      if (!from.startDate) {
-        from.startDate = new Date();
-      }
-      if (!from.notes) {
-        from.notes = null;
-      }
-      currentAttributeTypes[attributeTypeId] = {
-        attributeTypeId: attributeTypeId,
-        attributes: [{ 
-          attributeId: from.attributeId,
-          startDate: from.startDate,
-          notes: from.notes
-        }]  
-      };
-
-      return currentAttributeTypes;
     }
     
     return signupService;

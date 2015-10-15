@@ -38,7 +38,7 @@
                 name="tshirtSize"
                 id="tshirt"
                 ng-required='true'
-                ng-model="tripsSignup.signupService.page2.tshirtSize"
+                ng-model="signupStep.tshirt.attribute"
                 ng-options="tshirt.name for tshirt in signupStep.tshirtSizes.attributes | orderBy: 'attributeId'  track by tshirt.attributeId">
           <option value=""> -- Please Select a T-Shirt Size -- </option> 
         </select>
@@ -53,7 +53,7 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom') }">
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Bottom</label>
         <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
-          ng-model="tripsSignup.signupService.page2.scrubSizeBottom"
+          ng-model="signupStep.scrubBottom.attribute"
           ng-options="bottom.name for bottom in signupStep.scrubBottomSizes.attributes | orderBy: 'attributeId' track by bottom.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
           <option value=""> -- Please Select a Scrub Bottom Size -- </option> 
@@ -68,7 +68,7 @@
       <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop') }">
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Top</label>
         <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
-          ng-model="tripsSignup.signupService.page2.scrubSizeTop"
+          ng-model="signupStep.scrubTop.attribute"
           ng-options="top.name for top in signupStep.scrubTopSizes.attributes | orderBy: 'attributeId'  track by top.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
           <option value=""> -- Please Select a Scrub Top Size -- </option> 
@@ -99,7 +99,7 @@
           <label for="other" class="radio-inline">
               <input type="radio" value="other" id="other" name="referral" ng-model="tripsSignup.signupService.page2.referral" ng-required='true'>Other
           </label>
-          <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral')">
+          <ng-messages for="tripsSignup.tripAppPage2.referral.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
@@ -114,52 +114,36 @@
       </div><!--/form-group-->
     </div><!--/row-->
 
-    <!--<div class="row">-->
-      <!--<div class="form-group col-sm-6">-->
-        <!--<label for="dietary"-->
-               <!--class="control-label required">-->
-          <!--Please indicate any dietary restrictions <small class="text-muted"> Pick as many as neccesary </small>-->
-        <!--</label>-->
-        
-        <!--<br>-->
-         
-        <!--<div class="checkbox" ng-repeat="diet in signupStep.dietaryRestrictions.attributes"> -->
-          <!--<label for="dietary-restrictions-{{diet.attributeId}}"> -->
-            <!--<input ng-model="tripsSignup.signupService.page2.dietary[diet.attributeId]"-->
-                   <!--type="checkbox"-->
-                   <!--name="dietary-restrictions-{{diet.attributeId}}"-->
-                   <!--ng-value="diet.attributeId"-->
-                   <!--id="dietary-restrictions-{{diet.attributeId}}">-->
-            <!--{{ diet.name }} -->
-          <!--</label>-->
-          <!--<input type='text'  />-->
-        <!--</div>-->
-      <!--</div>[>/form-group<]-->
-    <!--</div>[>/row<]-->
-
-
-
     <div class="row">
-      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'vegetarian') }">
-          <label class="control-label block required">Vegetarian? <small class="text-muted">If you mark yes we will do our best to provide vegetarian meals during the trip</small></label>
-          <label for="vegetarian-yes" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page2.vegetarian" type="radio" value="yes" name="vegetarian" id="vegetarian-yes" ng-required='true'>Yes
-          </label>
-          <label for="vegetarian-no" class="radio-inline">
-              <input ng-model="tripsSignup.signupService.page2.vegetarian" type="radio" value="no" name="vegetarian" for="vegetarian-no" ng-required='true'>No
-          </label>
-          <ng-messages for="tripsSignup.tripAppPage2.vegetarian.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'vegetarian')">
-            <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
-            </span>
-          </ng-messages>
+      <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet') }">
+        <label for="diet" class="control-label required">
+          Please define any dietary restrictions <small class="text-muted">If you mark yes we will do our best to be sensitive to your diet during the trip</small>        </label>
+        <br>
+        <div class="checkbox" ng-repeat="diet in signupStep.dietaryRestrictions" > 
+          <label for="diet-{{diet.attributeId}}"> 
+            <input ng-model="diet.selected" 
+                   type="checkbox" 
+                   name="diet" 
+                   ng-value="diet.attributeId" 
+                   id="diet-{{diet.attributeId}}" 
+                   ng-required='!tripsSignup.dietSelected()'> 
+            {{diet.name}} 
+          </label> 
+        </div>
+
+        <ng-messages for="tripsSignup.tripAppPage2.diet.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
+
       </div><!--/form-group-->
     </div><!--/row-->
 
     <div class="row">
       <div class="form-group col-sm-12">
-        <label for="allergies"> Please describe all food allergies <small class="text-muted"> Leave blank if it doesn't apply </small> </label>
-          <textarea ng-model="tripsSignup.signupService.page2.allergies" class="form-control" rows="2" cols="1" id="allergies" maxlength="250">
+        <label for="allergies"> Please describe any allergies <small class="text-muted"> Leave blank if it doesn't apply </small> </label>
+          <textarea ng-model="signupStep.allergies.notes" class="form-control" rows="2" cols="1" id="allergies" maxlength="250">
           </textarea>
       </div><!--/form-group-->
     </div><!--/row-->
@@ -172,9 +156,9 @@
         
         <br>
 
-        <div class="checkbox" ng-repeat="slife in tripsSignup.signupService.page2.spiritualLife" > 
+        <div class="checkbox" ng-repeat="slife in signupStep.spiritualLife" > 
           <label for="slife-{{slife.attributeId}}"> 
-            <input ng-model="slife.isChecked" 
+            <input ng-model="slife.selected" 
                    type="checkbox" 
                    name="slife" 
                    ng-value="slife.attributeId" 

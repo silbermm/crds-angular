@@ -1,4 +1,5 @@
 var attributes = require('crds-constants').ATTRIBUTE_IDS;
+var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 (function() {
   'use strict';
 
@@ -48,6 +49,8 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.commonNameRequired = commonNameRequired;
     vm.contactId = contactId;
     vm.destination = vm.campaign.nickname;
+    vm.dietSelected = dietSelected;
+    vm.frequentFlyerChanged = frequentFlyerChanged;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
     vm.hasPassport = hasPassport;
@@ -133,14 +136,40 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       toTop();
     }
 
+    function checkboxSelected(attributeTypeId) {
+      var checked =
+        _.filter(vm.signupService.person.attributeTypes[attributeTypeId].attributes, function(skill) {
+        return skill.selected;
+      });
+
+      if (checked.length > 0) {
+        return true;
+      }
+
+      return false;
+
+    }
+
     function commonNameRequired() {
-      switch (vm.signupService.page4.lottery.value) {
+      switch (vm.signupService.page4.lottery) {
         case null:
           return false;
         case 'As long as I am selected, I will go on the trip.':
           return false;
         default:
           return true;
+      }
+    }
+
+    function dietSelected() {
+      return checkboxSelected(attributeTypes.DIETARY_RESTRICTIONS);
+    }
+
+    function frequentFlyerChanged(flyer) {
+      if (!_.isEmpty(flyer.notes)) {
+        flyer.selected = true; 
+      } else {
+        flyer.selected = false;
       }
     }
 
@@ -180,31 +209,10 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       }
     }
 
-    function onBeforeUnload() {
-      $log.debug('onBeforeUnload start');
-      if (vm.tpForm.$dirty) {
-        return '';
-      }
+    function hasPassport() {
+      return (vm.signupService.page6.validPassport === 'yes');
     }
 
-    function showFrequentFlyer(airline) {
-      if (airline.attributeId === attributes.SOUTHAFRICA_FREQUENT_FLYER) {
-        if (isSouthAfrica()) {
-          return true;
-        }
-        return false;
-      }
-
-      if(airline.attributeID === attributes.INDIA_FREQUENT_FLYER) {
-        if (isIndia()) {
-          return false;
-        }
-
-        return true;
-      }
-      
-      return true;
-    }
 
     function isIndia() {
       if (vm.destination === 'India') {
@@ -236,6 +244,13 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       }
 
       return false;
+    }
+
+    function onBeforeUnload() {
+      $log.debug('onBeforeUnload start');
+      if (vm.tpForm.$dirty) {
+        return '';
+      }
     }
 
     function preliminaryAgeCheck() {
@@ -286,10 +301,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       });
     }
 
-    function hasPassport() {
-      return (vm.signupService.page6.validPassport === 'yes');
-    }
-
     function progressLabel() {
       return vm.profileData.person.nickName + ' ' + vm.profileData.person.lastName;
     }
@@ -329,8 +340,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     }
 
     function saveData() {
-      // put the selected attributes on the person object....
-      vm.profileData.person.attributeTypes = vm.signupService.evaluateAttributes();
       
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
@@ -367,29 +376,31 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       $state.go('tripsignup.application.thankyou');
     }
 
-    function skillsSelected() {
-
-      var checked = _.filter(vm.signupService.page5.professionalSkills, function(skill) {
-        return skill.isChecked;
-      });
-
-      if (checked.length > 0) {
-        return true;
+    function showFrequentFlyer(airline) {
+      if (airline.attributeId === attributes.SOUTHAFRICA_FREQUENT_FLYER) {
+        if (isSouthAfrica()) {
+          return true;
+        }
+        return false;
       }
 
-      return false;
+      if(airline.attributeID === attributes.INDIA_FREQUENT_FLYER) {
+        if (isIndia()) {
+          return false;
+        }
+
+        return true;
+      }
+      
+      return true;
+    }
+
+    function skillsSelected() {
+      return checkboxSelected(attributeTypes.TRIP_SKILLS);
     }
 
     function spiritualSelected() {
-      var checked = _.filter(vm.signupService.page2.spiritualLife, function(spirit) {
-        return spirit.isChecked;
-      });
-
-      if (checked.length > 0) {
-        return true;
-      }
-
-      return false;
+      return checkboxSelected(attributeTypes.SPIRITUAL_JOURNEY);
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {

@@ -12,14 +12,11 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     '$scope',
 
     // For the dropdowns
-    'DietaryRestrictions',
     'WorkTeams',
     'ScrubTopSizes',
     'ScrubBottomSizes',
     'TshirtSizes',
-    'SpiritualJourney',
-    'TripSkills',
-    'FrequentFlyers',
+    'InternationalExperience',
   ];
 
   function SignupStepController(
@@ -27,26 +24,41 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     TripsSignupService,
     AttributeTypeService,
     $scope,
-    DietaryRestrictions,
     WorkTeams,
     ScrubTopSizes,
     ScrubBottomSizes,
     TshirtSizes,
-    SpiritualJourney,
-    TripSkills,
-    FrequentFlyers) {
+    InternationalExperience) {
 
     var vm = this;
 
-    vm.dietaryRestrictions = DietaryRestrictions;
-    vm.frequentFlyers = FrequentFlyers;
-    vm.scrubBottomSizes = ScrubBottomSizes;
-    vm.scrubTopSizes = ScrubTopSizes;
     vm.signupService = $scope.$parent.tripsSignup.signupService;
-    vm.spiritualJourney = SpiritualJourney;
+
+    vm.allergies = vm.signupService.person.singleAttributes[attributeTypes.ALLERGIES];
+
+    vm.dietaryRestrictions = vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS].attributes;
+    vm.frequentFlyers = vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes;
+
+    vm.internationalExpSelected = vm.signupService.person.singleAttributes[attributeTypes.INTERNATIONAL_EXPERIENCE];
+    vm.interExperience = InternationalExperience;
+
+    vm.scrubBottom = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_BOTTOM_SIZES];
+    vm.scrubBottomSizes = ScrubBottomSizes;
+
+    vm.scrubTop = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_TOP_SIZES];
+    vm.scrubTopSizes = ScrubTopSizes;
+
+    vm.spiritualLife = vm.signupService.person.attributeTypes[attributeTypes.SPIRITUAL_JOURNEY].attributes;
+
     vm.step = $stateParams.stepId;
-    vm.tripSkills = TripSkills;
+
+    vm.tripExperience = vm.signupService.person.singleAttributes[attributeTypes.TRIP_EXPERIENCE];
+
+    vm.tripSkills = vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes;
+
+    vm.tshirt = vm.signupService.person.singleAttributes[attributeTypes.TSHIRT_SIZES];
     vm.tshirtSizes = TshirtSizes;
+
     vm.workTeams = WorkTeams;
 
     vm.signupService.pageId = $stateParams.stepId;
@@ -55,145 +67,21 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     // populate dropdowns and select defaults
     switch (vm.signupService.pageId) {
       case '2':
-        evaluateScrubSizeBottom();
-        evaluateScrubSizeTop();
         evaluateSpiritualLife();
-        evaluateTshirtSize();
-        evaluateVegetarian();
-        evaluateFoodAllergies();
-        break;
-      case '5':
-        evaluatePreviousTripExp();
-        evaluateTripSkills();
         break;
       case '6':
-        evaluateFrequentFlyers();
         break;
       default:
         break;
     }
 
-    function evaluateFoodAllergies() {
-      if (vm.signupService.page2.allergies) {
-        return;
-      }
-
-      var found = _.find(vm.signupService.person.attributeTypes[attributeTypes.PERSONAL].attributes, function(attr) {
-        return attr.attributeId === attributes.FOOD_ALLERGIES;
-      });
-
-      if (found) {
-        vm.signupService.page2.allergies = found.notes;
-      }
-
-    }
-
-    function evaluateFrequentFlyers() {
-      if (vm.signupService.page6.frequentFlyers) {
-        return;
-      }
-
-      var attrs = AttributeTypeService.transformPersonMultiAttributes(
-          vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes,
-          vm.frequentFlyers.attributes, function(contactAttr, attr) {
-            attr.notes = contactAttr.notes;
-          });
-
-      vm.signupService.page6.frequentFlyers = attrs;
-    }
-
-    function evaluatePreviousTripExp() {
-      if (vm.signupService.page5.previousTripExperience) {
-        return;
-      }
-
-      var found =
-        _.find(vm.signupService.person.attributeTypes[attributeTypes.TRIP_EXPERIENCE].attributes, function(attr) {
-        return attr.attributeId === attributes.PREVIOUS_TRIP_EXPERIENCE;
-      });
-
-      if (found) {
-        vm.signupService.page5.previousTripExperience = found.notes;
-      }
-    }
-
-    function evaluateScrubSizeBottom() {
-      if (vm.signupService.page2.scrubSizeBottom) {
-        return;
-      }
-
-      if (vm.signupService.person.attributeTypes[attributeTypes.SCRUB_BOTTOM_SIZES] !== undefined) {
-        vm.signupService.page2.scrubSizeBottom =
-          vm.signupService.person.attributeTypes[attributeTypes.SCRUB_BOTTOM_SIZES].attributes[0];
-      }
-    }
-
-    function evaluateScrubSizeTop() {
-      if (vm.signupService.page2.scrubSizeTop) {
-        return;
-      }
-
-      if (vm.signupService.person.attributeTypes[attributeTypes.SCRUB_TOP_SIZES] !== undefined) {
-        vm.signupService.page2.scrubSizeTop =
-          vm.signupService.person.attributeTypes[attributeTypes.SCRUB_TOP_SIZES].attributes[0];
-      }
-    }
-
     function evaluateSpiritualLife() {
-      if (vm.signupService.page2.spiritualLife) {
-        return;
-      }
-
-      vm.signupService.page2.spiritualLife = vm.spiritualJourney.attributes;
-    }
-
-    function evaluateTripSkills() {
-      if (vm.signupService.page5.professionalSkills) {
-        return;
-      }
-      
-/*      _.forEach(vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes, function(skill) {*/
-
-      //});
-
-      var attrs = AttributeTypeService.transformPersonMultiAttributes(
-          vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes,
-          vm.tripSkills.attributes, function(personAttr, attr) {
-            attr.isChecked = true;
-          });
-
-      vm.signupService.page5.professionalSkills = attrs;
-    }
-
-    function evaluateTshirtSize() {
-      if (vm.signupService.page2.tshirtSize) {
-        return;
-      }
-
-      if (vm.signupService.person.attributeTypes[attributeTypes.TSHIRT_SIZES] !== undefined) {
-        vm.signupService.page2.tshirtSize =
-          vm.signupService.person.attributeTypes[attributeTypes.TSHIRT_SIZES].attributes[0];
-      }
-    }
-
-    function evaluateVegetarian() {
-      if (vm.signupService.page2.vegetarian) {
-        return;
-      }
-
-      if (vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS] !== undefined) {
-
-        var found =
-          _.find(
-              vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS].attributes, function(attr) {
-          return attr.attributeId === attributes.VEGETARIAN;
-        });
-
-        if (found) {
-          vm.signupService.page2.vegetarian = 'yes';
+      _.forEach(vm.spiritualLife, function(spirit) {
+        if (spirit.selected) {
+          spirit.selected = false;
+          spirit.endDate = new Date();
         }
-      }
+      });
     }
-
   }
 })();

@@ -71,8 +71,9 @@
                   id='workteam-first'
                   ng-model="tripsSignup.signupService.page5.nolaFirstChoiceWorkTeam"
                   ng-required="tripsSignup.isNola()"
-                  name="nolaFirstChoiceWorkTeam" >
-                    <option ng-repeat="workTeam in tripsSignup.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option>
+                  name="nolaFirstChoiceWorkTeam"
+                  ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
+                  <option value="" readonly disabled > Please select one </option>
                 </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaFirstChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam')">
                   <span ng-message="required">
@@ -101,8 +102,10 @@
                 <select class="form-control" id="workteam-second"
                   ng-model='tripsSignup.signupService.page5.nolaSecondChoiceWorkTeam'
                   ng-required="tripsSignup.isNola()"
-                  name="nolaSecondChoiceWorkTeam" >
-                  <option ng-repeat="workTeam in tripsSignup.workTeams" value="{{workTeam.dp_RecordID}}">{{workTeam.dp_RecordName}}</option>
+                  name="nolaSecondChoiceWorkTeam" 
+                  ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
+
+                  <option value="" readonly disabled > Please select one </option>
                 </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaSecondChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaSecondChoiceWorkTeam')">
                   <span ng-message="required">
@@ -118,7 +121,16 @@
         <div class="row">
           <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'tripExperience') }">
             <label for="trip-experience" class="control-label required">Describe any previous serving trip experience</label>
-            <textarea ng-model="tripsSignup.signupService.page5.previousTripExperience" cols="1" rows="4" class="form-control" name="tripExperience" id="trip-experience" maxlength="250" ng-required="true" placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." ></textarea>
+            <textarea ng-model="signupStep.tripExperience.notes" 
+                      cols="1"
+                      rows="4"
+                      class="form-control"
+                      name="tripExperience"
+                      id="trip-experience"
+                      maxlength="250"
+                      ng-required="true"
+                      placeholder="Dug water wells in Nicaragua? Built houses in Appalachia? We want to hear all of the details." >
+            </textarea>
             <ng-messages for="tripsSignup.tripAppPage5.tripExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'tripExperience')">
               <span ng-message="required">
                 <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -135,9 +147,9 @@
             
             <br>
 
-            <div class="checkbox" ng-repeat="skill in tripsSignup.signupService.page5.professionalSkills" >
+            <div class="checkbox" ng-repeat="skill in signupStep.tripSkills" >
               <label for="professional-{{skill.attributeId}}" >
-                <input ng-model="skill.isChecked" 
+                <input ng-model="skill.selected" 
                        type="checkbox"
                        name="professionchoice"
                        ng-value="skill.attributeId"
