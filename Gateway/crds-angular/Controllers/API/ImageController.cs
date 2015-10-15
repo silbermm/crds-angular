@@ -2,17 +2,21 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Util;
+using log4net;
+using RestSharp.Extensions;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
     public class ImageController : MPAuth
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof (ImageController));
         private readonly MPInterfaces.IMinistryPlatformService _mpService;
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
 
@@ -31,20 +35,26 @@ namespace crds_angular.Controllers.API
         [HttpGet]
         public IHttpActionResult GetImage(Int32 fileId)
         {
-            return (Authorized(token =>
+            try
             {
-                var imageStream = _mpService.GetFile(fileId, token);
-                var imageDescription = _mpService.GetFileDescription(fileId, token);
-                if (imageStream == null)
+                return (Authorized(token =>
                 {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
-                }
-                using (var memoryStream = new MemoryStream())
-                {
-                    imageStream.CopyTo(memoryStream);
-                    return new FileResult(memoryStream, imageDescription.FileName);
-                }
-            }));
+                    var imageStream = _mpService.GetFile(fileId, token);
+                    var imageDescription = _mpService.GetFileDescription(fileId, token);
+                    if (imageStream == null)
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
+                    }
+
+                    HttpContext.Current.Response.Buffer = true;
+                    return (new FileResult(new MemoryStream(imageStream.ReadAsBytes()), imageDescription.FileName, null, false));
+                }));
+            }
+            catch (Exception e)
+            {
+                _logger.Error("Error getting profile image", e);
+                return (BadRequest());
+            }
         }
 
         [Route("api/image/profile/{fileId:int=-1}")]

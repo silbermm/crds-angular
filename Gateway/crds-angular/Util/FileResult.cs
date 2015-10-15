@@ -15,8 +15,9 @@ namespace crds_angular.Util
         private readonly MemoryStream _stream;
         private readonly string _fileName;
         private readonly string _contentType;
+        private readonly bool _asAttachment;
 
-        public FileResult(MemoryStream stream, String fileName, String contentType = null)
+        public FileResult(MemoryStream stream, String fileName, String contentType = null, bool asAttachment = true)
         {
             if (stream == null)
             {
@@ -26,6 +27,7 @@ namespace crds_angular.Util
             _stream = stream;
             _fileName = fileName;
             _contentType = contentType;
+            _asAttachment = asAttachment;
         }
 
         public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
@@ -39,10 +41,13 @@ namespace crds_angular.Util
 
                 var contentType = _contentType ?? MimeMapping.GetMimeMapping(Path.GetExtension(_fileName));
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                if (_asAttachment)
                 {
-                    FileName = _fileName
-                };
+                    response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = _fileName
+                    };
+                }
 
                 return response;
             },
