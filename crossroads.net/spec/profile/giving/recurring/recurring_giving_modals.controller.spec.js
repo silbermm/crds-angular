@@ -36,6 +36,8 @@ describe('RecurringGivingModals', function() {
       brand: 'Visa',
       last4: '1000',
       icon: 'cc_visa',
+      address_zip: '41983',
+      exp_date: '2029-08-01T00:00:00',
       expectedViewBox: '0 0 160 100',
       expectedBrand: '#cc_visa',
       expectedCCNumberClass: 'cc_visa',
@@ -89,6 +91,10 @@ describe('RecurringGivingModals', function() {
       expect(vm.dto.program).toBe(mockProgramList[0]);
       expect(vm.dto.view).toBe('cc');
       expect(vm.dto.interval).toBe('Monthly');
+      expect(vm.dto.donor.default_source.credit_card.last4).toBe(mockRecurringGift.source.last4);
+      expect(vm.dto.donor.default_source.credit_card.brand).toBe(mockRecurringGift.source.brand);
+      expect(vm.dto.donor.default_source.credit_card.address_zip).toBe(mockRecurringGift.source.address_zip);
+      expect(vm.dto.donor.default_source.credit_card.exp_date).toBe('0829');
     });
 
   });
@@ -118,6 +124,33 @@ describe('RecurringGivingModals', function() {
       httpBackend.expectDELETE(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(404);
       vm.remove();
       httpBackend.flush();
+
+      expect(modalInstance.dismiss).not.toHaveBeenCalled();
+      expect(modalInstance.close).toHaveBeenCalled();
+    });
+  });
+
+  var recurringGiveForm;
+  describe('On edit', function() {
+    beforeEach(function() {
+      recurringGiveForm = {
+        donationDetailsForm: {
+          $dirty: undefined,
+        },
+      };
+    });
+
+    it('should call the close(true) on $modalInstance when remove is called', function() {
+      httpBackend.expectDELETE(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(200);
+      vm.edit(recurringGiveForm);
+
+      expect(modalInstance.close).toHaveBeenCalled();
+      expect(modalInstance.dismiss).not.toHaveBeenCalled();
+    });
+
+    it('should call the close(false) on $modalInstance when remove is called', function() {
+      httpBackend.expectDELETE(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12').respond(404);
+      vm.edit(recurringGiveForm);
 
       expect(modalInstance.dismiss).not.toHaveBeenCalled();
       expect(modalInstance.close).toHaveBeenCalled();
