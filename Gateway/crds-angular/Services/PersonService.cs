@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
@@ -32,6 +33,9 @@ namespace crds_angular.Services
             addressDictionary.Add("State/Region", addressDictionary["State"]);
 
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
+
+            // TODO: Should this move to _contactService or should update move it's call out to this service?
+            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
