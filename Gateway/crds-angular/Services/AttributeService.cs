@@ -24,13 +24,7 @@ namespace crds_angular.Services
 
             foreach (var attribute in attributes)
             {
-                var attributeDto = new AttributeDTO
-                {
-                    AttributeId = attribute.AttributeId,
-                    Name = attribute.Name,
-                    CategoryId = attribute.CategoryId,
-                    Category = attribute.Category                    
-                };
+                var attributeDto = ConvertAttributeToAttributeDto(attribute);
 
                 var key = GetOrCreateAttributeTypeDto(attribute, attributeTypes);
 
@@ -38,6 +32,18 @@ namespace crds_angular.Services
             }
 
             return attributeTypes.Values.ToList();
+        }
+
+        public AttributeDTO ConvertAttributeToAttributeDto(Attribute attribute)
+        {
+            var attributeDto = new AttributeDTO
+            {
+                AttributeId = attribute.AttributeId,
+                Name = attribute.Name,
+                CategoryId = attribute.CategoryId,
+                Category = attribute.Category
+            };
+            return attributeDto;
         }
 
         private static int GetOrCreateAttributeTypeDto(Attribute attribute, Dictionary<int, AttributeTypeDTO> attributeTypes)

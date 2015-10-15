@@ -7,7 +7,7 @@ namespace crds_angular.Services.Interfaces
     {
         TripFormResponseDto GetFormResponses(int selectionId, int selectionCount, int recordId);
         List<TripGroupDto> GetGroupsByEventId(int eventId);
-        MyTripsDto GetMyTrips(int contactId);
+        MyTripsDto GetMyTrips(int contactId, string token);
         List<TripParticipantDto> Search(string search);
         TripCampaignDto GetTripCampaign(int pledgeCampaignId);
         List<FamilyMemberTripDto> GetFamilyMembers(int contactId, int pledgeId, string token);
