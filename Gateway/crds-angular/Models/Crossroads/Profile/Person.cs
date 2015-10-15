@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using crds_angular.Services;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
@@ -91,6 +92,9 @@ namespace crds_angular.Models.Crossroads.Profile
 
         [JsonProperty(PropertyName = "attributeTypes")]
         public Dictionary<int, ContactAttributeTypeDTO> AttributeTypes { get; set; }
+
+        [JsonProperty(PropertyName = "singleAttributes")]
+        public Dictionary<int, ContactSingleAttributeDTO> SingleAttributes { get; set; }
 
         public MyContact GetContact()
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Attribute;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -12,27 +13,35 @@ namespace crds_angular.Services
     public class ContactAttributeService : IContactAttributeService
     {
         private readonly MPInterfaces.IContactAttributeService _mpContactAttributeService;
+        private readonly IAttributeService _attributeService;
         private readonly MPInterfaces.IApiUserService _apiUserService;
         private readonly MPInterfaces.IAttributeService _mpAttributeService;
 
         public ContactAttributeService(
             MPInterfaces.IContactAttributeService mpContactAttributeService, 
+            IAttributeService attributeService, 
             MPInterfaces.IApiUserService apiUserService,
             MPInterfaces.IAttributeService mpAttributeService)
         {
             _mpContactAttributeService = mpContactAttributeService;
+            _attributeService = attributeService;
             _apiUserService = apiUserService;
             _mpAttributeService = mpAttributeService;
         }
 
-        public Dictionary<int, ContactAttributeTypeDTO> GetContactAttributes(int contactId)
+        public ContactAllAttributesDTO GetContactAttributes(int contactId)
         {
             var mpAttributes = _mpAttributeService.GetAttributes(null);
             var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
 
-            var resultList = TranslateToAttributeTypeDtos(mpContactAttributes, mpAttributes);
-            return resultList;
+            var allAttributes = new ContactAllAttributesDTO();
+            allAttributes.MultiSelect = TranslateToAttributeTypeDtos(mpContactAttributes, mpAttributes);
+
+            allAttributes.SingleSelect = TranslateToSingleAttributeTypeDtos(mpContactAttributes, mpAttributes);
+
+            return allAttributes;
         }
+
 
         private Dictionary<int, ContactAttributeTypeDTO> TranslateToAttributeTypeDtos(
             List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
@@ -75,6 +84,32 @@ namespace crds_angular.Services
                 contactAttribute.EndDate = mpContactAttribute.EndDate;
                 contactAttribute.Notes = mpContactAttribute.Notes;
                 contactAttribute.Selected = true;
+            }
+
+            return attributeTypesDictionary;
+        }
+
+        private Dictionary<int, ContactSingleAttributeDTO> TranslateToSingleAttributeTypeDtos(
+            List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
+        {
+            // TODO: See if we can push this down to the MP Layer to get this data from the select directly
+            // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
+            var attributeTypesDictionary = mpAttributes
+                .Select(x => new { x.AttributeTypeId, x.AttributeTypeName })
+                .Distinct()
+                .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
+                              mpAttributeType => new ContactSingleAttributeDTO());
+
+            foreach (var mpContactAttribute in mpContactAttributes)
+            {                
+                // Lookup by attributeId
+                var mpAttribute = mpAttributes.FirstOrDefault(x => x.AttributeId == mpContactAttribute.AttributeId);
+                var attribute = _attributeService.ConvertAttributeToAttributeDto(mpAttribute);
+
+                var contactSingleAttribute = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
+
+                contactSingleAttribute.Value = attribute;
+                contactSingleAttribute.Notes = mpContactAttribute.Notes;
             }
 
             return attributeTypesDictionary;
