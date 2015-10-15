@@ -427,6 +427,8 @@ namespace crds_angular.test.Services
         {
             const string processorId = "cus_123";
             const string subscriptionId = "sub_123";
+            const int failCount = 0;
+            const int recurringGiftId = 123456;
 
             var e = new StripeEvent
             {
@@ -439,13 +441,26 @@ namespace crds_angular.test.Services
                     {
                         Id = "9876",
                         Customer = processorId,
+                        Charge = "ch_2468",
                         Subscription = subscriptionId
                     })
                 }
             };
 
+            var recurringGift = new CreateDonationDistDto
+            {
+                RecurringGiftId = recurringGiftId,
+                ConsecutiveFailureCount = 0
+            };
+            
+
+            _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
+            _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, failCount));
+            _donationService.Setup(mocked => mocked.UpdateDonationStatus("ch_2468", 777, e.Created, null)).Returns(123);
+            
             _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDeclinedEmail(subscriptionId));
-            Assert.IsNull(_fixture.ProcessStripeEvent(e));
+
+            _fixture.ProcessStripeEvent(e);
             _mpDonorService.VerifyAll();
 
  
