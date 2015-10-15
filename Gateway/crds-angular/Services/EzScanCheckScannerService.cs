@@ -95,6 +95,7 @@ namespace crds_angular.Services
                                                                                          contactDonor.ProcessorId,
                                                                                          check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
                                                                                          contactDonor.RegisteredUser,
+                                                                                         false, //Anonymous gift
                                                                                          false,
                                                                                          null,
                                                                                          donorAccountId,

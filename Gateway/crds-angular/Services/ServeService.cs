@@ -69,13 +69,14 @@ namespace crds_angular.Services
                 Email = me.EmailAddress,
                 LoggedInUser = true,
                 ParticipantId = me.ParticipantId,
-                PreferredName = me.PreferredName
+                PreferredName = me.PreferredName, 
+                Age = me.Age
             };
             relationships.Add(myParticipant);
 
             // get family for contact Id
             var contactRelationships =
-                _contactRelationshipService.GetMyImmediatieFamilyRelationships(contactId, token).ToList();
+                _contactRelationshipService.GetMyImmediateFamilyRelationships(contactId, token).ToList();
             var family = contactRelationships.Select(contact => new FamilyMember
             {
                 ContactId = contact.Contact_Id,

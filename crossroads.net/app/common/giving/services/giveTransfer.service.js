@@ -11,6 +11,7 @@
         this.account = '';
         this.amount = undefined;
         this.amountSubmitted = false;
+        this.anonymous = false;
         this.bankinfoSubmitted = false;
         this.brand = '';
         this.campaign = { campaignId: null, campaignName: null, pledgeDonorId: null };
