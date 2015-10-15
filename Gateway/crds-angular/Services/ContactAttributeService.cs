@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
-using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using Attribute = MinistryPlatform.Models.Attribute;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
@@ -59,6 +58,12 @@ namespace crds_angular.Services
                     Selected = false
                 };
 
+                // TODO: Remove hack to prevent single selections from being returned 
+                if (mpAttribute.PreventMultipleSelection)
+                {
+                    continue;
+                }
+
                 attributeTypesDictionary[mpAttribute.AttributeTypeId].Attributes.Add(contactAttribute);
             }
 
@@ -77,13 +82,25 @@ namespace crds_angular.Services
         
         public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes)
         {
+            // TODO: Add logic to merge single-select and mutli-select lists            
             var currentAttributes = TranslateToMPAttributes(contactAttributes);
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+
+            // TODO: Remove this filtering. For now it is used just exclude single-select from lists
+            var mpAttributes = _mpAttributeService.GetAttributes(null);
+            var mpSingleSelectionAttributes = mpAttributes
+                .Where(mpAttributeType => mpAttributeType.PreventMultipleSelection = true)
+                .Select(attributeType => new {attributeType.AttributeTypeId})
+                .ToList();
+
+            currentAttributes = currentAttributes.Where(x => mpSingleSelectionAttributes.Contains(new {x.AttributeTypeId})).ToList();
+            persistedAttributes = persistedAttributes.Where(x => mpSingleSelectionAttributes.Contains(new { x.AttributeTypeId })).ToList();
+            // TODO: Remove until here
+
 
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
             var apiUserToken = _apiUserService.GetToken();
-            // TODO: Can we determine insert / update by looking at ContactAttributeID?
             foreach (var attribute in attributesToSave)
             {
                 SaveAttribute(contactId, attribute, apiUserToken);
