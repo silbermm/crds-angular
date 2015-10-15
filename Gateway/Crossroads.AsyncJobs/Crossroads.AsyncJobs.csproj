@@ -204,10 +204,10 @@
     <Content Include="Unity.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="MinistryPlatform.config">
+    <Content Include="MinistryPlatform.config">
       <SubType>Designer</SubType>
       <TransformOnBuild>true</TransformOnBuild>
-    </None>
+    </Content>
     <None Include="MinistryPlatform.Debug.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
