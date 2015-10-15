@@ -34,7 +34,6 @@ namespace crds_angular.Services
             _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributesTypes.Values.ToList());
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
 
-            // TODO: Should this move to _contactService or should update move it's call out to this service?
             _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
         }
 
