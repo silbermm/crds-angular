@@ -158,7 +158,7 @@ namespace crds_angular.test.Services
         {
             var contactId = 123456;
 
-            _contactRelationshipService.Setup(m => m.GetMyImmediatieFamilyRelationships(contactId, It.IsAny<string>()))
+            _contactRelationshipService.Setup(m => m.GetMyImmediateFamilyRelationships(contactId, It.IsAny<string>()))
                 .Returns(MockContactRelationships());
 
             _participantService.Setup(m => m.GetParticipant(It.IsAny<int>()))

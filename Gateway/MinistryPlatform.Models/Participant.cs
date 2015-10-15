@@ -6,5 +6,6 @@
         public string EmailAddress { get; set; }
         public string PreferredName { get; set; }
         public string DisplayName { get; set; }
+        public int Age { get; set; }
     }
 }

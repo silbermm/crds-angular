@@ -5,7 +5,6 @@ using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
-using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -24,7 +23,10 @@ namespace MinistryPlatform.Translation.Services
         private IMinistryPlatformService ministryPlatformService;
         private readonly IGroupService _groupService;
 
-        public EventService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IGroupService groupService)
+        public EventService(IMinistryPlatformService ministryPlatformService,
+                            IAuthenticationService authenticationService,
+                            IConfigurationWrapper configurationWrapper,
+                            IGroupService groupService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
@@ -49,27 +51,33 @@ namespace MinistryPlatform.Translation.Services
                         apiToken =>
                         {
                             return
-                                (ministryPlatformService.CreateSubRecord(EventParticipantSubPageId, eventId, values,
-                                    apiToken,
-                                    true));
+                                (ministryPlatformService.CreateSubRecord(EventParticipantSubPageId,
+                                                                         eventId,
+                                                                         values,
+                                                                         apiToken,
+                                                                         true));
                         });
             }
             catch (Exception ex)
             {
                 throw new ApplicationException(
                     string.Format("registerParticipantForEvent failed.  Participant Id: {0}, Event Id: {1}",
-                        participantId, eventId), ex.InnerException);
+                                  participantId,
+                                  eventId),
+                    ex.InnerException);
             }
 
-            logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}", participantId, eventId,
-                eventParticipantId));
+            logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}",
+                                       participantId,
+                                       eventId,
+                                       eventParticipantId));
             return (eventParticipantId);
         }
 
         public int unRegisterParticipantForEvent(int participantId, int eventId)
         {
             logger.Debug("Removing participant " + participantId + " from event " + eventId);
-                       
+
             int eventParticipantId;
             try
             {
@@ -81,12 +89,47 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(
                     string.Format("unRegisterParticipantForEvent failed.  Participant Id: {0}, Event Id: {1}",
-                        participantId, eventId), ex.InnerException);
+                                  participantId,
+                                  eventId),
+                    ex.InnerException);
             }
 
-            logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}", participantId, eventId,
-                eventParticipantId));
+            logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}",
+                                       participantId,
+                                       eventId,
+                                       eventParticipantId));
             return (eventParticipantId);
+        }
+
+        public Event GetEvent(int eventId)
+        {
+            var token = ApiLogin();
+            var r = ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, eventId.ToString());
+            if (r.Count == 1)
+            {
+                var record = r[0];
+                var e = new Event
+                {
+                    EventEndDate = record.ToDate("Event_End_Date"),
+                    EventId = record.ToInt("Event_ID"),
+                    EventStartDate = record.ToDate("Event_Start_Date"),
+                    EventTitle = record.ToString("Event_Title"),
+                    PrimaryContact = new Contact
+                    {
+                        ContactId = record.ToInt("Contact_ID"),
+                        EmailAddress = record.ToString("Email_Address")
+                    }
+                };
+
+
+
+                return e;
+            }
+            if (r.Count == 0)
+            {
+                return null;
+            }
+            throw new ApplicationException(string.Format("Duplicate Event ID detected: {0}", eventId));
         }
 
         public int GetEventParticipantRecordId(int eventId, int participantId)

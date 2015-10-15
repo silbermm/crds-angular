@@ -224,6 +224,12 @@
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+    <Content Include="MinistryPlatform.local test.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+    </Content>
+    <Content Include="MinistryPlatform.MPTest01.config">
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+    </Content>
     <None Include="MinistryPlatform.Release.config">
       <DependentUpon>MinistryPlatform.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
