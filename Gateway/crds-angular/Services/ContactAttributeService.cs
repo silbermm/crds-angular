@@ -86,6 +86,7 @@ namespace crds_angular.Services
             RemoveMatchesFromBothLists(attributesToSave, attributesPersisted);
 
             var apiUserToken = _apiUserService.GetToken();
+            // TODO: Can we determine insert / update by looking at ContactAttributeID?
             foreach (var attribute in attributesToSave)
             {
                 // These are new so add them
@@ -94,8 +95,7 @@ namespace crds_angular.Services
 
             foreach (var attribute in attributesPersisted)
             {
-                // These are old so end-date them to remove them
-                attribute.EndDate = DateTime.Today;
+                // These are existing so update them
                 _mpContactAttributeService.UpdateAttribute(apiUserToken, attribute);
             }
         }
@@ -133,19 +133,38 @@ namespace crds_angular.Services
         {
             for (int index = attributesToSave.Count - 1; index >= 0; index--)
             {
-                var attribute = attributesToSave[index];
+                var attributeToSave = attributesToSave[index];
+
+                bool foundMatch = false;
 
                 for (int currentIndex = attributesPersisted.Count - 1; currentIndex >= 0; currentIndex--)
                 {
                     var currentAttribute = attributesPersisted[currentIndex];
 
-                    if (currentAttribute.AttributeId == attribute.AttributeId && currentAttribute.AttributeTypeId == attribute.AttributeTypeId)
+                    if (currentAttribute.AttributeId == attributeToSave.AttributeId)
                     {
-                        attributesPersisted.RemoveAt(currentIndex);
+                        if (attributeToSave.Notes == currentAttribute.Notes)
+                        {
+                            attributesPersisted.RemoveAt(currentIndex);
+                        }
+
                         attributesToSave.RemoveAt(index);
+                        foundMatch = true;
                         break;
                     }
                 }
+
+                if (!foundMatch)
+                {
+                    // New Entry with no match
+                    attributeToSave.StartDate = DateTime.Today;
+                }
+            }
+
+            foreach (var persisted in attributesPersisted)
+            {
+                // Existing entry with no match, so effectively remove it by end-dating it
+                persisted.EndDate = DateTime.Today;
             }
         }
     }
