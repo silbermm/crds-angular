@@ -611,13 +611,13 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page2.GuardianFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianFirstName") });
             answers.Add(new FormAnswer { Response = page2.GuardianLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.GuardianLastName") });
             answers.Add(new FormAnswer { Response = page2.Referral, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Referral") });
-            answers.Add(new FormAnswer { Response = page2.ScrubSizeTop, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeTop") });
-            answers.Add(new FormAnswer { Response = page2.ScrubSizeBottom, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeBottom") });
-            answers.Add(new FormAnswer { Response = page2.SpiritualLifeObedience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeObedience") });
-            answers.Add(new FormAnswer { Response = page2.SpiritualLifeReceived, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReceived") });
-            answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
-            answers.Add(new FormAnswer { Response = page2.SpiritualLifeSearching, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeSearching") });
-            answers.Add(new FormAnswer { Response = page2.TshirtSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.TshirtSize") });
+            //answers.Add(new FormAnswer { Response = page2.ScrubSizeTop, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeTop") });
+            //answers.Add(new FormAnswer { Response = page2.ScrubSizeBottom, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ScrubSizeBottom") });
+            //answers.Add(new FormAnswer { Response = page2.SpiritualLifeObedience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeObedience") });
+            //answers.Add(new FormAnswer { Response = page2.SpiritualLifeReceived, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReceived") });
+            //answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
+            //answers.Add(new FormAnswer { Response = page2.SpiritualLifeSearching, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeSearching") });
+            //answers.Add(new FormAnswer { Response = page2.TshirtSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.TshirtSize") });
             answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
             answers.Add(new FormAnswer { Response = page2.Why, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Why") });
 
@@ -639,18 +639,18 @@ namespace crds_angular.Services
 
             var page5 = applicationData.PageFive;
             answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillBusiness, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillBusiness") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillConstruction, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillConstruction") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillDental, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillDental") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillEducation, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillEducation") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillInformationTech, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillInformationTech") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedia, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedia") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedical, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedical") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMusic, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMusic") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillOther, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillOther") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillPhotography, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillPhotography") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillSocialWorker, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillSocialWorker") });
-            answers.Add(new FormAnswer { Response = page5.ProfessionalSkillStudent, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillStudent") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillBusiness, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillBusiness") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillConstruction, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillConstruction") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillDental, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillDental") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillEducation, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillEducation") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillInformationTech, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillInformationTech") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedia, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedia") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMedical, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMedical") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillMusic, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillMusic") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillOther, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillOther") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillPhotography, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillPhotography") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillSocialWorker, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillSocialWorker") });
+            //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillStudent, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillStudent") });
             answers.Add(new FormAnswer { Response = page5.SponsorChildFirstName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildFirstName") });
             answers.Add(new FormAnswer { Response = page5.SponsorChildInNicaragua, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildInNicaragua") });
             answers.Add(new FormAnswer { Response = page5.SponsorChildLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SponsorChildLastName") });
@@ -658,7 +658,7 @@ namespace crds_angular.Services
 
             var page6 = applicationData.PageSix;
 
-            answers.Add(new FormAnswer { Response = page6.DeltaFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DeltaFrequentFlyer") });
+            //answers.Add(new FormAnswer { Response = page6.DeltaFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DeltaFrequentFlyer") });
             answers.Add(new FormAnswer { Response = page6.DescribeExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.DescribeExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.ExperienceAbroad, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ExperienceAbroad") });
             answers.Add(new FormAnswer { Response = page6.InternationalTravelExpericence, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.InternationalTravelExpericence") });
@@ -669,9 +669,9 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page6.PassportLastName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportLastName") });
             answers.Add(new FormAnswer { Response = page6.PassportMiddleName, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PassportMiddleName") });
             answers.Add(new FormAnswer { Response = page6.PastAbuseHistory, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PastAbuseHistory") });
-            answers.Add(new FormAnswer { Response = page6.SouthAfricanFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SouthAfricanFrequentFlyer") });
-            answers.Add(new FormAnswer { Response = page6.UnitedFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UnitedFrequentFlyer") });
-            answers.Add(new FormAnswer { Response = page6.UsAirwaysFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UsAirwaysFrequentFlyer") });
+            //answers.Add(new FormAnswer { Response = page6.SouthAfricanFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SouthAfricanFrequentFlyer") });
+            //answers.Add(new FormAnswer { Response = page6.UnitedFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UnitedFrequentFlyer") });
+            //answers.Add(new FormAnswer { Response = page6.UsAirwaysFrequentFlyer, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.UsAirwaysFrequentFlyer") });
             answers.Add(new FormAnswer { Response = page6.ValidPassport, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ValidPassport") });
 
             return answers;
