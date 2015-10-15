@@ -201,8 +201,7 @@ namespace MinistryPlatform.Translation.Services
             }
             
         }
-
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -218,6 +217,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Date", setupTime},
                 {"Transaction_code", chargeId},
                 {"Registered_Donor", registeredDonor},
+                {"Anonymous", anonymous},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", donationStatus ?? 1}, //hardcoded to pending if no status specified

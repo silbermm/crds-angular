@@ -135,7 +135,8 @@
           GiveTransferService.amount,
           GiveTransferService.donor.donorId,
           GiveTransferService.email,
-          GiveTransferService.view).then(function(confirmation) {
+          GiveTransferService.view,
+          GiveTransferService.anonymous).then(function(confirmation) {
             GiveTransferService.amount = confirmation.amount;
             GiveTransferService.program = program;
             GiveTransferService.program_name = GiveTransferService.program.Name;
