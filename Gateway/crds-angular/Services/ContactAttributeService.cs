@@ -34,8 +34,8 @@ namespace crds_angular.Services
             var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
 
             var allAttributes = new ContactAllAttributesDTO();
-            allAttributes.MultiSelect = TranslateToAttributeTypeDtos(mpContactAttributes, mpAttributes);
 
+            allAttributes.MultiSelect = TranslateToAttributeTypeDtos(mpContactAttributes, mpAttributes);
             allAttributes.SingleSelect = TranslateToSingleAttributeTypeDtos(mpContactAttributes, mpAttributes);
 
             return allAttributes;
@@ -46,8 +46,6 @@ namespace crds_angular.Services
         {
             var mpFilteredAttributes = mpAttributes.Where(x => x.PreventMultipleSelection == false).ToList();
 
-            // TODO: See if we can push this down to the MP Layer to get this data from the select directly
-            // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
             var attributeTypesDictionary = mpFilteredAttributes
                 .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
                 .Distinct()
@@ -73,7 +71,12 @@ namespace crds_angular.Services
             }
 
             foreach (var mpContactAttribute in mpContactAttributes)
-            {
+            {                
+                if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
+                {
+                    continue;
+                }
+
                 var contactAttributeType = attributeTypesDictionary[mpContactAttribute.AttributeTypeId];
                 var contactAttribute = contactAttributeType.Attributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
                 contactAttribute.StartDate = mpContactAttribute.StartDate;
@@ -90,8 +93,6 @@ namespace crds_angular.Services
         {
             var mpFilteredAttributes = mpAttributes.Where(x => x.PreventMultipleSelection == true).ToList();
 
-            // TODO: See if we can push this down to the MP Layer to get this data from the select directly
-            // Possibly also pair this down to multi-select lists, and handle single-select as dropdown / lookups
             var attributeTypesDictionary = mpFilteredAttributes
                 .Select(x => new { x.AttributeTypeId, x.AttributeTypeName })
                 .Distinct()
@@ -100,6 +101,11 @@ namespace crds_angular.Services
 
             foreach (var mpContactAttribute in mpContactAttributes)
             {                
+                if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
+                {
+                    continue;
+                }
+
                 var mpAttribute = mpAttributes.First(x => x.AttributeId == mpContactAttribute.AttributeId);
 
                 var attribute = _attributeService.ConvertAttributeToAttributeDto(mpAttribute);
