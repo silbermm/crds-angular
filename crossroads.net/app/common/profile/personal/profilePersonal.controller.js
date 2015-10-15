@@ -80,13 +80,13 @@
 
     function configurePerson() {
 
-      if (vm.profileData.person.dateOfBirth !== undefined) {
+      if ((vm.profileData.person.dateOfBirth !== undefined) && (vm.profileData.person.dateOfBirth !== '')) {
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
         var mBdate = moment(newBirthDate, 'YYYY MM DD');
         vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
       }
 
-      if (vm.profileData.person.anniversaryDate !== undefined) {
+      if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
     }
