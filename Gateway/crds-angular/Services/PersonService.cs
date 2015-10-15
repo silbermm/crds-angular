@@ -31,7 +31,6 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
-            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributesTypes.Values.ToList());
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
 
             _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
