@@ -63,6 +63,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     function evaluateAttributes() {
       
       var personAttributeTypes = signupService.person.attributeTypes;
+
       personAttributeTypes = mapAttribute(
           signupService.page2.scrubSizeBottom,
           personAttributeTypes,
@@ -72,8 +73,13 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
           signupService.page2.scrubSizeTop,
           personAttributeTypes, 
           attributeTypes.SCRUB_TOP_SIZES);
-        
-        return personAttributeTypes;
+      
+      personAttributeTypes = mapAttribute(
+          signupService.page2.tshirtSize,
+          personAttributeTypes,
+          attributeTypes.TSHIRT_SIZES);
+
+      return personAttributeTypes;
     }
 
     function reset(campaign) {
@@ -168,9 +174,19 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       if ( currentAttributeTypes[attributeTypeId] === undefined ) {
         currentAttributeTypes[attributeTypeId] = {};
       }
+      if (!from.startDate) {
+        from.startDate = new Date();
+      }
+      if (!from.notes) {
+        from.notes = null;
+      }
       currentAttributeTypes[attributeTypeId] = {
         attributeTypeId: attributeTypeId,
-        attributes: [from ]  
+        attributes: [{ 
+          attributeId: from.attributeId,
+          startDate: from.startDate,
+          notes: from.notes
+        }]  
       };
 
       return currentAttributeTypes;

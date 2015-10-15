@@ -151,6 +151,10 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       if (vm.signupService.page5.professionalSkills) {
         return;
       }
+      
+/*      _.forEach(vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes, function(skill) {*/
+
+      //});
 
       var attrs = AttributeTypeService.transformPersonMultiAttributes(
           vm.signupService.person.attributeTypes[attributeTypes.TRIP_SKILLS].attributes,
