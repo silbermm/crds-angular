@@ -139,7 +139,7 @@ namespace MinistryPlatform.Translation.Services
             return template;
         }
 
-        public Communication GetTemplateAsCommunication(int templateId, int fromContactId, string fromEmailAddress, int replyContactId, string replyEmailAddress, int toContactId, string toEmailAddress)
+        public Communication GetTemplateAsCommunication(int templateId, int fromContactId, string fromEmailAddress, int replyContactId, string replyEmailAddress, int toContactId, string toEmailAddress, Dictionary<string, object> mergeData = null)
         {
             var template = GetTemplate(templateId);
             return new Communication
@@ -153,7 +153,8 @@ namespace MinistryPlatform.Translation.Services
                 ReplyContactId = replyContactId,
                 ReplyToEmailAddress = replyEmailAddress,
                 ToContactId = toContactId,
-                ToEmailAddress = toEmailAddress
+                ToEmailAddress = toEmailAddress, 
+                MergeData = mergeData
             };
             // should Merge Data be included as well?  tm 10/12
         }

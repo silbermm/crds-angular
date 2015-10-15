@@ -183,41 +183,58 @@ namespace MinistryPlatform.Translation.Services
 
         public IList<Event> getAllEventsForGroup(int groupId)
         {
-            string apiToken = ApiLogin();
+            var events = new List<Event>();
+            var apiToken = ApiLogin();
+            var tmpEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
+            if (tmpEvents == null || tmpEvents.Count == 0)
+            {
+                return null;
+            }
+            foreach (var tmpEvent in tmpEvents)
+            {
+                var newEvent = new Event();
+                newEvent.EventId = tmpEvent.ToInt("Event_ID");
+                newEvent.EventLocation = tmpEvent.ToString("Location_Name");
+                newEvent.EventStartDate = tmpEvent.ToDate("Event_Start_Date");
+                newEvent.EventTitle = tmpEvent.ToString("Event_Title");
+
+                events.Add(newEvent);
+            }
+            return events;
 
             // Get all the Groups->Events sub-page records
-            var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
-            if (mpEvents == null || mpEvents.Count == 0)
-            {
-                return (null);
-            }
+            //var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
+            //if (mpEvents == null || mpEvents.Count == 0)
+            //{
+            //    return (null);
+            //}
 
-            var events = new List<Event>();
-            foreach (Dictionary<string, object> e in mpEvents)
-            {
-                // The dp_RecordID in this case is the key of the Event_Group, now need to get the Event_ID
-                object recordId = null;
-                if (e.TryGetValue("dp_RecordID", out recordId))
-                {
-                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId,
-                                                                           (int) recordId,
-                                                                           apiToken,
-                                                                           false);
-                    if (eventGroup == null)
-                    {
-                        continue;
-                    }
+            
+            //foreach (Dictionary<string, object> e in mpEvents)
+            //{
+            //    // The dp_RecordID in this case is the key of the Event_Group, now need to get the Event_ID
+            //    object recordId = null;
+            //    if (e.TryGetValue("dp_RecordID", out recordId))
+            //    {
+            //        var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId,
+            //                                                               (int) recordId,
+            //                                                               apiToken,
+            //                                                               false);
+            //        if (eventGroup == null)
+            //        {
+            //            continue;
+            //        }
 
-                    object eventId = null;
-                    if (eventGroup.TryGetValue("Event_ID", out eventId))
-                    {
-                        Event evt = new Event();
-                        evt.EventId = (int) eventId;
-                        events.Add(evt);
-                    }
-                }
-            }
-            return (events);
+            //        object eventId = null;
+            //        if (eventGroup.TryGetValue("Event_ID", out eventId))
+            //        {
+            //            Event evt = new Event();
+            //            evt.EventId = (int) eventId;
+            //            events.Add(evt);
+            //        }
+            //    }
+            //}
+            //return (events);
         }
 
         public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)
