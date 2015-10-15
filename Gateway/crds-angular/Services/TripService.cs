@@ -339,6 +339,11 @@ namespace crds_angular.Services
             const int groupRoleId = 16; // wondering if eventually this will become user input?
             var events = _groupService.getAllEventsForGroup(dto.GroupId);
 
+            //var eventTitle = events[0].EventTitle;
+            //string eventLocation = events[0].EventLocation;
+            //var eventDate = events[0].EventStartDate.ToString();
+            
+
             foreach (var applicant in dto.Applicants)
             {
                 if (!_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
