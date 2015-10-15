@@ -27,5 +27,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
 
         [JsonProperty(PropertyName = "gift_message")]
         public string GiftMessage { get; set; }
+
+        [JsonProperty(PropertyName = "anonymous")]
+        public bool Anonymous { get; set; }
     }
 }

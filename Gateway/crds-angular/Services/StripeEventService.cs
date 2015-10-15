@@ -87,6 +87,7 @@ namespace crds_angular.Services
                                                                 invoice.Customer,
                                                                 DateTime.Now,
                                                                 true, // Registered donor?
+                                                                false, //Anonymous gift? 
                                                                 true, // Recurring gift?
                                                                 createDonation.RecurringGiftId,
                                                                 createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null,
