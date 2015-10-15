@@ -25,17 +25,7 @@
       Validation) {
 
     var vm = this;
-    var constants = require('./../../../constants');
-    // TODO: Should these be on global scope?
-    vm.attributeIds = constants.ATTRIBUTE_IDS;
-    vm.attributeTypeIds = constants.ATTRIBUTE_TYPE_IDS;
-
-    //vm.ethnicities = _.find(vm.profileData.person.attributeTypes,
-    //  function(attributeType) {
-    //    return (attributeType.attributeTypeId === vm.attributeTypeIds.ETHNICITY);
-    //  }).attributes;
-
-    vm.ethnicities = vm.profileData.person.attributeTypes[vm.attributeTypeIds.ETHNICITY].attributes;
+    var constants = require('crds-constants');
 
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
@@ -100,6 +90,8 @@
       if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
+
+      vm.ethnicities = vm.profileData.person.attributeTypes[constants.ATTRIBUTE_TYPE_IDS.ETHNICITY].attributes;
     }
 
     function convertHomePhone() {
