@@ -34,6 +34,7 @@ namespace crds_angular.Services
             return attributeTypes.Values.ToList();
         }
 
+        // TODO: Should this be in a different translation class?
         public AttributeDTO ConvertAttributeToAttributeDto(Attribute attribute)
         {
             var attributeDto = new AttributeDTO
