@@ -76,8 +76,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "subscription_id")]
         public string SubscriptionID { get; set; }
-        /// <summary>
-        /// The Subscription ID of the recurring gift created in Strip.  This is not required or used on input, but will be returned on output.
+        /// <summary>number of failures from stripe when processing the recurring gift.  This is not required or used on input, but will be returned on output.
         /// </summary>
         [JsonProperty(PropertyName = "consecutive_failure_count")]
         public string FailCount { get; set; }
