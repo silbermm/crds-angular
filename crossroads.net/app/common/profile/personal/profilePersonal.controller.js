@@ -3,9 +3,9 @@
 
   var moment = require('moment');
 
-  module.exports = ProfilePersonalDirective;
+  module.exports = ProfilePersonalController;
 
-  ProfilePersonalDirective.$inject = [
+  ProfilePersonalController.$inject = [
     '$rootScope',
     '$log',
     '$timeout',
@@ -15,7 +15,7 @@
     'Validation'
   ];
 
-  function ProfilePersonalDirective(
+  function ProfilePersonalController(
       $rootScope,
       $log,
       $timeout,
@@ -25,6 +25,7 @@
       Validation) {
 
     var vm = this;
+    var constants = require('crds-constants');
 
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
@@ -80,15 +81,17 @@
 
     function configurePerson() {
 
-      if (vm.profileData.person.dateOfBirth !== undefined) {
+      if ((vm.profileData.person.dateOfBirth !== undefined) && (vm.profileData.person.dateOfBirth !== '')) {
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
         var mBdate = moment(newBirthDate, 'YYYY MM DD');
         vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
       }
 
-      if (vm.profileData.person.anniversaryDate !== undefined) {
+      if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
+
+      vm.ethnicities = vm.profileData.person.attributeTypes[constants.ATTRIBUTE_TYPE_IDS.ETHNICITY].attributes;
     }
 
     function convertHomePhone() {
@@ -156,7 +159,7 @@
               vm.closeModal(true);
             }
           }, function() {
-
+            //TODO: Should we be emiting error message here?
             $log.debug('person save unsuccessful');
           });
         }

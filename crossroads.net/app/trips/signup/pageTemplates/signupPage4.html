@@ -34,7 +34,7 @@
           </div>
           <div>
             <label for="lottery-no-family" class="radio-inline">
-                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my fmaily OR any member of our larger group of friends is not selected, my spouse or family will still go.
+                <input ng-model="tripsSignup.signupService.page4.lottery.value" type="radio" value="If my spouse or any member of my family OR any member of our larger group of friends is not selected, my spouse or family will still go." name="lottery" id="lottery-no-family" ng-required="!tripsSignup.isIndia()">If my spouse or any member of my family OR any member of our larger group of friends is not selected, my spouse or family will still go.
             </label>
           </div>
           <ng-messages for="tripsSignup.tripAppPage4.lottery.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'lottery')">
@@ -81,9 +81,15 @@
           <div class="col-md-12">
             <p>Content block explaining support person email.</p>
           </div>
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail') }">
             <label for="support-person-email" class="control-label">Support Person Email Address</label>
-            <input ng-model="tripsSignup.signupService.page4.supportPersonEmail.value" type="text" class="form-control" name="supportPersonEmail" id="support-person-email" placeholder="Support Person Email Address">
+            <input
+              ng-model="tripsSignup.signupService.page4.supportPersonEmail.value"
+              type="email"
+              class="form-control"
+              name="supportPersonEmail"
+              id="support-person-email"
+              placeholder="Support Person Email Address">
             <ng-messages for="tripsSignup.tripAppPage4.supportPersonEmail.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage4, 'supportPersonEmail')">
               <span ng-message="email">
                 <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>

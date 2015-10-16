@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -28,7 +24,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
-            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
 
             _fixture = new ParticipantService(_mpServiceMock.Object, _authService.Object, _configWrapper.Object);
         }
@@ -42,11 +38,14 @@ namespace MinistryPlatform.Translation.Test.Services
             var searchString = contactId.ToString() + ",";
             var mockDictionaryList = new List<Dictionary<string, object>>
             {
-                new Dictionary<string, object>{
-                {"dp_RecordID", 100},
-                {"Email Address", "email-address"},
-                {"Nickname", "nick-name"},
-                {"Display Name", "display-name"}}
+                new Dictionary<string, object>
+                {
+                    {"dp_RecordID", 100},
+                    {"Email Address", "email-address"},
+                    {"Nickname", "nick-name"},
+                    {"Display Name", "display-name"},
+                    {"Age", 99}
+                }
             };
 
             _mpServiceMock.Setup(m => m.GetPageViewRecords(viewKey, It.IsAny<string>(), searchString, "", 0)).Returns(mockDictionaryList);

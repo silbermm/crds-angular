@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using crds_angular.App_Start;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -24,6 +25,8 @@ namespace crds_angular.test.Services
         public void SetUp()
         {
             _contactAttributeService = new Mock<IContactAttributeService>();
+            var contactAllAttributesDto = new ContactAllAttributesDTO();
+            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<int>())).Returns(contactAllAttributesDto);
             new Mock<MPInterfaces.IContactRelationshipService>();
             _contactService = new Mock<MPInterfaces.IContactService>();            
             _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();            
