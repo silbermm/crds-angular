@@ -349,7 +349,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       });
 
       var application = new vm.signupService.TripApplication();
-      application.contactId = vm.signupService.contactId;
+      application.contactId = vm.signupService.person.contactId;
       application.pledgeCampaignId = vm.signupService.campaign.id;
       application.pageTwo = vm.signupService.page2;
       application.pageThree = vm.signupService.page3;
@@ -384,12 +384,12 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         return false;
       }
 
-      if(airline.attributeID === attributes.INDIA_FREQUENT_FLYER) {
-        if (isIndia()) {
-          return false;
+      if(airline.attributeId === attributes.US_FREQUENT_FLYER) {
+        if (isNica()) {
+          return true;
         }
 
-        return true;
+        return false;
       }
       
       return true;

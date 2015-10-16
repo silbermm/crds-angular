@@ -210,6 +210,14 @@
 
             return;
           },
+         
+          AbuseHistory: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '6') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.ABUSE_HISTORY }).$promise;
+            }
+
+            return;
+          },
 
           WorkTeams: function(Trip) {
             return Trip.WorkTeams.query().$promise;
