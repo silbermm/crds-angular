@@ -3,9 +3,9 @@
 
   module.exports = RecurringGivingList;
 
-  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService'];
+  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService', 'DonationService'];
 
-  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService) {
+  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService, DonationService) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -25,14 +25,15 @@
       });
 
       function openRemoveGiftModal(selectedDonation, index) {
-        var modalInstance = $modal.open({
+        scope.modalInstance = $modal.open({
           parent: 'noSideBar',
           templateUrl: 'recurring_giving_remove_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            donation: function () {
+            donation: function() {
               return selectedDonation;
             },
+
             programList: function() {
               return [
                 {
@@ -44,27 +45,29 @@
           }
         });
 
-        modalInstance.result.then(function (success) {
+        scope.modalInstance.result.then(function(success) {
           if (success) {
             scope.recurringGifts.splice(index, 1);
             $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
           } else {
             $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
           }
-        }, function () {
+        }, function() {
+
           $log.info('Modal dismissed at: ' + new Date());
         });
       };
 
       function openEditGiftModal(selectedDonation) {
-        var modalInstance = $modal.open({
+        scope.modalInstance = $modal.open({
           parent: 'noSideBar',
           templateUrl: 'recurring_giving_edit_modal',
           controller: 'RecurringGivingModals as recurringGift',
           resolve: {
-            donation: function () {
+            donation: function() {
               return selectedDonation;
             },
+
             Programs: 'Programs',
             programList: function(Programs) {
               // TODO The number one relates to the programType in MP. At some point we should fetch
@@ -76,9 +79,21 @@
           }
         });
 
-        modalInstance.result.then(function (selectedItem, success) {
-          scope.selected = selectedItem;
-        }, function () {
+        scope.modalInstance.result.then(function(success) {
+          if (success) {
+            DonationService.queryRecurringGifts().then(function(data) {
+              scope.recurringGiftsInput = data;
+            }, function(/*error*/) {
+
+              $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+            });
+
+            $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
+          } else {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
+          }
+        }, function() {
+
           $log.info('Modal dismissed at: ' + new Date());
         });
       };

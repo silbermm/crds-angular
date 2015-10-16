@@ -34,13 +34,7 @@ WHEN 1 THEN
   CONCAT(REPLACE(Day_Of_Week_ID_Table.Day_Of_Week, '' '', ''''), ''s Weekly'')
 ELSE
   CONCAT(
-    CAST(Day_Of_Month AS VARCHAR),
-    CASE(Day_Of_Month % 10)
-      WHEN 1 THEN ''st''
-      WHEN 2 THEN ''nd''
-      WHEN 3 THEN ''rd''
-      ELSE ''th''
-    END,
+    [dbo].[crds_udfGetOrdinalNumber](Day_Of_Month),
     '' Monthly''
   )
 END AS Recurrence
@@ -52,7 +46,9 @@ END AS Recurrence
 , Donor_Account_ID_Table_Account_Type_ID_Table.[Account_Type_ID]
 , Donor_Account_ID_Table.[Account_Number]
 , Donor_Account_ID_Table.[Institution_Name]
-, Recurring_Gifts.[Subscription_ID]'
+, Recurring_Gifts.[Subscription_ID]
+, Donor_Account_ID_Table.[Processor_ID]
+, Donor_Account_ID_Table.[Processor_Account_ID]'
   ,'Program_ID_Table.Program_Name'
   ,'Recurring_Gifts.[Recurring_Gift_ID] IN (SELECT * FROM [dbo].[crds_udfGetRecurringGiftIdsForUser](dp_UserID))'
   ,'Donor_ID_Table_Contact_ID_Table.[Contact_ID]'

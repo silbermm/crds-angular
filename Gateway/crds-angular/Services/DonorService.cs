@@ -3,6 +3,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -21,6 +22,7 @@ namespace crds_angular.Services
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
+        public const int RecurringGiftFrequencyWeekly = 1;
         
         private readonly string _guestGiverDisplayName;
 
@@ -209,6 +211,15 @@ namespace crds_angular.Services
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
         }
 
+        /// <summary>
+        /// Edit an existing recurring gift.  This will cancel (end-date) an existing RecurringGift and then create a new one
+        /// if the Program, Amount, Frequency, Day of Week, or Day of Month are changed.  This will simply edit the existing gift
+        /// if only the payment method (credit card, bank account) is changed.
+        /// </summary>
+        /// <param name="authorizedUserToken">An OAuth token for the user who is logged in to cr.net/MP</param>
+        /// <param name="editGift">The edited values for the Recurring Gift</param>
+        /// <param name="donor">The donor performing the edits</param>
+        /// <returns>A RecurringGiftDto, populated with any new/updated values after any edits</returns>
         public RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, editGift.RecurringGiftId);
@@ -218,10 +229,10 @@ namespace crds_angular.Services
 
             var changedAmount = (int)(editGift.PlanAmount * Constants.StripeDecimalConversionValue) != existingGift.Amount;
             var changedProgram = !editGift.Program.Equals(existingGift.ProgramId);
-            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly);
+            var changedFrequency = !editGift.PlanInterval.Equals(existingGift.Frequency == RecurringGiftFrequencyWeekly ? PlanInterval.Weekly : PlanInterval.Monthly);
             var changedDayOfWeek = changedFrequency || (editGift.PlanInterval == PlanInterval.Weekly && (int) editGift.StartDate.DayOfWeek != existingGift.DayOfWeek);
             var changedDayOfMonth = changedFrequency || (editGift.PlanInterval == PlanInterval.Monthly && editGift.StartDate.Day != existingGift.DayOfMonth);
-            var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.Value.Date;
+            var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.GetValueOrDefault().Date;
 
             var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
             var needsNewMpRecurringGift = changedAmount || changedProgram || needsNewStripePlan;
@@ -229,32 +240,42 @@ namespace crds_angular.Services
             var recurringGiftId = existingGift.RecurringGiftId.GetValueOrDefault(-1);
 
             int donorAccountId;
+
             if (changedPayment)
             {
-                var customer = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+                // If the payment method changed, we need to create a new Stripe Source.
+                var source = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
                 // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
 
-                // TODO Need to change this to accept a user's token in order to facilitate Admin edit
-                donorAccountId = _mpDonorService.CreateDonorAccount(authorizedUserToken,
-                                                                    customer.brand,
+                donorAccountId = _mpDonorService.CreateDonorAccount(source.brand,
                                                                     DonorRoutingNumberDefault,
-                                                                    customer.last4,
+                                                                    source.last4,
+                                                                    null, //Encrypted account
                                                                     existingGift.DonorId,
-                                                                    customer.id,
+                                                                    source.id,
                                                                     donor.ProcessorId);
-                _mpDonorService.UpdateRecurringGiftDonorAccount(authorizedUserToken, recurringGiftId, donorAccountId);
+
+                // If we are not going to create a new Recurring Gift, then we'll update the existing
+                // gift with the new donor account
+                if (!needsNewMpRecurringGift)
+                {
+                    _mpDonorService.UpdateRecurringGiftDonorAccount(authorizedUserToken, recurringGiftId, donorAccountId);
+                }
             }
             else
             {
-                donorAccountId = existingGift.DonorAccountId.Value;
+                // If the payment method is not changed, set the donorAccountId with the existing ID so we can use it later
+                donorAccountId = existingGift.DonorAccountId.GetValueOrDefault();
             }
 
+            // Initialize a StripeSubscription, as we need the ID later on
             var stripeSubscription = new StripeSubscription {Id = existingGift.SubscriptionId};
 
             if (needsNewMpRecurringGift)
             {
                 if (needsNewStripePlan)
                 {
+                    // If we need a new Stripe Plan, cancel the old subscription and plan, and create a new one
                     var oldSubscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
                     _paymentService.CancelPlan(oldSubscription.Plan.Id);
 
@@ -262,6 +283,7 @@ namespace crds_angular.Services
                     stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
                 }
 
+                // Cancel the old recurring gift, and create a new one
                 _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
 
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
@@ -275,18 +297,19 @@ namespace crds_angular.Services
 
             }
 
+            // Get the new/updated recurring gift so we can return a DTO with all the new values
             var newGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
 
             var newRecurringGift = new RecurringGiftDto
             {
-                RecurringGiftId = newGift.RecurringGiftId.Value,
-                StartDate = newGift.StartDate.Value,
+                RecurringGiftId = newGift.RecurringGiftId.GetValueOrDefault(),
+                StartDate = newGift.StartDate.GetValueOrDefault(),
                 PlanAmount = newGift.Amount,
-                PlanInterval = newGift.Frequency == 1 ? PlanInterval.Weekly : PlanInterval.Monthly,
+                PlanInterval = newGift.Frequency == RecurringGiftFrequencyWeekly ? PlanInterval.Weekly : PlanInterval.Monthly,
                 Program = newGift.ProgramId,
                 DonorID = newGift.DonorId,
                 EmailAddress = donor.Email,
-                SubscriptionID = stripeSubscription.Id
+                SubscriptionID = stripeSubscription.Id,
             };
             return (newRecurringGift);
         }
@@ -299,7 +322,32 @@ namespace crds_angular.Services
         public List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken)
         {
             var records = _mpDonorService.GetRecurringGiftsForAuthenticatedUser(userToken);
-            return records.Select(Mapper.Map<RecurringGift, RecurringGiftDto>).ToList();
+            var recurringGifts = records.Select(Mapper.Map<RecurringGift, RecurringGiftDto>).ToList();
+
+            // We're not currently storing routing number, postal code, or expiration date in the DonorAccount table.
+            // We need these for editing a gift, so populate them from Stripe
+            foreach (var gift in recurringGifts)
+            {
+                PopulateStripeInfoOnRecurringGiftSource(gift.Source);
+            }
+
+            return (recurringGifts);
+        }
+
+        private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)
+        {
+            var source = _paymentService.GetSource(donationSource.PaymentProcessorId, donationSource.ProcessorAccountId);
+            if (source == null)
+            {
+                return;
+            }
+
+            donationSource.PostalCode = source.address_zip;
+            donationSource.RoutingNumber = source.routing_number;
+            if (!string.IsNullOrWhiteSpace(source.exp_month) && !string.IsNullOrWhiteSpace(source.exp_year))
+            {
+                donationSource.ExpirationDate = DateTime.ParseExact(string.Format("{0}/01/{1}", source.exp_month, source.exp_year), "M/dd/yyyy", DateTimeFormatInfo.CurrentInfo);
+            }
         }
     }
 }

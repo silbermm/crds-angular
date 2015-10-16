@@ -354,14 +354,17 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Edit a recurring gift for the authenticated user.
         /// </summary>
+        /// <param name="recurringGiftId">The ID of the recurring gift to edit</param>
         /// <param name="editGift">The data required to edit the recurring gift in MinistryPlatform and/or Stripe.</param>
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
         [HttpPut]
-        [Route("api/donor/recurrence")]
-        public IHttpActionResult EditRecurringGift([FromBody] RecurringGiftDto editGift)
+        [Route("api/donor/recurrence/{recurringGiftId:int}")]
+        public IHttpActionResult EditRecurringGift([FromUri]int recurringGiftId, [FromBody] RecurringGiftDto editGift)
         {
+            editGift.RecurringGiftId = recurringGiftId;
+
             return (Authorized(token =>
             {
                 try

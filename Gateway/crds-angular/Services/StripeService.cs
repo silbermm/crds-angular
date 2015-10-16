@@ -219,6 +219,16 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
+        public SourceData GetSource(string customerId, string sourceId)
+        {
+            var customer = GetCustomer(customerId);
+            if (customer.sources == null || customer.sources.data == null || !customer.sources.data.Any())
+            {
+                return (null);
+            }
+            return (customer.sources.data.Find(src => src.id.Equals(sourceId)));
+        }
+
         private static SourceData MapDefaultSource(List<SourceData>sources, string defaultSourceId)
         {
             var defaultSource = new SourceData();

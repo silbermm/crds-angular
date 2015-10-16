@@ -4,30 +4,30 @@
     <h3 class="modal-title">Edit Recurring Gift</h3>
   </div>
 
-  <div class="modal-body">
-    <donation-details amount="recurringGift.dto.amount"
-                     program="recurringGift.dto.program"
-                     amount-submitted="recurringGift.dto.amountSubmitted"
-                     programs-in="recurringGift.programsInput"
-                     giving-type="recurringGift.dto.givingType"
-                     recurring-start-date="recurringGift.dto.recurringStartDate">
-    </donation-details>
+  <form name="recurringGiveForm">
+    <div class="modal-body">
+      <donation-details amount="recurringGift.dto.amount"
+                       program="recurringGift.dto.program"
+                       amount-submitted="recurringGift.dto.amountSubmitted"
+                       programs-in="recurringGift.programsInput"
+                       giving-type="recurringGift.dto.givingType"
+                       recurring-start-date="recurringGift.dto.recurringStartDate">
+      </donation-details>
 
-    <bank-credit-card-details
-          dto='recurringGift.dto'
-          bank-info-submitted='recurringGift.dto.bankinfoSubmitted'
-          show-check-class='recurringGift.showCheckClass'
-          show-message='recurringGift.showMessage'
-          donor='recurringGift.dto.donor'
-          email='recurringGift.dto.email'
-          set-valid-card='setValidCard'
-          set-valid-cvc='setValidCvc'
-          account-state-name='recurringGift.account'>
-        </bank-credit-card-details>
-    </bank-credit-card-details>
-  </div>
+      <bank-credit-card-details
+            dto='recurringGift.dto'
+            bank-info-submitted='recurringGift.dto.bankinfoSubmitted'
+            donor='recurringGift.dto.donor'
+            email='recurringGift.dto.email'
+            set-valid-card='setValidCard'
+            set-valid-cvc='setValidCvc'
+            account-state-name='recurringGift.account'>
+          </bank-credit-card-details>
+      </bank-credit-card-details>
+    </div>
+  </form>
 
   <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="ok()">Update</button>
+    <button class="btn btn-primary" ng-click="recurringGift.edit(recurringGiveForm)">Update</button>
   </div>
 </script>
