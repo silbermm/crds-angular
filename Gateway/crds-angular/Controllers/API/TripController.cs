@@ -182,7 +182,7 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var contactId = _authenticationService.GetContactId(token);
-                    var trips = _tripService.GetMyTrips(contactId);
+                    var trips = _tripService.GetMyTrips(contactId, token);
                     return Ok(trips);
                 }
                 catch (Exception ex)

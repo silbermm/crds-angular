@@ -11,7 +11,7 @@
         ngModel.$validators.invalidDate = function(value) {
           var format = attrs.validateDate;
           format = format.replace(/[- /.]/, ' ');
-          if (value === undefined || value === null) {
+          if (value === undefined || value === null || value === '') {
             return true;
           }
 

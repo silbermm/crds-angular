@@ -141,7 +141,10 @@
         parent: 'noSideBar',
         url: '/profile',
         resolve: {
-          loggedin: crds_utilities.checkLoggedin
+          loggedin: crds_utilities.checkLoggedin,
+          AttributeTypes: function(AttributeTypeService) {
+            return AttributeTypeService.AttributeTypes().query().$promise;
+          },
         },
         data: {
           isProtected: true,
@@ -153,10 +156,26 @@
         views: {
           '': {
             templateUrl: 'profile/profile.html',
-            controller: 'crdsProfileCtrl as profile',
             resolve: {
               loggedin: crds_utilities.checkLoggedin
             },
+          },
+          'personal@profile': {
+            templateUrl: 'profile/profilePersonal.html',
+            controller: 'ProfileController as profile',
+            data: {
+              isProtected: true
+            },
+            resolve: {
+              $cookies: '$cookies',
+              contactId: function($cookies) {
+                return $cookies.get('userId');
+              },
+              Profile: 'Profile',
+              Person: function(Profile, contactId) {
+                return Profile.Person.get({contactId: contactId}).$promise;
+              },
+            }
           },
           'account@profile': {
             templateUrl: 'profile/profile_account.html',

@@ -17,5 +17,6 @@ namespace MinistryPlatform.Models
         public DateTime RegistrationStart { get; set; }
         public DateTime RegistrationEnd { get; set; }
         public List<int> AgeExceptions { get; set; }
+        public int EventId { get; set; }
     }
 }
