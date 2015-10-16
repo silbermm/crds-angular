@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace crds_angular.Util
 {
-    internal class FileResult : IHttpActionResult
+    class FileResult : IHttpActionResult
     {
         private readonly Stream _stream;
         private readonly string _fileName;
