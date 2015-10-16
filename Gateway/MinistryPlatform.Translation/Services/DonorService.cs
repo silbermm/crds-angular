@@ -30,7 +30,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
         private readonly int _myHouseholdRecurringGiftsApiPageView;
-
+        
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
         public const string EmailReason = "None";
@@ -47,7 +47,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService, IConfigurationWrapper configuration, ICryptoProvider crypto)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
@@ -188,8 +188,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-               // _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
-                _ministryPlatformService.UpdateRecord(pageView, recurringGiftValues, token);
+               _ministryPlatformService.UpdateRecord(pageView, recurringGiftValues, token);
             }
             catch (Exception e)
             {
@@ -527,7 +526,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason)
+        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
 
@@ -551,7 +550,8 @@ namespace MinistryPlatform.Translation.Services
                     {"Donation_Amount", donationAmount},
                     {"Donation_Date", setupDate},
                     {"Payment_Method", paymentType},
-                    {"Decline_Reason", emailReason}
+                    {"Decline_Reason", emailReason},
+                    {"Frequency", frequency}
                 }
             };
 
@@ -807,7 +807,29 @@ namespace MinistryPlatform.Translation.Services
 
         public void ProcessRecurringGiftDeclinedEmail(string subscription_id)
         {
-            throw new NotImplementedException();
+            var recurringGift = GetRecurringGiftForSubscription(subscription_id);
+            UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount);
+
+            var acctType = GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
+            var paymentType = PaymentType.getPaymentType(acctType).name;
+            var templateId = PaymentType.getPaymentType(acctType).recurringGiftDeclineEmailTemplateId;
+            var frequency = recurringGift.Frequency == 1 ? "Weekly" : "Monthly";
+            var program = _programService.GetProgramById(Convert.ToInt32(recurringGift.ProgramId));
+            
+            SendEmail(templateId, recurringGift.DonorId, recurringGift.Amount, paymentType, DateTime.Now, program.Name, "fail", frequency);
+        }
+
+        public int GetDonorAccountPymtType(int donorAccountId)
+        {
+            var donorAccount = _ministryPlatformService.GetRecordDict(_donorAccountsPageId, donorAccountId, ApiLogin());
+
+            if (donorAccount == null)
+            {
+               throw new ApplicationException(
+                   string.Format("Donor Account not found.  Donor Account Id: {0}", donorAccountId));
+            }
+            
+            return donorAccount.ToInt("Account_Type_ID");
         }
 
         // ReSharper disable once FunctionComplexityOverflow
