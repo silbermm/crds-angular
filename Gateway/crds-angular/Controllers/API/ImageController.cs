@@ -88,15 +88,13 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var imageBytes = new byte[0];
-                String fileName = null;
+                const String fileName = "profile.png";
 
                 var contactId = _authenticationService.GetContactId(token);
                 String base64String = Request.Content.ReadAsStringAsync().Result;
-                imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
-                fileName = "profile.png";
+                var imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
 
-                if (string.IsNullOrEmpty(fileName) || imageBytes.Length == 0)
+                if (imageBytes.Length == 0)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
                 }
