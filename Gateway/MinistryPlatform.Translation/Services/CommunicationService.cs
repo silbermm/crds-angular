@@ -156,7 +156,6 @@ namespace MinistryPlatform.Translation.Services
                 ToEmailAddress = toEmailAddress, 
                 MergeData = mergeData
             };
-            // should Merge Data be included as well?  tm 10/12
         }
 
         public string ParseTemplateBody(string templateBody, Dictionary<string, object> record)
