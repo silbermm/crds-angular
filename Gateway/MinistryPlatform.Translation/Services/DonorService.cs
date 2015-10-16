@@ -177,8 +177,18 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"Consecutive_Failure_Count", failCount + 1}
             };
-            var apiToken = ApiLogin();
-            UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
+
+            try
+            {
+                var apiToken = ApiLogin();
+                UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                       string.Format(
+                           "Update Recurring Gift Failure Count failed.  Recurring Gift Id: {0}"),e);
+            }
         }
 
 
@@ -805,9 +815,9 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(MapRecordToRecurringGift).ToList();
         }
 
-        public void ProcessRecurringGiftDeclinedEmail(string subscription_id)
+        public void ProcessRecurringGiftDeclinedEmail(string subscriptionId)
         {
-            var recurringGift = GetRecurringGiftForSubscription(subscription_id);
+            var recurringGift = GetRecurringGiftForSubscription(subscriptionId);
             UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount);
 
             var acctType = GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
