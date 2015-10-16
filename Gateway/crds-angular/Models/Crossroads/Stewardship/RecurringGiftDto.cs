@@ -76,6 +76,10 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "subscription_id")]
         public string SubscriptionID { get; set; }
+        /// <summary>number of failures from stripe when processing the recurring gift.  This is not required or used on input, but will be returned on output.
+        /// </summary>
+        [JsonProperty(PropertyName = "consecutive_failure_count")]
+        public string FailCount { get; set; }
         /// <summary>
         /// The Source of the recurring gift created in MinistryPlatform (Credit Card/Last 4/Visa).  This is not required or used on input, but will be returned on output.
         /// </summary>
