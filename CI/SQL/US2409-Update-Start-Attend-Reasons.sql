@@ -4,7 +4,7 @@ GO
 -- Add the Attribute Type
 IF NOT EXISTS (SELECT * FROM Attribute_Types WHERE Attribute_Type='StartAttendReason')
 BEGIN
-        SET @IDENTITY_INSERT [dbo].[Attribute_Types] ON
+        SET IDENTITY_INSERT [dbo].[Attribute_Types] ON
 	 
 	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type_ID], [Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
 	VALUES (59, 'StartAttendReason', '1', 'True')
