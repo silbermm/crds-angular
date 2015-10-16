@@ -157,8 +157,11 @@ namespace MinistryPlatform.Translation.Services
             var responseId = CreateFormResponse(form, token);
             foreach (var answer in form.FormAnswers)
             {
-                answer.FormResponseId = responseId;
-                CreateFormAnswer(answer, token);
+                if (answer.Response != null)
+                {
+                    answer.FormResponseId = responseId;
+                    CreateFormAnswer(answer, token);
+                }
             }
             return responseId;
         }

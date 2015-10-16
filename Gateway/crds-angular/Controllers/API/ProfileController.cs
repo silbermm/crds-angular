@@ -86,7 +86,9 @@ namespace crds_angular.Controllers.API
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("Save Trip Application Data Invalid", new InvalidOperationException("Invalid Save Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
             }
 
             return Authorized(t =>

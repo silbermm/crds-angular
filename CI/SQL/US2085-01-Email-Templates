@@ -23,7 +23,7 @@ VALUES
   (
      12986
     ,5
-    ,'Congrats! You're now a trip participant'
+    ,'Congrats! You are now a trip participant'
     ,'The trip admin has just added you to the trip!'
     ,1
     ,GetDate()
