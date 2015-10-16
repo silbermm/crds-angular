@@ -175,7 +175,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var recurringGiftValues = new Dictionary<string, object>
             {
-                {"Consecutive_Failure_Count", failCount + 1}
+                {"Consecutive_Failure_Count", failCount}
             };
 
             try
@@ -818,7 +818,7 @@ namespace MinistryPlatform.Translation.Services
         public void ProcessRecurringGiftDeclinedEmail(string subscriptionId)
         {
             var recurringGift = GetRecurringGiftForSubscription(subscriptionId);
-            UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount);
+            UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount + 1);
 
             var acctType = GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
             var paymentType = PaymentType.getPaymentType(acctType).name;

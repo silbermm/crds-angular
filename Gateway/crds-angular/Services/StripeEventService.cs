@@ -71,6 +71,7 @@ namespace crds_angular.Services
                 return;
             }
             var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
+            _mpDonorService.UpdateRecurringGiftFailureCount(createDonation.RecurringGiftId.Value, Constants.ResetFailCount);
             var charge = _paymentService.GetCharge(invoice.Charge);
 
             var donationStatus = charge.Status == "succeeded" ? DonationStatus.Succeeded : DonationStatus.Pending;
