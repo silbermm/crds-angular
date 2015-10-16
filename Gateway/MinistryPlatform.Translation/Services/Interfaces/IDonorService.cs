@@ -21,7 +21,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
         void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
-        void SendEmail(int emailTemplate, int donorId, int donationAmount, string donationType, DateTime donationDate, string programName, string emailReason);
+        void SendEmail(int emailTemplate, int donorId, decimal donationAmount, string donationType, DateTime donationDate, string programName, string emailReason, string frequency = null);
         ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
         string CreateHashedAccountAndRoutingNumber(string accountNumber, string routingNumber);
         string DecryptCheckValue(string value);
@@ -37,5 +37,9 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
         int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId);
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
+        void ProcessRecurringGiftDeclinedEmail(string subscription_id);
+        void UpdateRecurringGiftFailureCount(int recurringGiftId, int failureCount);
+        void UpdateRecurringGift(int pageView, string token, int recurringGiftId, Dictionary<string, object> recurringGiftValues);
+        int GetDonorAccountPymtType(int donorAccountId);
     }
 }

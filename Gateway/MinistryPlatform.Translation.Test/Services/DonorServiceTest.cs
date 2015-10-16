@@ -49,6 +49,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdDonationDistributions")).Returns(516);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGifts")).Returns(45243);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftBySubscription")).Returns(45208);
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DonorAccountPageView")).Returns(524);
             _configuration.Setup(mocked => mocked.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView")).Returns(45209);
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configuration.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
@@ -1093,12 +1094,14 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void TestGetRecurringGiftForSubscription()
         {
+            const decimal amt = 456;
+
             var lookupResult = new List<Dictionary<string, object>>
             {
                 new Dictionary<string, object>
                 {
                     {"Donor_ID", 123},
-                    {"Amount", 456},
+                    {"Amount", amt},
                     {"Program_ID", "444"},
                     {"Congregation_ID", 555},
                     {"Account_Type_ID", 3},
@@ -1391,6 +1394,27 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void TestGetDonorAccountPymtType()
+        {
+            const int donorAcct = 123;
+            const int donorId = 12345;
+            const int acct = 2;
+
+            var donorAccount = new Dictionary<string, object>
+            {
+                {"Donor_ID", donorId},
+                {"Donor_Account_ID", donorAcct},
+                {"Account_Type_ID", acct}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(298, donorAcct, It.IsAny<string>(), false)).Returns(donorAccount);
+            var result = _fixture.GetDonorAccountPymtType(donorAcct);
+
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(donorAccount["Account_Type_ID"], result);
+        }
+
         public void TestUpdateRecurringGiftDonorAccount()
         {
             const string authUserToken = "auth";

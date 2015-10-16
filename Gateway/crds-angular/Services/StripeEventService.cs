@@ -58,10 +58,10 @@ namespace crds_angular.Services
             _donationService.ProcessDeclineEmail(charge.Id);
         }
 
-        public void InvoiceCreated(DateTime? eventTimestamp, StripeInvoice invoice)
+        public void InvoicePaymentSucceeded(DateTime? eventTimestamp, StripeInvoice invoice)
         {
-            _logger.Debug(string.Format("Processing invoice.created event for subscription id {0}", invoice.Subscription));
-            if (string.IsNullOrWhiteSpace(invoice.Charge) && invoice.Amount <= 0)
+            _logger.Debug(string.Format("Processing invoice.payment_succeeded event for subscription id {0}", invoice.Subscription));
+            if (string.IsNullOrWhiteSpace(invoice.Charge) || invoice.Amount <= 0)
             {
                 _logger.Info(string.Format("No charge or amount on invoice {0} for subscription {1} - this is likely a trial-period donation, skipping", invoice.Id, invoice.Subscription));
                 if (_logger.IsDebugEnabled)
@@ -71,6 +71,7 @@ namespace crds_angular.Services
                 return;
             }
             var createDonation = _donorService.GetRecurringGiftForSubscription(invoice.Subscription);
+            _mpDonorService.UpdateRecurringGiftFailureCount(createDonation.RecurringGiftId.Value, Constants.ResetFailCount);
             var charge = _paymentService.GetCharge(invoice.Charge);
 
             var donationStatus = charge.Status == "succeeded" ? DonationStatus.Succeeded : DonationStatus.Pending;
@@ -95,12 +96,17 @@ namespace crds_angular.Services
                                                                 (int)donationStatus);
          }
 
+        private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
+        {
+            _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
+        }
+
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)
         {
             _logger.Debug("Processing transfer.paid event for transfer id " + transfer.Id);
 
             var response = new TransferPaidResponseDTO();
-
+            
             // Don't process this transfer if we already have a batch for the same transfer id
             var existingBatch = _donationService.GetDonationBatchByProcessorTransferId(transfer.Id);
             if (existingBatch != null)
@@ -253,8 +259,11 @@ namespace crds_angular.Services
                     case "transfer.paid":
                         response = TransferPaid(stripeEvent.Created, ParseStripeEvent<StripeTransfer>(stripeEvent.Data));
                         break;
-                    case "invoice.created":
-                        InvoiceCreated(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
+                    case "invoice.payment_succeeded":
+                        InvoicePaymentSucceeded(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
+                        break;
+                    case "invoice.payment_failed":
+                        InvoicePaymentFailed(stripeEvent.Created, ParseStripeEvent<StripeInvoice>(stripeEvent.Data));
                         break;
                     default:
                         _logger.Debug("Ignoring event " + stripeEvent.Type);
