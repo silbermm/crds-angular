@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  var attributes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
+
   module.exports = TripRoutes;
 
   TripRoutes.$inject = ['$stateProvider', '$urlMatcherFactoryProvider', '$locationProvider'];
@@ -41,11 +43,12 @@
               tripParticipantId: $stateParams.eventParticipantId
             }).$promise;
           },
+
           Meta: function(TripParticipant, $state) {
             TripParticipant.$promise.then(
               function() {
-                $state.next.data.meta.title =
-                  TripParticipant.participantName+' - '+TripParticipant.trips[0].tripName;
+                $state.next.data.meta.title = TripParticipant.participantName +
+                  ' - ' + TripParticipant.trips[0].tripName;
               });
           }
         }
@@ -117,7 +120,8 @@
 
           Family: function(Trip, $stateParams) {
             return Trip.Family.query({pledgeCampaignId: $stateParams.campaignId}).$promise;
-          }
+          },
+
         }
       })
       .state('tripsignup.application', {
@@ -155,12 +159,6 @@
             return Profile.Person.get({contactId: cid}).$promise;
           },
 
-          Lookup: 'Lookup',
-
-          WorkTeams: function(Trip) {
-            return Trip.WorkTeams.query().$promise;
-          },
-
           pageId: function() {
             return 0;
           }
@@ -178,6 +176,54 @@
         },
 
         controller: 'SignupStepController as signupStep',
+        resolve: {
+          AttributeTypeService: 'AttributeTypeService',
+          $stateParams: '$stateParams',
+          ScrubTopSizes: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '2') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.SCRUB_TOP_SIZES }).$promise;
+            }
+
+            return null;
+          },
+
+          ScrubBottomSizes: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '2') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.SCRUB_BOTTOM_SIZES }).$promise;
+            }
+
+            return;
+          },
+
+          TshirtSizes: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '2') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.TSHIRT_SIZES }).$promise;
+            }
+
+            return;
+          },
+
+          InternationalExperience: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '6') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.INTERNATIONAL_EXPERIENCE }).$promise;
+            }
+
+            return;
+          },
+         
+          AbuseHistory: function(AttributeTypeService, $stateParams) {
+            if ($stateParams.stepId === '6') {
+              return AttributeTypeService.AttributeTypes().get({ id: attributes.ABUSE_HISTORY }).$promise;
+            }
+
+            return;
+          },
+
+          WorkTeams: function(Trip) {
+            return Trip.WorkTeams.query().$promise;
+          },
+
+        }
       });
   }
 

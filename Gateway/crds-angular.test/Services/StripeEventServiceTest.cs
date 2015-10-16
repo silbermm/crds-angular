@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -6,6 +7,7 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -425,11 +427,12 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestInvoicePaymentFailed()
+        public void TestInvoicePaymentFailedNoCancel()
         {
             const string processorId = "cus_123";
+            const string id = "9876";
             const string subscriptionId = "sub_123";
-            const int failCount = 0;
+            const string charge = "ch_2468";
             const int recurringGiftId = 123456;
 
             var e = new StripeEvent
@@ -441,20 +444,100 @@ namespace crds_angular.test.Services
                 {
                     Object = JObject.FromObject(new StripeInvoice()
                     {
-                        Id = "9876",
+                        Id = id,
                         Customer = processorId,
-                        Charge = "ch_2468",
+                        Charge = charge,
                         Subscription = subscriptionId
                     })
                 }
             };
-            
-            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDeclinedEmail(subscriptionId));
 
+            var gift = new CreateDonationDistDto
+            {
+                Frequency = 1,
+                RecurringGiftId = recurringGiftId
+            };
+
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
+            _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(gift);
+           
+            Assert.IsNull(_fixture.ProcessStripeEvent(e));
             _fixture.ProcessStripeEvent(e);
             _mpDonorService.VerifyAll();
+        }
 
- 
+        [Test]
+        public void TestInvoicePaymentFailedCancelPlanAndSubscription()
+        {
+            const string processorId = "cus_123";
+            const string subscriptionId = "sub_123";
+            const int failCount = 2;
+            const int recurringGiftId = 123456;
+            const int donorId = 3421;
+            const int contactId = 765876;
+            const int frequency = 2;
+            const string id = "9876";
+            const string charge = "ch_2468";
+            const string planId = "Donor ID #3421 weekly"; 
+
+            var e = new StripeEvent
+            {
+                LiveMode = true,
+                Type = "invoice.payment_failed",
+                Created = DateTime.Now.AddDays(-1),
+                Data = new StripeEventData
+                {
+                    Object = JObject.FromObject(new StripeInvoice()
+                    {
+                        Id = id,
+                        Customer = processorId,
+                        Charge = charge,
+                        Subscription = subscriptionId
+                    })
+                }
+            };
+
+            var gift = new CreateDonationDistDto
+            {
+                Frequency = frequency,
+                RecurringGiftId = recurringGiftId,
+                SubscriptionId = subscriptionId,
+                ConsecutiveFailureCount =  failCount,
+                DonorId =  donorId,                
+            };
+
+             var contactDonor = new ContactDonor
+            {
+                ContactId = contactId,
+                DonorId = donorId,
+                ProcessorId = processorId
+            };
+
+             var plan = new StripePlan
+             {
+                 Id = planId
+             };
+
+             var subscription = new StripeSubscription
+             {
+                 Plan = plan
+             };
+
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
+            _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(gift);
+            _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(donorId)).Returns(contactDonor);
+            _paymentService.Setup(mocked => mocked.CancelSubscription(processorId, subscriptionId)).Returns(subscription);
+            _paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
+            _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(recurringGiftId));
+           
+
+            Assert.IsNull(_fixture.ProcessStripeEvent(e));
+            _fixture.ProcessStripeEvent(e);
+            _mpDonorService.VerifyAll();
+            _donorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+
         }
     }
 }

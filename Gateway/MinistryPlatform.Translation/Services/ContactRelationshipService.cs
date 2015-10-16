@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -12,7 +10,6 @@ namespace MinistryPlatform.Translation.Services
 {
     public class ContactRelationshipService : BaseService, IContactRelationshipService
     {
-        private readonly int _getMyFamilyViewId = Convert.ToInt32(AppSettings("MyContactFamilyRelationshipViewId"));
 
         private readonly int _getMyCurrentRelationships = Convert.ToInt32((AppSettings("MyContactCurrentRelationships")));
 
@@ -41,6 +38,28 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
+        public IEnumerable<Relationship> GetMyCurrentRelationships(int contactId)
+        {
+            var blah = _configurationWrapper.GetConfigIntValue("ContactRelationshipsIds");
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(blah, 
+                                                                         contactId, 
+                                                                         ApiLogin());
+            try
+            {
+                return viewRecords.Select(viewRecord => new Relationship
+                {
+                    RelationshipID = (int)viewRecord["Relationship_ID"],
+                    RelatedContactID = (int)viewRecord["Related_Contact_ID"],
+                    EndDate = (viewRecord["End_Date"] != null) ? viewRecord.ToDate("End_Date") : (DateTime?) null,
+                    StartDate = (DateTime)viewRecord["Start_Date"]
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
         public IEnumerable<ContactRelationship> GetMyCurrentRelationships(int contactId, string token)
         {
             var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId,
@@ -59,8 +78,32 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw e;
+                throw;
             }
         }
+
+        public int AddRelationship(Relationship relationship, int toContact )
+        {           
+            try
+            {
+                var dict = new Dictionary<string, object>
+                {
+                    {"Relationship_ID", relationship.RelationshipID},
+                    {"Related_Contact_ID", relationship.RelatedContactID},
+                    {"Start_Date", relationship.StartDate},
+                    {"End_Date", relationship.EndDate}
+                };
+                return _ministryPlatformService.CreateSubRecord(_configurationWrapper.GetConfigIntValue("ContactRelationships"),
+                                                         toContact,
+                                                         dict,
+                                                         ApiLogin(), true);
+            }
+            catch (Exception e)
+            {
+                return -1;
+            }
+            
+        }
+        
     }
 }

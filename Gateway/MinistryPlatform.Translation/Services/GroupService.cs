@@ -183,41 +183,24 @@ namespace MinistryPlatform.Translation.Services
 
         public IList<Event> getAllEventsForGroup(int groupId)
         {
-            string apiToken = ApiLogin();
-
-            // Get all the Groups->Events sub-page records
-            var mpEvents = ministryPlatformService.GetSubPageRecords(GroupsEventsPageId, groupId, apiToken);
-            if (mpEvents == null || mpEvents.Count == 0)
-            {
-                return (null);
-            }
-
             var events = new List<Event>();
-            foreach (Dictionary<string, object> e in mpEvents)
+            var apiToken = ApiLogin();
+            var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
+            if (groupEvents == null || groupEvents.Count == 0)
             {
-                // The dp_RecordID in this case is the key of the Event_Group, now need to get the Event_ID
-                object recordId = null;
-                if (e.TryGetValue("dp_RecordID", out recordId))
-                {
-                    var eventGroup = ministryPlatformService.GetRecordDict(EventsGroupsPageId,
-                                                                           (int) recordId,
-                                                                           apiToken,
-                                                                           false);
-                    if (eventGroup == null)
-                    {
-                        continue;
-                    }
-
-                    object eventId = null;
-                    if (eventGroup.TryGetValue("Event_ID", out eventId))
-                    {
-                        Event evt = new Event();
-                        evt.EventId = (int) eventId;
-                        events.Add(evt);
-                    }
-                }
+                return null;
             }
-            return (events);
+            foreach (var tmpEvent in groupEvents)
+            {
+                var newEvent = new Event();
+                newEvent.EventId = tmpEvent.ToInt("Event_ID");
+                newEvent.EventLocation = tmpEvent.ToString("Location_Name");
+                newEvent.EventStartDate = tmpEvent.ToDate("Event_Start_Date");
+                newEvent.EventTitle = tmpEvent.ToString("Event_Title");
+
+                events.Add(newEvent);
+            }
+            return events;
         }
 
         public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)

@@ -32,7 +32,6 @@
       changeProfileImage.result.then(function (croppedImage) {
         vm.path = croppedImage;
         ImageService.ProfileImage.save(croppedImage);
-
       });
 
     }

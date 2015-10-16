@@ -47,7 +47,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
-
+       
         public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
@@ -169,10 +169,20 @@ namespace MinistryPlatform.Translation.Services
             {
                 {"End_Date", DateTime.Now.Date}
             };
-
+           
             UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
+        public void CancelRecurringGift(int recurringGiftId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"End_Date", DateTime.Now.Date}
+            };
+            var apiToken = ApiLogin();
+            UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
+        }
+        
         public void UpdateRecurringGiftFailureCount(int recurringGiftId, int failCount)
         {
             var recurringGiftValues = new Dictionary<string, object>
@@ -216,7 +226,7 @@ namespace MinistryPlatform.Translation.Services
         
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
-            var pymtId = PaymentType.getPaymentType(pymtType).id;
+            var pymtId = PaymentType.GetPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
 
             var apiToken = ApiLogin();
@@ -797,7 +807,9 @@ namespace MinistryPlatform.Translation.Services
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
                         RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
-                        DonorAccountId = record.ToNullableInt("Donor_Account_ID")
+                        DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
+                        SubscriptionId = record.ToString("Subscription_ID"),
+                        ConsecutiveFailureCount = record.ToInt("Consecutive_Failure_Count")
                     };
                 }
                 
@@ -817,14 +829,15 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(MapRecordToRecurringGift).ToList();
         }
 
-        public void ProcessRecurringGiftDeclinedEmail(string subscriptionId)
+
+        public void ProcessRecurringGiftDecline(string subscriptionId)
         {
             var recurringGift = GetRecurringGiftForSubscription(subscriptionId);
             UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount + 1);
-
+            
             var acctType = GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
-            var paymentType = PaymentType.getPaymentType(acctType).name;
-            var templateId = PaymentType.getPaymentType(acctType).recurringGiftDeclineEmailTemplateId;
+            var paymentType = PaymentType.GetPaymentType(acctType).name;
+            var templateId = recurringGift.ConsecutiveFailureCount >= 2 ? PaymentType.GetPaymentType(acctType).recurringGiftCancelEmailTemplateId : PaymentType.GetPaymentType(acctType).recurringGiftDeclineEmailTemplateId;
             var frequency = recurringGift.Frequency == 1 ? "Weekly" : "Monthly";
             var program = _programService.GetProgramById(Convert.ToInt32(recurringGift.ProgramId));
             var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero);

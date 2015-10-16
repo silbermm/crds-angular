@@ -57,6 +57,7 @@
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
     <Compile Include="Contact.cs" />
+    <Compile Include="DonationAndDistributionRecord.cs" />
     <Compile Include="Pledge.cs" />
     <Compile Include="SkillAttribute.cs" />
     <Compile Include="Communication.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="PrivateInvite.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relationship.cs" />
     <Compile Include="RecurringGift.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />

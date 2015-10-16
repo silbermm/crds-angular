@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 
 namespace MinistryPlatform.Models
 {
@@ -30,5 +30,12 @@ namespace MinistryPlatform.Models
         public string Nickname { get; set; }
         public string Postal_Code { get; set; }
         public string State { get; set; }
+        public string ID_Number { get; set; }
+        public string Passport_Firstname { get; set; }
+        public string Passport_Lastname { get; set; }
+        public string Passport_Middlename { get; set; }
+        public string Passport_Country { get; set; }
+        public string Passport_Number { get; set; }
+        public DateTime? Passport_Expiration { get; set; }
     }
 }

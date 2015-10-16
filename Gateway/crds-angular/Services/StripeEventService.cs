@@ -98,7 +98,17 @@ namespace crds_angular.Services
 
         private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
         {
-            _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
+            _mpDonorService.ProcessRecurringGiftDecline(invoice.Subscription);
+            var gift = _mpDonorService.GetRecurringGiftForSubscription(invoice.Subscription);
+           
+            if (gift.ConsecutiveFailureCount >= 2)
+            {
+                var donor = _donorService.GetContactDonorForDonorId(gift.DonorId);
+
+                var subscription = _paymentService.CancelSubscription(donor.ProcessorId, gift.SubscriptionId);
+                _paymentService.CancelPlan(subscription.Plan.Id);
+                _mpDonorService.CancelRecurringGift(gift.RecurringGiftId.Value);
+            }
         }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)

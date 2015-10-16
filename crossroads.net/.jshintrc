@@ -19,9 +19,9 @@
     "undef": true,
     "unused": false,
     "strict": false,
-    "maxparams": 10,
+    "maxparams": 50,
     "maxdepth": 5,
-    "maxstatements": 40,
+    "maxstatements": 50,
     "maxcomplexity": 8,
     "maxlen": 120,
 
@@ -75,6 +75,7 @@
         "spyOn": false,
         "_$location_" : false,
         "expect" : false,
-        "addthis" : false
+        "addthis" : false,
+        "moment": false
     }
 }

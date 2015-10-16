@@ -1,3 +1,5 @@
+var attributes = require('crds-constants').ATTRIBUTE_IDS;
+var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 (function() {
   'use strict';
 
@@ -10,7 +12,6 @@
     '$state',
     'Session',
     'Campaign',
-    'WorkTeams',
     '$location',
     'Trip',
     '$q',
@@ -20,7 +21,7 @@
     'Validation',
     '$window',
     '$anchorScroll',
-    '$stateParams'
+    '$stateParams',
   ];
 
   function TripsSignupController(
@@ -30,7 +31,6 @@
       $state,
       Session,
       Campaign,
-      WorkTeams,
       $location,
       Trip,
       $q,
@@ -40,9 +40,7 @@
       Validation,
       $window,
       $anchorScroll,
-      $stateParams
-    )
-    {
+      $stateParams ) {
 
     var vm = this;
     vm.ageLimitReached = true;
@@ -51,6 +49,8 @@
     vm.commonNameRequired = commonNameRequired;
     vm.contactId = contactId;
     vm.destination = vm.campaign.nickname;
+    vm.dietSelected = dietSelected;
+    vm.frequentFlyerChanged = frequentFlyerChanged;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
     vm.hasPassport = hasPassport;
@@ -65,6 +65,7 @@
     vm.progressLabel = '';
     vm.registrationNotOpen = true;
     vm.requireInternational = requireInternational;
+    vm.showFrequentFlyer = showFrequentFlyer;
     vm.signupService = TripsSignupService;
     vm.skillsSelected = skillsSelected;
     vm.spiritualSelected = spiritualSelected;
@@ -75,7 +76,6 @@
     vm.phoneFormat = vm.validation.phoneFormat();
     vm.viewReady = false;
     vm.whyPlaceholder = '';
-    vm.workTeams = WorkTeams;
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
     $scope.$on('$viewContentLoaded', stateChangeSuccess);
@@ -87,7 +87,9 @@
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
     function activate() {
-
+      
+      vm.signupService.person = Person;
+      
       if (vm.signupService.campaign === undefined) {
         vm.signupService.reset(vm.campaign);
       }
@@ -134,14 +136,40 @@
       toTop();
     }
 
+    function checkboxSelected(attributeTypeId) {
+      var checked =
+        _.filter(vm.signupService.person.attributeTypes[attributeTypeId].attributes, function(skill) {
+        return skill.selected;
+      });
+
+      if (checked.length > 0) {
+        return true;
+      }
+
+      return false;
+
+    }
+
     function commonNameRequired() {
-      switch (vm.signupService.page4.lottery.value) {
+      switch (vm.signupService.page4.lottery) {
         case null:
           return false;
         case 'As long as I am selected, I will go on the trip.':
           return false;
         default:
           return true;
+      }
+    }
+
+    function dietSelected() {
+      return checkboxSelected(attributeTypes.DIETARY_RESTRICTIONS);
+    }
+
+    function frequentFlyerChanged(flyer) {
+      if (!_.isEmpty(flyer.notes)) {
+        flyer.selected = true; 
+      } else {
+        flyer.selected = false;
       }
     }
 
@@ -181,12 +209,10 @@
       }
     }
 
-    function onBeforeUnload() {
-      $log.debug('onBeforeUnload start');
-      if (vm.tpForm.$dirty) {
-        return '';
-      }
+    function hasPassport() {
+      return (vm.signupService.page6.validPassport === 'yes');
     }
+
 
     function isIndia() {
       if (vm.destination === 'India') {
@@ -218,6 +244,13 @@
       }
 
       return false;
+    }
+
+    function onBeforeUnload() {
+      $log.debug('onBeforeUnload start');
+      if (vm.tpForm.$dirty) {
+        return '';
+      }
     }
 
     function preliminaryAgeCheck() {
@@ -268,10 +301,6 @@
       });
     }
 
-    function hasPassport() {
-      return (vm.signupService.page6.validPassport.value === 'yes');
-    }
-
     function progressLabel() {
       return vm.profileData.person.nickName + ' ' + vm.profileData.person.lastName;
     }
@@ -311,6 +340,7 @@
     }
 
     function saveData() {
+      
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
@@ -319,7 +349,7 @@
       });
 
       var application = new vm.signupService.TripApplication();
-      application.contactId = vm.signupService.contactId;
+      application.contactId = vm.signupService.person.contactId;
       application.pledgeCampaignId = vm.signupService.campaign.id;
       application.pageTwo = vm.signupService.page2;
       application.pageThree = vm.signupService.page3;
@@ -346,35 +376,31 @@
       $state.go('tripsignup.application.thankyou');
     }
 
-    function skillsSelected() {
-      if (vm.signupService.page5.professionalSkillBusiness.value ||
-          vm.signupService.page5.professionalSkillConstruction.value ||
-          vm.signupService.page5.professionalSkillDental.value ||
-          vm.signupService.page5.professionalSkillEducation.value ||
-          vm.signupService.page5.professionalSkillInformationTech.value ||
-          vm.signupService.page5.professionalSkillMedia.value ||
-          vm.signupService.page5.professionalSkillMedical.value ||
-          vm.signupService.page5.professionalSkillMusic.value ||
-          vm.signupService.page5.professionalSkillPhotography.value ||
-          vm.signupService.page5.professionalSkillSocialWorker.value ||
-          vm.signupService.page5.professionalSkillStudent.value ||
-          vm.signupService.page5.professionalSkillOther.value)
-      {
-        return true;
+    function showFrequentFlyer(airline) {
+      if (airline.attributeId === attributes.SOUTHAFRICA_FREQUENT_FLYER) {
+        if (isSouthAfrica()) {
+          return true;
+        }
+        return false;
       }
 
-      return false;
+      if(airline.attributeId === attributes.US_FREQUENT_FLYER) {
+        if (isNica()) {
+          return true;
+        }
+
+        return false;
+      }
+      
+      return true;
+    }
+
+    function skillsSelected() {
+      return checkboxSelected(attributeTypes.TRIP_SKILLS);
     }
 
     function spiritualSelected() {
-      if (vm.signupService.page2.spiritualLifeSearching.value ||
-          vm.signupService.page2.spiritualLifeReceived.value ||
-          vm.signupService.page2.spiritualLifeObedience.value ||
-          vm.signupService.page2.spiritualLifeReplicating.value) {
-        return true;
-      }
-
-      return false;
+      return checkboxSelected(attributeTypes.SPIRITUAL_JOURNEY);
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
@@ -392,6 +418,8 @@
           event.preventDefault();
           $state.go('tripsignup', {campaignId: toParams.campaignId});
         }
+
+        return;
       }
 
       if (toState.name === 'tripsignup') {

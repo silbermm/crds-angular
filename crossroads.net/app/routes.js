@@ -86,24 +86,24 @@
       })
       .state('login', {
         parent: 'noSideBar',
-        url: '/login',
+        url: '/signin',
         templateUrl: 'login/login_page.html',
         controller: 'LoginCtrl',
         data: {
           isProtected: false,
           meta: {
-            title: 'Login',
+            title: 'Sign In',
             description: ''
           }
         }
       })
       .state('logout', {
-        url: '/logout',
+        url: '/signout',
         controller: 'LogoutController',
         data: {
           isProtected: false,
           meta: {
-            title: 'Logout',
+            title: 'Sign out',
             description: ''
           }
         }
