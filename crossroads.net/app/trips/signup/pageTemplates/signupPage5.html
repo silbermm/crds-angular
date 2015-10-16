@@ -33,6 +33,7 @@
         </div>
         <div class="form-group col-sm-6" collapse="!isCollapsed" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorLastName') }">
           <label for="sponsor-lastname" class="control-label" ng-class="{'required': tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes' }">Child's Last Name</label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildLastName" type="text" class="form-control" name="sponsorLastName" id="sponsor-lastname" placeholder="Enter sponsored child's last name" ng-required="tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes'">
           <ng-messages for="tripsSignup.tripAppPage5.sponsorLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorLastName')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -43,6 +44,7 @@
       <div class="row">
         <div class="form-group col-sm-6" collapse="!isCollapsed" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorNumber') }">
           <label for="sponsor-number" class="control-label" ng-class="{'required': tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes' }">Child's Sponsorship Number</label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildNumber" type="text" class="form-control" name="sponsorNumber" id="sponsor-number" placeholder="Enter sponsored child's id number" ng-required="tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes'">
           <ng-messages for="tripsSignup.tripAppPage5.sponsorNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorNumber')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -52,27 +54,24 @@
       </div>
     </div><!--/#child sponsor-->
 
-
       <legend>
         Skills &amp; Experience
       </legend>
 
+      <div class="row" ng-show="tripsSignup.isNola()">
+        <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam') }">
+          <label for="workteam-first" class="control-label" ng-class="{'required': tripsSignup.isNola() }">First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
 
-
-        <div class="row" ng-show="tripsSignup.isNola()">
-          <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam') }">
-            <label for="workteam-first" class="control-label" ng-class="{'required': tripsSignup.isNola() }">First Choice Work Team <span class="small text-muted">Kids traveling must be on the same work team as at least one parent.</span></label>
-
-            <div class="row">
-              <div class="col-sm-6">
-                <select class='form-control'
-                  id='workteam-first'
-                  ng-model="tripsSignup.signupService.page5.nolaFirstChoiceWorkTeam"
-                  ng-required="tripsSignup.isNola()"
-                  name="nolaFirstChoiceWorkTeam"
-                  ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
-                  <option value="" readonly disabled > Please select one </option>
-                </select>
+          <div class="row">
+            <div class="col-sm-6">
+              <select class='form-control'
+                      id='workteam-first'
+                      ng-model="tripsSignup.signupService.page5.nolaFirstChoiceWorkTeam"
+                      ng-required="tripsSignup.isNola()"
+                      name="nolaFirstChoiceWorkTeam"
+                      ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
+                <option value="" readonly disabled > Please select one </option>
+              </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaFirstChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>

@@ -114,8 +114,6 @@
         nolaFirstChoiceWorkTeam: null,
         nolaFirstChoiceExperience: null,
         nolaSecondChoiceWorkTeam: null,
-        //previousTripExperience: null,
-        //professionalSkills: null,
       };
     }
 
@@ -128,11 +126,6 @@
         passportLastName: null,
         passportCountry: null,
         passportNumber: null,
-        //deltaFrequentFlyer: null,
-        //southAfricanFrequentFlyer: null,
-        //junitedFrequentFlyer: null,
-        //usAirwaysFrequentFlyer: null,
-        //internationalTravelExpericence: null,
         experienceAbroad: null,
         describeExperienceAbroad: null,
         pastAbuseHistory: null,
