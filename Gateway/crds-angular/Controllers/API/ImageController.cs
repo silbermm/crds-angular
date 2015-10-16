@@ -76,17 +76,10 @@ namespace crds_angular.Controllers.API
         {
             var token = _apiUserService.GetToken();
             var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
-            Int32? fileId = null;
-            String fileName = null;
-            foreach (var file in files.Where(file => file.IsDefaultImage))
-            {
-                fileId = file.FileId;
-                fileName = file.FileName;
-                break;
-            }
-            return fileId == null ? 
-                (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found"))) : 
-                GetImage(fileId.Value, fileName, token);
+            var file = files.FirstOrDefault(f => f.IsDefaultImage);
+            return file != null ? 
+                GetImage(file.FileId, file.FileName, token) : 
+                (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
         }
 
         [Route("api/image/profile/{fileId:int=-1}")]
