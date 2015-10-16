@@ -385,10 +385,11 @@ namespace crds_angular.test.Services
             const int recurringGiftId = 654;
             const int donorAccountId = 987;
             const int donationStatus = 4;
+            const decimal amt = 789;
 
             var recurringGift = new CreateDonationDistDto
             {
-                Amount = 78900,
+                Amount = amt,
                 DonorAccountId = donorAccountId,
                 DonorId = donorId,
                 PaymentType = paymentType,
@@ -396,7 +397,8 @@ namespace crds_angular.test.Services
                 RecurringGiftId = recurringGiftId
             };
             _donorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
-
+            _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, Constants.ResetFailCount));
+       
             _mpDonorService.Setup(
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord((int) (chargeAmount/Constants.StripeDecimalConversionValue),

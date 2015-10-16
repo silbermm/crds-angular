@@ -119,12 +119,13 @@ namespace MinistryPlatform.Translation.Services
             return donorId;
         }
 
+        // TODO Need this method to accept an authorized user token in order to facilitate admin setup/edit
         public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId)
         {
             var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
-            var accountType = (giftType == "Bank") ? AccountType.Checking : AccountType.Credit;
+            var accountType = (institutionName == "Bank") ? AccountType.Checking : AccountType.Credit;
 
             try
             {
@@ -864,6 +865,8 @@ namespace MinistryPlatform.Translation.Services
                 AccountNumberLast4 = record["Account_Number"] as string,
                 InstitutionName = record["Institution_Name"] as string,
                 SubscriptionID = record["Subscription_ID"] as string,
+                ProcessorAccountId = record["Processor_Account_ID"] as string,
+                ProcessorId = record["Processor_ID"] as string
             };
         }
     }

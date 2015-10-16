@@ -30,6 +30,10 @@
       submitBankInfo: submitBankInfo,
       submitChangedBankInfo: submitChangedBankInfo,
       updateDonorAndDonate: updateDonorAndDonate,
+      deleteRecurringGift: deleteRecurringGift,
+      getRecurringGift: getRecurringGift,
+      queryRecurringGifts: queryRecurringGifts,
+      updateRecurringGift: updateRecurringGift,
     };
 
     function createBank() {
@@ -95,6 +99,32 @@
             $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
       }
+    }
+
+    function updateRecurringGift(accountInfoUpdated = false) {
+      GiveTransferService.processing = true;
+
+      if (GiveTransferService.view === 'cc' && accountInfoUpdated) {
+        donationService.createCard();
+        return PaymentService.updateRecurringGiftWithCard(donationService.card, GiveTransferService.recurringGiftId);
+      } else if (GiveTransferService.view === 'bank' && accountInfoUpdated) {
+        donationService.createBank();
+        return PaymentService.updateRecurringGiftWithBankAcct(donationService.bank, GiveTransferService.recurringGiftId);
+      } else {
+        return PaymentService.updateRecurringGiftDonorOnlyInformation(GiveTransferService.recurringGiftId);
+      }
+    }
+
+    function deleteRecurringGift() {
+      return PaymentService.deleteRecurringGift(GiveTransferService.recurringGiftId);
+    }
+
+    function getRecurringGift() {
+      return PaymentService.getRecurringGift(GiveTransferService.recurringGiftId);
+    }
+
+    function queryRecurringGifts() {
+      return PaymentService.queryRecurringGifts();
     }
 
     function confirmDonation(programsInput) {

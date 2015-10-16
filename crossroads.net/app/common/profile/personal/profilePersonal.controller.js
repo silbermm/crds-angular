@@ -25,7 +25,7 @@
       Validation) {
 
     var vm = this;
-    var constants = require('crds-constants');
+    var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
@@ -91,7 +91,11 @@
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
 
-      vm.ethnicities = vm.profileData.person.attributeTypes[constants.ATTRIBUTE_TYPE_IDS.ETHNICITY].attributes;
+      vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
+      vm.startAttendReason = vm.profileData.person.singleAttributes[attributeTypeIds.START_ATTEND_REASON];
+      vm.startAttendReasons = _.find(vm.attributeTypes, function(attributeType) {
+        return attributeType.attributeTypeId === attributeTypeIds.START_ATTEND_REASON;
+      });
     }
 
     function convertHomePhone() {
