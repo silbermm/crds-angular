@@ -157,13 +157,13 @@
         views: {
           '': {
             templateUrl: 'profile/profile.html',
+            controller: 'ProfileController as profile',
             resolve: {
               loggedin: crds_utilities.checkLoggedin
             },
           },
           'personal@profile': {
             templateUrl: 'profile/profilePersonal.html',
-            controller: 'ProfileController as profile',
             data: {
               isProtected: true
             },

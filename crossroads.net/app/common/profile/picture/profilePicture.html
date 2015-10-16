@@ -1,9 +1,8 @@
-<div class="row">
-  <div class="form-group col-sm-12">
-    <label class="block required" for="profile-photo">Profile Photo</label>
-    <a class="profile-pic col-sm-2 col-xs-6" href="">
-      <img class="profile-image pull-left img-square img-responsive imgix-fluid" data-src="//crossroads-media.imgix.net/images/avatar.svg" src="//crossroads-media.imgix.net/images/avatar.svg" alt="Profile Default Photo">
+<div class="col-xs-3 col-sm-2">
+  <label for="fileInputModal" class="profile-pic" ng-click="picture.openModal()">
+      <img class="profile-image pull-left img-square img-responsive"
+        ng-src="{{picture.path}}" alt="Profile Photo"
+        err-src="{{picture.defaultImage()}}"/>
       <span class="change-photo">Change Photo</span>
-    </a>
-  </div>
+  </label>
 </div>

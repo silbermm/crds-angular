@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -15,6 +10,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using crds_angular.Util;
 using Microsoft.Ajax.Utilities;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -154,9 +150,8 @@ namespace crds_angular.Controllers.API
                     // get export file and name
                     var fileName = _gatewayDonationService.GPExportFileName(depositId);
                     var stream = _gatewayDonationService.CreateGPExport(selectionId, depositId, token);
-                    var contentType = MimeMapping.GetMimeMapping(fileName);
 
-                    return new FileResult(stream, fileName, contentType);
+                    return new FileResult(stream, fileName);
                 }
                 catch (Exception ex)
                 {
@@ -304,46 +299,6 @@ namespace crds_angular.Controllers.API
         private void SendMessageFromDonor(int pledgeId, string message)
         {
             _mpDonationService.SendMessageFromDonor(pledgeId, message);
-        }
-    }
-
-    internal class FileResult : IHttpActionResult
-    {
-        private readonly MemoryStream _stream;
-        private readonly string _fileName;
-        private readonly string _contentType;
-
-        public FileResult(MemoryStream stream, string fileName, string contentType = null)
-        {
-            if (stream == null)
-            {
-                throw new ArgumentNullException("stream");
-            }
-
-            _stream = stream;
-            _fileName = fileName;
-            _contentType = contentType;
-        }
-
-        public Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
-        {
-            return Task.Run(() =>
-            {
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StreamContent(_stream)
-                };
-
-                var contentType = _contentType;
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(contentType);
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = _fileName
-                };
-
-                return response;
-            },
-                            cancellationToken);
         }
     }
 }

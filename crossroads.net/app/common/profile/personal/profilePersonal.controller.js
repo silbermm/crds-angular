@@ -56,8 +56,6 @@
     ////////////////////////////////
 
     function activate() {
-      vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
-
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;

@@ -3,6 +3,7 @@ using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
@@ -194,6 +195,41 @@ namespace MinistryPlatform.Translation.Services
             VoidCall(token, platformClient => platformClient.RemoveFromSelection(selectionId, records));
         }
 
+        public void UpdateFile(Int32 fileId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token)
+        {
+            VoidCall(token, platformClient => 
+                platformClient.UpdateFile(fileId, fileName, description, isDefaultImage, longestDimension, file));
+        }
+
+        public FileDescription CreateFile(String pageName, Int32 recordId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token)
+        {
+            var result = Call<FileDescription>(token, platformClient =>
+                platformClient.CreateFile(GetMinistryPlatformId(pageName), recordId, fileName, description, isDefaultImage, longestDimension, file));
+            return result;
+        }
+
+        public Stream GetFile(Int32 fileId, String token)
+        {
+            var result = Call<Stream>(token, platformClient => platformClient.GetFile(fileId, false));
+            return result;
+        }
+
+        public FileDescription GetFileDescription(Int32 fileId, String token)
+        {
+            var result = Call<FileDescription>(token, platformClient => platformClient.GetFileDescription(fileId));
+            return result;
+        }
+
+        public FileDescription[] GetFileDescriptions(String pageName, Int32 recordId, String token)
+        {
+            var result = Call<FileDescription[]>(token,
+                platformClient => platformClient.GetFileDescriptions(GetMinistryPlatformId(pageName), recordId));
+            return result;
+        }
+
+        /*
+         * Think carefully before using, in most cases we don't want to delete records, but end date them, or mark them as inactive
+         */
         public int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token)
         {
             VoidCall(token,

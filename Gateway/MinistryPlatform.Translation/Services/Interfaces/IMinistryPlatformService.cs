@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using MinistryPlatform.Translation.PlatformService;
 using Newtonsoft.Json.Linq;
 
@@ -46,6 +47,23 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
         void UpdateSubRecord(int subPageId, Dictionary<string, object> dictionary, String token);
+
+        void UpdateFile(Int32 fileId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token);
+        
+        FileDescription CreateFile(String pageName,
+                                          Int32 recordId,
+                                          String fileName,
+                                          String description,
+                                          Boolean isDefaultImage,
+                                          Int32 longestDimension,
+                                          Byte[] file,
+                                          String token);
+
+        Stream GetFile(Int32 fileId, String token);
+
+        FileDescription GetFileDescription(Int32 fileId, String token);
+
+        FileDescription[] GetFileDescriptions(String pageName, Int32 recordId, String token);
 
         List<Dictionary<string, object>> GetSubpageViewRecords(int viewId, int recordId, string token, string searchString="", string sort="", int top=0);
         List<Dictionary<string, object>> GetSubpageViewRecords(string viewKey, int recordId, string token, string searchString = "", string sort = "", int top = 0);
