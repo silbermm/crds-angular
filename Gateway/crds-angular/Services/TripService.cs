@@ -634,7 +634,7 @@ namespace crds_angular.Services
             //answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
             //answers.Add(new FormAnswer { Response = page2.SpiritualLifeSearching, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeSearching") });
             //answers.Add(new FormAnswer { Response = page2.TshirtSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.TshirtSize") });
-            answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
+            //answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
             answers.Add(new FormAnswer { Response = page2.Why, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Why") });
 
             var page3 = applicationData.PageThree;
@@ -654,7 +654,7 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page4.WhyGroupLeader, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.WhyGroupLeader") });
 
             var page5 = applicationData.PageFive;
-            answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
+            //answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillBusiness, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillBusiness") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillConstruction, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillConstruction") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillDental, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillDental") });

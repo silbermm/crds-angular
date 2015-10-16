@@ -5,21 +5,18 @@ ALTER TABLE dbo.Attributes ALTER COLUMN [Attribute_Name] nvarchar(100) not null
 GO
 
 -- ATTRIBUTE TYPE DETAILS
-DECLARE @ATTRIBUTE_TYPE_ID int = 63;
-DECLARE @ATTRIBUTE_TYPE_VALUE varchar(50) = N'FrequentFlyer';
-DECLARE @ATTRIBUTE_TYPE_DESCRIPTION varchar(255) = N'Record your frequent flyer airlines';
+DECLARE @ATTRIBUTE_TYPE_ID int = 69;
+DECLARE @ATTRIBUTE_TYPE_VALUE varchar(50) = N'Abuse History';
+DECLARE @ATTRIBUTE_TYPE_DESCRIPTION varchar(255) = N'History of Abuse';
 
-DECLARE @ATTRIBUTE_ID_DELTA int = 3958;
-DECLARE @ATTRIBUTE_NAME_DELTA varchar(100) = N'Delta Airlines';
+DECLARE @ATTRIBUTE_ID_1 int = 3973;
+DECLARE @ATTRIBUTE_NAME_1 varchar(100) = N'Yes';
 
-DECLARE @ATTRIBUTE_ID_SA int = 3959;
-DECLARE @ATTRIBUTE_NAME_SA varchar(100) = N'South Africa Airlines';
+DECLARE @ATTRIBUTE_ID_2 int = 3974;
+DECLARE @ATTRIBUTE_NAME_2 varchar(100) = N'No';
 
-DECLARE @ATTRIBUTE_ID_UNITED int = 3960;
-DECLARE @ATTRIBUTE_NAME_UNITED varchar(100) = N'United Airlines';
-
-DECLARE @ATTRIBUTE_ID_US int = 3980;
-DECLARE @ATTRIBUTE_NAME_US varchar(100) = N'US Airlines';
+DECLARE @ATTRIBUTE_ID_3 int = 3975;
+DECLARE @ATTRIBUTE_NAME_3 varchar(100) = N'I''d rather talk to someone confidentially';
 
 IF EXISTS (Select 1 FROM [dbo].[Attribute_Types] WHERE [Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID)
 	BEGIN
@@ -51,13 +48,13 @@ ELSE
 			SET IDENTITY_INSERT [dbo].[Attribute_Types] OFF
 	END
 
-IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_DELTA)
+IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_1)
 	BEGIN
 		UPDATE [dbo].[Attributes]
-		   SET [Attribute_Name] = @ATTRIBUTE_NAME_DELTA
+		   SET [Attribute_Name] = @ATTRIBUTE_NAME_1
 			   ,[Domain_ID] = 1
 			   ,[Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID
-		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_DELTA
+		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_1
 	END
 ELSE
 	BEGIN
@@ -68,45 +65,20 @@ ELSE
 				   ,[Domain_ID]
 				   ,[Attribute_Type_ID])
 			 VALUES
-				   (@ATTRIBUTE_ID_DELTA
-				   ,@ATTRIBUTE_NAME_DELTA
+				   (@ATTRIBUTE_ID_1
+				   ,@ATTRIBUTE_NAME_1
 				   ,1
 				   ,@ATTRIBUTE_TYPE_ID)
 			SET IDENTITY_INSERT [dbo].[Attributes] OFF
 	END
 
-
-IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_SA)
+IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_2)
 	BEGIN
 		UPDATE [dbo].[Attributes]
-		   SET [Attribute_Name] = @ATTRIBUTE_NAME_SA
+		   SET [Attribute_Name] = @ATTRIBUTE_NAME_2
 			   ,[Domain_ID] = 1
 			   ,[Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID
-		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_SA
-	END
-ELSE
-	BEGIN
-				SET IDENTITY_INSERT [dbo].[Attributes] ON
-		INSERT INTO [dbo].[Attributes]
-				   ( [Attribute_ID]
-				   ,[Attribute_Name]
-				   ,[Domain_ID]
-				   ,[Attribute_Type_ID])
-			 VALUES
-				   (@ATTRIBUTE_ID_SA
-				   ,@ATTRIBUTE_NAME_SA
-				   ,1
-				   ,@ATTRIBUTE_TYPE_ID)
-			SET IDENTITY_INSERT [dbo].[Attributes] OFF
-	END
-
-IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_UNITED)
-	BEGIN
-		UPDATE [dbo].[Attributes]
-		   SET [Attribute_Name] = @ATTRIBUTE_NAME_UNITED
-			   ,[Domain_ID] = 1
-			   ,[Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID
-		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_UNITED
+		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_2
 	END
 ELSE
 	BEGIN
@@ -117,20 +89,20 @@ ELSE
 				   ,[Domain_ID]
 				   ,[Attribute_Type_ID])
 			 VALUES
-				   (@ATTRIBUTE_ID_UNITED
-				   ,@ATTRIBUTE_NAME_UNITED
+				   (@ATTRIBUTE_ID_2
+				   ,@ATTRIBUTE_NAME_
 				   ,1
 				   ,@ATTRIBUTE_TYPE_ID)
 			SET IDENTITY_INSERT [dbo].[Attributes] OFF
 	END
 
-IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_US)
+	IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_3)
 	BEGIN
 		UPDATE [dbo].[Attributes]
-		   SET [Attribute_Name] = @ATTRIBUTE_NAME_US
+		   SET [Attribute_Name] = @ATTRIBUTE_NAME_3
 			   ,[Domain_ID] = 1
 			   ,[Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID
-		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_US
+		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_3
 	END
 ELSE
 	BEGIN
@@ -141,8 +113,8 @@ ELSE
 				   ,[Domain_ID]
 				   ,[Attribute_Type_ID])
 			 VALUES
-				   (@ATTRIBUTE_ID_US
-				   ,@ATTRIBUTE_NAME_US
+				   (@ATTRIBUTE_ID_3
+				   ,@ATTRIBUTE_NAME_3
 				   ,1
 				   ,@ATTRIBUTE_TYPE_ID)
 			SET IDENTITY_INSERT [dbo].[Attributes] OFF

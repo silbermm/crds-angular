@@ -83,13 +83,13 @@ namespace crds_angular.Models.Crossroads.Trip
             //[JsonProperty(PropertyName = "spiritualLifeSearching")]
             //public string SpiritualLifeSearching { get; set; }
 
-            [JsonProperty(PropertyName = "tshirtSize")]
-            [Required]
-            public string TshirtSize { get; set; }
+            //[JsonProperty(PropertyName = "tshirtSize")]
+            //[Required]
+            //public string TshirtSize { get; set; }
 
-            [JsonProperty(PropertyName = "vegetarian")]
-            [Required]
-            public string Vegetarian { get; set; }
+            //[JsonProperty(PropertyName = "vegetarian")]
+            //[Required]
+            //public string Vegetarian { get; set; }
 
             [JsonProperty(PropertyName = "why")]
             [Required]
@@ -144,9 +144,9 @@ namespace crds_angular.Models.Crossroads.Trip
 
         public class ApplicationPageFive
         {
-            [JsonProperty(PropertyName = "previousTripExperience")]
-            [Required]
-            public string PreviousTripExperience { get; set; }
+            //[JsonProperty(PropertyName = "previousTripExperience")]
+            //[Required]
+            //public string PreviousTripExperience { get; set; }
 
             [JsonProperty(PropertyName = "professionaSkills")]
             public string[] ProfessionalSkills { get; set; }
