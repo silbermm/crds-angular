@@ -46,6 +46,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int DeleteRecord(int pageId, int recordId, DeleteOption[] deleteOptions, String token);
 
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
+        void UpdateSubRecord(int subPageId, Dictionary<string, object> dictionary, String token);
 
         void UpdateFile(Int32 fileId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token);
         

@@ -210,6 +210,7 @@ namespace crds_angular.Controllers.API
                                                                                      donor.ProcessorId,
                                                                                      DateTime.Now,
                                                                                      true,
+                                                                                     dto.Anonymous,
                                                                                      false,
                                                                                      null,
                                                                                      null);
@@ -265,6 +266,7 @@ namespace crds_angular.Controllers.API
                                                                                      donor.ProcessorId,
                                                                                      DateTime.Now,
                                                                                      false,
+                                                                                     dto.Anonymous,
                                                                                      false,
                                                                                      null,
                                                                                      null);

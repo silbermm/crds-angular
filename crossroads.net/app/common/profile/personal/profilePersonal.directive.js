@@ -11,6 +11,7 @@
       bindToController: true,
       scope: {
         allowPasswordChange: '=',
+        attributeTypes: '=?',
         buttonCss: '@',
         buttonText: '=',
         contactId: '=?',

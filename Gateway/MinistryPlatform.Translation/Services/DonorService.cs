@@ -29,6 +29,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftBySubscription;
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
+        private readonly int _myHouseholdRecurringGiftsApiPageView;
 
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -66,6 +67,7 @@ namespace MinistryPlatform.Translation.Services
             _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
+            _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
         }
 
 
@@ -101,32 +103,28 @@ namespace MinistryPlatform.Translation.Services
             {
                 throw new ApplicationException(string.Format("CreateDonorRecord failed.  Contact Id: {0}", contactId), e);
             }
-
-            // Create a new DonorAccount for this donor, if we have account info
-            if (donorAccount != null)
+   
+            if (donorAccount!= null)
             {
                 CreateDonorAccount(DefaultInstitutionName,
                                    DonorAccountNumberDefault,
                                    DonorRoutingNumberDefault,
+                                   donorAccount.EncryptedAccount,
                                    donorId,
                                    donorAccount.ProcessorAccountId,
                                    processorId);
             }
+            
             return donorId;
         }
 
-        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, int donorId, string processorAcctId, string processorId)
+        // TODO Need this method to accept an authorized user token in order to facilitate admin setup/edit
+        public int CreateDonorAccount(string giftType, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId)
         {
-           var apiToken = ApiLogin();
-
-            string encryptedAcct = null;
-            if (routingNumber != DonorRoutingNumberDefault)
-            {
-                encryptedAcct = CreateHashedAccountAndRoutingNumber(acctNumber, routingNumber);
-            }
+            var apiToken = ApiLogin();
 
             var institutionName = giftType ?? DefaultInstitutionName;
-            var accountType = (giftType == null) ? AccountType.Checking : AccountType.Credit;
+            var accountType = (institutionName == "Bank") ? AccountType.Checking : AccountType.Credit;
 
             try
             {
@@ -154,7 +152,46 @@ namespace MinistryPlatform.Translation.Services
            
         }
 
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
+        public void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"Donor_Account_ID", donorAccountId}
+            };
+
+            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+        }
+
+        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"End_Date", DateTime.Now.Date}
+            };
+
+            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+        }
+
+        private void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
+        {
+            recurringGiftValues["Recurring_Gift_ID"] = recurringGiftId;
+
+            try
+            {
+                _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                    string.Format(
+                        "Update Recurring Gift Donor Account failed.  Recurring Gift Id: {0}, Updates: {1}"
+                        , recurringGiftId
+                        , string.Join(";", recurringGiftValues)),
+                    e);
+            }
+            
+        }
+        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
             var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
@@ -170,6 +207,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donation_Date", setupTime},
                 {"Transaction_code", chargeId},
                 {"Registered_Donor", registeredDonor},
+                {"Anonymous", anonymous},
                 {"Processor_ID", processorId },
                 {"Donation_Status_Date", setupTime},
                 {"Donation_Status_ID", donationStatus ?? 1}, //hardcoded to pending if no status specified
@@ -636,7 +674,7 @@ namespace MinistryPlatform.Translation.Services
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
 
-        public int CreateRecurringGiftRecord(int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
+        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
         {
             int? dayOfWeek = null;
             int? dayOfMonth = null;
@@ -666,11 +704,10 @@ namespace MinistryPlatform.Translation.Services
                 {"Subscription_ID", subscriptionId}
             };
 
-            var apiToken = ApiLogin();
             int recurringGiftId;
             try
             {
-                recurringGiftId = _ministryPlatformService.CreateRecord(_recurringGiftPageId, values, apiToken, true);
+                recurringGiftId = _ministryPlatformService.CreateRecord(_myHouseholdDonationRecurringGifts, values, authorizedUserToken, true);
             }
             catch (Exception e)
             {
@@ -678,6 +715,42 @@ namespace MinistryPlatform.Translation.Services
             }
 
             return recurringGiftId;
+        }
+
+        public CreateDonationDistDto GetRecurringGiftById(string authorizedUserToken, int recurringGiftId)
+        {
+            var searchStr = string.Format("\"{0}\",", recurringGiftId);
+            CreateDonationDistDto createDonation = null;
+            try
+            {
+                var records = _ministryPlatformService.GetPageViewRecords(_myHouseholdRecurringGiftsApiPageView, authorizedUserToken, searchStr);
+                if (records != null && records.Any())
+                {
+                    var record = records.First();
+                    createDonation = new CreateDonationDistDto
+                    {
+                        RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
+                        DonorId = record.ToInt("Donor_ID"),
+                        Frequency = record.ToInt("Frequency_ID"),
+                        DayOfWeek = record.ToInt("Day_Of_Week_ID"),
+                        DayOfMonth = record.ToInt("Day_Of_Month"),
+                        StartDate = record.ToDate("Start_Date"),
+                        Amount = (int)((record["Amount"] as decimal? ?? 0.00M) * Constants.StripeDecimalConversionValue),
+                        ProgramId = record.ToString("Program_ID"),
+                        CongregationId = record.ToInt("Congregation_ID"),
+                        PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
+                        DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
+                        SubscriptionId = record.ToString("Subscription_ID")
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(
+                    string.Format("GetRecurringGift failed.  Recurring Gift Id: {0}", recurringGiftId), ex);
+            }
+
+            return createDonation;
         }
 
         public CreateDonationDistDto GetRecurringGiftForSubscription(string subscription)
@@ -728,17 +801,20 @@ namespace MinistryPlatform.Translation.Services
                 RecurringGiftId = record["Recurring_Gift_ID"] as int? ?? 0,
                 DonorID = record["Donor_ID"] as int? ?? 0,
                 EmailAddress = record["User_Email"] as string,
-                Frequency = record["Frequency"] as string,
+                Frequency = (record["Frequency"] as string ?? string.Empty).Trim(),
                 Recurrence = record["Recurrence"] as string,
                 StartDate = record["Start_Date"] as DateTime? ?? DateTime.Now,
-                EndDate = record["End_Date"] as DateTime? ?? DateTime.Now,
+                EndDate = record["End_Date"] as DateTime?,
                 Amount = record["Amount"] as decimal? ?? 0,
+                ProgramID = record["Program_ID"] as int? ?? 0,
                 ProgramName = record["Program_Name"] as string,
                 CongregationName = record["Congregation_Name"] as string,
                 AccountTypeID = record["Account_Type_ID"] as int? ?? 0,
                 AccountNumberLast4 = record["Account_Number"] as string,
                 InstitutionName = record["Institution_Name"] as string,
                 SubscriptionID = record["Subscription_ID"] as string,
+                ProcessorAccountId = record["Processor_Account_ID"] as string,
+                ProcessorId = record["Processor_ID"] as string
             };
         }
     }

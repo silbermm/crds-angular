@@ -1,21 +1,20 @@
 using System.Collections.Generic;
 using crds_angular.App_Start;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services.Interfaces;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 
 namespace crds_angular.test.Services
 {
-    internal class PersonServiceTest
+    internal class PersonServiceTest_opportunityService
     {
         private Mock<IContactAttributeService> _contactAttributeService;
-        private Mock<IContactRelationshipService> _contactRelationshipService;        
-        private Mock<IContactService> _contactService;
-        private Mock<IOpportunityService> _opportunityService;
-        private Mock<IAuthenticationService> _authenticationService;
-        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
+        private Mock<MPInterfaces.IContactService> _contactService;
+        private Mock<MPInterfaces.IAuthenticationService> _authenticationService;        
 
         private PersonService _fixture;
         private MyContact _myContact;
@@ -26,12 +25,11 @@ namespace crds_angular.test.Services
         public void SetUp()
         {
             _contactAttributeService = new Mock<IContactAttributeService>();
-            _contactRelationshipService = new Mock<IContactRelationshipService>();
-            _contactService = new Mock<IContactService>();            
-            _opportunityService = new Mock<IOpportunityService>();
-            _authenticationService = new Mock<IAuthenticationService>();
-            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
-            
+            var contactAllAttributesDto = new ContactAllAttributesDTO();
+            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<int>())).Returns(contactAllAttributesDto);
+            new Mock<MPInterfaces.IContactRelationshipService>();
+            _contactService = new Mock<MPInterfaces.IContactService>();            
+            _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();            
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             _myContact = new MyContact

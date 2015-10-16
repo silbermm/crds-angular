@@ -9,6 +9,7 @@ using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using RestSharp.Extensions;
 
@@ -33,16 +34,17 @@ namespace crds_angular.Services
             _contentBlockService = contentBlockService;
         }
 
-        private static bool IsBadResponse(IRestResponse response)
+        private static bool IsBadResponse(IRestResponse response, bool errorNotFound = false)
         {
-            return (response.ResponseStatus != ResponseStatus.Completed 
+            return (response.ResponseStatus != ResponseStatus.Completed
+                    || (errorNotFound && response.StatusCode == HttpStatusCode.NotFound)
                     || response.StatusCode == HttpStatusCode.BadRequest
                     || response.StatusCode == HttpStatusCode.PaymentRequired);
         }
 
-        private void CheckStripeResponse(string errorMessage, IRestResponse response)
+        private void CheckStripeResponse(string errorMessage, IRestResponse response, bool errorNotFound = false)
         {
-            if (!IsBadResponse(response))
+            if (!IsBadResponse(response, errorNotFound))
             {
                 return;
             }
@@ -106,6 +108,16 @@ namespace crds_angular.Services
             return response.Data;
         }
 
+        public StripeCustomer GetCustomer(string customerId)
+        {
+            var request = new RestRequest(string.Format("/customers/{0}", customerId));
+
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer creation failed", response);
+
+            return response.Data;
+        }
+
         public string CreateToken(string accountNumber, string routingNumber)
         {
             var request = new RestRequest("tokens", Method.POST);
@@ -159,6 +171,29 @@ namespace crds_angular.Services
             return sourceData;
         }
 
+        public StripeSubscription CancelSubscription(string customerId, string subscriptionId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.DELETE);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Stripe Subscription Cancel failed", response, true);
+
+            return (response.Data);
+        }
+
+        public StripePlan CancelPlan(string planId)
+        {
+            // We need to replace "/" with the URL-encoded "%2F" b/c our plan IDs have slashes in them, but this is
+            // part of the URI, which means it will not work properly if not encoded.
+            // For example: "2015344 10/13/2015 10:57:17"
+            var request = new RestRequest(string.Format("plans/{0}", planId.Replace("/", "%2F")), Method.DELETE);
+
+            var response = _stripeRestClient.Execute<StripePlan>(request);
+            CheckStripeResponse("Stripe Plan Cancel failed", response);
+
+            return (response.Data);
+        }
+
         public string UpdateCustomerDescription(string customerToken, int donorId)
         {
             var request = new RestRequest("customers/" + customerToken, Method.POST);
@@ -182,6 +217,16 @@ namespace crds_angular.Services
             var defaultSource = MapDefaultSource(sources, defaultSourceId);
 
             return defaultSource;
+        }
+
+        public SourceData GetSource(string customerId, string sourceId)
+        {
+            var customer = GetCustomer(customerId);
+            if (customer.sources == null || customer.sources.data == null || !customer.sources.data.Any())
+            {
+                return (null);
+            }
+            return (customer.sources.data.Find(src => src.id.Equals(sourceId)));
         }
 
         private static SourceData MapDefaultSource(List<SourceData>sources, string defaultSourceId)
@@ -309,9 +354,12 @@ namespace crds_angular.Services
         public StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
             var request = new RestRequest("plans", Method.POST);
+
+            var interval = EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval);
+
             request.AddParameter("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue);
-            request.AddParameter("interval", recurringGiftDto.PlanInterval);
-            request.AddParameter("name", "Donor ID #" + contactDonor.DonorId + " " + recurringGiftDto.PlanInterval + "ly");
+            request.AddParameter("interval", interval);
+            request.AddParameter("name", string.Format("Donor ID #{0} {1}ly", contactDonor.DonorId, interval));
             request.AddParameter("currency", "usd");
             request.AddParameter("trial_period_days", recurringGiftDto.StartDate.Date.Subtract(DateTime.Today).Days);
             request.AddParameter("id", contactDonor.DonorId + " " + DateTime.Now);
