@@ -1,4 +1,22 @@
-<profile-picture></profile-picture>
+<h1 class="page-header">My Profile</h1>
+<h2 class="subheading">Hello, special you.</h2>
+<div class="profile-header">
+  <div class="row">
+    <profile-picture></profile-picture>
+    <div class="profile-desc col-xs-7 col-sm-9">
+      <h3 class="profile-name">Tate Lucas</h3>
+      <!-- Handle a null church site here with something like "Please select your site" currently it's just blank when null-->
+      <p class="lead site-name"><a href="#Site" ng-click="set.showHousehold = true" data-toggle="tab" class="edit-church-site">Oakley <svg viewBox="0 0 32 32" class="icon icon-pencil4"><use xlink:href="#pencil4"></use></svg></a>
+      </p>
+      info: {{profileData.person.contactid}}
+      <!-- Mock for future profile progress bar
+      <div class="col-sm-6 row">
+        <progressbar value="55">55%</progressbar>
+      </div>
+      -->
+    </div>
+  </div>
+</div>
 <tabset>
   <tab heading="Personal">
     <ui-view name="personal"></ui-view>

@@ -5,14 +5,19 @@
   ProfileController.$inject = [
     'contactId',
     'Person',
-    'AttributeTypes'];
+    'AttributeTypes',
+    'Profile'];
 
-  function ProfileController(contactId, Person, AttributeTypes) {
+  function ProfileController(contactId, Person, AttributeTypes, Profile) {
     var vm = this;
 
     vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
     vm.contactId = contactId;
-    vm.profileData = { person:  Person };
+    Profile.Personal.get(function(data) {
+      vm.profileData = { person: data };
+      vm.viewReady = true;
+      debugger;
+    });
   }
-})()
+})();

@@ -69,6 +69,7 @@
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
             vm.viewReady = true;
+            debugger;
           });
         } else {
           configurePerson();
