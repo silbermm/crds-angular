@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Core.Common.EntitySql;
 using System.Linq;
-using crds_angular.Models;
-using System.Runtime.InteropServices;
+
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
@@ -278,7 +277,21 @@ namespace crds_angular.Services
             return participants.Values.Where(x => x.Trips.Count > 0).OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDto GetMyTrips(int contactId)
+        public MyTripsDto GetMyTrips(int contactId, string token)
+        {
+            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var familyTrips = new MyTripsDto();
+
+            foreach (var member in family)
+            {
+                var trips = TripForContact(member.ContactId);
+                familyTrips.MyTrips.AddRange(trips.MyTrips);
+            }
+
+            return familyTrips;
+        }
+
+        private MyTripsDto TripForContact(int contactId)
         {
             var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
@@ -287,24 +300,27 @@ namespace crds_angular.Services
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
-                var eventParticipantId = 0;
-                var eventParticipantIds = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
-                if (eventParticipantIds != null)
+
+                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (tripParticipant == null)
                 {
-                    eventParticipantId = eventParticipantIds.EventParticipantId;
+                    continue;
                 }
                 eventIds.Add(trip.EventId);
-                events.Add(new Trip
-                {
-                    EventId = trip.EventId,
-                    EventType = trip.EventTypeId.ToString(),
-                    EventTitle = trip.EventTitle,
-                    EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy"),
-                    EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy"),
-                    FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days),
-                    FundraisingGoal = trip.TotalPledge,
-                    EventParticipantId = eventParticipantId
-                });
+
+                var t = new Trip();
+                t.EventId = trip.EventId;
+                t.EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy");
+                t.EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy");
+                t.EventTitle = trip.EventTitle;
+                t.EventType = trip.EventTypeId.ToString();
+                t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
+                t.FundraisingGoal = trip.TotalPledge;
+                t.EventParticipantId = tripParticipant.EventParticipantId;
+                t.EventParticipantFirstName = tripParticipant.Nickname;
+                t.EventParticipantLastName = tripParticipant.Lastname;
+
+                events.Add(t);
             }
 
             foreach (var e in events)
@@ -349,18 +365,64 @@ namespace crds_angular.Services
 
             foreach (var applicant in dto.Applicants)
             {
-                if (!_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
+                var groupParticipantId = AddGroupParticipant(dto.GroupId, groupRoleId, groupStartDate, events, applicant);
+                if (groupParticipantId != 0)
                 {
-                    var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
                     groupParticipants.Add(groupParticipantId);
                 }
-
                 CreatePledge(dto, applicant);
-
                 EventRegistration(events, applicant, dto.Campaign.DestinationId);
+                SendTripParticipantSuccess(applicant.ContactId, events);
             }
 
             return groupParticipants;
+        }
+
+        private int AddGroupParticipant(int groupId, int groupRoleId, DateTime groupStartDate, IList<Event> events, TripApplicant applicant)
+        {
+            if (_groupService.ParticipantGroupMember(groupId, applicant.ParticipantId))
+            {
+                return 0;
+            }
+            var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, groupId, groupRoleId, groupStartDate);
+            SendTripParticipantSuccess(applicant.ContactId, events);
+            return groupParticipantId;
+        }
+
+        private void SendTripParticipantSuccess(int contactId, IList<Event> events)
+        {
+            var htmlTable = FormatParticipantEventTable(events).Build();
+
+            var mergeData = new Dictionary<string, object> {{"Html_Table", htmlTable}};
+            SendMessage("TripParticipantSuccessTemplate", contactId, mergeData);
+        }
+
+        private HtmlElement FormatParticipantEventTable(IEnumerable<Event> events)
+        {
+            var tableAttrs = new Dictionary<string, string>()
+            {
+                {"width", "100%"},
+                {"border", "1"},
+                {"cellspacing", "0"},
+                {"cellpadding", "5"}
+            };
+
+            var cellAttrs = new Dictionary<string, string>()
+            {
+                {"align", "center"}
+            };
+
+            var rows = events.Select(e => new HtmlElement("tr")
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventTitle))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventLocation))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString()))).ToList();
+
+            var headerLabels = new List<string> {"Event", "Location", "Date"};
+            var headers = new HtmlElement("tr", headerLabels.Select(el => new HtmlElement("th", el)).ToList());
+
+            return new HtmlElement("table", tableAttrs)
+                .Append(headers)
+                .Append(rows);
         }
 
         public int GeneratePrivateInvite(PrivateInviteDto dto, string token)
@@ -487,19 +549,20 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendMessage(string templateKey, int toContactId)
+        private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData = null)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
             var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                toContact.Contact_ID,
-                                                                                toContact.Email_Address);
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            toContact.Contact_ID,
+                                                                            toContact.Email_Address,
+                                                                            mergeData);
             _communicationService.SendMessage(template);
         }
 
@@ -571,7 +634,7 @@ namespace crds_angular.Services
 
                 // Check if relationship exists...
                 var myRelationships = _contactRelationshipService.GetMyCurrentRelationships(dto.ContactId);
-                var rel = myRelationships.Where(r => r.RelationshipID == _configurationWrapper.GetConfigIntValue("SponsoredChild") && r.RelatedContactID == childId);
+                var rel = myRelationships.Where(r =>  r.RelationshipID == _configurationWrapper.GetConfigIntValue("SponsoredChild") && r.RelatedContactID == childId);
                 if (!rel.Any())
                 {
                     // Update the relationship
@@ -618,7 +681,7 @@ namespace crds_angular.Services
             //answers.Add(new FormAnswer { Response = page2.SpiritualLifeReplicating, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeReplicating") });
             //answers.Add(new FormAnswer { Response = page2.SpiritualLifeSearching, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.SpiritualLifeSearching") });
             //answers.Add(new FormAnswer { Response = page2.TshirtSize, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.TshirtSize") });
-            answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
+            //answers.Add(new FormAnswer { Response = page2.Vegetarian, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Vegetarian") });
             answers.Add(new FormAnswer { Response = page2.Why, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.Why") });
 
             var page3 = applicationData.PageThree;
@@ -638,7 +701,7 @@ namespace crds_angular.Services
             answers.Add(new FormAnswer { Response = page4.WhyGroupLeader, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.WhyGroupLeader") });
 
             var page5 = applicationData.PageFive;
-            answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
+            //answers.Add(new FormAnswer { Response = page5.PreviousTripExperience, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.PreviousTripExperience") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillBusiness, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillBusiness") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillConstruction, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillConstruction") });
             //answers.Add(new FormAnswer { Response = page5.ProfessionalSkillDental, FieldId = _configurationWrapper.GetConfigIntValue("TripForm.ProfessionalSkillDental") });

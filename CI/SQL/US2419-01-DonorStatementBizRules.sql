@@ -1,8 +1,16 @@
-
 /****** Object:  StoredProcedure [dbo].[crds_Update_Donor_Statement_Type]    Script Date: 10/14/2015 8:57:30 AM ******/
+USE [MinistryPlatform]
+GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
+GO
+-- Create a placeholder proc, so the below ALTER will always work.
+-- This allows the same SQL file to be run in any environment, without errors.
+-- This is preferable to dropping the proc, as permissions will be maintained
+-- on an existing proc.
+IF OBJECT_ID('dbo.crds_Update_Donor_Statement_Type', 'p') IS NULL
+    EXEC('CREATE PROCEDURE dbo.crds_Update_Donor_Statement_Type AS SELECT 1')
 GO
 -- =======================================================================
 -- Author:    Sandi Ritter
@@ -10,8 +18,7 @@ GO
 -- Description: This SP will change the donor Statement Type to Individual 
 --               when the Contact is not a Head of Household
 -- =======================================================================
-CREATE PROCEDURE  [dbo].[crds_Update_Donor_Statement_Type]  
-  
+ALTER PROCEDURE [dbo].[crds_Update_Donor_Statement_Type]
 AS
 BEGIN
   

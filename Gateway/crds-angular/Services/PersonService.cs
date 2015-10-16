@@ -31,11 +31,8 @@ namespace crds_angular.Services
             var householdDictionary = getDictionary(person.GetHousehold());
             var addressDictionary = getDictionary(person.GetAddress());
             addressDictionary.Add("State/Region", addressDictionary["State"]);
-            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributesTypes.Values.ToList());
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
-
-            // TODO: Should this move to _contactService or should update move it's call out to this service?
-            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes);
+            _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
         }
 
         public List<Skill> GetLoggedInUserSkills(int contactId, string token)
@@ -53,7 +50,8 @@ namespace crds_angular.Services
 
             // TODO: Should this move to _contactService or should update move it's call out to this service?
             var attributesTypes = _contactAttributeService.GetContactAttributes(contactId);
-            person.AttributeTypes = attributesTypes;
+            person.AttributeTypes = attributesTypes.MultiSelect;
+            person.SingleAttributes = attributesTypes.SingleSelect;
 
             return person;
         }

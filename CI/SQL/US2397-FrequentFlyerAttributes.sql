@@ -18,6 +18,9 @@ DECLARE @ATTRIBUTE_NAME_SA varchar(100) = N'South Africa Airlines';
 DECLARE @ATTRIBUTE_ID_UNITED int = 3960;
 DECLARE @ATTRIBUTE_NAME_UNITED varchar(100) = N'United Airlines';
 
+DECLARE @ATTRIBUTE_ID_US int = 3980;
+DECLARE @ATTRIBUTE_NAME_US varchar(100) = N'US Airlines';
+
 IF EXISTS (Select 1 FROM [dbo].[Attribute_Types] WHERE [Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID)
 	BEGIN
 		UPDATE [dbo].[Attribute_Types]
@@ -116,6 +119,30 @@ ELSE
 			 VALUES
 				   (@ATTRIBUTE_ID_UNITED
 				   ,@ATTRIBUTE_NAME_UNITED
+				   ,1
+				   ,@ATTRIBUTE_TYPE_ID)
+			SET IDENTITY_INSERT [dbo].[Attributes] OFF
+	END
+
+IF EXISTS (Select 1 FROM [dbo].[Attributes] WHERE [Attribute_ID] = @ATTRIBUTE_ID_US)
+	BEGIN
+		UPDATE [dbo].[Attributes]
+		   SET [Attribute_Name] = @ATTRIBUTE_NAME_US
+			   ,[Domain_ID] = 1
+			   ,[Attribute_Type_ID] = @ATTRIBUTE_TYPE_ID
+		 WHERE [dbo].Attributes.Attribute_ID = @ATTRIBUTE_ID_US
+	END
+ELSE
+	BEGIN
+		SET IDENTITY_INSERT [dbo].[Attributes] ON
+		INSERT INTO [dbo].[Attributes]
+				   ( [Attribute_ID]
+				   ,[Attribute_Name]
+				   ,[Domain_ID]
+				   ,[Attribute_Type_ID])
+			 VALUES
+				   (@ATTRIBUTE_ID_US
+				   ,@ATTRIBUTE_NAME_US
 				   ,1
 				   ,@ATTRIBUTE_TYPE_ID)
 			SET IDENTITY_INSERT [dbo].[Attributes] OFF

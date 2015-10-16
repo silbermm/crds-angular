@@ -63,13 +63,13 @@ namespace crds_angular.Models.Crossroads.Trip
             public string Referral { get; set; }
 
             [JsonProperty(PropertyName = "scrubSizeTop")]
-            public ContactAttributeDTO ScrubSizeTop { get; set; }
+            public string ScrubSizeTop { get; set; }
 
             [JsonProperty(PropertyName = "scrubSizeBottom")]
-            public ContactAttributeDTO ScrubSizeBottom { get; set; }
+            public string ScrubSizeBottom { get; set; }
 
             [JsonProperty(PropertyName = "spiritualLife")]
-            public SpiritualJourneyContactAttributeDTO SpiritualLife { get; set; }
+            public string[] SpiritualLife { get; set; }
 
             //[JsonProperty(PropertyName = "spiritualLifeObedience")]
             //public string SpiritualLifeObedience { get; set; }
@@ -83,13 +83,13 @@ namespace crds_angular.Models.Crossroads.Trip
             //[JsonProperty(PropertyName = "spiritualLifeSearching")]
             //public string SpiritualLifeSearching { get; set; }
 
-            [JsonProperty(PropertyName = "tshirtSize")]
-            [Required]
-            public ContactAttributeDTO TshirtSize { get; set; }
+            //[JsonProperty(PropertyName = "tshirtSize")]
+            //[Required]
+            //public string TshirtSize { get; set; }
 
-            [JsonProperty(PropertyName = "vegetarian")]
-            [Required]
-            public string Vegetarian { get; set; }
+            //[JsonProperty(PropertyName = "vegetarian")]
+            //[Required]
+            //public string Vegetarian { get; set; }
 
             [JsonProperty(PropertyName = "why")]
             [Required]
@@ -144,12 +144,12 @@ namespace crds_angular.Models.Crossroads.Trip
 
         public class ApplicationPageFive
         {
-            [JsonProperty(PropertyName = "previousTripExperience")]
-            [Required]
-            public string PreviousTripExperience { get; set; }
+            //[JsonProperty(PropertyName = "previousTripExperience")]
+            //[Required]
+            //public string PreviousTripExperience { get; set; }
 
             [JsonProperty(PropertyName = "professionaSkills")]
-            public ProfessionalSkillsAttributeDTO ProfessionalSkills { get; set; }
+            public string[] ProfessionalSkills { get; set; }
 
             //[JsonProperty(PropertyName = "professionalSkillBusiness")]
             //public string ProfessionalSkillBusiness { get; set; }
@@ -224,9 +224,9 @@ namespace crds_angular.Models.Crossroads.Trip
             public string PassportNumber { get; set; }
 
             [JsonProperty(PropertyName = "frequentFlyers")]
-            public List<FrequentFlyerAttributeDTO> FrequentFlyers { get; set; }
+            public string[] FrequentFlyers { get; set; }
 
-                //[JsonProperty(PropertyName = "deltaFrequentFlyer")]
+            //[JsonProperty(PropertyName = "deltaFrequentFlyer")]
             //public string DeltaFrequentFlyer { get; set; }
 
             //[JsonProperty(PropertyName = "southAfricanFrequentFlyer")]

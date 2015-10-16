@@ -18,6 +18,7 @@
         showFrequencyOption: '=?',
         givingType: '=?',
         recurringStartDate: '=?',
+        allowOneTime: '=?',
       },
       templateUrl: 'donation_details/donationDetails.html',
       link: link
@@ -32,6 +33,7 @@
       scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
       scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
       scope.givingType = scope.givingType === undefined ? 'one_time' : scope.givingType;
+      scope.allowOneTime = scope.allowOneTime === undefined ? true : scope.allowOneTime;
       scope.dateOptions = {
         formatYear: 'yy',
         startingDay: 1,
@@ -59,6 +61,10 @@
         if (scope.showFrequencyOption) {
           scope.allowRecurring = scope.program.AllowRecurringGiving;
         }
+
+        if (!scope.allowOneTime) {
+          removeNoneRecurringPrograms();
+        }
       }
 
       function amountError() {
@@ -73,6 +79,14 @@
 
       function setProgramList() {
         return scope.ministryShow ? scope.program = '' : scope.program = scope.programsIn[0];
+      }
+
+      function removeNoneRecurringPrograms() {
+        angular.forEach(scope.programsIn, function(program, index) {
+          if (!program.AllowRecurringGiving) {
+            scope.programsIn.splice(index, 1);
+          }
+        });
       }
 
       function openRecurringStartDate($event) {

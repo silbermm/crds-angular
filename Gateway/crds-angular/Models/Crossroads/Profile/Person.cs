@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using crds_angular.Services;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
-using HouseholdMember = MinistryPlatform.Models.HouseholdMember;
-
+using Address = crds_angular.Models.MP.Address;
 
 namespace crds_angular.Models.Crossroads.Profile
 {
@@ -92,6 +92,9 @@ namespace crds_angular.Models.Crossroads.Profile
         [JsonProperty(PropertyName = "attributeTypes")]
         public Dictionary<int, ContactAttributeTypeDTO> AttributeTypes { get; set; }
 
+        [JsonProperty(PropertyName = "singleAttributes")]
+        public Dictionary<int, ContactSingleAttributeDTO> SingleAttributes { get; set; }
+
         public MyContact GetContact()
         {
             return new MyContact
@@ -121,9 +124,9 @@ namespace crds_angular.Models.Crossroads.Profile
             };
         }
 
-        public MinistryPlatform.Models.Household GetHousehold()
+        public Household GetHousehold()
         {
-            return new MinistryPlatform.Models.Household
+            return new Household
             {
                 Household_ID = HouseholdId,
                 Home_Phone = HomePhone,
@@ -131,9 +134,9 @@ namespace crds_angular.Models.Crossroads.Profile
             };
         }
 
-        public crds_angular.Models.MP.Address GetAddress()
+        public Address GetAddress()
         {
-            return new crds_angular.Models.MP.Address
+            return new Address
             {
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,
