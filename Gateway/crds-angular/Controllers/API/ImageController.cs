@@ -97,71 +97,42 @@ namespace crds_angular.Controllers.API
             {
                 var imageBytes = new byte[0];
                 String fileName = null;
-                // Getting contact ID from logged-in user token, rather than requiring it to be passed in
-                //var recordId = "";
+
                 var contactId = _authenticationService.GetContactId(token);
-                if (Request.Content.IsMimeMultipartContent())
+                String base64String = Request.Content.ReadAsStringAsync().Result;
+                imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
+                fileName = "profile.png";
+
+                if (string.IsNullOrEmpty(fileName) || imageBytes.Length == 0)
                 {
-                    Request.Content.LoadIntoBufferAsync().Wait();
-                    Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider()).ContinueWith(task =>
-                    {
-                        MultipartMemoryStreamProvider provider = task.Result;
-                        foreach (HttpContent content in provider.Contents)
-                        {
-                            switch (content.Headers.ContentDisposition.Name)
-                            {
-                                case "\"file\"":
-                                    imageBytes = content.ReadAsByteArrayAsync().Result;
-                                    fileName = content.Headers.ContentDisposition.FileName;
-                                    fileName = fileName.Replace("\"", "");
-                                    break;
-                                // Don't need recordId, can get it from authenticated user
-                                //case "\"recordId\"":
-                                //    recordId = content.ReadAsStringAsync().Result;
-                                //    break;
-                                default:
-                                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
-                            }
-                        }
-
-                        if (string.IsNullOrEmpty(fileName) || imageBytes.Length == 0)
-                        {
-                            throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
-                        }
-                        if (fileId > 0)
-                        {
-                            _mpService.UpdateFile(
-                                fileId,
-                                fileName,
-                                "Profile Image",
-                                true,
-                                -1,
-                                imageBytes,
-                                token
-                                );
-                        }
-                        else
-                        {
-                            _mpService.CreateFile(
-                                "Contacts",
-                                //recordId,
-                                contactId,
-                                fileName,
-                                "Profile Image",
-                                true,
-                                -1,
-                                imageBytes,
-                                token
-                                );
-                        }
-
-                    });
-                    return (Ok());
+                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
+                }
+                if (fileId > 0)
+                {
+                    _mpService.UpdateFile(
+                        fileId,
+                        fileName,
+                        "Profile Image",
+                        true,
+                        -1,
+                        imageBytes,
+                        token
+                        );
                 }
                 else
                 {
-                    throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.NotAcceptable, "This request is not properly formatted"));
+                    _mpService.CreateFile(
+                        "Contacts",
+                        contactId,
+                        fileName,
+                        "Profile Image",
+                        true,
+                        -1,
+                        imageBytes,
+                        token
+                        );
                 }
+                return (Ok());
             }));
         }
     }
