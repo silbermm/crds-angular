@@ -18,11 +18,16 @@
 
     function link(scope, el, attr) {
 
+      scope.cardName = cardName;
       scope.goalMet = goalMet;
       scope.shareUrl = TripsUrlService.ShareUrl(scope.trip.eventParticipantId);
 
       function goalMet(totalRaised, goal) {
         return (totalRaised >= goal);
+      }
+
+      function cardName(first, last) {
+        return first + ' ' + last;
       }
     }
   }

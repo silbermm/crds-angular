@@ -104,7 +104,7 @@ namespace crds_angular.Controllers.API
                     }
                     catch(Exception ex)
                     {
-                        var apiError = new ApiErrorDto("GP Export File Creation Failed", ex);
+                        var apiError = new ApiErrorDto("Profile update Failed", ex);
                         throw new HttpResponseException(apiError.HttpResponseMessage);   
                     }
                 }

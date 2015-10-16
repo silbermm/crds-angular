@@ -11,8 +11,9 @@
   require('./profile.config');
 
   require('./profile.html');
+  require('./profilePersonal.html');
 
-  app.controller('crdsProfileCtrl', ['$rootScope','Profile', 'Lookup', '$q', '$log','$scope', require('./profile_controller')]);
+  app.controller('ProfileController', require('./profile.controller'))
 
   // Modal
   require('./editProfile.html');
