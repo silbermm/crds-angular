@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -293,6 +292,11 @@ namespace crds_angular.Services
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
+                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (tripParticipant == null)
+                {
+                    continue;
+                }
                 eventIds.Add(trip.EventId);
 
                 var t = new Trip();
@@ -303,14 +307,9 @@ namespace crds_angular.Services
                 t.EventType = trip.EventTypeId.ToString();
                 t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
                 t.FundraisingGoal = trip.TotalPledge;
-
-                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
-                if (tripParticipant != null)
-                {
-                    t.EventParticipantId = tripParticipant.EventParticipantId;
-                    t.EventParticipantFirstName = tripParticipant.Nickname;
-                    t.EventParticipantLastName = tripParticipant.Lastname;
-                }
+                t.EventParticipantId = tripParticipant.EventParticipantId;
+                t.EventParticipantFirstName = tripParticipant.Nickname;
+                t.EventParticipantLastName = tripParticipant.Lastname;
 
                 events.Add(t);
             }
@@ -499,12 +498,12 @@ namespace crds_angular.Services
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                toContact.Contact_ID,
-                                                                                toContact.Email_Address);
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            toContact.Contact_ID,
+                                                                            toContact.Email_Address);
             _communicationService.SendMessage(template);
         }
 
