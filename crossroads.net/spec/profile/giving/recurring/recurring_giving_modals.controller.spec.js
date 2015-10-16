@@ -135,6 +135,12 @@ describe('RecurringGivingModals', function() {
     beforeEach(function() {
       recurringGiveForm = {
         donationDetailsForm: {
+          amount: {
+            $valid: true,
+          },
+          recurringStartDate: {
+            $dirty: false,
+          },
           $dirty: undefined,
         },
       };
