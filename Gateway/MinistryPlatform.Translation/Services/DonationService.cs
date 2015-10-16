@@ -278,8 +278,8 @@ namespace MinistryPlatform.Translation.Services
                 }
                 
                 var program = rec.First().ToString("Statement_Title");
-                var paymentType = PaymentType.getPaymentType(result.paymentTypeId).name;
-                var declineEmailTemplate = PaymentType.getPaymentType(result.paymentTypeId).declineEmailTemplateId;
+                var paymentType = PaymentType.GetPaymentType(result.paymentTypeId).name;
+                var declineEmailTemplate = PaymentType.GetPaymentType(result.paymentTypeId).declineEmailTemplateId;
 
                 _donorService.SendEmail(declineEmailTemplate, result.donorId, result.donationAmt, paymentType, result.donationDate,
                     program, result.donationNotes);
@@ -315,7 +315,7 @@ namespace MinistryPlatform.Translation.Services
                 donorId = dictionary.ToInt("Donor_ID"),
                 donationDate = dictionary.ToDate("Donation_Date"),
                 donationAmt = Convert.ToInt32(dictionary["Donation_Amount"]),
-                paymentTypeId = PaymentType.getPaymentType(dictionary.ToString("Payment_Type")).id,
+                paymentTypeId = PaymentType.GetPaymentType(dictionary.ToString("Payment_Type")).id,
                 donationNotes = dictionary.ToString("Donation_Status_Notes"),
                 batchId = dictionary.ToNullableInt("Batch_ID")
             };
