@@ -107,6 +107,7 @@ namespace crds_angular.Services
 
                 var subscription = _paymentService.CancelSubscription(donor.ProcessorId, gift.SubscriptionId);
                 _paymentService.CancelPlan(subscription.Plan.Id);
+                _mpDonorService.CancelRecurringGift(gift.RecurringGiftId.Value);
             }
         }
 

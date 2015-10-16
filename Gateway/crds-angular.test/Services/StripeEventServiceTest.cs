@@ -528,6 +528,7 @@ namespace crds_angular.test.Services
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(donorId)).Returns(contactDonor);
             _paymentService.Setup(mocked => mocked.CancelSubscription(processorId, subscriptionId)).Returns(subscription);
             _paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
+            _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(recurringGiftId));
            
 
             Assert.IsNull(_fixture.ProcessStripeEvent(e));

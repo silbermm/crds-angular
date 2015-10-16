@@ -172,6 +172,16 @@ namespace MinistryPlatform.Translation.Services
            
             UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
+
+        public void CancelRecurringGift(int recurringGiftId)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"End_Date", DateTime.Now.Date}
+            };
+            var apiToken = ApiLogin();
+            UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
+        }
         
         public void UpdateRecurringGiftFailureCount(int recurringGiftId, int failCount)
         {
