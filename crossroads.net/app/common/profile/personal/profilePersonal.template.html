@@ -160,17 +160,29 @@
         </ng-messages>
       </div>
       <div class="form-group col-sm-6" >
-        <label for="start-attend-reason">Why did you start attending Crossroads?</label>
+        <label for="start-attend-reason">Why did you start attending Crossroads?
+            <svg viewBox="0 0 32 32"
+                 class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline"
+                 popover="We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads."
+                 popover-placement="right" popover-append-to-body="true" popover-trigger="focus">
+                <use xlink:href="#question-circle"></use>
+            </svg>
+            <svg viewBox="0 0 32 32"
+                 class="icon icon-question-circle icon-subtle pointer visible-xs-inline"
+                 ng-click="infoCollapsed = !infoCollapsed">
+                <use xlink:href="#question-circle"></use>
+            </svg>
+            <div collapse="!infoCollapsed">
+                <div class="well well-sm">We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads.</div>
+            </div>
+        </label>
         <select name="start-attend-reason"
                 class="form-control col-sm-12"
                 id="start-attend-reason"
-                ng-model="profile.profileData.person.start-attend-reason"
-                ng-options="start-attend-reason.dp_RecordID as start-attend-reason.dp_RecordName for start-attend-reasons in profile.start-attend-reason" >
+                ng-model="profile.startAttendReason.attribute"
+                ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
           <option value=""> -- Choose One -- </option>
         </select>
-        <ng-messages for="profile.pform['start-attend-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'start-attend-date')">
-          <ng-messages-include src="on-pause-messages"></ng-messages-include>
-        </ng-messages>
       </div>
     </div>
 
