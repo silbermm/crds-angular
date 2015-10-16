@@ -4,8 +4,12 @@ GO
 -- Add the Attribute Type
 IF NOT EXISTS (SELECT * FROM Attribute_Types WHERE Attribute_Type='StartAttendReason')
 BEGIN
+        SET IDENTITY_INSERT [dbo].[Attribute_Types] ON
+	 
 	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
-	VALUES ('StartAttendReason', '1', 'True')
+	VALUES (59, 'StartAttendReason', '1', 'True')
+	
+	SET IDENTITY_INSERT [dbo].[Attribute_Types] ON 
 END
 GO
 
@@ -19,10 +23,10 @@ INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_I
 VALUES ('A friend invited me to the weekend', @Attribute_TypeID, '1')
 END
 
-IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='Nobody invited me – I just came to a weekend')
+IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='Nobody invited me â€“ I just came to a weekend')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('Nobody invited me – I just came to a weekend', @Attribute_TypeID, '1')
+VALUES ('Nobody invited me â€“ I just came to a weekend', @Attribute_TypeID, '1')
 END
 
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='I attended Awaited')
