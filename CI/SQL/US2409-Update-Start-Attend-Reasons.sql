@@ -4,7 +4,7 @@ GO
 -- Add the Attribute Type
 IF NOT EXISTS (SELECT * FROM Attribute_Types WHERE Attribute_Type='StartAttendReason')
 BEGIN
-        SET IDENTITY_INSERT [dbo].[Attribute_Types] ON
+    SET IDENTITY_INSERT [dbo].[Attribute_Types] ON
 	 
 	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type_ID], [Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
 	VALUES (59, 'StartAttendReason', '1', 'True')
@@ -26,7 +26,7 @@ END
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='Nobody invited me – I just came to a weekend')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('Nobody invited me – I just came to a weekend', SET IDENTITY_INSERT, '1')
+VALUES ('Nobody invited me – I just came to a weekend', @Attribute_Type_ID, '1')
 END
 
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='I attended Awaited')
@@ -44,24 +44,24 @@ END
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='I went on a GO Trip')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('I went on a GO Trip', @Attribute_TypeID, '1')
+VALUES ('I went on a GO Trip', @Attribute_Type_ID, '1')
 END
 
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='I served with some other ministry')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('I served with some other ministry', @Attribute_TypeID, '1')
+VALUES ('I served with some other ministry', @Attribute_Type_ID, '1')
 END
 
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='My reason isn''t listed')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('My reason isn''t listed', @Attribute_TypeID, '1')
+VALUES ('My reason isn''t listed', @Attribute_Type_ID, '1')
 END
 
 IF NOT EXISTS (SELECT * FROM Attributes WHERE Attribute_Name='I don''t remember')
 BEGIN
 INSERT INTO [dbo].[Attributes] ([Attribute_Name], [Attribute_Type_ID], [Domain_ID])
-VALUES ('I don''t remember', @Attribute_TypeID, '1')
+VALUES ('I don''t remember', @Attribute_Type_ID, '1')
 END
 GO
