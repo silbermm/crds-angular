@@ -19,6 +19,7 @@
     vm.openModal = openModal;
 
     function defaultImage(){
+      //TODO Move to constant
       return '//crossroads-media.imgix.net/images/avatar.svg';
     }
 
