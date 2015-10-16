@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using crds_angular.Models.Crossroads.Attribute;
-using crds_angular.Models.Crossroads.Profile;
+﻿using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Trip
@@ -71,26 +68,6 @@ namespace crds_angular.Models.Crossroads.Trip
             [JsonProperty(PropertyName = "spiritualLife")]
             public string[] SpiritualLife { get; set; }
 
-            //[JsonProperty(PropertyName = "spiritualLifeObedience")]
-            //public string SpiritualLifeObedience { get; set; }
-
-            //[JsonProperty(PropertyName = "spiritualLifeReceived")]
-            //public string SpiritualLifeReceived { get; set; }
-
-            //[JsonProperty(PropertyName = "spiritualLifeReplicating")]
-            //public string SpiritualLifeReplicating { get; set; }
-
-            //[JsonProperty(PropertyName = "spiritualLifeSearching")]
-            //public string SpiritualLifeSearching { get; set; }
-
-            //[JsonProperty(PropertyName = "tshirtSize")]
-            //[Required]
-            //public string TshirtSize { get; set; }
-
-            //[JsonProperty(PropertyName = "vegetarian")]
-            //[Required]
-            //public string Vegetarian { get; set; }
-
             [JsonProperty(PropertyName = "why")]
             [Required]
             public string Why { get; set; }
@@ -144,48 +121,8 @@ namespace crds_angular.Models.Crossroads.Trip
 
         public class ApplicationPageFive
         {
-            //[JsonProperty(PropertyName = "previousTripExperience")]
-            //[Required]
-            //public string PreviousTripExperience { get; set; }
-
             [JsonProperty(PropertyName = "professionaSkills")]
             public string[] ProfessionalSkills { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillBusiness")]
-            //public string ProfessionalSkillBusiness { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillConstruction")]
-            //public string ProfessionalSkillConstruction { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillDental")]
-            //public string ProfessionalSkillDental { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillEducation")]
-            //public string ProfessionalSkillEducation { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillInformationTech")]
-            //public string ProfessionalSkillInformationTech { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillMedia")]
-            //public string ProfessionalSkillMedia { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillMedical")]
-            //public string ProfessionalSkillMedical { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillMusic")]
-            //public string ProfessionalSkillMusic { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillOther")]
-            //public string ProfessionalSkillOther { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillPhotography")]
-            //public string ProfessionalSkillPhotography { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillSocialWorker")]
-            //public string ProfessionalSkillSocialWorker { get; set; }
-
-            //[JsonProperty(PropertyName = "professionalSkillStudent")]
-            //public string ProfessionalSkillStudent { get; set; }
 
             [JsonProperty(PropertyName = "sponsorChildFirstName")]
             public string SponsorChildFirstName { get; set; }
@@ -225,18 +162,6 @@ namespace crds_angular.Models.Crossroads.Trip
 
             [JsonProperty(PropertyName = "frequentFlyers")]
             public string[] FrequentFlyers { get; set; }
-
-            //[JsonProperty(PropertyName = "deltaFrequentFlyer")]
-            //public string DeltaFrequentFlyer { get; set; }
-
-            //[JsonProperty(PropertyName = "southAfricanFrequentFlyer")]
-            //public string SouthAfricanFrequentFlyer { get; set; }
-
-            //[JsonProperty(PropertyName = "unitedFrequentFlyer")]
-            //public string UnitedFrequentFlyer { get; set; }
-
-            //[JsonProperty(PropertyName = "usAirwaysFrequentFlyer")]
-            //public string UsAirwaysFrequentFlyer { get; set; }
 
             [JsonProperty(PropertyName = "internationalTravelExpericence")]
             public string InternationalTravelExpericence { get; set; }

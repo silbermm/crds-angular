@@ -39,15 +39,13 @@ ELSE
 				   ,[Attribute_Type]
 				   ,[Description]
 				   ,[Domain_ID]
-				   ,[Available_Online]
-				   ,[Prevent_Multiple_Selection])
+				   ,[Available_Online])
 			 VALUES
 				   (@ATTRIBUTE_TYPE_ID
 				   ,@ATTRIBUTE_TYPE_VALUE
 				   ,@ATTRIBUTE_TYPE_DESCRIPTION
 				   ,1
-				   ,1
-				   ,0)
+				   ,1)
 			SET IDENTITY_INSERT [dbo].[Attribute_Types] OFF
 	END
 

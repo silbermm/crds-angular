@@ -149,9 +149,7 @@ namespace MinistryPlatform.Translation.Services
                 Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier_ID"),
                 Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
                 Nickname = recordsDict.ToString("Nickname"),
-                Age = recordsDict.ToInt("Age"),
-                
-                
+                Age = recordsDict.ToInt("Age")
             };
             if (recordsDict.ContainsKey("ID_Card"))
             {

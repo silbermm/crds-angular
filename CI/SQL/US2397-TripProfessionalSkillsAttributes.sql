@@ -11,8 +11,7 @@ IF EXISTS (Select 1 FROM [dbo].[Attribute_Types] WHERE [Attribute_Type_ID] = @AT
 			SET [Attribute_Type] = @ATTRIBUTE_TYPE_VALUE
 			   ,[Description] = @ATTRIBUTE_TYPE_DESCRIPTION
 			   ,[Domain_ID] = 1
-			   ,[Available_Online] = 1
-			   ,[Prevent_Multiple_Selection] = 0
+			   ,[Available_Online] = 1			   
 			WHERE [dbo].Attribute_Types.Attribute_Type_ID = @ATTRIBUTE_TYPE_ID
 	END
 ELSE
@@ -23,15 +22,13 @@ ELSE
 				   ,[Attribute_Type]
 				   ,[Description]
 				   ,[Domain_ID]
-				   ,[Available_Online]
-				   ,[Prevent_Multiple_Selection])
+				   ,[Available_Online])
 			 VALUES
 				   (@ATTRIBUTE_TYPE_ID
 				   ,@ATTRIBUTE_TYPE_VALUE
 				   ,@ATTRIBUTE_TYPE_DESCRIPTION
 				   ,1
-				   ,1
-				   ,0)
+				   ,1)
 			SET IDENTITY_INSERT [dbo].[Attribute_Types] OFF
 	END
 

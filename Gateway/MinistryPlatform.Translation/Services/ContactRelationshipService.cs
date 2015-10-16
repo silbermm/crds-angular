@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -13,7 +10,6 @@ namespace MinistryPlatform.Translation.Services
 {
     public class ContactRelationshipService : BaseService, IContactRelationshipService
     {
-        private readonly int _getMyFamilyViewId = Convert.ToInt32(AppSettings("MyContactFamilyRelationshipViewId"));
 
         private readonly int _getMyCurrentRelationships = Convert.ToInt32((AppSettings("MyContactCurrentRelationships")));
 
@@ -87,10 +83,7 @@ namespace MinistryPlatform.Translation.Services
         }
 
         public int AddRelationship(Relationship relationship, int toContact )
-        {
-            //var records = _ministryPlatformService.GetSubPageRecord("ContactRelationships",
-            //                                          5337888,
-            //                                          ApiLogin());
+        {           
             try
             {
                 var dict = new Dictionary<string, object>
