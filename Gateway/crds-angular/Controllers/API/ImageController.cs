@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
@@ -8,6 +9,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Util;
 using log4net;
+using MinistryPlatform.Translation.PlatformService;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
@@ -17,11 +19,25 @@ namespace crds_angular.Controllers.API
         private readonly ILog _logger = LogManager.GetLogger(typeof (ImageController));
         private readonly MPInterfaces.IMinistryPlatformService _mpService;
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
+        private readonly MPInterfaces.IApiUserService _apiUserService;
 
-        public ImageController(MPInterfaces.IMinistryPlatformService mpService, MPInterfaces.IAuthenticationService authenticationService)
+        public ImageController(MPInterfaces.IMinistryPlatformService mpService, MPInterfaces.IAuthenticationService authenticationService, MPInterfaces.IApiUserService apiUserService)
         {
             _authenticationService = authenticationService;
+            _apiUserService = apiUserService;
             _mpService = mpService;
+        }
+
+        private IHttpActionResult GetImage(Int32 fileId, String fileName, String token)
+        {
+            var imageStream = _mpService.GetFile(fileId, token);
+            if (imageStream == null)
+            {
+                return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
+            }
+
+            HttpContext.Current.Response.Buffer = true;
+            return (new FileResult(imageStream, fileName, null, false));
         }
 
         /// <summary>
@@ -37,15 +53,8 @@ namespace crds_angular.Controllers.API
             {
                 return (Authorized(token =>
                 {
-                    var imageStream = _mpService.GetFile(fileId, token);
                     var imageDescription = _mpService.GetFileDescription(fileId, token);
-                    if (imageStream == null)
-                    {
-                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
-                    }
-
-                    HttpContext.Current.Response.Buffer = true;
-                    return (new FileResult(imageStream, imageDescription.FileName, null, false));
+                    return GetImage(fileId, imageDescription.FileName, token);
                 }));
             }
             catch (Exception e)
@@ -53,6 +62,31 @@ namespace crds_angular.Controllers.API
                 _logger.Error("Error getting profile image", e);
                 return (BadRequest());
             }
+        }
+
+
+        /// <summary>
+        /// Retrieves a profile image given a contact ID.
+        /// </summary>
+        /// <param name="contactId"></param>
+        /// <returns>A byte stream?</returns>
+        [Route("api/image/profile/{contactId:int}")]
+        [HttpGet]
+        public IHttpActionResult GetProfileImage(Int32 contactId)
+        {
+            var token = _apiUserService.GetToken();
+            var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
+            Int32? fileId = null;
+            String fileName = null;
+            foreach (var file in files.Where(file => file.IsDefaultImage))
+            {
+                fileId = file.FileId;
+                fileName = file.FileName;
+                break;
+            }
+            return fileId == null ? 
+                (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found"))) : 
+                GetImage(fileId.Value, fileName, token);
         }
 
         [Route("api/image/profile/{fileId:int=-1}")]
