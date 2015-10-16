@@ -25,7 +25,7 @@
     function openModal() {
       var changeProfileImage = $modal.open({
         templateUrl: 'picture/profileImageUpload.html',
-        controller: 'ChangeProfileImageCtrl as modal',
+        controller: 'ChangeProfileImageController as modal',
         backdrop: true
       });
 
