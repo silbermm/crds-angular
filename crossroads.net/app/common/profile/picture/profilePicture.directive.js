@@ -10,7 +10,7 @@
       restrict: 'E',
       replace: true,
       scope: {
-
+        contactId: '=?',
       },
       controller: 'ProfilePictureController as picture',
       bindToController: true,

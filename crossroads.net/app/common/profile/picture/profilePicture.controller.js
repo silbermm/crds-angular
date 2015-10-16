@@ -3,7 +3,7 @@
 
   module.exports = ProfilePictureController;
 
-  ProfilePictureController.$inject = [];
+  ProfilePictureController.$inject = ['ImageService'];
 
   /**
    * Controller for the ProfilePictureDirective
@@ -12,9 +12,12 @@
    *    ...
    *    ...
    */
-  function ProfilePictureController() {
+  function ProfilePictureController(ImageService) {
     var vm = this;
 
+    ImageService.ProfileImage.get({contact: vm.contactId}, function(data) {
+      vm.image = data;
+    });
   }
 
 })();

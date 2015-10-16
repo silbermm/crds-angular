@@ -56,8 +56,6 @@
     ////////////////////////////////
 
     function activate() {
-      vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
-
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -69,7 +67,6 @@
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
             vm.viewReady = true;
-            debugger;
           });
         } else {
           configurePerson();
@@ -90,10 +87,11 @@
 
       if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
         var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
+        //vm.annDate = formatAnniversaryDate(vm.profileData.person.anniversaryDate);
       }
 
-      vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
-      vm.startAttendReason = vm.profileData.person.singleAttributes[attributeTypeIds.START_ATTEND_REASON];
+      //vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
+      //vm.startAttendReason = vm.profileData.person.singleAttributes[attributeTypeIds.START_ATTEND_REASON];
       vm.startAttendReasons = _.find(vm.attributeTypes, function(attributeType) {
         return attributeType.attributeTypeId === attributeTypeIds.START_ATTEND_REASON;
       });

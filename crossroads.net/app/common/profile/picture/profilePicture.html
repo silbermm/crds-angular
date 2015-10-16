@@ -1,6 +1,8 @@
 <div class="col-xs-3 col-sm-2">
+  {{picture}}
   <label for="fileInputModal" class="profile-pic" ng-click="myProfile.openModal()">
       <img class="profile-image pull-left img-square img-responsive imgix-fluid" data-src="//crossroads-media.imgix.net/images/avatar.svg" src="//crossroads-media.imgix.net/images/avatar.svg" alt="Profile Default Photo" />
+      <img class="profile-image pull-left img-square img-responsive" src="{{picture.image}}" alt="Profile Default Photo" />
       <span class="change-photo">Change Photo</span>
   </label>
 </div>
