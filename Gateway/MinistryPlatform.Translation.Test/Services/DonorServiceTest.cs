@@ -1106,7 +1106,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Congregation_ID", 555},
                     {"Account_Type_ID", 3},
                     {"Recurring_Gift_ID", 4},
-                    {"Donor_Account_ID", 5}
+                    {"Subscription_ID", "sub_asdf1234"},
+                    {"Donor_Account_ID", 5},
+                    {"Consecutive_Failure_Count", 1}
                 }
             };
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), ",\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
