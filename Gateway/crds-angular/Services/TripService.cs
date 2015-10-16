@@ -5,6 +5,7 @@ using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
@@ -356,18 +357,64 @@ namespace crds_angular.Services
 
             foreach (var applicant in dto.Applicants)
             {
-                if (!_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
+                var groupParticipantId = AddGroupParticipant(dto.GroupId, groupRoleId, groupStartDate, events, applicant);
+                if (groupParticipantId != 0)
                 {
-                    var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, dto.GroupId, groupRoleId, groupStartDate);
                     groupParticipants.Add(groupParticipantId);
                 }
-
                 CreatePledge(dto, applicant);
-
                 EventRegistration(events, applicant, dto.Campaign.DestinationId);
+                SendTripParticipantSuccess(applicant.ContactId, events);
             }
 
             return groupParticipants;
+        }
+
+        private int AddGroupParticipant(int groupId, int groupRoleId, DateTime groupStartDate, IList<Event> events, TripApplicant applicant)
+        {
+            if (_groupService.ParticipantGroupMember(groupId, applicant.ParticipantId))
+            {
+                return 0;
+            }
+            var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, groupId, groupRoleId, groupStartDate);
+            SendTripParticipantSuccess(applicant.ContactId, events);
+            return groupParticipantId;
+        }
+
+        private void SendTripParticipantSuccess(int contactId, IList<Event> events)
+        {
+            var htmlTable = FormatParticipantEventTable(events).Build();
+
+            var mergeData = new Dictionary<string, object> {{"Html_Table", htmlTable}};
+            SendMessage("TripParticipantSuccessTemplate", contactId, mergeData);
+        }
+
+        private HtmlElement FormatParticipantEventTable(IEnumerable<Event> events)
+        {
+            var tableAttrs = new Dictionary<string, string>()
+            {
+                {"width", "100%"},
+                {"border", "1"},
+                {"cellspacing", "0"},
+                {"cellpadding", "5"}
+            };
+
+            var cellAttrs = new Dictionary<string, string>()
+            {
+                {"align", "center"}
+            };
+
+            var rows = events.Select(e => new HtmlElement("tr")
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventTitle))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventLocation))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString()))).ToList();
+
+            var headerLabels = new List<string> {"Event", "Location", "Date"};
+            var headers = new HtmlElement("tr", headerLabels.Select(el => new HtmlElement("th", el)).ToList());
+
+            return new HtmlElement("table", tableAttrs)
+                .Append(headers)
+                .Append(rows);
         }
 
         public int GeneratePrivateInvite(PrivateInviteDto dto, string token)
@@ -491,7 +538,7 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendMessage(string templateKey, int toContactId)
+        private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData = null)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
             var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
@@ -503,7 +550,8 @@ namespace crds_angular.Services
                                                                             fromContact.Contact_ID,
                                                                             fromContact.Email_Address,
                                                                             toContact.Contact_ID,
-                                                                            toContact.Email_Address);
+                                                                            toContact.Email_Address,
+                                                                            mergeData);
             _communicationService.SendMessage(template);
         }
 
