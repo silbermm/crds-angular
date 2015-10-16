@@ -98,7 +98,6 @@
     function edit(recurringGiveForm) {
       // Amount is not valid
       if (recurringGiveForm.donationDetailsForm !== undefined && !recurringGiveForm.donationDetailsForm.amount.$valid) {
-        console.log('Donation Amount not valid.');
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         return;
       }
@@ -106,7 +105,6 @@
       // Recurring Start Date was touched and is not valid - We don't want to validate if they are not updating this field
       if (recurringGiveForm.donationDetailsForm !== undefined && recurringGiveForm.donationDetailsForm.recurringStartDate.$dirty &&
           !recurringGiveForm.donationDetailsForm.recurringStartDate.$valid) {
-        console.log('Donation Start Date touched and not valid.');
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         return;
       }
@@ -114,12 +112,10 @@
       // Validate the credit card or bank account form
       if ((recurringGiveForm.creditCardForm !== undefined && !recurringGiveForm.creditCardForm.$valid) ||
           (recurringGiveForm.bankAccountForm !== undefined && !recurringGiveForm.bankAccountForm.$valid)) {
-        console.log('Credit Card or Bank Info not valid.');
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         return;
       }
 
-      console.log('valid.');
       // Form is valid so update
       if ((recurringGiveForm.creditCardForm !== undefined && recurringGiveForm.creditCardForm.$dirty) ||
           (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
