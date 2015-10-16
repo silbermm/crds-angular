@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using crds_angular.Models.Crossroads.Trip;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -294,6 +293,11 @@ namespace crds_angular.Services
             var eventIds = new List<int>();
             foreach (var trip in trips.Where(trip => !eventIds.Contains(trip.EventId)))
             {
+                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
+                if (tripParticipant == null)
+                {
+                    continue;
+                }
                 eventIds.Add(trip.EventId);
 
                 var t = new Trip();
@@ -304,14 +308,9 @@ namespace crds_angular.Services
                 t.EventType = trip.EventTypeId.ToString();
                 t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
                 t.FundraisingGoal = trip.TotalPledge;
-
-                var tripParticipant = _eventParticipantService.TripParticipants("," + trip.EventId + ",,,,,,,,,,,," + contactId).FirstOrDefault();
-                if (tripParticipant != null)
-                {
-                    t.EventParticipantId = tripParticipant.EventParticipantId;
-                    t.EventParticipantFirstName = tripParticipant.Nickname;
-                    t.EventParticipantLastName = tripParticipant.Lastname;
-                }
+                t.EventParticipantId = tripParticipant.EventParticipantId;
+                t.EventParticipantFirstName = tripParticipant.Nickname;
+                t.EventParticipantLastName = tripParticipant.Lastname;
 
                 events.Add(t);
             }
@@ -382,7 +381,7 @@ namespace crds_angular.Services
             return groupParticipantId;
         }
 
-        private void SendTripParticipantSuccess( int contactId, IList<Event> events)
+        private void SendTripParticipantSuccess(int contactId, IList<Event> events)
         {
             var htmlTable = FormatParticipantEventTable(events).Build();
 
@@ -406,12 +405,12 @@ namespace crds_angular.Services
             };
 
             var rows = events.Select(e => new HtmlElement("tr")
-                                                       .Append(new HtmlElement("td", cellAttrs, e.EventTitle))
-                                                       .Append(new HtmlElement("td", cellAttrs, e.EventLocation))
-                                                       .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString()))).ToList();
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventTitle))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventLocation))
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString()))).ToList();
 
-            var headerLabels = new List<string>{"Event","Location","Date"};
-            var headers = new HtmlElement("tr",headerLabels.Select(el => new HtmlElement("th", el)).ToList());
+            var headerLabels = new List<string> {"Event", "Location", "Date"};
+            var headers = new HtmlElement("tr", headerLabels.Select(el => new HtmlElement("th", el)).ToList());
 
             return new HtmlElement("table", tableAttrs)
                 .Append(headers)
@@ -539,19 +538,20 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData =null)
+        private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData = null)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
             var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                fromContact.Contact_ID,
-                                                                                fromContact.Email_Address,
-                                                                                toContact.Contact_ID,
-                                                                                toContact.Email_Address, mergeData);
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            fromContact.Contact_ID,
+                                                                            fromContact.Email_Address,
+                                                                            toContact.Contact_ID,
+                                                                            toContact.Email_Address,
+                                                                            mergeData);
             _communicationService.SendMessage(template);
         }
 
