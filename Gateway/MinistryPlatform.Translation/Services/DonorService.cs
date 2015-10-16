@@ -793,7 +793,7 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(MapRecordToRecurringGift).ToList();
         }
 
-        public void ProcessRecurringGiftDeclinedEmail(string subscription_id)
+        public void ProcessRecurringGiftDecline(string subscription_id)
         {
             throw new NotImplementedException();
         }

@@ -97,7 +97,7 @@ namespace crds_angular.Services
 
         private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
         {
-            _mpDonorService.ProcessRecurringGiftDeclinedEmail(invoice.Subscription);
+            _mpDonorService.ProcessRecurringGiftDecline(invoice.Subscription);
         }
 
         public TransferPaidResponseDTO TransferPaid(DateTime? eventTimestamp, StripeTransfer transfer)

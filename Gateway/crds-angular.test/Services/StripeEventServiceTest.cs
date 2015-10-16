@@ -429,7 +429,7 @@ namespace crds_angular.test.Services
                 }
             };
 
-            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDeclinedEmail(subscriptionId));
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
             Assert.IsNull(_fixture.ProcessStripeEvent(e));
             _mpDonorService.VerifyAll();
 
