@@ -6,7 +6,7 @@ IF NOT EXISTS (SELECT * FROM Attribute_Types WHERE Attribute_Type='StartAttendRe
 BEGIN
         SET IDENTITY_INSERT [dbo].[Attribute_Types] ON
 	 
-	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
+	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type_ID], [Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
 	VALUES (59, 'StartAttendReason', '1', 'True')
 	
 	SET IDENTITY_INSERT [dbo].[Attribute_Types] ON 
