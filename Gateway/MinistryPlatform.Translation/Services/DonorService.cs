@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Crossroads.Utilities;
+using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -30,7 +31,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
         private readonly int _myHouseholdRecurringGiftsApiPageView;
-
+        
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
         public const string EmailReason = "None";
@@ -47,7 +48,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
 
-        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService, IConfigurationWrapper configuration, ICryptoProvider crypto)
+        public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
@@ -159,7 +160,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Donor_Account_ID", donorAccountId}
             };
 
-            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+            UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
         public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
@@ -169,16 +170,37 @@ namespace MinistryPlatform.Translation.Services
                 {"End_Date", DateTime.Now.Date}
             };
 
-            UpdateRecurringGift(authorizedUserToken, recurringGiftId, recurringGiftValues);
+            UpdateRecurringGift(_myHouseholdDonationRecurringGifts, authorizedUserToken, recurringGiftId, recurringGiftValues);
         }
 
-        private void UpdateRecurringGift(string authorizedUserToken, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
+        public void UpdateRecurringGiftFailureCount(int recurringGiftId, int failCount)
+        {
+            var recurringGiftValues = new Dictionary<string, object>
+            {
+                {"Consecutive_Failure_Count", failCount}
+            };
+
+            try
+            {
+                var apiToken = ApiLogin();
+                UpdateRecurringGift(_recurringGiftPageId, apiToken, recurringGiftId, recurringGiftValues);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                       string.Format(
+                           "Update Recurring Gift Failure Count failed.  Recurring Gift Id: {0}"),e);
+            }
+        }
+
+
+        public void UpdateRecurringGift(int pageView, string token, int recurringGiftId, Dictionary<string, object> recurringGiftValues)
         {
             recurringGiftValues["Recurring_Gift_ID"] = recurringGiftId;
 
             try
             {
-                _ministryPlatformService.UpdateRecord(_myHouseholdDonationRecurringGifts, recurringGiftValues, authorizedUserToken);
+               _ministryPlatformService.UpdateRecord(pageView, recurringGiftValues, token);
             }
             catch (Exception e)
             {
@@ -191,6 +213,7 @@ namespace MinistryPlatform.Translation.Services
             }
             
         }
+        
         public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
         {
             var pymtId = PaymentType.getPaymentType(pymtType).id;
@@ -515,7 +538,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason)
+        public void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
 
@@ -537,9 +560,10 @@ namespace MinistryPlatform.Translation.Services
                 {
                     {"Program_Name", program},
                     {"Donation_Amount", donationAmount},
-                    {"Donation_Date", setupDate},
+                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy HH:mm tt")},
                     {"Payment_Method", paymentType},
-                    {"Decline_Reason", emailReason}
+                    {"Decline_Reason", emailReason},
+                    {"Frequency", frequency}
                 }
             };
 
@@ -768,7 +792,7 @@ namespace MinistryPlatform.Translation.Services
                     createDonation = new CreateDonationDistDto
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        Amount = record.ToInt("Amount"),
+                        Amount = record["Amount"] as decimal? ?? 0,
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
@@ -793,9 +817,32 @@ namespace MinistryPlatform.Translation.Services
             return records.Select(MapRecordToRecurringGift).ToList();
         }
 
-        public void ProcessRecurringGiftDeclinedEmail(string subscription_id)
+        public void ProcessRecurringGiftDeclinedEmail(string subscriptionId)
         {
-            throw new NotImplementedException();
+            var recurringGift = GetRecurringGiftForSubscription(subscriptionId);
+            UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, recurringGift.ConsecutiveFailureCount + 1);
+
+            var acctType = GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
+            var paymentType = PaymentType.getPaymentType(acctType).name;
+            var templateId = PaymentType.getPaymentType(acctType).recurringGiftDeclineEmailTemplateId;
+            var frequency = recurringGift.Frequency == 1 ? "Weekly" : "Monthly";
+            var program = _programService.GetProgramById(Convert.ToInt32(recurringGift.ProgramId));
+            var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero);
+
+            SendEmail(templateId, recurringGift.DonorId, amt, paymentType, DateTime.Now, program.Name, "fail", frequency);
+        }
+
+        public int GetDonorAccountPymtType(int donorAccountId)
+        {
+            var donorAccount = _ministryPlatformService.GetRecordDict(_donorAccountsPageId, donorAccountId, ApiLogin());
+
+            if (donorAccount == null)
+            {
+               throw new ApplicationException(
+                   string.Format("Donor Account not found.  Donor Account Id: {0}", donorAccountId));
+            }
+            
+            return donorAccount.ToInt("Account_Type_ID");
         }
 
         // ReSharper disable once FunctionComplexityOverflow
