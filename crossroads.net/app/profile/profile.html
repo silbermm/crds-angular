@@ -2,7 +2,7 @@
 <h2 class="subheading">Hello, special you.</h2>
 <div class="profile-header">
   <div class="row">
-    <profile-picture contact-id="profile.profileData.person.contactId"></profile-picture>
+    <profile-picture ng-if="profile.profileData.person.contactId" contact-id="profile.profileData.person.contactId"></profile-picture>
     <div class="profile-desc col-xs-7 col-sm-9">
       <h3 class="profile-name">{{profile.profileData.person.nickName}} {{profile.profileData.person.lastName}}</h3>
 <!-- Mock for site, not part of this current story

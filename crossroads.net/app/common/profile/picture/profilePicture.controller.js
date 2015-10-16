@@ -15,6 +15,7 @@
   function ProfilePictureController(ImageService) {
     var vm = this;
     vm.path = __API_ENDPOINT__ + 'api/image/profile/' + vm.contactId;
+    vm.test = vm.contactId
     vm.defaultImage = defaultImage;
     //vm.contactId need to wait for this...
     ImageService.ProfileImage.get({contact: 6}, function(data) {
