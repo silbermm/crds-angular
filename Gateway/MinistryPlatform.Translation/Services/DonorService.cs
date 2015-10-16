@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Crossroads.Utilities;
+using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -536,7 +537,7 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, int donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
+        public void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
 
@@ -558,7 +559,7 @@ namespace MinistryPlatform.Translation.Services
                 {
                     {"Program_Name", program},
                     {"Donation_Amount", donationAmount},
-                    {"Donation_Date", setupDate},
+                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy HH:mm tt")},
                     {"Payment_Method", paymentType},
                     {"Decline_Reason", emailReason},
                     {"Frequency", frequency}
@@ -790,7 +791,7 @@ namespace MinistryPlatform.Translation.Services
                     createDonation = new CreateDonationDistDto
                     {
                         DonorId = record.ToInt("Donor_ID"),
-                        Amount = record.ToInt("Amount"),
+                        Amount = record["Amount"] as decimal? ?? 0,
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
@@ -825,8 +826,9 @@ namespace MinistryPlatform.Translation.Services
             var templateId = PaymentType.getPaymentType(acctType).recurringGiftDeclineEmailTemplateId;
             var frequency = recurringGift.Frequency == 1 ? "Weekly" : "Monthly";
             var program = _programService.GetProgramById(Convert.ToInt32(recurringGift.ProgramId));
-            
-            SendEmail(templateId, recurringGift.DonorId, recurringGift.Amount, paymentType, DateTime.Now, program.Name, "fail", frequency);
+            var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero);
+
+            SendEmail(templateId, recurringGift.DonorId, amt, paymentType, DateTime.Now, program.Name, "fail", frequency);
         }
 
         public int GetDonorAccountPymtType(int donorAccountId)
