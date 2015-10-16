@@ -3,7 +3,7 @@
 
   module.exports = ProfilePictureController;
 
-  ProfilePictureController.$inject = ['ImageService'];
+  ProfilePictureController.$inject = ['ImageService','$modal'];
 
   /**
    * Controller for the ProfilePictureDirective
@@ -12,18 +12,29 @@
    *    ...
    *    ...
    */
-  function ProfilePictureController(ImageService) {
+  function ProfilePictureController(ImageService, $modal) {
     var vm = this;
     vm.path = __API_ENDPOINT__ + 'api/image/profile/' + vm.contactId;
-    vm.test = vm.contactId
     vm.defaultImage = defaultImage;
-    //vm.contactId need to wait for this...
-    ImageService.ProfileImage.get({contact: 6}, function(data) {
-      vm.image = data;
-    });
+    vm.openModal = openModal;
 
     function defaultImage(){
       return '//crossroads-media.imgix.net/images/avatar.svg';
+    }
+
+    function openModal() {
+      var changeProfileImage = $modal.open({
+        templateUrl: 'picture/profileImageUpload.html',
+        controller: 'ChangeProfileImageCtrl as modal',
+        backdrop: true
+      });
+
+      changeProfileImage.result.then(function (croppedImage) {
+        vm.path = croppedImage;
+        ImageService.ProfileImage.save(croppedImage);
+
+      });
+
     }
   }
 

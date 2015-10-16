@@ -18,7 +18,7 @@
         });
       };
       reader.readAsDataURL(file);
-    };
+    }
 
     $timeout(function () {
       angular.element(document.querySelector('#fileInputModal')).on('change', handleFileSelect);
@@ -26,10 +26,10 @@
 
     function ok() {
       $modalInstance.close(_this.myCroppedImage);
-    };
+    }
 
     function cancel() {
       $modalInstance.dismiss('cancel');
-    };
+    }
   };
 })();
