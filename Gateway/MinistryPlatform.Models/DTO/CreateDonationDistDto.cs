@@ -2,9 +2,9 @@
 
 namespace MinistryPlatform.Models.DTO
 {
-   public class CreateDonationDistDto
+    public class CreateDonationDistDto
     {
-        public int Amount { get; set; }
+        public Decimal Amount { get; set; }
         public int DonorId { get; set; }
         public int CongregationId { get; set; }
         public string PaymentType { get; set; }
@@ -16,5 +16,6 @@ namespace MinistryPlatform.Models.DTO
         public int? DayOfMonth { get; set; }
         public DateTime? StartDate { get; set; }
         public string SubscriptionId { get; set; }
+        public int ConsecutiveFailureCount { get; set; }
     }
 }
