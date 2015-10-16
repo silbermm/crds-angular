@@ -20,6 +20,4 @@ GO
 
 -- Update attributes for trips to be single selection
 UPDATE dbo.Attribute_Types SET Prevent_Multiple_Selection = 1 WHERE Attribute_Type_ID IN (21, 22, 23, 62, 66, 67, 68, 69)
-GO-- Update attributes for trips to be single selection
-UPDATE dbo.Attribute_Types SET Prevent_Multiple_Selection = 1 WHERE Attribute_Type_ID IN (21, 22, 23, 62, 66, 67)
 GO

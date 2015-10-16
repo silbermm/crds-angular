@@ -31,7 +31,7 @@
 
   <div class="form-group" ng-show='showInitiativeOption'>
     <select class="form-control" ng-model="givingType">
-      <option value="one_time">One Time</option>
+      <option value="one_time" ng-if="allowOneTime">One Time</option>
       <option value="week" ng-if="allowRecurring">Weekly</option>
       <option value="month" ng-if="allowRecurring">Monthly</option>
     </select>

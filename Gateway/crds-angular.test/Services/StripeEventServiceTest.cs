@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -6,6 +7,7 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -318,22 +320,37 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        public void TestInvoiceCreatedNoAmountOrCharge()
+        public void TestInvoicePaymentSucceededNoAmount()
         {
             var invoice = new StripeInvoice
             {
                 Subscription = "sub_123",
                 Amount = 0,
-                Charge = "  ",
+                Charge = "ch_123",
             };
 
-            _fixture.InvoiceCreated(DateTime.Now, invoice);
+            _fixture.InvoicePaymentSucceeded(DateTime.Now, invoice);
             _paymentService.VerifyAll();
             _donorService.VerifyAll();
         }
 
         [Test]
-        public void TestInvoiceCreated()
+        public void TestInvoicePaymentSucceededNoCharge()
+        {
+            var invoice = new StripeInvoice
+            {
+                Subscription = "sub_123",
+                Amount = 123,
+                Charge = "   ",
+            };
+
+            _fixture.InvoicePaymentSucceeded(DateTime.Now, invoice);
+            _paymentService.VerifyAll();
+            _donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestInvoicePaymentSucceeded()
         {
             var eventTimestamp = DateTime.Now;
             const string processorId = "cus_123";
@@ -370,10 +387,11 @@ namespace crds_angular.test.Services
             const int recurringGiftId = 654;
             const int donorAccountId = 987;
             const int donationStatus = 4;
+            const decimal amt = 789;
 
             var recurringGift = new CreateDonationDistDto
             {
-                Amount = 78900,
+                Amount = amt,
                 DonorAccountId = donorAccountId,
                 DonorId = donorId,
                 PaymentType = paymentType,
@@ -381,7 +399,8 @@ namespace crds_angular.test.Services
                 RecurringGiftId = recurringGiftId
             };
             _donorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
-
+            _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, Constants.ResetFailCount));
+       
             _mpDonorService.Setup(
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord((int) (chargeAmount/Constants.StripeDecimalConversionValue),
@@ -401,10 +420,124 @@ namespace crds_angular.test.Services
                                                                null,
                                                                donationStatus)).Returns(123);
 
-            _fixture.InvoiceCreated(eventTimestamp, invoice);
+            _fixture.InvoicePaymentSucceeded(eventTimestamp, invoice);
             _paymentService.VerifyAll();
             _mpDonorService.VerifyAll();
             _donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestInvoicePaymentFailedNoCancel()
+        {
+            const string processorId = "cus_123";
+            const string id = "9876";
+            const string subscriptionId = "sub_123";
+            const string charge = "ch_2468";
+            const int recurringGiftId = 123456;
+
+            var e = new StripeEvent
+            {
+                LiveMode = true,
+                Type = "invoice.payment_failed",
+                Created = DateTime.Now.AddDays(-1),
+                Data = new StripeEventData
+                {
+                    Object = JObject.FromObject(new StripeInvoice()
+                    {
+                        Id = id,
+                        Customer = processorId,
+                        Charge = charge,
+                        Subscription = subscriptionId
+                    })
+                }
+            };
+
+            var gift = new CreateDonationDistDto
+            {
+                Frequency = 1,
+                RecurringGiftId = recurringGiftId
+            };
+
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
+            _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(gift);
+           
+            Assert.IsNull(_fixture.ProcessStripeEvent(e));
+            _fixture.ProcessStripeEvent(e);
+            _mpDonorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestInvoicePaymentFailedCancelPlanAndSubscription()
+        {
+            const string processorId = "cus_123";
+            const string subscriptionId = "sub_123";
+            const int failCount = 2;
+            const int recurringGiftId = 123456;
+            const int donorId = 3421;
+            const int contactId = 765876;
+            const int frequency = 2;
+            const string id = "9876";
+            const string charge = "ch_2468";
+            const string planId = "Donor ID #3421 weekly"; 
+
+            var e = new StripeEvent
+            {
+                LiveMode = true,
+                Type = "invoice.payment_failed",
+                Created = DateTime.Now.AddDays(-1),
+                Data = new StripeEventData
+                {
+                    Object = JObject.FromObject(new StripeInvoice()
+                    {
+                        Id = id,
+                        Customer = processorId,
+                        Charge = charge,
+                        Subscription = subscriptionId
+                    })
+                }
+            };
+
+            var gift = new CreateDonationDistDto
+            {
+                Frequency = frequency,
+                RecurringGiftId = recurringGiftId,
+                SubscriptionId = subscriptionId,
+                ConsecutiveFailureCount =  failCount,
+                DonorId =  donorId,                
+            };
+
+             var contactDonor = new ContactDonor
+            {
+                ContactId = contactId,
+                DonorId = donorId,
+                ProcessorId = processorId
+            };
+
+             var plan = new StripePlan
+             {
+                 Id = planId
+             };
+
+             var subscription = new StripeSubscription
+             {
+                 Plan = plan
+             };
+
+            _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
+            _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(gift);
+            _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(donorId)).Returns(contactDonor);
+            _paymentService.Setup(mocked => mocked.CancelSubscription(processorId, subscriptionId)).Returns(subscription);
+            _paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
+            _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(recurringGiftId));
+           
+
+            Assert.IsNull(_fixture.ProcessStripeEvent(e));
+            _fixture.ProcessStripeEvent(e);
+            _mpDonorService.VerifyAll();
+            _donorService.VerifyAll();
+            _paymentService.VerifyAll();
+
+
         }
     }
 }

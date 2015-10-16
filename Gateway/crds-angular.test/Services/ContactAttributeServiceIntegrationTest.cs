@@ -142,12 +142,6 @@ namespace crds_angular.test.Services
             // Add all back
             item.Value.Value = originalValue;
             _service.SaveContactAttributes(contactId, attributes.MultiSelect, attributes.SingleSelect);
-
-            //// Remove all items            
-            //_service.SaveContactAttributes(contactId, deletedAttributes.MultiSelect, deletedAttributes.SingleSelect);
-
-            //// Add all back
-            //_service.SaveContactAttributes(contactId, originalAttributes.MultiSelect, deletedAttributes.SingleSelect);
         }
     }
 }

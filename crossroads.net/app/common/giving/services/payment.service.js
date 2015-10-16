@@ -17,6 +17,12 @@
       getDonor: getDonor,
       updateDonorWithBankAcct:updateDonorWithBankAcct,
       updateDonorWithCard:updateDonorWithCard,
+      updateRecurringGiftWithBankAcct: updateRecurringGiftWithBankAcct,
+      updateRecurringGiftWithCard: updateRecurringGiftWithCard,
+      updateRecurringGiftDonorOnlyInformation: updateRecurringGiftDonorOnlyInformation,
+      deleteRecurringGift: deleteRecurringGift,
+      queryRecurringGifts: queryRecurringGifts,
+      getRecurringGift: getRecurringGift,
       addGlobalErrorMessage: _addGlobalErrorMessage,
       stripeErrorHandler: stripeErrorHandler
     };
@@ -32,11 +38,43 @@
     }
 
     function createRecurringGiftWithBankAcct(bankAcct) {
-      return apiRecurringGift(bankAcct, stripe.bankAccount, 'POST');
+      return buildNewRecurringGift(bankAcct, stripe.bankAccount, 'POST');
     }
 
     function createRecurringGiftWithCard(card) {
-      return apiRecurringGift(card, stripe.card, 'POST');
+      return buildNewRecurringGift(card, stripe.card, 'POST');
+    }
+
+    function updateRecurringGiftWithBankAcct(bankAcct, recurringGiftId) {
+      return buildNewRecurringGift(bankAcct, stripe.bankAccount, 'PUT', recurringGiftId);
+    }
+
+    function updateRecurringGiftWithCard(card, recurringGiftId) {
+      return buildNewRecurringGift(card, stripe.card, 'PUT', recurringGiftId);
+    }
+
+    function updateRecurringGiftDonorOnlyInformation(recurringGiftId) {
+      var def = $q.defer();
+      apiRecurringGift('PUT', def, createRecurringGiftRequest(), recurringGiftId);
+      return def.promise;
+    }
+
+    function deleteRecurringGift(recurringGiftId) {
+      var def = $q.defer();
+      apiRecurringGift('DELETE', def, null, recurringGiftId);
+      return def.promise;
+    }
+
+    function getRecurringGift(recurringGiftId) {
+      var def = $q.defer();
+      apiRecurringGift('GET', def, null, null);
+      return def.promise;
+    }
+
+    function queryRecurringGifts() {
+      var def = $q.defer();
+      apiRecurringGift('QUERY', def, null, null);
+      return def.promise;
     }
 
     function donateToProgram(program_id, campaignId, amount, donor_id, email_address, pymt_type, anonymous) {
@@ -175,35 +213,62 @@
       return def.promise;
     }
 
-    function apiRecurringGift(donorInfo, stripeFunc, apiMethod) {
+    function buildNewRecurringGift(donorInfo, stripeFunc, apiMethod, recurringGiftId = null) {
       var def = $q.defer();
+
       stripeFunc.createToken(donorInfo, function(status, response) {
         if (response.error) {
           def.reject(_addGlobalErrorMessage(response.error, status));
         } else {
-          var recurringGiftRequest = {
-            stripe_token_id: response.id,
-            amount: GiveTransferService.amount,
-            program: GiveTransferService.program.ProgramId,
-            interval: GiveTransferService.givingType,
-            start_date: GiveTransferService.recurringStartDate
-          };
-          $http({
-            method: apiMethod,
-            url: __API_ENDPOINT__ + 'api/donor/recurrence',
-            headers: {
-              Authorization: $cookies.get('sessionId')
-            },
-            data: recurringGiftRequest
-          }).success(function(data) {
-            def.resolve(data);
-          }).error(function(response, statusCode) {
-            def.reject(_addGlobalErrorMessage(response.error, statusCode));
-          });
+          var recurringGiftRequest = createRecurringGiftRequest(response.id);
+          apiRecurringGift(apiMethod, def, recurringGiftRequest, recurringGiftId);
         }
       });
 
       return def.promise;
+    }
+
+    function createRecurringGiftRequest(token_id = null) {
+      var recurringGiftRequest = {
+        amount: GiveTransferService.amount,
+        program: GiveTransferService.program.ProgramId,
+        interval: GiveTransferService.givingType,
+        start_date: GiveTransferService.recurringStartDate
+      };
+
+      if (token_id !== null) {
+        recurringGiftRequest.stripe_token_id = token_id;
+      }
+
+      return recurringGiftRequest;
+    }
+
+    function apiRecurringGift(apiMethod, def, recurringGiftRequest = null, recurringGiftId = null) {
+      $http({
+        method: apiMethod === 'QUERY' ? 'GET' : apiMethod,
+        isArray: (apiMethod === 'QUERY'),
+        url: apiRecurringGiftUrl(apiMethod, recurringGiftId),
+        headers: {
+          Authorization: $cookies.get('sessionId')
+        },
+        data: recurringGiftRequest
+      }).success(function(data) {
+        def.resolve(data);
+      }).error(function(response, statusCode) {
+        if (response !== null && response !== undefined) {
+          def.reject(_addGlobalErrorMessage(response.error, statusCode));
+        } else {
+          def.reject();
+        }
+      });
+    }
+
+    function apiRecurringGiftUrl(apiMethod, recurringGiftId = null) {
+      if (apiMethod === 'POST' || apiMethod === 'QUERY') {
+        return __API_ENDPOINT__ + 'api/donor/recurrence';
+      }
+
+      return __API_ENDPOINT__ + 'api/donor/recurrence/' + recurringGiftId;
     }
 
     return paymentService;
