@@ -9,7 +9,7 @@ BEGIN
 	INSERT INTO [dbo].[Attribute_Types] ([Attribute_Type_ID], [Attribute_Type], [Domain_ID], [Prevent_Multiple_Selection])
 	VALUES (59, 'StartAttendReason', '1', 'True')
 	
-	SET IDENTITY_INSERT [dbo].[Attribute_Types] ON 
+	SET IDENTITY_INSERT [dbo].[Attribute_Types] OFF
 END
 GO
 
