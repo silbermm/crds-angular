@@ -146,6 +146,14 @@
           AttributeTypes: function(AttributeTypeService) {
             return AttributeTypeService.AttributeTypes().query().$promise;
           },
+          Person: function(Profile, $stateParams, $cookies) {
+            var cid = $cookies.get('userId');
+            if ($stateParams.contactId) {
+              cid = $stateParams.contactId;
+            }
+
+            return Profile.Person.get({contactId: cid}).$promise;
+          },
         },
         data: {
           isProtected: true,
