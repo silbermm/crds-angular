@@ -27,7 +27,8 @@
       var changeProfileImage = $modal.open({
         templateUrl: 'picture/profileImageUpload.html',
         controller: 'ChangeProfileImageController as modal',
-        backdrop: true
+        backdrop: true,
+        show: false,
       });
 
       changeProfileImage.result.then(function (croppedImage) {
