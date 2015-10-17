@@ -93,13 +93,15 @@ namespace crds_angular.Controllers.API
                 var contactId = _authenticationService.GetContactId(token); 
                 var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
                 var file = files.FirstOrDefault(f => f.IsDefaultImage);
-                String base64String = Request.Content.ReadAsStringAsync().Result;
-                var imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
+                var base64String = Request.Content.ReadAsStringAsync().Result;
 
-                if (imageBytes.Length == 0)
+                if (base64String.Length == 0)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
                 }
+
+                var imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
+
                 if (file!=null)
                 {
                     _mpService.UpdateFile(
