@@ -1,6 +1,7 @@
 (function() {
+  'use strict';
   module.exports = {
-
+    //TODO Should this be moved to core?
     // MODULE NAMES
     MODULES: {
       CROSSROADS: 'crossroads',

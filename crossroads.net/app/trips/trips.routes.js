@@ -57,7 +57,7 @@
         templateUrl: 'tripgivingTemplates/amount.html'
       })
       .state('tripgiving.login', {
-        controller: 'LoginCtrl',
+        controller: 'LoginController',
         templateUrl: 'tripgivingTemplates/login.html'
       })
       .state('tripgiving.register', {
@@ -210,7 +210,7 @@
 
             return;
           },
-         
+
           AbuseHistory: function(AttributeTypeService, $stateParams) {
             if ($stateParams.stepId === '6') {
               return AttributeTypeService.AttributeTypes().get({ id: attributes.ABUSE_HISTORY }).$promise;

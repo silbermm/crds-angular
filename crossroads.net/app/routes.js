@@ -88,7 +88,7 @@
         parent: 'noSideBar',
         url: '/signin',
         templateUrl: 'login/login_page.html',
-        controller: 'LoginCtrl',
+        controller: 'LoginController',
         data: {
           isProtected: false,
           meta: {
@@ -124,7 +124,7 @@
         parent: 'noSideBar',
         url: '/forgot-password',
         templateUrl: 'login/forgot_password.html',
-        controller: 'LoginCtrl',
+        controller: 'LoginController',
         data: {
           isProtected: false
         }
@@ -133,7 +133,7 @@
         parent: 'noSideBar',
         url: '/reset-password',
         templateUrl: 'login/reset_password.html',
-        controller: 'LoginCtrl',
+        controller: 'LoginController',
         data: {
           isProtected: false
         }
@@ -146,6 +146,7 @@
           AttributeTypes: function(AttributeTypeService) {
             return AttributeTypeService.AttributeTypes().query().$promise;
           },
+
           Person: function(Profile, $stateParams, $cookies) {
             var cid = $cookies.get('userId');
             if ($stateParams.contactId) {
@@ -180,6 +181,7 @@
               contactId: function($cookies) {
                 return $cookies.get('userId');
               },
+
               Profile: 'Profile',
               Person: function(Profile, contactId) {
                 return Profile.Person.get({contactId: contactId}).$promise;
