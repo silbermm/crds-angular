@@ -234,12 +234,14 @@ namespace crds_angular.Services
                                                    new
                                                    {
                                                        r.ParticipantId,
+                                                       r.ContactId,
                                                        r.EmailAddress,
                                                        r.Lastname,
                                                        r.Nickname
                                                    }).Select(x => new TripParticipantDto()
                                                    {
                                                        ParticipantId = x.Key.ParticipantId,
+                                                       ContactId = x.Key.ContactId,
                                                        Email = x.Key.EmailAddress,
                                                        Lastname = x.Key.Lastname,
                                                        Nickname = x.Key.Nickname,
