@@ -82,28 +82,28 @@ namespace crds_angular.Controllers.API
                 (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
         }
 
-        [Route("api/image/profile/{fileId:int=-1}")]
+        [Route("api/image/profile/")]
         [HttpPost]
-        public IHttpActionResult Post(Int32 fileId)
+        public IHttpActionResult Post()
         {
             return (Authorized(token =>
             {
-                var imageBytes = new byte[0];
-                String fileName = null;
+                const String fileName = "profile.png";
 
-                var contactId = _authenticationService.GetContactId(token);
+                var contactId = _authenticationService.GetContactId(token); 
+                var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
+                var file = files.FirstOrDefault(f => f.IsDefaultImage);
                 String base64String = Request.Content.ReadAsStringAsync().Result;
-                imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
-                fileName = "profile.png";
+                var imageBytes = Convert.FromBase64String(base64String.Split(',')[1]);
 
-                if (string.IsNullOrEmpty(fileName) || imageBytes.Length == 0)
+                if (imageBytes.Length == 0)
                 {
                     throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, "Request did not specify a \"file\" for the profile image."));
                 }
-                if (fileId > 0)
+                if (file!=null)
                 {
                     _mpService.UpdateFile(
-                        fileId,
+                        file.FileId,
                         fileName,
                         "Profile Image",
                         true,
