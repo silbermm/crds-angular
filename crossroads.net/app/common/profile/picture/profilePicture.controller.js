@@ -3,7 +3,7 @@
 
   module.exports = ProfilePictureController;
 
-  ProfilePictureController.$inject = ['ImageService', '$modal'];
+  ProfilePictureController.$inject = ['$rootScope', 'ImageService', '$modal'];
 
   /**
    * Controller for the ProfilePictureDirective
@@ -12,7 +12,7 @@
    *    ...
    *    ...
    */
-  function ProfilePictureController(ImageService, $modal) {
+  function ProfilePictureController($rootScope, ImageService, $modal) {
     var vm = this;
     vm.path = ImageService.ProfileImageBaseURL + vm.contactId;
     vm.defaultImage = ImageService.DefaultProfileImage;
@@ -29,6 +29,7 @@
       changeProfileImage.result.then(function(croppedImage) {
         vm.path = croppedImage;
         ImageService.ProfileImage.save(croppedImage);
+        $rootScope.$emit('profilePhotoChanged');
       });
 
     }
