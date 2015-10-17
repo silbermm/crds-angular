@@ -5,8 +5,8 @@
   <div ng-hide="!modal.myImage" class="change-profile-pic">
     <img-crop image="modal.myImage" result-image="modal.myCroppedImage" area-type="square" ></img-crop>
   </div>
-  <div class="push-ends hidden-lg hidden-xs">
-      <input type="file" id="fileInputModal" />
+  <div class="push-ends">
+      <input ng-focus="modal.focus()" type="file" id="fileInputModal" accept="image/gif,image/jpeg,image/png"/>
   </div>
 </div>
 <div class="modal-footer">
