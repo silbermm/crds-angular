@@ -1,35 +1,50 @@
-(function () {
+(function() {
   'use strict';
   module.exports = function changeProfileImageCtrl($modalInstance, $scope, $timeout) {
-    var _this = this;
+    var vm = this;
 
-    _this.ok = ok;
-    _this.cancel = cancel;
-    _this.handleFileSelect = handleFileSelect;
-    _this.myImage = '';
-    _this.myCroppedImage = '';
+    vm.ok = ok;
+    vm.cancel = cancel;
+    vm.focus = focus;
+    vm.handleFileSelect = handleFileSelect;
+    vm.myImage = '';
+    vm.myCroppedImage = '';
+    vm.init = false;
 
     function handleFileSelect(evt) {
       var file = evt.currentTarget.files[0];
       var reader = new FileReader();
-      reader.onload = function (evt) {
-        $scope.$apply(function ($scope) {
-          _this.myImage = evt.target.result;
+      reader.onload = function(evt) {
+        $scope.$apply(function($scope) {
+          vm.myImage = evt.target.result;
         });
       };
+
       reader.readAsDataURL(file);
     }
 
-    $timeout(function () {
+    $timeout(function() {
       angular.element(document.querySelector('#fileInputModal')).on('change', handleFileSelect);
     });
 
     function ok() {
-      $modalInstance.close(_this.myCroppedImage);
+      $modalInstance.close(vm.myCroppedImage);
+      vm.init = false;
     }
 
     function cancel() {
       $modalInstance.dismiss('cancel');
+      vm.init = false;
+    }
+
+    function focus() {
+      $timeout(function() {
+        if (vm.init && angular.element(document.querySelector('#fileInputModal'))[0].files.length === 0) {
+          cancel();
+        }
+
+        vm.init = true;
+      }, 200);
     }
   };
 })();
