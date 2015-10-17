@@ -4,17 +4,13 @@
   module.exports = ProfileController;
   ProfileController.$inject = [
     'AttributeTypes',
-    'Profile'];
+    'Person'];
 
-  function ProfileController(AttributeTypes, Profile) {
+  function ProfileController(AttributeTypes, Person) {
     var vm = this;
 
     vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
-    //TODO Move to resolve
-    Profile.Personal.get(function(data) {
-      vm.profileData = { person: data };
-      vm.viewReady = true;
-    });
+    vm.profileData = { person: Person };
   }
 })();
