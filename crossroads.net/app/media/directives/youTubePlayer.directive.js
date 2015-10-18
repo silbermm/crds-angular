@@ -19,7 +19,7 @@
 
       link: function(scope, element) {
         var tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
+        tag.src = '//www.youtube.com/iframe_api';
         var firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -27,6 +27,10 @@
 
         YouTubePlayerFactory.onReady(function() {
           player = setupPlayer(scope, element);
+          var tag = document.createElement('script');
+          tag.src = '//cdn.jsdelivr.net/youtube-google-analytics/8.0.2/lunametrics-youtube.gtm.min.js';
+          var firstScriptTag = document.getElementsByTagName('script')[0];
+          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
         });
 
         function setupPlayer(scope, element) {
