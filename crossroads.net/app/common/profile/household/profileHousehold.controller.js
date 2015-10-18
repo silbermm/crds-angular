@@ -2,14 +2,31 @@
 (function() {
   module.exports = ProfileHouseholdController;
 
-  ProfileHouseholdController.$inject = ['$rootScope', '$location', '$anchorScroll', '$log', 'Profile', 'Lookup', 'Validation'];
+  ProfileHouseholdController.$inject = [
+    '$rootScope',
+    '$location',
+    '$anchorScroll',
+    '$timeout',
+    '$log',
+    'Profile',
+    'Lookup',
+    'Validation'];
 
   /**
    * The controller for the household form directive
    * Variables passed in include:
    *  - householdInfo -- this is what the form fields are bound too
    */
-  function ProfileHouseholdController($rootScope, $location, $anchorScroll, $log, Profile, Lookup, Validation) {
+  function ProfileHouseholdController(
+          $rootScope,
+          $location,
+          $anchorScroll,
+          $timeout,
+          $log,
+          Profile,
+          Lookup,
+          Validation) {
+
     var vm = this;
 
     vm.countries = getCountries();
@@ -20,10 +37,18 @@
     vm.states = getStates();
     vm.validation = Validation;
 
-    $rootScope.$on('homePhoneFocus', function(event,data) {
+    $rootScope.$on('homePhoneFocus', function(event, data) {
       vm.isCollapsed = false;
       $location.hash('homephonecont');
-      setTimeout(function() {
+      $timeout(function() {
+        $anchorScroll();
+      }, 500);
+    });
+
+    $rootScope.$on('locationFocus', function(event, data) {
+      vm.isCollapsed = false;
+      $location.hash('Site');
+      $timeout(function() {
         $anchorScroll();
       }, 500);
     });
