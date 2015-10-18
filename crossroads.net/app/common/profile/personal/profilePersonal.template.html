@@ -104,6 +104,7 @@
         <div class="form-group col-sm-6">
             <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12" ng-model="profile.profileData.person.maritalStatusId" ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
+              <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
             </select>
         </div>
 
@@ -185,7 +186,7 @@
                 id="start-attend-reason"
                 ng-model="profile.startAttendReason.attribute"
                 ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
-          <option value=""> -- Choose One -- </option>
+          <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>
@@ -220,7 +221,7 @@
                 id="service-provider"
                 ng-model="profile.profileData.person.mobileCarrierId"
                 ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" >
-            <option value=""> -- Choose One -- </option>
+            <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>
