@@ -102,6 +102,25 @@
 </head>
 
 <body ng-controller="coreController as app" ng-class="app.asideState.position">
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-2977073-9', 'none'); <!--TODO pull out to config somehow? -->
+  </script>
+  <!-- End Google Analytics -->
+  <!-- Google Tag Manager -->
+  <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MFS4MJ"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MFS4MJ');</script>
+  <!-- End Google Tag Manager -->
   <div growl class="crossroads-growl">
   </div>
   <div ui-view> </div>
@@ -112,6 +131,7 @@
 <script type="text/javascript" src="http://alvarotrigo.com/fullPage/jquery.fullPage.min.js"></script>
 
 <script src="https://js.stripe.com/v2/"></script>
+
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#async=1"></script>
 <!-- build:corejs -->
 <script src="/assets/core.js"></script>
