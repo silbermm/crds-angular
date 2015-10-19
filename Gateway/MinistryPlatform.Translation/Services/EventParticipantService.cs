@@ -69,6 +69,7 @@ namespace MinistryPlatform.Translation.Services
                     CampaignId = viewRecord.ToInt("Campaign_ID"),
                     CampaignName = viewRecord.ToString("Campaign_Name"),
                     DonorId = viewRecord.ToInt("Donor_ID"),
+                    ContactId = viewRecord.ToInt("Contact_ID"),
                 }).ToList();
             }
             catch (Exception ex)

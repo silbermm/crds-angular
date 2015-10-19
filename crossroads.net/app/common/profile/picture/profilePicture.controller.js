@@ -3,7 +3,7 @@
 
   module.exports = ProfilePictureController;
 
-  ProfilePictureController.$inject = ['ImageService','$modal'];
+  ProfilePictureController.$inject = ['ImageService', '$modal'];
 
   /**
    * Controller for the ProfilePictureDirective
@@ -14,14 +14,9 @@
    */
   function ProfilePictureController(ImageService, $modal) {
     var vm = this;
-    vm.path = __API_ENDPOINT__ + 'api/image/profile/' + vm.contactId;
-    vm.defaultImage = defaultImage;
+    vm.path = ImageService.ProfileImageBaseURL + vm.contactId;
+    vm.defaultImage = ImageService.DefaultProfileImage;
     vm.openModal = openModal;
-
-    function defaultImage(){
-      //TODO Move to constant
-      return '//crossroads-media.imgix.net/images/avatar.svg';
-    }
 
     function openModal() {
       var changeProfileImage = $modal.open({
@@ -31,7 +26,7 @@
         show: false,
       });
 
-      changeProfileImage.result.then(function (croppedImage) {
+      changeProfileImage.result.then(function(croppedImage) {
         vm.path = croppedImage;
         ImageService.ProfileImage.save(croppedImage);
       });
