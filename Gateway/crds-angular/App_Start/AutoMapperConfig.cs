@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Web.Optimization;
 using AutoMapper;
-using crds_angular.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
-using RestSharp.Extensions;
 using Group = MinistryPlatform.Models.Group;
 using Response = MinistryPlatform.Models.Response;
 
@@ -161,7 +158,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
                 .ForMember(dest => dest.DonorID, opts => opts.MapFrom(src => src.DonorID))
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.EmailAddress))
-                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency.Matches("^.*Monthly") ? PlanInterval.Monthly : PlanInterval.Weekly))
+                .ForMember(dest => dest.PlanInterval, opts => opts.MapFrom(src => src.Frequency.IndexOf("Monthly", StringComparison.Ordinal) >= 0 ? PlanInterval.Monthly : PlanInterval.Weekly))
                 .ForMember(dest => dest.Recurrence, opts => opts.MapFrom(src => src.Recurrence))
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.StartDate))
                 .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EndDate))
