@@ -809,6 +809,7 @@ namespace MinistryPlatform.Translation.Services
                         RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
                         SubscriptionId = record.ToString("Subscription_ID"),
+                        Frequency = record.ToInt("Frequency_ID"),
                         ConsecutiveFailureCount = record.ToInt("Consecutive_Failure_Count")
                     };
                 }
