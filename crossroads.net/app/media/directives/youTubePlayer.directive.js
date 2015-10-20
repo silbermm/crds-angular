@@ -3,9 +3,9 @@
 
   module.exports = YouTubePlayer;
 
-  YouTubePlayer.$inject = ['$window', 'YT_EVENT', 'YouTubePlayerFactory','$analytics'];
+  YouTubePlayer.$inject = ['$window', 'YT_EVENT', 'YouTubePlayerFactory', '$analytics'];
 
-  function YouTubePlayer($window, YT_EVENT, YouTubePlayerFactory,$analytics) {
+  function YouTubePlayer($window, YT_EVENT, YouTubePlayerFactory, $analytics) {
     return {
       restrict: 'E',
 

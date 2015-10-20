@@ -15,7 +15,9 @@
     'ImageURL',
     'YT_EVENT',
     'ResponsiveImageService',
-    'ContentSiteConfigService'
+    'SiteConfig',
+    'ContentSiteConfigService',
+    '$analytics'
   ];
 
   function SingleMediaController($rootScope,
@@ -30,7 +32,9 @@
                                  ImageURL,
                                  YT_EVENT,
                                  ResponsiveImageService,
-                                 ContentSiteConfigService) {
+                                 SiteConfig,
+                                 ContentSiteConfigService,
+                                 $analytics) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'message');
@@ -39,6 +43,7 @@
     vm.media = SingleMedia[ItemProperty];
     vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
+    vm.pauseAudioPlayer = pauseAudioPlayer;
     vm.setAudioPlayer = setAudioPlayer;
     vm.showSwitchToAudio = showSwitchToAudio;
     vm.showSwitchToVideo = showSwitchToVideo;
@@ -81,7 +86,16 @@
     }
 
     if (vm.audio) {
-      vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
+      if (ContentSiteConfigService.siteconfig.soundCloudURL) {
+        vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
+      } else {
+        SiteConfig.get({id:1}).$promise.then(function(result) {
+              ContentSiteConfigService.siteconfig = result.siteConfig;
+              vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
+            }
+          );
+      }
+
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
     }
 
@@ -122,6 +136,12 @@
 
     function setAudioPlayer(audioPlayer) {
       vm.audioPlayer = audioPlayer;
+      $analytics.eventTrack('Play', {  category: 'audio', label: _.get(vm.audio, 'serviceId') });
+    }
+
+    function pauseAudioPlayer() {
+      vm.audioPlayer.pause();
+      $analytics.eventTrack('Pause', {  category: 'audio', label: _.get(vm.audio, 'serviceId') });
     }
 
     function sendControlEvent(ctrlEvent) {
@@ -153,7 +173,7 @@
         return;
       }
 
-      vm.audioPlayer.pause();
+      vm.pauseAudioPlayer();
     }
 
     function switchToAudio() {
