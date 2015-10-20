@@ -1106,6 +1106,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Congregation_ID", 555},
                     {"Account_Type_ID", 3},
                     {"Recurring_Gift_ID", 4},
+                    {"Frequency_ID", 1},
                     {"Subscription_ID", "sub_asdf1234"},
                     {"Donor_Account_ID", 5},
                     {"Consecutive_Failure_Count", 1}
