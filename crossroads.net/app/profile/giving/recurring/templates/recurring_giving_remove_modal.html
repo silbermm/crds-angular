@@ -27,7 +27,9 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-danger" ng-click="recurringGift.remove()">
+    <button class="btn btn-danger"
+      ng-class="{disabled: recurringGift.dto.processing}"
+      ng-click="recurringGift.remove()">
       <svg viewBox="0 0 25 32" class="icon icon-trash-o">
         <use xlink:href="#trash-o"></use>
       </svg>
