@@ -96,9 +96,12 @@
     }
 
     function edit(recurringGiveForm) {
+      vm.dto.processing = true;
+
       // Amount is not valid
       if (recurringGiveForm.donationDetailsForm !== undefined && !recurringGiveForm.donationDetailsForm.amount.$valid) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        vm.dto.processing = false;
         return;
       }
 
@@ -106,6 +109,7 @@
       if (recurringGiveForm.donationDetailsForm !== undefined && recurringGiveForm.donationDetailsForm.recurringStartDate.$dirty &&
           !recurringGiveForm.donationDetailsForm.recurringStartDate.$valid) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        vm.dto.processing = false;
         return;
       }
 
@@ -113,6 +117,7 @@
       if ((recurringGiveForm.creditCardForm !== undefined && !recurringGiveForm.creditCardForm.$valid) ||
           (recurringGiveForm.bankAccountForm !== undefined && !recurringGiveForm.bankAccountForm.$valid)) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        vm.dto.processing = false;
         return;
       }
 
