@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 
@@ -7,8 +6,9 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IPaymentService
     {
-        StripeCustomer CreateCustomer(string customerToken, int? donorId = null);
+        StripeCustomer CreateCustomer(string customerToken, string donorDescription = null);
         StripeCustomer GetCustomer(string customerId);
+        StripeCustomer DeleteCustomer(string customerId);
         string CreateToken(string accountNumber, string routingNumber);
         StripeCharge ChargeCustomer(string customerToken, int amount, int donorId);
         StripeCharge ChargeCustomer(string customerToken, string customerSourceId, int amount, int donorId);
