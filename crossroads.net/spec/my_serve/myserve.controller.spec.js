@@ -14,7 +14,7 @@ describe('MyServeController', function() {
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(angular.mock.module(function($provide){
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
     $provide.value('Groups', retArray);
     mockSession= jasmine.createSpyObj('Session', ['exists', 'isActive']);
     mockSession.exists.and.callFake(function(something){

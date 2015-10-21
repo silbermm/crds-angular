@@ -11,7 +11,7 @@ describe('Admin Giving History Tool', function() {
 
   beforeEach(function() {
     angular.mock.module('crossroads', function($provide) {
-      $state = jasmine.createSpyObj('$state', ['go']);
+      $state = jasmine.createSpyObj('$state', ['go', 'get']);
       MPTools = jasmine.createSpyObj('MPTools', ['getParams']);
       GivingHistoryService = {
         impersonateDonorId: undefined

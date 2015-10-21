@@ -66,7 +66,7 @@ describe('Serve Teams Directive', function() {
   });
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector){
