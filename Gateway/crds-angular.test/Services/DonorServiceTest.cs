@@ -1,19 +1,19 @@
-﻿using crds_angular.Services;
-using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Models;
-using Moq;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Services;
+using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
+using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
-using MinistryPlatform.Translation.Enum;
-using MvcContrib.TestHelper.Ui;
+using MinistryPlatform.Translation.Services.Interfaces;
+using Moq;
+using NUnit.Framework;
 using RestSharp.Extensions;
-using PaymentType = crds_angular.Models.Crossroads.Stewardship.PaymentType;
+using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 
 namespace crds_angular.test.Services
 {
@@ -21,11 +21,11 @@ namespace crds_angular.test.Services
     {
         private DonorService _fixture;
 
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService> _mpDonorService;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService> _mpContactService;
-        private Mock<crds_angular.Services.Interfaces.IPaymentService> _paymentService;
+        private Mock<IDonorService> _mpDonorService;
+        private Mock<IContactService> _mpContactService;
+        private Mock<IPaymentService> _paymentService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
-        private Mock<MinistryPlatform.Translation.Services.Interfaces.IAuthenticationService> _authenticationService;
+        private Mock<IAuthenticationService> _authenticationService;
 
         private const string GuestGiverDisplayName = "Guest Giver";
 
@@ -41,10 +41,10 @@ namespace crds_angular.test.Services
         {
             AutoMapperConfig.RegisterMappings();
 
-            _mpDonorService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IDonorService>(MockBehavior.Strict);
-            _mpContactService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IContactService>(MockBehavior.Strict);
-            _paymentService = new Mock<crds_angular.Services.Interfaces.IPaymentService>(MockBehavior.Strict);
-            _authenticationService = new Mock<MinistryPlatform.Translation.Services.Interfaces.IAuthenticationService>(MockBehavior.Strict);
+            _mpDonorService = new Mock<IDonorService>(MockBehavior.Strict);
+            _mpContactService = new Mock<IContactService>(MockBehavior.Strict);
+            _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
+            _authenticationService = new Mock<IAuthenticationService>(MockBehavior.Strict);
 
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(StatementFrequencyNever);
