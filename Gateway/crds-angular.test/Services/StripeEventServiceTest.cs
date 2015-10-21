@@ -471,7 +471,7 @@ namespace crds_angular.test.Services
         {
             const string processorId = "cus_123";
             const string subscriptionId = "sub_123";
-            const int failCount = 2;
+            const int failCount = 3;
             const int recurringGiftId = 123456;
             const int donorId = 3421;
             const int contactId = 765876;
