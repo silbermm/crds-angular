@@ -20,7 +20,7 @@ require('../../../app/trips/trips.module');
     beforeEach(angular.mock.module('crossroads.trips'));
 
     beforeEach(angular.mock.module(function($provide) {
-      $provide.value('$state', {});
+      $provide.value('$state', { get: function() {} });
     }));
 
     beforeEach(inject(function(_$compile_, _$rootScope_, _$httpBackend_) {

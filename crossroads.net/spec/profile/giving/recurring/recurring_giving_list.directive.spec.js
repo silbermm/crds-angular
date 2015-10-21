@@ -40,7 +40,7 @@ describe('RecurringGivingList Directive', function() {
     });
 
     $provide.value('$modal', modal);
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   beforeEach(

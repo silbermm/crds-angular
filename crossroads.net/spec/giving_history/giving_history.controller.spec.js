@@ -12,7 +12,7 @@ describe('GivingHistoryController', function() {
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   var mockDonationYearsResponse =
