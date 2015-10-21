@@ -216,7 +216,7 @@ namespace crds_angular.Services
 
                 donorAccountId = _mpDonorService.CreateDonorAccount(source.brand,
                                                                         DonorRoutingNumberDefault,
-                                                                        source.last4,
+                                                                        string.IsNullOrWhiteSpace(source.bank_last4) ? source.last4 : source.bank_last4,
                                                                         null,
                                                                         contactDonor.DonorId,
                                                                         source.id,
@@ -247,29 +247,66 @@ namespace crds_angular.Services
                 if (stripeSubscription != null)
                 {
                     _logger.Debug(string.Format("Deleting Stripe Subscription {0} for donor {1}", stripeSubscription.Id, contactDonor.DonorId));
-                    _paymentService.CancelSubscription(customer.id, stripeSubscription.Id);
+                    try
+                    {
+                        _paymentService.CancelSubscription(customer.id, stripeSubscription.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Subscription {0} for donor {1}", stripeSubscription.Id, contactDonor.DonorId), ex);
+                    }
                 }
 
                 if (plan != null)
                 {
                     _logger.Debug(string.Format("Deleting Stripe Plan {0} for donor {1}", plan.Id, contactDonor.DonorId));
-                    _paymentService.CancelPlan(plan.Id);
+                    try
+                    {
+                        _paymentService.CancelPlan(plan.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Plan {0} for donor {1}", plan.Id, contactDonor.DonorId), ex);
+                    }
                 }
 
                 if (customer != null)
                 {
-                    _logger.Debug(string.Format("Deleting Stripe Cubscription {0} for donor {1}", customer.id, contactDonor.DonorId));
-                    _paymentService.DeleteCustomer(customer.id);
-                }
-
-                if (recurGiftId != -1)
-                {
-                    _mpDonorService.CancelRecurringGift(authorizedUserToken, recurGiftId);
+                    _logger.Debug(string.Format("Deleting Stripe Customer {0} for donor {1}", customer.id, contactDonor.DonorId));
+                    try
+                    {
+                        _paymentService.DeleteCustomer(customer.id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Customer {0} for donor {1}", customer.id, contactDonor.DonorId), ex);
+                    }
                 }
 
                 if (donorAccountId != -1)
                 {
-                    _mpDonorService.DeleteDonorAccount(authorizedUserToken, donorAccountId);
+                    _logger.Debug(string.Format("Deleting Donor Account {0} for donor {1}", donorAccountId, contactDonor.DonorId));
+                    try
+                    {
+                        _mpDonorService.DeleteDonorAccount(authorizedUserToken, donorAccountId);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Donor Account {0} for donor {1}", donorAccountId, contactDonor.DonorId), ex);
+                    }
+                }
+
+                if (recurGiftId != -1)
+                {
+                    _logger.Debug(string.Format("Deleting Recurring Gift {0} for donor {1}", recurGiftId, contactDonor.DonorId));
+                    try
+                    {
+                        _mpDonorService.CancelRecurringGift(authorizedUserToken, recurGiftId);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Recurring Gift {0} for donor {1}", recurGiftId, contactDonor.DonorId), ex);
+                    }
                 }
 
                 throw;
@@ -279,9 +316,8 @@ namespace crds_angular.Services
         public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
-            var donor = GetContactDonorForDonorId(existingGift.DonorId);
 
-            var subscription = _paymentService.CancelSubscription(donor.ProcessorId, existingGift.SubscriptionId);
+            var subscription = _paymentService.CancelSubscription(existingGift.StripeCustomerId, existingGift.SubscriptionId);
             _paymentService.CancelPlan(subscription.Plan.Id);
 
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
@@ -320,16 +356,16 @@ namespace crds_angular.Services
             if (changedPayment)
             {
                 // If the payment method changed, we need to create a new Stripe Source.
-                var source = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
+                var source = _paymentService.UpdateCustomerSource(existingGift.StripeCustomerId, editGift.StripeTokenId);
                 // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
 
                 donorAccountId = _mpDonorService.CreateDonorAccount(source.brand,
                                                                     DonorRoutingNumberDefault,
-                                                                    source.last4,
+                                                                    string.IsNullOrWhiteSpace(source.bank_last4) ? source.last4 : source.bank_last4,
                                                                     null, //Encrypted account
                                                                     existingGift.DonorId,
                                                                     source.id,
-                                                                    donor.ProcessorId);
+                                                                    existingGift.StripeCustomerId);
 
                 // If we are not going to create a new Recurring Gift, then we'll update the existing
                 // gift with the new donor account
@@ -352,11 +388,11 @@ namespace crds_angular.Services
                 if (needsNewStripePlan)
                 {
                     // If we need a new Stripe Plan, cancel the old subscription and plan, and create a new one
-                    var oldSubscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
+                    var oldSubscription = _paymentService.CancelSubscription(existingGift.StripeCustomerId, stripeSubscription.Id);
                     _paymentService.CancelPlan(oldSubscription.Plan.Id);
 
                     var plan = _paymentService.CreatePlan(editGift, donor);
-                    stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
+                    stripeSubscription = _paymentService.CreateSubscription(plan.Id, existingGift.StripeCustomerId);
                 }
 
                 // Cancel the old recurring gift, and create a new one

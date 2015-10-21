@@ -794,7 +794,9 @@ namespace MinistryPlatform.Translation.Services
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
-                        SubscriptionId = record.ToString("Subscription_ID")
+                        SubscriptionId = record.ToString("Subscription_ID"),
+                        StripeCustomerId = record.ToString("Processor_ID"),
+                        StripeAccountId = record.ToString("Processor_Account_ID")
                     };
                 }
             }
