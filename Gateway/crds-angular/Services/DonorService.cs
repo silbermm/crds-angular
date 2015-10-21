@@ -55,7 +55,7 @@ namespace crds_angular.Services
             _statementTypeIndividual = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
-            _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongreagtion");
+            _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongregation");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)

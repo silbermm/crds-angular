@@ -29,6 +29,8 @@
   </form>
 
   <div class="modal-footer">
-    <button class="btn btn-primary" ng-click="recurringGift.edit(recurringGiveForm)">Update</button>
+    <button class="btn btn-primary"
+      ng-class="{disabled: recurringGift.dto.processing}"
+      ng-click="recurringGift.edit(recurringGiveForm)">Update</button>
   </div>
 </script>
