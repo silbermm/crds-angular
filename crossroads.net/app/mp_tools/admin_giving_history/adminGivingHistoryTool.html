@@ -1,18 +1,18 @@
 <div ng-init="AdminGivingHistory.activate()">
-    <div ng-if="!AdminGivingHistory.allowAccess()" class="alert alert-danger" role="alert">
+    <div ng-if="!AdminGivingHistory.allowAccess" class="alert alert-danger" role="alert">
         Sorry, you must have the "Stewardship Donation Processor" role to run this tool.  Please contact an administrator.
     </div>
 
-    <div ng-if="AdminGivingHistory.allowAccess()">
-        <div ng-if="AdminGivingHistory.noSelection" class="alert alert-danger" role="alert">
+    <div ng-if="AdminGivingHistory.allowAccess">
+        <div ng-if="AdminGivingHistory.service.dto.noSelection" class="alert alert-danger" role="alert">
             Sorry, you must select a single donor record in the grid before launching this tool, or launch this tool from the edit view.
         </div>
 
-        <div ng-if="AdminGivingHistory.tooManySelections" class="alert alert-danger" role="alert">
+        <div ng-if="AdminGivingHistory.service.dto.tooManySelections" class="alert alert-danger" role="alert">
             Sorry, you cannot run this tool with multiple donors selected.  Please select only one donor.
         </div>
 
-        <div ng-if="AdminGivingHistory.selectionError" class="alert alert-danger" role="alert">
+        <div ng-if="AdminGivingHistory.service.dto.selectionError" class="alert alert-danger" role="alert">
             Sorry, there was an error retrieving the donor record for your selection.
         </div>
     </div>
