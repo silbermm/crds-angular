@@ -36,7 +36,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
 
     vm.signupService = $scope.$parent.tripsSignup.signupService;
     vm.abuseHistory = vm.signupService.person.singleAttributes[attributeTypes.ABUSE_HISTORY];
-    vm.abuseOptions = AbuseHistory; 
+    vm.abuseOptions = AbuseHistory;
     vm.allergies = vm.signupService.person.singleAttributes[attributeTypes.ALLERGIES];
     vm.dietaryRestrictions = vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS].attributes;
     vm.experienceAbroad = vm.signupService.person.singleAttributes[attributeTypes.EXPERIENCE_ABROAD];
