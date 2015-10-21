@@ -33,6 +33,7 @@ namespace crds_angular.Services
         private readonly int _statementTypeIndividual;
         private readonly int _statementMethodNone;
         private readonly int _statementMethodPostalMail;
+        private readonly int _notSiteSpecificCongregation;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
@@ -50,6 +51,7 @@ namespace crds_angular.Services
             _statementTypeIndividual = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
+            _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongreagtion");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -192,7 +194,7 @@ namespace crds_angular.Services
                                                            contactDonor.ProcessorId);
             var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
             var contact = _mpContactService.GetContactById(contactDonor.ContactId);
-            var congregation = contact.Congregation_ID ?? 5;
+            var congregation = contact.Congregation_ID ?? _notSiteSpecificCongregation;
            
             var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
                                                                 donorAccountId,
