@@ -86,16 +86,7 @@
     }
 
     if (vm.audio) {
-      if (ContentSiteConfigService.siteconfig.soundCloudURL) {
-        vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
-      } else {
-        SiteConfig.get({id:1}).$promise.then(function(result) {
-              ContentSiteConfigService.siteconfig = result.siteConfig;
-              vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
-            }
-          );
-      }
-
+      vm.audio.audioUrl = ContentSiteConfigService.siteconfig.soundCloudURL + _.get(vm.audio, 'serviceId');
       vm.audioDownloadLink = _.get(vm.audio, 'source.filename');
     }
 
@@ -134,8 +125,9 @@
       vm.videoPlayerIsVisible = false;
     }
 
-    function setAudioPlayer(audioPlayer) {
-      vm.audioPlayer = audioPlayer;
+    function setAudioPlayer(player, track) {
+      vm.audioPlayer = player;
+      vm.audioPlayer.play(track.src);
       $analytics.eventTrack('Play', {  category: 'audio', label: _.get(vm.audio, 'serviceId') });
     }
 
