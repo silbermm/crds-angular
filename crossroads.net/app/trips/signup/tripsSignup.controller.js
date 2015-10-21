@@ -71,6 +71,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.spiritualSelected = spiritualSelected;
     vm.tripName = vm.campaign.name;
     vm.underAge = underAge;
+    vm.updateFrequentFlyer = updateFrequentFlyer;
     vm.validateProfile = validateProfile;
     vm.validation = Validation;
     vm.phoneFormat = vm.validation.phoneFormat();
@@ -340,7 +341,12 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function saveData() {
-      
+       _.forEach(vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes, function(flyer) {
+        if(flyer.notes) {
+          flyer.selected = true;
+        }
+      });
+
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
@@ -450,6 +456,12 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
     function underAge() {
       return Session.exists('age') && Session.exists('age') < 18;
+    }
+
+    function updateFrequentFlyer(ff) {
+      if(ff.notes) {
+        ff.selected = true;
+      }
     }
 
     function validateProfile(profile, household) {
