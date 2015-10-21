@@ -708,7 +708,7 @@ namespace MinistryPlatform.Translation.Services
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
 
-        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
+        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId, int congregationId)
         {
             int? dayOfWeek = null;
             int? dayOfMonth = null;
@@ -734,7 +734,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Amount", planAmount},
                 {"Start_Date", startDate},
                 {"Program_ID", program},
-                {"Congregation_ID", 1},
+                {"Congregation_ID", congregationId},
                 {"Subscription_ID", subscriptionId}
             };
 

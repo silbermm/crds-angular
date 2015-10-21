@@ -1066,6 +1066,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var startDate = DateTime.Today;
             const string program = "555";
             const string subscriptionId = "sub_123";
+            const int congregationId = 1;
 
             const int recurringGiftId = 987;
 
@@ -1079,13 +1080,13 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Amount", planAmount},
                 {"Start_Date", startDate},
                 {"Program_ID", program},
-                {"Congregation_ID", 1},
+                {"Congregation_ID", congregationId},
                 {"Subscription_ID", subscriptionId}
             };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(45243, expectedParms, It.IsAny<string>(), true)).Returns(recurringGiftId);
 
-            var result = _fixture.CreateRecurringGiftRecord("auth", donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId);
+            var result = _fixture.CreateRecurringGiftRecord("auth", donorId, donorAccountId, planInterval, planAmount, startDate, program, subscriptionId, congregationId);
             _ministryPlatformService.VerifyAll();
 
             Assert.AreEqual(recurringGiftId, result);
