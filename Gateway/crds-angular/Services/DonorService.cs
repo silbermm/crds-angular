@@ -7,9 +7,11 @@ using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Services;
+using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 
 namespace crds_angular.Services
 {
@@ -31,6 +33,7 @@ namespace crds_angular.Services
         private readonly int _statementTypeIndividual;
         private readonly int _statementMethodNone;
         private readonly int _statementMethodPostalMail;
+        private readonly int _notSiteSpecificCongregation;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
@@ -48,6 +51,7 @@ namespace crds_angular.Services
             _statementTypeIndividual = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
+            _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongregation");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -189,6 +193,8 @@ namespace crds_angular.Services
                                                            response.id,
                                                            contactDonor.ProcessorId);
             var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
+            var contact = _mpContactService.GetContactById(contactDonor.ContactId);
+            var congregation = contact.Congregation_ID ?? _notSiteSpecificCongregation;
            
             var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
                                                                 donorAccountId,
@@ -196,7 +202,8 @@ namespace crds_angular.Services
                                                                 recurringGiftDto.PlanAmount,
                                                                 recurringGiftDto.StartDate,
                                                                 recurringGiftDto.Program,
-                                                                stripeSubscription.Id);
+                                                                stripeSubscription.Id,
+                                                                congregation);
             return recurGiftId;
         }
 
@@ -285,6 +292,8 @@ namespace crds_angular.Services
 
                 // Cancel the old recurring gift, and create a new one
                 _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+                var contact = _mpContactService.GetContactById(donor.ContactId);
+                var congregation = contact.Congregation_ID ?? 5;
 
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
                                                                             donor.DonorId,
@@ -293,7 +302,8 @@ namespace crds_angular.Services
                                                                             editGift.PlanAmount,
                                                                             editGift.StartDate,
                                                                             editGift.Program,
-                                                                            stripeSubscription.Id);
+                                                                            stripeSubscription.Id,
+                                                                            congregation);
 
             }
 

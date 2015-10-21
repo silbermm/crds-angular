@@ -97,7 +97,7 @@
         <div class="col-sm-12">
           <legend>Frequent Flyer Information</legend>
         </div>
-        <div class="form-group col-sm-6" ng-repeat="flyer in tripsSignup.signupService.page6.frequentFlyers" ng-show="tripsSignup.showFrequentFlyer(flyer)" >
+        <div class="form-group col-sm-6" ng-repeat="flyer in signupStep.frequentFlyers" ng-show="tripsSignup.showFrequentFlyer(flyer)" >
           <label for="deltaff">{{flyer.name}}</label>
           <input ng-model="flyer.notes"
                  type="text" 

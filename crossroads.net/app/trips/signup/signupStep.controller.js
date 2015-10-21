@@ -71,6 +71,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           evaluatePreviousTripExperience();
           break;
         case '6':
+          evaluateFrequentFlyers();
           evaluateInternationalExperience();
           break;
         default:
@@ -83,6 +84,14 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       if (!vm.allergies.attribute) {
         vm.allergies.attribute = {
           attributeId: attributes.ALL_ALLERGIES
+        };
+      }
+    }
+
+    function evaluateFrequentFlyers() {
+      if (!vm.frequentFlyers.attribute) {
+        vm.frequentFlyers.attribute = {
+          attributeId: attributes.FREQUENT_FLYERS
         };
       }
     }
