@@ -90,8 +90,8 @@ namespace crds_angular.Controllers.API
             {
                 const String fileName = "profile.png";
 
-                var contactId = _authenticationService.GetContactId(token); 
-                var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
+                var contactId = _authenticationService.GetContactId(token);
+                var files = _mpService.GetFileDescriptions("MyContact", contactId, token);
                 var file = files.FirstOrDefault(f => f.IsDefaultImage);
                 var base64String = Request.Content.ReadAsStringAsync().Result;
 
