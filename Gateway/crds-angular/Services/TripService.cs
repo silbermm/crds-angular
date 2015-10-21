@@ -516,7 +516,7 @@ namespace crds_angular.Services
         {
             try
             {
-                UpdatePassport(dto);
+                //UpdatePassport(dto);
                 UpdateChildSponsorship(dto);
                 SaveParticipant(dto);
                 var formResponse = new FormResponse();
@@ -591,7 +591,7 @@ namespace crds_angular.Services
             {
                 MyContact c = _contactService.GetContactById(dto.ContactId);
                 c.Passport_Country = dto.PageSix.PassportCountry;
-                c.Passport_Expiration = DateTime.Parse(dto.PageSix.PassportExpirationDate);
+                //c.Passport_Expiration = DateTime.Parse(dto.PageSix.PassportExpirationDate);
                 c.Passport_Firstname = dto.PageSix.PassportFirstName;
                 c.Passport_Lastname = dto.PageSix.PassportLastName;
                 c.Passport_Middlename = dto.PageSix.PassportMiddleName;
