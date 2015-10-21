@@ -117,7 +117,7 @@ namespace crds_angular.Controllers.API
                 else
                 {
                     _mpService.CreateFile(
-                        "Contacts",
+                        "MyContact",
                         contactId,
                         fileName,
                         "Profile Image",
