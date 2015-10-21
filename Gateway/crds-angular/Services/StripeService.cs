@@ -96,10 +96,10 @@ namespace crds_angular.Services
             return (e);
         }
 
-        public StripeCustomer CreateCustomer(string customerToken)
+        public StripeCustomer CreateCustomer(string customerToken, int? donorId = null)
         {
             var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
+            request.AddParameter("description", string.Format(StripeCustomerDescription, donorId.HasValue ? donorId + "" : "pending")); // adds to POST or URL querystring based on Method
             request.AddParameter("source", customerToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);

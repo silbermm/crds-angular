@@ -98,12 +98,13 @@ namespace crds_angular.Services
         ///    whether a Customer needs to be created at the payment processor, etc.
         /// </summary>
         /// <param name="contactDonor">An existing ContactDonor, looked up from either GetDonorForEmail or GetDonorForAuthenticatedUser.  This may be null, indicating there is no existing contact or donor.</param>
-       ///  <param name="encryptedKey"> The encrypted routing and account number</param>
+        ///  <param name="encryptedKey"> The encrypted routing and account number</param>
         /// <param name="emailAddress">An email address to use when creating a Contact (#1 above).</param>
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
+        /// <param name="createPaymentProcessorCustomer">Create a payment processor customer record.  Defaults to true.</param>
         /// <returns></returns>
-        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
+        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate, bool createPaymentProcessorCustomer = true)
         {
             var contactDonorResponse = new ContactDonor();
             StripeCustomer stripeCustomer = null;
@@ -122,7 +123,10 @@ namespace crds_angular.Services
                     contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
                 }
 
-                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                if (createPaymentProcessorCustomer)
+                {
+                    stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                }
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
                 if (donorAccount != null)
@@ -181,16 +185,16 @@ namespace crds_angular.Services
 
         public int CreateRecurringGift(string authorizedUserToken, RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
-            var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
+            var customer = _paymentService.CreateCustomer(recurringGiftDto.StripeTokenId, contactDonor.DonorId);
 
             var plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
 
-            var donorAccountId = _mpDonorService.CreateDonorAccount(response.brand,
+            var donorAccountId = _mpDonorService.CreateDonorAccount(customer.brand,
                                                            DonorRoutingNumberDefault,
-                                                           response.last4,
+                                                           customer.last4,
                                                            null,
                                                            contactDonor.DonorId,
-                                                           response.id,
+                                                           customer.id,
                                                            contactDonor.ProcessorId);
             var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
             var contact = _mpContactService.GetContactById(contactDonor.ContactId);
