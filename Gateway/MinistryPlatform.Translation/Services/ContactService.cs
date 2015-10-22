@@ -149,13 +149,28 @@ namespace MinistryPlatform.Translation.Services
                 Mobile_Carrier = recordsDict.ToNullableInt("Mobile_Carrier_ID"),
                 Mobile_Phone = recordsDict.ToString("Mobile_Phone"),
                 Nickname = recordsDict.ToString("Nickname"),
-                Age = recordsDict.ToInt("Age")
+                Age = recordsDict.ToInt("Age"),
+                Passport_Number = recordsDict.ToString("Passport_Number"),
+                Passport_Country = recordsDict.ToString("Passport_Country"),
+                Passport_Expiration = ParseExpirationDate(recordsDict.ToNullableDate("Passport_Expiration")),
+                Passport_Firstname = recordsDict.ToString("Passport_Firstname"),
+                Passport_Lastname = recordsDict.ToString("Passport_Lastname"),
+                Passport_Middlename = recordsDict.ToString("Passport_Middlename")              
             };
             if (recordsDict.ContainsKey("ID_Card"))
             {
                 contact.ID_Number = recordsDict.ToString("ID_Card");
             }            
             return contact;
+        }
+
+        private static string ParseExpirationDate(DateTime? date)
+        {
+            if (date != null)
+            {
+                return String.Format("{0:MM/dd/yyyy}", date);
+            }
+            return null;
         }
 
         private static string ParseAnniversaryDate(DateTime? anniversary)

@@ -152,7 +152,13 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.HouseholdId, opts => opts.MapFrom(src => src.Household_ID))
                 .ForMember(dest => dest.HouseholdName, opts => opts.MapFrom(src => src.Household_Name))
                 .ForMember(dest => dest.AddressId, opts => opts.MapFrom(src => src.Address_ID))
-                .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age));
+                .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age))
+                .ForMember(dest => dest.PassportExpiration, opts=> opts.MapFrom(src => src.Passport_Expiration))
+                .ForMember(dest => dest.PassportNumber, opts => opts.MapFrom(src => src.Passport_Number))
+                .ForMember(dest => dest.PassportFirstname, opts => opts.MapFrom(src => src.Passport_Firstname))
+                .ForMember(dest => dest.PassportLastname, opts => opts.MapFrom(src => src.Passport_Lastname))
+                .ForMember(dest => dest.PassportMiddlename, opts => opts.MapFrom(src => src.Passport_Middlename))
+                .ForMember(dest => dest.PassportCountry, opts => opts.MapFrom(src => src.Passport_Country));
 
             Mapper.CreateMap<RecurringGift, RecurringGiftDto>()
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
