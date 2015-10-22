@@ -38,8 +38,13 @@
 
     <div class="row">
       <div class="form-group col-sm-6">
-        <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
-        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName">
+        <label for="nickname" class="required">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
+        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName" required>
+        <ng-messages for="profile.pform.nickname.$error" ng-if="profile.validation.showErrors(profile.pform, 'nickname')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
 
