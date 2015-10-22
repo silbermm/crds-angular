@@ -53,7 +53,7 @@
       if (toState.name === 'give.recurring'){
         return;
       }
-      if (!vm.dto.initialized || toState.name === 'give') {
+      if ((!vm.dto.initialized || toState.name === 'give') && toState.name === "give.recurring"){
         event.preventDefault();
         vm.service.initDefaultState();
         return;
