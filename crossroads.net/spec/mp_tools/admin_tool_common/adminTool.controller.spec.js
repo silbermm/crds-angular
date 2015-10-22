@@ -19,7 +19,7 @@ describe('Admin Common Tool', function() {
         $state.go('tools.adminGivingHistory');
       };
 
-      $provide.constant('role', GIVE_ROLES);
+      $provide.constant('role', GIVE_ROLES.StewardshipDonationProcessor);
       $provide.value('goToFunction', goToFunction);
     });
   });
@@ -49,7 +49,7 @@ describe('Admin Common Tool', function() {
       it('should not change state if access is not allowed', function() {
         AuthService.isAuthenticated.and.returnValue(false);
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
         expect(fixture.service.dto.noSelection).toBeUndefined();
         expect(fixture.service.dto.selectionError).toBeUndefined();
@@ -60,7 +60,7 @@ describe('Admin Common Tool', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
         expect(fixture.service.dto.noSelection).toBeTruthy();
         expect(fixture.service.dto.selectionError).toBeUndefined();
@@ -77,7 +77,7 @@ describe('Admin Common Tool', function() {
           }
         });
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
         expect(fixture.service.dto.noSelection).toBeFalsy();
         expect(fixture.service.dto.selectionError).toBeUndefined();
@@ -95,7 +95,7 @@ describe('Admin Common Tool', function() {
           }
         });
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).toHaveBeenCalledWith('tools.adminGivingHistory');
         expect(GivingHistoryService.impersonateDonorId).toEqual(123);
       });
@@ -119,7 +119,7 @@ describe('Admin Common Tool', function() {
         });
         MPTools.Selection = callback;
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
         expect(GivingHistoryService.impersonateDonorId).toBeUndefined();
         expect(actualParams).toBeDefined();
@@ -150,7 +150,7 @@ describe('Admin Common Tool', function() {
         });
         MPTools.Selection = callback;
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).toHaveBeenCalledWith('tools.adminGivingHistory');
         expect(GivingHistoryService.impersonateDonorId).toEqual(123);
         expect(actualParams).toBeDefined();
@@ -162,7 +162,7 @@ describe('Admin Common Tool', function() {
 
       it('Should not allow access if user is not authenticated', function() {
         AuthService.isAuthenticated.and.returnValue(false);
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
         expect(fixture.allowAccess).toBeFalsy();
 
@@ -173,7 +173,7 @@ describe('Admin Common Tool', function() {
       it('Should not allow access if user is authenticated but not authorized', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(false);
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
         expect(fixture.allowAccess).toBeFalsy();
 
@@ -184,7 +184,7 @@ describe('Admin Common Tool', function() {
       it('Should allow access if user is authenticated and authorized', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
         expect(fixture.allowAccess).toBeTruthy();
 
