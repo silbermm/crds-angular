@@ -20,7 +20,7 @@ DECLARE @ContactIdTbl TABLE (ID INT, New_Nickname VARCHAR(MAX), Prev_Nickname VA
   SET Nickname = First_Name 
   OUTPUT INSERTED.Contact_ID, INSERTED.Nickname, DELETED.Nickname INTO @ContactIdTbl
   FROM Contacts C 
-  WHERE Nickname IS NULL and First_Name IS NOT NULL and Contact_Id='1367488'
+  WHERE Nickname IS NULL and First_Name IS NOT NULL
   
   DECLARE @AuditLogTbl TABLE (AID INT, Record_ID INT)
     INSERT INTO dbo.dp_Audit_Log
