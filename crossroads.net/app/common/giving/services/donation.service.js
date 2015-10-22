@@ -79,12 +79,12 @@
       }
     }
 
-    function createRecurringGift() {
+    function createRecurringGift(impersonateDonorId = null) {
       GiveTransferService.processing = true;
 
       if (GiveTransferService.view === 'cc') {
         donationService.createCard();
-        PaymentService.createRecurringGiftWithCard(donationService.card)
+        PaymentService.createRecurringGiftWithCard(donationService.card, impersonateDonorId)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
             GiveTransferService.email = recurringGift.email;
@@ -92,7 +92,7 @@
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
-        PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
+        PaymentService.createRecurringGiftWithBankAcct(donationService.bank, impersonateDonorId)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
             GiveTransferService.email = recurringGift.email;
@@ -101,30 +101,30 @@
       }
     }
 
-    function updateRecurringGift(accountInfoUpdated = false) {
+    function updateRecurringGift(accountInfoUpdated = false, impersonateDonorId = null) {
       GiveTransferService.processing = true;
 
       if (GiveTransferService.view === 'cc' && accountInfoUpdated) {
         donationService.createCard();
-        return PaymentService.updateRecurringGiftWithCard(donationService.card, GiveTransferService.recurringGiftId);
+        return PaymentService.updateRecurringGiftWithCard(donationService.card, GiveTransferService.recurringGiftId, impersonateDonorId);
       } else if (GiveTransferService.view === 'bank' && accountInfoUpdated) {
         donationService.createBank();
-        return PaymentService.updateRecurringGiftWithBankAcct(donationService.bank, GiveTransferService.recurringGiftId);
+        return PaymentService.updateRecurringGiftWithBankAcct(donationService.bank, GiveTransferService.recurringGiftId, impersonateDonorId);
       } else {
-        return PaymentService.updateRecurringGiftDonorOnlyInformation(GiveTransferService.recurringGiftId);
+        return PaymentService.updateRecurringGiftDonorOnlyInformation(GiveTransferService.recurringGiftId, impersonateDonorId);
       }
     }
 
-    function deleteRecurringGift() {
-      return PaymentService.deleteRecurringGift(GiveTransferService.recurringGiftId);
+    function deleteRecurringGift(impersonateDonorId = null) {
+      return PaymentService.deleteRecurringGift(GiveTransferService.recurringGiftId, impersonateDonorId);
     }
 
-    function getRecurringGift() {
-      return PaymentService.getRecurringGift(GiveTransferService.recurringGiftId);
+    function getRecurringGift(impersonateDonorId = null) {
+      return PaymentService.getRecurringGift(GiveTransferService.recurringGiftId, impersonateDonorId);
     }
 
-    function queryRecurringGifts() {
-      return PaymentService.queryRecurringGifts();
+    function queryRecurringGifts(impersonateDonorId = null) {
+      return PaymentService.queryRecurringGifts(impersonateDonorId);
     }
 
     function confirmDonation(programsInput) {
