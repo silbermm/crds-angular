@@ -22,4 +22,5 @@ SELECT STUFF((
                     INNER JOIN dbo.Contacts c ON cr.Contact_ID = c.Contact_ID 
 			where cr.Relationship_ID = @SponsoredRelationshipID
 			  and cr.Related_Contact_ID = @Contact
+			  and (cr.End_Date <= @SignUpDate or cr.End_Date is null)
                FOR XML PATH( '' ), TYPE ).value( '.', 'nvarchar(max)' ), 1, 1, '');
