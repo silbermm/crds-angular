@@ -53,7 +53,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.frequentFlyerChanged = frequentFlyerChanged;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
-    vm.hasPassport = hasPassport;
     vm.isIndia = isIndia;
     vm.isNica = isNica;
     vm.isNola = isNola;
@@ -208,11 +207,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         saveData();
       }
     }
-
-    function hasPassport() {
-      return (vm.signupService.page6.validPassport === 'yes');
-    }
-
 
     function isIndia() {
       if (vm.destination === 'India') {
