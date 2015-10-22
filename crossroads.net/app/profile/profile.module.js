@@ -13,7 +13,7 @@
   require('./profile.html');
   require('./profilePersonal.html');
 
-  app.controller('ProfileController', require('./profile.controller'))
+  app.controller('ProfileController', require('./profile.controller'));
 
   // Modal
   require('./editProfile.html');
@@ -21,7 +21,7 @@
 
   // Shared Services
   app.factory('Lookup', ['$resource', 'Session', require('./services/profile_lookup_service')]);
-  app.factory('Profile', ['$resource',require('./services/profile_service')]);
+  app.factory('Profile', ['$resource', require('./services/profile_service')]);
   app.factory('ProfileReferenceData', ['Lookup', 'Profile', '$resolve', require('./services/profile_reference_data')]);
 
   // Skills

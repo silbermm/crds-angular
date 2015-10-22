@@ -10,7 +10,7 @@ describe('Natural Number Validation Directive', function() {
   });
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   beforeEach(inject(function($injector,_$compile_, _$rootScope_) {

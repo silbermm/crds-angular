@@ -40,6 +40,13 @@
                   $state.next.data.meta = systemPage.systemPages[0];
                 }
               });
+          },
+
+          SiteConfig: function(SiteConfig, ContentSiteConfigService) {
+            return SiteConfig.get({id:1}).$promise.then(function(result) {
+                  ContentSiteConfigService.siteconfig = result.siteConfig;
+                }
+              );
           }
         }
       })

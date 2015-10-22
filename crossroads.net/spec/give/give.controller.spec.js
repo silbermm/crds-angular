@@ -26,7 +26,9 @@ describe('GiveController', function() {
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
     $provide.value('$state', {
-      go: function() {}
+      go: function() {},
+
+      get: function() {}
     });
 
     programList = [

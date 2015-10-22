@@ -15,7 +15,9 @@
     'ImageURL',
     'YT_EVENT',
     'ResponsiveImageService',
-    'ContentSiteConfigService'
+    'SiteConfig',
+    'ContentSiteConfigService',
+    '$analytics'
   ];
 
   function SingleMediaController($rootScope,
@@ -30,7 +32,9 @@
                                  ImageURL,
                                  YT_EVENT,
                                  ResponsiveImageService,
-                                 ContentSiteConfigService) {
+                                 SiteConfig,
+                                 ContentSiteConfigService,
+                                 $analytics) {
     var vm = this;
     vm.imageUrl = ImageURL;
     vm.isMessage = (ItemProperty === 'message');
@@ -39,6 +43,7 @@
     vm.media = SingleMedia[ItemProperty];
     vm.pauseVideo = pauseVideo;
     vm.playVideo = playVideo;
+    vm.pauseAudioPlayer = pauseAudioPlayer;
     vm.setAudioPlayer = setAudioPlayer;
     vm.showSwitchToAudio = showSwitchToAudio;
     vm.showSwitchToVideo = showSwitchToVideo;
@@ -120,8 +125,15 @@
       vm.videoPlayerIsVisible = false;
     }
 
-    function setAudioPlayer(audioPlayer) {
-      vm.audioPlayer = audioPlayer;
+    function setAudioPlayer(player, track) {
+      vm.audioPlayer = player;
+      vm.audioPlayer.play(track.src);
+      $analytics.eventTrack('Play', {  category: 'audio', label: _.get(vm.audio, 'serviceId') });
+    }
+
+    function pauseAudioPlayer() {
+      vm.audioPlayer.pause();
+      $analytics.eventTrack('Pause', {  category: 'audio', label: _.get(vm.audio, 'serviceId') });
     }
 
     function sendControlEvent(ctrlEvent) {
@@ -153,7 +165,7 @@
         return;
       }
 
-      vm.audioPlayer.pause();
+      vm.pauseAudioPlayer();
     }
 
     function switchToAudio() {
