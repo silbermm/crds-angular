@@ -18,7 +18,7 @@ namespace crds_angular.Services.Interfaces
             
         ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
 
-        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate /*, bool createPaymentProcessorCustomer = true*/);
 
         string DecryptValues(string value);
 

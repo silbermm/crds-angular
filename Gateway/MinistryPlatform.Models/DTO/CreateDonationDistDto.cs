@@ -17,5 +17,7 @@ namespace MinistryPlatform.Models.DTO
         public DateTime? StartDate { get; set; }
         public string SubscriptionId { get; set; }
         public int ConsecutiveFailureCount { get; set; }
+        public string StripeCustomerId { get; set; }
+        public string StripeAccountId { get; set; }
     }
 }
