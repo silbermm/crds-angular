@@ -1,13 +1,13 @@
 (function(){
-  'use strict()'; 
-  
+  'use strict()';
+
   var _ = require('lodash');
-  
-  module.exports = MPTools; 
+
+  module.exports = MPTools;
 
   MPTools.$inject = ['$location', '$resource', 'AuthService'];
 
-  function MPTools($location, $resource, AuthService){
+  function MPTools($location, $resource, AuthService) {
     var service = {
       setParams: setParams,
       getParams: getParams,
@@ -19,34 +19,35 @@
         selectionError: undefined,
         tooManySelections: undefined,
       },
-    }
+    };
     var params =  {};
 
     function setParams(location) {
       console.log('saving location info to a service');
       params = {
-        userGuid: location.search()['ug'],
-        domainGuid: location.search()['dg'],
-        pageId: location.search()['pageID'],
-        recordId: location.search()['recordID'],
-        recordDescription: location.search()['recordDescription'],
-        selectedRecord: location.search()['s'],
-        selectedCount: location.search()['sc']
+        userGuid: location.search().ug,
+        domainGuid: location.search().dg,
+        pageId: location.search().pageID,
+        recordId: location.search().recordID,
+        recordDescription: location.search().recordDescription,
+        selectedRecord: location.search().s,
+        selectedCount: location.search().sc
       };
     }
 
     function getParams() {
-      if(_.isEmpty(params) || params.userGuid === undefined){
-        params = { 
-          userGuid: $location.search()['ug'],
-          domainGuid: $location.search()['dg'],
-          pageId: $location.search()['pageID'],
-          recordId: $location.search()['recordID'],
-          recordDescription: $location.search()['recordDescription'],
-          selectedRecord: $location.search()['s'],
-          selectedCount: $location.search()['sc']
+      if (_.isEmpty(params) || params.userGuid === undefined) {
+        params = {
+          userGuid: $location.search().ug,
+          domainGuid: $location.search().dg,
+          pageId: $location.search().pageID,
+          recordId: $location.search().recordID,
+          recordDescription: $location.search().recordDescription,
+          selectedRecord: $location.search().s,
+          selectedCount: $location.search().sc
         };
       }
+
       return params;
     }
 
@@ -70,6 +71,7 @@
         service.Selection.get({selectionId: selectionId}, function(data) {
           goToFunction(data.RecordIds[0]);
         }, function(error) {
+
           service.dto.selectionError = true;
         });
       }

@@ -28,13 +28,26 @@
           GIVE_ROLES: 'GIVE_ROLES',
           GivingHistoryService: 'GivingHistoryService',
           role: function(GIVE_ROLES) {
-            return GIVE_ROLES.StewardshipDonationProcessor
+            return GIVE_ROLES.StewardshipDonationProcessor;
           },
+
           goToFunction: function(GivingHistoryService, $state) {
             return function(donorId) {
               GivingHistoryService.impersonateDonorId = donorId;
               $state.go('tools.adminGivingHistory');
             };
+          }
+        }
+      })
+      .state('tools.adminGivingHistory', {
+        url: '/adminGivingHistory',
+        controller: 'GivingHistoryController as admin_giving_history_controller',
+        templateUrl: 'admin_giving_history/adminGivingHistory.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Giving History - Admin View',
+            description: ''
           }
         }
       });
