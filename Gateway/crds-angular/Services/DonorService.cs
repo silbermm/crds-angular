@@ -126,14 +126,15 @@ namespace crds_angular.Services
                     contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
                 }
 
-                var donorAccount = contactDonor != null ? contactDonor.Account : null;
                 stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+
+                var donorAccount = contactDonor != null ? contactDonor.Account : null;
                 if (donorAccount != null)
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }
-                contactDonorResponse.ProcessorId = stripeCustomer.id;
 
+                contactDonorResponse.ProcessorId = stripeCustomer.id;
            
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
