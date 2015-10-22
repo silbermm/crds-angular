@@ -71,7 +71,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.spiritualSelected = spiritualSelected;
     vm.tripName = vm.campaign.name;
     vm.underAge = underAge;
-    vm.updateFrequentFlyer = updateFrequentFlyer;
     vm.validateProfile = validateProfile;
     vm.validation = Validation;
     vm.phoneFormat = vm.validation.phoneFormat();
@@ -456,12 +455,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
     function underAge() {
       return Session.exists('age') && Session.exists('age') < 18;
-    }
-
-    function updateFrequentFlyer(ff) {
-      if(ff.notes) {
-        ff.selected = true;
-      }
     }
 
     function validateProfile(profile, household) {
