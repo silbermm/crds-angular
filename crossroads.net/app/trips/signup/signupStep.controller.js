@@ -44,7 +44,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.internationalExpSelected = vm.signupService.person.singleAttributes[attributeTypes.INTERNATIONAL_EXPERIENCE];
     vm.interExperience = InternationalExperience;
     vm.person = vm.signupService.person;
-    vm.passportValid = _.isEmpty(vm.signupService.person.passportNumber) ? "" : "true";
+    vm.passportValid = _.isEmpty(vm.signupService.person.passportNumber) ? '' : 'true';
     vm.scrubBottom = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_BOTTOM_SIZES];
     vm.scrubBottomSizes = ScrubBottomSizes;
     vm.scrubTop = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_TOP_SIZES];
@@ -92,7 +92,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
 
     function evaluateFrequentFlyers() {
       _.forEach(vm.frequentFlyers, function(flyer) {
-        if(flyer.notes) {
+        if (flyer.notes) {
           flyer.selected = true;
         }
       });
