@@ -2,23 +2,25 @@ require('crds-core');
 require('../../../app/common/common.module');
 require('../../../app/app');
 
-describe('Admin Giving History Tool', function() {
+describe('Admin Common Tool', function() {
   var $state;
   var MPTools;
   var GivingHistoryService;
   var AuthService;
+  var goToFunction;
   var GIVE_ROLES = { StewardshipDonationProcessor: 7 };
 
   beforeEach(function() {
     angular.mock.module('crossroads', function($provide) {
       $state = jasmine.createSpyObj('$state', ['go']);
-      GivingHistoryService = {
-        impersonateDonorId: undefined
+      GivingHistoryService = { impersonateDonorId: undefined };
+      goToFunction = function(donorId) {
+        GivingHistoryService.impersonateDonorId = donorId;
+        $state.go('tools.adminGivingHistory');
       };
 
-      $provide.constant('GIVE_ROLES', GIVE_ROLES);
-      $provide.value('$state', $state);
-      $provide.value('GivingHistoryService', GivingHistoryService);
+      $provide.constant('role', GIVE_ROLES);
+      $provide.value('goToFunction', goToFunction);
     });
   });
 
