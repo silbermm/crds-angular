@@ -106,9 +106,8 @@ namespace crds_angular.Services
         /// <param name="emailAddress">An email address to use when creating a Contact (#1 above).</param>
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
-        /// <param name="createPaymentProcessorCustomer">Create a payment processor customer record.  Defaults to true.</param>
         /// <returns></returns>
-        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate /*, bool createPaymentProcessorCustomer = true */)
+        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
             StripeCustomer stripeCustomer = null;
@@ -128,41 +127,29 @@ namespace crds_angular.Services
                 }
 
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                //if (createPaymentProcessorCustomer)
-                //{
-                    stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
-                    if (donorAccount != null)
-                    {
-                        donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
-                    }
-                    contactDonorResponse.ProcessorId = stripeCustomer.id;
-                //}
+                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                if (donorAccount != null)
+                {
+                    donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
+                }
+                contactDonorResponse.ProcessorId = stripeCustomer.id;
 
            
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
 
-                //if (createPaymentProcessorCustomer)
-                //{
-                    _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
-                //}
+                _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
             }
             else if (!contactDonor.HasPaymentProcessorRecord)
             {
                 contactDonorResponse.ContactId = contactDonor.ContactId;
-                //if (createPaymentProcessorCustomer)
-                //{
-                    stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
-                    contactDonorResponse.ProcessorId = stripeCustomer.id;
-                //}
+                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                contactDonorResponse.ProcessorId = stripeCustomer.id;
 
                 if (contactDonor.ExistingDonor)
                 {
-                    //if (createPaymentProcessorCustomer)
-                    //{
-                        contactDonorResponse.DonorId = _mpDonorService.UpdatePaymentProcessorCustomerId(contactDonor.DonorId, contactDonorResponse.ProcessorId);
-                    //}
+                    contactDonorResponse.DonorId = _mpDonorService.UpdatePaymentProcessorCustomerId(contactDonor.DonorId, contactDonorResponse.ProcessorId);
                 }
                 else
                 {
@@ -179,11 +166,7 @@ namespace crds_angular.Services
                     }
                 }
 
-                //if (createPaymentProcessorCustomer)
-                //{
-                    _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
-                //}
-
+                _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
                 contactDonorResponse.RegisteredUser = contactDonor.RegisteredUser;
             }
             else
