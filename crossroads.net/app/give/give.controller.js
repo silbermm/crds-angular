@@ -50,7 +50,9 @@
       }
 
       GiveTransferService.processing = true;
-
+      if (toState.name === 'give.recurring'){
+        return;
+      }
       if (!vm.dto.initialized || toState.name === 'give') {
         event.preventDefault();
         vm.service.initDefaultState();
