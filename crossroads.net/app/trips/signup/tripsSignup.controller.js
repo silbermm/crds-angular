@@ -340,7 +340,12 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function saveData() {
-      
+       _.forEach(vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes, function(flyer) {
+        if(flyer.notes) {
+          flyer.selected = true;
+        }
+      });
+
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
