@@ -516,7 +516,6 @@ namespace crds_angular.Services
         {
             try
             {
-                UpdatePassport(dto);
                 UpdateChildSponsorship(dto);
                 SaveParticipant(dto);
                 var formResponse = new FormResponse();
@@ -583,32 +582,6 @@ namespace crds_angular.Services
         {
             SendMessage("TripApplicantErrorTemplate", contactId);
         }
-
-        private Boolean UpdatePassport(TripApplicationDto dto)
-        {
-            // Is there passport info to save?
-            if (dto.PageSix.PassportFirstName != null)
-            {
-                MyContact c = _contactService.GetContactById(dto.ContactId);
-                c.Passport_Country = dto.PageSix.PassportCountry;
-                c.Passport_Expiration = DateTime.Parse(dto.PageSix.PassportExpirationDate);
-                c.Passport_Firstname = dto.PageSix.PassportFirstName;
-                c.Passport_Lastname = dto.PageSix.PassportLastName;
-                c.Passport_Middlename = dto.PageSix.PassportMiddleName;
-                c.Passport_Number = dto.PageSix.PassportNumber;
-                var contactDictionary = getDictionary(c);
-                try
-                {
-                    _contactService.UpdateContact(dto.ContactId, contactDictionary);           
-                }
-                catch (ApplicationException e)
-                {
-                    _logger.Error("Unable to save contact: " + e.Message);
-                    return false;
-                }
-            }
-            return true;
-       }
 
         private Boolean UpdateChildSponsorship(TripApplicationDto dto)
         {
