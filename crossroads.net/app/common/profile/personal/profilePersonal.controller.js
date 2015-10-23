@@ -61,7 +61,7 @@
     vm.crossroadsStartDate = new Date(1994, 0, 1);
     vm.isMeridian = true;
     vm.openBirthdatePicker = openBirthdatePicker;
-
+    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.thirteenYearsAgo : vm.today);
     function openBirthdatePicker($event) {
       $event.preventDefault();
       $event.stopPropagation();
