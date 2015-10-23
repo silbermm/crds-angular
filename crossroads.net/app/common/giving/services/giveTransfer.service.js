@@ -44,8 +44,6 @@
         }
 
       }
-   // transferObject.reset();
-
 
     function resetForConvert() {
       this.account = '';

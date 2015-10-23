@@ -250,7 +250,7 @@ describe('PaymentService', function() {
       httpBackend.flush();
     });
 
-    it('should not create a donor if createToken fails', function() {
+    it('should not create a donor if createToken failssssss', function() {
       spyOn(stripe.bankAccount, 'createToken').and.callFake(function(donorInfo, callback) {
         callback(500, { error: { type: 'junk', } });
       });
