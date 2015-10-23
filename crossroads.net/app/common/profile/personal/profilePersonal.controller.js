@@ -51,6 +51,35 @@
 
     activate();
 
+    //Datepicker STUFF
+    vm.hstep = 1;
+    vm.mstep = 15;
+    var now = new Date();
+    vm.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.thirteenYearsAgo = new Date(now.getFullYear() - 13, now.getMonth(), now.getDate());
+    vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
+    vm.crossroadsStartDate = new Date(1994, 0, 1);
+    vm.isMeridian = true;
+    vm.openBirthdatePicker = openBirthdatePicker;
+
+    function openBirthdatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.birthdateOpen = true;
+    }
+
+    vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
+
+    function openStartAttendingDatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.startAttendingOpen = true;
+    }
+
+    //END Datepicker STUFF
+
     ////////////////////////////////
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
