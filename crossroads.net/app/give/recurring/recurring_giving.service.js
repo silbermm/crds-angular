@@ -3,9 +3,9 @@
 
   module.exports = RecurringGiving;
 
-  RecurringGiving.$inject = ['GiveTransferService', 'DonationService', 'GiveFlow', 'Session', '$state'];
+  RecurringGiving.$inject = ['GiveTransferService', 'DonationService', 'GiveFlow', 'Session', '$state', '$filter'];
 
-  function RecurringGiving(GiveTransferService, DonationService, GiveFlow, Session, $state) {
+  function RecurringGiving(GiveTransferService, DonationService, GiveFlow, Session, $state, $filter) {
     var service = {
       name: 'RecurringGiving',
       initDefaultState: initDefaultState,
@@ -18,6 +18,7 @@
       processChange: processChange,
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
       resetGiveTransferServiceGiveType: resetGiveTransferServiceGiveType,
+      loadDonationInformation: loadDonationInformation,
     };
 
     function initDefaultState() {
@@ -74,6 +75,60 @@
     }
 
     function getLoggedInUserDonorPaymentInfo(event, toState) {
+    }
+
+    function loadDonationInformation(donation, programsInput) {
+      GiveTransferService.reset();
+
+      GiveTransferService.recurringGiftId = donation.recurring_gift_id;
+      GiveTransferService.amount = donation.amount;
+      GiveTransferService.amountSubmitted = false;
+      GiveTransferService.bankinfoSubmitted = false;
+      GiveTransferService.changeAccountInfo = true;
+      GiveTransferService.brand = '#' + donation.source.icon;
+      GiveTransferService.ccNumberClass = donation.source.icon;
+      GiveTransferService.givingType = donation.interval;
+      GiveTransferService.initialized = true;
+      GiveTransferService.last4 = donation.source.last4;
+      GiveTransferService.program = $filter('filter')(programsInput, {ProgramId: donation.program})[0];
+      GiveTransferService.recurringStartDate = donation.start_date;
+      GiveTransferService.view = donation.source.type === 'CreditCard' ? 'cc' : 'bank';
+      setupInterval(donation);
+      setupDonor(donation);
+    }
+
+    function setupDonor(donation) {
+      GiveTransferService.donor = {
+        id: donation.donor_id,
+        default_source: {
+          credit_card: {
+            last4: null,
+            brand: null,
+            address_zip: null,
+            exp_date: null,
+          },
+          bank_account: {
+            routing: null,
+            last4: null,
+          },
+        },
+      };
+
+      if (donation.source.type === 'CreditCard') {
+        GiveTransferService.donor.default_source.credit_card.last4 = donation.source.last4;
+        GiveTransferService.donor.default_source.credit_card.brand = donation.source.brand;
+        GiveTransferService.donor.default_source.credit_card.address_zip = donation.source.address_zip;
+        GiveTransferService.donor.default_source.credit_card.exp_date = moment(donation.source.exp_date).format('MMYY');
+      } else {
+        GiveTransferService.donor.default_source.bank_account.last4 = donation.source.last4;
+        GiveTransferService.donor.default_source.bank_account.routing = donation.source.routing;
+      }
+    }
+
+    function setupInterval(donation) {
+      if (donation.interval !== null) {
+        GiveTransferService.interval = _.capitalize(donation.interval.toLowerCase()) + 'ly';
+      }
     }
 
     return service;

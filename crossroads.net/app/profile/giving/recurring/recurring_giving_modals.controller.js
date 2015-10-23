@@ -7,6 +7,7 @@
       '$rootScope',
       'DonationService',
       'GiveTransferService',
+      'RecurringGiving',
       'donation',
       'programList'];
 
@@ -14,6 +15,7 @@
                                  $rootScope,
                                  DonationService,
                                  GiveTransferService,
+                                 RecurringGiving,
                                  donation,
                                  programList) {
     var vm = this;
@@ -27,7 +29,7 @@
     activate();
 
     function activate() {
-      vm.dto.loadRecurringDonationInformation(vm.donation, vm.programsInput);
+      RecurringGiving.loadDonationInformation(vm.donation, vm.programsInput);
     }
 
     function cancel() {
