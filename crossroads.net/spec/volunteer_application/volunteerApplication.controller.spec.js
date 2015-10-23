@@ -121,7 +121,7 @@ describe('Volunteer Application Controller', function() {
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   describe("Not in Family", function(){

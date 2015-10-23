@@ -10,7 +10,7 @@ describe('Credit Card Info Directive', function() {
   });
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   beforeEach(inject(function($injector, _$compile_, _$rootScope_, _$templateCache_, _$timeout_) {

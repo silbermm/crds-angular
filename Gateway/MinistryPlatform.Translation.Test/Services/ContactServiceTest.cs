@@ -70,7 +70,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Mobile_Carrier_ID", 2},
                     {"Mobile_Phone", "513-555-9876"},
                     {"Nickname", "nickname"},
-                    {"Age", 30}
+                    {"Age", 30},
+                    {"Passport_Number", "12345"},
+                    {"Passport_Firstname", "first-name"},
+                    {"Passport_Lastname", "last-name"},
+                    {"Passport_Country", "USA"},
+                    {"Passport_Middlename", "middle-name"},
+                    {"Passport_Expiration", "02/21/2020"}             
                 }
             };
 
@@ -119,7 +125,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Mobile_Carrier_ID", null},
                     {"Mobile_Phone", "513-555-9876"},
                     {"Nickname", "nickname"},
-                    {"Age", 30}
+                    {"Age", 30},
+                    {"Passport_Number", "12345"},
+                    {"Passport_Firstname", "first-name"},
+                    {"Passport_Lastname", "last-name"},
+                    {"Passport_Country", "USA"},
+                    {"Passport_Middlename", "middle-name"},
+                    {"Passport_Expiration", "02/21/2020"}
                 }
             };
 

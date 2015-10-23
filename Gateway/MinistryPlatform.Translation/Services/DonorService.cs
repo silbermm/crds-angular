@@ -11,7 +11,9 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Communication = MinistryPlatform.Models.Communication;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -151,6 +153,24 @@ namespace MinistryPlatform.Translation.Services
                 throw new ApplicationException(string.Format("CreateDonorAccount failed.  Donor Id: {0}", donorId), e);
             }
            
+        }
+
+        public void DeleteDonorAccount(string authorizedUserToken, int donorAccountId)
+        {
+            try
+            {
+                _ministryPlatformService.DeleteRecord(_donorAccountsPageId, donorAccountId, new []
+                {
+                    new DeleteOption
+                    {
+                        Action = DeleteAction.Delete
+                    }
+                }, authorizedUserToken);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("RemoveDonorAccount failed.  Donor Id: {0}", donorAccountId), e);
+            }
         }
 
         public void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId)
@@ -774,7 +794,9 @@ namespace MinistryPlatform.Translation.Services
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
-                        SubscriptionId = record.ToString("Subscription_ID")
+                        SubscriptionId = record.ToString("Subscription_ID"),
+                        StripeCustomerId = record.ToString("Processor_ID"),
+                        StripeAccountId = record.ToString("Processor_Account_ID")
                     };
                 }
             }

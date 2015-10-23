@@ -119,13 +119,6 @@
 
     function page6() {
       return {
-        validPassport: null,
-        passportExpirationDate: null,
-        passportFirstName: null,
-        passportMiddleName: null,
-        passportLastName: null,
-        passportCountry: null,
-        passportNumber: null,
         experienceAbroad: null,
         describeExperienceAbroad: null,
         pastAbuseHistory: null,

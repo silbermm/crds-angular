@@ -1,6 +1,6 @@
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
-    <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
+    <p class="push-bottom" ng-bind-html="$root.MESSAGES.privacy.content | html"></p>
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
@@ -38,8 +38,13 @@
 
     <div class="row">
       <div class="form-group col-sm-6">
-        <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
-        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName">
+        <label for="nickname" class="required">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
+        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName" required>
+        <ng-messages for="profile.pform.nickname.$error" ng-if="profile.validation.showErrors(profile.pform, 'nickname')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
 
@@ -104,6 +109,7 @@
         <div class="form-group col-sm-6">
             <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12" ng-model="profile.profileData.person.maritalStatusId" ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
+              <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
             </select>
         </div>
 
@@ -164,8 +170,8 @@
             <a><svg viewBox="0 0 32 32"
                  class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline"
                  popover="We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads."
-                 popover-placement="right" 
-                 popover-append-to-body="true" 
+                 popover-placement="right"
+                 popover-append-to-body="true"
                  popover-trigger="focus">
                 <use xlink:href="#question-circle"></use>
               </svg></a>
@@ -185,7 +191,7 @@
                 id="start-attend-reason"
                 ng-model="profile.startAttendReason.attribute"
                 ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
-          <option value=""> -- Choose One -- </option>
+          <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>
@@ -220,7 +226,7 @@
                 id="service-provider"
                 ng-model="profile.profileData.person.mobileCarrierId"
                 ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" >
-            <option value=""> -- Choose One -- </option>
+            <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>

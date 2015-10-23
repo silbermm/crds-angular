@@ -15,7 +15,7 @@ var tripHelpers = require('../trips.helpers');
 
     beforeEach(angular.mock.module(function($provide) {
       $provide.value('TripParticipant', tripHelpers.TripParticipant);
-      $provide.value('$state', { go: function() {} });
+      $provide.value('$state', { go: function() {}, get: function() {} });
 
       mockSession = jasmine.createSpyObj('Session', ['exists', 'isActive', 'removeRedirectRoute', 'addRedirectRoute']);
       mockSession.exists.and.callFake(function(something) {
