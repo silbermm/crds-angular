@@ -114,10 +114,6 @@
         vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
       }
 
-      if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
-        var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
-      }
-
       vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
       vm.startAttendReason = vm.profileData.person.singleAttributes[attributeTypeIds.START_ATTEND_REASON];
       vm.startAttendReasons = _.find(vm.attributeTypes, function(attributeType) {
