@@ -97,13 +97,14 @@
                  id="birthdate"
                  placeholder="mm/dd/yyyy"
                  datepicker-popup="MM/dd/yyyy"
-                 ng-required="true"
                  ng-model='profile.profileData.person.dateOfBirth'
                  is-open='profile.birthdateOpen'
-                 close-text="Close"
-                 max-date='{{profile.thirteenYearsAgo}}'
-                 min-date='{{profile.oneHundredFiftyYearsAgo}}'
+                 show-button-bar='false'
+                 max-date={{profile.thirteenYearsAgo}}
+                 min-date={{profile.oneHundredFiftyYearsAgo}}
+                 init-date=profile.thirteenYearsAgo
                  ng-required="true"
+                 datepicker-validator
                  required>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="profile.openBirthdatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -112,6 +113,12 @@
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <span ng-message="date">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="minDate">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="maxDate">
             <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
@@ -174,16 +181,17 @@
                  id="startAttendDate"
                  placeholder="mm/yyyy"
                  datepicker-popup="MM/yyyy"
-                 ng-required="true"
+                 datepicker-options="{minMode: 'month'}"
+                 datepicker-mode="'month'"
                  ng-model='profile.profileData.person.anniversaryDate'
                  is-open='profile.startAttendingOpen'
                  close-text="Close"
-                 min-date='{{profile.crossroadsStartDate}}'
-                 max-date='{{profile.today}}'
+                 min-date={{profile.crossroadsStartDate}}
+                 max-date={{profile.today}}
                  ng-model-options="{updateOn:'blur'}"
+                 datepicker-validator
                  ng-required="true"
-                 required
-                 datepicker-options="{minMode: 'month'}" datepicker-mode="'month'">
+                 required>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="profile.openStartAttendingDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -191,6 +199,12 @@
         <ng-messages for="profile.pform.startAttendDate.$error" ng-if="profile.validation.showErrors(profile.pform, 'startAttendDate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <span ng-message="date">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="minDate">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="maxDate">
             <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
