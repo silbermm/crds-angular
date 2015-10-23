@@ -53,8 +53,7 @@ describe('Give Transfer Service', function() {
         expect(fixture.account).toBeDefined();
         expect(fixture.account).toBe('');
 
-       // expect(fixture.amount).toBeDefined();
-        //expect(fixture.amount).toBe('');
+        expect(fixture.amount).toBeUndefined();
 
         expect(fixture.ccNumberClass).toBeDefined();
         expect(fixture.ccNumberClass).toBe('');
@@ -62,19 +61,18 @@ describe('Give Transfer Service', function() {
         expect(fixture.declinedPayment).toBeDefined();
         expect(fixture.declinedPayment).toBeFalsy();
 
-        //expect(fixture.donor).toBeDefined();
-        //expect(fixture.donor).toEqual({});
-        //
-        //expect(fixture.email).toBeUndefined();
-        //
-        //expect(fixture.program).toBeDefined();
-        //expect(fixture.program).toBe('');
-        //
-        //expect(fixture.routing).toBeDefined();
-        //expect(fixture.routing).toBe('');
-        //
-        //expect(fixture.savedPayment).toBeDefined();
-        //expect(fixture.savedPayment).toBe('');
+        expect(fixture.donor).toBeDefined();
+        expect(fixture.donor).toEqual({});
+
+        expect(fixture.email).toBeUndefined();
+
+        expect(fixture.program).toBeUndefined();
+
+        expect(fixture.routing).toBeDefined();
+        expect(fixture.routing).toBe('');
+
+        expect(fixture.savedPayment).toBeDefined();
+        expect(fixture.savedPayment).toBe('');
 
         expect(fixture.view).toBeDefined();
         expect(fixture.view).toBe('bank');
