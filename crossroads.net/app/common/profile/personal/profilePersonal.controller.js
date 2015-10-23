@@ -61,7 +61,7 @@
     vm.crossroadsStartDate = new Date(1994, 0, 1);
     vm.isMeridian = true;
     vm.openBirthdatePicker = openBirthdatePicker;
-
+    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.thirteenYearsAgo : vm.today);
     function openBirthdatePicker($event) {
       $event.preventDefault();
       $event.stopPropagation();
@@ -112,10 +112,6 @@
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
         var mBdate = moment(newBirthDate, 'YYYY MM DD');
         vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
-      }
-
-      if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
-        var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
 
       vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
