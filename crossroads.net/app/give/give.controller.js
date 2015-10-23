@@ -54,7 +54,7 @@
         event.preventDefault();
         return;
       }
-      if ((!vm.dto.initialized || toState.name === 'give') && toState.name === "give.recurring"){
+      if ((!vm.dto.initialized || toState.name === 'give') && toState.name !== "give.recurring"){
         event.preventDefault();
         vm.service.initDefaultState();
         return;
