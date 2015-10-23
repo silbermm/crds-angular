@@ -5,6 +5,7 @@ var constants = require('../constants');
 require('./templates/give.html');
 require('./templates/amount.html');
 require('./templates/register.html');
+require('./templates/mockup-give-commitment.html');
 
 var app = angular.module(constants.MODULES.GIVE, [
     constants.MODULES.CORE,
@@ -19,4 +20,3 @@ app.controller('GiveController', require('./give.controller'));
 
 require('./one_time');
 require('./recurring');
-

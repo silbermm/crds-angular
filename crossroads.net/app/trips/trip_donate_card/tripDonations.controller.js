@@ -31,6 +31,10 @@
         return 'Anonymous';
       }
 
+      if (vm.donation.paymentTypeId === 13) {
+        return 'Transfer';
+      }
+
       if (vm.donation.registeredDonor) {
         return vm.donation.donorNickname + ' ' + vm.donation.donorLastName;
       } else {
