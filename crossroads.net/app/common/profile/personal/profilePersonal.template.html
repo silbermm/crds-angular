@@ -119,7 +119,8 @@
             <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="maxDate">
-            <span ng-bind-html="$root.MESSAGES.thirteenOrOlder.content | html"></span>
+            <span ng-if="profile.enforceAgeRestriction" ng-bind-html="$root.MESSAGES.thirteenOrOlder.content | html"></span>
+            <span ng-if="!profile.enforceAgeRestriction"  ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
