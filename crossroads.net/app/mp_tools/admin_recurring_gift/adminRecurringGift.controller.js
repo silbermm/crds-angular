@@ -1,18 +1,16 @@
 (function() {
   'use strict';
 
-  module.exports = RecurringGivingModals;
+  module.exports = AdminRecurringGiftController;
 
-  RecurringGivingModals.$inject = ['$modalInstance',
-      '$rootScope',
+  AdminRecurringGiftController.$inject = ['$rootScope',
       'DonationService',
       'GiveTransferService',
       'RecurringGiving',
       'donation',
       'programList'];
 
-  function RecurringGivingModals($modalInstance,
-                                 $rootScope,
+  function AdminRecurringGiftController($rootScope,
                                  DonationService,
                                  GiveTransferService,
                                  RecurringGiving,
@@ -22,32 +20,15 @@
     vm.dto = GiveTransferService;
     vm.programsInput = programList;
     vm.donation = donation;
-    vm.cancel = cancel;
-    vm.remove = remove;
-    vm.edit = edit;
+    vm.create = create;
 
     activate();
 
     function activate() {
-      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation);
+      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation, GiveTransferService.impersonateDonorId);
     }
 
-    function cancel() {
-      $modalInstance.dismiss('cancel');
-    }
-
-    function remove() {
-      vm.dto.processing = true;
-
-      DonationService.deleteRecurringGift().then(function() {
-        $modalInstance.close(true);
-      }, function(/*error*/) {
-
-        $modalInstance.close(false);
-      });
-    }
-
-    function edit(recurringGiveForm) {
+    function create(recurringGiveForm) {
       vm.dto.processing = true;
 
       // Amount is not valid
@@ -78,22 +59,16 @@
           (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
         // Credit card or bank account info is touched so update token from strip
         DonationService.updateRecurringGift(true).then(function() {
-          $modalInstance.close(true);
         }, function(/*error*/) {
 
-          $modalInstance.close(false);
         });
       } else if (recurringGiveForm.donationDetailsForm.$dirty) {
         // Credit card or bank account info was not touched so do not update token from strip
         DonationService.updateRecurringGift(false).then(function() {
-          $modalInstance.close(true);
         }, function(/*error*/) {
-
-          $modalInstance.close(false);
         });
       } else {
         // Nothing touched so just close
-        $modalInstance.close(true);
       }
     }
 

@@ -77,29 +77,32 @@
     function getLoggedInUserDonorPaymentInfo(event, toState) {
     }
 
-    function loadDonationInformation(donation, programsInput) {
+    function loadDonationInformation(programsInput, donation = null, impersonateDonorId = null) {
       GiveTransferService.reset();
 
-      GiveTransferService.recurringGiftId = donation.recurring_gift_id;
-      GiveTransferService.amount = donation.amount;
       GiveTransferService.amountSubmitted = false;
       GiveTransferService.bankinfoSubmitted = false;
       GiveTransferService.changeAccountInfo = true;
-      GiveTransferService.brand = '#' + donation.source.icon;
-      GiveTransferService.ccNumberClass = donation.source.icon;
-      GiveTransferService.givingType = donation.interval;
       GiveTransferService.initialized = true;
-      GiveTransferService.last4 = donation.source.last4;
-      GiveTransferService.program = $filter('filter')(programsInput, {ProgramId: donation.program})[0];
-      GiveTransferService.recurringStartDate = donation.start_date;
-      GiveTransferService.view = donation.source.type === 'CreditCard' ? 'cc' : 'bank';
-      setupInterval(donation);
-      setupDonor(donation);
+      setupDonor(donation, impersonateDonorId);
+
+      if (donation !== null) {
+        GiveTransferService.recurringGiftId = donation.recurring_gift_id;
+        GiveTransferService.amount = donation.amount;
+        GiveTransferService.brand = '#' + donation.source.icon;
+        GiveTransferService.ccNumberClass = donation.source.icon;
+        GiveTransferService.givingType = donation.interval;
+        GiveTransferService.last4 = donation.source.last4;
+        GiveTransferService.program = $filter('filter')(programsInput, {ProgramId: donation.program})[0];
+        GiveTransferService.recurringStartDate = donation.start_date;
+        GiveTransferService.view = donation.source.type === 'CreditCard' ? 'cc' : 'bank';
+        setupInterval(donation);
+      }
     }
 
-    function setupDonor(donation) {
+    function setupDonor(donation, impersonateDonorId = null) {
       GiveTransferService.donor = {
-        id: donation.donor_id,
+        id: (impersonateDonorId == null ? donation.donor_id : impersonateDonorId),
         default_source: {
           credit_card: {
             last4: null,

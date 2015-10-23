@@ -33,6 +33,7 @@
         this.view = 'bank';
         this.recurringStartDate = undefined;
         this.recurringGiftId = undefined;
+        this.impersonateDonorId = undefined;
 
         if (!Session.isActive()) {
           User.email = '';

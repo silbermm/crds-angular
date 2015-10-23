@@ -36,4 +36,7 @@
   // The Administrator Giving History Tool
   require('./admin_giving_history');
 
+  // The Administrator Recurring Gift Tool
+  require('./admin_recurring_gift');
+
 })();

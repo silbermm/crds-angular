@@ -1,11 +1,11 @@
 (function() {
   'use strict()';
+
   var MODULE = 'crossroads.mptools';
 
-  require('./adminRecurringGifthtml');
+  require('./adminRecurringGift.html');
 
-  angular.
-      module(MODULE).
-      controller('AdminGivingHistoryController',
-      require('./adminGivingHistory.controller'));
+  var app = angular.module(MODULE);
+  app.controller('AdminRecurringGiftController', require('./adminRecurringGift.controller'));
+
 })();
