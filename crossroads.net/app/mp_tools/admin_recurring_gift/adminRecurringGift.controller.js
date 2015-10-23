@@ -21,6 +21,7 @@
     vm.programsInput = programList;
     vm.donation = donation;
     vm.create = create;
+    vm.deleting = false;
 
     activate();
 
@@ -29,49 +30,24 @@
     }
 
     function create(recurringGiveForm) {
-      vm.dto.processing = true;
+      RecurringGiving.createGift(recurringGiveForm, successful, failure, GiveTransferService.impersonateDonorId);
+    }
 
-      // Amount is not valid
-      if (recurringGiveForm.donationDetailsForm !== undefined && !recurringGiveForm.donationDetailsForm.amount.$valid) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        vm.dto.processing = false;
-        return;
-      }
-
-      // Recurring Start Date was touched and is not valid - We don't want to validate if they are not updating this field
-      if (recurringGiveForm.donationDetailsForm !== undefined && recurringGiveForm.donationDetailsForm.recurringStartDate.$dirty &&
-          !recurringGiveForm.donationDetailsForm.recurringStartDate.$valid) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        vm.dto.processing = false;
-        return;
-      }
-
-      // Validate the credit card or bank account form
-      if ((recurringGiveForm.creditCardForm !== undefined && !recurringGiveForm.creditCardForm.$valid) ||
-          (recurringGiveForm.bankAccountForm !== undefined && !recurringGiveForm.bankAccountForm.$valid)) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        vm.dto.processing = false;
-        return;
-      }
-
-      // Form is valid so update
-      if ((recurringGiveForm.creditCardForm !== undefined && recurringGiveForm.creditCardForm.$dirty) ||
-          (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
-        // Credit card or bank account info is touched so update token from strip
-        DonationService.updateRecurringGift(true).then(function() {
-        }, function(/*error*/) {
-
-        });
-      } else if (recurringGiveForm.donationDetailsForm.$dirty) {
-        // Credit card or bank account info was not touched so do not update token from strip
-        DonationService.updateRecurringGift(false).then(function() {
-        }, function(/*error*/) {
-        });
+    function successful() {
+      if (vm.deleting) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
       } else {
-        // Nothing touched so just close
+        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
       }
     }
 
+    function failure() {
+      if (vm.deleting) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+      } else {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
+      }
+    }
   };
 
 })();

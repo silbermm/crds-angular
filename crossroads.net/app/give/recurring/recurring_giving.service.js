@@ -135,6 +135,22 @@
       }
     }
 
+    function createGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
+      GiveTransferService.processing = true;
+
+      if (!validForm(recurringGiveForm)) {
+        return;
+      }
+
+      // Credit card or bank account info is touched so update token from strip
+      DonationService.createRecurringGift(impersonateDonorId).then(function() {
+        success();
+      }, function(/*error*/) {
+
+        failure();
+      });
+    }
+
     function updateGift(recurringGiveForm, success, failure) {
       GiveTransferService.processing = true;
 
