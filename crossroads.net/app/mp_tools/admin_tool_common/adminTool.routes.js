@@ -75,7 +75,7 @@
       })
       .state('tools.adminRecurringGift', {
         url: '/adminRecurringGift',
-        controller: 'AdminRecurringGiftController as adminRecurringGiftController',
+        controller: 'AdminRecurringGiftController as recurringGift',
         templateUrl: 'admin_recurring_gift/adminRecurringGift.html',
         resolve: {
           Programs: 'Programs',

@@ -1,0 +1,27 @@
+<div class="form-group">
+  <donation-details amount="adminRecurringGiftController.dto.amount"
+                    program="adminRecurringGiftController.dto.program"
+                    amount-submitted="adminRecurringGiftController.dto.amountSubmitted"
+                    programs-in="adminRecurringGiftController.programsInput">
+  </donation-details>
+
+  <bank-credit-card-details
+        dto='adminRecurringGiftController.dto'
+        bank-info-submitted='adminRecurringGiftController.dto.bankinfoSubmitted'
+        show-check-class='adminRecurringGiftController.showCheckClass'
+        show-message='adminRecurringGiftController.showMessage'
+        donor='adminRecurringGiftController.dto.donor'
+        email='adminRecurringGiftController.dto.email'
+        set-valid-card='setValidCard'
+        set-valid-cvc='setValidCvc'
+        account-state-name='adminRecurringGiftController.account'>
+  </bank-credit-card-details>
+
+  <button ng-click="" ng-class="{disabled: adminRecurringGiftController.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
+    <span ng-if="adminRecurringGiftController.dto.processing">Giving</span>
+    <span ng-if="!adminRecurringGiftController.dto.processing">Give ...</span>
+      <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
+        <use xlink:href="#arrow-right9"></use>
+      </svg>
+  </button>
+</div>
