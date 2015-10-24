@@ -1339,6 +1339,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const int accountTypeId = 2;
             const int donorAccountId = 987;
             const string subscriptionId = "sub_123";
+            const string processorId = "cus_123";
+            const string accountId = "card_456";
 
             var records = new List<Dictionary<string, object>>
             {
@@ -1356,6 +1358,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Account_Type_ID", accountTypeId},
                     {"Donor_Account_ID", donorAccountId},
                     {"Subscription_ID", subscriptionId},
+                    {"Processor_ID", processorId},
+                    {"Processor_Account_ID", accountId}
                 }
             };
 
@@ -1377,6 +1381,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
             Assert.AreEqual(donorAccountId, result.DonorAccountId);
             Assert.AreEqual(subscriptionId, result.SubscriptionId);
+            Assert.AreEqual(processorId, result.StripeCustomerId);
+            Assert.AreEqual(accountId, result.StripeAccountId);
         }
 
         [Test]

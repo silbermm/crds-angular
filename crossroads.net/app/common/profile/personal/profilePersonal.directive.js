@@ -20,7 +20,8 @@
         requireMobilePhone: '=',
         submitFormCallback: '&?',
         profileData: '=?',
-        updatedPerson: '=?'
+        updatedPerson: '=?',
+        enforceAgeRestriction: '@'
       },
       templateUrl: 'personal/profilePersonal.template.html',
       controller: 'ProfilePersonalController as profile',
