@@ -3,9 +3,23 @@
 
   module.exports = RecurringGiving;
 
-  RecurringGiving.$inject = ['GiveTransferService', 'DonationService', 'GiveFlow', 'Session', '$state', '$filter', '$rootScope'];
+  RecurringGiving.$inject = ['GiveTransferService',
+    'DonationService',
+    'GiveFlow',
+    'Session',
+    'PaymentService',
+    '$state',
+    '$filter',
+    '$rootScope'];
 
-  function RecurringGiving(GiveTransferService, DonationService, GiveFlow, Session, $state, $filter, $rootScope) {
+  function RecurringGiving(GiveTransferService,
+                           DonationService,
+                           GiveFlow,
+                           Session,
+                           PaymentService,
+                           $state,
+                           $filter,
+                           $rootScope) {
     var service = {
       name: 'RecurringGiving',
       initDefaultState: initDefaultState,
@@ -20,6 +34,7 @@
       resetGiveTransferServiceGiveType: resetGiveTransferServiceGiveType,
       loadDonationInformation: loadDonationInformation,
       updateGift: updateGift,
+      createGift: createGift,
     };
 
     function initDefaultState() {
@@ -118,12 +133,12 @@
         },
       };
 
-      if (donation.source.type === 'CreditCard') {
+      if (donation !== null && donation.source.type === 'CreditCard') {
         GiveTransferService.donor.default_source.credit_card.last4 = donation.source.last4;
         GiveTransferService.donor.default_source.credit_card.brand = donation.source.brand;
         GiveTransferService.donor.default_source.credit_card.address_zip = donation.source.address_zip;
         GiveTransferService.donor.default_source.credit_card.exp_date = moment(donation.source.exp_date).format('MMYY');
-      } else {
+      } else if (donation !== null) {
         GiveTransferService.donor.default_source.bank_account.last4 = donation.source.last4;
         GiveTransferService.donor.default_source.bank_account.routing = donation.source.routing;
       }
@@ -143,7 +158,7 @@
       }
 
       // Credit card or bank account info is touched so update token from strip
-      DonationService.createRecurringGift(impersonateDonorId).then(function() {
+      DonationService.adminCreateRecurringGift(impersonateDonorId).then(function() {
         success();
       }, function(/*error*/) {
 
@@ -151,7 +166,7 @@
       });
     }
 
-    function updateGift(recurringGiveForm, success, failure) {
+    function updateGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
 
       if (!validForm(recurringGiveForm)) {
@@ -162,7 +177,7 @@
       if ((recurringGiveForm.creditCardForm !== undefined && recurringGiveForm.creditCardForm.$dirty) ||
           (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
         // Credit card or bank account info is touched so update token from strip
-        DonationService.updateRecurringGift(true).then(function() {
+        DonationService.updateRecurringGift(true, impersonateDonorId).then(function() {
           success();
         }, function(/*error*/) {
 
@@ -170,7 +185,7 @@
         });
       } else if (recurringGiveForm.donationDetailsForm.$dirty) {
         // Credit card or bank account info was not touched so do not update token from strip
-        DonationService.updateRecurringGift(false).then(function() {
+        DonationService.updateRecurringGift(false, impersonateDonorId).then(function() {
           success();
         }, function(/*error*/) {
 

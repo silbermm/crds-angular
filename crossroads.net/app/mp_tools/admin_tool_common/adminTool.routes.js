@@ -78,6 +78,7 @@
         controller: 'AdminRecurringGiftController as recurringGift',
         templateUrl: 'admin_recurring_gift/adminRecurringGift.html',
         resolve: {
+          donation: null,
           Programs: 'Programs',
           programList: function(Programs) {
             // TODO The number one relates to the programType in MP. At some point we should fetch
@@ -85,10 +86,6 @@
             return Programs.Programs.query({
               programType: 1
             }).$promise;
-          },
-
-          donation: function() {
-            return null;
           },
         },
         data: {

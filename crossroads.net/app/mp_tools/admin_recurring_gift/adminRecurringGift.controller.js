@@ -21,16 +21,23 @@
     vm.programsInput = programList;
     vm.donation = donation;
     vm.create = create;
+    vm.update = update;
     vm.deleting = false;
+    vm.impersonateDonorId = undefined;
 
     activate();
 
     function activate() {
-      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation, GiveTransferService.impersonateDonorId);
+      vm.impersonateDonorId = GiveTransferService.impersonateDonorId;
+      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation, vm.impersonateDonorId);
     }
 
     function create(recurringGiveForm) {
-      RecurringGiving.createGift(recurringGiveForm, successful, failure, GiveTransferService.impersonateDonorId);
+      RecurringGiving.createGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
+    }
+
+    function update(recurringGiveForm) {
+      RecurringGiving.updateGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
     }
 
     function successful() {

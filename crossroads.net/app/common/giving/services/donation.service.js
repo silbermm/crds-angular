@@ -34,6 +34,7 @@
       getRecurringGift: getRecurringGift,
       queryRecurringGifts: queryRecurringGifts,
       updateRecurringGift: updateRecurringGift,
+      adminCreateRecurringGift: adminCreateRecurringGift,
     };
 
     function createBank() {
@@ -79,12 +80,12 @@
       }
     }
 
-    function createRecurringGift(impersonateDonorId = null) {
+    function createRecurringGift() {
       GiveTransferService.processing = true;
 
       if (GiveTransferService.view === 'cc') {
         donationService.createCard();
-        PaymentService.createRecurringGiftWithCard(donationService.card, impersonateDonorId)
+        PaymentService.createRecurringGiftWithCard(donationService.card)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
             GiveTransferService.email = recurringGift.email;
@@ -92,12 +93,24 @@
           }, PaymentService.stripeErrorHandler);
       } else if (GiveTransferService.view === 'bank') {
         donationService.createBank();
-        PaymentService.createRecurringGiftWithBankAcct(donationService.bank, impersonateDonorId)
+        PaymentService.createRecurringGiftWithBankAcct(donationService.bank)
           .then(function(recurringGift) {
             // TODO: Put recurringGift in GiveTransferService
             GiveTransferService.email = recurringGift.email;
             $state.go(GiveFlow.thankYou);
           }, PaymentService.stripeErrorHandler);
+      }
+    }
+
+    function adminCreateRecurringGift(impersonateDonorId = null) {
+      GiveTransferService.processing = true;
+
+      if (GiveTransferService.view === 'cc') {
+        donationService.createCard();
+        return PaymentService.createRecurringGiftWithCard(donationService.card, impersonateDonorId);
+      } else if (GiveTransferService.view === 'bank') {
+        donationService.createBank();
+        return PaymentService.createRecurringGiftWithBankAcct(donationService.bank, impersonateDonorId);
       }
     }
 
