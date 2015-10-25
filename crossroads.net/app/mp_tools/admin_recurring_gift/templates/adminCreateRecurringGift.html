@@ -1,27 +1,16 @@
-<div class="form-group">
-  <donation-details amount="adminRecurringGiftController.dto.amount"
-                    program="adminRecurringGiftController.dto.program"
-                    amount-submitted="adminRecurringGiftController.dto.amountSubmitted"
-                    programs-in="adminRecurringGiftController.programsInput">
-  </donation-details>
+<div class="form-group col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+  <h1 class="page-header">Create Recurring Gift</h1>
+  <div class="push-top">
+    <form name="recurringGiveForm">
+      <ng-include src="'templates/recurringGiftTemplate.html'"> </ng-include>
 
-  <bank-credit-card-details
-        dto='adminRecurringGiftController.dto'
-        bank-info-submitted='adminRecurringGiftController.dto.bankinfoSubmitted'
-        show-check-class='adminRecurringGiftController.showCheckClass'
-        show-message='adminRecurringGiftController.showMessage'
-        donor='adminRecurringGiftController.dto.donor'
-        email='adminRecurringGiftController.dto.email'
-        set-valid-card='setValidCard'
-        set-valid-cvc='setValidCvc'
-        account-state-name='adminRecurringGiftController.account'>
-  </bank-credit-card-details>
-
-  <button ng-click="" ng-class="{disabled: adminRecurringGiftController.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
-    <span ng-if="adminRecurringGiftController.dto.processing">Giving</span>
-    <span ng-if="!adminRecurringGiftController.dto.processing">Give ...</span>
-      <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
-        <use xlink:href="#arrow-right9"></use>
-      </svg>
-  </button>
+      <button ng-click="recurringGift.create(recurringGiveForm)" ng-class="{disabled: recurringGift.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
+        <span ng-if="recurringGift.dto.processing">Giving</span>
+        <span ng-if="!recurringGift.dto.processing">Give ...</span>
+          <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">
+            <use xlink:href="#arrow-right9"></use>
+          </svg>
+      </button>
+    </form>
+  </div>
 </div>

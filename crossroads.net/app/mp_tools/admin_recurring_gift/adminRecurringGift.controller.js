@@ -43,16 +43,20 @@
     function successful() {
       if (vm.deleting) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
+        vm.dto.processing = false;
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
+        vm.dto.processing = false;
       }
     }
 
     function failure() {
       if (vm.deleting) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+        vm.dto.processing = false;
       } else {
         $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
+        vm.dto.processing = false;
       }
     }
   };

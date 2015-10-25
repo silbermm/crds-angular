@@ -118,7 +118,7 @@
 
     function setupDonor(donation, impersonateDonorId = null) {
       GiveTransferService.donor = {
-        id: (impersonateDonorId == null ? donation.donor_id : impersonateDonorId),
+        id: (impersonateDonorId === null ? donation.donor_id : impersonateDonorId),
         default_source: {
           credit_card: {
             last4: null,

@@ -51,10 +51,10 @@
           }
         }
       })
-      .state('tools.adminRecurringGiftTool', {
+      .state('tools.adminSetupRecurringGiftTool', {
         // This is a "launch" page for the tool, it will check access, etc, then forward
         // on to the actual page with the history.
-        url: '/adminRecurringGiftTool',
+        url: '/adminSetupRecurringGiftTool',
         controller: 'AdminToolController as AdminToolController',
         templateUrl: 'admin_tool_common/adminTool.html',
         resolve: {
@@ -68,17 +68,16 @@
           goToFunction: function(GiveTransferService, $state) {
             return function(donorId) {
               GiveTransferService.impersonateDonorId = donorId;
-              $state.go('tools.adminRecurringGift');
+              $state.go('tools.adminSetupRecurringGift');
             };
           }
         }
       })
-      .state('tools.adminRecurringGift', {
-        url: '/adminRecurringGift',
+      .state('tools.adminSetupRecurringGift', {
+        url: '/adminSetupRecurringGift',
         controller: 'AdminRecurringGiftController as recurringGift',
-        templateUrl: 'admin_recurring_gift/adminRecurringGift.html',
+        templateUrl: 'templates/adminCreateRecurringGift.html',
         resolve: {
-          donation: null,
           Programs: 'Programs',
           programList: function(Programs) {
             // TODO The number one relates to the programType in MP. At some point we should fetch
@@ -87,14 +86,11 @@
               programType: 1
             }).$promise;
           },
+
+          donation: function() {
+            return null;
+          },
         },
-        data: {
-          isProtected: true,
-          meta: {
-            title: 'Recurring Gift - Admin View',
-            description: ''
-          }
-        }
       });
   }
 
