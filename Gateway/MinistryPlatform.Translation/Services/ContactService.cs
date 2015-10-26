@@ -239,6 +239,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Company", false},
                 {"Last_Name", contact.Last_Name},
                 {"First_Name", contact.First_Name},
+                {"Display_Name", contact.Last_Name + ", " + contact.First_Name},
                 {"Nickname", contact.First_Name},
                 {"ID_Card", contact.ID_Number}
             };
