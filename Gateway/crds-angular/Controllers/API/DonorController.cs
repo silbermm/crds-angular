@@ -24,14 +24,21 @@ namespace crds_angular.Controllers.API
         private readonly IDonationService _donationService;
         private readonly MPInterfaces.IDonorService _mpDonorService;
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
+        private readonly IUserImpersonationService _impersonationService;
 
-        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService, MPInterfaces.IDonorService mpDonorService, MPInterfaces.IAuthenticationService authenticationService)
+        public DonorController(IDonorService donorService, 
+                                IPaymentService stripePaymentService, 
+                                IDonationService donationService, 
+                                MPInterfaces.IDonorService mpDonorService, 
+                                MPInterfaces.IAuthenticationService authenticationService,
+                                IUserImpersonationService impersonationService)
         {
             _donorService = donorService;
             _stripePaymentService = stripePaymentService;
             _donationService = donationService;
             _authenticationService = authenticationService;
             _mpDonorService = mpDonorService;
+            _impersonationService = impersonationService;
         }
 
         /// <summary>
@@ -319,20 +326,33 @@ namespace crds_angular.Controllers.API
         /// Create a recurring gift for the authenticated user.
         /// </summary>
         /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
         [HttpPost]
         [Route("api/donor/recurrence")]
-        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
+        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
                 try
                 {
-                    var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var contactDonor = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetContactDonorForAuthenticatedUser(token))
+                        : _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
-                    var recurringGift = _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
+                    var recurringGift = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.CreateRecurringGift(token, recurringGiftDto, donor))
+                        : _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
 
                     recurringGiftDto.EmailAddress = donor.Email;
                     recurringGiftDto.RecurringGiftId = recurringGift;

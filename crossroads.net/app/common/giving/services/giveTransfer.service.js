@@ -33,6 +33,7 @@
         this.view = 'bank';
         this.recurringStartDate = undefined;
         this.recurringGiftId = undefined;
+        this.impersonateDonorId = undefined;
 
         // TODO - This is added to allow UX team to mock pledge-related UI components in the give pages
         // To use, start the giving flow with "?mockPledge=true" appended to the URL, for example:
