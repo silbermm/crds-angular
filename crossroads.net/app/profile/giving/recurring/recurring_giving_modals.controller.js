@@ -41,7 +41,7 @@
     function remove() {
       vm.dto.processing = true;
 
-      DonationService.deleteRecurringGift().then(function() {
+      DonationService.deleteRecurringGift(vm.impersonateDonorId).then(function() {
         $modalInstance.close(true);
       }, function(/*error*/) {
 

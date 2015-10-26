@@ -3,14 +3,14 @@
 
   module.exports = AdminRecurringGiftController;
 
-  AdminRecurringGiftController.$inject = ['$log', '$filter', '$state', '$modal', '$rootScope', 'DonationService'];
+  AdminRecurringGiftController.$inject = ['$log', '$filter', '$state', '$modal', '$rootScope', 'DonationService', 'GiveTransferService'];
 
-  function AdminRecurringGiftController($log, $filter, $state, $modal, $rootScope, DonationService) {
+  function AdminRecurringGiftController($log, $filter, $state, $modal, $rootScope, DonationService, GiveTransferService) {
     var vm = this;
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
-    vm.createRecurring = createRecurring;
+    vm.openCreateGiftModal = openCreateGiftModal;
     vm.modalInstance = undefined;
     vm.impersonateDonorId = undefined;
 
@@ -19,7 +19,7 @@
     function activate() {
       vm.impersonateDonorId = GiveTransferService.impersonateDonorId;
 
-      DonationService.queryRecurringGifts().then(function(data) {
+      DonationService.queryRecurringGifts(vm.impersonateDonorId).then(function(data) {
         vm.recurring_gifts = data;
         vm.recurring_giving_view_ready = true;
         vm.recurring_giving = true;
@@ -33,7 +33,7 @@
     function openCreateGiftModal() {
       vm.modalInstance = $modal.open({
         parent: 'noSideBar',
-        templateUrl: 'recurring_giving_edit_modal',
+        templateUrl: 'recurring_giving_create_modal',
         controller: 'RecurringGivingModals as recurringGift',
         resolve: {
           donation: function() {

@@ -54,7 +54,7 @@
       .state('tools.adminRecurringGiftTool', {
         // This is a "launch" page for the tool, it will check access, etc, then forward
         // on to the actual page with the history.
-        url: '/adminSetupRecurringGiftTool',
+        url: '/adminRecurringGiftTool',
         controller: 'AdminToolController as AdminToolController',
         templateUrl: 'admin_tool_common/adminTool.html',
         resolve: {

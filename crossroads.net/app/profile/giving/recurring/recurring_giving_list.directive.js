@@ -3,9 +3,9 @@
 
   module.exports = RecurringGivingList;
 
-  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService', 'DonationService'];
+  RecurringGivingList.$inject = ['$rootScope', '$log', '$modal', 'PaymentDisplayDetailService', 'DonationService', 'GiveTransferService'];
 
-  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService, DonationService) {
+  function RecurringGivingList($rootScope, $log, $modal, PaymentDisplayDetailService, DonationService, GiveTransferService) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -19,7 +19,7 @@
     function link(scope) {
       scope.openRemoveGiftModal = openRemoveGiftModal;
       scope.openEditGiftModal = openEditGiftModal;
-      scope.openCreateGiftModal = openCreateGiftModal;
+      scope.impersonateDonorId = GiveTransferService.impersonateDonorId;
 
       scope.$watch('recurringGiftsInput', function(recurringGifts) {
         scope.recurringGifts = PaymentDisplayDetailService.postProcess(recurringGifts);
@@ -82,7 +82,7 @@
 
         scope.modalInstance.result.then(function(success) {
           if (success) {
-            DonationService.queryRecurringGifts().then(function(data) {
+            DonationService.queryRecurringGifts(scope.impersonateDonorId).then(function(data) {
               scope.recurringGiftsInput = data;
             }, function(/*error*/) {
 
