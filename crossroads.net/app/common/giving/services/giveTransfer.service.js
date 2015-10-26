@@ -38,6 +38,7 @@
       this.view = 'bank';
       this.recurringStartDate = undefined;
       this.recurringGiftId = undefined;
+      this.recurringConvert = false;
 
       if (!Session.isActive()) {
         User.email = '';
@@ -58,7 +59,7 @@
       this.donor = {};
       this.donorError = false;
       this.email = undefined;
-      this.initialized = false;
+      this.initialized = true;
       this.last4 = '';
       this.message = null;
       this.processing = false;
@@ -68,6 +69,7 @@
       this.view = 'bank';
       this.recurringStartDate = undefined;
       this.recurringGiftId = undefined;
+      this.recurringConvert = true;
 
       if (!Session.isActive()) {
         User.email = '';
