@@ -113,9 +113,15 @@
     function configurePerson() {
 
       if ((vm.profileData.person.dateOfBirth !== undefined) && (vm.profileData.person.dateOfBirth !== '')) {
-        var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
-        var mBdate = moment(newBirthDate, 'YYYY MM DD');
-        vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
+        if (typeof vm.profileData.person.dateOfBirth === 'string' ||
+            vm.profileData.person.dateOfBirth instanceof String) {
+          var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
+          var mBdate = moment(newBirthDate, 'YYYY MM DD');
+          vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
+        } else {
+          var formatedDate = moment(vm.profileData.person.dateOfBirth);
+          vm.profileData.person.dateOfBirth = formatedDate.format('MM/DD/YYYY');
+        }
       }
 
       vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
