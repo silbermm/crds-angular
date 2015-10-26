@@ -189,7 +189,6 @@ describe('PaymentService', function() {
         function(error) {
           expect(error).toBeDefined();
           expect(error.type).toEqual('junk');
-          expect(GiveTransferService.processing).toEqual(false);
         });
 
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
@@ -340,7 +339,6 @@ describe('PaymentService', function() {
         function(error) {
           expect(error).toBeDefined();
           expect(error.type).toEqual('junk');
-          expect(GiveTransferService.processing).toEqual(false);
         });
 
       expect(stripe.card.createToken).toHaveBeenCalledWith(card, jasmine.any(Function));
@@ -421,7 +419,6 @@ describe('PaymentService', function() {
         function(error) {
           expect(error).toBeDefined();
           expect(error.type).toEqual('junk');
-          expect(GiveTransferService.processing).toEqual(false);
         });
 
       expect(stripe.bankAccount.createToken).toHaveBeenCalledWith(bankAccount, jasmine.any(Function));
@@ -452,12 +449,12 @@ describe('PaymentService', function() {
 
   describe('function donateToProgram', function() {
     it('should successfully create a donation', function() {
-
+      GiveTransferService.campaign = 'ABCD';
+      GiveTransferService.campaign.pledgeDonorId = 111;
       var postData = {
         program_id: 'Program',
         pledge_campaign_id: 321,
-        pledge_donor_id: null,
-        gift_message: null,
+        pledge_donor_id:  GiveTransferService.campaign.pledgeDonorId,
         amount: '1234',
         donor_id: 'Donor'
       };
