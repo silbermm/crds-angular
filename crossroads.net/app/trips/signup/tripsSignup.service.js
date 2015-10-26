@@ -111,6 +111,7 @@
         sponsorChildFirstName: null,
         sponsorChildLastName: null,
         sponsorChildNumber: null,
+        sponsorChildTown: null,
         nolaFirstChoiceWorkTeam: null,
         nolaFirstChoiceExperience: null,
         nolaSecondChoiceWorkTeam: null,

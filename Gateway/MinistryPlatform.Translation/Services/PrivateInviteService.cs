@@ -62,25 +62,32 @@ namespace MinistryPlatform.Translation.Services
             return records.Count == 1;
         }
 
-        public void MarkAsUsed(int pledgeCampaignId, string inviteGUID)
+        public void MarkAsUsed(int pledgeCampaignId, string inviteGuid)
         {
-            var apiLogin = ApiLogin();
-            //Find invite by GUID
-            var invites = _ministryPlatformService.GetSubpageViewRecords("TripPrivateInviteValid", pledgeCampaignId, apiLogin, inviteGUID);
-            if (invites.Count != 1)
+            try
             {
-                throw new ApplicationException(string.Format("Error finding invite for {0}", inviteGUID));
+                var apiLogin = ApiLogin();
+                //Find invite by GUID
+                var invites = _ministryPlatformService.GetSubpageViewRecords("TripPrivateInviteValid", pledgeCampaignId, apiLogin, inviteGuid);
+                if (invites.Count != 1)
+                {
+                    throw new ApplicationException(string.Format("Error finding invite for {0}", inviteGuid));
+                }
+
+                //Mark it dude
+                var dict = new Dictionary<string, object>
+                {
+                    {"Pledge_Campaign_ID", pledgeCampaignId},
+                    {"Private_Invitation_ID", invites.First()["Private_Invitation_ID"]},
+                    {"Invitation_Used", true}
+                };
+
+                _ministryPlatformService.UpdateRecord(_tripInvitationsPageId, dict, apiLogin);
             }
-
-            //Mark it dude
-            var dict = new Dictionary<string, object>
+            catch (Exception ex)
             {
-                {"Pledge_Campaign_ID", pledgeCampaignId},
-                {"Private_Invitation_ID", invites.First()["Private_Invitation_ID"]},
-                {"Invitation_Used", true}
-            };
-
-            _ministryPlatformService.UpdateRecord(_tripInvitationsPageId, dict, apiLogin);
+                throw  new ApplicationException("Private Invite - Mark as Used Failed",ex);
+            }
         }
     }
 }
