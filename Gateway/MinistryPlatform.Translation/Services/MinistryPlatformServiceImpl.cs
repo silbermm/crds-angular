@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.ServiceModel.Web;
 using System.Web.Security;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
@@ -245,6 +246,15 @@ namespace MinistryPlatform.Translation.Services
         public void UpdateSubRecord(int subpageId, Dictionary<string, object> dictionary, String token)
         {            
             VoidCall(token, platformClient => platformClient.UpdateSubpageRecord(subpageId, dictionary, false));
+        }
+
+        public UserInfo GetContactInfo(string token)
+        {
+            using (new OperationContextScope(_platformServiceClient.InnerChannel))
+            {
+                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
+                return Call<UserInfo>(token, platformClient => platformClient .GetCurrentUserInfo());
+            }
         }
 
         private int GetMinistryPlatformId(string mpKey)

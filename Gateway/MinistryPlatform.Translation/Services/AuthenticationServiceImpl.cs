@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json.Linq;
@@ -105,12 +108,7 @@ namespace MinistryPlatform.Translation.Services
         //Get ID of currently logged in user
         public int GetContactId(string token)
         {
-            using (new OperationContextScope((IClientChannel) platformService.InnerChannel))
-            {
-                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                var contactId = platformService.GetCurrentUserInfo();
-                return contactId.ContactId;
-            }
+            return ministryPlatformService.GetContactInfo(token).ContactId;
         }
     }
 }
