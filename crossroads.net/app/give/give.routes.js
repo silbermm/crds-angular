@@ -61,6 +61,12 @@
       .state('give.register', {
         controller: 'RegisterCtrl',
         templateUrl: 'templates/register.html'
+      })
+      .state('give.commitment', {
+        parent: 'noSideBar',
+        url: '/give-commitment',
+        controller: 'GiveController as give',
+        templateUrl: 'templates/mockup-give-commitment.html'
       });
   }
 

@@ -23,7 +23,7 @@ describe('GOTrip Nicaragua Signup Application Controller', function() {
     $provide.value('WorkTeams', tripHelpers.WorkTeams);
     $provide.value('contactId', 123456);
     $provide.value('Person', tripHelpers.Person);
-    $provide.value('$state', { go: function() {} });
+    $provide.value('$state', { go: function() {}, get: function() {} });
 
     mockSession = jasmine.createSpyObj('Session', ['exists', 'isActive', 'removeRedirectRoute', 'addRedirectRoute']);
     mockSession.exists.and.callFake(function(something) {

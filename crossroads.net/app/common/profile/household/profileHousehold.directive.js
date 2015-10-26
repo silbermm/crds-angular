@@ -12,7 +12,7 @@
       scope: {
         householdId: '=?',
         householdInfo: '=',
-        householdForm: '=' 
+        householdForm: '=',
       },
       templateUrl: 'household/profileHousehold.template.html',
       controller: 'ProfileHouseholdController as household',

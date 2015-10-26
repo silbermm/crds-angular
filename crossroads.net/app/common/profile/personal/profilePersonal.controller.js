@@ -12,7 +12,8 @@
     'MESSAGES',
     'ProfileReferenceData',
     'Profile',
-    'Validation'
+    'Validation',
+    '$sce'
   ];
 
   function ProfilePersonalController(
@@ -22,11 +23,13 @@
       MESSAGES,
       ProfileReferenceData,
       Profile,
-      Validation) {
+      Validation,
+      $sce) {
 
     var vm = this;
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
+    vm.ageRestrictionMessage = $sce.trustAsHtml($rootScope.MESSAGES.ageRestriction.content);
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
     vm.closeModal = closeModal;
@@ -47,9 +50,39 @@
     vm.submitted = false;
     vm.validation = Validation;
     vm.viewReady = false;
+    vm.minYears = vm.minYears ? Number(vm.minYears) : 13;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
     activate();
+
+    //Datepicker STUFF
+    vm.hstep = 1;
+    vm.mstep = 15;
+    var now = new Date();
+    vm.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.minimumBirthdate = new Date(now.getFullYear() - vm.minYears, now.getMonth(), now.getDate());
+    vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
+    vm.crossroadsStartDate = new Date(1994, 0, 1);
+    vm.isMeridian = true;
+    vm.openBirthdatePicker = openBirthdatePicker;
+    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.minimumBirthdate : vm.today);
+    function openBirthdatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.birthdateOpen = true;
+    }
+
+    vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
+
+    function openStartAttendingDatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.startAttendingOpen = true;
+    }
+
+    //END Datepicker STUFF
 
     ////////////////////////////////
     //// IMPLEMENTATION DETAILS ////
@@ -83,10 +116,6 @@
         var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
         var mBdate = moment(newBirthDate, 'YYYY MM DD');
         vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
-      }
-
-      if ((vm.profileData.person.anniversaryDate !== undefined) && (vm.profileData.person.anniversaryDate !== '')) {
-        var mAdate = moment(new Date(vm.profileData.person.anniversaryDate));
       }
 
       vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;

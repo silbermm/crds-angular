@@ -1,6 +1,6 @@
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
-    <p class="push-bottom">Information shared here is kept secure and private. We will not share or sell your information.</p>
+    <p class="push-bottom" ng-bind-html="$root.MESSAGES.privacy.content | html"></p>
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
@@ -37,9 +37,14 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6">
-        <label for="nickname">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
-        <input type="text" class="form-control" id="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName">
+      <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'nickname')}">
+        <label for="nickname" class="required">Preferred Name <small class="text-muted">(Example: Chris instead of Christopher)</small> </label>
+        <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName" required>
+        <ng-messages for="profile.pform.nickname.$error" ng-if="profile.validation.showErrors(profile.pform, 'nickname')">
+          <span ng-message="required">
+            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+        </ng-messages>
       </div>
     </div>
 
@@ -84,18 +89,41 @@
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'birthdate')}" >
-        <label class="required">Birth Date</label>
-        <input type="text"
-               class="form-control"
-               name="birthdate"
-               id="birthdate"
-               placeholder="mm/dd/yyyy"
-               ng-required="true"
-               ng-model='profile.profileData.person.dateOfBirth'
-               validate-date>
+
+        <label for="birthdate" class="required">Birth Date</label>
+        <span class="input-group datepicker">
+          <input type="text"
+                 class="form-control"
+                 name="birthdate"
+                 id="birthdate"
+                 placeholder="mm/dd/yyyy"
+                 datepicker-popup="MM/dd/yyyy"
+                 ng-model='profile.profileData.person.dateOfBirth'
+                 is-open='profile.birthdateOpen'
+                 show-button-bar='false'
+                 max-date={{profile.minBirthdate}}
+                 min-date={{profile.oneHundredFiftyYearsAgo}}
+                 init-date=profile.minBirthdate
+                 ng-required="true"
+                 datepicker-validator
+                 required>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="profile.openBirthdatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+        </span>
+        
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
-          <ng-messages-include src="on-pause-messages"></ng-messages-include>
+          <span ng-message="date">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="minDate">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="maxDate">
+            <span ng-if="profile.enforceAgeRestriction" dynamic-content="profile.ageRestrictionMessage"></span>
+            <span ng-if="!profile.enforceAgeRestriction"  ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
         </ng-messages>
       </div>
     </div>
@@ -104,6 +132,7 @@
         <div class="form-group col-sm-6">
             <label for="marital_status">Marital Status</label>
             <select class="form-control col-sm-12" ng-model="profile.profileData.person.maritalStatusId" ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
+              <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
             </select>
         </div>
 
@@ -129,8 +158,10 @@
          <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
          <div class="profile-ethnicity">
            <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
-              <label><input type="checkbox" ng-model="ethnicity.selected">{{ethnicity.name}}</label>
-
+              <label>
+                <input type="checkbox" ng-model="ethnicity.selected">
+                {{ethnicity.name}}
+              </label>
            </div>
           </div>
       </div>
@@ -144,19 +175,41 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'anniversary-date')}" >
-        <label class="control-label">When did you start attending Crossroads?</label>
+      <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'startAttendDate')}" >
+        <label for="startAttendDate" class="required">When did you start attending Crossroads?</label>
+        <span class="input-group datepicker">
+          <input type="text"
+                 class="form-control"
+                 name="startAttendDate"
+                 id="startAttendDate"
+                 placeholder="mm/yyyy"
+                 datepicker-popup="MM/yyyy"
+                 datepicker-options="{minMode: 'month'}"
+                 datepicker-mode="'month'"
+                 ng-model='profile.profileData.person.anniversaryDate'
+                 is-open='profile.startAttendingOpen'
+                 close-text="Close"
+                 min-date={{profile.crossroadsStartDate}}
+                 max-date={{profile.today}}
+                 ng-model-options="{updateOn:'blur'}"
+                 datepicker-validator
+                 ng-required="true"
+                 required>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" ng-click="profile.openStartAttendingDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
         </span>
-        <input type="text"
-               class="form-control"
-               id="anniversary-date"
-               name="anniversary-date"
-               placeholder="mm/yyyy"
-               validate-date='MM/YYYY'
-               ng-model-options="{updateOn:'blur'}"
-               ng-model="profile.profileData.person.anniversaryDate">
-        <ng-messages for="profile.pform['anniversary-date'].$error" ng-if="profile.validation.showErrors(profile.pform, 'anniversary-date')">
-          <ng-messages-include src="on-pause-messages"></ng-messages-include>
+        <ng-messages for="profile.pform.startAttendDate.$error" ng-if="profile.validation.showErrors(profile.pform, 'startAttendDate')">
+          <ng-messages-include src="on-submit-messages"></ng-messages-include>
+          <span ng-message="date">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="minDate">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
+          <span ng-message="maxDate">
+            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+          </span>
         </ng-messages>
       </div>
       <div class="form-group col-sm-6" >
@@ -164,8 +217,8 @@
             <a><svg viewBox="0 0 32 32"
                  class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline"
                  popover="We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads."
-                 popover-placement="right" 
-                 popover-append-to-body="true" 
+                 popover-placement="right"
+                 popover-append-to-body="true"
                  popover-trigger="focus">
                 <use xlink:href="#question-circle"></use>
               </svg></a>
@@ -185,7 +238,7 @@
                 id="start-attend-reason"
                 ng-model="profile.startAttendReason.attribute"
                 ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
-          <option value=""> -- Choose One -- </option>
+          <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>
@@ -220,7 +273,7 @@
                 id="service-provider"
                 ng-model="profile.profileData.person.mobileCarrierId"
                 ng-options="providers.dp_RecordID as providers.dp_RecordName for providers in profile.serviceProviders" >
-            <option value=""> -- Choose One -- </option>
+            <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
     </div>

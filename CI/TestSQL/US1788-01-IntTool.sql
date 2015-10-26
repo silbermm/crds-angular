@@ -11,11 +11,11 @@ GO
 
 INSERT INTO [dbo].[dp_Tools]
            ([Tool_ID]
-		        ,[Tool_Name]
+		   ,[Tool_Name]
            ,[Description]
            ,[Launch_Page])
      VALUES
-           (371
+           (373
 		   ,'Trip Private Invites - DEV'
            ,'Development Trip Private Invite Tool'
            ,'http://localhost:3000/mptools/tripPrivateInvite')
@@ -30,8 +30,8 @@ INSERT INTO [dbo].[dp_Tool_Pages]
 		   ,[Tool_ID]
            ,[Page_ID])
      VALUES
-           (478
-		       ,371
+           (480
+		   ,373
            ,514)
 
 SET IDENTITY_INSERT [dbo].[dp_Tool_Pages] OFF
@@ -40,4 +40,4 @@ GO
 INSERT INTO [dbo].[dp_Role_Tools]
            (Role_ID, Tool_ID, Domain_ID)
      VALUES
-           (2, 371, 1)
+           (2, 373, 1)

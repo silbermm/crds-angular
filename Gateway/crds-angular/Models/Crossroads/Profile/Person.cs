@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Services;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
@@ -19,6 +20,24 @@ namespace crds_angular.Models.Crossroads.Profile
 
         [JsonProperty(PropertyName = "age")]
         public int Age { get; set; }
+
+        [JsonProperty(PropertyName = "passportNumber")]
+        public string PassportNumber { get; set; }
+
+        [JsonProperty(PropertyName = "passportFirstname")]
+        public string PassportFirstname { get; set; }
+
+        [JsonProperty(PropertyName = "passportLastname")]
+        public string PassportLastname { get; set; }
+
+        [JsonProperty(PropertyName = "passportMiddlename")]
+        public string PassportMiddlename { get; set; }
+
+        [JsonProperty(PropertyName = "passportExpiration")]
+        public string PassportExpiration { get; set; }
+        
+        [JsonProperty(PropertyName = "passportCountry")]
+        public string PassportCountry { get; set; }
 
         [JsonProperty(PropertyName = "anniversaryDate")]
         public string AnniversaryDate { get; set; }
@@ -120,7 +139,13 @@ namespace crds_angular.Models.Crossroads.Profile
                 State = State,
                 Postal_Code = PostalCode,
                 Congregation_ID = CongregationId,
-                Household_ID = HouseholdId
+                Household_ID = HouseholdId,
+                Passport_Country = PassportCountry,
+                Passport_Expiration = PassportExpiration,
+                Passport_Firstname = PassportFirstname,
+                Passport_Lastname = PassportLastname,
+                Passport_Middlename = PassportMiddlename,
+                Passport_Number = PassportNumber
             };
         }
 

@@ -11,6 +11,7 @@ describe('RecurringGivingModals', function() {
   var filter;
   var DonationService;
   var GiveTransferService;
+  var RecurringGiving;
   var donation;
   var programList;
   var httpBackend;
@@ -47,7 +48,7 @@ describe('RecurringGivingModals', function() {
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(angular.mock.module(function($provide) {
-    $provide.value('$state', {});
+    $provide.value('$state', { get: function() {} });
   }));
 
   beforeEach(inject(function(_$controller_, $injector) {
@@ -58,6 +59,7 @@ describe('RecurringGivingModals', function() {
     filter = $injector.get('$filter');
     DonationService = $injector.get('DonationService');
     GiveTransferService = $injector.get('GiveTransferService');
+    RecurringGiving = $injector.get('RecurringGiving');
 
     modalInstance = {                    // Create a mock object using spies
       close: jasmine.createSpy('modalInstance.close'),

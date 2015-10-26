@@ -6,6 +6,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         PrivateInvite Create(int pledgeCampaignId, string emailAddress, string recipientName, string token);
         bool PrivateInviteValid(int pledgeCampaignId, string guid, string emailAddress);
-        void MarkAsUsed(int pledgeCampaignId, string inviteGUID);
+        void MarkAsUsed(int pledgeCampaignId, string inviteGuid);
     }
 }

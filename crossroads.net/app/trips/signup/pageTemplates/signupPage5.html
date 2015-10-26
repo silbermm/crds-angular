@@ -9,10 +9,10 @@
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorChild') }">
           <label class="control-label block" ng-class="{'required': tripsSignup.isNica()}">Have you sponsored a child through Crossroads in Nicaragua?</label>
           <label class="radio-inline" ng-click="isCollapsed = true">
-              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="yes" name="sponsorChild" id="sponsor-yes" ng-required="tripsSignup.isNica()">Yes
+            <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="yes" name="sponsorChild" id="sponsor-yes" ng-required="tripsSignup.isNica()">Yes
           </label>
           <label class="radio-inline" ng-click="isCollapsed = false">
-              <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="no" name="sponsorChild" id="sponsor-no" ng-required="tripsSignup.isNica()">No
+            <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="no" name="sponsorChild" id="sponsor-no" ng-required="tripsSignup.isNica()">No
           </label>
           <ng-messages for="tripsSignup.tripAppPage5.sponsorChild.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorChild')">
             <span ng-message="required">
@@ -51,6 +51,16 @@
             </span>
           </ng-messages>
         </div>
+        <div class="form-group col-sm-6" collapse="!isCollapsed" >
+          <label for="sponsor-town" class="control-label"> Child's City/Town </label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildTown"
+                 type="text"
+                 class="form-control"
+                 name="sponsorTown"
+                 id="sponsor-town"
+                 placeholder="Enter sponsored child's city/town" >
+        </div>
+
       </div>
     </div><!--/#child sponsor-->
 
