@@ -103,7 +103,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
-            _ministryPlatformService.Setup(mocked => mocked.GetSubpageViewRecords(110, myId, It.IsAny<string>(),  "", "", 0)).Returns(subpageDict);
+            _ministryPlatformService.Setup(mocked => mocked.GetSubpageViewRecords("ContactRelationshipsIds", myId, It.IsAny<string>(), "", "", 0)).Returns(subpageDict);
 
             var result = _fixture.GetMyCurrentRelationships(myId).ToList();
             Assert.AreEqual(relationships[0].RelatedContactID, result[0].RelatedContactID);
