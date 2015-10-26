@@ -960,7 +960,7 @@ describe('GiveController', function() {
     });
   });
 
-  describe('Give type branching', function() { 
+  describe('Give convert to recurring gift', function() {
     it('should change convert to recurring', function() {
       GiveTransferService.givingType = 'one-time';
       GiveTransferService.amount = '12345';
