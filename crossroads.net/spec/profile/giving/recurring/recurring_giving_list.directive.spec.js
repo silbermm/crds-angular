@@ -15,7 +15,9 @@ describe('RecurringGivingList Directive', function() {
 
   beforeEach(angular.mock.module(function($provide) {
     modal = {
-      open: function(){},
+      open: function() {
+      },
+
       name: 'test modal',
     };
 
@@ -28,13 +30,14 @@ describe('RecurringGivingList Directive', function() {
             this.cancelCallback = cancelCallback;
           }
         },
-        close: function( item ) {
+        close: function(item) {
           //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
-          this.result.confirmCallBack( item );
+          this.result.confirmCallBack(item);
         },
-        dismiss: function( type ) {
+
+        dismiss: function(type) {
           //The user clicked cancel on the modal dialog, call the stored cancel callback
-          this.result.cancelCallback( type );
+          this.result.cancelCallback(type);
         }
       };
     });
