@@ -20,6 +20,7 @@
       getLoggedInUserDonorPaymentInfo: getLoggedInUserDonorPaymentInfo,
       resetGiveFlow: resetGiveFlow,
       resetGiveTransferServiceGiveType: resetGiveTransferServiceGiveType,
+      convertToRecurring: convertToRecurring,
     };
 
     function initDefaultState() {
@@ -84,6 +85,13 @@
 
     function getLoggedInUserDonorPaymentInfo(event, toState) {
       DonationService.transitionForLoggedInUserBasedOnExistingDonor(event, toState);
+    }
+
+    function convertToRecurring() {
+      GiveTransferService.givingType = 'month';
+      GiveTransferService.resetForConvert();
+      Session.removeRedirectRoute();
+      $state.go(GiveFlow.amount);
     }
 
     return service;

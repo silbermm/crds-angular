@@ -9,6 +9,8 @@
           A receipt has been sent to <strong>{{give.dto.email}}</strong>.
       </p>
       <br />
-      <a href="">Make this gift recurring</a>
+      <section ng-if="give.dto.givingType">
+          <a href="" ng-click="give.service.convertToRecurring()">Make this gift recurring</a>
+      </section>
   </div>
 </div>
