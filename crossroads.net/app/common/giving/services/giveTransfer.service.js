@@ -3,9 +3,9 @@
 
   module.exports = GiveTransferService;
 
-  GiveTransferService.$inject = ['Session', 'User'];
+  GiveTransferService.$inject = ['Session', 'User', '$location'];
 
-  function GiveTransferService(Session, User) {
+  function GiveTransferService(Session, User, $location) {
     var transferObject = {
       reset: function() {
         this.account = '';
@@ -33,6 +33,12 @@
         this.view = 'bank';
         this.recurringStartDate = undefined;
         this.recurringGiftId = undefined;
+        this.impersonateDonorId = undefined;
+
+        // TODO - This is added to allow UX team to mock pledge-related UI components in the give pages
+        // To use, start the giving flow with "?mockPledge=true" appended to the URL, for example:
+        // http://int.crossroads.net/give?mockPledge=true
+        this.mockPledge = $location.search().mockPledge;
 
         if (!Session.isActive()) {
           User.email = '';

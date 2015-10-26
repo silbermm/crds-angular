@@ -74,5 +74,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Dictionary<string, object>> GetSelectionsForPageDict(int pageId, int selectionId, String token);
         List<Dictionary<string, object>> GetSelectionsDict(int selectionId, String token, String search = "", String sort = "");
         SelectQueryResult GetSelectionRecords(int selectionId, String token, String search = "", String sort = "");
+        UserInfo GetContactInfo(string token);
     }
 }
