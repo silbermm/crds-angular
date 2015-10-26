@@ -19,11 +19,14 @@
     function link(scope, el, attr) {
 
       scope.goToGiving = goToGiving;
-      scope.shareUrl = TripsUrlService.ShareUrl(scope.tripParticipant.trips[0].tripParticipantId);
+      scope.shareUrl = shareUrl;
 
-      function goToGiving() {
-        var pId = angular.copy(scope.tripParticipant.trips[0].tripParticipantId);
-        $state.go('tripgiving.amount', {eventParticipantId: pId});
+      function goToGiving(tripParticipantId) {
+        $state.go('tripgiving.amount', {eventParticipantId: tripParticipantId});
+      }
+
+      function shareUrl(tripParticipantId) {
+        return TripsUrlService.ShareUrl(tripParticipantId);
       }
 
     }
