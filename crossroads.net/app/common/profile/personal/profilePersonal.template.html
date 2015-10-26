@@ -103,7 +103,7 @@
                  show-button-bar='false'
                  max-date={{profile.minBirthdate}}
                  min-date={{profile.oneHundredFiftyYearsAgo}}
-                 init-date=profile.thirteenYearsAgo
+                 init-date=profile.minBirthdate
                  ng-required="true"
                  datepicker-validator
                  required>
@@ -121,7 +121,7 @@
             <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="maxDate">
-            <span ng-if="profile.enforceAgeRestriction" ng-bind-html="$root.MESSAGES.thirteenOrOlder.content | html"></span>
+            <span ng-if="profile.enforceAgeRestriction" dynamic-content="profile.ageRestrictionMessage"></span>
             <span ng-if="!profile.enforceAgeRestriction"  ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
