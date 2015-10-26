@@ -960,23 +960,7 @@ describe('GiveController', function() {
     });
   });
 
-  describe('Give type branching', function() {
-    beforeEach(function() {
-      spyOn(controller.service, 'goToAccount');
-      controller.giveForm = {
-        amountForm: {
-          $dirty: false,
-        },
-        creditCardForm: {
-          $dirty: true,
-        },
-        bankAccountForm: {
-          $dirty: true,
-        },
-        $valid: true,
-      };
-    });
-
+  describe('Give type branching', function() { 
     it('should change convert to recurring', function() {
       GiveTransferService.givingType = 'one-time';
       GiveTransferService.amount = '12345';
