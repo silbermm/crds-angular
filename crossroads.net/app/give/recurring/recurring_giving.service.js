@@ -96,6 +96,7 @@
     function loadDonationInformation(programsInput, donation = null, impersonateDonorId = null) {
       GiveTransferService.reset();
 
+      GiveTransferService.impersonateDonorId = impersonateDonorId;
       GiveTransferService.amountSubmitted = false;
       GiveTransferService.bankinfoSubmitted = false;
       GiveTransferService.changeAccountInfo = true;

@@ -19,6 +19,7 @@
     function link(scope) {
       scope.openRemoveGiftModal = openRemoveGiftModal;
       scope.openEditGiftModal = openEditGiftModal;
+      scope.openCreateGiftModal = openCreateGiftModal;
 
       scope.$watch('recurringGiftsInput', function(recurringGifts) {
         scope.recurringGifts = PaymentDisplayDetailService.postProcess(recurringGifts);
