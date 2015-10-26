@@ -30,7 +30,13 @@
   // The GP Export Tool
   require('./gp_export');
 
+  // The Administrator Tool Common
+  require('./admin_tool_common');
+
   // The Administrator Giving History Tool
   require('./admin_giving_history');
+
+  // The Administrator Recurring Gift Tool
+  require('./admin_recurring_gift');
 
 })();
