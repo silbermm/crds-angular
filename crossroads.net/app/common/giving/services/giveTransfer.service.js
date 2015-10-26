@@ -59,6 +59,7 @@
       this.donor = {};
       this.donorError = false;
       this.email = undefined;
+      this.givingType = 'month';
       this.initialized = true;
       this.last4 = '';
       this.message = null;

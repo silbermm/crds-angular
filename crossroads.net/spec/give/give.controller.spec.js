@@ -960,4 +960,33 @@ describe('GiveController', function() {
     });
   });
 
+  describe('Give type branching', function() {
+    beforeEach(function() {
+      spyOn(controller.service, 'goToAccount');
+      controller.giveForm = {
+        amountForm: {
+          $dirty: false,
+        },
+        creditCardForm: {
+          $dirty: true,
+        },
+        bankAccountForm: {
+          $dirty: true,
+        },
+        $valid: true,
+      };
+    });
+
+    it('should change convert to recurring', function() {
+      GiveTransferService.givingType = 'one-time';
+      GiveTransferService.amount = '12345';
+      GiveTransferService.program = '3';
+      GiveTransferService.resetForConvert();
+
+      expect(GiveTransferService.amount).toBe('12345');
+      expect(GiveTransferService.program).toBe('3');
+      expect(GiveTransferService.givingType).toBe('month');
+    });
+  });
+
 });
