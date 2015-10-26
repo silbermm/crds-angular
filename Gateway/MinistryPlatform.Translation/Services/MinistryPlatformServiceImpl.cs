@@ -250,11 +250,7 @@ namespace MinistryPlatform.Translation.Services
 
         public UserInfo GetContactInfo(string token)
         {
-            using (new OperationContextScope(_platformServiceClient.InnerChannel))
-            {
-                WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization", "Bearer " + token);
-                return Call<UserInfo>(token, platformClient => platformClient .GetCurrentUserInfo());
-            }
+            return Call<UserInfo>(token, platformClient => platformClient .GetCurrentUserInfo());
         }
 
         private int GetMinistryPlatformId(string mpKey)
