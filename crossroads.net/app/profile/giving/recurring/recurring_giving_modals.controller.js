@@ -116,17 +116,17 @@
       }
 
       // Validate the credit card or bank account form
-      if ((recurringGiveForm.creditCardForm !== undefined && !recurringGiveForm.creditCardForm.$valid) ||
-          (recurringGiveForm.bankAccountForm !== undefined && !recurringGiveForm.bankAccountForm.$valid)) {
+      var accountForm = recurringGiveForm.creditCardForm !== undefined ?
+          recurringGiveForm.creditCardForm : recurringGiveForm.bankAccountForm;
+      if (accountForm !== undefined && accountForm.$dirty && !accountForm.$valid) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         vm.dto.processing = false;
         return;
       }
 
       // Form is valid so update
-      if ((recurringGiveForm.creditCardForm !== undefined && recurringGiveForm.creditCardForm.$dirty) ||
-          (recurringGiveForm.bankAccountForm !== undefined && recurringGiveForm.bankAccountForm.$dirty)) {
-        // Credit card or bank account info is touched so update token from strip
+      if (accountForm !== undefined && accountForm.$dirty) {
+        // Credit card or bank account info is touched so update token from stripe
         DonationService.updateRecurringGift(true).then(function() {
           $modalInstance.close(true);
         }, function(/*error*/) {
