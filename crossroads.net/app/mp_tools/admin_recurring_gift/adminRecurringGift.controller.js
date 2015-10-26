@@ -3,9 +3,9 @@
 
   module.exports = AdminRecurringGiftController;
 
-  AdminRecurringGiftController.$inject = ['$log', '$filter', '$state', '$modal', '$rootScope', 'DonationService', 'GiveTransferService'];
+  AdminRecurringGiftController.$inject = ['$log', '$filter', '$modal', '$rootScope', 'DonationService', 'GiveTransferService'];
 
-  function AdminRecurringGiftController($log, $filter, $state, $modal, $rootScope, DonationService, GiveTransferService) {
+  function AdminRecurringGiftController($log, $filter, $modal, $rootScope, DonationService, GiveTransferService) {
     var vm = this;
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
