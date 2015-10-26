@@ -135,6 +135,9 @@ namespace crds_angular.Models.Crossroads.Trip
 
             [JsonProperty(PropertyName = "sponsorChildNumber")]
             public string SponsorChildNumber { get; set; }
+
+            [JsonProperty(PropertyName = "sponsorChildTown")]
+            public string SponsorChildTown { get; set; }
         }
 
         public class ApplicationPageSix
