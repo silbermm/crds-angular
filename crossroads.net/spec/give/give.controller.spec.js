@@ -960,4 +960,17 @@ describe('GiveController', function() {
     });
   });
 
+  describe('Give convert to recurring gift', function() {
+    it('should change convert to recurring', function() {
+      GiveTransferService.givingType = 'one-time';
+      GiveTransferService.amount = '12345';
+      GiveTransferService.program = '3';
+      GiveTransferService.resetForConvert();
+
+      expect(GiveTransferService.amount).toBe('12345');
+      expect(GiveTransferService.program).toBe('3');
+      expect(GiveTransferService.givingType).toBe('month');
+    });
+  });
+
 });

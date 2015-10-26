@@ -2,25 +2,25 @@ require('crds-core');
 require('../../../app/common/common.module');
 require('../../../app/app');
 
-describe('Admin Giving History Tool', function() {
+describe('Admin Common Tool', function() {
   var $state;
   var MPTools;
   var GivingHistoryService;
   var AuthService;
-  var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
+  var goToFunction;
+  var GIVE_ROLES = { StewardshipDonationProcessor: 7 };
 
   beforeEach(function() {
     angular.mock.module('crossroads', function($provide) {
-      $state = jasmine.createSpyObj('$state', ['go', 'get']);
-      MPTools = jasmine.createSpyObj('MPTools', ['getParams']);
-      GivingHistoryService = {
-        impersonateDonorId: undefined
+      $state = jasmine.createSpyObj('$state', ['go']);
+      GivingHistoryService = { impersonateDonorId: undefined };
+      goToFunction = function(donorId) {
+        GivingHistoryService.impersonateDonorId = donorId;
+        $state.go('tools.adminGivingHistory');
       };
 
-      $provide.constant('GIVE_ROLES', GIVE_ROLES);
-      $provide.value('$state', $state);
-      $provide.value('MPTools', MPTools);
-      $provide.value('GivingHistoryService', GivingHistoryService);
+      $provide.constant('role', GIVE_ROLES.StewardshipDonationProcessor);
+      $provide.value('goToFunction', goToFunction);
     });
   });
 
@@ -33,8 +33,9 @@ describe('Admin Giving History Tool', function() {
 
   var $controller;
 
-  beforeEach(inject(function(_$controller_) {
+  beforeEach(inject(function(_$controller_, $injector) {
     $controller = _$controller_;
+    MPTools = $injector.get('MPTools');
   }));
 
   describe('Admin Giving History Controller', function() {
@@ -48,43 +49,53 @@ describe('Admin Giving History Tool', function() {
       it('should not change state if access is not allowed', function() {
         AuthService.isAuthenticated.and.returnValue(false);
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
-        expect(fixture.noSelection).toBeUndefined();
-        expect(fixture.selectionError).toBeUndefined();
-        expect(fixture.tooManySelections).toBeUndefined();
+        expect(fixture.service.dto.noSelection).toBeUndefined();
+        expect(fixture.service.dto.selectionError).toBeUndefined();
+        expect(fixture.service.dto.tooManySelections).toBeUndefined();
       });
 
       it('should not change state if access is allowed but no selections are made', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        MPTools.getParams.and.returnValue({});
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
-        expect(fixture.noSelection).toBeTruthy();
-        expect(fixture.selectionError).toBeUndefined();
-        expect(fixture.tooManySelections).toBeFalsy();
+        expect(fixture.service.dto.noSelection).toBeTruthy();
+        expect(fixture.service.dto.selectionError).toBeUndefined();
+        expect(fixture.service.dto.tooManySelections).toBeFalsy();
       });
 
       it('should not change state if access is allowed but too many selections are made', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        MPTools.getParams.and.returnValue({selectedCount: 2, selectedRecord: 123});
+        spyOn(MPTools, 'getParams').and.callFake(function(){
+          return {
+            selectedCount: 2,
+            selectedRecord: 123,
+          }
+        });
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
-        expect(fixture.noSelection).toBeFalsy();
-        expect(fixture.selectionError).toBeUndefined();
-        expect(fixture.tooManySelections).toBeTruthy();
+        expect(fixture.service.dto.noSelection).toBeFalsy();
+        expect(fixture.service.dto.selectionError).toBeUndefined();
+        expect(fixture.service.dto.tooManySelections).toBeTruthy();
       });
 
       it('should go to history view when a single donor is being viewed or edited', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        MPTools.getParams.and.returnValue({recordId: 123, selectedCount: 0, selectedRecord: 0});
+        spyOn(MPTools, 'getParams').and.callFake(function(){
+          return {
+            recordId: 123,
+            selectedCount: 0,
+            selectedRecord: 0,
+          }
+        });
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).toHaveBeenCalledWith('tools.adminGivingHistory');
         expect(GivingHistoryService.impersonateDonorId).toEqual(123);
       });
@@ -99,15 +110,21 @@ describe('Admin Giving History Tool', function() {
         };
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        MPTools.getParams.and.returnValue({recordId: 0, selectedCount: 1, selectedRecord: 456});
+        spyOn(MPTools, 'getParams').and.callFake(function(){
+          return {
+            recordId: 0,
+            selectedCount: 1,
+            selectedRecord: 456,
+          }
+        });
         MPTools.Selection = callback;
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).not.toHaveBeenCalled();
         expect(GivingHistoryService.impersonateDonorId).toBeUndefined();
         expect(actualParams).toBeDefined();
         expect(actualParams).toEqual({selectionId: 456});
-        expect(fixture.selectionError).toBeTruthy();
+        expect(fixture.service.dto.selectionError).toBeTruthy();
       });
 
       it('should go to history view when a single donor is selected', function() {
@@ -124,10 +141,16 @@ describe('Admin Giving History Tool', function() {
         };
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
-        MPTools.getParams.and.returnValue({recordId: 0, selectedCount: 1, selectedRecord: 456});
+        spyOn(MPTools, 'getParams').and.callFake(function(){
+          return {
+            recordId: 0,
+            selectedCount: 1,
+            selectedRecord: 456,
+          }
+        });
         MPTools.Selection = callback;
 
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
+        fixture = $controller('AdminToolController', { $scope: $scope });
         expect($state.go).toHaveBeenCalledWith('tools.adminGivingHistory');
         expect(GivingHistoryService.impersonateDonorId).toEqual(123);
         expect(actualParams).toBeDefined();
@@ -136,14 +159,12 @@ describe('Admin Giving History Tool', function() {
     });
 
     describe('Function allowAccess', function() {
-      beforeEach(function() {
-        fixture = $controller('AdminGivingHistoryController', { $scope: $scope });
-      });
 
       it('Should not allow access if user is not authenticated', function() {
         AuthService.isAuthenticated.and.returnValue(false);
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
-        expect(fixture.allowAccess()).toBeFalsy();
+        expect(fixture.allowAccess).toBeFalsy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
         expect(AuthService.isAuthorized).not.toHaveBeenCalled();
@@ -152,18 +173,20 @@ describe('Admin Giving History Tool', function() {
       it('Should not allow access if user is authenticated but not authorized', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(false);
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
-        expect(fixture.allowAccess()).toBeFalsy();
+        expect(fixture.allowAccess).toBeFalsy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
         expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
       });
 
-      it('Should not allow access if user is authenticated but not authorized', function() {
+      it('Should allow access if user is authenticated and authorized', function() {
         AuthService.isAuthenticated.and.returnValue(true);
         AuthService.isAuthorized.and.returnValue(true);
+        fixture = $controller('AdminToolController', { $scope: $scope });
 
-        expect(fixture.allowAccess()).toBeTruthy();
+        expect(fixture.allowAccess).toBeTruthy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
         expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);

@@ -12,7 +12,8 @@
     'MESSAGES',
     'ProfileReferenceData',
     'Profile',
-    'Validation'
+    'Validation',
+    '$sce'
   ];
 
   function ProfilePersonalController(
@@ -22,11 +23,13 @@
       MESSAGES,
       ProfileReferenceData,
       Profile,
-      Validation) {
+      Validation,
+      $sce) {
 
     var vm = this;
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
+    vm.ageRestrictionMessage = $sce.trustAsHtml($rootScope.MESSAGES.ageRestriction.content);
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
     vm.closeModal = closeModal;
@@ -47,6 +50,7 @@
     vm.submitted = false;
     vm.validation = Validation;
     vm.viewReady = false;
+    vm.minYears = vm.minYears ? Number(vm.minYears) : 13;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
     activate();
@@ -56,12 +60,12 @@
     vm.mstep = 15;
     var now = new Date();
     vm.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    vm.thirteenYearsAgo = new Date(now.getFullYear() - 13, now.getMonth(), now.getDate());
+    vm.minimumBirthdate = new Date(now.getFullYear() - vm.minYears, now.getMonth(), now.getDate());
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
     vm.crossroadsStartDate = new Date(1994, 0, 1);
     vm.isMeridian = true;
     vm.openBirthdatePicker = openBirthdatePicker;
-    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.thirteenYearsAgo : vm.today);
+    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.minimumBirthdate : vm.today);
     function openBirthdatePicker($event) {
       $event.preventDefault();
       $event.stopPropagation();

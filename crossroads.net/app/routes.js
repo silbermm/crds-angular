@@ -494,25 +494,6 @@
           }
         }
       })
-      .state('tools.adminGivingHistoryTool', {
-        // This is a "launch" page for the tool, it will check access, etc, then forward
-        // on to the actual page with the history.
-        url: '/adminGivingHistoryTool',
-        controller: 'AdminGivingHistoryController as AdminGivingHistory',
-        templateUrl: 'admin_giving_history/adminGivingHistoryTool.html'
-      })
-      .state('tools.adminGivingHistory', {
-        url: '/adminGivingHistory',
-        controller: 'GivingHistoryController as admin_giving_history_controller',
-        templateUrl: 'admin_giving_history/adminGivingHistory.html',
-        data: {
-          isProtected: true,
-          meta: {
-            title: 'Giving History - Admin View',
-            description: ''
-          }
-        }
-      })
       .state('tools.gpExport', {
         url: '/gpExport',
         controller: 'GPExportController as gpExport',
