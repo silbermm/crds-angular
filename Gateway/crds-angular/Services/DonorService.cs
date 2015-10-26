@@ -297,7 +297,7 @@ namespace crds_angular.Services
             }
         }
 
-        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        public Boolean CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
 
@@ -305,6 +305,8 @@ namespace crds_angular.Services
             _paymentService.CancelPlan(subscription.Plan.Id);
 
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+
+            return true;
         }
 
         /// <summary>

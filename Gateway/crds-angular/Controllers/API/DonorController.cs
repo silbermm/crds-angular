@@ -376,21 +376,35 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="recurringGiftId">The ID of the recurring gift to edit</param>
         /// <param name="editGift">The data required to edit the recurring gift in MinistryPlatform and/or Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
         [HttpPut]
         [Route("api/donor/recurrence/{recurringGiftId:int}")]
-        public IHttpActionResult EditRecurringGift([FromUri]int recurringGiftId, [FromBody] RecurringGiftDto editGift)
+        public IHttpActionResult EditRecurringGift([FromUri]int recurringGiftId, [FromBody] RecurringGiftDto editGift, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             editGift.RecurringGiftId = recurringGiftId;
 
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
                 try
                 {
-                    var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
-                    var recurringGift = _donorService.EditRecurringGift(token, editGift, donor);
+                    var donor = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetContactDonorForAuthenticatedUser(token))
+                        : _donorService.GetContactDonorForAuthenticatedUser(token);
+
+                    var recurringGift = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.EditRecurringGift(token, editGift, donor))
+                        : _donorService.EditRecurringGift(token, editGift, donor);
 
                     return Ok(recurringGift);
                 }
@@ -411,17 +425,27 @@ namespace crds_angular.Controllers.API
         /// Cancel a recurring gift for the authenticated user.  This simply end-dates the gift, and cancels the subscription at Stripe.
         /// </summary>
         /// <param name="recurringGiftId">The recurring gift ID to delete in MinistryPlatform and Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The RecurringGiftDto representing the gift that was deleted</returns>
         [RequiresAuthorization]
         [HttpDelete]
         [Route("api/donor/recurrence/{recurringGiftId:int}")]
-        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId)
+        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return(Authorized(token =>
             {
+
                 try
                 {
-                    _donorService.CancelRecurringGift(token, recurringGiftId);
+                    var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
+                    var result = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.CancelRecurringGift(token, recurringGiftId))
+                        : _donorService.CancelRecurringGift(token, recurringGiftId);
+
                     return (Ok());
                 }
                 catch (PaymentProcessorException stripeException)
@@ -440,17 +464,25 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve list of recurring gifts for the logged-in donor.
         /// </summary>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of RecurringGiftDto</returns>
         [Route("api/donor/recurrence")]
         [ResponseType(typeof(List<RecurringGiftDto>))]
         [HttpGet]
-        public IHttpActionResult GetRecurringGifts()
+        public IHttpActionResult GetRecurringGifts([FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+                
                 try
                 {
-                    var recurringGifts = _donorService.GetRecurringGiftsForAuthenticatedUser(token);
+                    var recurringGifts = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetRecurringGiftsForAuthenticatedUser(token)) 
+                        : _donorService.GetRecurringGiftsForAuthenticatedUser(token);
 
                     if (recurringGifts == null || !recurringGifts.Any())
                     {
