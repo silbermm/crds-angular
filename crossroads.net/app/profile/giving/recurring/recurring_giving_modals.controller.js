@@ -25,6 +25,7 @@
     vm.cancel = cancel;
     vm.remove = remove;
     vm.edit = edit;
+    vm.create = create;
     vm.impersonateDonorId = undefined;
 
     activate();
