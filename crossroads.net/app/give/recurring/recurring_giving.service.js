@@ -154,7 +154,7 @@
     function createGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
 
-      if (!validForm(recurringGiveForm)) {
+      if (!validForm(recurringGiveForm, false)) {
         return;
       }
 
@@ -170,7 +170,7 @@
     function updateGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
 
-      if (!validForm(recurringGiveForm)) {
+      if (!validForm(recurringGiveForm, true)) {
         return;
       }
 
@@ -198,7 +198,7 @@
       }
     }
 
-    function validForm(recurringGiveForm) {
+    function validForm(recurringGiveForm, allowPristine) {
       // Amount is not valid
       if (recurringGiveForm.donationDetailsForm !== undefined && !recurringGiveForm.donationDetailsForm.amount.$valid) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -217,8 +217,9 @@
       }
 
       // Validate the credit card or bank account form
-      if ((recurringGiveForm.creditCardForm !== undefined && !recurringGiveForm.creditCardForm.$valid) ||
-          (recurringGiveForm.bankAccountForm !== undefined && !recurringGiveForm.bankAccountForm.$valid)) {
+      var accountForm = recurringGiveForm.creditCardForm !== undefined ?
+          recurringGiveForm.creditCardForm : recurringGiveForm.bankAccountForm;
+      if (accountForm !== undefined && !accountForm.$valid && !accountForm.$dirty && !allowPristine) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         GiveTransferService.processing = false;
         return false;

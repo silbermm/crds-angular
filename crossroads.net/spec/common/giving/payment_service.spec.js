@@ -2,8 +2,6 @@ require('crds-core');
 require('../../../app/common/common.module');
 require('../../../app/app');
 
-var moment = require('moment');
-
 describe('PaymentService', function() {
   var sut;
   var httpBackend;

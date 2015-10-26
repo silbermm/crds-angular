@@ -16,6 +16,7 @@
         buttonText: '=',
         contactId: '=?',
         forTrips: '=',
+        minYears: '=?',
         modalInstance: '=?',
         requireMobilePhone: '=',
         submitFormCallback: '&?',

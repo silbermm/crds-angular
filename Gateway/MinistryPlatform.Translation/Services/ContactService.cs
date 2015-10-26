@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -187,15 +188,36 @@ namespace MinistryPlatform.Translation.Services
             return (CreateContact(contactDonor));
         }
 
-        public int CreateContactForSponsoredChild(string firstName, string lastName, string idCard)
+        public int CreateContactForSponsoredChild(string firstName, string lastName, string town, string idCard)
         {
+            var householdId = CreateAddressHouseholdForSponsoredChild(town, lastName);
+
             var contact = new MyContact
             {
                 First_Name = firstName,
                 Last_Name = lastName,
-                ID_Number = idCard
+                ID_Number = idCard,
+                Household_ID = householdId
             };
-             return CreateContact(contact);
+            
+            return CreateContact(contact);
+        }
+
+        private int CreateAddressHouseholdForSponsoredChild(string town, string lastName)
+        {
+            if (!String.IsNullOrEmpty(town))
+            {
+                var address = new PostalAddress
+                {
+                    City = town,
+                    Line1 = "Not Known"
+                };
+                return  CreateHouseholdAndAddress(lastName, address, ApiLogin());
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public int CreateContactForGuestGiver(string emailAddress, string displayName)
@@ -220,6 +242,12 @@ namespace MinistryPlatform.Translation.Services
                 {"Nickname", contact.First_Name},
                 {"ID_Card", contact.ID_Number}
             };
+
+            if (contact.Household_ID > 0)
+            {
+                contactDictionary.Add("HouseHold_ID", contact.Household_ID);
+                contactDictionary.Add("Household_Position_ID", _householdPositionDefaultId);
+            }
 
             try
             {
@@ -283,7 +311,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private int CreateHouseholdAndAddress(string householdName, PostalAddress address, string apiToken)
+        private int CreateHouseholdAndAddress(string householdName, PostalAddress address, string apiToken )
         {
             var addressDictionary = new Dictionary<string, object>
                 {
