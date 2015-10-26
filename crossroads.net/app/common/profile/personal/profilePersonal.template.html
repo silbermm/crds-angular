@@ -96,9 +96,10 @@
                id="birthdate"
                placeholder="mm/dd/yyyy"
                ng-required="true"
+               youngest-age="8"
+               validate-youngest-age
                ng-model='profile.profileData.person.dateOfBirth'
-               validate-date
-               validate-youngest-age >
+               validate-date >
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <ng-messages-include src="on-pause-messages"></ng-messages-include>

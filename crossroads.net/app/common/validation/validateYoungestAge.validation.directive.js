@@ -1,4 +1,5 @@
 (function() {
+  'use strict';
   module.exports = ValidateYoungestAge;
 
   ValidateYoungestAge.$inject = [];
@@ -16,11 +17,12 @@
 
           var input = moment(value, 'MM/DD/YYYY');
           console.log(input);
-          return input.years >= ageToCheckAgainst;
+          if (moment().years() - input.years()) > Number(ageToCheckAgainst){
+            
+          };
         };
       }
-
     };
-
   }
+
 })();
