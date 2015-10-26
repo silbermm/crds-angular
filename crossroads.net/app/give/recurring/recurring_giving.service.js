@@ -152,6 +152,7 @@
 
     function createGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
+      GiveTransferService.amountSubmitted = true;
 
       if (!validForm(recurringGiveForm, false)) {
         return;
@@ -168,6 +169,7 @@
 
     function updateGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
+      GiveTransferService.amountSubmitted = true;
 
       if (!validForm(recurringGiveForm, true)) {
         return;

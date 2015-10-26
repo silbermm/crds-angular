@@ -28,10 +28,12 @@
 
       scope.minDate = new Date();
       scope.amountError = amountError;
+      scope.clearStartDate = clearStartDate;
       scope.ministryShow = false;
       scope.setProgramList = setProgramList;
       scope.showInitiativeOption = scope.showInitiativeOption === undefined ? true : scope.showInitiativeOption;
       scope.showFrequencyOption = scope.showFrequencyOption === undefined ? true : scope.showFrequencyOption;
+      scope.startDateError = startDateError;
       scope.givingType = scope.givingType === undefined ? 'one_time' : scope.givingType;
       scope.allowOneTime = scope.allowOneTime === undefined ? true : scope.allowOneTime;
       scope.dateOptions = {
@@ -77,6 +79,12 @@
                 scope.amount === '');
       }
 
+      function startDateError() {
+        return (scope.amountSubmitted && scope.givingType !== 'one_time' &&
+                scope.donationDetailsForm.recurringStartDate.$dirty &&
+                scope.donationDetailsForm.recurringStartDate.$invalid);
+      }
+
       function setProgramList() {
         return scope.ministryShow ? scope.program = '' : scope.program = scope.programsIn[0];
       }
@@ -103,6 +111,15 @@
             scope.givingType = 'one_time';
           }
         }
+      }
+
+      function clearStartDate() {
+        if (scope.givingType === 'one_time' || scope.donationDetailsForm.recurringStartDate.$dirty) {
+          return;
+        }
+
+        scope.recurringStartDate = undefined;
+        scope.donationDetailsForm.recurringStartDate.$setDirty();
       }
     }
   }
