@@ -21,17 +21,17 @@
             </span>
           </ng-messages>
         </div>
-        <div class="form-group col-sm-12"  collapse="!isCollapsed">
-          <label for="why">
+        <div class="form-group col-sm-12" ng-show="signupStep.passportValid === 'false'">
+          <label>
             <span ng-bind-html="$root.MESSAGES.TripNoPassport.content | html"></span>
           </label>
         </div>
       </div>
 
-        <div class="row">
+        <div class="row" ng-show="signupStep.passportValid === 'true'">
           <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber') }">
-              <label for="passport-number" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Passport Number</label>
-              <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport number">
+              <label for="passport-number" class="control-label" ng-class="{'required': signupStep.hasPassport() }">Passport Number</label>
+              <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="signupStep.hasPassport()" placeholder="Enter passport number">
               <ng-messages for="tripsSignup.tripAppPage6.passportNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber')">
                 <span ng-message="required">
                   <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -40,8 +40,8 @@
           </div>
 
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire') }" ng-controller="crdsDatePickerCtrl">
-          <label for="passport-expire" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">When does your passport expire?</label>
-          <input ng-model="signupStep.person.passportExpiration" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="tripsSignup.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy">
+          <label for="passport-expire" class="control-label" ng-class="{'required': signupStep.hasPassport() }">When does your passport expire?</label>
+          <input ng-model="signupStep.person.passportExpiration" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="signupStep.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy">
           <ng-messages for="tripsSignup.tripAppPage6.passportExpire.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -53,13 +53,13 @@
         </div>
       </div><!--/row-->
 
-      <div class="row">
+      <div class="row" ng-show="signupStep.passportValid === 'true'">
         <div class="form-group col-sm-12">
           <span ng-bind-html="$root.MESSAGES.TripPassportName.content | html"></span>
           <div class="row">
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName') }">
-                <label for="passport-firstname" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">First Name</label>
-                <input ng-model="signupStep.person.passportFirstname" type="text" class="form-control" name="passportFirstName" id="passport-firstname" ng-required="tripsSignup.hasPassport()" placeholder="Enter first name">
+                <label for="passport-firstname" class="control-label" ng-class="{'required': signupStep.hasPassport() }">First Name</label>
+                <input ng-model="signupStep.person.passportFirstname" type="text" class="form-control" name="passportFirstName" id="passport-firstname" ng-required="signupStep.hasPassport()" placeholder="Enter first name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -73,8 +73,8 @@
           </div>
           <div class="row">
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportLastName') }">
-                <label for="passport-lastname" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Last Name</label>
-                <input ng-model="signupStep.person.passportLastname" type="text" class="form-control" name="passportLastName" id="passport-lastname" ng-required="tripsSignup.hasPassport()" placeholder="Enter last name">
+                <label for="passport-lastname" class="control-label" ng-class="{'required': signupStep.hasPassport() }">Last Name</label>
+                <input ng-model="signupStep.person.passportLastname" type="text" class="form-control" name="passportLastName" id="passport-lastname" ng-required="signupStep.hasPassport()" placeholder="Enter last name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportLastName')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -82,8 +82,8 @@
                 </ng-messages>
             </div>
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportCountry') }">
-                <label for="passport-country" class="control-label" ng-class="{'required': tripsSignup.hasPassport() }">Country of Passport</label>
-                <input ng-model="signupStep.person.passportCountry" type="text" class="form-control" name="passportCountry" id="passport-country" ng-required="tripsSignup.hasPassport()" placeholder="Enter passport country">
+                <label for="passport-country" class="control-label" ng-class="{'required': signupStep.hasPassport() }">Country of Passport</label>
+                <input ng-model="signupStep.person.passportCountry" type="text" class="form-control" name="passportCountry" id="passport-country" ng-required="signupStep.hasPassport()" placeholder="Enter passport country">
                 <ng-messages for="tripsSignup.tripAppPage6.passportCountry.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportCountry')">
                   <span ng-message="required">
                     <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -101,14 +101,14 @@
         <div class="form-group col-sm-6" ng-repeat="flyer in signupStep.frequentFlyers" ng-show="tripsSignup.showFrequentFlyer(flyer)" >
           <label for="{{flyer.atributeId}}">{{flyer.name}}</label>
           <input ng-model="flyer.notes"
-                 type="text" 
-                 class="form-control" 
+                 type="text"
+                 class="form-control"
                  id="{{flyer.attributeId}}"
                  name="{{flyer.attributeId}}"
                  placeholder="Enter {{flyer.name}} frequent flyer number" />
         </div>
       </div>
-      
+
       <div class="row" ng-show="!tripsSignup.nolaRequired()">
        <div class="col-sm-12">
         <legend>
@@ -161,7 +161,7 @@
         <div class="col-sm-12 push-bottom" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'describeExperienceAbroad') }">
           <div class="form-group push-top" collapse="!isCollapsed">
             <label for="describeExperienceAbroad" ng-class="{'required': isCollapsed}">Please describe your experience</label>
-            <textarea ng-model="signupStep.experienceAbroad.notes" 
+            <textarea ng-model="signupStep.experienceAbroad.notes"
                       cols="1"
                       rows="4"
                       class="form-control"

@@ -10,7 +10,6 @@ namespace MinistryPlatform.Translation.Services
 {
     public class ContactRelationshipService : BaseService, IContactRelationshipService
     {
-
         private readonly int _getMyCurrentRelationships = Convert.ToInt32((AppSettings("MyContactCurrentRelationships")));
 
         private IMinistryPlatformService _ministryPlatformService;
@@ -24,7 +23,8 @@ namespace MinistryPlatform.Translation.Services
         public IEnumerable<ContactRelationship> GetMyImmediateFamilyRelationships(int contactId, string token)
         {
             var viewRecords = _ministryPlatformService.GetSubpageViewRecords("MyContactFamilyRelationshipViewId",
-                contactId, token);
+                                                                             contactId,
+                                                                             token);
 
             return viewRecords.Select(viewRecord => new ContactRelationship
             {
@@ -33,37 +33,38 @@ namespace MinistryPlatform.Translation.Services
                 Last_Name = viewRecord.ToString("Last Name"),
                 Preferred_Name = viewRecord.ToString("Preferred Name"),
                 Participant_Id = viewRecord.ToInt("Participant_ID"),
-                Relationship_Id = viewRecord.ToInt("Relationship_ID"), 
+                Relationship_Id = viewRecord.ToInt("Relationship_ID"),
                 Age = viewRecord.ToInt("Age")
             }).ToList();
         }
 
         public IEnumerable<Relationship> GetMyCurrentRelationships(int contactId)
         {
-            var blah = _configurationWrapper.GetConfigIntValue("ContactRelationshipsIds");
-            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(blah, 
-                                                                         contactId, 
-                                                                         ApiLogin());
             try
             {
-                return viewRecords.Select(viewRecord => new Relationship
+                var viewRecords = _ministryPlatformService.GetSubpageViewRecords("ContactRelationshipsIds",
+                                                                                 contactId,
+                                                                                 ApiLogin());
+
+                return viewRecords.Select(record => new Relationship
                 {
-                    RelationshipID = (int)viewRecord["Relationship_ID"],
-                    RelatedContactID = (int)viewRecord["Related_Contact_ID"],
-                    EndDate = (viewRecord["End_Date"] != null) ? viewRecord.ToDate("End_Date") : (DateTime?) null,
-                    StartDate = (DateTime)viewRecord["Start_Date"]
+                    RelationshipID = record.ToInt("Relationship_ID"),
+                    RelatedContactID = record.ToInt("Related_Contact_ID"),
+                    EndDate = record.ToNullableDate("End_Date"),
+                    StartDate = record.ToDate("Start_Date")
                 }).ToList();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw;
+                throw new ApplicationException("GetMyCurrentRelationships Failed", ex);
             }
         }
 
         public IEnumerable<ContactRelationship> GetMyCurrentRelationships(int contactId, string token)
         {
-            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships, contactId,
-                token);
+            var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships,
+                                                                             contactId,
+                                                                             token);
             try
             {
                 return viewRecords.Select(viewRecord => new ContactRelationship
@@ -82,8 +83,8 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public int AddRelationship(Relationship relationship, int toContact )
-        {           
+        public int AddRelationship(Relationship relationship, int toContact)
+        {
             try
             {
                 var dict = new Dictionary<string, object>
@@ -94,16 +95,15 @@ namespace MinistryPlatform.Translation.Services
                     {"End_Date", relationship.EndDate}
                 };
                 return _ministryPlatformService.CreateSubRecord(_configurationWrapper.GetConfigIntValue("ContactRelationships"),
-                                                         toContact,
-                                                         dict,
-                                                         ApiLogin(), true);
+                                                                toContact,
+                                                                dict,
+                                                                ApiLogin(),
+                                                                true);
             }
             catch (Exception e)
             {
                 return -1;
             }
-            
         }
-        
     }
 }
