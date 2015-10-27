@@ -1,7 +1,7 @@
 USE [MinistryPlatform]
 GO
 
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Trip_Export]    Script Date: 10/22/2015 6:40:31 PM ******/
+/****** Object:  StoredProcedure [dbo].[report_CRDS_Trip_Export]    Script Date: 10/27/2015 8:28:26 AM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -9,6 +9,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[report_CRDS_Trip_Export]
+-- Add the parameters for the stored procedure here
       @EventID INT
 AS
     BEGIN
@@ -16,6 +17,7 @@ AS
         -- interfering with SELECT statements.
         SET NOCOUNT ON;
 
+        -- Insert statements for procedure here
         -- PARMS
         DECLARE @MissionTripEventType INT = 6;
 
@@ -91,165 +93,170 @@ AS
                a.Foreign_Country,
                h.Home_Phone,
                cn.Congregation_Name,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @TripGuardianFirstName
                    AND r.Form_Response_ID = fr.Form_Response_ID ) TripGuardianFirstName,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @TripGuardianLastName
                    AND r.Form_Response_ID = fr.Form_Response_ID ) TripGuardianLastName,
-               ( 
+               (
                  SELECT Attribute_Name
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @TShirtSize ) AS TShirtSize,
-               ( 
+               (
                  SELECT Attribute_Name
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @ScrubSizeTop ) AS ScrubSizeTop,
-               ( 
+               (
                  SELECT Attribute_Name
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @ScrubSizeBottom ) AS ScrubSizeBottom,
-               ( 
+               (
                  SELECT STUFF((
                           SELECT '|' + attribute_name
                           FROM dbo.vw_crds_Contact_Attributes AS ca
                           WHERE ca.contact_id = c.Contact_ID
                             AND ca.Attribute_Type_ID = @DietaryRestrictions
                           FOR XML PATH( '' ), TYPE ).value( '.', 'nvarchar(max)' ), 1, 1, '')) AS Dietary_Restrictions,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @Allergies ) AS Allergies,
-               ( 
+               (
                  SELECT STUFF((
                           SELECT '|' + attribute_name
                           FROM dbo.vw_crds_Contact_Attributes AS ca
                           WHERE ca.contact_id = c.Contact_ID
                             AND ca.Attribute_Type_ID = @SpritualLife
                           FOR XML PATH( '' ), TYPE ).value( '.', 'nvarchar(max)' ), 1, 1, '')) AS Spritual_Life,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @Why
                    AND r.Form_Response_ID = fr.Form_Response_ID ) WhyGoOnTrip,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @EmergencyContactFirstName
                    AND r.Form_Response_ID = fr.Form_Response_ID ) EmergencyContactFirstName,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @EmergencyContactLastName
                    AND r.Form_Response_ID = fr.Form_Response_ID ) EmergencyContactLastName,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @EmergencyContactPrimaryPhone
                    AND r.Form_Response_ID = fr.Form_Response_ID ) EmergencyContactPrimaryPhone,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @EmergencyContactSecondaryPhone
                    AND r.Form_Response_ID = fr.Form_Response_ID ) EmergencyContactSecondaryPhone,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @EmergencyContactEmailAddress
                    AND r.Form_Response_ID = fr.Form_Response_ID ) EmergencyContactEmailAddress,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @LotteryPreference
                    AND r.Form_Response_ID = fr.Form_Response_ID ) LotteryPreference,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @CommonName
                    AND r.Form_Response_ID = fr.Form_Response_ID ) CommonName,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @RequestedRoommate1
                    AND r.Form_Response_ID = fr.Form_Response_ID ) RequestedRoommate1,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @RequestedRoommate2
                    AND r.Form_Response_ID = fr.Form_Response_ID ) RequestedRoommate2,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @SupportPersonEmail
                    AND r.Form_Response_ID = fr.Form_Response_ID ) SupportPersonEmail,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @GoGroupLeaderInterest
                    AND r.Form_Response_ID = fr.Form_Response_ID ) GoGroupLeaderInterest,
-               ( 
+			 sponsoredChild.SponsoredChild,
+			 sponsoredChild.SponsoredChildFirstName,
+			 sponsoredChild.SponsoredChildLastName,
+			 sponsoredChild.SponsoredChildIdNumber,
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @PreviousTripExperience ) AS Previous_Trip_Experience,
-               ( 
+               (
                  SELECT STUFF((
                           SELECT '|' + attribute_name
                           FROM dbo.vw_crds_Contact_Attributes AS ca
                           WHERE ca.contact_id = c.Contact_ID
                             AND ca.Attribute_Type_ID = @Profession
                           FOR XML PATH( '' ), TYPE ).value( '.', 'nvarchar(max)' ), 1, 1, '')) AS Profession,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_ID = @FrequentFlyerDelta ) AS FF_Delta,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_ID = @FrequentFlyerSouthAfrica ) AS FF_South_African_Airlines,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_ID = @FrequentFlyerUnited ) AS FF_United,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_ID = @FrequentFlyerUsAir ) AS FF_USAir,
-               ( 
+               (
                  SELECT Attribute_Name
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @InternationalTravelExperience ) AS International_Travel_Experience,
-               ( 
+               (
                  SELECT Notes
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @ExperienceServingAbroad ) AS Experience_Serving_Abroad,
                ( CONVERT( VARCHAR(10), fr.Response_Date, 101)) SignUpDate,
-			(Select dbo.crds_SpouseOnTrip(c.Contact_ID, ep.Event_ID)) SpouseOnTrip,
+			spouse.SpouseOnTrip,
+			spouse.SpouseName,
 			dep.Deposit,
 			dep.Payment_Type,
 			dep.Donation_Date,
 			dep.Pledge_Status,
 			dep.amount DepositAmount,
-               ( 
+               (
                  SELECT Attribute_Name
                  FROM vw_crds_Contact_Attributes
                  WHERE Contact_ID = c.Contact_ID
                    AND Attribute_Type_ID = @AbuseVictim ) AS Abuse_Victim,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -259,7 +266,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @StewardsOfChildren ) StewardsOfChildren,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -269,7 +276,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @Visa ) Visa,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -279,7 +286,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @Diploma ) Diploma,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -289,7 +296,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @MedicalLicense ) MedicalLicense,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -299,7 +306,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @LetterVerification ) LetterVerification,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -309,7 +316,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @GoodFaithLetter ) GoodFaithLetter,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -319,7 +326,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @GoodStandingLetter ) GoodStandingLetter,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -329,7 +336,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @Form10 ) Form10,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -339,7 +346,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @MedicalApplication ) MedicalApplication,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -349,7 +356,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @OrchardAfricaWaiver ) OrchardAfricaWaiver,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -359,7 +366,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @CopyOfPassport ) CopyOfPassport,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -369,7 +376,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @IPromise ) IPromise,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -379,7 +386,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @Waiver ) Waiver,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -389,7 +396,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @ProofOfGuardianship ) ProofOfGuardianship,
-               ( 
+               (
                  SELECT( CASE d.Received
                              WHEN 0
                              THEN 'No'
@@ -399,7 +406,7 @@ AS
                  FROM dbo.cr_EventParticipant_Documents d
                  WHERE d.Event_Participant_ID = ep.Event_Participant_ID
                    AND d.Document_ID = @CountryDocumentation ) CountryDocumentation,
-               ( 
+               (
                  SELECT STUFF((
                           SELECT '|' + e.Event_Title
                           FROM MinistryPlatform.dbo.Event_Participants trip
@@ -408,17 +415,17 @@ AS
                                                       AND e.Event_ID != @EventId
                           WHERE trip.Participant_ID = ep.Participant_ID
                           FOR XML PATH( '' ), TYPE ).value( '.', 'nvarchar(max)' ), 1, 1, '')) PreviousTrips,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @WorkTeamPreference1
                    AND r.Form_Response_ID = fr.Form_Response_ID ) WorkTeamPreference1,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @WorkTeamPreference2
                    AND r.Form_Response_ID = fr.Form_Response_ID ) WorkTeamPreference2,
-               ( 
+               (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
                  WHERE r.Form_Field_ID = @WorkTeamExperience
@@ -435,8 +442,8 @@ AS
              INNER JOIN Genders g ON c.Gender_ID = g.Gender_ID
              INNER JOIN Marital_Statuses ms ON c.Marital_Status_ID = ms.Marital_Status_ID
 		   CROSS APPLY dbo.crds_TripDeposit(c.Contact_ID, ep.Event_ID, pc.Pledge_Campaign_ID) dep
+		   CROSS APPLY dbo.crds_SpouseOnTrip(c.Contact_ID, ep.Event_ID) spouse
+		   CROSS APPLY dbo.crds_SponsoredChild(c.Contact_ID) sponsoredChild
         WHERE ep.Event_ID = @EventID;
     END;
 GO
-
-

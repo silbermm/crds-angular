@@ -1,36 +1,30 @@
-USE [MinistryPlatform]
+USE [MinistryPlatform];
 GO
 
-/****** Object:  UserDefinedFunction [dbo].[crds_TripDeposit]    Script Date: 10/22/2015 6:42:06 PM ******/
-SET ANSI_NULLS ON
+/****** Object:  UserDefinedFunction [dbo].[crds_TripDeposit]    Script Date: 10/27/2015 8:26:00 AM ******/
+
+SET ANSI_NULLS ON;
 GO
-
-SET QUOTED_IDENTIFIER ON
+SET QUOTED_IDENTIFIER ON;
 GO
-
-
 CREATE FUNCTION [dbo].[crds_TripDeposit](
                 @Contact          INT,
                 @EventId          INT,
                 @PledgeCampaignID INT )
-RETURNS 
-@TripDepositTable TABLE( Deposit       VARCHAR(5) NOT NULL,
-                         Payment_Type  VARCHAR(20) NULL,
-                         Donation_Date DATETIME NULL,
-                         Pledge_Status NVARCHAR(25) NULL,
-                         Amount        MONEY NULL )
+RETURNS @TripDepositTable TABLE( Deposit       VARCHAR(5) NOT NULL,
+                                 Payment_Type  VARCHAR(20) NULL,
+                                 Donation_Date DATETIME NULL,
+                                 Pledge_Status NVARCHAR(25) NULL,
+                                 Amount        MONEY NULL )
 AS
      BEGIN
-
      DECLARE @DepositId INT;
-
      SELECT @DepositId = MIN(DD.Donation_Distribution_ID)
      FROM [dbo].[Donation_Distributions] DD
           JOIN [dbo].[Pledges] P ON DD.Pledge_ID = P.Pledge_ID
           JOIN [dbo].[Donors] D ON D.Donor_ID = P.Donor_ID
      WHERE D.Contact_ID = @Contact
        AND P.Pledge_Campaign_ID = @PledgeCampaignID;
-
      IF @DepositId IS NOT NULL
          BEGIN
              INSERT INTO @TripDepositTable
@@ -53,11 +47,8 @@ AS
                            NULL Payment_Type,
                            NULL Donation_Date,
                            NULL Pledge_Status,
-                           NULL Amount; 
+                           NULL Amount; --from dbo.Donation_Distributions dd
          END;
     RETURN;
     END;
-
 GO
-
-

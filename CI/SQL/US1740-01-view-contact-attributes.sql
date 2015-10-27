@@ -1,7 +1,7 @@
 USE [MinistryPlatform];
 GO
 
-/****** Object:  View [dbo].[vw_crds_Contact_Attributes]    Script Date: 10/22/2015 6:44:31 PM ******/
+/****** Object:  View [dbo].[vw_crds_Contact_Attributes]    Script Date: 10/27/2015 8:24:10 AM ******/
 
 SET ANSI_NULLS ON;
 GO
