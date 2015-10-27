@@ -130,6 +130,24 @@ describe('AdminRecurringGift', function() {
   });
 
   describe('On initialization', function() {
+    it('should set impersonation error when user not allowed to impersonate', function() {
+      var error = {};
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(403, error);
+      $httpBackend.flush();
+
+      expect(vm.impersonationError).toBeTruthy();
+      expect(vm.impersonationErrorMessage).toEqual('User is not allowed to impersonate');
+    });
+
+    it('should set impersonation error when user to impersonate is not found', function() {
+      var error = {};
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(409, error);
+      $httpBackend.flush();
+
+      expect(vm.impersonationError).toBeTruthy();
+      expect(vm.impersonationErrorMessage).toEqual('Could not find user to impersonate');
+    });
+
     it('should retrieve recurring gifts for impersonated user', function() {
       $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
                              .respond(mockRecurringGiftsResponse);
