@@ -132,7 +132,8 @@
       }
 
       function changeToDate() {
-        if (scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt !== undefined) {
+        if (scope.currentMember.currentOpportunity !== undefined &&
+            scope.currentMember.currentOpportunity.toDt !== undefined) {
           var m = moment(scope.currentMember.currentOpportunity.toDt);
           if (m.isValid()) {
             scope.formErrors.dateRange = false;
@@ -173,7 +174,7 @@
           personToEdit.name = person.nickName === null ? person.firstName : person.nickName;
           $rootScope.$emit('personUpdated', person);
         });
-      };
+      }
 
       function getFrequency() {
         var dateTime = moment(scope.oppServeDate + ' ' + scope.opportunity.time);
@@ -233,7 +234,9 @@
         if (scope.currentMember.serveRsvp == null) {
           validForm.valid = false;
           scope.formErrors.role = true;
-        } else if (scope.currentMember.serveRsvp.roleId === undefined || scope.currentMember.serveRsvp.roleId === null || scope.currentMember.currentOpportunity === null) {
+        } else if (scope.currentMember.serveRsvp.roleId === undefined ||
+            scope.currentMember.serveRsvp.roleId === null ||
+            scope.currentMember.currentOpportunity === null) {
           validForm.valid = false;
           scope.formErrors.frequency = true;
         } else {
@@ -245,26 +248,30 @@
             scope.formErrors.frequency = true;
           }
 
-          if (scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.toDt === undefined) {
+          if (scope.currentMember.currentOpportunity !== undefined &&
+              scope.currentMember.currentOpportunity.toDt === undefined) {
             validForm.valid = false;
             scope.formErrors.to = true;
           }
 
-          if (scope.currentMember.currentOpportunity !== undefined && scope.currentMember.currentOpportunity.fromDt === undefined) {
+          if (scope.currentMember.currentOpportunity !== undefined &&
+              scope.currentMember.currentOpportunity.fromDt === undefined) {
             validForm.valid = false;
             scope.formErrors.from = true;
           }
 
           if (validForm.valid) {
+            var startDate;
+            var endDate;
             try {
-              var startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
+              startDate = parseDate(scope.currentMember.currentOpportunity.toDt);
             } catch (ex) {
               validForm.valid = false;
               scope.formErrors.from = true;
             }
 
             try {
-              var endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
+              endDate = parseDate(scope.currentMember.currentOpportunity.fromDt);
             } catch (ex) {
               validForm.valid = false;
               scope.formErrors.to = true;
@@ -337,13 +344,15 @@
 
               // every  or everyother
               scope.formErrors.frequency = false;
-              var roleId = (scope.currentMember.serveRsvp.roleId === 0) ? scope.currentMember.roles[0].roleId : scope.currentMember.serveRsvp.roleId;
+              var roleId = (scope.currentMember.serveRsvp.roleId === 0) ?
+                scope.currentMember.roles[0].roleId : scope.currentMember.serveRsvp.roleId;
               ServeOpportunities.LastOpportunityDate.get({
                 id: roleId
               }, function(ret) {
                 var dateNum = Number(ret.date * 1000);
                 var toDate = new Date(dateNum);
-                scope.currentMember.currentOpportunity.toDt = (toDate.getMonth() + 1) + '/' + toDate.getDate() + '/' + toDate.getFullYear();
+                scope.currentMember.currentOpportunity.toDt =
+                  (toDate.getMonth() + 1) + '/' + toDate.getDate() + '/' + toDate.getFullYear();
               });
 
               scope.datesDisabled = false;
@@ -374,6 +383,7 @@
           scope.currentMember.serveRsvp.attending = true;
           scope.currentMember.showFrequency = true;
         }
+
         determineSaveButtonState();
       }
 
@@ -405,7 +415,7 @@
         rsvp.opportunityId = scope.currentMember.serveRsvp.roleId;
         rsvp.opportunityIds = _.map(scope.currentMember.roles, function(role) {
           return role.roleId;
-        });;
+        });
 
         rsvp.eventTypeId = scope.team.eventTypeId;
         rsvp.endDate = parseDate(scope.currentMember.currentOpportunity.toDt);
@@ -425,14 +435,15 @@
             saveMessage = saveMessage.replace('[participant]', scope.currentActiveTab);
             saveMessage = saveMessage.replace('[team]', scope.team.name);
             saveMessage = saveMessage.replace('[date]', scope.oppServeDate);
-            growl['success'](saveMessage);
+            growl.success(saveMessage);
           }
 
           scope.currentMember.serveRsvp.isSaved = true;
           scope.processing = false;
           updateCapacity();
           savePanel(scope.currentMember, true);
-          $rootScope.$emit('updateAfterSave', {'member': scope.currentMember, 'groupId': scope.team.groupId, 'eventIds': updatedEvents.EventIds});
+          $rootScope.$emit('updateAfterSave',
+              {member: scope.currentMember, groupId: scope.team.groupId, eventIds: updatedEvents.EventIds});
 
           // should we reset the form to pristine
           if (!isFormDirty()) {
@@ -482,7 +493,7 @@
       }
 
       function determineSaveButtonState() {
-        if(scope.currentMember.serveRsvp) {
+        if (scope.currentMember.serveRsvp) {
           if (scope.currentMember.serveRsvp.isSaved) {
             scope.buttonDisabled = true;
           } else if (scope.currentMember.serveRsvp.isSaved === undefined &&
@@ -525,7 +536,7 @@
         setActiveTab(member);
 
         // figure out the state of the save button
-        determineSaveButtonState();       
+        determineSaveButtonState();
       }
 
       function updateCapacity() {
@@ -538,6 +549,6 @@
           });
         });
       }
-    };
+    }
   }
 })();
