@@ -36,6 +36,6 @@ namespace MinistryPlatform.Models
         public string Passport_Middlename { get; set; }
         public string Passport_Country { get; set; }
         public string Passport_Number { get; set; }
-        public DateTime? Passport_Expiration { get; set; }
+        public string Passport_Expiration { get; set; }
     }
 }

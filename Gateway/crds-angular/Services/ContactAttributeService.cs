@@ -220,14 +220,23 @@ namespace crds_angular.Services
 
                     if (currentAttribute.AttributeId == attributeToSave.AttributeId)
                     {
+                        foundMatch = true;
                         if (attributeToSave.Notes == currentAttribute.Notes)
                         {
                             persistedAttributes.RemoveAt(currentIndex);
+                            currentAttributes.RemoveAt(index);
                         }
-
-                        currentAttributes.RemoveAt(index);
-                        foundMatch = true;
-                        break;
+                        else if (attributeToSave.Notes != String.Empty || attributeToSave.Notes == null)
+                        {
+                            persistedAttributes.RemoveAt(currentIndex);
+                            attributeToSave.StartDate = currentAttribute.StartDate;
+                            attributeToSave.ContactAttributeId = currentAttribute.ContactAttributeId;
+                        }
+                        else
+                        {
+                            currentAttributes.RemoveAt(index);    
+                        }                                                
+                        break;    
                     }
                 }
 
