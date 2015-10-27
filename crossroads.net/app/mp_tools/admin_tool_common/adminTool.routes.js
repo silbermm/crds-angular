@@ -51,10 +51,10 @@
           }
         }
       })
-      .state('tools.adminSetupRecurringGiftTool', {
+      .state('tools.adminRecurringGiftTool', {
         // This is a "launch" page for the tool, it will check access, etc, then forward
         // on to the actual page with the history.
-        url: '/adminSetupRecurringGiftTool',
+        url: '/adminRecurringGiftTool',
         controller: 'AdminToolController as AdminToolController',
         templateUrl: 'admin_tool_common/adminTool.html',
         resolve: {
@@ -68,29 +68,22 @@
           goToFunction: function(GiveTransferService, $state) {
             return function(donorId) {
               GiveTransferService.impersonateDonorId = donorId;
-              $state.go('tools.adminSetupRecurringGift');
+              $state.go('tools.adminManageRecurringGifts');
             };
           }
         }
       })
-      .state('tools.adminSetupRecurringGift', {
-        url: '/adminSetupRecurringGift',
+      .state('tools.adminManageRecurringGifts', {
+        url: '/adminManageRecurringGifts',
         controller: 'AdminRecurringGiftController as recurringGift',
-        templateUrl: 'templates/adminCreateRecurringGift.html',
-        resolve: {
-          Programs: 'Programs',
-          programList: function(Programs) {
-            // TODO The number one relates to the programType in MP. At some point we should fetch
-            // that number from MP based in human readable input here.
-            return Programs.Programs.query({
-              programType: 1
-            }).$promise;
-          },
-
-          donation: function() {
-            return null;
-          },
-        },
+        templateUrl: 'templates/adminManageRecurringGifts.html',
+        data: {
+          isProtected: true,
+          meta: {
+            title: 'Manage Recurring Gifts - Admin',
+            description: ''
+          }
+        }
       });
   }
 

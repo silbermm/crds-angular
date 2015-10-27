@@ -4,173 +4,169 @@ require('../../../app/app');
 
 describe('AdminRecurringGift', function() {
 
-  var vm;
-  var rootScope;
+  var $httpBackend;
   var scope;
+  var $log;
+  var $modal;
+  var rootScope;
   var DonationService;
-  var GiveTransferService;
-  var RecurringGiving;
-  var donation;
-  var programList;
-  var httpBackend;
+  var GiveTransferService = {};
+  var vm;
 
-  var mockProgramList = [
+  var mockRecurringGiftsResponse = [
     {
-      ProgramId: 1,
-      Name: 'Crossroads'
+      amount: 1000,
+      recurrence: 'Fridays Weekly',
+      program: 'Crossroads',
+      source:
+      {
+        type: 'CreditCard',
+        brand: 'Visa',
+        last4: '1000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 1000',
+        expectedIcon: 'cc_visa'
+      }
     },
     {
-      ProgramId: 2,
-      Name: 'Beans & Rice'
+      amount: 2000,
+      recurrence: '8th Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'MasterCard',
+        last4: '2000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 2000',
+        expectedIcon: 'cc_mastercard'
+      }
+    },
+    {
+      amount: 3000,
+      recurrence: '30th Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'AmericanExpress',
+        last4: '3000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 3000',
+        expectedIcon: 'cc_american_express'
+      }
+    },
+    {
+      amount: 4000,
+      recurrence: '21st Monthly',
+      program: 'Crossroads',
+      source: {
+        type: 'CreditCard',
+        brand: 'Discover',
+        last4: '4000',
+        expectedViewBox: '0 0 160 100',
+        expectedName: 'ending in 4000',
+        expectedIcon: 'cc_discover'
+      }
     }
   ];
-
-  var mockRecurringGift =
-  {
-    recurring_gift_id: 12,
-    donor_id: 123,
-    amount: 1000,
-    recurrence: '8th Monthly',
-    interval: 'month',
-    program: 1,
-    source:
-    {
-      type: 'CreditCard',
-      brand: 'Visa',
-      last4: '1000',
-      icon: 'cc_visa',
-      address_zip: '41983',
-      exp_date: '2029-08-01T00:00:00',
-      expectedViewBox: '0 0 160 100',
-      expectedBrand: '#cc_visa',
-      expectedCCNumberClass: 'cc_visa',
-    },
-  };
 
   beforeEach(angular.mock.module('crossroads'));
 
   beforeEach(angular.mock.module(function($provide) {
+    $modal = {
+      open: function() {
+      },
+
+      name: 'test modal',
+    };
+
+    spyOn($modal, 'open').and.callFake(function() {
+      return {
+        result: {
+          then: function(confirmCallback, cancelCallback) {
+            //Store the callbacks for later when the user clicks on the OK or Cancel button of the dialog
+            this.confirmCallBack = confirmCallback;
+            this.cancelCallback = cancelCallback;
+          }
+        },
+        close: function(item) {
+          //The user clicked OK on the modal dialog, call the stored confirm callback with the selected item
+          this.result.confirmCallBack(item);
+        },
+
+        dismiss: function(type) {
+          //The user clicked cancel on the modal dialog, call the stored cancel callback
+          this.result.cancelCallback(type);
+        }
+      };
+    });
+
+    $provide.value('$modal', $modal);
     $provide.value('$state', { get: function() {} });
   }));
 
-  describe('When Admin performing an update', function() {
-    beforeEach(inject(function(_$controller_, $injector) {
-      httpBackend = $injector.get('$httpBackend');
+  beforeEach(inject(function($injector, _$controller_) {
+      scope = $rootScope.$new();
+      $httpBackend = $injector.get('$httpBackend');
+      $log = $injector.get('$log');
       rootScope = $injector.get('$rootScope');
-
-      scope = rootScope.$new();
       DonationService = $injector.get('DonationService');
       GiveTransferService = $injector.get('GiveTransferService');
-      RecurringGiving = $injector.get('RecurringGiving');
 
+      scope = rootScope.$new();
       GiveTransferService.impersonateDonorId = 12;
-      spyOn(rootScope, '$emit').and.callFake(function() {});
 
       vm = _$controller_('AdminRecurringGiftController',
-                             {$rootScope: rootScope,
+                             {$log: $log,
+                               $modal: $modal,
+                               $rootScope: rootScope,
                                DonationService: DonationService,
-                               GiveTransferService: GiveTransferService,
-                               donation: mockRecurringGift,
-                               programList: mockProgramList});
-    }));
+                               GiveTransferService: GiveTransferService});
+    })
+  );
 
-    describe('On initialization', function() {
-      it('should populate the dto with the correct information', function() {
-        expect(vm.impersonateDonorId).toBe(12);
-        expect(vm.dto.amount).toBe(mockRecurringGift.amount);
-        expect(vm.dto.amountSubmitted).toBeFalsy();
-        expect(vm.dto.bankinfoSubmitted).toBeFalsy();
-        expect(vm.dto.changeAccountInfo).toBeTruthy();
-        expect(vm.dto.brand).toBe(mockRecurringGift.source.expectedBrand);
-        expect(vm.dto.ccNumberClass).toBe(mockRecurringGift.source.expectedCCNumberClass);
-        expect(vm.dto.donor.id).toBe(12);
-        expect(vm.dto.last4).toBe(mockRecurringGift.source.last4);
-        expect(vm.dto.givingType).toBe(mockRecurringGift.interval);
-        expect(vm.dto.initialized).toBeTruthy();
-        expect(vm.dto.program).toBe(mockProgramList[0]);
-        expect(vm.dto.view).toBe('cc');
-        expect(vm.dto.interval).toBe('Monthly');
-        expect(vm.dto.donor.default_source.credit_card.last4).toBe(mockRecurringGift.source.last4);
-        expect(vm.dto.donor.default_source.credit_card.brand).toBe(mockRecurringGift.source.brand);
-        expect(vm.dto.donor.default_source.credit_card.address_zip).toBe(mockRecurringGift.source.address_zip);
-        expect(vm.dto.donor.default_source.credit_card.exp_date).toBe('0829');
-      });
+  afterEach(function() {
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
 
+  describe('On initialization', function() {
+    it('should retrieve recurring gifts for impersonated user', function() {
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
+                             .respond(mockRecurringGiftsResponse);
+      $httpBackend.flush();
+
+      expect(vm.impersonateDonorId).toBe(12);
+      expect(vm.recurring_giving).toBeTruthy();
+      expect(vm.recurring_giving_view_ready).toBeTruthy();
+      expect(vm.recurring_gifts.length).toBe(4);
+      expect(vm.recurring_gifts[0].recurrence).toEqual('Fridays Weekly');
+      expect(vm.recurring_gifts[1].recurrence).toEqual('8th Monthly');
+      expect(vm.recurring_gifts[2].recurrence).toEqual('30th Monthly');
+      expect(vm.recurring_gifts[3].recurrence).toEqual('21st Monthly');
     });
 
-    var recurringGiveForm;
-    describe('On actual edit', function() {
-      beforeEach(function() {
-        recurringGiveForm = {
-          donationDetailsForm: {
-            amount: {
-              $valid: true,
-            },
-            recurringStartDate: {
-              $dirty: false,
-            },
-            $dirty: undefined,
-          },
-        };
-      });
+    it('should not have recurring gifts if there are no recurring gifts', function() {
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(404, {});
+      $httpBackend.flush();
 
-      it('should call the emit on rootScope when edit is called', function() {
-        httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12?impersonateDonorId=12').respond(200);
-        vm.update(recurringGiveForm);
-
-        expect(rootScope.$emit).toHaveBeenCalled();
-      });
-
-      it('should call the emit on rootScope when edit is called', function() {
-        httpBackend.expectPUT(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence/12?impersonateDonorId=12').respond(404);
-        vm.update(recurringGiveForm);
-
-        expect(rootScope.$emit).toHaveBeenCalled();
-      });
+      expect(vm.impersonateDonorId).toBe(12);
+      expect(vm.recurring_giving).toBeFalsy();
+      expect(vm.recurring_giving_view_ready).toBeTruthy();
+      expect(vm.recurring_gifts.length).toBe(0);
     });
   });
 
-  describe('When Admin performing a create', function() {
-    beforeEach(inject(function(_$controller_, $injector) {
-      httpBackend = $injector.get('$httpBackend');
-      rootScope = $injector.get('$rootScope');
+  describe('scope.openEditGiftModal(selectedDonation)', function() {
+    beforeEach(function() {
+      vm.openCreateGiftModal();
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
+                             .respond(mockRecurringGiftsResponse);
+      $httpBackend.flush();
 
-      scope = rootScope.$new();
-      DonationService = $injector.get('DonationService');
-      GiveTransferService = $injector.get('GiveTransferService');
-      RecurringGiving = $injector.get('RecurringGiving');
+    });
 
-      GiveTransferService.impersonateDonorId = 12;
-      spyOn(rootScope, '$emit').and.callFake(function() {});
-
-      var mockDonation = null;
-
-      vm = _$controller_('AdminRecurringGiftController',
-                             {$rootScope: rootScope,
-                               DonationService: DonationService,
-                               GiveTransferService: GiveTransferService,
-                               donation: mockDonation,
-                               programList: mockProgramList});
-    }));
-
-    describe('On initialization', function() {
-      it('should populate the dto with the correct information', function() {
-        expect(vm.impersonateDonorId).toBe(12);
-        expect(vm.dto.amount).toBe(undefined);
-        expect(vm.dto.amountSubmitted).toBeFalsy();
-        expect(vm.dto.bankinfoSubmitted).toBeFalsy();
-        expect(vm.dto.changeAccountInfo).toBeTruthy();
-        expect(vm.dto.brand).toBe('');
-        expect(vm.dto.ccNumberClass).toBe('');
-        expect(vm.dto.donor.id).toBe(12);
-        expect(vm.dto.last4).toBe('');
-        expect(vm.dto.givingType).toBe(undefined);
-        expect(vm.dto.initialized).toBeTruthy();
-        expect(vm.dto.program).toBe(undefined);
-        expect(vm.dto.view).toBe('bank');
-        expect(vm.dto.interval).toBe(undefined);
-      });
-
+    it('should open a modal', function() {
+      expect($modal.open).toHaveBeenCalled();
     });
   });
 });

@@ -3,7 +3,7 @@ GO
 
 declare @toolids table (id int);
 declare @ToolName varchar(30) = 'Manage Recurring Donations'
-declare @LaunchPage varchar(100) = 'http://int.crossroads.net/mptools/adminSetupRecurringGiftTool'
+declare @LaunchPage varchar(100) = 'http://int.crossroads.net/mptools/adminRecurringGiftTool'
 declare @Description varchar(50) = 'Manage Recurring Giving on behalf of a Donor.'
 declare @ToolId int
 
@@ -56,7 +56,7 @@ END
 /* DEVELOPMENT TOOL */
 declare @toolidsdev table (id int);
 declare @ToolNameDev varchar(30) = 'Manage Recurring Donations - Dev'
-declare @LaunchPageDev varchar(100) = 'http://localhost:3000/mptools/adminSetupRecurringGiftTool'
+declare @LaunchPageDev varchar(100) = 'http://localhost:3000/mptools/adminRecurringGiftTool'
 declare @DescriptionDev varchar(50) = 'Manage Recurring Giving on behalf of a Donor.'
 declare @ToolIdDev int
 
