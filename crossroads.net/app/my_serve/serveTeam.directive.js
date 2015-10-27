@@ -37,7 +37,8 @@
 
     function link(scope, el, attr) {
 
-      scope.panelStates = { };
+      scope.buttonDisabled = false;
+      scope.buttonState = buttonState;
       scope.cancel = cancel;
       scope.currentActiveTab = null;
       scope.currentMember = null;
@@ -63,6 +64,7 @@
         to: false,
         dateRange: false
       };
+      scope.panelStates = { };
       scope.populateDates = populateDates;
       scope.processing = false;
       scope.isActiveTab = isActiveTab;
@@ -92,6 +94,10 @@
         }
       }
 
+      function buttonState() {
+        return scope.processing || scope.buttonDisabled;
+      }
+
       function cancel() {
         // panel is open, close it
         // but first, revert back to original state...
@@ -105,9 +111,9 @@
 
         // should we reset the form to pristine
         if (!isFormDirty()) {
-          var teamFormName = 'teamForm-' + scope.team.index;
-          var form = scope['teamForm-' + scope.team.index];
-          form.$setPristine();
+          /*var teamFormName = 'teamForm-' + scope.team.index;*/
+          /*var form = scope['teamForm-' + scope.team.index];*/
+          scope.teamForm.$setPristine();
         }
 
         togglePanel(null);
@@ -306,8 +312,7 @@
         return m.format('X');
       }
 
-      function passedDeadlineMsg(id)
-      {
+      function passedDeadlineMsg(id) {
         return _.result(_.find($rootScope.MESSAGES, 'id', id), 'content');
       }
 
@@ -348,7 +353,6 @@
       }
 
       function roleChanged(selectedRole) {
-        console.log(selectedRole);
         scope.formErrors.role = false;
         scope.selectedRole = selectedRole;
         if (scope.currentMember.serveRsvp === undefined) {
@@ -370,6 +374,7 @@
           scope.currentMember.serveRsvp.attending = true;
           scope.currentMember.showFrequency = true;
         }
+        determineSaveButtonState();
       }
 
       function savePanel(member, force) {
@@ -471,9 +476,24 @@
           scope.selectedRole = _.find(scope.currentMember.roles, function(r) {
             return r.roleId === scope.currentMember.serveRsvp.roleId;
           });
-        };
+        }
 
         allowProfileEdit();
+      }
+
+      function determineSaveButtonState() {
+        if(scope.currentMember.serveRsvp) {
+          if (scope.currentMember.serveRsvp.isSaved) {
+            scope.buttonDisabled = true;
+          } else if (scope.currentMember.serveRsvp.isSaved === undefined &&
+              scope.selectedRole.roleId === scope.currentMember.serveRsvp.roleId) {
+            scope.buttonDisabled = true;
+          } else {
+            scope.buttonDisabled = false;
+          }
+        } else {
+          scope.buttonDisabled = false;
+        }
       }
 
       function showIcon(member) {
@@ -503,6 +523,9 @@
 
         // save the original state of the member
         setActiveTab(member);
+
+        // figure out the state of the save button
+        determineSaveButtonState();       
       }
 
       function updateCapacity() {
