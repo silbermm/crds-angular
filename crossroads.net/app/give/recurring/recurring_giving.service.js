@@ -83,7 +83,12 @@
     }
 
     function submitBankInfo(giveForm, programsInput) {
-      DonationService.createRecurringGift();
+      GiveTransferService.bankinfoSubmitted = true;
+      if (giveForm.accountForm.$valid) {
+        DonationService.createRecurringGift();
+      } else {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
     }
 
     function processChange() {

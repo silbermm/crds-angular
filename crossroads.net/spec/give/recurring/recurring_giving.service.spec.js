@@ -45,9 +45,10 @@ describe('RecurringGiving Service', function() {
     $provide.value('$state', $state);
   }));
 
-  beforeEach(inject(function(_RecurringGiving_, _GiveTransferService_) {
+  beforeEach(inject(function(_RecurringGiving_, _GiveTransferService_, _$rootScope_) {
     fixture = _RecurringGiving_;
     GiveTransferService = _GiveTransferService_;
+    $rootScope = _$rootScope_;
   }));
 
   describe('Function createGift', function() {
@@ -101,5 +102,42 @@ describe('RecurringGiving Service', function() {
       expect(callback.onSuccess).toHaveBeenCalled();
       expect(callback.onFailure).not.toHaveBeenCalled();
     });
+  });
+
+  describe('Function submitBankInfo', function() {
+    var giveForm;
+    beforeEach(function() {
+      DonationService.createRecurringGift = jasmine.createSpy('createRecurringGift');
+      GiveTransferService.bankinfoSubmitted = false;
+
+      giveForm = {
+        accountForm: {
+          $valid: undefined
+        }
+      };
+    });
+
+    it('should call DonationService.createRecurringGift if form is valid', function() {
+      giveForm.accountForm.$valid = true;
+      fixture.submitBankInfo(giveForm, []);
+
+      expect(GiveTransferService.bankinfoSubmitted).toBeTruthy();
+      expect(DonationService.createRecurringGift).toHaveBeenCalled();
+    });
+
+    it('should not call donation service if form is invalid', function() {
+      $rootScope.$emit = jasmine.createSpy('$emit');
+      $rootScope.MESSAGES = {
+        generalError: 123
+      };
+
+      giveForm.accountForm.$valid = false;
+      fixture.submitBankInfo(giveForm, []);
+
+      expect(GiveTransferService.bankinfoSubmitted).toBeTruthy();
+      expect($rootScope.$emit).toHaveBeenCalledWith('notify', $rootScope.MESSAGES.generalError);
+      expect(DonationService.createRecurringGift).not.toHaveBeenCalled();
+    });
+
   });
 });
