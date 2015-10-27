@@ -448,7 +448,10 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function underAge() {
-      return Session.exists('age') && Session.exists('age') < 18;
+      var birthdate = crds_utilities.convertStringToDate(vm.signupService.page1.profile.person.dateOfBirth);
+      var eighteen = new Date();
+      eighteen.setFullYear(eighteen.getFullYear() - 18);
+      return birthdate.getTime() >= eighteen.getTime();
     }
 
     function validateProfile(profile, household) {
