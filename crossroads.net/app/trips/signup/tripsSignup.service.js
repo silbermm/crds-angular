@@ -56,7 +56,7 @@
           break;
       }
     }
-    
+
     function reset(campaign) {
       signupService.campaign = campaign;
       signupService.ageLimitReached = false;
@@ -123,9 +123,10 @@
         experienceAbroad: null,
         describeExperienceAbroad: null,
         pastAbuseHistory: null,
+        validPassport: null
       };
     }
-    
+
     return signupService;
   }
 })();
