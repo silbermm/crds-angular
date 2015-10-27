@@ -13,6 +13,8 @@
     vm.openCreateGiftModal = openCreateGiftModal;
     vm.modalInstance = undefined;
     vm.impersonateDonorId = undefined;
+    vm.impersonationError = false;
+    vm.impersonationErrorMessage = undefined;
 
     activate();
 
@@ -23,11 +25,33 @@
         vm.recurring_gifts = data;
         vm.recurring_giving_view_ready = true;
         vm.recurring_giving = true;
-      }, function(/*error*/) {
+      }, function(error) {
 
         vm.recurring_giving = false;
         vm.recurring_giving_view_ready = true;
+        setErrorState(error);
       });
+    }
+
+    function setErrorState(error) {
+      if (vm.impersonateDonorId === undefined || error === undefined || error.httpStatusCode === undefined) {
+        return;
+      }
+
+      switch (error.httpStatusCode) {
+        case 403: // Forbidden - not allowed to impersonate
+          vm.impersonationError = true;
+          vm.impersonationErrorMessage = error.data === undefined || error.data.message === undefined ?
+              'User is not allowed to impersonate' : error.data.message;
+          break;
+        case 409: // Conflict - tried to impersonate, but user could not be found
+          vm.impersonationError = true;
+          vm.impersonationErrorMessage = error.data === undefined || error.data.message === undefined ?
+              'Could not find user to impersonate' : error.data.message;
+          break;
+        default:
+          break;
+      }
     }
 
     function openCreateGiftModal() {
