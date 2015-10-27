@@ -451,12 +451,13 @@
             var form = scope['teamForm-' + scope.team.index];
             form.$setPristine();
           }
-
+          determineSaveButtonState(); 
           return true;
         }, function(err) {
 
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           scope.processing = false;
+          determineSaveButtonState(); 
           return false;
         });
       }
