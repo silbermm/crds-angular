@@ -11,8 +11,7 @@ EXEC sp_add_jobstep
 	@on_fail_step_id=0, 
 	@retry_attempts=0, 
 	@retry_interval=0, 
-	@os_run_priority=0, 
-	@subsystem=N'TSQL', 
+	@os_run_priority=0,  
 	@command=N'EXEC [dbo].[crds_di_PopulatePreferredName]', 
 	@database_name=N'master', 
 	@flags=0
