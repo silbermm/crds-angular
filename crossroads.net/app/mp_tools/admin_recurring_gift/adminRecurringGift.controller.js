@@ -3,62 +3,71 @@
 
   module.exports = AdminRecurringGiftController;
 
-  AdminRecurringGiftController.$inject = ['$rootScope',
-      'DonationService',
-      'GiveTransferService',
-      'RecurringGiving',
-      'donation',
-      'programList'];
+  AdminRecurringGiftController.$inject = ['$log', '$filter', '$modal', '$rootScope', 'DonationService', 'GiveTransferService'];
 
-  function AdminRecurringGiftController($rootScope,
-                                 DonationService,
-                                 GiveTransferService,
-                                 RecurringGiving,
-                                 donation,
-                                 programList) {
+  function AdminRecurringGiftController($log, $filter, $modal, $rootScope, DonationService, GiveTransferService) {
     var vm = this;
-    vm.dto = GiveTransferService;
-    vm.programsInput = programList;
-    vm.donation = donation;
-    vm.create = create;
-    vm.update = update;
-    vm.deleting = false;
+    vm.recurring_gifts = [];
+    vm.recurring_giving = false;
+    vm.recurring_giving_view_ready = false;
+    vm.openCreateGiftModal = openCreateGiftModal;
+    vm.modalInstance = undefined;
     vm.impersonateDonorId = undefined;
 
     activate();
 
     function activate() {
       vm.impersonateDonorId = GiveTransferService.impersonateDonorId;
-      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation, vm.impersonateDonorId);
+
+      DonationService.queryRecurringGifts(vm.impersonateDonorId).then(function(data) {
+        vm.recurring_gifts = data;
+        vm.recurring_giving_view_ready = true;
+        vm.recurring_giving = true;
+      }, function(/*error*/) {
+
+        vm.recurring_giving = false;
+        vm.recurring_giving_view_ready = true;
+      });
     }
 
-    function create(recurringGiveForm) {
-      RecurringGiving.createGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
-    }
+    function openCreateGiftModal() {
+      vm.modalInstance = $modal.open({
+        parent: 'noSideBar',
+        templateUrl: 'recurring_giving_create_modal',
+        controller: 'RecurringGivingModals as recurringGift',
+        resolve: {
+          donation: function() {
+            return null;
+          },
 
-    function update(recurringGiveForm) {
-      RecurringGiving.updateGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
-    }
+          Programs: 'Programs',
+          programList: function(Programs) {
+            // TODO The number one relates to the programType in MP. At some point we should fetch
+            // that number from MP based in human readable input here.
+            return Programs.Programs.query({
+              programType: 1
+            }).$promise;
+          },
+        }
+      });
 
-    function successful() {
-      if (vm.deleting) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringRemovedSuccess);
-        vm.dto.processing = false;
-      } else {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
-        vm.dto.processing = false;
-      }
-    }
+      vm.modalInstance.result.then(function(success) {
+        if (success) {
+          DonationService.queryRecurringGifts(vm.impersonateDonorId).then(function(data) {
+            vm.recurring_gifts = data;
+          }, function(/*error*/) {
 
-    function failure() {
-      if (vm.deleting) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
-        vm.dto.processing = false;
-      } else {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
-        vm.dto.processing = false;
-      }
-    }
-  };
+            $rootScope.$emit('notify', $rootScope.MESSAGES.failedResponse);
+          });
 
+          $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupSuccess);
+        } else {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.giveRecurringSetupWarning);
+        }
+      }, function() {
+
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    }
+  }
 })();

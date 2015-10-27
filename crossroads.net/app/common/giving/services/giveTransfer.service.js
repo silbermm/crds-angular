@@ -39,6 +39,7 @@
       this.recurringStartDate = undefined;
       this.recurringGiftId = undefined;
       this.recurringConvert = false;
+      this.impersonateDonorId = null;
 
       // TODO - This is added to allow UX team to mock pledge-related UI components in the give pages
       // To use, start the giving flow with "?mockPledge=true" appended to the URL, for example:
@@ -48,7 +49,6 @@
       if (!Session.isActive()) {
         User.email = '';
       }
-
     }
 
     function resetForConvert() {
@@ -76,6 +76,7 @@
       this.recurringStartDate = undefined;
       this.recurringGiftId = undefined;
       this.recurringConvert = true;
+      this.impersonateDonorId = null;
 
       // TODO - This is added to allow UX team to mock pledge-related UI components in the give pages
       // To use, start the giving flow with "?mockPledge=true" appended to the URL, for example:
