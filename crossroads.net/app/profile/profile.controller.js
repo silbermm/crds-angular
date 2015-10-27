@@ -2,6 +2,7 @@
   'use strict';
 
   module.exports = ProfileController;
+
   ProfileController.$inject = [
     '$rootScope',
     'AttributeTypes',
@@ -9,25 +10,17 @@
     'Lookup'];
 
   function ProfileController($rootScope, AttributeTypes, Person, Lookup) {
+
     var vm = this;
-    vm.locations = getLocations();
     vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
-    vm.profileData = { person: Person };
-    vm.locationFocus = locationFocus;
     vm.displayLocation = displayLocation;
+    vm.enforceAgeRestriction = enforceAgeRestriction;
+    vm.locations = getLocations();
+    vm.locationFocus = locationFocus;
+    vm.profileData = { person: Person };
 
-    function locationFocus() {
-      $rootScope.$emit('locationFocus');
-    }
-
-    function getLocations() {
-      return Lookup.query({
-        table: 'crossroadslocations'
-      }, function(data) {
-        return data;
-      });
-    }
+    ////////////
 
     function displayLocation() {
       var locationName;
@@ -45,6 +38,22 @@
       }
 
       return locationName;
+    }
+
+    function enforceAgeRestriction() {
+      return 13;
+    }
+
+    function getLocations() {
+      return Lookup.query({
+        table: 'crossroadslocations'
+      }, function(data) {
+        return data;
+      });
+    }
+
+    function locationFocus() {
+      $rootScope.$emit('locationFocus');
     }
   }
 })();
