@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _householdDefaultSourceId;
         private readonly int _householdPositionDefaultId;
         private readonly int _addressesPageId;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(ContactService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof (ContactService));
 
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IConfigurationWrapper _configurationWrapper;
@@ -59,7 +59,7 @@ namespace MinistryPlatform.Translation.Services
         public MyContact GetContactById(int contactId)
         {
             var searchString = string.Format(",\"{0}\"", contactId);
-            
+
             var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
 
             if (pageViewRecords.Count > 1)
@@ -72,7 +72,6 @@ namespace MinistryPlatform.Translation.Services
 
         public MyContact GetContactByIdCard(string idCard)
         {
-         
             var searchString = string.Format(new String(',', 33) + "\"{0}\"", idCard);
             var pageViewRecords = _ministryPlatformService.GetPageViewRecords("AllIndividualsWithContactId", ApiLogin(), searchString);
             if (pageViewRecords.Count > 1)
@@ -100,8 +99,8 @@ namespace MinistryPlatform.Translation.Services
                 LastName = famRec.ToString("Last_Name"),
                 DateOfBirth = famRec.ToDate("Date_of_Birth"),
                 HouseholdPosition = famRec.ToString("Household_Position"),
-                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?)null,
-                DonorId = famRec.ContainsKey("Donor_ID") ? famRec.ToInt("Donor_ID") : (int?)null
+                StatementTypeId = famRec.ContainsKey("Statement_Type_ID") ? famRec.ToInt("Statement_Type_ID") : (int?) null,
+                DonorId = famRec.ContainsKey("Donor_ID") ? famRec.ToInt("Donor_ID") : (int?) null
             }).ToList();
             return family;
         }
@@ -161,7 +160,7 @@ namespace MinistryPlatform.Translation.Services
             if (recordsDict.ContainsKey("ID_Card"))
             {
                 contact.ID_Number = recordsDict.ToString("ID_Card");
-            }            
+            }
             return contact;
         }
 
@@ -238,6 +237,8 @@ namespace MinistryPlatform.Translation.Services
             var contactDictionary = new Dictionary<string, object>
             {
                 {"Company", false},
+                {"Last_Name", contact.Last_Name},
+                {"First_Name", contact.First_Name},
                 {"Display_Name", contact.Last_Name + ", " + contact.First_Name},
                 {"Nickname", contact.First_Name},
                 {"ID_Card", contact.ID_Number}
@@ -299,7 +300,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                return(_ministryPlatformService.CreateRecord(_contactsPageId, contactDictionary, token));
+                return (_ministryPlatformService.CreateRecord(_contactsPageId, contactDictionary, token));
             }
             catch (Exception e)
             {
@@ -314,24 +315,24 @@ namespace MinistryPlatform.Translation.Services
         private int CreateHouseholdAndAddress(string householdName, PostalAddress address, string apiToken )
         {
             var addressDictionary = new Dictionary<string, object>
-                {
-                    { "Address_Line_1", address.Line1 },
-                    { "Address_Line_2", address.Line2 },
-                    { "City", address.City },
-                    { "State/Region", address.State },
-                    { "Postal_Code", address.PostalCode }
-                };
+            {
+                {"Address_Line_1", address.Line1},
+                {"Address_Line_2", address.Line2},
+                {"City", address.City},
+                {"State/Region", address.State},
+                {"Postal_Code", address.PostalCode}
+            };
             var addressId = _ministryPlatformService.CreateRecord(_addressesPageId, addressDictionary, apiToken);
 
             var householdDictionary = new Dictionary<string, object>
-                {
-                    {"Household_Name", householdName},
-                    {"Congregation_ID", _congregationDefaultId},
-                    {"Household_Source_ID", _householdDefaultSourceId},
-                    {"Address_ID", addressId}
-                };
+            {
+                {"Household_Name", householdName},
+                {"Congregation_ID", _congregationDefaultId},
+                {"Household_Source_ID", _householdDefaultSourceId},
+                {"Address_ID", addressId}
+            };
 
-            return(_ministryPlatformService.CreateRecord(_householdsPageId, householdDictionary, apiToken));
+            return (_ministryPlatformService.CreateRecord(_householdsPageId, householdDictionary, apiToken));
         }
 
         public IList<int> GetContactIdByRoleId(int roleId, string token)
@@ -355,12 +356,13 @@ namespace MinistryPlatform.Translation.Services
                     throw new ApplicationException("Error Saving contact: " + e.Message);
                 }
             });
-            
         }
 
-        public void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary)
+        public void UpdateContact(int contactId,
+                                  Dictionary<string, object> profileDictionary,
+                                  Dictionary<string, object> householdDictionary,
+                                  Dictionary<string, object> addressDictionary)
         {
-
             WithApiLogin<int>(token =>
             {
                 try
@@ -384,7 +386,6 @@ namespace MinistryPlatform.Translation.Services
                 {
                     return 0;
                 }
-
             });
         }
     }

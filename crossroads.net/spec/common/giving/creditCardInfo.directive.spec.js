@@ -3,7 +3,12 @@ require('../../../app/common/common.module');
 require('../../../app/app');
 
 describe('Credit Card Info Directive', function() {
-  var ccElement, scope, isolateScope, form, $timeout, httpBackend;
+  var ccElement;
+  var scope;
+  var isolateScope;
+  var form;
+  var $timeout;
+  var httpBackend;
 
   beforeEach(function() {
     angular.mock.module('crossroads');
@@ -27,20 +32,20 @@ describe('Credit Card Info Directive', function() {
       '<span ng-message="naturalNumber">Not a valid number</span>' +
       '<span ng-message="invalidZip">Invalid zip</span>');
 
-    var templateString = "<credit-card-info "
-     + "cvc='model.cvc' "
-     + "exp-date='model.expDate' "
-     + "cc-number='model.ccNumber' "
-     + "billing-zip-code='model.billingZipCode' "
-     + "bankinfo-submitted='model.bankinfoSubmitted' "
-     + "name-on-card='model.nameOnCard' "
-     + "default-source='model.defaultSource' "
-     + "change-account-info='model.changeAccountInfo' "
-     + "declined-payment='model.declinedPayment' "
-     + "set-valid-card='model.setValidCard' "
-     + "set-valid-cvc='model.setValidCvc' "
-     + "cc-number-class='model.ccNumberClass'>"
-     + "</credit-card-info>";
+    var templateString = '<credit-card-info '
+     + 'cvc=\'model.cvc\' '
+     + 'exp-date=\'model.expDate\' '
+     + 'cc-number=\'model.ccNumber\' '
+     + 'billing-zip-code=\'model.billingZipCode\' '
+     + 'bankinfo-submitted=\'model.bankinfoSubmitted\' '
+     + 'name-on-card=\'model.nameOnCard\' '
+     + 'default-source=\'model.defaultSource\' '
+     + 'change-account-info=\'model.changeAccountInfo\' '
+     + 'declined-payment=\'model.declinedPayment\' '
+     + 'set-valid-card=\'model.setValidCard\' '
+     + 'set-valid-cvc=\'model.setValidCvc\' '
+     + 'cc-number-class=\'model.ccNumberClass\'>'
+     + '</credit-card-info>';
 
     scope = $rootScope.$new();
     scope.model = {
@@ -51,18 +56,17 @@ describe('Credit Card Info Directive', function() {
       bankInfoSubmitted: false,
       nameOnCard: 'Mr. Ed',
       defaultSource: {
-        address_zip: "12345",
-        brand: "Visa",
-        cvc: "123",
-        exp_date: "0123",
-        name: "Tim Giver",
-        last4: "9876",
+        address_zip: '12345',
+        brand: 'Visa',
+        cvc: '123',
+        exp_date: '0123',
+        name: 'Tim Giver',
+        last4: '9876',
       },
       changeAccountInfo: false,
       ccNumberClass: 'cc-visa',
       declinedPayment: false
     };
-
 
     ccElement = $compile(templateString)(scope);
     scope.$digest();
@@ -92,36 +96,36 @@ describe('Credit Card Info Directive', function() {
     });
   });
 
- describe('ccCardType Function', function() {
-   it('should have the visa credit card class', function(){
+  describe('ccCardType Function', function() {
+    it('should have the visa credit card class', function() {
      form.ccNumber.$modelValue = '4242424242424242';
      isolateScope.ccCardType();
-     expect(isolateScope.ccNumberClass).toBe("cc-visa");
+     expect(isolateScope.ccNumberClass).toBe('cc-visa');
    });
 
-    it('should have the mastercard credit card class', function(){
+    it('should have the mastercard credit card class', function() {
       form.ccNumber.$modelValue = '5105105105105100';
       isolateScope.ccCardType();
-      expect(isolateScope.ccNumberClass).toBe("cc-mastercard");
+      expect(isolateScope.ccNumberClass).toBe('cc-mastercard');
     });
 
-    it('should have the discover credit card class', function(){
+    it('should have the discover credit card class', function() {
       form.ccNumber.$modelValue = '6011111111111117';
       isolateScope.ccCardType();
-      expect(isolateScope.ccNumberClass).toBe("cc-discover");
+      expect(isolateScope.ccNumberClass).toBe('cc-discover');
     });
 
-    it('should have the amex credit card class', function(){
+    it('should have the amex credit card class', function() {
       form.ccNumber.$modelValue = '378282246310005';
       isolateScope.ccCardType();
-      expect(isolateScope.ccNumberClass).toBe("cc-american-express");
+      expect(isolateScope.ccNumberClass).toBe('cc-american-express');
     });
 
-    it('should not have a credit card class', function(){
+    it('should not have a credit card class', function() {
       form.ccNumber.$modelValue = '';
       isolateScope.defaultCardPlaceholderValues = {};
       isolateScope.ccCardType();
-      expect(isolateScope.ccNumberClass).toBe("");
+      expect(isolateScope.ccNumberClass).toBe('');
     });
   });
 });

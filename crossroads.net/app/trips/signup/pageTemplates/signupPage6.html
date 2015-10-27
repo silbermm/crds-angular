@@ -10,10 +10,10 @@
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport') }">
           <label class="control-label block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline">
-              <input ng-model="signupStep.passportValid" type="radio" value="true"  name="passport" id="passport-yes" ng-required="true">Yes
+              <input ng-model="tripsSignup.signupService.page6.validPassport" type="radio" value="true"  name="passport" id="passport-yes" ng-required="true">Yes
           </label>
           <label id="passport-no" class="radio-inline">
-              <input ng-model="signupStep.passportValid" type="radio" value="false" name="passport" id="passport-no" ng-required="true">No
+              <input ng-model="tripsSignup.signupService.page6.validPassport" type="radio" value="false" name="passport" id="passport-no" ng-required="true">No
           </label>
           <ng-messages for="tripsSignup.tripAppPage6.passport.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport')">
             <span ng-message="required">
@@ -21,14 +21,14 @@
             </span>
           </ng-messages>
         </div>
-        <div class="form-group col-sm-12" ng-show="signupStep.passportValid === 'false'">
+        <div class="form-group col-sm-12" ng-show="tripsSignup.signupService.page6.validPassport === 'false'">
           <label>
             <span ng-bind-html="$root.MESSAGES.TripNoPassport.content | html"></span>
           </label>
         </div>
       </div>
 
-        <div class="row" ng-show="signupStep.passportValid === 'true'">
+        <div class="row" ng-show="tripsSignup.signupService.page6.validPassport === 'true'">
           <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber') }">
               <label for="passport-number" class="control-label" ng-class="{'required': signupStep.hasPassport() }">Passport Number</label>
               <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="signupStep.hasPassport()" placeholder="Enter passport number">
@@ -53,7 +53,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="signupStep.passportValid === 'true'">
+      <div class="row" ng-show="tripsSignup.signupService.page6.validPassport === 'true'">
         <div class="form-group col-sm-12">
           <span ng-bind-html="$root.MESSAGES.TripPassportName.content | html"></span>
           <div class="row">
@@ -207,7 +207,7 @@
         </div>
       </div>
 
-      <a ng-click='tripsSignup.handleSubmit(tripsSignup.tripAppPage6)' class="btn btn-primary pull-right">Submit Application</a>
+      <button ng-click='tripsSignup.handleSubmit(tripsSignup.tripAppPage6)' class="btn btn-primary pull-right">Submit Application</button>
     </ng-form>
   </div>
 </div><!--/row-->
