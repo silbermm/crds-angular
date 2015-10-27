@@ -1,13 +1,10 @@
 USE [MinistryPlatform]
 GO
-
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Trip_Export]    Script Date: 10/27/2015 8:28:26 AM ******/
+/****** Object:  StoredProcedure [dbo].[report_CRDS_Trip_Export]    Script Date: 10/27/2015 12:00:29 PM ******/
 SET ANSI_NULLS ON
 GO
-
 SET QUOTED_IDENTIFIER ON
 GO
-
 CREATE PROCEDURE [dbo].[report_CRDS_Trip_Export]
 -- Add the parameters for the stored procedure here
       @EventID INT
@@ -22,7 +19,7 @@ AS
         DECLARE @MissionTripEventType INT = 6;
 
         -- MAPPING VALUES
-        DECLARE @ContactId INT = 768379;
+	   DECLARE @ValidPassport INT = 1464;
         DECLARE @TShirtSize INT = 21;
         DECLARE @ScrubSizeTop INT = 22;
         DECLARE @ScrubSizeBottom INT = 23;
@@ -93,6 +90,17 @@ AS
                a.Foreign_Country,
                h.Home_Phone,
                cn.Congregation_Name,
+			(
+                 SELECT Response
+                 FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
+                 WHERE r.Form_Field_ID = @ValidPassport
+                   AND r.Form_Response_ID = fr.Form_Response_ID ) ValidPassport,
+			c.Passport_Firstname,
+			c.Passport_Middlename,
+			c.Passport_Lastname,
+			c.Passport_Number,
+			c.Passport_Country,
+			c.Passport_Expiration,
                (
                  SELECT Response
                  FROM [MinistryPlatform].[dbo].[Form_Response_Answers] r
@@ -446,4 +454,3 @@ AS
 		   CROSS APPLY dbo.crds_SponsoredChild(c.Contact_ID) sponsoredChild
         WHERE ep.Event_ID = @EventID;
     END;
-GO
