@@ -465,6 +465,35 @@ namespace crds_angular.Controllers.API
                 }
             }));
         }
+
+        /// <summary>
+        /// Retrieve list of pledges for the logged-in donor.
+        /// </summary>
+        /// <returns>A list of PledgeDto</returns>
+        [Route("api/donor/pledge")]
+        [ResponseType(typeof(List<PledgeDto>))]
+        [HttpGet]
+        public IHttpActionResult GetPledges()
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var pledges = _donorService.GetRecurringGiftsForAuthenticatedUser(token);
+
+                    if (pledges == null || !pledges.Any())
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                    }
+
+                    return (Ok(pledges));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
+            }));
+        }
     }
 }
 
