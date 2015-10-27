@@ -5,22 +5,23 @@
   
   var app = angular.module('crossroads');
 
-  require("./capacity.service");
+  require('./capacity.service');
 
-  app.factory("filterState", require('./filterState.service.js'));
-  app.controller("MyServeController", require('./myserve.controller'));
+  app.factory('filterState', require('./filterState.service.js'));
+  app.controller('MyServeController', require('./myserve.controller'));
 
   require('./serveTabs.html');
-  app.directive("serveTabs", require('./serveTabs.directive'));
+  app.directive('serveTabs', require('./serveTabs.directive'));
 
   require('./serveTeam.html');
-  app.directive("serveTeam", require('./serveTeam.directive'));
+  app.directive('serveTeam', require('./serveTeam.directive'));
 
-  app.factory("ServeOpportunities", require('../services/serveOpportunities.service'));
+  app.factory('ServeOpportunities', require('../services/serveOpportunities.service'));
 
   require('./refine/refineList.html');
-  app.directive("refineList", require('./refine/refineList.directive'));
+  app.directive('refineList', require('./refine/refineList.directive'));
 
   require('./refine/serveModalContent.html');
-  app.controller("ServeModalController", require('./refine/serveModal.controller'));
-})()
+  app.controller('ServeModalController', require('./refine/serveModal.controller'));
+
+})();
