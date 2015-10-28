@@ -64,6 +64,7 @@ namespace crds_angular.Services
                 {
                     AttributeId = mpAttribute.AttributeId,
                     Name = mpAttribute.Name,
+                    SortOrder = mpAttribute.SortOrder,
                     Selected = false
                 };
 

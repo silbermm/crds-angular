@@ -157,7 +157,7 @@
       <div class="form-group col-sm-12">
          <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
          <div class="profile-ethnicity">
-           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
+           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities | orderBy: ['sortOrder', 'name']  ">
               <label>
                 <input type="checkbox" ng-model="ethnicity.selected">
                 {{ethnicity.name}}
