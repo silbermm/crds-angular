@@ -471,7 +471,6 @@ namespace crds_angular.Controllers.API
         /// Retrieve list of pledges for the logged-in donor.
         /// </summary>
         /// <returns>A list of PledgeDto</returns>
-      //  [RequiresAuthorization]
         [Route("api/donor/pledge")]
         [ResponseType(typeof(List<PledgeDto>))]
         [HttpGet]
