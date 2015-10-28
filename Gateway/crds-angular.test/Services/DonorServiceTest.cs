@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using crds_angular.App_Start;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -27,7 +26,6 @@ namespace crds_angular.test.Services
         private Mock<IPaymentService> _paymentService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IAuthenticationService> _authenticationService;
-        private Mock<IEmailCommunication> _emailService;
 
         private const string GuestGiverDisplayName = "Guest Giver";
 
@@ -42,8 +40,6 @@ namespace crds_angular.test.Services
         private const int RecurringGiftSetupEmailTemplateId = 9000;
         private const int RecurringGiftUpdateEmailTemplateId = 9001;
         private const int RecurringGiftCancelEmailTemplateId = 9002;
-        private const int GivingEmailFromUser = 5150;
-        private const int GivingEmailFromContact = 1984;
 
         [SetUp]
         public void SetUp()
@@ -54,7 +50,6 @@ namespace crds_angular.test.Services
             _mpContactService = new Mock<IContactService>(MockBehavior.Strict);
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _authenticationService = new Mock<IAuthenticationService>(MockBehavior.Strict);
-            _emailService = new Mock<IEmailCommunication>(MockBehavior.Strict);
 
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(StatementFrequencyNever);
@@ -68,10 +63,8 @@ namespace crds_angular.test.Services
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftSetupEmailTemplateId")).Returns(RecurringGiftSetupEmailTemplateId);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId")).Returns(RecurringGiftUpdateEmailTemplateId);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftCancelEmailTemplateId")).Returns(RecurringGiftCancelEmailTemplateId);
-            _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("GivingEmailFromUser")).Returns(GivingEmailFromUser);
-            _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("GivingEmailFromContact")).Returns(GivingEmailFromContact);
 
-            _fixture = new DonorService(_mpDonorService.Object, _mpContactService.Object, _paymentService.Object, _configurationWrapper.Object, _authenticationService.Object, _emailService.Object);
+            _fixture = new DonorService(_mpDonorService.Object, _mpContactService.Object, _paymentService.Object, _configurationWrapper.Object, _authenticationService.Object);
 
         }
 
@@ -339,25 +332,15 @@ namespace crds_angular.test.Services
                                                      recurringGiftDto.Program,
                                                      stripeSubscription.Id, contact.Congregation_ID.Value)).Returns(recurringGiftId);
 
-            _authenticationService.Setup(mocked => mocked.GetContactId("auth")).Returns(357);
             _mpDonorService.Setup(mocked => mocked.GetRecurringGiftById("auth", recurringGiftId)).Returns(recurringGift);
             _mpDonorService.Setup(mocked => mocked.GetDonorAccountPymtType(recurringGift.DonorAccountId.Value)).Returns(1);
-            _emailService.Setup(
+            _mpDonorService.Setup(
                 mocked =>
-                    mocked.SendEmail(
-                        It.Is<EmailCommunicationDTO>(
-                            e =>
-                                e.FromUserId.Value == GivingEmailFromUser && e.FromContactId == GivingEmailFromContact && e.TemplateId == RecurringGiftSetupEmailTemplateId &&
-                                e.ToContactId == 357 &&
-                                e.MergeData["Program_Name"].Equals("Crossroads") && (decimal) e.MergeData["Donation_Amount"] == (123.45M / 100) &&
-                                e.MergeData["Frequency"].Equals("12th of the month") && e.MergeData["Payment_Method"].Equals("Check")
-                            ),
-                        "auth"));
+                    mocked.SendEmail(RecurringGiftSetupEmailTemplateId, recurringGift.DonorId, (int)(123.45M/100), "Check", It.IsAny<DateTime>(), "Crossroads", string.Empty, "12th of the month"));
 
             var response = _fixture.CreateRecurringGift("auth", recurringGiftDto, contactDonor);
             _paymentService.VerifyAll();
             _mpDonorService.VerifyAll();
-            _emailService.VerifyAll();
             Assert.AreEqual(recurringGiftId, response);
         }
 
@@ -607,7 +590,7 @@ namespace crds_angular.test.Services
                 },
             };
 
-            var sourceData = new SourceData[]
+            var sourceData = new []
             {
                 new SourceData
                 {
@@ -724,26 +707,14 @@ namespace crds_angular.test.Services
             _paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
             _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, recurringGiftId));
 
-            _authenticationService.Setup(mocked => mocked.GetContactId(authUserToken)).Returns(357);
             _mpDonorService.Setup(mocked => mocked.GetDonorAccountPymtType(gift.DonorAccountId.Value)).Returns(1);
-            _emailService.Setup(
+            _mpDonorService.Setup(
                 mocked =>
-                    mocked.SendEmail(
-                        It.Is<EmailCommunicationDTO>(
-                            e =>
-                                e.FromUserId.Value == GivingEmailFromUser && e.FromContactId == GivingEmailFromContact && e.TemplateId == RecurringGiftCancelEmailTemplateId &&
-                                e.ToContactId == 357 &&
-                                e.MergeData["Program_Name"].Equals("Crossroads") && (decimal) e.MergeData["Donation_Amount"] == (123.45M / 100) &&
-                                e.MergeData["Frequency"].Equals("12th of the month") && e.MergeData["Payment_Method"].Equals("Check")
-                            ),
-                        authUserToken));
-
+                    mocked.SendEmail(RecurringGiftCancelEmailTemplateId, gift.DonorId, (int)(123.45M / 100), "Check", It.IsAny<DateTime>(), "Crossroads", string.Empty, "12th of the month"));
 
             _fixture.CancelRecurringGift(authUserToken, recurringGiftId);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
-            _authenticationService.VerifyAll();
-            _emailService.VerifyAll();
         }
 
         [Test]
@@ -956,26 +927,14 @@ namespace crds_angular.test.Services
                                                      newSubscription.Id, contact.Congregation_ID.Value)).Returns(newRecurringGiftId);
             _mpDonorService.Setup(mocked => mocked.GetRecurringGiftById(authUserToken, newRecurringGiftId)).Returns(newRecurringGift);
 
-            _authenticationService.Setup(mocked => mocked.GetContactId(authUserToken)).Returns(357);
             _mpDonorService.Setup(mocked => mocked.GetDonorAccountPymtType(234)).Returns(1);
-            _emailService.Setup(
+            _mpDonorService.Setup(
                 mocked =>
-                    mocked.SendEmail(
-                        It.Is<EmailCommunicationDTO>(
-                            e =>
-                                e.FromUserId.Value == GivingEmailFromUser && e.FromContactId == GivingEmailFromContact && e.TemplateId == RecurringGiftUpdateEmailTemplateId &&
-                                e.ToContactId == 357 &&
-                                e.MergeData["Program_Name"].Equals("Crossroads") && (decimal) e.MergeData["Donation_Amount"] == (80000M / 100) &&
-                                e.MergeData["Frequency"].Equals("12th of the month") && e.MergeData["Payment_Method"].Equals("Check")
-                            ),
-                        authUserToken));
-
+                    mocked.SendEmail(RecurringGiftUpdateEmailTemplateId, newRecurringGift.DonorId, (int)(80000M / 100), "Check", It.IsAny<DateTime>(), "Crossroads", string.Empty, "12th of the month"));
 
             var result = _fixture.EditRecurringGift(authUserToken, editGift, donor);
             _mpDonorService.VerifyAll();
             _paymentService.VerifyAll();
-            _emailService.VerifyAll();
-            _authenticationService.VerifyAll();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(newRecurringGift.RecurringGiftId, result.RecurringGiftId);

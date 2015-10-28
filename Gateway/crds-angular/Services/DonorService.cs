@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Stewardship;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Services;
@@ -25,7 +23,6 @@ namespace crds_angular.Services
         private readonly IContactService _mpContactService;
         private readonly Interfaces.IPaymentService _paymentService;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IEmailCommunication _emailService;
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
@@ -42,18 +39,15 @@ namespace crds_angular.Services
         private readonly int _recurringGiftSetupEmailTemplateId;
         private readonly int _recurringGiftUpdateEmailTemplateId;
         private readonly int _recurringGiftCancelEmailTemplateId;
-        private readonly int _emailFromUser;
-        private readonly int _emailFromContact;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
-            IAuthenticationService authenticationService, IEmailCommunication emailService)
+            IAuthenticationService authenticationService)
         {
             _mpDonorService = mpDonorService;
             _mpContactService = mpContactService;
             _paymentService = paymentService;
             _authenticationService = authenticationService;
-            _emailService = emailService;
 
             _guestGiverDisplayName = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
 
@@ -67,8 +61,6 @@ namespace crds_angular.Services
             _recurringGiftSetupEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftSetupEmailTemplateId");
             _recurringGiftUpdateEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId");
             _recurringGiftCancelEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftCancelEmailTemplateId");
-            _emailFromUser = configurationWrapper.GetConfigIntValue("GivingEmailFromUser");
-            _emailFromContact = configurationWrapper.GetConfigIntValue("GivingEmailFromContact");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -123,7 +115,7 @@ namespace crds_angular.Services
         public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
-            StripeCustomer stripeCustomer = null;
+            StripeCustomer stripeCustomer;
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 var statementMethod = _statementMethodNone;
@@ -319,37 +311,20 @@ namespace crds_angular.Services
             {
                 if (recurringGift == null)
                 {
-                    recurringGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.Value);
+                    recurringGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.GetValueOrDefault());
                 }
 
-                var contactId = _authenticationService.GetContactId(authorizedUserToken);
-                var acctType = _mpDonorService.GetDonorAccountPymtType(recurringGift.DonorAccountId.Value);
+                var acctType = _mpDonorService.GetDonorAccountPymtType(recurringGift.DonorAccountId.GetValueOrDefault());
                 var paymentType = MinistryPlatform.Translation.Enum.PaymentType.GetPaymentType(acctType).name;
                 var frequency = recurringGift.Recurrence;
                 var programName = recurringGift.ProgramName;
                 var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero) / Constants.StripeDecimalConversionValue;
 
-                var email = new EmailCommunicationDTO
-                {
-                    FromContactId = _emailFromContact,
-                    FromUserId = _emailFromUser,
-                    MergeData = new Dictionary<string, object>
-                    {
-                        {"Program_Name", programName},
-                        {"Donation_Amount", amt},
-                        {"Frequency", frequency},
-                        {"Donation_Date", DateTime.Now.ToString("MM/dd/yyyy HH:mm tt")},
-                        {"Payment_Method", paymentType}
-                    },
-                    TemplateId = templateId,
-                    ToContactId = contactId
-                };
-                _emailService.SendEmail(email, authorizedUserToken);
-
+                _mpDonorService.SendEmail(templateId, recurringGift.DonorId, (int)amt, paymentType, DateTime.Now, programName, string.Empty, frequency);
             }
             catch (Exception e)
             {
-                _logger.Warn(string.Format("Could not send email for recurring gift {0}", recurringGift.RecurringGiftId), e);
+                _logger.Warn(string.Format("Could not send email for recurring gift {0}", recurringGift == null ? recurringGiftId : recurringGift.RecurringGiftId), e);
             }
         }
 
