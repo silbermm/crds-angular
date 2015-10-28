@@ -237,7 +237,7 @@
                 class="form-control col-sm-12"
                 id="start-attend-reason"
                 ng-model="profile.startAttendReason.attribute"
-                ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
+                ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: ['sortOrder', 'name'] track by startAttendReason.attributeId" >
           <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
