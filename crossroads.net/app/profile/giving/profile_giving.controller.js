@@ -14,7 +14,7 @@
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
-    vm.createRecurring = createRecurring;
+    //vm.createRecurring = createRecurring;
 
     activate();
 
@@ -43,8 +43,8 @@
       });
     }
 
-    function createRecurring() {
-      $state.go('give.recurring');
-    }
+    //function createRecurring() {
+    //  $state.go('give.recurring');
+    //}
   }
 })();
