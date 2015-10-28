@@ -83,7 +83,12 @@
     }
 
     function submitBankInfo(giveForm, programsInput) {
-      DonationService.createRecurringGift();
+      GiveTransferService.bankinfoSubmitted = true;
+      if (giveForm.accountForm.$valid) {
+        DonationService.createRecurringGift();
+      } else {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      }
     }
 
     function processChange() {
@@ -96,6 +101,7 @@
     function loadDonationInformation(programsInput, donation = null, impersonateDonorId = null) {
       GiveTransferService.reset();
 
+      GiveTransferService.impersonateDonorId = impersonateDonorId;
       GiveTransferService.amountSubmitted = false;
       GiveTransferService.bankinfoSubmitted = false;
       GiveTransferService.changeAccountInfo = true;
@@ -152,6 +158,7 @@
 
     function createGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
+      GiveTransferService.amountSubmitted = true;
 
       if (!validForm(recurringGiveForm, false)) {
         return;
@@ -168,6 +175,7 @@
 
     function updateGift(recurringGiveForm, success, failure, impersonateDonorId = null) {
       GiveTransferService.processing = true;
+      GiveTransferService.amountSubmitted = true;
 
       if (!validForm(recurringGiveForm, true)) {
         return;

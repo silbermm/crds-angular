@@ -390,6 +390,28 @@ namespace crds_angular.Services
 
             return response.Data;
         }
+
+        public StripeSubscription GetSubscription(string customerId, string subscriptionId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.GET);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription get request", response);
+
+            return response.Data;
+        }
+
+        public StripeSubscription UpdateSubscriptionPlan(string customerId, string subscriptionId, string planId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.POST);
+            request.AddParameter("prorate", false);
+            request.AddParameter("plan", planId);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription update request", response);
+
+            return response.Data;
+        }
     }
 
     public class Error

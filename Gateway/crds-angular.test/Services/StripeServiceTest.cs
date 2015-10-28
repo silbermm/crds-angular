@@ -625,6 +625,57 @@ namespace crds_angular.test.Services
         }
 
         [Test]
+        public void TestUpdateSubscriptionPlan()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string sub = "sub_123";
+            const string customer = "cus_123";
+            const string plan = "plan_123";
+
+            var response = _fixture.UpdateSubscriptionPlan(customer, sub, plan);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(
+                            o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions/" + sub) && ParameterMatches("plan", plan, o.Parameters) && ParameterMatches("prorate", false, o.Parameters))));
+
+            Assert.AreSame(stripeSubscription, response);
+        }
+
+        [Test]
+        public void TestGetSubscription()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string sub = "sub_123";
+            const string customer = "cus_123";
+
+            var response = _fixture.GetSubscription(customer, sub);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(
+                            o => o.Method == Method.GET && o.Resource.Equals("customers/" + customer + "/subscriptions/" + sub))));
+
+            Assert.AreSame(stripeSubscription, response);
+        }
+
+        [Test]
         public void TestCancelPlan()
         {
             var stripePlan = new StripePlan();

@@ -25,11 +25,14 @@
     vm.cancel = cancel;
     vm.remove = remove;
     vm.edit = edit;
+    vm.create = create;
+    vm.impersonateDonorId = undefined;
 
     activate();
 
     function activate() {
-      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation);
+      vm.impersonateDonorId = GiveTransferService.impersonateDonorId;
+      RecurringGiving.loadDonationInformation(vm.programsInput, vm.donation, vm.impersonateDonorId);
     }
 
     function cancel() {
@@ -39,7 +42,7 @@
     function remove() {
       vm.dto.processing = true;
 
-      DonationService.deleteRecurringGift().then(function() {
+      DonationService.deleteRecurringGift(vm.impersonateDonorId).then(function() {
         $modalInstance.close(true);
       }, function(/*error*/) {
 
@@ -48,7 +51,11 @@
     }
 
     function edit(recurringGiveForm) {
-      RecurringGiving.updateGift(recurringGiveForm, successful, failure);
+      RecurringGiving.updateGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
+    }
+
+    function create(recurringGiveForm) {
+      RecurringGiving.createGift(recurringGiveForm, successful, failure, vm.impersonateDonorId);
     }
 
     function successful() {

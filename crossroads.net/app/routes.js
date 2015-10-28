@@ -246,6 +246,12 @@
         controller: 'AdboxCtrl as adbox',
         templateUrl: 'adbox/adbox-index.html'
       })
+      .state('serve-one-time', {
+        parent: 'noSideBar',
+        url: '/serve-one-time',
+        controller: 'MyServeController as serve',
+        templateUrl: 'my_serve/one_time_serve_mockup.html'
+      })
       .state('serve-signup', {
         parent: 'noSideBar',
         url: '/serve-signup',

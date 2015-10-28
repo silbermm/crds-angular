@@ -16,13 +16,12 @@
         buttonText: '=',
         contactId: '=?',
         forTrips: '=',
-        minYears: '=?',
         modalInstance: '=?',
         requireMobilePhone: '=',
         submitFormCallback: '&?',
         profileData: '=?',
         updatedPerson: '=?',
-        enforceAgeRestriction: '@'
+        enforceAgeRestriction: '=?'
       },
       templateUrl: 'personal/profilePersonal.template.html',
       controller: 'ProfilePersonalController as profile',
