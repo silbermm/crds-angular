@@ -17,6 +17,8 @@ namespace crds_angular.Models.Crossroads.Profile
         public DateTime? EndDate { get; set; }
         [JsonProperty(PropertyName = "notes")]
         public string Notes { get; set; }
+        [JsonProperty(PropertyName = "sortOrder")]
+        public int SortOrder { get; set; }
 
     }
 }
