@@ -58,3 +58,81 @@ BEGIN
   END
   RETURN
 END
+
+
+USE MINISTRYPLATFORM
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =========================================================================
+-- Author:		Sandi Ritter
+-- Create date: 10/28/2015
+-- Description:	This function will sum the donation amounts by pledge ID
+-- =========================================================================
+CREATE FUNCTION [dbo].[crds_udfSumDonationByPledgeId]
+(
+	@Pledge_ID INT
+)
+RETURNS MONEY
+AS
+BEGIN
+
+	DECLARE @Donation_Amount MONEY;
+
+	SELECT @Donation_Amount = SUM(Amount) FROM dbo.Donation_Distributions D
+		WHERE  D.Pledge_ID = @Pledge_ID
+
+	RETURN @Donation_Amount
+
+END
+GO
+
+
+USE [MinistryPlatform]
+GO
+
+SET IDENTITY_INSERT [dbo].[dp_Pages] ON
+
+INSERT INTO [dbo].[dp_Pages]
+           ([Page_ID]
+		   ,[Display_Name]
+           ,[Singular_Name]
+           ,[Description]
+           ,[View_Order]
+           ,[Table_Name]
+           ,[Primary_Key]
+           ,[Display_Search]
+           ,[Default_Field_List]
+           ,[Selected_Record_Expression]
+           ,[Filter_Clause]
+           ,[Contact_ID_Field]
+           ,[Display_Copy])
+     VALUES
+           (525
+		       ,'My Household Pledges'
+           ,'My Household Pledge'
+           ,'All of a Households Pledges.  This is used by the Profile page to show Pledges in CR.net'
+           ,100
+           ,'Pledges'
+           ,'Pledge_ID'
+           ,1
+           ,'Pledge_ID
+              ,Donor_ID_Table.[Donor_ID]
+              ,Pledges.Pledge_Campaign_ID
+              ,Donor_ID_Table_Contact_ID_Table.Display_Name
+              ,Pledge_Status_ID_Table.Pledge_Status
+              ,Total_Pledge
+              ,Pledge_Campaign_ID_Table.Campaign_Goal
+              ,Pledge_Campaign_ID_Table.Start_Date
+              ,Pledge_Campaign_ID_Table.End_Date
+              ,Pledge_Campaign_ID_Table.Campaign_Name
+              ,[dbo].[crds_udfSumDonationByPledgeId](Pledge_ID) AS Donation_Total'
+           ,'Pledge_ID'
+           ,'Pledges.[Pledge_ID] IN (SELECT * FROM [dbo].[crds_udfGetPledgeIdsForUser](dp_UserID))'
+           ,'Donor_ID_Table_Contact_ID_Table.[Contact_ID]'
+           ,0)
+GO
+
+
+SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
