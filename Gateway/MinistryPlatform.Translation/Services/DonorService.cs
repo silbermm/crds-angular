@@ -882,7 +882,7 @@ namespace MinistryPlatform.Translation.Services
             
             return donorAccount.ToInt("Account_Type_ID");
         }
-
+        
         // ReSharper disable once FunctionComplexityOverflow
         private RecurringGift MapRecordToRecurringGift(Dictionary<string, object> record)
         {

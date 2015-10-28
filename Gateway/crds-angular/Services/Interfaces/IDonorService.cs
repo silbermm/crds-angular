@@ -31,5 +31,7 @@ namespace crds_angular.Services.Interfaces
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId);
 
         List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken);
+
+        List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken);
     }
 }

@@ -441,6 +441,7 @@ namespace crds_angular.Controllers.API
         /// Retrieve list of recurring gifts for the logged-in donor.
         /// </summary>
         /// <returns>A list of RecurringGiftDto</returns>
+       // [RequiresAuthorization]
         [Route("api/donor/recurrence")]
         [ResponseType(typeof(List<RecurringGiftDto>))]
         [HttpGet]
@@ -470,6 +471,7 @@ namespace crds_angular.Controllers.API
         /// Retrieve list of pledges for the logged-in donor.
         /// </summary>
         /// <returns>A list of PledgeDto</returns>
+      //  [RequiresAuthorization]
         [Route("api/donor/pledge")]
         [ResponseType(typeof(List<PledgeDto>))]
         [HttpGet]
@@ -479,7 +481,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var pledges = _donorService.GetRecurringGiftsForAuthenticatedUser(token);
+                    var pledges = _donorService.GetPledgesForAuthenticatedUser(token);
 
                     if (pledges == null || !pledges.Any())
                     {

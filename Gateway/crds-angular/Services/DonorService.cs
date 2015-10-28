@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads.Stewardship;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Services;
@@ -25,6 +23,7 @@ namespace crds_angular.Services
         private readonly IContactService _mpContactService;
         private readonly Interfaces.IPaymentService _paymentService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IPledgeService _pledgeService;
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
@@ -41,12 +40,13 @@ namespace crds_angular.Services
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService, IPledgeService pledgeService)
         {
             _mpDonorService = mpDonorService;
             _mpContactService = mpContactService;
             _paymentService = paymentService;
             _authenticationService = authenticationService;
+            _pledgeService = pledgeService;
 
             _guestGiverDisplayName = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
 
@@ -432,6 +432,13 @@ namespace crds_angular.Services
 
             return (recurringGifts);
         }
+
+        public List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken)
+        {
+            var pledges = _pledgeService.GetPledgesForAuthUser(userToken);
+            var pled = pledges.Select(Mapper.Map<Pledge, PledgeDto>).ToList();
+            return (pled);
+        } 
 
         private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)
         {

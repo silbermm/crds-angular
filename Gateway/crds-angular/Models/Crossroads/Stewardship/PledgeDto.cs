@@ -20,7 +20,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// </summary>
         [JsonProperty(PropertyName = "donor_display_name")]
         [Required]
-        public int DonorDisplayName { get; set; }
+        public string DonorDisplayName { get; set; }
 
         /// <summary>
         /// This is a name of the pledge campaign.
