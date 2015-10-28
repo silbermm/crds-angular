@@ -252,6 +252,12 @@
         controller: 'MyServeController as serve',
         templateUrl: 'my_serve/one_time_serve_mockup.html'
       })
+      .state('event-registration', {
+        parent: 'noSideBar',
+        url: '/event-registration',
+        controller: 'MyServeController as serve',
+        templateUrl: 'my_serve/event_registration_mockup.html'
+      })
       .state('serve-signup', {
         parent: 'noSideBar',
         url: '/serve-signup',
