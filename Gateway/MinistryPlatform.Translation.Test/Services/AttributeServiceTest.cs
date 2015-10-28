@@ -137,7 +137,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category", "Category #1"},
                     {"Attribute_Type_ID", 3},
                     {"Attribute_Type", "AttributeType #1"},
-                    {"Prevent_Multiple_Selection", "False"}
+                    {"Prevent_Multiple_Selection", "False"},
+                    {"Sort_Order", "0"}
                 },
                 new Dictionary<string, object>()
                 {
@@ -147,7 +148,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category", "Category #2"},
                     {"Attribute_Type_ID", 6},
                     {"Attribute_Type", "AttributeType #1"},
-                    {"Prevent_Multiple_Selection", "False"}
+                    {"Prevent_Multiple_Selection", "False"},
+                    {"Sort_Order", "0"}
                 },
                 new Dictionary<string, object>()
                 {
@@ -157,7 +159,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Category", null},
                     {"Attribute_Type_ID", 9},
                     {"Attribute_Type", "AttributeType #2"},
-                    {"Prevent_Multiple_Selection", "True"}
+                    {"Prevent_Multiple_Selection", "True"},
+                    {"Sort_Order", "0"}
                 }
             };
         }
