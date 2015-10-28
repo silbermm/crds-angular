@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads.Stewardship;
-using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Services;
@@ -38,6 +36,9 @@ namespace crds_angular.Services
         private readonly int _statementMethodNone;
         private readonly int _statementMethodPostalMail;
         private readonly int _notSiteSpecificCongregation;
+        private readonly int _recurringGiftSetupEmailTemplateId;
+        private readonly int _recurringGiftUpdateEmailTemplateId;
+        private readonly int _recurringGiftCancelEmailTemplateId;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
@@ -56,6 +57,10 @@ namespace crds_angular.Services
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
             _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongregation");
+
+            _recurringGiftSetupEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftSetupEmailTemplateId");
+            _recurringGiftUpdateEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId");
+            _recurringGiftCancelEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftCancelEmailTemplateId");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -110,7 +115,7 @@ namespace crds_angular.Services
         public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
-            StripeCustomer stripeCustomer = null;
+            StripeCustomer stripeCustomer;
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 var statementMethod = _statementMethodNone;
@@ -222,6 +227,9 @@ namespace crds_angular.Services
                                                                             recurringGiftDto.Program,
                                                                             stripeSubscription.Id,
                                                                             congregation);
+
+                SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftSetupEmailTemplateId, null, recurGiftId);
+
                 return recurGiftId;
             }
             catch (Exception e)
@@ -297,6 +305,29 @@ namespace crds_angular.Services
             }
         }
 
+        private void SendRecurringGiftConfirmationEmail(string authorizedUserToken, int templateId, CreateDonationDistDto recurringGift, int? recurringGiftId = null)
+        {
+            try
+            {
+                if (recurringGift == null)
+                {
+                    recurringGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.GetValueOrDefault());
+                }
+
+                var acctType = _mpDonorService.GetDonorAccountPymtType(recurringGift.DonorAccountId.GetValueOrDefault());
+                var paymentType = MinistryPlatform.Translation.Enum.PaymentType.GetPaymentType(acctType).name;
+                var frequency = recurringGift.Recurrence;
+                var programName = recurringGift.ProgramName;
+                var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero) / Constants.StripeDecimalConversionValue;
+
+                _mpDonorService.SendEmail(templateId, recurringGift.DonorId, (int)amt, paymentType, DateTime.Now, programName, string.Empty, frequency);
+            }
+            catch (Exception e)
+            {
+                _logger.Warn(string.Format("Could not send email for recurring gift {0}", recurringGift == null ? recurringGiftId : recurringGift.RecurringGiftId), e);
+            }
+        }
+
         public Boolean CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
@@ -305,6 +336,8 @@ namespace crds_angular.Services
             _paymentService.CancelPlan(subscription.Plan.Id);
 
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftCancelEmailTemplateId, existingGift);
 
             return true;
         }
@@ -424,6 +457,9 @@ namespace crds_angular.Services
                 EmailAddress = donor.Email,
                 SubscriptionID = stripeSubscription.Id,
             };
+
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftUpdateEmailTemplateId, newGift);
+
             return (newRecurringGift);
         }
 

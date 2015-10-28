@@ -66,7 +66,7 @@ namespace crds_angular.Controllers.API
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
                 try
                 {
-                    var donations = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var donations = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,
                                                                   () =>
@@ -100,7 +100,7 @@ namespace crds_angular.Controllers.API
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
                 try
                 {
-                    var donationYears = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var donationYears = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token))
                         : _gatewayDonationService.GetDonationYearsForAuthenticatedUser(token);
 
