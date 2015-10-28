@@ -1323,7 +1323,7 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void TestGetRecurringGifyById()
+        public void TestGetRecurringGiftById()
         {
             const string authUserToken = "auth";
             const int recurringGiftId = 123;
