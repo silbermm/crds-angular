@@ -10,7 +10,9 @@
     vm.donations = [];
     vm.donation_history = false;
     vm.donation_view_ready = false;
-    vm.pledgeCommitments = [];
+    vm.pledge_commitments = [];
+    vm.pledge_commitments_data = [];
+    vm.pledge_commitments_view_ready = false;
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
@@ -43,9 +45,12 @@
       });
 
       DonationService.getPledgeCommitments().then(function(data){
-        vm.pledgeCommitments = data;
+        vm.pledge_commitments_data = data;
+        vm.pledge_commitments = true;
+        vm.pledge_commitments_view_ready = true;
       }, function(error){
-        //do something else
+        vm.pledge_commitments_data = false;
+        vm.pledge_commitments_view_ready = true;
       });
     }
 

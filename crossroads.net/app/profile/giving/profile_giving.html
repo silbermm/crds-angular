@@ -67,7 +67,7 @@
                   donation-do-not-show-labels="true"></donation-list>
               </div>
             </div>
-          </div>
+
           <!-- END OF IS GIVING HISTORY -->
 
           <div class="row">
@@ -85,6 +85,7 @@
           <hr>
 
           <!--Card 1: Active campaign midway through dates and progress-->
+          <div ng-show="giving_profile_controller.pledge_commitments_data && giving_profile_controller.donation_view_ready">
           <div class="card-item" data-category="view">
             <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
               <!--Brian Miller: These need converted to IMGIX once the routes are refactored to trigger IMGIX-->
@@ -110,7 +111,7 @@
               </div>
             </div>
           </div><!-- /card-item -->
-
+        
           <div class="row">
             <div class="col-sm-12 text-center">
               <a href="" class="btn btn-primary">Add New</a>
@@ -119,8 +120,8 @@
         </div>
 
         <!--  NO ACTIVE COMMITMENTS - ng-show if no records  -->
-        <div class="no-data">
-          <div class="col-sm-6 col-sm-offset-3">
+        <div ng-show="!giving_profile_controller.pledge_commitments_data && giving_profile_controller.pledge_commitments_view_ready" class="no-data">
+         <div class="col-sm-6 col-sm-offset-3">
             <svg viewBox="0 0 23 32" class="icon icon-file-text-o">
               <use xlink:href="#file-text-o"></use>
             </svg>
