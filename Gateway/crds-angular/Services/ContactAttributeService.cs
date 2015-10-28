@@ -65,7 +65,8 @@ namespace crds_angular.Services
                     AttributeId = mpAttribute.AttributeId,
                     Name = mpAttribute.Name,
                     SortOrder = mpAttribute.SortOrder,
-                    Selected = false
+                    Selected = false,
+                    Category = mpAttribute.Category
                 };
 
                 attributeTypesDictionary[mpAttribute.AttributeTypeId].Attributes.Add(contactAttribute);

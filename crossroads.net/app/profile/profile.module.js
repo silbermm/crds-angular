@@ -26,7 +26,7 @@
 
   // Skills
   require('./skills/profile_skills.html');
-  app.controller('ProfileSkillsController', ['$rootScope', 'Skills', 'Session', '$log', require('./skills/profile_skills_controllers')]);
+  app.controller('ProfileSkillsController', require('./skills/profileSkills.controller'));
   app.factory('Skills', ['$resource', require('./skills/profile_skills_service')]);
 
   // Giving

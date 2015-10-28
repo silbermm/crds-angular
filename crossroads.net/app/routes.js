@@ -202,7 +202,7 @@
             }
           },
           'skills@profile': {
-            controller: 'ProfileSkillsController as profile',
+            controller: 'ProfileSkillsController as profileSkills',
             templateUrl: 'skills/profile_skills.html',
             data: {
               isProtected: true
