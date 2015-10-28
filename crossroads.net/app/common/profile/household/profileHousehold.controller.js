@@ -36,6 +36,7 @@
     vm.locations = getLocations();
     vm.states = getStates();
     vm.validation = Validation;
+    vm.validLocations = [];
 
     $rootScope.$on('homePhoneFocus', function(event, data) {
       vm.isCollapsed = false;
@@ -86,6 +87,10 @@
       return Lookup.query({
         table: 'crossroadslocations'
       }, function(data) {
+        vm.validLocations = _.map(vm.locations, function(location) {
+          return location.dp_RecordID;
+        });
+
         return data;
       });
     }
