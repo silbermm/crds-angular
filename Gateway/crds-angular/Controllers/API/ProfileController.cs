@@ -43,7 +43,7 @@ namespace crds_angular.Controllers.API
                 var impersonateUserId = impersonateDonorId == null ? string.Empty : _donorService.GetContactDonorForDonorId(impersonateDonorId.Value).Email;
                 try
                 {
-                    var person = string.IsNullOrWhiteSpace(impersonateUserId)
+                    var person = (impersonateDonorId != null)
                         ? _personService.GetLoggedInUserProfile(token)
                         : _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token));
                     if (person == null)

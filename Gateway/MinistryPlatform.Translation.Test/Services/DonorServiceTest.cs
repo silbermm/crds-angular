@@ -1341,6 +1341,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const string subscriptionId = "sub_123";
             const string processorId = "cus_123";
             const string accountId = "card_456";
+            const string recurrence = "montly";
+            const string programName = "Crossroads";
 
             var records = new List<Dictionary<string, object>>
             {
@@ -1359,7 +1361,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Donor_Account_ID", donorAccountId},
                     {"Subscription_ID", subscriptionId},
                     {"Processor_ID", processorId},
-                    {"Processor_Account_ID", accountId}
+                    {"Processor_Account_ID", accountId},
+                    {"Recurrence", recurrence},
+                    {"Program_Name", programName}
                 }
             };
 
