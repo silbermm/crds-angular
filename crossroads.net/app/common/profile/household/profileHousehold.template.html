@@ -126,14 +126,16 @@
                 </li>
                 <li class="list-group-item clearfix">
                   <div class="row">
-                    <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'crLocation')}">
+                    <div id="Site"
+                         class="form-group col-sm-6"
+                         ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'crLocation')}">
                       <label for="provider" class="required">Crossroads Location</label>
                       <select class="form-control col-sm-12"
                               name="crLocation"
-                              required
+                              valid-dropdown-value="household.validLocations"
                               ng-model="household.householdInfo.congregationId"
                               ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations">
-                        <option value="" disabled="disabled" selected="selected"> -- Choose One -- </option>
+                        <option value="" selected="selected" > -- Choose One -- </option>
                       </select>
                       <ng-messages for="household.householdForm.crLocation.$error" ng-if="household.validation.showErrors(household.householdForm, 'crLocation')">
                         <ng-messages-include src="on-submit-messages"></ng-messages-include>

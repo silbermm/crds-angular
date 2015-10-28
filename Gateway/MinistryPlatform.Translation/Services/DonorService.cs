@@ -796,7 +796,9 @@ namespace MinistryPlatform.Translation.Services
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
                         SubscriptionId = record.ToString("Subscription_ID"),
                         StripeCustomerId = record.ToString("Processor_ID"),
-                        StripeAccountId = record.ToString("Processor_Account_ID")
+                        StripeAccountId = record.ToString("Processor_Account_ID"),
+                        Recurrence = record.ToString("Recurrence"),
+                        ProgramName = record.ToString("Program_Name")
                     };
                 }
             }

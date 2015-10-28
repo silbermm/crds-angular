@@ -340,7 +340,7 @@ namespace crds_angular.Controllers.API
 
                 try
                 {
-                    var contactDonor = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var contactDonor = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,
                                                                   () =>
@@ -392,7 +392,7 @@ namespace crds_angular.Controllers.API
 
                 try
                 {
-                    var donor = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var donor = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,
                                                                   () =>
@@ -439,7 +439,7 @@ namespace crds_angular.Controllers.API
                 {
                     var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
 
-                    var result = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var result = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,
                                                                   () =>
@@ -477,7 +477,7 @@ namespace crds_angular.Controllers.API
                 
                 try
                 {
-                    var recurringGifts = !string.IsNullOrWhiteSpace(impersonateUserId)
+                    var recurringGifts = (impersonateDonorId != null)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,
                                                                   () =>

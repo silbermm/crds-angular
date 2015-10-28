@@ -28,6 +28,7 @@
 
     var vm = this;
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
+    var now = new Date();
 
     vm.ageRestrictionMessage = $sce.trustAsHtml($rootScope.MESSAGES.ageRestriction.content);
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
@@ -35,13 +36,21 @@
     vm.closeModal = closeModal;
     vm.convertHomePhone = convertHomePhone;
     vm.convertPhone = convertPhone;
+    vm.crossroadsStartDate = new Date(1994, 0, 1);
     vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
     vm.formatAnniversaryDate = formatAnniversaryDate;
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
+    vm.hstep = 1;
     vm.isDobError = isDobError;
+    vm.isMeridian = true;
     vm.loading = true;
+    vm.minBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.mstep = 15;
+    vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
+    vm.openBirthdatePicker = openBirthdatePicker;
+    vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
     vm.passwordPrefix = 'account-page';
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
@@ -50,45 +59,20 @@
     vm.submitted = false;
     vm.validation = Validation;
     vm.viewReady = false;
-    vm.minYears = vm.minYears ? Number(vm.minYears) : 13;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
     activate();
-
-    //Datepicker STUFF
-    vm.hstep = 1;
-    vm.mstep = 15;
-    var now = new Date();
-    vm.today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    vm.minimumBirthdate = new Date(now.getFullYear() - vm.minYears, now.getMonth(), now.getDate());
-    vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
-    vm.crossroadsStartDate = new Date(1994, 0, 1);
-    vm.isMeridian = true;
-    vm.openBirthdatePicker = openBirthdatePicker;
-    vm.minBirthdate = (vm.enforceAgeRestriction ? vm.minimumBirthdate : vm.today);
-    function openBirthdatePicker($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      vm.birthdateOpen = true;
-    }
-
-    vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
-
-    function openStartAttendingDatePicker($event) {
-      $event.preventDefault();
-      $event.stopPropagation();
-
-      vm.startAttendingOpen = true;
-    }
-
-    //END Datepicker STUFF
 
     ////////////////////////////////
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
 
     function activate() {
+
+      if (vm.enforceAgeRestriction) {
+        vm.minBirthdate.setFullYear(vm.minBirthdate.getFullYear() - vm.enforceAgeRestriction);
+      }
+
       ProfileReferenceData.getInstance().then(function(response) {
         vm.genders = response.genders;
         vm.maritalStatuses = response.maritalStatuses;
@@ -151,6 +135,12 @@
       vm.modalInstance.close(vm.updatedPerson);
     }
 
+    function convertPhone() {
+      if (vm.pform['mobile-phone'].$valid) {
+        vm.profileData.person.mobilePhone = vm.profileData.person.mobilePhone.replace(vm.phoneFormat, '$1-$2-$3');
+      }
+    }
+
     function formatAnniversaryDate(anniversaryDate) {
       var tmp = moment(anniversaryDate);
       var month = tmp.month() + 1;
@@ -166,6 +156,20 @@
       return (vm.pform.birthdate.$touched ||
         vm.pform.$submitted) &&
         vm.pform.birthdate.$invalid;
+    }
+
+    function openBirthdatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.birthdateOpen = true;
+    }
+
+    function openStartAttendingDatePicker($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      vm.startAttendingOpen = true;
     }
 
     function savePersonal() {
@@ -201,12 +205,6 @@
           });
         }
       }, 550);
-    }
-
-    function convertPhone() {
-      if (vm.pform['mobile-phone'].$valid) {
-        vm.profileData.person.mobilePhone = vm.profileData.person.mobilePhone.replace(vm.phoneFormat, '$1-$2-$3');
-      }
     }
 
     function showMobilePhoneError() {

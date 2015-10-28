@@ -445,13 +445,12 @@
           $rootScope.$emit('updateAfterSave',
               {member: scope.currentMember, groupId: scope.team.groupId, eventIds: updatedEvents.EventIds});
 
+          determineSaveButtonState(); 
+          
           // should we reset the form to pristine
           if (!isFormDirty()) {
-            var teamFormName = 'teamForm-' + scope.team.index;
-            var form = scope['teamForm-' + scope.team.index];
-            form.$setPristine();
+            scope.teamForm.$setPristine();
           }
-          determineSaveButtonState(); 
           return true;
         }, function(err) {
 

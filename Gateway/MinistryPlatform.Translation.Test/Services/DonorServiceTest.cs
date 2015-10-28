@@ -1323,7 +1323,7 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
-        public void TestGetRecurringGifyById()
+        public void TestGetRecurringGiftById()
         {
             const string authUserToken = "auth";
             const int recurringGiftId = 123;
@@ -1341,6 +1341,8 @@ namespace MinistryPlatform.Translation.Test.Services
             const string subscriptionId = "sub_123";
             const string processorId = "cus_123";
             const string accountId = "card_456";
+            const string recurrence = "Monthly";
+            const string programName = "Game Change";
 
             var records = new List<Dictionary<string, object>>
             {
@@ -1359,7 +1361,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Donor_Account_ID", donorAccountId},
                     {"Subscription_ID", subscriptionId},
                     {"Processor_ID", processorId},
-                    {"Processor_Account_ID", accountId}
+                    {"Processor_Account_ID", accountId},
+                    {"Recurrence", recurrence},
+                    {"Program_Name", programName}
                 }
             };
 
@@ -1383,6 +1387,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(subscriptionId, result.SubscriptionId);
             Assert.AreEqual(processorId, result.StripeCustomerId);
             Assert.AreEqual(accountId, result.StripeAccountId);
+            Assert.AreEqual(recurrence, result.Recurrence);
+            Assert.AreEqual(programName, result.ProgramName);
         }
 
         [Test]
