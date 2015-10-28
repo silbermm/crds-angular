@@ -516,7 +516,7 @@ namespace crds_angular.Controllers.API
 
                     if (pledges == null || !pledges.Any())
                     {
-                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching commitments found")));
                     }
 
                     return (Ok(pledges));

@@ -23,6 +23,7 @@
       createRecurringGift: createRecurringGift,
       confirmDonation: confirmDonation,
       donate: donate,
+      getPledgeCommitments: getPledgeCommitments,
       processBankAccountChange: processBankAccountChange,
       processChange: processChange,
       processCreditCardChange: processCreditCardChange,
@@ -134,6 +135,10 @@
 
     function getRecurringGift(impersonateDonorId = null) {
       return PaymentService.getRecurringGift(GiveTransferService.recurringGiftId, impersonateDonorId);
+    }
+
+    function getPledgeCommitments(){
+      return PaymentService.getPledgeCommitments();
     }
 
     function queryRecurringGifts(impersonateDonorId = null) {

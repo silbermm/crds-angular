@@ -132,6 +132,29 @@ describe('ProfileGivingController', function() {
     ending_donation_date: '456'
   };
 
+  var mockPledgeCommitmentsResponse = [
+    {
+      pledge_id: 330508,
+      donor_display_name: 'Pledge, Donor',
+      pledge_campaign: 'Super Campaign',
+      pledge_status: 'Active',
+      campaign_start_date: '"10/1/2015',
+      campaign_end_date: '"6/1/2019',
+      total_pledge: 1500,
+      pledge_donations: 155
+    },
+    {
+      pledge_id: 330509,
+      donor_display_name: 'Commitment, Pledge',
+      pledge_campaign: 'Long Campaign',
+      pledge_status: 'Active',
+      campaign_start_date: '10/1/2015',
+      campaign_end_date: '6/1/2019',
+      total_pledge: 150,
+      pledge_donations: 65
+    }
+  ];
+
   beforeEach(inject(function(_$injector_, $httpBackend, _$controller_, $rootScope) {
       var $injector = _$injector_;
 
@@ -153,11 +176,14 @@ describe('ProfileGivingController', function() {
       sut = controllerConstructor('ProfileGivingController', {$scope: scope});
     });
 
-    it('should retrieve most recent giving year donations for current user', function() {
+    it('should retrieve most recent giving year donations for current user and commitments', function() {
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3')
                              .respond(mockDonationResponse);
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence')
                              .respond(mockRecurringGiftsRespons);
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/pledge')
+                            .respond(mockPledgeCommitmentsResponse);
+
       httpBackend.flush();
 
       expect(sut.donation_history).toBeTruthy();
@@ -180,6 +206,7 @@ describe('ProfileGivingController', function() {
     it('should not have history if there are no donations', function() {
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donations?limit=3').respond(404, {});
       httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence').respond(404, {});
+      httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/pledge').respond(404, {});
       httpBackend.flush();
 
       expect(sut.donation_history).toBeFalsy();
