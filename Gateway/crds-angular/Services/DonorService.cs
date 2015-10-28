@@ -228,7 +228,7 @@ namespace crds_angular.Services
                                                                             stripeSubscription.Id,
                                                                             congregation);
 
-                SendConfirmationEmail(authorizedUserToken, _recurringGiftSetupEmailTemplateId, null, recurGiftId);
+                SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftSetupEmailTemplateId, null, recurGiftId);
 
                 return recurGiftId;
             }
@@ -305,7 +305,7 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendConfirmationEmail(string authorizedUserToken, int templateId, CreateDonationDistDto recurringGift, int? recurringGiftId = null)
+        private void SendRecurringGiftConfirmationEmail(string authorizedUserToken, int templateId, CreateDonationDistDto recurringGift, int? recurringGiftId = null)
         {
             try
             {
@@ -337,7 +337,7 @@ namespace crds_angular.Services
 
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
 
-            SendConfirmationEmail(authorizedUserToken, _recurringGiftCancelEmailTemplateId, existingGift);
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftCancelEmailTemplateId, existingGift);
 
             return true;
         }
@@ -458,7 +458,7 @@ namespace crds_angular.Services
                 SubscriptionID = stripeSubscription.Id,
             };
 
-            SendConfirmationEmail(authorizedUserToken, _recurringGiftUpdateEmailTemplateId, newGift);
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftUpdateEmailTemplateId, newGift);
 
             return (newRecurringGift);
         }
