@@ -1,42 +1,72 @@
 ﻿<form role="form" ng-init="profile.initAccount(this)" name="account_form" novalidate>
-
-    <div class="row">
-        <div class="form-group col-sm-6">
-            <label for="password">Change Password</label>  
-            <password-field required="false" submitted="account_form.$submitted" passwd="profile.password.password" prefix="profile.passwordPrefix"></password-field>
+  <div class="row">
+    <div class="col-sm-12">
+      <p>Manage your communication preferences.</p>
+      <div class="row">
+        <legend class="col-sm-12">Email Communications</legend>
+        <div ng-repeat="publications in profile.publications" class="form-group clearfix toggle-input-group">
+          <div class="col-xs-6">
+            <label class="block">{{publications.Title}}
+              <br /><small class="text-muted">{{publications.Description}}</small>
+            </label>
+          </div>
+          <div class="col-xs-6">
+            <toggle-switch ng-model="switchStatus1"></toggle-switch>
+          </div>
         </div>
-            <div class="form-group col-sm-12">
-                <label class="block">Email Communication</label>
-                <label class="radio-inline">
-                    <input type="radio" name="emailCommunicationOn" value="False" ng-model="profile.account.EmailNotifications"> On
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="emailCommunicationOff" value="True" ng-model="profile.account.EmailNotifications"> Off
-                </label>
+      </div><!--/row-->
+<!-- Mock, NOT YET IMPLEMENTED
+        <div class="row">
+            <legend class="col-sm-12">Text Message Communications</legend>
+            <div class="form-group clearfix toggle-input-group">
+                <div class="col-xs-6">
+                    <label class="block">The Daily
+                        <br /><small class="text-muted">Daily texts to help you connect with God</small>
+                    </label>
+                </div>
+                <div class="col-xs-6">
+                    <toggle-switch ng-model="switchStatus4"></toggle-switch>
+                </div>
+            </div>
+            <div class="form-group clearfix toggle-input-group">
+                <div class="col-xs-6">
+                    <label class="block">General Crossroads Communication
+                        <br /><small class="text-muted">Roughly once a month</small>
+                    </label>
+                </div>
+                <div class="col-xs-6">
+                    <toggle-switch ng-model="switchStatus5"></toggle-switch>
+                </div>
+            </div>
+            <div class="form-group clearfix toggle-input-group">
+                <div class="col-xs-6">
+                    <label class="block">Kids' Club Updates
+                        <br /><small class="text-muted">Once a week</small>
+                    </label>
+                </div>
+                <div class="col-xs-6">
+                    <toggle-switch ng-model="switchStatus6"></toggle-switch>
+                </div>
             </div>
 
-            <div class="form-group col-sm-12">
-                <label class="block">Text Messaging Communication</label>
-                <label class="radio-inline">
-                    <input type="radio" name="textSubscriptionOn" value="False" ng-model="profile.account.TextNotifications"> On
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="textSubscriptionOff" value="True" ng-model="profile.account.TextNotifications"> Off
-                </label>
-            </div>
+        </div><!--/row-->
 
-            <div class="form-group col-sm-12">
-                <label class="block">Paperless Statements</label>
-                <label class="radio-inline">
-                    <input type="radio" name="paperlessSubscriptionOn" value="True" ng-model="profile.account.PaperlessStatements"> On
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="paperlessSubscriptionOff" value="False" ng-model="profile.account.PaperlessStatements"> Off
-                </label>
-            </div>
+<!-- Mock, NOT YET IMPLEMENTED
+        <div class="row">
+            <legend class="col-sm-12">Giving Statements</legend>
 
-        </div>
-    <button id="save-account" ng-click="profile.saveAccount(this)" class="btn btn-primary" data-style="expand-left">
-        Save
-    </button>
-</form>
+            <div class="form-group clearfix toggle-input-group">
+              <div class="col-xs-6">
+                <label class="block">Paperless Giving Statements
+                  <br><span class="text-muted small">Giving statements will be emailed to you.</span>
+                </label>
+              </div>
+              <div class="col-xs-6">
+                <toggle-switch ng-model="swithStatus7"></toggle-switch>
+              </div>
+            </div>
+        </div><!--/row-->
+      </div><!--/col-sm-12-->
+    </div><!--/row-->
+    <!--/col-sm-12-->
+  </form>

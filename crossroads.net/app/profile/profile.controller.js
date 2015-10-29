@@ -7,9 +7,10 @@
     '$rootScope',
     'AttributeTypes',
     'Person',
-    'Lookup'];
+    'Lookup',
+    'Profile'];
 
-  function ProfileController($rootScope, AttributeTypes, Person, Lookup) {
+  function ProfileController($rootScope, AttributeTypes, Person, Lookup, Profile) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
@@ -19,6 +20,7 @@
     vm.locations = getLocations();
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
+    vm.publications = Profile.Publications.query();
 
     ////////////
 
