@@ -33,7 +33,6 @@
     vm.displayName = displayName;
     vm.displayLocation = displayLocation;
     vm.isCollapsed = true;
-    //vm.locations = vm.locations2;
     vm.states = getStates();
     vm.validation = Validation;
     vm.validLocations = validLocations(vm.locations);
@@ -82,18 +81,6 @@
         return data;
       });
     }
-
-    // function getLocations() {
-    //   return Lookup.query({
-    //     table: 'crossroadslocations'
-    //   }, function(data) {
-    //     vm.validLocations = _.map(vm.locations, function(location) {
-    //       return location.dp_RecordID;
-    //     });
-    //
-    //     return data;
-    //   });
-    // }
 
     function getStates() {
       return Lookup.query({
