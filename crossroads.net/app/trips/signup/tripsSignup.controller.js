@@ -87,9 +87,9 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
     function activate() {
-      
+
       vm.signupService.person = Person;
-      
+
       if (vm.signupService.campaign === undefined) {
         vm.signupService.reset(vm.campaign);
       }
@@ -174,7 +174,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
     function frequentFlyerChanged(flyer) {
       if (!_.isEmpty(flyer.notes)) {
-        flyer.selected = true; 
+        flyer.selected = true;
       } else {
         flyer.selected = false;
       }
@@ -398,7 +398,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
         return false;
       }
-      
+
       return true;
     }
 
