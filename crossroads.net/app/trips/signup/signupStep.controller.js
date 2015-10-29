@@ -18,6 +18,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     'TshirtSizes',
     'InternationalExperience',
     'AbuseHistory',
+    'Locations'
   ];
 
   function SignupStepController(
@@ -30,7 +31,8 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     ScrubBottomSizes,
     TshirtSizes,
     InternationalExperience,
-    AbuseHistory) {
+    AbuseHistory,
+    Locations) {
 
     var vm = this;
 
@@ -44,6 +46,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.hasPassport = hasPassport;
     vm.internationalExpSelected = vm.signupService.person.singleAttributes[attributeTypes.INTERNATIONAL_EXPERIENCE];
     vm.interExperience = InternationalExperience;
+    vm.locations = Locations;
     vm.person = vm.signupService.person;
     vm.passportValid = _.isEmpty(vm.signupService.person.passportNumber) ? '' : 'true';
     vm.requireSponsoredChild = requireSponsoredChild;

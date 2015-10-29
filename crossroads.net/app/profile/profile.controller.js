@@ -7,16 +7,17 @@
     '$rootScope',
     'AttributeTypes',
     'Person',
-    'Lookup'];
+    'Lookup',
+    'Locations'];
 
-  function ProfileController($rootScope, AttributeTypes, Person, Lookup) {
+  function ProfileController($rootScope, AttributeTypes, Person, Lookup, Locations) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
     vm.displayLocation = displayLocation;
     vm.enforceAgeRestriction = enforceAgeRestriction;
-    vm.locations = getLocations();
+    vm.locations = Locations;
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
 
