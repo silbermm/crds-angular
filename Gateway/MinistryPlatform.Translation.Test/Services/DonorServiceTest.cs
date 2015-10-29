@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -533,10 +534,73 @@ namespace MinistryPlatform.Translation.Test.Services
                 Body = "Your payment was rejected.  Darn.",
                 Subject = "Test Decline Email"
             };
-            _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
+
+            const string emailAddress = "me@here.com";
+            const int contactId = 3;
+            var contactList = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donor_ID", 1},
+                    {"Processor_ID", 2},
+                    {"Contact_ID", contactId},
+                    {"Email", emailAddress},
+                    {"Statement_Type", "Family"},
+                    {"Statement_Type_ID", 2},
+                    {"Statement_Frequency", "Quarterly"},
+                    {"Statement_Method", "Online"},
+                    {"Household_ID", 4},
+                }
+            };
+
+            const string frequency = "12th of the month";
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords("DonorByContactId", It.IsAny<string>(), It.IsAny<string>(), string.Empty, 0)).Returns(contactList);
+            var expectedCommunication = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = getTemplateResponse.Body,
+                EmailSubject = getTemplateResponse.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "giving@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "giving@crossroads.net",
+                ToContactId = contactId,
+                ToEmailAddress = emailAddress,
+                MergeData = new Dictionary<string, object>
+                {
+                    {"Program_Name", program},
+                    {"Donation_Amount", donationAmt.ToString("N2")},
+                    {"Donation_Date", donationDate.ToString("MM/dd/yyyy h:mmtt", new DateTimeFormatInfo
+                    {
+                        AMDesignator = "am",
+                        PMDesignator = "pm"
+                    })},
+                    {"Payment_Method", paymentType},
+                    {"Decline_Reason", emailReason},
+                    {"Frequency", frequency}
+                }
+            };
+
+            _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
+            _communicationService.Setup(
+                mocked =>
+                    mocked.SendMessage(
+                        It.Is<Communication>(
+                            c =>
+                                c.EmailBody.Equals(expectedCommunication.EmailBody) && c.EmailSubject.Equals(expectedCommunication.EmailSubject) &&
+                                c.ToContactId == expectedCommunication.ToContactId && c.ToEmailAddress.Equals(expectedCommunication.ToEmailAddress) &&
+                                c.MergeData["Program_Name"].Equals(expectedCommunication.MergeData["Program_Name"]) &&
+                                c.MergeData["Donation_Amount"].Equals(expectedCommunication.MergeData["Donation_Amount"]) &&
+                                c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&
+                                c.MergeData["Payment_Method"].Equals(expectedCommunication.MergeData["Payment_Method"]) &&
+                                c.MergeData["Decline_Reason"].Equals(expectedCommunication.MergeData["Decline_Reason"]) &&
+                                c.MergeData["Frequency"].Equals(expectedCommunication.MergeData["Frequency"])
+                            )));
 
             _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
-                emailReason);
+                emailReason, frequency);
 
             _ministryPlatformService.VerifyAll();
             _communicationService.VerifyAll();
@@ -1431,6 +1495,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(donorAccount["Account_Type_ID"], result);
         }
 
+        [Test]
         public void TestUpdateRecurringGiftDonorAccount()
         {
             const string authUserToken = "auth";

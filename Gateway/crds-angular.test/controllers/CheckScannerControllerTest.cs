@@ -7,11 +7,13 @@ using Crossroads.Utilities.Messaging.Interfaces;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http.Controllers;
 using System.Web.Http.Results;
 using crds_angular.Exceptions;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -218,5 +220,61 @@ namespace crds_angular.test.controllers
             Assert.IsNotNull(okResult.Content);
             Assert.AreSame(donorDetail, okResult.Content);
         }
+
+        [Test]
+        public void TestGetDonorForCheckUnauthenticated()
+        {
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Throws<Exception>();
+            var result = _fixture.GetDonorForCheck(new CheckAccount
+            {
+                AccountNumber = "123",
+                RoutingNumber = "456"
+            });
+
+            _authenticationService.VerifyAll();
+            _checkScannerService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(result);
+            var restResult = (RestHttpActionResult<ApiErrorDto>) result;
+            Assert.AreEqual(HttpStatusCode.Unauthorized, restResult.StatusCode);
+            Assert.AreEqual("Could not authenticate to MinistryPlatform", restResult.Content.Message);
+        }
+
+        [Test]
+        public void TestCreateDonorUnauthenticated()
+        {
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Throws<Exception>();
+            var result = _fixture.CreateDonor(new CheckScannerCheck());
+
+            _authenticationService.VerifyAll();
+            _checkScannerService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(result);
+            var restResult = (RestHttpActionResult<ApiErrorDto>)result;
+            Assert.AreEqual(HttpStatusCode.Unauthorized, restResult.StatusCode);
+            Assert.AreEqual("Could not authenticate to MinistryPlatform", restResult.Content.Message);
+        }
+
+        [Test]
+        public void TestCreateDonorStripeFails()
+        {
+            _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(1);
+
+            _checkScannerService.Setup(mocked => mocked.CreateDonor(It.IsAny<CheckScannerCheck>()))
+                .Throws(new PaymentProcessorException(HttpStatusCode.BadGateway, "aux message", "type", "message", "code", "decline code", "param"));
+
+            var result = _fixture.CreateDonor(new CheckScannerCheck());
+            _authenticationService.VerifyAll();
+            _checkScannerService.VerifyAll();
+
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<RestHttpActionResult<ApiErrorDto>>(result);
+            var restResult = (RestHttpActionResult<ApiErrorDto>)result;
+            Assert.AreEqual(HttpStatusCode.MethodNotAllowed, restResult.StatusCode);
+            Assert.AreEqual("Could not create checking account at payment processor", restResult.Content.Message);
+        }
+
     }
 }

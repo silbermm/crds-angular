@@ -1,5 +1,5 @@
 'use strict()';
-﻿(function() {
+(function() {
   module.exports = function($resource) {
     return {
       Personal: $resource(__API_ENDPOINT__ + 'api/profile'),

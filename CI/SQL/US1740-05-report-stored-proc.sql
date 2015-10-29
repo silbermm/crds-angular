@@ -79,7 +79,7 @@ AS
                ms.Marital_Status,
                g.Gender,
                c.Employer_Name,
-               p._First_Attendance_Ever,
+               p.Participant_Start_Date AS First_Attendance_Ever,
                c.Mobile_Phone,
                a.Address_Line_1,
                a.Address_Line_2,
