@@ -1,40 +1,36 @@
 <table class="table gift-table push-top">
-  <tbody ng-repeat="pledgeCommitment in pledgeCommitments track by $index">
-    <tr>
-      <td>
-          {{pledgeCommitment.pledge_campaign}}
-          <div class="text-muted">
-            <span ng-show="recurringGift.source.icon">
-             <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
-               <!--Brian Miller: These need converted to IMGIX once the routes are refactored to trigger IMGIX-->
-               <img class="card-img-show" src="//crossroads-media.imgix.net/images/commitment-campaign-im-in.jpg">
-              <svg ng-attr-viewBox="{{recurringGift.source.viewBox}}" ng-class="'icon icon-' + recurringGift.source.icon + 'payment-type-icon'">
-                  <use ng-attr-xlink:href="{{'#' + recurringGift.source.icon}}" xlink:href=""></use>
-              </svg>
-              </small>
-            </span>
-            <small>
-              {{recurringGift.source.name}}
-            </small>
-          </div>
-      </td>
-      <td class="text-right">
-        <span class="dollar-amount">{{recurringGift.amount | currency:'$'}}</span>
-        <p class="text-muted"><span><small>{{recurringGift.recurrence}}</small></span>
-        </p>
-      </td>
-      <td class="table-actions text-right">
-        <a href="" ng-click="openEditGiftModal(recurringGift)">
-          <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-            <use xlink:href="#pencil4"></use>
-          </svg> Edit
-        </a>
-        <a href="" ng-click="openRemoveGiftModal(recurringGift, $index)">
-          <svg viewBox="0 0 25 32" class="icon icon-trash-o">
-            <use xlink:href="#trash-o"></use>
-          </svg> Remove
-        </a>
-      </td>
-    </tr>
-  </tbody>
+  <h2>dddddddddddddddddddddddddddddddd</h2>
+  <!--<tbody ng-repeat="pledgeCommitment in pledgeCommitments track by $index">-->
+    <!--<tr>-->
+      <!--<td>-->
+        <!-- -->
+          <!--<div class="text-muted">-->
+             <!--<div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">-->
+               <!--&lt;!&ndash;Brian Miller: These need converted to IMGIX once the routes are refactored to trigger IMGIX&ndash;&gt;-->
+               <!--<img class="card-img-show" src="//crossroads-media.imgix3.net/images/commitment-campaign-im-in.jpg">-->
+
+               <!--<div class="col-sm-9 col-xs-12 card-content col-sm-height">-->
+                 <!--<div class="card-header">-->
+                   <!--<div class="row">-->
+                     <!--<div class="col-sm-8">-->
+                       <!--<h3>{{</h3>-->
+                     <!--</div>-->
+                     <!--<div class="col-sm-12">-->
+                       <!--<p class="text-muted trip-date">January 1, 2016 - January 1, 2019</p>-->
+                     <!--</div>-->
+                   <!--</div>&lt;!&ndash;/row&ndash;&gt;-->
+                   <!--<div class="row">-->
+                     <!--<div class="col-sm-12">-->
+                       <!--<p class="flush-bottom text-right trip-funding" style="width: 1.4%">$500 Given</p>-->
+                       <!--<progressbar class="progress-striped" type="success" max="35000" value="500">1&#37;</progressbar>-->
+                       <!--<p class="pull-right funding-goal">$35,000 Committed</p>-->
+                     <!--</div>-->
+                   <!--</div>&lt;!&ndash;/row&ndash;&gt;-->
+                 <!--</div>-->
+               <!--</div>-->
+               <!--</div>-->
+          <!--</div>-->
+      <!--</td>-->
+    <!--</tr>-->
+  <!--</tbody>-->
 </table>

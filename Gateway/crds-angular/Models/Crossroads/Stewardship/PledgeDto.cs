@@ -18,6 +18,13 @@ namespace crds_angular.Models.Crossroads.Stewardship
         /// <summary>
         /// The ID of the MP pledge. 
         /// </summary>
+        [JsonProperty(PropertyName = "pledge_campaign_id")]
+        [Required]
+        public int PledgeCampaignId { get; set; }
+
+        /// <summary>
+        /// The ID of the MP pledge. 
+        /// </summary>
         [JsonProperty(PropertyName = "donor_display_name")]
         [Required]
         public string DonorDisplayName { get; set; }

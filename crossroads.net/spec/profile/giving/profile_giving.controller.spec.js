@@ -135,6 +135,7 @@ describe('ProfileGivingController', function() {
   var mockPledgeCommitmentsResponse = [
     {
       pledge_id: 330508,
+      pledge_campaign_id: 852,
       donor_display_name: 'Pledge, Donor',
       pledge_campaign: 'Super Campaign',
       pledge_status: 'Active',
@@ -145,6 +146,7 @@ describe('ProfileGivingController', function() {
     },
     {
       pledge_id: 330509,
+      pledge_campaign_id: 528,
       donor_display_name: 'Commitment, Pledge',
       pledge_campaign: 'Long Campaign',
       pledge_status: 'Active',

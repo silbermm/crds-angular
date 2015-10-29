@@ -16,13 +16,13 @@
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
-    //vm.createRecurring = createRecurring;
 
     activate();
 
     function activate() {
       vm.donation_view_ready = false;
       vm.recurring_giving_view_ready = false;
+      vm.pledge_commitments_view_ready = false;
 
       GivingHistoryService.donations.get({limit: 3}, function(data) {
         vm.donations = data.donations;
@@ -54,8 +54,14 @@
       });
     }
 
+    function getPledgeCampaignPicture(pledge_campaign_id) {
+      //go get the image.  if not found use a default??
+      vm.path = ImageService.ProfileImageBaseURL + pledge_campaign_id;
+      //vm.defaultImage = ImageService.DefaultProfileImage;
+      };
 
-    //function createRecurring() {
+
+      //function createRecurring() {
     //  $state.go('give.recurring');
     //}
   }

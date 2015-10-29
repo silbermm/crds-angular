@@ -96,6 +96,7 @@ namespace MinistryPlatform.Translation.Services
             return new Pledge()
             {
                 PledgeId = record.ToInt("Pledge_ID"),
+                PledgeCampaignId = record.ToInt("Pledge_Campaign_ID"),
                 DonorId = record.ToInt("Donor_ID"),
                 PledgeStatus = record.ToString("Pledge_Status"),
                 CampaignName = record.ToString("Campaign_Name"),

@@ -82,35 +82,12 @@
       <div class="row commitments">
         <div class="col-sm-12">
           <h2>Commitments</h2>
-          <hr>
 
-          <!--Card 1: Active campaign midway through dates and progress-->
-          <div ng-show="giving_profile_controller.pledge_commitments_data && giving_profile_controller.donation_view_ready">
-          <div class="card-item" data-category="view">
-            <div class="col-sm-3 col-xs-12 card-img card-img-stacked card-dark col-sm-height">
-              <!--Brian Miller: These need converted to IMGIX once the routes are refactored to trigger IMGIX-->
-              <img class="card-img-show" src="//crossroads-media.imgix.net/images/commitment-campaign-im-in.jpg">
-            </div>
-            <div class="col-sm-9 col-xs-12 card-content col-sm-height">
-              <div class="card-header">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h3>{{</h3>
-                  </div>
-                  <div class="col-sm-12">
-                    <p class="text-muted trip-date">January 1, 2016 - January 1, 2019</p>
-                  </div>
-                </div><!--/row-->
-                <div class="row">
-                  <div class="col-sm-12">
-                    <p class="flush-bottom text-right trip-funding" style="width: 1.4%">$500 Given</p>
-                    <progressbar class="progress-striped" type="success" max="35000" value="500">1&#37;</progressbar>
-                    <p class="pull-right funding-goal">$35,000 Committed</p>
-                  </div>
-                </div><!--/row-->
-              </div>
-            </div>
-          </div><!-- /card-item -->
+          <commitment-list
+                  commitment-list-input="giving_profile_controller.pledge_commitments">
+          </commitment-list>
+
+          </div>
 
           <div class="row">
             <div class="col-sm-12 text-center">

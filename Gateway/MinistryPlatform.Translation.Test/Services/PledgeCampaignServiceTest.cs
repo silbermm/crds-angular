@@ -66,6 +66,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 new Dictionary<string, object>
                 {
                     {"Pledge_ID", 123},
+                    {"Pledge_Campaign_ID", 678},
                     {"Pledge_Status", "Active"},
                     {"Donor_ID", 432},
                     {"Campaign_Name", "Winners Win"},
@@ -77,9 +78,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 },
                 new Dictionary<string, object>
                 {
-                    {"Pledge_ID", 123},
+                    {"Pledge_ID", 321},
+                    {"Pledge_Campaign_ID", 876},
                     {"Pledge_Status", "Active"},
-                    {"Donor_ID", 432},
+                    {"Donor_ID", 111},
                     {"Campaign_Name", "Chartreuse Caboose"},
                     {"Total_Pledge", 3000.00M},
                     {"Donation_Total", 1215.00M},
@@ -96,6 +98,7 @@ namespace MinistryPlatform.Translation.Test.Services
 
             Assert.IsNotNull(record);
             Assert.AreEqual(records[0]["Pledge_ID"], record[0].PledgeId);
+            Assert.AreEqual(records[0]["Pledge_Campaign_ID"], record[0].PledgeCampaignId);
             Assert.AreEqual(records[0]["Pledge_Status"], record[0].PledgeStatus);
             Assert.AreEqual(records[0]["Campaign_Name"], record[0].CampaignName);
             Assert.AreEqual(records[0]["Total_Pledge"], record[0].PledgeTotal);
@@ -105,6 +108,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["End_Date"], record[0].CampaignEndDate);
 
             Assert.AreEqual(records[1]["Pledge_ID"], record[1].PledgeId);
+            Assert.AreEqual(records[1]["Pledge_Campaign_ID"], record[1].PledgeCampaignId);
             Assert.AreEqual(records[1]["Pledge_Status"], record[1].PledgeStatus);
             Assert.AreEqual(records[1]["Campaign_Name"], record[1].CampaignName);
             Assert.AreEqual(records[1]["Total_Pledge"], record[1].PledgeTotal);
