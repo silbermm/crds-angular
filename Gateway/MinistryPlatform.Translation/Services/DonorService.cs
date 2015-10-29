@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -49,6 +50,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
+        private readonly DateTimeFormatInfo _dateTimeFormat;
        
         public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
@@ -71,6 +73,12 @@ namespace MinistryPlatform.Translation.Services
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
             _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
+
+            _dateTimeFormat = new DateTimeFormatInfo
+            {
+                AMDesignator = "am",
+                PMDesignator = "pm"
+            };
         }
 
 
@@ -589,8 +597,8 @@ namespace MinistryPlatform.Translation.Services
                 MergeData = new Dictionary<string, object>
                 {
                     {"Program_Name", program},
-                    {"Donation_Amount", donationAmount},
-                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy HH:mm tt")},
+                    {"Donation_Amount", donationAmount.ToString("N2")},
+                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy h:mmtt", _dateTimeFormat)},
                     {"Payment_Method", paymentType},
                     {"Decline_Reason", emailReason},
                     {"Frequency", frequency}
