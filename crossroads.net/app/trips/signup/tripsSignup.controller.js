@@ -49,7 +49,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.commonNameRequired = commonNameRequired;
     vm.contactId = contactId;
     vm.destination = vm.campaign.nickname;
-    vm.dietSelected = dietSelected;
     vm.enforceAgeRestriction = enforceAgeRestriction;
     vm.frequentFlyerChanged = frequentFlyerChanged;
     vm.handlePageChange = handlePageChange;
@@ -161,14 +160,11 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       }
     }
 
-    function dietSelected() {
-      return checkboxSelected(attributeTypes.DIETARY_RESTRICTIONS);
-    }
-
     function enforceAgeRestriction() {
       if (_.includes(Campaign.ageExceptions, Number(vm.signupService.contactId))) {
         return undefined;
       }
+
       return Campaign.ageLimit;
     }
 
