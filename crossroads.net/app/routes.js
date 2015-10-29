@@ -145,6 +145,18 @@
           isProtected: false
         }
       })
+      .state('myprofile', {
+        parent: 'noSideBar',
+        url: '/myprofile',
+        controller: 'MyProfileCtrl as myProfile',
+        templateUrl: 'myprofile/myprofile.html',
+        data: {
+          meta: {
+            title: 'Profile',
+            description: ''
+          }
+        }
+      })
       .state('explore', {
         parent: 'noHeaderOrFooter',
         url: '/explore',

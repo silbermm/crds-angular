@@ -41,6 +41,15 @@
 
             return Profile.Person.get({contactId: cid}).$promise;
           },
+
+          Locations: function(Lookup) {
+            return Lookup.query({
+              table: 'crossroadslocations'
+            }, function(data) {
+              return data;
+            });
+          }
+
         },
         data: {
           isProtected: true,
