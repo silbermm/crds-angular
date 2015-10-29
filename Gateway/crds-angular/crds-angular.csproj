@@ -260,6 +260,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\SubscriptionssController .cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Controllers\API\PublicationsController.cs" />
     <Compile Include="Util\FileResult.cs" />
