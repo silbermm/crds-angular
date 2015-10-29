@@ -256,10 +256,10 @@
         url: '/event-registration',
         templateUrl: 'my_serve/event_registration_mockup.html'
       })
-      .state('event-registration-mvp', {
+      .state('event-registration-desired', {
         parent: 'noSideBar',
-        url: '/event-registration-mvp',
-        templateUrl: 'my_serve/event_registration_mockup_mvp.html'
+        url: '/event-registration-desired',
+        templateUrl: 'my_serve/event_registration_mockup_desired.html'
       })
       .state('serve-signup', {
         parent: 'noSideBar',

@@ -3,7 +3,7 @@
   require('./myserve.html');
   require('./one_time_serve_mockup.html');
   require('./event_registration_mockup.html');
-  require('./event_registration_mockup_mvp.html');
+  require('./event_registration_mockup_desired.html');
 
   var app = angular.module('crossroads');
 

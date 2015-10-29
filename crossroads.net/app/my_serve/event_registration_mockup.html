@@ -59,7 +59,7 @@
                           <div>
                             <div class="radio">
                               <label>
-                                <input type="radio" class="ng-pristine ng-untouched ng-valid" name="role" checked /> <span class="opportunity-name ng-binding">Attendee</span> <span class="text-muted"><small>5:00pm - 06:45pm</small></span><span class="label  label-info" ng-show="role.capacity.display">100 Remaining</span>
+                                <input type="radio" class="ng-pristine ng-untouched ng-valid" name="role" checked /> <span class="opportunity-name ng-binding">Attendee</span> <span class="label  label-info">100 Remaining</span>
                               </label>
                             </div>
                             <div class="radio">
@@ -68,11 +68,21 @@
                               </label>
                             </div>
                           </div>
-                          <div ng-show="selectedRole.room" class=""> <h4 class="flush-bottom"> Location </h4> <p class="ng-binding"> KC 101 </p> </div>
+                          <div class="panel panel-default">
+                            <div class="panel-body text-muted">
+                              <div class="pull-left"> <h5 class="flush-bottom"> Event Times </h5> <p>10:00am - 11:15am </p> </div>
+                              <div class="pull-left push-left"> <h5 class="flush-bottom"> Location </h5> <p> KC 101 </p> </div>
+                            </div>
+                          </div>
                         </div><!--/col-md-5-->
 
                         <div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left;">
-                          <h4>Childcare</h4>
+                          <h4>
+                            Childcare
+                            <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" popover-placement="right" popover="If you don't see your child listed, please contact childcare@crossroads.net">
+                              <use xlink:href="#question-circle"></use>
+                            </svg>
+                          </h4>
                           <div>
                             <div class="checkbox">
                               <label>
