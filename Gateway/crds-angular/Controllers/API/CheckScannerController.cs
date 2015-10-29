@@ -1,10 +1,14 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 using System.Messaging;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
@@ -103,6 +107,12 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
+                var authResult = CheckToken(token);
+                if (authResult != null)
+                {
+                    return (authResult);
+                }
+
                 var donorDetail = _checkScannerService.GetContactDonorForCheck(checkAccount.AccountNumber, checkAccount.RoutingNumber);
                 if (donorDetail == null)
                 {
@@ -110,6 +120,19 @@ namespace crds_angular.Controllers.API
                 }
                 return (Ok(donorDetail)); 
             }));
+        }
+
+        private RestHttpActionResult<ApiErrorDto>CheckToken(string token)
+        {
+            try
+            {
+                _authenticationService.GetContactId(token);
+                return (null);
+            }
+            catch (Exception e)
+            {
+                return(RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.Unauthorized, new ApiErrorDto("Could not authenticate to MinistryPlatform", e)));
+            }
         }
         
         /// <summary>
@@ -124,9 +147,21 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var result = _checkScannerService.CreateDonor(checkDetails);
-                return (Ok(result));
+                var authResult = CheckToken(token);
+                if (authResult != null)
+                {
+                    return (authResult);
+                }
 
+                try
+                {
+                    var result = _checkScannerService.CreateDonor(checkDetails);
+                    return (Ok(result));
+                }
+                catch (PaymentProcessorException e)
+                {
+                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.MethodNotAllowed, new ApiErrorDto("Could not create checking account at payment processor", e)));
+                }
             }));
         }
 
