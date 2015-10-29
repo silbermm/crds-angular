@@ -48,18 +48,6 @@
               </Border>
             </Style>
           </Subreport>
-          <Subreport Name="Subreport2">
-            <ReportName>/MPReports/DI_TooManyHeadsOfHousehold</ReportName>
-            <Top>3.85292in</Top>
-            <Height>3in</Height>
-            <Width>3in</Width>
-            <ZIndex>2</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Subreport>
         </ReportItems>
         <Height>7.32167in</Height>
         <Style>
