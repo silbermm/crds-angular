@@ -89,7 +89,7 @@ BEGIN
            (113
            ,'Household Pledges'
            ,540
-           ,'Pledges.Pledge_ID IN (SELECT * FROM [dbo].[crds_udfGetPledgeIdsForUser](dp_ParentID))');
+           ,'Pledges.Pledge_ID IN (SELECT * FROM [dbo].[crds_udfGetPledgeIdsForDonor](dp_ParentID))');
 
   UPDATE [dbo].[dp_Sub_Pages]
   SET [Default_View] = 113
