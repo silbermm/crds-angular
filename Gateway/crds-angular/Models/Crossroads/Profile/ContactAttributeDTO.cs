@@ -21,5 +21,7 @@ namespace crds_angular.Models.Crossroads.Profile
         public int SortOrder { get; set; }
         [JsonProperty(PropertyName = "category")]
         public string Category { get; set; }
+        [JsonProperty(PropertyName = "categoryDescription")]
+        public string CategoryDescription { get; set; }
     }
 }

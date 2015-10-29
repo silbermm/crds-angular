@@ -8,45 +8,53 @@
   function ProfileSkillsController(Skills, Session, Person) {
     var vm = this;
 
-    debugger;
-
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
+    var personSkills = Person.attributeTypes[attributeTypeIds.SKILLS].attributes;
 
-    vm.Person = Person;
-    vm.removeSkill = RemoveSkill;
-    vm.skillChange = SkillChange;
+    vm.flatSkills = personSkills;
+    vm.groupedSkills = groupSkills(personSkills);
+    vm.removeSkill = removeSkill;
+    vm.skillChange = skillChange;
 
-    var attributes = Person.attributeTypes[attributeTypeIds.SKILLS].attributes;
-    vm.flatSkills = attributes;
+    function groupSkills(attributes) {
+      var skillsByCategory = {};
+      _.forEach(attributes, function(attribute) {
+        if (attribute.category in skillsByCategory === false) {
+          skillsByCategory[attribute.category] = {
+            name: attribute.category,
+            description: attribute.categoryDescription,
+            skills: []
+          };
+        }
 
-    vm.categories = GroupSkillsByCategory();
-    vm.otherSkills = _.groupBy(attributes, 'category');
-    debugger;
+        skillsByCategory[attribute.category].skills.push(attribute);
+      });
 
-    function GroupSkillsByCategory() {
-      return _.chain(attributes)
-        .groupBy('category')
-        .pairs()
-        .map(function (currentItem) {
-          var zipped = _.zip(['name', 'skills'], currentItem);
-          return _.object(zipped);
-        })
-        .value();
+      return convertHashValuesToArray(skillsByCategory);
     }
 
-    function RemoveSkill(skill) {
+    function convertHashValuesToArray(obj) {
+      var result = [];
+      _.forEach(obj, function(item) {
+        result.push(item);
+      });
+
+      return result;
+    }
+
+    function removeSkill(skill) {
       skill.selected = false;
 
       //call function to perform action, which is first?
       vm.skillChange(skill);
     }
 
-    function SkillChange(skill) {
+    function skillChange(skill) {
       var newSkill = new Skills();
       newSkill.SkillId = skill.SkillId;
       newSkill.RecordId = skill.RecordId;
 
-      if (skill.Selected) {
+      if (skill.selected) {
         newSkill.$save({userId: Session.exists('userId')}, function(data) {
           skill.RecordId = data.RecordId;
         });

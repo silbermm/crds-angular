@@ -14,10 +14,13 @@
 
         <fieldset class="row add-skills">
             <p class="lead col-sm-12">Check off any super powers you may have.</p>
-            <div class="form-group col-sm-12 row" ng-repeat="category in profileSkills.categories">
-                <label class="col-sm-3">{{ category.name }}</label>
+            <div class="form-group col-sm-12 row" ng-repeat="skillGroup in profileSkills.groupedSkills | orderBy: 'name'">
+                <label class="col-sm-3">
+                    {{ skillGroup.name }}
+                    <br /><span class="text-muted">{{ skillGroup.description }}</span>
+                </label>
                 <div class="cat-skill-group col-sm-9">
-                    <div ng-repeat="skill in category.skills | orderBy: 'sortOrder'" class="checkbox">
+                    <div ng-repeat="skill in skillGroup.skills | orderBy: 'sortOrder'" class="checkbox">
                         <label>
                             <input type="checkbox" ng-model="skill.selected" ng-change="profileSkills.skillChange(skill)"> {{ skill.name }}
                         </label>
