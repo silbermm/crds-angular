@@ -249,19 +249,16 @@
       .state('serve-one-time', {
         parent: 'noSideBar',
         url: '/serve-one-time',
-        controller: 'MyServeController as serve',
         templateUrl: 'my_serve/one_time_serve_mockup.html'
       })
       .state('event-registration', {
         parent: 'noSideBar',
         url: '/event-registration',
-        controller: 'MyServeController as serve',
         templateUrl: 'my_serve/event_registration_mockup.html'
       })
       .state('event-registration-mvp', {
         parent: 'noSideBar',
         url: '/event-registration-mvp',
-        controller: 'MyServeController as serve',
         templateUrl: 'my_serve/event_registration_mockup_mvp.html'
       })
       .state('serve-signup', {
