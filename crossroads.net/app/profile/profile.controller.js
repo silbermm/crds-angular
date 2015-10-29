@@ -11,7 +11,7 @@
     'Lookup',
     'Locations'];
 
-  function ProfileController($rootScope, AttributeTypes, Person, Lookup, Locations) {
+  function ProfileController($rootScope, $state, AttributeTypes, Person, Lookup, Locations) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
@@ -62,7 +62,7 @@
         { title:'Personal', active: false, route: 'profile.personal' },
         { title:'Account', active: false, route: 'profile.account' },
         { title:'Skills', active: false, route: 'profile.skills' },
-        { title: 'Giving History', active: false, route: 'profile.giving' },
+        { title: 'Giving History', active: false, route: 'profile.giving' }
       ];
     }
 
