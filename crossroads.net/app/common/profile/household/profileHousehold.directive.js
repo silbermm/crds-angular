@@ -13,6 +13,7 @@
         householdId: '=?',
         householdInfo: '=',
         householdForm: '=',
+        locations: '='
       },
       templateUrl: 'household/profileHousehold.template.html',
       controller: 'ProfileHouseholdController as household',
