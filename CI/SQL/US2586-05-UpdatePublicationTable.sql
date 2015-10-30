@@ -13,17 +13,14 @@ GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_dp_Contact_Publications_dp_Publications]') AND parent_object_id = OBJECT_ID(N'[dbo].[dp_Contact_Publications]'))
 ALTER TABLE [dbo].[dp_Contact_Publications] DROP CONSTRAINT [FK_dp_Contact_Publications_dp_Publications]
-PRINT 'dropping first'
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_dp_User_Publications_dp_Publications]') AND parent_object_id = OBJECT_ID(N'[dbo].[dp_User_Publications]'))
 ALTER TABLE [dbo].[dp_User_Publications] DROP CONSTRAINT [FK_dp_User_Publications_dp_Publications]
-PRINT 'dropping second'
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_dp_Communication_Publications_dp_Publications]') AND parent_object_id = OBJECT_ID(N'[dbo].[dp_Communication_Publications]'))
 ALTER TABLE [dbo].[dp_Communication_Publications] DROP CONSTRAINT [FK_dp_Communication_Publications_dp_Publications]
-PRINT 'dropping third'
 GO
 
 TRUNCATE TABLE dp_Publications
