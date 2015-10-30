@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -133,21 +135,35 @@ namespace crds_angular.Services
             var apiUserToken = _apiUserService.GetToken();
             foreach (var attribute in attributesToSave)
             {
-                SaveAttribute(contactId, attribute, apiUserToken);
+                SaveAttribute(contactId, attribute, apiUserToken, false);
             }
         }
 
-        private void SaveAttribute(int contactId, ContactAttribute attribute, string apiUserToken)
+        public void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute)
+        {          
+            var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);                                   
+            var persistedAttribute = GetMyRecords.GetMyAttribute(contactId, token, contactAttribute.AttributeId);
+
+            if (persistedAttribute != null)
+            {
+                mpContactAttribute.ContactAttributeId = persistedAttribute.dp_RecordID;
+            }
+
+
+            SaveAttribute(contactId, mpContactAttribute, token, true);
+        }
+
+        private void SaveAttribute(int contactId, ContactAttribute attribute, string token, bool useMyProfile)
         {            
             if (attribute.ContactAttributeId == 0)
             {
                 // These are new so add them
-                _mpContactAttributeService.CreateAttribute(apiUserToken, contactId, attribute);
+                _mpContactAttributeService.CreateAttribute(token, contactId, attribute, useMyProfile);                
             }
             else
             {
                 // These are existing so update them
-                _mpContactAttributeService.UpdateAttribute(apiUserToken, attribute);
+                _mpContactAttributeService.UpdateAttribute(token, attribute, useMyProfile);
             }
         }
 
@@ -164,20 +180,27 @@ namespace crds_angular.Services
                         continue;
                     }
 
-                    var mpContactAttribute = new ContactAttribute()
-                    {
-                        AttributeId = contactAttribute.AttributeId,
-                        AttributeTypeId = contactAttributeType.AttributeTypeId,
-                        AttributeTypeName = contactAttributeType.Name,
-                        StartDate = contactAttribute.StartDate,
-                        EndDate = contactAttribute.EndDate,
-                        Notes = contactAttribute.Notes
-                    };
+                    var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, contactAttributeType);
 
                     results.Add(mpContactAttribute);
                 }
             }
             return results;
+        }
+
+        private static ContactAttribute TranslateMultiToMPAttribute(ContactAttributeDTO contactAttribute, ContactAttributeTypeDTO contactAttributeType)
+        {            
+            var mpContactAttribute = new ContactAttribute()
+            {
+                AttributeId = contactAttribute.AttributeId,                
+                AttributeTypeId = contactAttributeType != null ? contactAttributeType.AttributeTypeId : 0,
+                AttributeTypeName = contactAttributeType != null ? contactAttributeType.Name : String.Empty,
+                StartDate = contactAttribute.StartDate,
+                EndDate = contactAttribute.EndDate,
+                Notes = contactAttribute.Notes
+            };
+
+            return mpContactAttribute;
         }
 
         private List<ContactAttribute> TranslateSingleToMPAttribute(Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)

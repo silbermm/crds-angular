@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
         }
         public static List<SkillAttribute> GetMyAttributes(int recordId, string token)
         {
-            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactAttributesSubPage"]);            
             var subPageRecords = MinistryPlatformService.GetSubPageRecords(subPageId, recordId, token);
             var attributes = new List<SkillAttribute>();
 
@@ -51,12 +51,38 @@ namespace MinistryPlatform.Translation.Services
                 };
                 attributes.Add(attribute);
             }
+
             return attributes;
+        }
+
+        public static SkillAttribute GetMyAttribute(int recordId, string token, int attributeTypeId)
+        {
+            var subPageViewId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactCurrentAttributesSubPageView"]);
+            var searchString = string.Format("\"{0}\",", attributeTypeId);
+            var subPageRecords = MinistryPlatformService.GetSubpageViewRecords(subPageViewId, recordId, token, searchString);
+
+            var attributes = new List<SkillAttribute>();
+
+            foreach (var record in subPageRecords)
+            {
+                var attribute = new SkillAttribute
+                {
+                    Attribute_Name = (string)record["Attribute_Name"],
+                    Attribute_Type = (string)record["Attribute_Type"],
+                    dp_FileID = (int?)record["dp_FileID"],
+                    dp_RecordID = (int)record["dp_RecordID"],
+                    dp_RecordName = (string)record["dp_RecordName"],
+                    dp_RecordStatus = (int)record["dp_RecordStatus"],
+                    dp_Selected = (int)record["dp_Selected"]
+                };
+                attributes.Add(attribute);
+            }
+            return attributes.FirstOrDefault();
         }
 
         public static int CreateAttribute(SkillAttribute attribute, int parentRecordId, string token)
         {
-            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MySkills"]);
+            var subPageId = Convert.ToInt32(ConfigurationManager.AppSettings["MyContactCurrentAttributesSubPageView"]);
             var platformServiceClient = new PlatformServiceClient();
 
             using (
@@ -81,7 +107,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 WebOperationContext.Current.OutgoingRequest.Headers.Add("Authorization",
                                                                         "Bearer " + token);
-                platformServiceClient.DeleteSubpageRecord(AppSettings("MySkills"), recordId, null);
+                platformServiceClient.DeleteSubpageRecord(AppSettings("MyContactAttributes"), recordId, null);
             }
             return true;
         }

@@ -3,9 +3,9 @@
 
   module.exports = ProfileSkillsController;
 
-  ProfileSkillsController.$inject = ['Skills', 'Session', 'Person'];
+  ProfileSkillsController.$inject = ['$rootScope', 'Skills', 'Session', 'Person'];
 
-  function ProfileSkillsController(Skills, Session, Person) {
+  function ProfileSkillsController($rootScope, Skills, Session, Person) {
     var vm = this;
 
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
@@ -44,23 +44,28 @@
 
     function removeSkill(skill) {
       skill.selected = false;
-
-      //call function to perform action, which is first?
-      vm.skillChange(skill);
+      skillChange(skill);
     }
 
     function skillChange(skill) {
-      var newSkill = new Skills();
-      newSkill.SkillId = skill.SkillId;
-      newSkill.RecordId = skill.RecordId;
-
       if (skill.selected) {
-        newSkill.$save({userId: Session.exists('userId')}, function(data) {
-          skill.RecordId = data.RecordId;
-        });
+        skill.startDate = moment();
       } else {
-        var removed = newSkill.$remove({userId: Session.exists('userId'), recordId: newSkill.RecordId});
+        skill.endDate = moment();
       }
+
+      saveSkill(skill);
+    }
+
+    function saveSkill(skill) {
+      var contactId = Session.exists('userId');
+      Skills.save({contactId: contactId},
+        skill,
+        function(data) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+        }, function(reason) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        });
     }
   }
 })()

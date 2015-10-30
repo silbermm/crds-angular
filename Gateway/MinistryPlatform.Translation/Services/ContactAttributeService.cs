@@ -14,6 +14,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _contactAttributesSubPage = Convert.ToInt32((AppSettings("ContactAttributesSubPage")));
+        private readonly int _myContactAttributesSubPage = Convert.ToInt32((AppSettings("MyContactAttributesSubPage")));
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ContactAttributeService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService)
@@ -33,20 +34,22 @@ namespace MinistryPlatform.Translation.Services
                 AttributeId = record.ToInt("Attribute_ID"),
                 StartDate = record.ToDate("Start_Date"),
                 EndDate = record.ToNullableDate("End_Date"),
-                Notes = record.ToString("Notes"),                
+                Notes = record.ToString("Notes"),
                 AttributeTypeId = record.ToInt("Attribute_Type_ID"),
                 AttributeTypeName = record.ToString("Attribute_Type")
             }).ToList();
             return contactAttributes;
         }
 
-        public int CreateAttribute(string token, int contactId, ContactAttribute attribute)
+        public int CreateAttribute(string token, int contactId, ContactAttribute attribute, bool useMyProfile)
         {
             var attributeDictionary = TranslateContactAttributeToDictionary(attribute);
 
+            var subPageId = useMyProfile ? _myContactAttributesSubPage : _contactAttributesSubPage;            
+
             try
-            {                
-                return _ministryPlatformService.CreateSubRecord(_contactAttributesSubPage, contactId, attributeDictionary, token);
+            {
+                return _ministryPlatformService.CreateSubRecord(subPageId, contactId, attributeDictionary, token);
             }
             catch (Exception e)
             {
@@ -58,13 +61,14 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public void UpdateAttribute(string token, ContactAttribute attribute)
+        public void UpdateAttribute(string token, ContactAttribute attribute, bool useMyProfile)
         {
             var attributeDictionary = TranslateContactAttributeToDictionary(attribute);
+            var subPageId = useMyProfile ? _myContactAttributesSubPage : _contactAttributesSubPage;            
 
             try
             {
-                _ministryPlatformService.UpdateSubRecord(_contactAttributesSubPage, attributeDictionary, token);
+                _ministryPlatformService.UpdateSubRecord(subPageId, attributeDictionary, token);
             }
             catch (Exception e)
             {

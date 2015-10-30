@@ -292,7 +292,7 @@
     <Compile Include="Controllers\API\LookupController.cs" />
     <Compile Include="Controllers\API\OpportunityController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
-    <Compile Include="Controllers\API\SkillController.cs" />
+    <Compile Include="Controllers\API\ContactAttributeController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Controllers\API\MinistryPlatformToolsController.cs" />
     <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />

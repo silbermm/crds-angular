@@ -1,9 +1,8 @@
-'use strict()';
+(function() {
+  'use strict()';
 
-﻿(function(){
-  
-    module.exports = function SkillsService($resource){
-        return $resource(__API_ENDPOINT__ + "api/skill/:userId");
-    }
+  module.exports = function SkillsService($resource) {
+    return $resource(__API_ENDPOINT__ + 'api/contact/attribute/:contactId');
+  };
 
 })()

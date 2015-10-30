@@ -8,6 +8,39 @@ UPDATE dbo.dp_Page_Views
 	WHERE 
 		Page_View_ID = 2185
 
+-- Update MyContactAttributes sub page
+UPDATE dbo.dp_Sub_Pages 
+	SET 
+		Default_Field_List = 'Attribute_ID_Table.Attribute_ID
+,Attribute_ID_Table_Attribute_Type_ID_Table.Attribute_Type
+,Attribute_ID_Table.Attribute_Name
+,Contact_Attributes.Start_Date
+,Contact_Attributes.Notes
+,Contact_Attributes.End_Date'
+	WHERE
+		Sub_Page_Id = 421
+
+
+-- Create sub page view to limit to only active attributes
+SET IDENTITY_INSERT dbo.dp_Sub_Page_Views ON
+INSERT INTO dbo.dp_Sub_Page_Views
+	(
+		Sub_Page_View_ID , 
+		View_Title, 
+		Sub_Page_ID, 
+		View_Clause
+	)
+	VALUES
+	(
+		117, 
+		'Current Attributes', 
+		421, 
+		'GetDate() BETWEEN Contact_Attributes.Start_Date AND ISNULL(Contact_Attributes.End_Date, GetDate())'
+	)
+
+SET IDENTITY_INSERT dbo.dp_Sub_Page_Views OFF
+
+-- Correct display of category
 UPDATE Attribute_Categories 
 	SET 
 		Attribute_Category = 'Construction', 
