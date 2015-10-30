@@ -29,7 +29,7 @@
 
       scope.commitmentPercent = function(donations, commitment) {
         var percent = (donations / commitment) * 100;
-        if (percent > 100) {
+        if (percent >= 100) {
           return 100;
         } else {
           return Math.round(percent);
