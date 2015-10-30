@@ -4,6 +4,13 @@ GO
 TRUNCATE TABLE dp_Contact_Publications
 GO
 
+TRUNCATE TABLE dp_User_Publications
+GO
+
+TRUNCATE TABLE dp_Communication_Publications
+
+GO
+
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_dp_Contact_Publications_dp_Publications]') AND parent_object_id = OBJECT_ID(N'[dbo].[dp_Contact_Publications]'))
 ALTER TABLE [dbo].[dp_Contact_Publications] DROP CONSTRAINT [FK_dp_Contact_Publications_dp_Publications]
 PRINT 'dropping first'
