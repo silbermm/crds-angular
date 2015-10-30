@@ -54,6 +54,7 @@ BEGIN
   END
   RETURN
 END
+GO
 
 -- =========================================================================
 -- Author:		Sandi Ritter
@@ -80,6 +81,7 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] ON
+GO
 
 INSERT INTO [dbo].[dp_Pages]
            ([Page_ID]
@@ -123,6 +125,7 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
+GO
 
 -- Grant "Full" access on this page to "All Platform Users" role
 INSERT INTO [dbo].[dp_Role_Pages] (
