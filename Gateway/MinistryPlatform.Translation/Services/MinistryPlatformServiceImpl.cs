@@ -248,6 +248,12 @@ namespace MinistryPlatform.Translation.Services
             VoidCall(token, platformClient => platformClient.UpdateSubpageRecord(subpageId, dictionary, false));
         }
 
+        public void UpdateSubRecord(string subPageKey, Dictionary<string, object> subscription, string token)
+        {
+            var subPageId = GetMinistryPlatformId(subPageKey);
+            UpdateSubRecord(subPageId, subscription, token);
+        }
+
         public UserInfo GetContactInfo(string token)
         {
             return Call<UserInfo>(token, platformClient => platformClient .GetCurrentUserInfo());

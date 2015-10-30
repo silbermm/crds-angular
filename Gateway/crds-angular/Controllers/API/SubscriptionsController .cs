@@ -30,14 +30,16 @@ namespace crds_angular.Controllers.API
             }));
         }
 
-        [ResponseType(typeof(List<Dictionary<string, object>>))]
-        [Route("api/profile/subscriptions")]
+        [Route("api/subscriptions")]
         [HttpPost]
-        public IHttpActionResult Post()
+        public IHttpActionResult Post(Dictionary<string, object> subscription)
         {
-            //var token = _apiUserService.GetToken();
-            //var publications = _ministryPlatformService.GetRecordsDict("Publications", token, ",,,,True", "8 asc");
-            return this.Ok();
+            return (Authorized(token =>
+            {
+                var contactId = _authenticationService.GetContactId(token);
+                var recordId = new {dp_RecordID = _subscriptionService.SetSubscriptions(subscription, contactId, token)};
+                return this.Ok(recordId);
+            }));
         }  
     }
 }

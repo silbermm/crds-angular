@@ -11,7 +11,7 @@
             </label>
           </div>
           <div class="col-xs-6">
-            <toggle-switch disabled="{{true}}" ng-model="subscription.Subscribed"></toggle-switch>
+            <toggle-switch ng-click="profile.saveSubscription(subscription)" ng-model="subscription.Subscribed"></toggle-switch>
           </div>
         </div>
       </div><!--/row-->
