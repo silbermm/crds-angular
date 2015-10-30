@@ -15,7 +15,6 @@
       donateToProgram: donateToProgram,
       donation: {},
       getDonor: getDonor,
-      getPledgeCommitments: getPledgeCommitments,
       updateDonorWithBankAcct:updateDonorWithBankAcct,
       updateDonorWithCard:updateDonorWithCard,
       updateRecurringGiftWithBankAcct: updateRecurringGiftWithBankAcct,
@@ -126,22 +125,6 @@
         def.reject(_addGlobalErrorMessage(response.error, statusCode));
       });
 
-      return def.promise;
-    }
-
-    function getPledgeCommitments(){
-      var def = $q.defer();
-      $http({
-        method: 'GET',
-        url: __API_ENDPOINT__ + 'api/donor/pledge',
-        headers:{
-          Authorization: $cookies.get('sessionId')
-        }
-      }).success(function(data){
-        def.resolve(data);
-      }).error(function(response, statusCode){
-        def.reject(_addGlobalErrorMessage(response.error, statusCode));
-      });
       return def.promise;
     }
 

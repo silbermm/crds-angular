@@ -16,5 +16,6 @@
   app.controller('ProfileGivingController', require('./profile_giving.controller'));
   app.directive('recurringGivingList', require('./recurring/recurring_giving_list.directive'));
   app.directive('commitmentList', require('./commitment/commitment_list.directive'));
+  app.factory('CommitmentService', require('./commitment/commitment.service'));
 
 })();

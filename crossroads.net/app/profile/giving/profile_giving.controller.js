@@ -44,7 +44,7 @@
         vm.recurring_giving_view_ready = true;
       });
 
-      DonationService.getPledgeCommitments().then(function(data){
+      CommitmentService.getPledgeCommitments().then(function(data){
         vm.pledge_commitments = data;
         vm.pledge_commitments_data = true;
         vm.pledge_commitments_view_ready = true;
