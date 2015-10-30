@@ -223,6 +223,14 @@
             return Trip.WorkTeams.query().$promise;
           },
 
+          Locations: function(Lookup) {
+            return Lookup.query({
+              table: 'crossroadslocations'
+            }, function(data) {
+              return data;
+            });
+          }
+
         }
       });
   }

@@ -157,7 +157,7 @@
       <div class="form-group col-sm-12">
          <label for="ethnicity">Ethnicity <span class="small text-muted">Select all that apply</span></label>
          <div class="profile-ethnicity">
-           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities">
+           <div class="checkbox" ng-repeat="ethnicity in profile.ethnicities | orderBy: ['sortOrder', 'name']  ">
               <label>
                 <input type="checkbox" ng-model="ethnicity.selected">
                 {{ethnicity.name}}
@@ -237,7 +237,7 @@
                 class="form-control col-sm-12"
                 id="start-attend-reason"
                 ng-model="profile.startAttendReason.attribute"
-                ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: 'attributeId'  track by startAttendReason.attributeId" >
+                ng-options="startAttendReason.name for startAttendReason in profile.startAttendReasons.attributes | orderBy: ['sortOrder', 'name'] track by startAttendReason.attributeId" >
           <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
         </select>
       </div>
@@ -284,7 +284,7 @@
 
 
     <div class="row" ng-if="profile.profileData.person.householdId!==undefined">
-      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' />
+      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' />
     </div>
     <!--/row-->
 

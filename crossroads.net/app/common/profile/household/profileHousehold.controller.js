@@ -33,9 +33,9 @@
     vm.displayName = displayName;
     vm.displayLocation = displayLocation;
     vm.isCollapsed = true;
-    vm.locations = getLocations();
     vm.states = getStates();
     vm.validation = Validation;
+    vm.validLocations = validLocations(vm.locations);
 
     $rootScope.$on('homePhoneFocus', function(event, data) {
       vm.isCollapsed = false;
@@ -82,19 +82,17 @@
       });
     }
 
-    function getLocations() {
-      return Lookup.query({
-        table: 'crossroadslocations'
-      }, function(data) {
-        return data;
-      });
-    }
-
     function getStates() {
       return Lookup.query({
         table: 'states'
       }, function(data) {
         return data;
+      });
+    }
+
+    function validLocations(locations) {
+      return _.map(locations, function(location) {
+        return location.dp_RecordID;
       });
     }
   }

@@ -21,7 +21,8 @@
         submitFormCallback: '&?',
         profileData: '=?',
         updatedPerson: '=?',
-        enforceAgeRestriction: '=?'
+        enforceAgeRestriction: '=?',
+        locations: '='
       },
       templateUrl: 'personal/profilePersonal.template.html',
       controller: 'ProfilePersonalController as profile',

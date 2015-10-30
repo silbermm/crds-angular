@@ -302,7 +302,6 @@
       }
 
       GiveTransferService.bankinfoSubmitted = true;
-      GiveTransferService.amountSubmitted = true;
 
       if (GiveTransferService.amount === '') {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);

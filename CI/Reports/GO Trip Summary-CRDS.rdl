@@ -183,9 +183,12 @@
           <QueryParameter Name="EventID">
             <Value>=Parameters!EventID.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="PledgeStatusId">
+            <Value>=Parameters!PledgeStatusId.Value</Value>
+          </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
-        <CommandText>dbo.report_event_selected_campaign_summary</CommandText>
+        <CommandText>report_CRDS_Event_Selected_Campaign_Summary</CommandText>
       </Query>
       <Fields>
         <Field Name="Event_Title">

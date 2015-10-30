@@ -186,7 +186,7 @@
           </legend>
           <div ng-bind-html="$root.MESSAGES.trip_abuse.content | html"></div>
           <div class="form-group" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'abuse') }">
-            <label class="control-label block required">Have you ever been a victim of any form of abuse?</label>
+            <label class="control-label block required">Are you aware of ever having been sexually victimized in any way?</label>
             <div class="radio" ng-repeat="option in signupStep.abuseOptions.attributes">
               <label for="abuse-{{option.attributeId}}">
                   <input ng-model="signupStep.abuseHistory.attribute.attributeId"
