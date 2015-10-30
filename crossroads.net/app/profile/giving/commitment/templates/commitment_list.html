@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-sm-12">
           <p class="flush-bottom text-right trip-funding" style="width: 1.4%">{{pledgeCommitment.pledge_donations | currency}} Given</p>
-          <progressbar ng-class="{'progress-striped' : !commitmentMet(pledgeCommitment.pledge_donations, pledgeCommitment.total_pledge)}" type="success" max="pledgeCommitment.total_pledge" value="pledgeCommitment.pledge_donations">12&#37;</progressbar>
+          <progressbar ng-class="{'progress-striped' : !commitmentMet(pledgeCommitment.pledge_donations, pledgeCommitment.total_pledge)}" type="success" max="pledgeCommitment.total_pledge" value="pledgeCommitment.pledge_donations">{{commitmentPercent(pledgeCommitment.pledge_donations, pledgeCommitment.total_pledge)}}&#37;</progressbar>
           <p class="pull-right funding-goal">{{pledgeCommitment.total_pledge | currency}} Committed</p>
         </div>
       </div><!-- /row -->
