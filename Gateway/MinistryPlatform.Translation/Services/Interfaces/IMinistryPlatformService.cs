@@ -48,6 +48,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void UpdateRecord(int pageId, Dictionary<string, object> dictionary, String token);
         void UpdateSubRecord(int subPageId, Dictionary<string, object> dictionary, String token);
 
+        void UpdateSubRecord(string subPageKey, Dictionary<string, object> subscription, string token);
+
         void UpdateFile(Int32 fileId, String fileName, String description, Boolean isDefaultImage, Int32 longestDimension, Byte[] file, String token);
         
         FileDescription CreateFile(String pageName,

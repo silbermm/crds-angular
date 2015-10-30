@@ -27,12 +27,25 @@ namespace crds_angular.Services
                     if ((int)pID == (int)spID)
                     {
                         subscription.TryGetValue("Unsubscribed", out unSub);
+                        publication.Add("Subscription", subscription);
                         break;
                     }
                 }
                 publication.Add("Subscribed", !(bool)unSub);
             }
-            return (publications);
+            return publications;
+        }
+
+        public int SetSubscriptions(Dictionary<string, object> subscription, int contactId, string token)
+        {
+            object spID;
+            if (subscription.TryGetValue("dp_RecordID", out spID))
+            {
+                subscription.Add("Contact_Publication_ID", spID);
+                _ministryPlatformService.UpdateSubRecord("SubscriptionsSubPage", subscription, token);
+                return 0;
+            }
+            return _ministryPlatformService.CreateSubRecord("SubscriptionsSubPage", contactId, subscription, token);
         }
     }
 }
