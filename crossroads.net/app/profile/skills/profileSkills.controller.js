@@ -30,16 +30,7 @@
         skillsByCategory[attribute.category].skills.push(attribute);
       });
 
-      return convertHashValuesToArray(skillsByCategory);
-    }
-
-    function convertHashValuesToArray(obj) {
-      var result = [];
-      _.forEach(obj, function(item) {
-        result.push(item);
-      });
-
-      return result;
+      return _.values(skillsByCategory);
     }
 
     function removeSkill(skill) {
