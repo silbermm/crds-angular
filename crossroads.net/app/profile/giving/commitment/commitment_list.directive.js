@@ -3,9 +3,9 @@
 
   module.exports = CommitmentList;
 
-  CommitmentList.$inject = ['$rootScope', '$log', 'DonationService', 'GiveTransferService', 'ImageService'];
+  CommitmentList.$inject = ['ImageService'];
 
-  function CommitmentList($rootScope, $log, DonationService, GiveTransferService, ImageService) {
+  function CommitmentList(ImageService) {
     return {
       restrict: 'EA',
       transclude: true,
