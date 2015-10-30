@@ -80,6 +80,7 @@
     "bootstrap-dropdown": "./node_modules/bootstrap/js/dropdown.js",
     "angular-ui-select": "./lib/select.js",
     "plangular": "./node_modules/plangular-3/src/plangular.js",
-    "crds-constants": "./app/constants.js"
+    "crds-constants": "./app/constants.js",
+    "blueimp-load-image": "./node_modules/blueimp-load-image/js/load-image.js"
   }
 }

@@ -1,6 +1,14 @@
 (function() {
   'use strict';
-  module.exports = function changeProfileImageCtrl($modalInstance, $scope, $timeout) {
+
+  require('blueimp-load-image');
+
+  module.exports = changeProfileImageCtrl;
+
+  changeProfileImageCtrl.$inject = ['$modalInstance', '$scope', '$timeout'];
+    
+  function changeProfileImageCtrl($modalInstance, $scope, $timeout) {
+
     var vm = this;
 
     vm.ok = ok;
@@ -12,15 +20,19 @@
     vm.init = false;
 
     function handleFileSelect(evt) {
-      var file = evt.currentTarget.files[0];
-      var reader = new FileReader();
-      reader.onload = function(evt) {
-        $scope.$apply(function($scope) {
-          vm.myImage = evt.target.result;
-        });
-      };
+      loadImage(
+        evt.currentTarget.files[0],
+        function (file) {
+          var reader = new FileReader();
+          reader.onload = function(evt) {
+            $scope.$apply(function($scope) {
+              vm.myImage = evt.target.result;
+            });
+          };
 
-      reader.readAsDataURL(file);
+          reader.readAsDataURL(file);
+        }
+      );
     }
 
     $timeout(function() {
@@ -46,5 +58,5 @@
         vm.init = true;
       }, 200);
     }
-  };
+  }
 })();
