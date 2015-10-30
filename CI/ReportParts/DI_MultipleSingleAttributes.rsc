@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ComponentItem xmlns:rdl="http://schemas.microsoft.com/sqlserver/reporting/2010/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" Name="Tablix3" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2010/01/componentdefinition">
+  <Properties>
+    <Property Name="Type">Tablix</Property>
+    <Property Name="ThumbnailSource">iVBORw0KGgoAAAANSUhEUgAAAIIAAAALCAYAAACzvFXtAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANeSURBVFhH7VbPSxtBFP4iLdRN9BJ/JVAiRFdqhQpFpL2k9FKECoXgsfdizKH1VPoHeBJhtafipR6Lpx4aexA8BdFjtRo31UW0tYmX4i+w7fa9mdlkTWOqbQKF5INl5r1573vfvB121vPMWLZRQ1VjPH4b4IMQMUxbwrSNSMQ2NmiaMOTIPiNhJ2g0yTaNmFpPkJ/mhhPHaxH74ZPX4qkEbywhbcnXYDd4Hc6YWMtxEHL1CCZxyTouHYrDrVXGueBo5VHtRWqN5Guzz9Hr0uxwl9LIYC5nX0Ib1YpwTo6L+xTL9dX9SL58fmI4Ru0zKCNfJzGs+uTWR1ocDt47o+7V81FEB8LiZKRNE+vLNHk3icmUcBHCiOsppExl6cCLCVofG8IsnkJfm5ULhLDeo2ZApXglFJ+D8CAGqVRY76Iac8K1vtwDvUNMCetUx4SZVqZAnsPRGh4gERSU5mfSpZXE6WovjEI9ou5AnPZDRq6+GPIoopER1qPoEtRpmROOY3pM8Ys47pM03ViYmVZ5PWqcw9TPfrxFnDKcOiPke8mLLn3ud5CHuBpSq6vKvBxCj1qA6Bi6SPj71X7lldC7u1EJ3kL8Sx0H5eAohUrx/4l3YWYRbw6m8IAOyYhvCNZjdShcYA6+Gjw7OztV/48wPvsZo9GAsqoPwWAQaPAG7N7eTnFPXBSc09kRUFZxnMfb2XG5Wp29d+1eyinGVUr7Reswfzm0yp6cpzNia9fkfwWP5UCpvReCYwNtxeP5Q8DwcFBbwAdvewhNdDqyHyxofSFox/WoxzFoQHZpha6im9C2sgB9tTc/7aGVbI4/Yl97EzRXHPsXkxb674dgza/Ae4d9HLAG6wCilrZlIcPHEV4037gObXsNWa0ZmuaHP1c3i6Y+Ytu2RF5q4+zl1ugLQmpvxmFys6AO8bZogF+jvRzBSmYQEnosNN8Kwe+vx/bStuBfJI3uHuCMVubOUI4Xma8QWv37+9j3A5l5pyb3wcKRDzgs0Nnou4fTk2l8vzqBK6dTOPkxB807RHHfVMTfIbf3FtKsHSG7Rd0U8yxWknvwBVqlVurl/kcLmwdf4PO1/dbD3d1d+UVwTkS5USneQpSjTqW1/s89djjq1MGoocpR+1msQVwNHv4sKLuGqgXwC0fpYNQwLje+AAAAAElFTkSuQmCC</Property>
+    <Property Name="ThumbnailMimeType">image/png</Property>
+  </Properties>
+  <RdlFragment>
+    <rdl:Report>
+      <rdl:AutoRefresh>0</rdl:AutoRefresh>
+      <rdl:DataSources>
+        <rdl:DataSource Name="DataSource1">
+          <rdl:DataSourceReference>/Data Sources/MPReportsDS</rdl:DataSourceReference>
+          <rd:SecurityType>None</rd:SecurityType>
+          <rd:DataSourceID>b99bd624-d320-4fe4-b446-a5c0dc6b3c8d</rd:DataSourceID>
+        </rdl:DataSource>
+      </rdl:DataSources>
+      <rdl:DataSets>
+        <rdl:DataSet Name="DataSet1">
+          <rdl:Query>
+            <rdl:DataSourceName>DataSource1</rdl:DataSourceName>
+            <rdl:CommandType>StoredProcedure</rdl:CommandType>
+            <rdl:CommandText>report_cr_di_SingleContactAttribute</rdl:CommandText>
+          </rdl:Query>
+          <rdl:Fields>
+            <rdl:Field Name="unique_attribute_name">
+              <rdl:DataField>unique_attribute_name</rdl:DataField>
+              <rd:TypeName>System.String</rd:TypeName>
+            </rdl:Field>
+            <rdl:Field Name="attr_type_id">
+              <rdl:DataField>attr_type_id</rdl:DataField>
+              <rd:TypeName>System.Int32</rd:TypeName>
+            </rdl:Field>
+            <rdl:Field Name="contact_id">
+              <rdl:DataField>contact_id</rdl:DataField>
+              <rd:TypeName>System.Int32</rd:TypeName>
+            </rdl:Field>
+            <rdl:Field Name="attr_count">
+              <rdl:DataField>attr_count</rdl:DataField>
+              <rd:TypeName>System.Int32</rd:TypeName>
+            </rdl:Field>
+            <rdl:Field Name="server_url">
+              <rdl:DataField>server_url</rdl:DataField>
+              <rd:TypeName>System.String</rd:TypeName>
+            </rdl:Field>
+          </rdl:Fields>
+        </rdl:DataSet>
+      </rdl:DataSets>
+      <rdl:ReportSections>
+        <rdl:ReportSection>
+          <rdl:Body>
+            <rdl:ReportItems>
+              <rdl:Tablix Name="Tablix3">
+                <rdl:TablixBody>
+                  <rdl:TablixColumns>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1.26042in</rdl:Width>
+                    </rdl:TablixColumn>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1.47917in</rdl:Width>
+                    </rdl:TablixColumn>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1in</rdl:Width>
+                    </rdl:TablixColumn>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1.34375in</rdl:Width>
+                    </rdl:TablixColumn>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1.26042in</rdl:Width>
+                    </rdl:TablixColumn>
+                    <rdl:TablixColumn>
+                      <rdl:Width>1in</rdl:Width>
+                    </rdl:TablixColumn>
+                  </rdl:TablixColumns>
+                  <rdl:TablixRows>
+                    <rdl:TablixRow>
+                      <rdl:Height>0.25in</rdl:Height>
+                      <rdl:TablixCells>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox14">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Attribute Type</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox14</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox15">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Attribute Type ID</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox15</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox17">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Contact ID</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox17</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox19">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Attribute Count</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox19</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox21">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Contact Link</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox21</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox23">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>server_url</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value />
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontSize>11pt</rdl:FontSize>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>White</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox23</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#7292cc</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:BackgroundColor>#4c68a2</rdl:BackgroundColor>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                      </rdl:TablixCells>
+                    </rdl:TablixRow>
+                    <rdl:TablixRow>
+                      <rdl:Height>0.25in</rdl:Height>
+                      <rdl:TablixCells>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="unique_attribute_name">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>=Fields!unique_attribute_name.Value</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:Color>#4d4d4d</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>unique_attribute_name</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="attr_type_id">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>=Sum(Fields!attr_type_id.Value)</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:Color>#4d4d4d</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>attr_type_id</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="contact_id">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>=Sum(Fields!contact_id.Value)</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:Color>#4d4d4d</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>contact_id</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="attr_count">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>=Sum(Fields!attr_count.Value)</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:Color>#4d4d4d</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>attr_count</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox22">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>Link</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:FontWeight>Bold</rdl:FontWeight>
+                                        <rdl:Color>Blue</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox22</rd:DefaultName>
+                              <rdl:ActionInfo>
+                                <rdl:Actions>
+                                  <rdl:Action>
+                                    <rdl:Hyperlink>= "https://" &amp; Fields!server_url.Value &amp; "/ministryplatform#/292/" &amp; Fields!contact_id.Value &amp; "/269"</rdl:Hyperlink>
+                                  </rdl:Action>
+                                </rdl:Actions>
+                              </rdl:ActionInfo>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                        <rdl:TablixCell>
+                          <rdl:CellContents>
+                            <rdl:Textbox Name="Textbox24">
+                              <rdl:CanGrow>true</rdl:CanGrow>
+                              <rdl:KeepTogether>true</rdl:KeepTogether>
+                              <rdl:Paragraphs>
+                                <rdl:Paragraph>
+                                  <rdl:TextRuns>
+                                    <rdl:TextRun>
+                                      <rdl:Value>=Fields!server_url.Value</rdl:Value>
+                                      <rdl:Style>
+                                        <rdl:FontFamily>Tahoma</rdl:FontFamily>
+                                        <rdl:Color>#4d4d4d</rdl:Color>
+                                      </rdl:Style>
+                                    </rdl:TextRun>
+                                  </rdl:TextRuns>
+                                  <rdl:Style />
+                                </rdl:Paragraph>
+                              </rdl:Paragraphs>
+                              <rd:DefaultName>Textbox24</rd:DefaultName>
+                              <rdl:Style>
+                                <rdl:Border>
+                                  <rdl:Color>#e5e5e5</rdl:Color>
+                                  <rdl:Style>Solid</rdl:Style>
+                                </rdl:Border>
+                                <rdl:PaddingLeft>2pt</rdl:PaddingLeft>
+                                <rdl:PaddingRight>2pt</rdl:PaddingRight>
+                                <rdl:PaddingTop>2pt</rdl:PaddingTop>
+                                <rdl:PaddingBottom>2pt</rdl:PaddingBottom>
+                              </rdl:Style>
+                            </rdl:Textbox>
+                          </rdl:CellContents>
+                        </rdl:TablixCell>
+                      </rdl:TablixCells>
+                    </rdl:TablixRow>
+                  </rdl:TablixRows>
+                </rdl:TablixBody>
+                <rdl:TablixColumnHierarchy>
+                  <rdl:TablixMembers>
+                    <rdl:TablixMember />
+                    <rdl:TablixMember />
+                    <rdl:TablixMember />
+                    <rdl:TablixMember />
+                    <rdl:TablixMember />
+                    <rdl:TablixMember>
+                      <rdl:Visibility>
+                        <rdl:Hidden>true</rdl:Hidden>
+                      </rdl:Visibility>
+                    </rdl:TablixMember>
+                  </rdl:TablixMembers>
+                </rdl:TablixColumnHierarchy>
+                <rdl:TablixRowHierarchy>
+                  <rdl:TablixMembers>
+                    <rdl:TablixMember>
+                      <rdl:KeepWithGroup>After</rdl:KeepWithGroup>
+                    </rdl:TablixMember>
+                    <rdl:TablixMember>
+                      <rdl:Group Name="Details" />
+                    </rdl:TablixMember>
+                  </rdl:TablixMembers>
+                </rdl:TablixRowHierarchy>
+                <rdl:DataSetName>DataSet1</rdl:DataSetName>
+                <rdl:Top>0.53542in</rdl:Top>
+                <rdl:Height>0.5in</rdl:Height>
+                <rdl:Width>7.34375in</rdl:Width>
+                <rdl:Style>
+                  <rdl:Border>
+                    <rdl:Style>None</rdl:Style>
+                  </rdl:Border>
+                </rdl:Style>
+                <ComponentMetadata>
+                  <ComponentId>3bf8cbfc-f32f-4c3e-80dc-bcf4a71831ab</ComponentId>
+                  <SourcePath>/Report Parts/DI_MultipleSingleAttributes</SourcePath>
+                  <SyncDate>2015-10-30T07:55:57.9789227-04:00</SyncDate>
+                </ComponentMetadata>
+              </rdl:Tablix>
+            </rdl:ReportItems>
+            <rdl:Height>0in</rdl:Height>
+            <rdl:Style />
+          </rdl:Body>
+          <rdl:Width>0in</rdl:Width>
+          <rdl:Page>
+            <rdl:Style />
+          </rdl:Page>
+        </rdl:ReportSection>
+      </rdl:ReportSections>
+      <rd:ReportUnitType>Invalid</rd:ReportUnitType>
+      <rd:ReportID>ae98bfff-617e-478f-bfe3-b5fa5d91820d</rd:ReportID>
+    </rdl:Report>
+  </RdlFragment>
+</ComponentItem>
