@@ -9,15 +9,21 @@
     return {
       restrict: 'EA',
       transclude: true,
-      templateUrl: 'commitment_list.html',
+      templateUrl: 'templates/commitment_list.html',
       scope: {
-        commitmentInput: '=',
+        commitmentListInput: '=',
       },
       link: link
     };
 
     function link(scope) {
+      scope.$watch('commitmentListInput', function(pledgeCommitments) {
+        scope.pledgeCommitments = pledgeCommitments;
+      });
 
+    function commitmentMet(donations, commitment) {
+      return (donations >= commitment);
+    }
     }
   }
 })();

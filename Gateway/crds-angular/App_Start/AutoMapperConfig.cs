@@ -185,7 +185,7 @@ namespace crds_angular.App_Start
                         PaymentProcessorId = src.ProcessorId
                     };
                 });
-            
+
             Mapper.CreateMap<Pledge, PledgeDto>()
                 .ForMember(dest => dest.PledgeCampaign, opts => opts.MapFrom(src => src.CampaignName))
                 .ForMember(dest => dest.TotalPledge, opts => opts.MapFrom(src => src.PledgeTotal));

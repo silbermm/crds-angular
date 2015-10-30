@@ -99,12 +99,12 @@ namespace MinistryPlatform.Translation.Services
                 PledgeCampaignId = record.ToInt("Pledge_Campaign_ID"),
                 DonorId = record.ToInt("Donor_ID"),
                 PledgeStatus = record.ToString("Pledge_Status"),
-                CampaignName = record.ToString("Campaign_Name"),
+                CampaignName = record.ToString("Campaign_Name"),   
                 PledgeTotal = record["Total_Pledge"] as decimal? ?? 0,
                 PledgeDonations = record["Donation_Total"] as decimal? ?? 0,
                 DonorDisplayName = record.ToString("Display_Name"),
-                CampaignStartDate = record.ToDate("Start_Date"),
-                CampaignEndDate = record.ToDate("End_Date")
+                CampaignStartDate = record.ToDateAsString("Start_Date"),
+                CampaignEndDate = record.ToDateAsString("End_Date"),
             };
         }
     }
