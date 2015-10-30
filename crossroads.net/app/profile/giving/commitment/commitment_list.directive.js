@@ -3,9 +3,9 @@
 
   module.exports = CommitmentList;
 
-  CommitmentList.$inject = ['$rootScope', '$log', 'DonationService', 'GiveTransferService', 'ImageService'];
+  CommitmentList.$inject = ['ImageService'];
 
-  function CommitmentList($rootScope, $log, DonationService, GiveTransferService, ImageService) {
+  function CommitmentList(ImageService) {
     return {
       restrict: 'EA',
       transclude: true,
@@ -29,7 +29,7 @@
 
       scope.commitmentPercent = function(donations, commitment) {
         var percent = (donations / commitment) * 100;
-        if (percent > 100) {
+        if (percent >= 100) {
           return 100;
         } else {
           return Math.round(percent);

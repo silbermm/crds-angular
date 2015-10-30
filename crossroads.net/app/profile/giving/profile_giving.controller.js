@@ -48,21 +48,11 @@
         vm.pledge_commitments = data;
         vm.pledge_commitments_data = true;
         vm.pledge_commitments_view_ready = true;
-      }, function(error){
+      }, function(/*error*/) {
+
         vm.pledge_commitments_data = false;
         vm.pledge_commitments_view_ready = true;
       });
     }
-
-    function getPledgeCampaignPicture(pledge_campaign_id) {
-      //go get the image.  if not found use a default??
-      vm.path = ImageService.ProfileImageBaseURL + pledge_campaign_id;
-      //vm.defaultImage = ImageService.DefaultProfileImage;
-      };
-
-
-      //function createRecurring() {
-    //  $state.go('give.recurring');
-    //}
   }
 })();
