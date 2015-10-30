@@ -103,8 +103,8 @@ namespace MinistryPlatform.Translation.Services
                 PledgeTotal = record["Total_Pledge"] as decimal? ?? 0,
                 PledgeDonations = record["Donation_Total"] as decimal? ?? 0,
                 DonorDisplayName = record.ToString("Display_Name"),
-                CampaignStartDate = record.ToDateAsString("Start_Date"),
-                CampaignEndDate = record.ToDateAsString("End_Date"),
+                CampaignStartDate = record.ToDate("Start_Date"),
+                CampaignEndDate = record.ToDate("End_Date"),
             };
         }
     }

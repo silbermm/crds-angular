@@ -15,7 +15,7 @@ namespace MinistryPlatform.Models
         public decimal PledgeTotal { get; set; }
         public decimal PledgeDonations { get; set; }
         public string DonorDisplayName { get; set; }
-        public string CampaignStartDate { get; set; }
-        public string CampaignEndDate { get; set; }
+        public DateTime CampaignStartDate { get; set; }
+        public DateTime CampaignEndDate { get; set; }
     }
 }
