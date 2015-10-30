@@ -8,10 +8,11 @@
     '$state',
     'AttributeTypes',
     'Person',
+    'Profile',
     'Lookup',
     'Locations'];
 
-  function ProfileController($rootScope, $state, AttributeTypes, Person, Lookup, Locations) {
+  function ProfileController($rootScope, $state, AttributeTypes, Person, Profile, Lookup, Locations) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
@@ -22,6 +23,7 @@
     vm.locations = Locations;
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
+    vm.subscriptions = Profile.Subscriptions.query();
     vm.tabs = getTabs();
 
     activate();
@@ -60,7 +62,7 @@
     function getTabs() {
       return [
         { title:'Personal', active: false, route: 'profile.personal' },
-        { title:'Account', active: false, route: 'profile.account' },
+        { title:'Communications', active: false, route: 'profile.communications' },
         { title:'Skills', active: false, route: 'profile.skills' },
         { title: 'Giving History', active: false, route: 'profile.giving' }
       ];

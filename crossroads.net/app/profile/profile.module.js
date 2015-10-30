@@ -14,6 +14,6 @@
 
   require('./profile.html');
   require('./personal/profilePersonal.html');
-  require('./account/profileAccount.html');
+  require('./communications/profileCommunications.html');
 
 })();

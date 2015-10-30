@@ -66,6 +66,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token =>
             {
                 // does the logged in user have permission to view this contact?
+                //TODO: Move this security logic to MP, if for some reason we absulutly can't then centerlize all security logic that exists in the gateway
                 var loggedInUser = _personService.GetLoggedInUserProfile(token);
                 var family = _serveService.GetImmediateFamilyParticipants(loggedInUser.ContactId, token);
                 Person person = null;
