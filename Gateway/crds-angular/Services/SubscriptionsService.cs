@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Services.Interfaces;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -43,7 +44,7 @@ namespace crds_angular.Services
             {
                 subscription.Add("Contact_Publication_ID", spID);
                 _ministryPlatformService.UpdateSubRecord("SubscriptionsSubPage", subscription, token);
-                return 0;
+                return Convert.ToInt32(spID);
             }
             return _ministryPlatformService.CreateSubRecord("SubscriptionsSubPage", contactId, subscription, token);
         }

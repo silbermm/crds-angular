@@ -37,7 +37,8 @@ namespace crds_angular.Controllers.API
             return (Authorized(token =>
             {
                 var contactId = _authenticationService.GetContactId(token);
-                return this.Ok(_subscriptionService.SetSubscriptions(subscription, contactId, token));
+                var recordId = new {dp_RecordID = _subscriptionService.SetSubscriptions(subscription, contactId, token)};
+                return this.Ok(recordId);
             }));
         }  
     }
