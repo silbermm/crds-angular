@@ -34,6 +34,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
         private readonly int _myHouseholdRecurringGiftsApiPageView;
+        private readonly int _myHouseholdPledges;
         
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -73,12 +74,14 @@ namespace MinistryPlatform.Translation.Services
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
             _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
+            _myHouseholdPledges = configuration.GetConfigIntValue("MyHouseholdPledges");
 
             _dateTimeFormat = new DateTimeFormatInfo
             {
                 AMDesignator = "am",
                 PMDesignator = "pm"
             };
+
         }
 
 
@@ -890,7 +893,7 @@ namespace MinistryPlatform.Translation.Services
             
             return donorAccount.ToInt("Account_Type_ID");
         }
-
+        
         // ReSharper disable once FunctionComplexityOverflow
         private RecurringGift MapRecordToRecurringGift(Dictionary<string, object> record)
         {

@@ -26,7 +26,7 @@ namespace crds_angular.test.Services
         private Mock<IPaymentService> _paymentService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IAuthenticationService> _authenticationService;
-
+        private Mock<IPledgeService> _pledgeService; 
         private const string GuestGiverDisplayName = "Guest Giver";
 
         private const int StatementFrequencyNever = 9;
@@ -50,6 +50,7 @@ namespace crds_angular.test.Services
             _mpContactService = new Mock<IContactService>(MockBehavior.Strict);
             _paymentService = new Mock<IPaymentService>(MockBehavior.Strict);
             _authenticationService = new Mock<IAuthenticationService>(MockBehavior.Strict);
+            _pledgeService = new Mock<IPledgeService>(MockBehavior.Strict);
 
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementFrequencyNever")).Returns(StatementFrequencyNever);
@@ -59,12 +60,11 @@ namespace crds_angular.test.Services
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("DonorStatementMethodPostalMail")).Returns(StatementMethodPostalMail);
             _configurationWrapper.Setup(mocked => mocked.GetConfigValue("GuestGiverContactDisplayName")).Returns(GuestGiverDisplayName);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("NotSiteSpecificCongregation")).Returns(NotSiteSpecificCongregation);
-
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftSetupEmailTemplateId")).Returns(RecurringGiftSetupEmailTemplateId);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId")).Returns(RecurringGiftUpdateEmailTemplateId);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("RecurringGiftCancelEmailTemplateId")).Returns(RecurringGiftCancelEmailTemplateId);
 
-            _fixture = new DonorService(_mpDonorService.Object, _mpContactService.Object, _paymentService.Object, _configurationWrapper.Object, _authenticationService.Object);
+            _fixture = new DonorService(_mpDonorService.Object, _mpContactService.Object, _paymentService.Object, _configurationWrapper.Object, _authenticationService.Object, _pledgeService.Object);
 
         }
 
