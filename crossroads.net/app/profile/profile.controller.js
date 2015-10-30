@@ -24,6 +24,7 @@
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
     vm.subscriptions = Profile.Subscriptions.query();
+    vm.saveSubscription = saveSubscription;
     vm.tabs = getTabs();
 
     activate();
@@ -74,6 +75,23 @@
 
     function locationFocus() {
       $rootScope.$emit('locationFocus');
+    }
+
+    function saveSubscription(subscription) {
+      if (subscription.Subscription) {
+        subscription.Subscription.Unsubscribed = !subscription.Subscribed;
+      } else {
+        subscription.Subscription = {
+          Publication_ID: subscription.ID,
+          Publication_Title: subscription.Title,
+          Unsubscribed: !subscription.Subscribed
+        };
+
+      }
+
+      Profile.Subscriptions.save(subscription.Subscription).$promise.then(function(data) {
+        subscription.Subscription.dp_RecordID = data.dp_RecordID;
+      });
     }
   }
 })();
