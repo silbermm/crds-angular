@@ -1,10 +1,6 @@
 USE [MinistryPlatform]
 GO
 /****** Object:  UserDefinedFunction [dbo].[crds_udfGetPledgeIdsForUser]    Script Date: 10/27/2015 12:25:00 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 -- =============================================
 -- Author:      Sandi Ritter
 -- Create date: 10/27/2015
@@ -58,12 +54,8 @@ BEGIN
   END
   RETURN
 END
-
-
-SET ANSI_NULLS ON
 GO
-SET QUOTED_IDENTIFIER ON
-GO
+
 -- =========================================================================
 -- Author:		Sandi Ritter
 -- Create date: 10/28/2015
@@ -89,6 +81,7 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] ON
+GO
 
 INSERT INTO [dbo].[dp_Pages]
            ([Page_ID]
@@ -132,6 +125,7 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
+GO
 
 -- Grant "Full" access on this page to "All Platform Users" role
 INSERT INTO [dbo].[dp_Role_Pages] (
