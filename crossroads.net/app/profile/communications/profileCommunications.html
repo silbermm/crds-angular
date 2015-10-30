@@ -1,7 +1,7 @@
 ﻿<form role="form" ng-init="profile.initAccount(this)" name="account_form" novalidate>
   <div class="row">
     <div class="col-sm-12">
-      <p>Manage your communication preferences.</p>
+      <span ng-bind-html="$root.MESSAGES.profileCommunicationsHeader.content | html"></span>
       <div class="row">
         <legend class="col-sm-12">Email Communications</legend>
         <div ng-repeat="subscription in profile.subscriptions" class="form-group clearfix toggle-input-group">
