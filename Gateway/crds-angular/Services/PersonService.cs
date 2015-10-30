@@ -1,15 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AutoMapper;
-using crds_angular.Models;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
-using MinistryPlatform.Models;
-using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services;
+using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 
 namespace crds_angular.Services
@@ -35,11 +31,6 @@ namespace crds_angular.Services
             addressDictionary.Add("State/Region", addressDictionary["State"]);
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
             _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
-        }
-
-        public List<Skill> GetLoggedInUserSkills(int contactId, string token)
-        {
-            return GetSkills(contactId, token);
         }
 
         public Person GetPerson(int contactId)
@@ -73,16 +64,6 @@ namespace crds_angular.Services
             person.HouseholdMembers = family;
 
             return person;
-        }
-
-        private List<Skill> GetSkills(int recordId, string token)
-        {
-            var attributes = GetMyRecords.GetMyAttributes(recordId, token);
-
-            var skills =
-                Mapper.Map<List<SkillAttribute>, List<Skill>>(attributes);
-
-            return skills;
         }
     }
 }
