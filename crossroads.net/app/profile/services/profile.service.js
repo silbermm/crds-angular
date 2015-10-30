@@ -7,7 +7,6 @@
       Account: $resource(__API_ENDPOINT__ + 'api/account'),
       Password: $resource(__API_ENDPOINT__ + 'api/account/password'),
       Household: $resource(__API_ENDPOINT__ + 'api/profile/household/:householdId'),
-      MySkills: $resource(__API_ENDPOINT__ + 'api/myskills')
     };
   };
 })();

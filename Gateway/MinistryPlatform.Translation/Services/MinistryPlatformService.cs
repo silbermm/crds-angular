@@ -58,10 +58,10 @@ namespace MinistryPlatform.Translation.Services
             return MPFormatConversion.MPFormatToDictionary(GetRecord(pageId, recordId, token, quickadd));
         }
 
-        public static List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token)
+        public static List<Dictionary<string, object>> GetSubPageRecords(int subPageId, int recordId, String token, string searchString = "", string sort = "", int top = 0)
         {
             SelectQueryResult result = PlatformUtils.Call<SelectQueryResult>(token,
-                platformClient => platformClient.GetSubpageRecords(subPageId, recordId, string.Empty, string.Empty, 0));
+                platformClient => platformClient.GetSubpageRecords(subPageId, recordId, searchString, sort, top));
             return MPFormatConversion.MPFormatToList(result);
         }
 

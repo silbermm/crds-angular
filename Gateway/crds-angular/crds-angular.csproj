@@ -279,9 +279,6 @@
     <Compile Include="Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeTypeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\FrequentFlyerAttributeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\ProfessionalSkillsAttributeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\SpiritualJourneyContactAttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Profile\ContactAttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Profile\ContactAttributeTypeDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
@@ -293,7 +290,7 @@
     <Compile Include="Controllers\API\LookupController.cs" />
     <Compile Include="Controllers\API\OpportunityController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
-    <Compile Include="Controllers\API\SkillController.cs" />
+    <Compile Include="Controllers\API\ContactAttributeController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Controllers\API\MinistryPlatformToolsController.cs" />
     <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />
@@ -332,7 +329,6 @@
     <Compile Include="Models\Crossroads\Serve\ServingTime.cs" />
     <Compile Include="Models\Crossroads\Serve\TeamMember.cs" />
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
-    <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
@@ -437,7 +433,6 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ServeService.cs" />
-    <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\StripeEventService.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />

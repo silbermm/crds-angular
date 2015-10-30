@@ -69,7 +69,8 @@
       })
       .state('profile.skills', {
         url: '/skills',
-        template: '<profile-skills> </profile-skills>',
+        templateUrl: 'skills/profileSkills.html',
+        controller: 'ProfileSkillsController as profileSkills',
       })
       .state('profile.giving', {
         url: '/giving',
