@@ -11,6 +11,6 @@ namespace MinistryPlatform.Models
         public int AttributeTypeId { get; set; }
         public string AttributeTypeName { get; set; }
         public bool PreventMultipleSelection { get; set; }
-        public int SortOrder { get; set; }        
+        public int SortOrder { get; set; }
     }
 }
