@@ -81,9 +81,10 @@ namespace crds_angular.test.Services
                 }
             };
 
-            _contactAttributeService.Setup(x => x.GetCurrentContactAttributes(_fakeContactId)).Returns(_currentAttributes);
-            _apiUserService.Setup(x => x.GetToken()).Returns(_fakeToken);           
-            _contactAttributeService.Setup(x => x.UpdateAttribute(_fakeToken, It.IsAny<ContactAttribute>(), false)).Callback<string, ContactAttribute, bool>((id, actual, useMyProfile) =>
+            var useMyProfile = false;
+            _contactAttributeService.Setup(x => x.GetCurrentContactAttributes(_fakeToken, _fakeContactId, useMyProfile, null)).Returns(_currentAttributes);
+            _apiUserService.Setup(x => x.GetToken()).Returns(_fakeToken);
+            _contactAttributeService.Setup(x => x.UpdateAttribute(_fakeToken, It.IsAny<ContactAttribute>(), useMyProfile)).Callback<string, ContactAttribute, bool>((id, actual, useMyProfileParam) =>
             {
                 Assert.AreEqual(actual.Notes, _updatedNote);  
                 Assert.AreEqual(actual.ContactAttributeId, 123456);
@@ -92,7 +93,7 @@ namespace crds_angular.test.Services
             _apiUserService.VerifyAll();
             _attributeService.VerifyAll();
             _mpAttributeService.VerifyAll();
-            _contactAttributeService.Verify( update => update.UpdateAttribute(_fakeToken, It.IsAny<ContactAttribute>(), false), Times.Once);
+            _contactAttributeService.Verify(update => update.UpdateAttribute(_fakeToken, It.IsAny<ContactAttribute>(), useMyProfile), Times.Once);
             
 
         }

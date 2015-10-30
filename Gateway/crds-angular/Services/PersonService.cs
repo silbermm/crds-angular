@@ -18,11 +18,13 @@ namespace crds_angular.Services
     {
         private readonly MPServices.IContactService _contactService;
         private readonly IContactAttributeService _contactAttributeService;
+        private readonly MPServices.IApiUserService _apiUserService;
 
-        public PersonService(MPServices.IContactService contactService, IContactAttributeService contactAttributeService)
+        public PersonService(MPServices.IContactService contactService, IContactAttributeService contactAttributeService, MPServices.IApiUserService apiUserService)
         {
             _contactService = contactService;
             _contactAttributeService = contactAttributeService;
+            _apiUserService = apiUserService;
         }
 
         public void SetProfile(String token, Person person)
@@ -49,7 +51,8 @@ namespace crds_angular.Services
             person.HouseholdMembers = family;
 
             // TODO: Should this move to _contactService or should update move it's call out to this service?
-            var attributesTypes = _contactAttributeService.GetContactAttributes(contactId);
+            var apiUser = _apiUserService.GetToken();
+            var attributesTypes = _contactAttributeService.GetContactAttributes(apiUser, contactId);
             person.AttributeTypes = attributesTypes.MultiSelect;
             person.SingleAttributes = attributesTypes.SingleSelect;
 

@@ -27,14 +27,16 @@ INSERT INTO dbo.dp_Sub_Page_Views
 	(
 		Sub_Page_View_ID , 
 		View_Title, 
-		Sub_Page_ID, 
+		Sub_Page_ID,
+		Field_List,	 
 		View_Clause
 	)
 	VALUES
 	(
 		117, 
 		'Current Attributes', 
-		421, 
+		421,
+		'Contact_Attributes.[Contact_Attribute_ID], Contact_Attributes.[Start_Date], Contact_Attributes.[End_Date], Contact_Attributes.[Notes], Attribute_ID_Table.[Attribute_ID], Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type_ID],  Attribute_ID_Table_Attribute_Type_ID_Table.[Attribute_Type]',
 		'GetDate() BETWEEN Contact_Attributes.Start_Date AND ISNULL(Contact_Attributes.End_Date, GetDate())'
 	)
 

@@ -14,22 +14,24 @@ namespace crds_angular.test.Services
     {
         private Mock<IContactAttributeService> _contactAttributeService;
         private Mock<MPInterfaces.IContactService> _contactService;
-        private Mock<MPInterfaces.IAuthenticationService> _authenticationService;        
+        private Mock<MPInterfaces.IAuthenticationService> _authenticationService;
+        private Mock<MPInterfaces.IApiUserService> _apiUserService;
 
         private PersonService _fixture;
         private MyContact _myContact;
-        private List<HouseholdMember> _householdMembers;
-        
+        private List<HouseholdMember> _householdMembers;            
 
         [SetUp]
         public void SetUp()
         {
             _contactAttributeService = new Mock<IContactAttributeService>();
             var contactAllAttributesDto = new ContactAllAttributesDTO();
-            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<int>())).Returns(contactAllAttributesDto);
-            new Mock<MPInterfaces.IContactRelationshipService>();
+            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<string>(), It.IsAny<int>())).Returns(contactAllAttributesDto);            
             _contactService = new Mock<MPInterfaces.IContactService>();            
-            _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();            
+            _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();
+
+            _apiUserService = new Mock<MPInterfaces.IApiUserService>();
+            _apiUserService.Setup(m => m.GetToken()).Returns("something");       
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             _myContact = new MyContact
@@ -62,7 +64,7 @@ namespace crds_angular.test.Services
             };
             _householdMembers = new List<HouseholdMember>();
 
-            _fixture = new PersonService(_contactService.Object, _contactAttributeService.Object);
+            _fixture = new PersonService(_contactService.Object, _contactAttributeService.Object, _apiUserService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();

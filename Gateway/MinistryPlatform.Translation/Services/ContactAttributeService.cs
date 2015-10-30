@@ -13,20 +13,28 @@ namespace MinistryPlatform.Translation.Services
     public class ContactAttributeService : BaseService, IContactAttributeService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
-        private readonly int _contactAttributesSubPage = Convert.ToInt32((AppSettings("ContactAttributesSubPage")));
-        private readonly int _myContactAttributesSubPage = Convert.ToInt32((AppSettings("MyContactAttributesSubPage")));
+        private readonly IApiUserService _apiUserService;
+        private readonly int _contactAttributesSubPage = Convert.ToInt32(AppSettings("ContactAttributesSubPage"));
+        private readonly int _constactSelectedContactAttributes = Convert.ToInt32(AppSettings("SelectedContactAttributes"));
+        private readonly int _myContactAttributesSubPage = Convert.ToInt32(AppSettings("MyContactAttributesSubPage"));
+        private readonly int _myContactCurrentAttributesSubPageView = Convert.ToInt32(AppSettings("MyContactCurrentAttributesSubPageView"));
         private readonly ILog _logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ContactAttributeService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService)
+        public ContactAttributeService(IAuthenticationService authenticationService, 
+            IConfigurationWrapper configurationWrapper, 
+            IMinistryPlatformService ministryPlatformService, 
+            IApiUserService apiUserService)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
+            _apiUserService = apiUserService;
         }
 
-        public List<ContactAttribute> GetCurrentContactAttributes(int contactId)
+        public List<ContactAttribute> GetCurrentContactAttributes(string token, int contactId, bool useMyProfile, int? attributeTypeIdFilter = null)
         {
-            var token = ApiLogin();
-            var records = _ministryPlatformService.GetSubpageViewRecords("SelectedContactAttributes", contactId, token);            
+            var subPageViewId = useMyProfile ? _myContactCurrentAttributesSubPageView : _constactSelectedContactAttributes;
+            var searchString = attributeTypeIdFilter.HasValue ? string.Format(",,,,\"{0}\"", attributeTypeIdFilter.Value) : "";
+            var records = _ministryPlatformService.GetSubpageViewRecords(subPageViewId, contactId, token, searchString);
 
             var contactAttributes = records.Select(record => new ContactAttribute
             {
@@ -38,6 +46,7 @@ namespace MinistryPlatform.Translation.Services
                 AttributeTypeId = record.ToInt("Attribute_Type_ID"),
                 AttributeTypeName = record.ToString("Attribute_Type")
             }).ToList();
+
             return contactAttributes;
         }
 

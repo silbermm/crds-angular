@@ -30,10 +30,10 @@ namespace crds_angular.Services
             _mpAttributeService = mpAttributeService;
         }
 
-        public ContactAllAttributesDTO GetContactAttributes(int contactId)
+        public ContactAllAttributesDTO GetContactAttributes(string token, int contactId)
         {
             var mpAttributes = _mpAttributeService.GetAttributes(null);
-            var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+            var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, false);
 
             var allAttributes = new ContactAllAttributesDTO();
 
@@ -128,11 +128,13 @@ namespace crds_angular.Services
             var currentAttributes = TranslateMultiToMPAttributes(contactAttributes);
             currentAttributes.AddRange(TranslateSingleToMPAttribute(contactSingleAttributes));
 
-            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+            var apiUserToken = _apiUserService.GetToken();
+
+            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(apiUserToken, contactId, false);
 
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
-            var apiUserToken = _apiUserService.GetToken();
+            
             foreach (var attribute in attributesToSave)
             {
                 SaveAttribute(contactId, attribute, apiUserToken, false);
@@ -141,12 +143,12 @@ namespace crds_angular.Services
 
         public void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute)
         {          
-            var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);                                   
-            var persistedAttribute = GetMyRecords.GetMyAttribute(contactId, token, contactAttribute.AttributeId);
+            var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);
+            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, true, contactAttribute.AttributeId);
 
-            if (persistedAttribute != null)
+            if (persistedAttributes.Count >= 1)
             {
-                mpContactAttribute.ContactAttributeId = persistedAttribute.dp_RecordID;
+                mpContactAttribute.ContactAttributeId = persistedAttributes[0].ContactAttributeId;
             }
 
 
