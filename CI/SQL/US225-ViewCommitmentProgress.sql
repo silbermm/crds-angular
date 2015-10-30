@@ -1,10 +1,6 @@
 USE [MinistryPlatform]
 GO
 /****** Object:  UserDefinedFunction [dbo].[crds_udfGetPledgeIdsForUser]    Script Date: 10/27/2015 12:25:00 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 -- =============================================
 -- Author:      Sandi Ritter
 -- Create date: 10/27/2015
@@ -59,11 +55,6 @@ BEGIN
   RETURN
 END
 
-
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 -- =========================================================================
 -- Author:		Sandi Ritter
 -- Create date: 10/28/2015
