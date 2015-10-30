@@ -466,6 +466,7 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of RecurringGiftDto</returns>
+       // [RequiresAuthorization]
         [Route("api/donor/recurrence")]
         [ResponseType(typeof(List<RecurringGiftDto>))]
         [HttpGet]
@@ -490,6 +491,35 @@ namespace crds_angular.Controllers.API
                     }
 
                     return (Ok(recurringGifts));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
+            }));
+        }
+
+        /// <summary>
+        /// Retrieve list of pledges for the logged-in donor.
+        /// </summary>
+        /// <returns>A list of PledgeDto</returns>
+        [Route("api/donor/pledge")]
+        [ResponseType(typeof(List<PledgeDto>))]
+        [HttpGet]
+        public IHttpActionResult GetPledges()
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var pledges = _donorService.GetPledgesForAuthenticatedUser(token);
+
+                    if (pledges == null || !pledges.Any())
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching commitments found")));
+                    }
+
+                    return (Ok(pledges));
                 }
                 catch (UserImpersonationException e)
                 {

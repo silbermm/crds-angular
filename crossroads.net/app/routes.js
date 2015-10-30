@@ -177,8 +177,17 @@
       .state('serve-one-time', {
         parent: 'noSideBar',
         url: '/serve-one-time',
-        controller: 'MyServeController as serve',
         templateUrl: 'my_serve/one_time_serve_mockup.html'
+      })
+      .state('event-registration', {
+        parent: 'noSideBar',
+        url: '/event-registration',
+        templateUrl: 'my_serve/event_registration_mockup.html'
+      })
+      .state('event-registration-desired', {
+        parent: 'noSideBar',
+        url: '/event-registration-desired',
+        templateUrl: 'my_serve/event_registration_mockup_desired.html'
       })
       .state('serve-signup', {
         parent: 'noSideBar',

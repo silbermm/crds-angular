@@ -16,16 +16,20 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> _ministryPlatformService;
         private Mock<IAuthenticationService> _authService;
         private Mock<IConfigurationWrapper> _configWrapper;
+        private Mock<Translation.Services.Interfaces.IApiUserService> _apiUserService;
 
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _authService = new Mock<IAuthenticationService>();
-            _configWrapper = new Mock<IConfigurationWrapper>();
+            _configWrapper = new Mock<IConfigurationWrapper>();            
+            _apiUserService = new Mock<IApiUserService>();            
+            _apiUserService.Setup(m => m.GetToken()).Returns("something");
+        
 
             _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
-            _fixture = new ContactAttributeService(_authService.Object, _configWrapper.Object, _ministryPlatformService.Object);
+            _fixture = new ContactAttributeService(_authService.Object, _configWrapper.Object, _ministryPlatformService.Object, _apiUserService.Object);
         }
 
         [Test]
@@ -57,12 +61,13 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Attribute_Type", "AttributeType #2"}
                 }
             };
+
             _ministryPlatformService.Setup(
                 mocked =>
-                    mocked.GetSubpageViewRecords("SelectedContactAttributes", contactId, It.IsAny<string>(), "", "", 0))
+                    mocked.GetSubpageViewRecords(It.IsAny<int>(), contactId, It.IsAny<string>(), "", "", 0))
                 .Returns(getSubpageViewRecordsResponse);
-
-            var attributes = _fixture.GetCurrentContactAttributes(contactId).ToList();
+            
+            var attributes = _fixture.GetCurrentContactAttributes("fakeToken", contactId, false, null).ToList();
 
             _ministryPlatformService.VerifyAll();
 

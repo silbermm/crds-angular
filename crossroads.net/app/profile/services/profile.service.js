@@ -8,7 +8,6 @@
       Password: $resource(__API_ENDPOINT__ + 'api/account/password'),
       Subscriptions: $resource(__API_ENDPOINT__ + 'api/subscriptions'),
       Household: $resource(__API_ENDPOINT__ + 'api/profile/household/:householdId'),
-      MySkills: $resource(__API_ENDPOINT__ + 'api/myskills')
     };
   };
 })();

@@ -1,53 +1,62 @@
 (function() {
   'use strict()';
+
   module.exports = ProfileSkillsController;
 
-  ProfileSkillsController.$inject = ['$rootScope', 'Skills', 'Session', '$log'];
+  ProfileSkillsController.$inject = ['$rootScope', 'Skills', 'Session', 'Person'];
 
-  function ProfileSkillsController($rootScope, Skills, Session, $log) {
-
+  function ProfileSkillsController($rootScope, Skills, Session, Person) {
     var vm = this;
-    vm.skills = [];
+
+    var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
+    var personSkills = Person.attributeTypes[attributeTypeIds.SKILLS].attributes;
+
+    vm.flatSkills = personSkills;
+    vm.groupedSkills = groupSkills(personSkills);
+    vm.removeSkill = removeSkill;
     vm.skillChange = skillChange;
-    vm.skillTrashCan = skillTrashCan;
 
-    activate();
+    function groupSkills(attributes) {
+      var skillsByCategory = {};
+      _.forEach(attributes, function(attribute) {
+        if (attribute.category in skillsByCategory === false) {
+          skillsByCategory[attribute.category] = {
+            name: attribute.category,
+            description: attribute.categoryDescription,
+            skills: []
+          };
+        }
 
-    /////////////////
-    function activate() {
-      vm.skills = Skills.query({userId:Session.exists('userId')}, function() {
-        vm.myskills = function() {
-          var flat = [];
-          vm.skills.forEach(function(item) {
-            flat.push.apply(flat, item.Skills);
-          });
-
-          return flat;
-        };
+        skillsByCategory[attribute.category].skills.push(attribute);
       });
+
+      return _.values(skillsByCategory);
     }
 
-    function skillTrashCan(skill) {
-      //toggle Selected
-      skill.Selected = !skill.Selected;
-
-      //call function to perform action, which is first?
-      vm.skillChange(skill);
+    function removeSkill(skill) {
+      skill.selected = false;
+      skillChange(skill);
     }
 
     function skillChange(skill) {
-      var newSkill = new Skills();
-      newSkill.SkillId = skill.SkillId;
-      newSkill.RecordId = skill.RecordId;
-
-      if (skill.Selected) {
-        newSkill.$save({userId:Session.exists('userId')}, function(data) {
-          skill.RecordId = data.RecordId;
-        });
+      if (skill.selected) {
+        skill.startDate = moment();
       } else {
-        var removed = newSkill.$remove({ userId: Session.exists('userId'), recordId: newSkill.RecordId });
+        skill.endDate = moment();
       }
+
+      saveSkill(skill);
+    }
+
+    function saveSkill(skill) {
+      var contactId = Session.exists('userId');
+      Skills.save({contactId: contactId},
+        skill,
+        function(data) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+        }, function(reason) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        });
     }
   }
-
 })();

@@ -8,8 +8,8 @@ GO
 -- This allows the same SQL file to be run in any environment, without errors.
 -- This is preferable to dropping the function, as permissions will be maintained
 -- on an existing function.
-IF OBJECT_ID('dbo.crds_udfGetPledgeIdsForUser', 'TF') IS NULL
-    EXEC('CREATE FUNCTION dbo.crds_udfGetPledgeIdsForUser(@User_ID INT) RETURNS @PledgeIdTable TABLE (Pledge_ID INT) AS BEGIN; RETURN; END')
+IF OBJECT_ID('dbo.crds_udfGetPledgeIdsForDonor', 'TF') IS NULL
+    EXEC('CREATE FUNCTION dbo.crds_udfGetPledgeIdsForDonor(@Donor_ID INT) RETURNS @PledgeIdTable TABLE (Pledge_ID INT) AS BEGIN; RETURN; END')
 GO
 -- =============================================
 -- Author:      Dustin Kocher
@@ -17,7 +17,7 @@ GO
 -- Description: Retrieve a table of all pledge IDs for a given
 --              user.  This takes into account household (Family) giving.
 -- =============================================
-ALTER FUNCTION [dbo].[crds_udfGetPledgeIdsForUser](@Donor_ID INT)
+ALTER FUNCTION [dbo].[crds_udfGetPledgeIdsForDonor](@Donor_ID INT)
 RETURNS @PledgeIdTable TABLE (Pledge_ID INT)
 AS
 BEGIN
