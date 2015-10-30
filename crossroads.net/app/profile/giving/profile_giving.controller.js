@@ -3,9 +3,9 @@
 
   module.exports = ProfileGivingController;
 
-  ProfileGivingController.$inject = ['$log', '$filter', '$state', 'GivingHistoryService', 'DonationService'];
+  ProfileGivingController.$inject = ['$log', '$filter', '$state', 'GivingHistoryService', 'DonationService', 'CommitmentService'];
 
-  function ProfileGivingController($log, $filter, $state, GivingHistoryService, DonationService) {
+  function ProfileGivingController($log, $filter, $state, GivingHistoryService, DonationService, CommitmentService) {
     var vm = this;
     vm.donations = [];
     vm.donation_history = false;
@@ -44,7 +44,7 @@
         vm.recurring_giving_view_ready = true;
       });
 
-      CommitmentService.getPledgeCommitments().then(function(data){
+      CommitmentService.getPledgeCommitments.query().$promise.then(function(data){
         vm.pledge_commitments = data;
         vm.pledge_commitments_data = true;
         vm.pledge_commitments_view_ready = true;
