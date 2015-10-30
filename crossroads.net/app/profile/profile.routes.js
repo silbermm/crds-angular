@@ -63,9 +63,9 @@
         url: '/personal',
         templateUrl: 'personal/profilePersonal.html'
       })
-      .state('profile.account', {
-        url: '/account',
-        templateUrl: 'account/profileAccount.html',
+      .state('profile.communications', {
+        url: '/communications',
+        templateUrl: 'communications/profileCommunications.html',
       })
       .state('profile.skills', {
         url: '/skills',

@@ -4,14 +4,14 @@
       <p>Manage your communication preferences.</p>
       <div class="row">
         <legend class="col-sm-12">Email Communications</legend>
-        <div ng-repeat="publications in profile.publications" class="form-group clearfix toggle-input-group">
+        <div ng-repeat="subscription in profile.subscriptions" class="form-group clearfix toggle-input-group">
           <div class="col-xs-6">
-            <label class="block">{{publications.Title}}
-              <br /><small class="text-muted">{{publications.Description}}</small>
+            <label class="block">{{subscription.Title}}
+              <br /><small class="text-muted">{{subscription.Description}}</small>
             </label>
           </div>
           <div class="col-xs-6">
-            <toggle-switch ng-model="switchStatus1"></toggle-switch>
+            <toggle-switch ng-model="subscription.Subscribed"></toggle-switch>
           </div>
         </div>
       </div><!--/row-->
