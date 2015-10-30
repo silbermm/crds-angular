@@ -13,7 +13,7 @@ describe('CommitmentList Directive', function() {
 
   beforeEach(angular.mock.module(function($provide) {
     ImageService = { PledgeCampaignImageBaseURL: 'pledgecampaign/' };
-    $provide.value('PledgeCampaignImageBaseURL', ImageService);
+    $provide.value('ImageService', ImageService);
 
     $provide.value('$state', { get: function() {} });
   }));
@@ -41,6 +41,24 @@ describe('CommitmentList Directive', function() {
             ' commitment-list-input="commitmentListInput"></commitment-list>';
       })
   );
+
+  describe('function link', function() {
+    var fixture;
+    beforeEach(function() {
+      var element = $compile(angular.element(templateString))(scope);
+      scope.$digest();
+
+      fixture = element.isolateScope();
+    });
+
+    it('should set the image base url on scope', function() {
+      expect(fixture.pledge_campaign_base_url).toBe(ImageService.PledgeCampaignImageBaseURL);
+    });
+
+    it('should set pledgeCommitments on scope', function() {
+      expect(fixture.pledgeCommitments).toEqual(scope.commitmentListInput);
+    });
+  });
 
   describe('function commitmentMet', function() {
     var fixture;
