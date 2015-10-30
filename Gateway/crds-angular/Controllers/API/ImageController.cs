@@ -87,7 +87,7 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="recordId"></param>
         /// <returns>A byte stream?</returns>
-        [Route("api/image/profile/{recordId:int}")]
+        [Route("api/image/pledgecampaign/{recordId:int}")]
         [HttpGet]
         public IHttpActionResult GetCampaignImage(Int32 recordId)
         {
