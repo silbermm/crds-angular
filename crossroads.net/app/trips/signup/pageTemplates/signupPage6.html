@@ -28,10 +28,10 @@
         </div>
       </div>
 
-        <div class="row" ng-show="tripsSignup.signupService.page6.validPassport === 'true'">
+        <div class="row" ng-if="tripsSignup.signupService.page6.validPassport === 'true'">
           <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber') }">
               <label for="passport-number" class="control-label" ng-class="{'required': signupStep.hasPassport() }">Passport Number</label>
-              <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="signupStep.hasPassport()" placeholder="Enter passport number">
+              <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" ng-required="signupStep.hasPassport()" placeholder="Enter passport number" />
               <ng-messages for="tripsSignup.tripAppPage6.passportNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber')">
                 <span ng-message="required">
                   <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -41,7 +41,7 @@
 
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire') }" ng-controller="crdsDatePickerCtrl">
           <label for="passport-expire" class="control-label" ng-class="{'required': signupStep.hasPassport() }">When does your passport expire?</label>
-          <input ng-model="signupStep.person.passportExpiration" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="signupStep.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy">
+          <input ng-model="signupStep.person.passportExpiration" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" ng-required="signupStep.hasPassport()" ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy" />
           <ng-messages for="tripsSignup.tripAppPage6.passportExpire.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -53,7 +53,7 @@
         </div>
       </div><!--/row-->
 
-      <div class="row" ng-show="tripsSignup.signupService.page6.validPassport === 'true'">
+      <div class="row" ng-if="tripsSignup.signupService.page6.validPassport === 'true'">
         <div class="form-group col-sm-12">
           <span ng-bind-html="$root.MESSAGES.TripPassportName.content | html"></span>
           <div class="row">
