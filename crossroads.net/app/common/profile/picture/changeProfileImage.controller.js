@@ -29,16 +29,11 @@
       }); 
 
       var reader = new FileReader();
-      //reader.onload = function(evt) {
-                //$scope.$apply(function($scope) {
-                            //vm.myImage = evt.target.result;
-                                    //});
-                      /*};*/
-        reader.onload = function(readFile) {
+      
+      reader.onload = function(readFile) {
         loadImage(
           readFile.target.result,
           function(f) {
-            var u = f.toDataURL();
             $scope.$apply(function($scope) {
               vm.myImage = f.src || f.toDataURL();
             });
