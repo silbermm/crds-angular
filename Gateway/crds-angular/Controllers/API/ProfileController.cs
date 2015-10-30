@@ -44,8 +44,8 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var person = (impersonateDonorId != null)
-                        ? _personService.GetLoggedInUserProfile(token)
-                        : _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token));
+                        ? _impersonationService.WithImpersonation(token, impersonateUserId, () => _personService.GetLoggedInUserProfile(token))
+                        : _personService.GetLoggedInUserProfile(token);
                     if (person == null)
                     {
                         return Unauthorized();

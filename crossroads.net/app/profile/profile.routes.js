@@ -63,13 +63,14 @@
         url: '/personal',
         templateUrl: 'personal/profilePersonal.html'
       })
-      .state('profile.account', {
-        url: '/account',
-        templateUrl: 'account/profileAccount.html',
+      .state('profile.communications', {
+        url: '/communications',
+        templateUrl: 'communications/profileCommunications.html',
       })
       .state('profile.skills', {
         url: '/skills',
-        template: '<profile-skills> </profile-skills>',
+        templateUrl: 'skills/profileSkills.html',
+        controller: 'ProfileSkillsController as profileSkills',
       })
       .state('profile.giving', {
         url: '/giving',

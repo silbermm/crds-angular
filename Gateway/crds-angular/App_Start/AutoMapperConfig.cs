@@ -21,13 +21,6 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
 
-            Mapper.CreateMap<SkillAttribute, Skill>()
-                .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
-
-            Mapper.CreateMap<Skill, SkillAttribute>()
-                .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
-
             Mapper.CreateMap<Group, OpportunityGroup>()
                 .ForMember(dest => dest.GroupId, opts => opts.MapFrom(src => src.GroupId))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
@@ -185,6 +178,12 @@ namespace crds_angular.App_Start
                         PaymentProcessorId = src.ProcessorId
                     };
                 });
+
+            Mapper.CreateMap<Pledge, PledgeDto>()
+                .ForMember(dest => dest.PledgeCampaign, opts => opts.MapFrom(src => src.CampaignName))
+                .ForMember(dest => dest.TotalPledge, opts => opts.MapFrom(src => src.PledgeTotal))
+                .ForMember(dest=> dest.CampaignStartDate, opts =>opts.MapFrom(src => src.CampaignStartDate.ToString("MMMM d, yyyy")))
+                .ForMember(dest => dest.CampaignEndDate, opts => opts.MapFrom(src => src.CampaignEndDate.ToString("MMMM d, yyyy")));
         }
     }
 }

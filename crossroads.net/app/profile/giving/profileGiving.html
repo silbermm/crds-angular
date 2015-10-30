@@ -67,7 +67,7 @@
                   donation-do-not-show-labels="true"></donation-list>
               </div>
             </div>
-          </div>
+
           <!-- END OF IS GIVING HISTORY -->
 
           <div class="row">
@@ -82,15 +82,31 @@
       <div class="row commitments">
         <div class="col-sm-12">
           <h2>Commitments</h2>
-          <hr>
+
+          <commitment-list
+                  commitment-list-input="giving_profile_controller.pledge_commitments">
+          </commitment-list>
+
+          </div>
 
           <div class="row">
             <div class="col-sm-12 text-center">
-              <a href="" class="btn btn-primary">Add New</a>
+              <a href="http://www.crossroads.net/index.php?action=viewpage&filepath=shortlinks/Commitment.htm" target="_blank" class="btn btn-primary">Add New</a>
             </div>
-          </div><!--/row-->
+          </div>
         </div>
-      </div><!--/row /commitments-->
+
+        <!--  NO ACTIVE COMMITMENTS - ng-show if no records  -->
+        <div ng-show="!giving_profile_controller.pledge_commitments_data && giving_profile_controller.pledge_commitments_view_ready" class="no-data">
+         <div class="col-sm-6 col-sm-offset-3">
+            <svg viewBox="0 0 23 32" class="icon icon-file-text-o">
+              <use xlink:href="#file-text-o"></use>
+            </svg>
+            <div ng-bind-html="$root.MESSAGES.no_commitments.content | html"></div>
+          </div>
+        </div>
+
+      </div>
 
 
       <div class="panel panel-default push-top">

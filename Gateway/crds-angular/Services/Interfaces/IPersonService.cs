@@ -10,8 +10,7 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IPersonService
     {
-        void SetProfile(String token, Person person);
-        List<Skill> GetLoggedInUserSkills(int contactId, string token);
+        void SetProfile(String token, Person person);        
         Person GetLoggedInUserProfile(String token);
         Person GetPerson(int contactId);
         List<RoleDto> GetLoggedInUserRoles(string token);

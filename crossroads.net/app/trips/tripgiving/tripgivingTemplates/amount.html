@@ -1,3 +1,7 @@
+<script type="text/ng-template" id="tripAnonymousPopover.html">
+  <div ng-bind-html="$root.MESSAGES.tripAnonymousGiverPopover.content | html"></div>
+</script>
+
 <div class="push-top">
   <ng-form class="give-form" role="form" name="amountForm" novalidate>
     <div class="form-group">
@@ -12,17 +16,20 @@
           <label>
             <input type="checkbox" name="anonymous" ng-model="tripGiving.dto.anonymous" /> I want to give anonymously
           </label>
+          <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" popover-template="'tripAnonymousPopover.html'">
+            <use xlink:href="#question-circle"></use>
+          </svg>
         </div>
         <div class="form-group">
           <label>Message to {{tripGiving.tripParticipant.participantName}} </label>
-          <textarea class="form-control" 
+          <textarea class="form-control"
                     name="message"
                     ng-model="tripGiving.dto.message">
           </textarea>
         </div>
       </div>
-      <button ng-click="tripGiving.giveFlow.goToAccount(tripGiving.tripForm)" 
-              ng-class="{disabled: tripGiving.dto.processing}" 
+      <button ng-click="tripGiving.giveFlow.goToAccount(tripGiving.tripForm)"
+              ng-class="{disabled: tripGiving.dto.processing}"
               class="btn btn-primary btn-lg btn-block-mobile give-button">
          <span ng-if="tripGiving.dto.processing">Next...</span>
          <span ng-if="!tripGiving.dto.processing">Next</span>
@@ -33,4 +40,3 @@
     </div>
   </ng-form>
 </div>
-

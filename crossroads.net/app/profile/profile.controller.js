@@ -23,7 +23,7 @@
     vm.locations = Locations;
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
-    vm.publications = Profile.Publications.query();
+    vm.subscriptions = Profile.Subscriptions.query();
     vm.tabs = getTabs();
 
     activate();
@@ -62,7 +62,7 @@
     function getTabs() {
       return [
         { title:'Personal', active: false, route: 'profile.personal' },
-        { title:'Account', active: false, route: 'profile.account' },
+        { title:'Communications', active: false, route: 'profile.communications' },
         { title:'Skills', active: false, route: 'profile.skills' },
         { title: 'Giving History', active: false, route: 'profile.giving' }
       ];
