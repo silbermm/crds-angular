@@ -132,3 +132,30 @@ GO
 
 
 SET IDENTITY_INSERT [dbo].[dp_Pages] OFF
+
+-- Grant "Full" access on this page to "All Platform Users" role
+INSERT INTO [dbo].[dp_Role_Pages] (
+  [Role_ID],
+  [Page_ID],
+  [Access_Level],
+  [Scope_All],
+  [Approver],
+  [File_Attacher],
+  [Data_Importer],
+  [Data_Exporter],
+  [Secure_Records],
+  [Allow_Comments],
+  [Quick_Add]
+) VALUES (
+  39,
+  525,
+  3,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+);
