@@ -3,7 +3,7 @@
         <div class="col-sm-12">
             <div class="row giving-intro">
                 <div class="col-sm-12">
-                    <p>If you have any questions or need help please contact <a href="">finance@crossroads.net</a>.</p>
+                    <div ng-bind-html="$root.MESSAGES.profileGivingTop.content | html"></div>
                 </div>
             </div>
             <!--/row-->
@@ -26,13 +26,21 @@
                         </div>
                     </div>
                     <!-- END OF IS GIVING HISTORY -->
-
-                    <div class="row">
+                    <div class="row" ng-show="giving_profile_controller.recurring_giving && giving_profile_controller.recurring_giving_view_ready">
                         <div class="col-sm-12 text-center">
                             <a href="" ng-click="giving_profile_controller.createRecurring()" class="btn btn-primary">Add
                                 New</a>
                         </div>
                     </div>
+                    <!--  NO ACTIVE RECURRING GIFTS - ng-show if no records  -->
+                    <div class="row no-data" ng-show="!giving_profile_controller.recurring_giving && giving_profile_controller.recurring_giving_view_ready">
+                      <div class="col-sm-6 col-sm-offset-3">
+                          <svg viewBox="0 0 32 32" class="icon icon-ccw">
+                          	<use xlink:href="#ccw"></use>
+                          </svg>
+                        <div ng-bind-html="$root.MESSAGES.noRecurringGifts.content | html"></div>
+                      </div><!--/col-sm-12-->
+                    </div><!--/no-data-->
                 </div>
             </div>
             <!--/row-->
@@ -62,7 +70,6 @@
                         <!--/no-data-->
                     </div>
                     <!--  END OF NO GIVING HISTORY  -->
-
                     <!-- IS GIVING HISTORY - ng-show or ng-if on data from resource-->
                     <div ng-show="giving_profile_controller.donation_history && giving_profile_controller.donation_view_ready">
                         <div class="row">
@@ -73,9 +80,7 @@
                                         donation-do-not-show-labels="true"></donation-list>
                             </div>
                         </div>
-
                         <!-- END OF IS GIVING HISTORY -->
-
                         <div class="row">
                             <div class="col-sm-12 text-center push-bottom">
                                 <a ui-sref="giving_history" class="btn btn-default">View All</a>
@@ -99,7 +104,7 @@
                          ng-bind-html="$root.MESSAGES.commitmentDonations.content | html"></div>
                 </div>
 
-                <div class="row">
+                <div class="row" ng-if="giving_profile_controller.pledge_commitments_data">
                     <div class="col-sm-12 text-center">
                         <a href="http://www.crossroads.net/index.php?action=viewpage&filepath=shortlinks/Commitment.htm"
                            target="_blank" class="btn btn-primary">Add New</a>
@@ -119,11 +124,7 @@
             </div>
 
             <div class="panel panel-default push-top">
-                <div class="panel-body text-muted small" role="alert">
-                    When you provide a check as payment, you authorize us either to use information from your check to
-                    make a one-time electronic fund transfer from your account or to process the payment as a check
-                    transaction. For inquiries please contact 513-731-7400.
-                </div>
+                <div class="panel-body text-muted small" role="alert" ng-bind-html="$root.MESSAGES.profileGivingDisclaimer.content | html" ></div>
                 <!--/panel-body-->
             </div>
             <!--/panel-->
