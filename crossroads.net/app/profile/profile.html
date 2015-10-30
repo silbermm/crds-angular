@@ -1,5 +1,4 @@
-<h1 class="page-header">My Profile</h1>
-<h2 class="subheading">Hello, special you.</h2>
+<span ng-bind-html="$root.MESSAGES.profileHeader.content | html"></span>
 <div class="profile-header">
   <div class="row">
     <profile-picture ng-if="profile.profileData.person.contactId" contact-id="profile.profileData.person.contactId"></profile-picture>
@@ -23,6 +22,6 @@
 </div>
 <tabset>
   <tab ng-repeat="tab in profile.tabs" heading="{{tab.title}}" active="tab.active" ng-click="profile.goToTab(tab)" >
-    <ui-view></ui-view>   
+    <ui-view></ui-view>
   </tab>
 </tabset>
