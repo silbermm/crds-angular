@@ -77,9 +77,9 @@
                       id='workteam-first'
                       ng-model="tripsSignup.signupService.page5.nolaFirstChoiceWorkTeam"
                       ng-required="tripsSignup.isNola()"
-                      name="nolaFirstChoiceWorkTeam"
-                      ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
+                      name="nolaFirstChoiceWorkTeam">
                 <option value="" readonly disabled > Please select one </option>
+                <option ng-repeat="workTeam in signupStep.workTeams" value="{{workTeam.dp_RecordName}}">{{workTeam.dp_RecordName}}</option>
               </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaFirstChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam')">
                   <span ng-message="required">
@@ -108,10 +108,9 @@
                 <select class="form-control" id="workteam-second"
                   ng-model='tripsSignup.signupService.page5.nolaSecondChoiceWorkTeam'
                   ng-required="tripsSignup.isNola()"
-                  name="nolaSecondChoiceWorkTeam"
-                  ng-options="workTeam.dp_RecordName for workTeam in signupStep.workTeams track by workTeam.dp_RecordID" >
-
+                  name="nolaSecondChoiceWorkTeam" >
                   <option value="" readonly disabled > Please select one </option>
+                  <option ng-repeat="workTeam in signupStep.workTeams" value="{{workTeam.dp_RecordName}}">{{workTeam.dp_RecordName}}</option>
                 </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaSecondChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaSecondChoiceWorkTeam')">
                   <span ng-message="required">
