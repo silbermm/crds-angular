@@ -262,7 +262,6 @@
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
-    <Compile Include="Controllers\API\PublicationsController.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />

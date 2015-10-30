@@ -1,6 +1,12 @@
 (function() {
   'use strict';
-  module.exports = function changeProfileImageCtrl($modalInstance, $scope, $timeout) {
+
+  module.exports = changeProfileImageCtrl;
+
+  changeProfileImageCtrl.$inject = ['$modalInstance', '$scope', '$timeout'];
+    
+  function changeProfileImageCtrl($modalInstance, $scope, $timeout) {
+
     var vm = this;
 
     vm.ok = ok;
@@ -12,12 +18,28 @@
     vm.init = false;
 
     function handleFileSelect(evt) {
-      var file = evt.currentTarget.files[0];
+      var options = {
+      };
+     var file = evt.currentTarget.files[0];
+
+     loadImage.parseMetaData(file, function (data) {
+        if (data.exif) {
+            options.orientation = data.exif.get('Orientation');
+        }
+      }); 
+
       var reader = new FileReader();
-      reader.onload = function(evt) {
-        $scope.$apply(function($scope) {
-          vm.myImage = evt.target.result;
-        });
+      
+      reader.onload = function(readFile) {
+        loadImage(
+          readFile.target.result,
+          function(f) {
+            $scope.$apply(function($scope) {
+              vm.myImage = f.src || f.toDataURL();
+            });
+          },
+          options
+        );
       };
 
       reader.readAsDataURL(file);
@@ -46,5 +68,5 @@
         vm.init = true;
       }, 200);
     }
-  };
+  }
 })();
