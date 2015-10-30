@@ -1,22 +1,20 @@
 USE [MinistryPlatform]
 GO
-/****** Object:  StoredProcedure [dbo].[report_CRDS_Trip_Export]    Script Date: 10/27/2015 12:00:29 PM ******/
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[report_CRDS_Trip_Export]
--- Add the parameters for the stored procedure here
+
       @EventID INT
 AS
     BEGIN
-        -- SET NOCOUNT ON added to prevent extra result sets from
-        -- interfering with SELECT statements.
+
         SET NOCOUNT ON;
 
-        -- Insert statements for procedure here
-        -- PARMS
         DECLARE @MissionTripEventType INT = 6;
+	      DECLARE @PledgeDiscontinued INT = 3;
 
         -- MAPPING VALUES
 	   DECLARE @ValidPassport INT = 1464;
@@ -79,7 +77,7 @@ AS
                ms.Marital_Status,
                g.Gender,
                c.Employer_Name,
-               p._First_Attendance_Ever,
+               p.Participant_Start_Date AS First_Attendance_Ever,
                c.Mobile_Phone,
                a.Address_Line_1,
                a.Address_Line_2,
@@ -444,6 +442,9 @@ AS
              INNER JOIN dbo.Form_Responses fr ON p.Contact_ID = fr.Contact_ID
                                              AND pc.Pledge_Campaign_ID = fr.Pledge_Campaign_ID
              INNER JOIN dbo.Contacts c ON p.Contact_ID = c.Contact_ID
+		   INNER JOIN dbo.Pledges pg ON pc.Pledge_Campaign_ID = pg.Pledge_Campaign_ID
+								    AND c.Donor_Record = pg.Donor_ID
+								    AND pg.Pledge_Status_ID != @PledgeDiscontinued
              INNER JOIN Households h ON c.Household_ID = h.Household_ID
              INNER JOIN Addresses a ON h.Address_ID = a.Address_ID
              INNER JOIN Congregations cn ON h.Congregation_ID = cn.Congregation_ID

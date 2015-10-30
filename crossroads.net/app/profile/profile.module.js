@@ -1,37 +1,19 @@
 (function() {
   'use strict';
 
-  var app = angular.module('crossroads.profile', ['ngResource',
-      'ngMessages',
-      'ui.bootstrap',
-      'ui.router',
-      'crossroads.core',
-      'crossroads.common']);
+  var MODULES = require('crds-constants').MODULES;
 
-  require('./profile.config');
+  angular.module(MODULES.PROFILE, [MODULES.CORE, MODULES.COMMON])
+    .config(require('./profile.routes'))
+    .controller('ProfileController', require('./profile.controller'))
+    ;
 
-  require('./profile.html');
-  require('./profilePersonal.html');
-
-  app.controller('ProfileController', require('./profile.controller'));
-
-  // Modal
-  require('./editProfile.html');
-  app.controller('ProfileModalController', require('./profileModalController'));
-
-  // Shared Services
-  app.factory('Lookup', ['$resource', 'Session', require('./services/profile_lookup_service')]);
-  app.factory('Profile', ['$resource', require('./services/profile_service')]);
-  app.factory('ProfileReferenceData', ['Lookup', 'Profile', '$resolve', require('./services/profile_reference_data')]);
-
-  // Skills
-  require('./skills/profile_skills.html');
-  app.controller('ProfileSkillsController', require('./skills/profileSkills.controller'));
-  app.factory('Skills', ['$resource', require('./skills/profile_skills_service')]);
-
-  // Giving
+  require('./services');
+  require('./skills');
   require('./giving');
 
-  app.controller('crdsDatePickerCtrl', require('./profile_date_picker'));
-  require('./profile_account.html');
+  require('./profile.html');
+  require('./personal/profilePersonal.html');
+  require('./account/profileAccount.html');
+
 })();

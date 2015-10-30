@@ -145,78 +145,6 @@
           isProtected: false
         }
       })
-      .state('profile', {
-        parent: 'noSideBar',
-        url: '/profile',
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin,
-          AttributeTypes: function(AttributeTypeService) {
-            return AttributeTypeService.AttributeTypes().query().$promise;
-          },
-
-          Person: function(Profile, $stateParams, $cookies) {
-            var cid = $cookies.get('userId');
-            if ($stateParams.contactId) {
-              cid = $stateParams.contactId;
-            }
-
-            return Profile.Person.get({contactId: cid}).$promise;
-          },
-        },
-        data: {
-          isProtected: true,
-          meta: {
-            title: 'Profile',
-            description: ''
-          }
-        },
-        views: {
-          '': {
-            templateUrl: 'profile/profile.html',
-            controller: 'ProfileController as profile',
-            resolve: {
-              loggedin: crds_utilities.checkLoggedin
-            },
-          },
-          'personal@profile': {
-            templateUrl: 'profile/profilePersonal.html',
-            data: {
-              isProtected: true
-            },
-            resolve: {
-              $cookies: '$cookies',
-              contactId: function($cookies) {
-                return $cookies.get('userId');
-              },
-
-              Profile: 'Profile',
-              Person: function(Profile, contactId) {
-                return Profile.Person.get({contactId: contactId}).$promise;
-              },
-            }
-          },
-          'account@profile': {
-            templateUrl: 'profile/profile_account.html',
-            data: {
-              isProtected: true
-            }
-          },
-          'skills@profile': {
-            controller: 'ProfileSkillsController as profileSkills',
-            templateUrl: 'skills/profile_skills.html',
-            data: {
-              isProtected: true
-            }
-          },
-          'giving@profile': {
-            controller: 'ProfileGivingController as giving_profile_controller',
-            templateUrl: 'giving/profile_giving.html',
-            data: {
-              isProtected: true
-            }
-          }
-        }
-      })
       .state('myprofile', {
         parent: 'noSideBar',
         url: '/myprofile',
@@ -249,8 +177,17 @@
       .state('serve-one-time', {
         parent: 'noSideBar',
         url: '/serve-one-time',
-        controller: 'MyServeController as serve',
         templateUrl: 'my_serve/one_time_serve_mockup.html'
+      })
+      .state('event-registration', {
+        parent: 'noSideBar',
+        url: '/event-registration',
+        templateUrl: 'my_serve/event_registration_mockup.html'
+      })
+      .state('event-registration-desired', {
+        parent: 'noSideBar',
+        url: '/event-registration-desired',
+        templateUrl: 'my_serve/event_registration_mockup_desired.html'
       })
       .state('serve-signup', {
         parent: 'noSideBar',
