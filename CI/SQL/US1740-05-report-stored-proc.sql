@@ -36,9 +36,9 @@ AS
         DECLARE @Why INT = 1434;
         DECLARE @EmergencyContactFirstName INT = 1439;
         DECLARE @EmergencyContactLastName INT = 1440;
-        DECLARE @EmergencyContactPrimaryPhone INT = 1441;
-        DECLARE @EmergencyContactSecondaryPhone INT = 1442;
-        DECLARE @EmergencyContactEmailAddress INT = 1443;
+        DECLARE @EmergencyContactPrimaryPhone INT = 1442;
+        DECLARE @EmergencyContactSecondaryPhone INT = 1443;
+        DECLARE @EmergencyContactEmailAddress INT = 1441;
         DECLARE @LotteryPreference INT = 1444;
         DECLARE @CommonName INT = 1445;
         DECLARE @RequestedRoommate1 INT = 1446;
