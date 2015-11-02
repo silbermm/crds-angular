@@ -12,7 +12,7 @@ INSERT INTO [dbo].[dp_Role_Pages]
            ,[Page_ID]
            ,[Access_Level]
 		   ,[Scope_All]
-		   ,[Approver],
+		   ,[Approver]
 		   ,[File_Attacher]
 		   ,[Data_Importer]
 		   ,[Data_Exporter]
