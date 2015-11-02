@@ -518,7 +518,6 @@ namespace crds_angular.Services
             try
             {
                 UpdateChildSponsorship(dto);
-                SaveParticipant(dto);
                 var formResponse = new FormResponse();
                 formResponse.ContactId = dto.ContactId; //contact id of the person the application is for
                 formResponse.FormId = _configurationWrapper.GetConfigIntValue("TripApplicationFormId");
@@ -638,11 +637,6 @@ namespace crds_angular.Services
                 Town = dto.PageFive.SponsorChildTown
             };
             return createChild(sponsoredChild);
-        }
-
-        private Boolean SaveParticipant(TripApplicationDto dto)
-        {
-            return false;
         }
 
         private IEnumerable<FormAnswer> FormatFormAnswers(TripApplicationDto applicationData)
