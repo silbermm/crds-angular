@@ -10,9 +10,17 @@
     'Person',
     'Profile',
     'Lookup',
-    'Locations'];
+    'Locations',
+    'PaymentService'];
 
-  function ProfileController($rootScope, $state, AttributeTypes, Person, Profile, Lookup, Locations) {
+  function ProfileController($rootScope,
+      $state,
+      AttributeTypes,
+      Person,
+      Profile,
+      Lookup,
+      Locations,
+      PaymentService) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
@@ -23,9 +31,20 @@
     vm.locations = Locations;
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
-    vm.subscriptions = Profile.Subscriptions.query();
     vm.saveSubscription = saveSubscription;
     vm.tabs = getTabs();
+
+    //TODO: Move to resolve
+    vm.subscriptions = Profile.Subscriptions.query();
+    PaymentService.getDonor()
+      .then(function(donor) {
+        vm.donor = donor;
+        vm.paperless = (donor.Statement_Method_ID === 2 ? true : false);
+      },
+
+      function(error) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
 
     activate();
 
@@ -77,6 +96,19 @@
       $rootScope.$emit('locationFocus');
     }
 
+    function savePaperless() {
+
+      Profile.Subscriptions.save(subscription.Subscription).$promise
+      .then(function(data) {
+        subscription.Subscription.dp_RecordID = data.dp_RecordID;
+        $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+      },
+
+      function(error) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+      });
+    }
+
     function saveSubscription(subscription) {
       if (subscription.Subscription) {
         subscription.Subscription.Unsubscribed = !subscription.Subscribed;
@@ -89,8 +121,14 @@
 
       }
 
-      Profile.Subscriptions.save(subscription.Subscription).$promise.then(function(data) {
+      Profile.Subscriptions.save(subscription.Subscription).$promise
+      .then(function(data) {
         subscription.Subscription.dp_RecordID = data.dp_RecordID;
+        $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+      },
+
+      function(error) {
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       });
     }
   }
