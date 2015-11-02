@@ -40,8 +40,10 @@ namespace crds_angular.Services
             {
                 AttributeId = attribute.AttributeId,
                 Name = attribute.Name,
+                SortOrder = attribute.SortOrder,
                 CategoryId = attribute.CategoryId,
-                Category = attribute.Category
+                Category = attribute.Category,
+                CategoryDescription = attribute.CategoryDescription
             };
             return attributeDto;
         }

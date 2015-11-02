@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,7 +12,9 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Enum;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Communication = MinistryPlatform.Models.Communication;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -31,6 +34,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _recurringGiftPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
         private readonly int _myHouseholdRecurringGiftsApiPageView;
+        private readonly int _myHouseholdPledges;
         
         public const string DonorRecordId = "Donor_Record";
         public const string DonorProcessorId = "Processor_ID";
@@ -47,6 +51,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
+        private readonly DateTimeFormatInfo _dateTimeFormat;
        
         public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
@@ -69,6 +74,14 @@ namespace MinistryPlatform.Translation.Services
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
             _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
+            _myHouseholdPledges = configuration.GetConfigIntValue("MyHouseholdPledges");
+
+            _dateTimeFormat = new DateTimeFormatInfo
+            {
+                AMDesignator = "am",
+                PMDesignator = "pm"
+            };
+
         }
 
 
@@ -151,6 +164,24 @@ namespace MinistryPlatform.Translation.Services
                 throw new ApplicationException(string.Format("CreateDonorAccount failed.  Donor Id: {0}", donorId), e);
             }
            
+        }
+
+        public void DeleteDonorAccount(string authorizedUserToken, int donorAccountId)
+        {
+            try
+            {
+                _ministryPlatformService.DeleteRecord(_donorAccountsPageId, donorAccountId, new []
+                {
+                    new DeleteOption
+                    {
+                        Action = DeleteAction.Delete
+                    }
+                }, authorizedUserToken);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(string.Format("RemoveDonorAccount failed.  Donor Id: {0}", donorAccountId), e);
+            }
         }
 
         public void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId)
@@ -569,8 +600,8 @@ namespace MinistryPlatform.Translation.Services
                 MergeData = new Dictionary<string, object>
                 {
                     {"Program_Name", program},
-                    {"Donation_Amount", donationAmount},
-                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy HH:mm tt")},
+                    {"Donation_Amount", donationAmount.ToString("N2")},
+                    {"Donation_Date", setupDate.ToString("MM/dd/yyyy h:mmtt", _dateTimeFormat)},
                     {"Payment_Method", paymentType},
                     {"Decline_Reason", emailReason},
                     {"Frequency", frequency}
@@ -708,7 +739,7 @@ namespace MinistryPlatform.Translation.Services
             return string.Join(" or ", ids.Select(id => string.Format("\"{0}\"", id)));
         }
 
-        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId)
+        public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId, int congregationId)
         {
             int? dayOfWeek = null;
             int? dayOfMonth = null;
@@ -734,7 +765,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Amount", planAmount},
                 {"Start_Date", startDate},
                 {"Program_ID", program},
-                {"Congregation_ID", 1},
+                {"Congregation_ID", congregationId},
                 {"Subscription_ID", subscriptionId}
             };
 
@@ -774,7 +805,11 @@ namespace MinistryPlatform.Translation.Services
                         CongregationId = record.ToInt("Congregation_ID"),
                         PaymentType = (int)AccountType.Checking == record.ToInt("Account_Type_ID") ? PaymentType.Bank.abbrv : PaymentType.CreditCard.abbrv,
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
-                        SubscriptionId = record.ToString("Subscription_ID")
+                        SubscriptionId = record.ToString("Subscription_ID"),
+                        StripeCustomerId = record.ToString("Processor_ID"),
+                        StripeAccountId = record.ToString("Processor_Account_ID"),
+                        Recurrence = record.ToString("Recurrence"),
+                        ProgramName = record.ToString("Program_Name")
                     };
                 }
             }
@@ -809,6 +844,7 @@ namespace MinistryPlatform.Translation.Services
                         RecurringGiftId = record.ToNullableInt("Recurring_Gift_ID"),
                         DonorAccountId = record.ToNullableInt("Donor_Account_ID"),
                         SubscriptionId = record.ToString("Subscription_ID"),
+                        Frequency = record.ToInt("Frequency_ID"),
                         ConsecutiveFailureCount = record.ToInt("Consecutive_Failure_Count")
                     };
                 }
@@ -857,7 +893,7 @@ namespace MinistryPlatform.Translation.Services
             
             return donorAccount.ToInt("Account_Type_ID");
         }
-
+        
         // ReSharper disable once FunctionComplexityOverflow
         private RecurringGift MapRecordToRecurringGift(Dictionary<string, object> record)
         {

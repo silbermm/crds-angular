@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -28,10 +30,10 @@ namespace crds_angular.Services
             _mpAttributeService = mpAttributeService;
         }
 
-        public ContactAllAttributesDTO GetContactAttributes(int contactId)
+        public ContactAllAttributesDTO GetContactAttributes(string token, int contactId)
         {
             var mpAttributes = _mpAttributeService.GetAttributes(null);
-            var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+            var mpContactAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, false);
 
             var allAttributes = new ContactAllAttributesDTO();
 
@@ -64,7 +66,10 @@ namespace crds_angular.Services
                 {
                     AttributeId = mpAttribute.AttributeId,
                     Name = mpAttribute.Name,
-                    Selected = false
+                    SortOrder = mpAttribute.SortOrder,
+                    Selected = false,
+                    Category = mpAttribute.Category,                    
+                    CategoryDescription = mpAttribute.CategoryDescription
                 };
 
                 attributeTypesDictionary[mpAttribute.AttributeTypeId].Attributes.Add(contactAttribute);
@@ -123,28 +128,44 @@ namespace crds_angular.Services
             var currentAttributes = TranslateMultiToMPAttributes(contactAttributes);
             currentAttributes.AddRange(TranslateSingleToMPAttribute(contactSingleAttributes));
 
-            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(contactId);
+            var apiUserToken = _apiUserService.GetToken();
+
+            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(apiUserToken, contactId, false);
 
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
-            var apiUserToken = _apiUserService.GetToken();
+            
             foreach (var attribute in attributesToSave)
             {
-                SaveAttribute(contactId, attribute, apiUserToken);
+                SaveAttribute(contactId, attribute, apiUserToken, false);
             }
         }
 
-        private void SaveAttribute(int contactId, ContactAttribute attribute, string apiUserToken)
+        public void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute)
+        {          
+            var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);
+            var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, true, contactAttribute.AttributeId);
+
+            if (persistedAttributes.Count >= 1)
+            {
+                mpContactAttribute.ContactAttributeId = persistedAttributes[0].ContactAttributeId;
+            }
+
+
+            SaveAttribute(contactId, mpContactAttribute, token, true);
+        }
+
+        private void SaveAttribute(int contactId, ContactAttribute attribute, string token, bool useMyProfile)
         {            
             if (attribute.ContactAttributeId == 0)
             {
                 // These are new so add them
-                _mpContactAttributeService.CreateAttribute(apiUserToken, contactId, attribute);
+                _mpContactAttributeService.CreateAttribute(token, contactId, attribute, useMyProfile);                
             }
             else
             {
                 // These are existing so update them
-                _mpContactAttributeService.UpdateAttribute(apiUserToken, attribute);
+                _mpContactAttributeService.UpdateAttribute(token, attribute, useMyProfile);
             }
         }
 
@@ -161,20 +182,27 @@ namespace crds_angular.Services
                         continue;
                     }
 
-                    var mpContactAttribute = new ContactAttribute()
-                    {
-                        AttributeId = contactAttribute.AttributeId,
-                        AttributeTypeId = contactAttributeType.AttributeTypeId,
-                        AttributeTypeName = contactAttributeType.Name,
-                        StartDate = contactAttribute.StartDate,
-                        EndDate = contactAttribute.EndDate,
-                        Notes = contactAttribute.Notes
-                    };
+                    var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, contactAttributeType);
 
                     results.Add(mpContactAttribute);
                 }
             }
             return results;
+        }
+
+        private static ContactAttribute TranslateMultiToMPAttribute(ContactAttributeDTO contactAttribute, ContactAttributeTypeDTO contactAttributeType)
+        {            
+            var mpContactAttribute = new ContactAttribute()
+            {
+                AttributeId = contactAttribute.AttributeId,                
+                AttributeTypeId = contactAttributeType != null ? contactAttributeType.AttributeTypeId : 0,
+                AttributeTypeName = contactAttributeType != null ? contactAttributeType.Name : String.Empty,
+                StartDate = contactAttribute.StartDate,
+                EndDate = contactAttribute.EndDate,
+                Notes = contactAttribute.Notes
+            };
+
+            return mpContactAttribute;
         }
 
         private List<ContactAttribute> TranslateSingleToMPAttribute(Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
@@ -220,14 +248,23 @@ namespace crds_angular.Services
 
                     if (currentAttribute.AttributeId == attributeToSave.AttributeId)
                     {
+                        foundMatch = true;
                         if (attributeToSave.Notes == currentAttribute.Notes)
                         {
                             persistedAttributes.RemoveAt(currentIndex);
+                            currentAttributes.RemoveAt(index);
                         }
-
-                        currentAttributes.RemoveAt(index);
-                        foundMatch = true;
-                        break;
+                        else if (attributeToSave.Notes != String.Empty || attributeToSave.Notes == null)
+                        {
+                            persistedAttributes.RemoveAt(currentIndex);
+                            attributeToSave.StartDate = currentAttribute.StartDate;
+                            attributeToSave.ContactAttributeId = currentAttribute.ContactAttributeId;
+                        }
+                        else
+                        {
+                            currentAttributes.RemoveAt(index);    
+                        }                                                
+                        break;    
                     }
                 }
 

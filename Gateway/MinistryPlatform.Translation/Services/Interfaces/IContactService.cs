@@ -11,7 +11,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<HouseholdMember> GetHouseholdFamilyMembers(int householdId);
         MyContact GetMyProfile(string token);
         int CreateContactForGuestGiver(string emailAddress, string displayName);
-        int CreateContactForSponsoredChild(string firstName, string lastName, string idCard);
+        int CreateContactForSponsoredChild(string firstName, string lastName, string town, string idCard);
         int CreateContactForNewDonor(ContactDonor contactDonor);
         IList<int> GetContactIdByRoleId(int roleId, string token);
         void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary);

@@ -5,12 +5,14 @@
             <a type="button" class="btn btn-default active" role="button">Give as Guest</a>
         </div>
     </div>
-  
+
     <hr>
       <p>
-        You are giving <strong>{{give.dto.amount | currency}} per {{give.dto.givingType}}</strong> to 
-        <strong>{{give.dto.program['Name']}}</strong> starting on
-        <strong>{{give.dto.recurringStartDate | date:'MM/dd/yyyy' }}</strong>.
+        You are giving <strong>{{give.dto.amount | currency}} per {{give.dto.givingType}}</strong> to
+        <strong>{{give.dto.program['Name']}}</strong><span ng-if="give.dto.mockPledge">
+            <!-- TEMPORARY - if this is towards a specific commitment, we want to put the commitment owner's full name here to make it clear who it's going to -->
+            towards <strong>First Last's</strong> commitment
+        </span> starting on <strong>{{give.dto.recurringStartDate | date:'MM/dd/yyyy' }}</strong>.
         <a href="" ng-click="give.service.processChange()" tabindex="-1" class="text-secondary">Change</a>
       </p>
     <hr>
@@ -34,13 +36,13 @@
 	    </div>
 
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
-	    <bank-credit-card-details 
+	    <bank-credit-card-details
         dto='give.dto'
         bank-info-submitted='give.dto.bankinfoSubmitted'
         donor='give.dto.donor'
         email='give.dto.email'
         set-valid-card='setValidCard'
-        set-valid-cvc='setValidCvc' 
+        set-valid-cvc='setValidCvc'
         account-state-name='give.account'>
       </bank-credit-card-details>
 	</ng-form>

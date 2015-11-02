@@ -101,7 +101,7 @@ namespace crds_angular.Services
             _mpDonorService.ProcessRecurringGiftDecline(invoice.Subscription);
             var gift = _mpDonorService.GetRecurringGiftForSubscription(invoice.Subscription);
            
-            if (gift.ConsecutiveFailureCount >= 2)
+            if (gift.ConsecutiveFailureCount > 2)
             {
                 var donor = _donorService.GetContactDonorForDonorId(gift.DonorId);
 

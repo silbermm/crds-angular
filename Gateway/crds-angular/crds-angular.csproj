@@ -140,6 +140,7 @@
     </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\packages\MySql.Data.6.9.7\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MySql.Web">
       <HintPath>..\packages\MySql.Web.6.9.7\lib\net45\MySql.Web.dll</HintPath>
@@ -259,6 +260,11 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\SubscriptionsController .cs" />
+    <Compile Include="Models\Crossroads\SponsoredChild.cs" />
+    <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
+    <Compile Include="Services\SubscriptionsService.cs" />
+    <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
     <Compile Include="Util\FileResult.cs" />
     <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\EmailCommunicationController.cs" />
@@ -276,9 +282,6 @@
     <Compile Include="Filters\UnhandledExceptionFilter.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Attribute\AttributeTypeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\FrequentFlyerAttributeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\ProfessionalSkillsAttributeDTO.cs" />
-    <Compile Include="Models\Crossroads\Attribute\SpiritualJourneyContactAttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Profile\ContactAttributeDTO.cs" />
     <Compile Include="Models\Crossroads\Profile\ContactAttributeTypeDTO.cs" />
     <Compile Include="Models\Crossroads\Stewardship\StripeInvoice.cs" />
@@ -290,7 +293,7 @@
     <Compile Include="Controllers\API\LookupController.cs" />
     <Compile Include="Controllers\API\OpportunityController.cs" />
     <Compile Include="Controllers\API\ProfileController.cs" />
-    <Compile Include="Controllers\API\SkillController.cs" />
+    <Compile Include="Controllers\API\ContactAttributeController.cs" />
     <Compile Include="Controllers\API\VolunteerApplicationController.cs" />
     <Compile Include="Controllers\API\MinistryPlatformToolsController.cs" />
     <Compile Include="DataAccess\EzScanCheckScannerDao.cs" />
@@ -329,7 +332,6 @@
     <Compile Include="Models\Crossroads\Serve\ServingTime.cs" />
     <Compile Include="Models\Crossroads\Serve\TeamMember.cs" />
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
-    <Compile Include="Models\Crossroads\Skill.cs" />
     <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
@@ -434,7 +436,6 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ServeService.cs" />
-    <Compile Include="Services\SkillService.cs" />
     <Compile Include="Services\StripeEventService.cs" />
     <Compile Include="Services\StripeService.cs" />
     <Compile Include="Services\TranslationService.cs" />

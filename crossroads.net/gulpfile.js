@@ -53,6 +53,9 @@ function htmlReplace() {
       js: assets.main.js
     }))
     .pipe(gulp.dest('./'));
+
+    gulp.src('./lib/load-image.all.min.js')
+      .pipe(gulp.dest('./assets'));
 }
 
 var browserSyncCompiles = 0;
@@ -123,6 +126,8 @@ gulp.task('build-browser-sync', function() {
       js: '/assets/main.js'
     }))
     .pipe(gulp.dest('./'));
+
+  gulp.src('./lib/load-image.all.min.js') .pipe(gulp.dest('./assets'));
 
 });
 
@@ -292,7 +297,9 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
       js: '/assets/main.js'
     }))
     .pipe(gulp.dest('./'));
-
+    
+    gulp.src('./lib/load-image.all.min.js')
+      .pipe(gulp.dest('./assets'));
 
 	});
 

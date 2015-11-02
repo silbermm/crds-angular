@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
@@ -13,6 +14,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IMinistryPlatformService _ministryPlatformService;
 
         private readonly int _pledgePageId;
+        private readonly int _myHouseholdPledges;
 
         public PledgeService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper)
             : base(authenticationService, configurationWrapper)
@@ -20,6 +22,7 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
 
             _pledgePageId = configurationWrapper.GetConfigIntValue("Pledges");
+            _myHouseholdPledges = configurationWrapper.GetConfigIntValue("MyHouseholdPledges");
         }
 
         public int CreatePledge(int donorId, int pledgeCampaignId, decimal totalPledge)
@@ -80,6 +83,29 @@ namespace MinistryPlatform.Translation.Services
         {
             var record = _ministryPlatformService.GetRecordDict(_pledgePageId, pledgeId, ApiLogin());
             return record.ToInt("Donor_ID");
+        }
+        
+        public List<Pledge> GetPledgesForAuthUser(string userToken)
+        {
+            var records = _ministryPlatformService.GetRecordsDict(_myHouseholdPledges, userToken);
+            return records.Select(MapRecordToPledge).ToList();
+        }
+
+        private Pledge MapRecordToPledge(Dictionary<string, object> record)
+        {
+            return new Pledge()
+            {
+                PledgeId = record.ToInt("Pledge_ID"),
+                PledgeCampaignId = record.ToInt("Pledge_Campaign_ID"),
+                DonorId = record.ToInt("Donor_ID"),
+                PledgeStatus = record.ToString("Pledge_Status"),
+                CampaignName = record.ToString("Campaign_Name"),   
+                PledgeTotal = record["Total_Pledge"] as decimal? ?? 0,
+                PledgeDonations = record["Donation_Total"] as decimal? ?? 0,
+                DonorDisplayName = record.ToString("Display_Name"),
+                CampaignStartDate = record.ToDate("Start_Date"),
+                CampaignEndDate = record.ToDate("End_Date"),
+            };
         }
     }
 }

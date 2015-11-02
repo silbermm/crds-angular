@@ -27,6 +27,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.AsyncJobs", "Crossroads.AsyncJobs\Crossroads.AsyncJobs.csproj", "{D27EF73B-2BD5-42C8-B924-70B6312A8BB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.AsyncJobs.Test", "Crossroads.AsyncJobs.Test\Crossroads.AsyncJobs.Test.csproj", "{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CD41507E-91AC-4C60-96E2-5CAC25F49A76} = {CD41507E-91AC-4C60-96E2-5CAC25F49A76}
+		{CC650D93-731C-4613-B358-FB4C76237455} = {CC650D93-731C-4613-B358-FB4C76237455}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

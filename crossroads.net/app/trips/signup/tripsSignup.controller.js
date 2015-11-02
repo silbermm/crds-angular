@@ -49,11 +49,10 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.commonNameRequired = commonNameRequired;
     vm.contactId = contactId;
     vm.destination = vm.campaign.nickname;
-    vm.dietSelected = dietSelected;
+    vm.enforceAgeRestriction = enforceAgeRestriction;
     vm.frequentFlyerChanged = frequentFlyerChanged;
     vm.handlePageChange = handlePageChange;
     vm.handleSubmit = handleSubmit;
-    vm.hasPassport = hasPassport;
     vm.isIndia = isIndia;
     vm.isNica = isNica;
     vm.isNola = isNola;
@@ -87,9 +86,9 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
     function activate() {
-      
+
       vm.signupService.person = Person;
-      
+
       if (vm.signupService.campaign === undefined) {
         vm.signupService.reset(vm.campaign);
       }
@@ -161,13 +160,17 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       }
     }
 
-    function dietSelected() {
-      return checkboxSelected(attributeTypes.DIETARY_RESTRICTIONS);
+    function enforceAgeRestriction() {
+      if (_.includes(Campaign.ageExceptions, Number(vm.signupService.contactId))) {
+        return undefined;
+      }
+
+      return Campaign.ageLimit;
     }
 
     function frequentFlyerChanged(flyer) {
       if (!_.isEmpty(flyer.notes)) {
-        flyer.selected = true; 
+        flyer.selected = true;
       } else {
         flyer.selected = false;
       }
@@ -208,11 +211,6 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         saveData();
       }
     }
-
-    function hasPassport() {
-      return (vm.signupService.page6.validPassport === 'yes');
-    }
-
 
     function isIndia() {
       if (vm.destination === 'India') {
@@ -340,7 +338,12 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function saveData() {
-      
+       _.forEach(vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes, function(flyer) {
+        if(flyer.notes) {
+          flyer.selected = true;
+        }
+      });
+
       vm.profileData.person.$save(function() {
         $log.debug('person save successful');
       }, function() {
@@ -391,7 +394,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
 
         return false;
       }
-      
+
       return true;
     }
 
@@ -449,7 +452,10 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function underAge() {
-      return Session.exists('age') && Session.exists('age') < 18;
+      var birthdate = crds_utilities.convertStringToDate(vm.signupService.page1.profile.person.dateOfBirth);
+      var eighteen = new Date();
+      eighteen.setFullYear(eighteen.getFullYear() - 18);
+      return birthdate.getTime() >= eighteen.getTime();
     }
 
     function validateProfile(profile, household) {

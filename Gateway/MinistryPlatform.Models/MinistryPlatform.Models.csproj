@@ -59,7 +59,6 @@
     <Compile Include="Contact.cs" />
     <Compile Include="DonationAndDistributionRecord.cs" />
     <Compile Include="Pledge.cs" />
-    <Compile Include="SkillAttribute.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />
     <Compile Include="ContactDonor.cs" />

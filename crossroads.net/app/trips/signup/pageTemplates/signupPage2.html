@@ -22,7 +22,7 @@
         <legend>Trip Information</legend>
       </div><!--/col-sm-12-->
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize') }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize') }">
         <label for="tshirt" class="control-label required">T-shirt Size</label>
         <select class="form-control col-sm-12"
                 name="tshirtSize"
@@ -30,7 +30,7 @@
                 ng-required='true'
                 ng-model="signupStep.tshirt.attribute"
                 ng-options="tshirt.name for tshirt in signupStep.tshirtSizes.attributes | orderBy: 'attributeId'  track by tshirt.attributeId">
-          <option value=""> -- Please Select a T-Shirt Size -- </option> 
+          <option value=""> -- Please Select a T-Shirt Size -- </option>
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
           <span ng-message="required">
@@ -40,13 +40,13 @@
       </div><!--/form-group-->
     </div>
     <div class="row" ng-show="tripsSignup.isSouthAfrica()">
-      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom') }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom') }">
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Bottom</label>
         <select class="form-control col-sm-12" name="scrubBottom" id="scrubBottom"
           ng-model="signupStep.scrubBottom.attribute"
           ng-options="bottom.name for bottom in signupStep.scrubBottomSizes.attributes | orderBy: 'attributeId' track by bottom.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
-          <option value=""> -- Please Select a Scrub Bottom Size -- </option> 
+          <option value=""> -- Please Select a Scrub Bottom Size -- </option>
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubBottom.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom')">
           <span ng-message="required">
@@ -55,13 +55,13 @@
         </ng-messages>
       </div>
 
-      <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop') }">
+      <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop') }">
         <label for="scrub" class="control-label" ng-class="{'required': tripsSignup.isSouthAfrica()}">Scrub Size Top</label>
         <select class="form-control col-sm-12" name="scrubTop" id="scrubTop"
           ng-model="signupStep.scrubTop.attribute"
           ng-options="top.name for top in signupStep.scrubTopSizes.attributes | orderBy: 'attributeId'  track by top.attributeId"
           ng-required="tripsSignup.isSouthAfrica()">
-          <option value=""> -- Please Select a Scrub Top Size -- </option> 
+          <option value=""> -- Please Select a Scrub Top Size -- </option>
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubTop.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop')">
           <span ng-message="required">
@@ -105,20 +105,19 @@
     </div><!--/row-->
 
     <div class="row">
-      <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet') }">
-        <label for="diet" class="control-label required">
+      <div id="Site" class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet') }">
+        <label for="diet" class="control-label">
           Please define any dietary restrictions <small class="text-muted">If you mark yes we will do our best to be sensitive to your diet during the trip</small>        </label>
         <br>
-        <div class="checkbox" ng-repeat="diet in signupStep.dietaryRestrictions" > 
-          <label for="diet-{{diet.attributeId}}"> 
-            <input ng-model="diet.selected" 
-                   type="checkbox" 
-                   name="diet" 
-                   ng-value="diet.attributeId" 
-                   id="diet-{{diet.attributeId}}" 
-                   ng-required='!tripsSignup.dietSelected()'> 
-            {{diet.name}} 
-          </label> 
+        <div class="checkbox" ng-repeat="diet in signupStep.dietaryRestrictions" >
+          <label for="diet-{{diet.attributeId}}">
+            <input ng-model="diet.selected"
+                   type="checkbox"
+                   name="diet"
+                   ng-value="diet.attributeId"
+                   id="diet-{{diet.attributeId}}">
+            {{diet.name}}
+          </label>
         </div>
 
         <ng-messages for="tripsSignup.tripAppPage2.diet.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet')">
@@ -132,30 +131,30 @@
 
     <div class="row">
       <div class="form-group col-sm-12">
-        <label for="allergies"> Please describe any allergies <small class="text-muted"> Leave blank if it doesn't apply </small> </label>
+        <label for="allergies"> Please elaborate on above restrictions or list other allergies (example: Latex, nail polish, etc.) <small class="text-muted"> Leave blank if it doesn't apply </small> </label>
           <textarea ng-model="signupStep.allergies.notes" class="form-control" rows="2" cols="1" id="allergies" maxlength="250">
           </textarea>
       </div><!--/form-group-->
     </div><!--/row-->
 
     <div class="row">
-      <div id="Site" class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife') }">
+      <div id="Site" class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife') }">
         <label for="slife" class="control-label required">
           How would you define your spiritual life? <small class="text-muted"> Pick as many as you like </small>
         </label>
-        
+
         <br>
 
-        <div class="checkbox" ng-repeat="slife in signupStep.spiritualLife" > 
-          <label for="slife-{{slife.attributeId}}"> 
-            <input ng-model="slife.selected" 
-                   type="checkbox" 
-                   name="slife" 
-                   ng-value="slife.attributeId" 
-                   id="slife-{{slife.attributeId}}" 
-                   ng-required='!tripsSignup.spiritualSelected()'> 
-            {{slife.name}} 
-          </label> 
+        <div class="checkbox" ng-repeat="slife in signupStep.spiritualLife" >
+          <label for="slife-{{slife.attributeId}}">
+            <input ng-model="slife.selected"
+                   type="checkbox"
+                   name="slife"
+                   ng-value="slife.attributeId"
+                   id="slife-{{slife.attributeId}}"
+                   ng-required='!tripsSignup.spiritualSelected()'>
+            {{slife.name}}
+          </label>
         </div>
 
         <ng-messages for="tripsSignup.tripAppPage2.slife.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife')">
@@ -179,5 +178,5 @@
       </div><!--/form-group-->
     </div>
   </fieldset>
-  <a ng-click='tripsSignup.handlePageChange(3, tripsSignup.tripAppPage2)' class="btn btn-primary pull-right">Next</a>
+  <button ng-click='tripsSignup.handlePageChange(3, tripsSignup.tripAppPage2)' class="btn btn-primary pull-right">Next</button>
 </ng-form>

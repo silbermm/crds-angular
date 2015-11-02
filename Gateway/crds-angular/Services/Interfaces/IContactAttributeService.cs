@@ -6,7 +6,8 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IContactAttributeService
     {
-        ContactAllAttributesDTO GetContactAttributes(int contactId);
+        ContactAllAttributesDTO GetContactAttributes(string token, int contactId);
         void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes, Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes);
+        void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute);
     }
 }

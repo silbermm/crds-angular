@@ -12,7 +12,8 @@
       scope: {
         householdId: '=?',
         householdInfo: '=',
-        householdForm: '=' 
+        householdForm: '=',
+        locations: '='
       },
       templateUrl: 'household/profileHousehold.template.html',
       controller: 'ProfileHouseholdController as household',

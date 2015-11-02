@@ -96,10 +96,10 @@ namespace crds_angular.Services
             return (e);
         }
 
-        public StripeCustomer CreateCustomer(string customerToken)
+        public StripeCustomer CreateCustomer(string customerToken, string donorDescription = null)
         {
             var request = new RestRequest("customers", Method.POST);
-            request.AddParameter("description", string.Format(StripeCustomerDescription, "pending")); // adds to POST or URL querystring based on Method
+            request.AddParameter("description", string.Format(StripeCustomerDescription, string.IsNullOrWhiteSpace(donorDescription) ? "pending" : donorDescription));
             request.AddParameter("source", customerToken);
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
@@ -114,6 +114,16 @@ namespace crds_angular.Services
 
             var response = _stripeRestClient.Execute<StripeCustomer>(request);
             CheckStripeResponse("Customer creation failed", response);
+
+            return response.Data;
+        }
+
+        public StripeCustomer DeleteCustomer(string customerId)
+        {
+            var request = new RestRequest(string.Format("/customers/{0}", customerId), Method.DELETE);
+
+            var response = _stripeRestClient.Execute<StripeCustomer>(request);
+            CheckStripeResponse("Customer delete failed", response);
 
             return response.Data;
         }
@@ -377,6 +387,28 @@ namespace crds_angular.Services
 
             var response = _stripeRestClient.Execute<StripeSubscription>(request);
             CheckStripeResponse("Invalid subscription creation request", response);
+
+            return response.Data;
+        }
+
+        public StripeSubscription GetSubscription(string customerId, string subscriptionId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.GET);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription get request", response);
+
+            return response.Data;
+        }
+
+        public StripeSubscription UpdateSubscriptionPlan(string customerId, string subscriptionId, string planId)
+        {
+            var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.POST);
+            request.AddParameter("prorate", false);
+            request.AddParameter("plan", planId);
+
+            var response = _stripeRestClient.Execute<StripeSubscription>(request);
+            CheckStripeResponse("Invalid subscription update request", response);
 
             return response.Data;
         }

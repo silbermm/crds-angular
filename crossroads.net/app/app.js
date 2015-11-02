@@ -1,6 +1,7 @@
 require('./events');
 require('./mp_tools');
 require('../lib/select.css');
+
 (function() {
   'use strict()';
 

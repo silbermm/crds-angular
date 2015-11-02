@@ -10,15 +10,20 @@ using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models.DTO;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Services;
+using log4net;
+using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
 
 namespace crds_angular.Services
 {
     public class DonorService : Interfaces.IDonorService
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof (DonorService));
+
         private readonly IDonorService _mpDonorService;
         private readonly IContactService _mpContactService;
         private readonly Interfaces.IPaymentService _paymentService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IPledgeService _pledgeService;
         public const string DefaultInstitutionName = "Bank";
         public const string DonorRoutingNumberDefault = "0";
         public const string DonorAccountNumberDefault = "0";
@@ -31,15 +36,20 @@ namespace crds_angular.Services
         private readonly int _statementTypeIndividual;
         private readonly int _statementMethodNone;
         private readonly int _statementMethodPostalMail;
+        private readonly int _notSiteSpecificCongregation;
+        private readonly int _recurringGiftSetupEmailTemplateId;
+        private readonly int _recurringGiftUpdateEmailTemplateId;
+        private readonly int _recurringGiftCancelEmailTemplateId;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService, IPledgeService pledgeService)
         {
             _mpDonorService = mpDonorService;
             _mpContactService = mpContactService;
             _paymentService = paymentService;
             _authenticationService = authenticationService;
+            _pledgeService = pledgeService;
 
             _guestGiverDisplayName = configurationWrapper.GetConfigValue("GuestGiverContactDisplayName");
 
@@ -48,6 +58,11 @@ namespace crds_angular.Services
             _statementTypeIndividual = configurationWrapper.GetConfigIntValue("DonorStatementTypeIndividual");
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
+            _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongregation");
+
+            _recurringGiftSetupEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftSetupEmailTemplateId");
+            _recurringGiftUpdateEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId");
+            _recurringGiftCancelEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftCancelEmailTemplateId");
         }
 
         public ContactDonor GetContactDonorForEmail(string emailAddress)
@@ -94,7 +109,7 @@ namespace crds_angular.Services
         ///    whether a Customer needs to be created at the payment processor, etc.
         /// </summary>
         /// <param name="contactDonor">An existing ContactDonor, looked up from either GetDonorForEmail or GetDonorForAuthenticatedUser.  This may be null, indicating there is no existing contact or donor.</param>
-       ///  <param name="encryptedKey"> The encrypted routing and account number</param>
+        ///  <param name="encryptedKey"> The encrypted routing and account number</param>
         /// <param name="emailAddress">An email address to use when creating a Contact (#1 above).</param>
         /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
         /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
@@ -102,7 +117,7 @@ namespace crds_angular.Services
         public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
         {
             var contactDonorResponse = new ContactDonor();
-            StripeCustomer stripeCustomer = null;
+            StripeCustomer stripeCustomer;
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 var statementMethod = _statementMethodNone;
@@ -125,13 +140,13 @@ namespace crds_angular.Services
                 {
                     donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
                 }
-           
+
                 contactDonorResponse.ProcessorId = stripeCustomer.id;
-                
+           
                 contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
-           
+
                 _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
             }
             else if (!contactDonor.HasPaymentProcessorRecord)
@@ -158,8 +173,8 @@ namespace crds_angular.Services
                             _statementFrequencyNever, _statementTypeIndividual, _statementMethodNone);
                     }
                 }
-                _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
 
+                _paymentService.UpdateCustomerDescription(contactDonorResponse.ProcessorId, contactDonorResponse.DonorId);
                 contactDonorResponse.RegisteredUser = contactDonor.RegisteredUser;
             }
             else
@@ -177,38 +192,156 @@ namespace crds_angular.Services
 
         public int CreateRecurringGift(string authorizedUserToken, RecurringGiftDto recurringGiftDto, ContactDonor contactDonor)
         {
-            var response = _paymentService.AddSourceToCustomer(contactDonor.ProcessorId, recurringGiftDto.StripeTokenId);
+            StripeCustomer customer = null;
+            StripePlan plan = null;
+            StripeSubscription stripeSubscription = null;
+            var donorAccountId = -1;
+            var recurGiftId = -1;
 
-            var plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
+            try
+            {
 
-            var donorAccountId = _mpDonorService.CreateDonorAccount(response.brand,
-                                                           DonorRoutingNumberDefault,
-                                                           response.last4,
-                                                           null,
-                                                           contactDonor.DonorId,
-                                                           response.id,
-                                                           contactDonor.ProcessorId);
-            var stripeSubscription = _paymentService.CreateSubscription(plan.Id, contactDonor.ProcessorId);
-           
-            var recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken, contactDonor.DonorId,
-                                                                donorAccountId,
-                                                                EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval),
-                                                                recurringGiftDto.PlanAmount,
-                                                                recurringGiftDto.StartDate,
-                                                                recurringGiftDto.Program,
-                                                                stripeSubscription.Id);
-            return recurGiftId;
+                customer = _paymentService.CreateCustomer(recurringGiftDto.StripeTokenId, string.Format("{0}, Recurring Gift Subscription", contactDonor.DonorId));
+
+                var source = customer.sources.data.Find(s => s.id == customer.default_source);
+
+                donorAccountId = _mpDonorService.CreateDonorAccount(source.brand,
+                                                                        DonorRoutingNumberDefault,
+                                                                        string.IsNullOrWhiteSpace(source.bank_last4) ? source.last4 : source.bank_last4,
+                                                                        null,
+                                                                        contactDonor.DonorId,
+                                                                        source.id,
+                                                                        customer.id);
+
+                plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
+
+                stripeSubscription = _paymentService.CreateSubscription(plan.Id, customer.id);
+
+                var contact = _mpContactService.GetContactById(contactDonor.ContactId);
+                var congregation = contact.Congregation_ID ?? _notSiteSpecificCongregation;
+
+                recurGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
+                                                                            contactDonor.DonorId,
+                                                                            donorAccountId,
+                                                                            EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval),
+                                                                            recurringGiftDto.PlanAmount,
+                                                                            recurringGiftDto.StartDate,
+                                                                            recurringGiftDto.Program,
+                                                                            stripeSubscription.Id,
+                                                                            congregation);
+
+                SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftSetupEmailTemplateId, null, recurGiftId);
+
+                return recurGiftId;
+            }
+            catch (Exception e)
+            {
+                // "Rollback" any updates
+                _logger.Warn(string.Format("Error setting up recurring gift for donor {0}", contactDonor.DonorId), e);
+                if (stripeSubscription != null)
+                {
+                    _logger.Debug(string.Format("Deleting Stripe Subscription {0} for donor {1}", stripeSubscription.Id, contactDonor.DonorId));
+                    try
+                    {
+                        _paymentService.CancelSubscription(customer.id, stripeSubscription.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Subscription {0} for donor {1}", stripeSubscription.Id, contactDonor.DonorId), ex);
+                    }
+                }
+
+                if (plan != null)
+                {
+                    _logger.Debug(string.Format("Deleting Stripe Plan {0} for donor {1}", plan.Id, contactDonor.DonorId));
+                    try
+                    {
+                        _paymentService.CancelPlan(plan.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Plan {0} for donor {1}", plan.Id, contactDonor.DonorId), ex);
+                    }
+                }
+
+                if (customer != null)
+                {
+                    _logger.Debug(string.Format("Deleting Stripe Customer {0} for donor {1}", customer.id, contactDonor.DonorId));
+                    try
+                    {
+                        _paymentService.DeleteCustomer(customer.id);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Stripe Customer {0} for donor {1}", customer.id, contactDonor.DonorId), ex);
+                    }
+                }
+
+                if (donorAccountId != -1)
+                {
+                    _logger.Debug(string.Format("Deleting Donor Account {0} for donor {1}", donorAccountId, contactDonor.DonorId));
+                    try
+                    {
+                        _mpDonorService.DeleteDonorAccount(authorizedUserToken, donorAccountId);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Donor Account {0} for donor {1}", donorAccountId, contactDonor.DonorId), ex);
+                    }
+                }
+
+                if (recurGiftId != -1)
+                {
+                    _logger.Debug(string.Format("Deleting Recurring Gift {0} for donor {1}", recurGiftId, contactDonor.DonorId));
+                    try
+                    {
+                        _mpDonorService.CancelRecurringGift(authorizedUserToken, recurGiftId);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Warn(string.Format("Error deleting Recurring Gift {0} for donor {1}", recurGiftId, contactDonor.DonorId), ex);
+                    }
+                }
+
+                throw;
+            }
         }
 
-        public void CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
+        private void SendRecurringGiftConfirmationEmail(string authorizedUserToken, int templateId, CreateDonationDistDto recurringGift, int? recurringGiftId = null)
+        {
+            try
+            {
+                if (recurringGift == null)
+                {
+                    recurringGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId.GetValueOrDefault());
+                }
+
+                var acctType = _mpDonorService.GetDonorAccountPymtType(recurringGift.DonorAccountId.GetValueOrDefault());
+                var paymentType = MinistryPlatform.Translation.Enum.PaymentType.GetPaymentType(acctType).name;
+                var frequency = recurringGift.Recurrence;
+                var programName = recurringGift.ProgramName;
+                var amt = decimal.Round(recurringGift.Amount, 2, MidpointRounding.AwayFromZero) / Constants.StripeDecimalConversionValue;
+
+                _mpDonorService.SendEmail(templateId, recurringGift.DonorId, (int)amt, paymentType, DateTime.Now, programName, string.Empty, frequency);
+            }
+            catch (Exception e)
+            {
+                _logger.Warn(string.Format("Could not send email for recurring gift {0}", recurringGift == null ? recurringGiftId : recurringGift.RecurringGiftId), e);
+            }
+        }
+
+        public Boolean CancelRecurringGift(string authorizedUserToken, int recurringGiftId)
         {
             var existingGift = _mpDonorService.GetRecurringGiftById(authorizedUserToken, recurringGiftId);
-            var donor = GetContactDonorForDonorId(existingGift.DonorId);
 
-            var subscription = _paymentService.CancelSubscription(donor.ProcessorId, existingGift.SubscriptionId);
+            var subscription = _paymentService.CancelSubscription(existingGift.StripeCustomerId, existingGift.SubscriptionId);
             _paymentService.CancelPlan(subscription.Plan.Id);
 
             _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftCancelEmailTemplateId, existingGift);
+
+            return true;
         }
 
         /// <summary>
@@ -234,7 +367,8 @@ namespace crds_angular.Services
             var changedDayOfMonth = changedFrequency || (editGift.PlanInterval == PlanInterval.Monthly && editGift.StartDate.Day != existingGift.DayOfMonth);
             var changedStartDate = editGift.StartDate.Date != existingGift.StartDate.GetValueOrDefault().Date;
 
-            var needsNewStripePlan = changedAmount ||changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
+            var needsUpdatedStripeSubscription = changedAmount && !(changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate);
+            var needsNewStripePlan = changedAmount || changedFrequency || changedDayOfWeek || changedDayOfMonth || changedStartDate;
             var needsNewMpRecurringGift = changedAmount || changedProgram || needsNewStripePlan;
 
             var recurringGiftId = existingGift.RecurringGiftId.GetValueOrDefault(-1);
@@ -244,16 +378,15 @@ namespace crds_angular.Services
             if (changedPayment)
             {
                 // If the payment method changed, we need to create a new Stripe Source.
-                var source = _paymentService.AddSourceToCustomer(donor.ProcessorId, editGift.StripeTokenId);
-                // TODO Need to update source on Subscription/Customer in Stripe - depends on solution for DE494
+                var source = _paymentService.UpdateCustomerSource(existingGift.StripeCustomerId, editGift.StripeTokenId);
 
                 donorAccountId = _mpDonorService.CreateDonorAccount(source.brand,
                                                                     DonorRoutingNumberDefault,
-                                                                    source.last4,
+                                                                    string.IsNullOrWhiteSpace(source.bank_last4) ? source.last4 : source.bank_last4,
                                                                     null, //Encrypted account
                                                                     existingGift.DonorId,
                                                                     source.id,
-                                                                    donor.ProcessorId);
+                                                                    existingGift.StripeCustomerId);
 
                 // If we are not going to create a new Recurring Gift, then we'll update the existing
                 // gift with the new donor account
@@ -275,16 +408,30 @@ namespace crds_angular.Services
             {
                 if (needsNewStripePlan)
                 {
-                    // If we need a new Stripe Plan, cancel the old subscription and plan, and create a new one
-                    var oldSubscription = _paymentService.CancelSubscription(donor.ProcessorId, stripeSubscription.Id);
-                    _paymentService.CancelPlan(oldSubscription.Plan.Id);
-
+                    // Create the new Stripe Plan
                     var plan = _paymentService.CreatePlan(editGift, donor);
-                    stripeSubscription = _paymentService.CreateSubscription(plan.Id, donor.ProcessorId);
+                    StripeSubscription oldSubscription;
+                    if (needsUpdatedStripeSubscription)
+                    {
+                        // If we just changed the amount, we just need to update the Subscription to point to the new plan
+                        oldSubscription = _paymentService.GetSubscription(existingGift.StripeCustomerId, stripeSubscription.Id);
+                        stripeSubscription = _paymentService.UpdateSubscriptionPlan(existingGift.StripeCustomerId, stripeSubscription.Id, plan.Id);
+                    }
+                    else
+                    {
+                        // Otherwise, we need to cancel the old Subscription and create a new one
+                        oldSubscription = _paymentService.CancelSubscription(existingGift.StripeCustomerId, stripeSubscription.Id);
+                        stripeSubscription = _paymentService.CreateSubscription(plan.Id, existingGift.StripeCustomerId);
+                    }
+
+                    // In either case, we created a new Stripe Plan above, so cancel the old one
+                    _paymentService.CancelPlan(oldSubscription.Plan.Id);
                 }
 
                 // Cancel the old recurring gift, and create a new one
                 _mpDonorService.CancelRecurringGift(authorizedUserToken, recurringGiftId);
+                var contact = _mpContactService.GetContactById(donor.ContactId);
+                var congregation = contact.Congregation_ID ?? 5;
 
                 recurringGiftId = _mpDonorService.CreateRecurringGiftRecord(authorizedUserToken,
                                                                             donor.DonorId,
@@ -293,7 +440,8 @@ namespace crds_angular.Services
                                                                             editGift.PlanAmount,
                                                                             editGift.StartDate,
                                                                             editGift.Program,
-                                                                            stripeSubscription.Id);
+                                                                            stripeSubscription.Id,
+                                                                            congregation);
 
             }
 
@@ -311,6 +459,9 @@ namespace crds_angular.Services
                 EmailAddress = donor.Email,
                 SubscriptionID = stripeSubscription.Id,
             };
+
+            SendRecurringGiftConfirmationEmail(authorizedUserToken, _recurringGiftUpdateEmailTemplateId, newGift);
+
             return (newRecurringGift);
         }
 
@@ -333,6 +484,13 @@ namespace crds_angular.Services
 
             return (recurringGifts);
         }
+
+        public List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken)
+        {
+            var pledges = _pledgeService.GetPledgesForAuthUser(userToken);
+            var pled = pledges.Select(Mapper.Map<Pledge, PledgeDto>).ToList();
+            return (pled);
+        } 
 
         private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)
         {

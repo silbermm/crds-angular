@@ -18,7 +18,7 @@ namespace crds_angular.Services.Interfaces
             
         ContactDonor GetContactDonorForCheckAccount(string encryptedKey);
 
-        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate);
+        ContactDonor CreateOrUpdateContactDonor(ContactDonor existingDonor,  string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate /*, bool createPaymentProcessorCustomer = true*/);
 
         string DecryptValues(string value);
 
@@ -26,10 +26,12 @@ namespace crds_angular.Services.Interfaces
 
         RecurringGiftDto EditRecurringGift(string authorizedUserToken, RecurringGiftDto editGift, ContactDonor donor);
 
-        void CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
+        Boolean CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
 
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscriptionId);
 
         List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken);
+
+        List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken);
     }
 }

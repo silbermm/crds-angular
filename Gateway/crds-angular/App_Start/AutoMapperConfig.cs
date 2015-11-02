@@ -21,13 +21,6 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
 
-            Mapper.CreateMap<SkillAttribute, Skill>()
-                .ForMember(dest => dest.SkillId, opts => opts.MapFrom(src => src.dp_RecordID))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Attribute_Name));
-
-            Mapper.CreateMap<Skill, SkillAttribute>()
-                .ForMember(dest => dest.Attribute_ID, opts => opts.MapFrom(src => src.SkillId));
-
             Mapper.CreateMap<Group, OpportunityGroup>()
                 .ForMember(dest => dest.GroupId, opts => opts.MapFrom(src => src.GroupId))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
@@ -85,7 +78,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.ToInt("Deposit_ID", false)))
                 .ForMember(dest => dest.DepositTotalAmount, opts => opts.MapFrom(src => src.ContainsKey("Deposit_Total") ? src["Deposit_Total"] as decimal? : 0))
                 .ForMember(dest => dest.BatchCount, opts => opts.MapFrom(src => src.ToInt("Batch_Count", false)))
-                .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToString("Exported")))
+                .ForMember(dest => dest.Exported, opts => opts.MapFrom(src => src.ToBool("Exported", false)))
                 .ForMember(dest => dest.ProcessorTransferId, opts => opts.MapFrom(src => src.ToString("Processor_Transfer_ID")));
 
             Mapper.CreateMap<GPExportDatum, GPExportDatumDTO>()
@@ -152,7 +145,13 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.HouseholdId, opts => opts.MapFrom(src => src.Household_ID))
                 .ForMember(dest => dest.HouseholdName, opts => opts.MapFrom(src => src.Household_Name))
                 .ForMember(dest => dest.AddressId, opts => opts.MapFrom(src => src.Address_ID))
-                .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age));
+                .ForMember(dest => dest.Age, opts => opts.MapFrom(src => src.Age))
+                .ForMember(dest => dest.PassportExpiration, opts=> opts.MapFrom(src => src.Passport_Expiration))
+                .ForMember(dest => dest.PassportNumber, opts => opts.MapFrom(src => src.Passport_Number))
+                .ForMember(dest => dest.PassportFirstname, opts => opts.MapFrom(src => src.Passport_Firstname))
+                .ForMember(dest => dest.PassportLastname, opts => opts.MapFrom(src => src.Passport_Lastname))
+                .ForMember(dest => dest.PassportMiddlename, opts => opts.MapFrom(src => src.Passport_Middlename))
+                .ForMember(dest => dest.PassportCountry, opts => opts.MapFrom(src => src.Passport_Country));
 
             Mapper.CreateMap<RecurringGift, RecurringGiftDto>()
                 .ForMember(dest => dest.EmailAddress, opts => opts.MapFrom(src => src.RecurringGiftId))
@@ -179,6 +178,12 @@ namespace crds_angular.App_Start
                         PaymentProcessorId = src.ProcessorId
                     };
                 });
+
+            Mapper.CreateMap<Pledge, PledgeDto>()
+                .ForMember(dest => dest.PledgeCampaign, opts => opts.MapFrom(src => src.CampaignName))
+                .ForMember(dest => dest.TotalPledge, opts => opts.MapFrom(src => src.PledgeTotal))
+                .ForMember(dest=> dest.CampaignStartDate, opts =>opts.MapFrom(src => src.CampaignStartDate.ToString("MMMM d, yyyy")))
+                .ForMember(dest => dest.CampaignEndDate, opts => opts.MapFrom(src => src.CampaignEndDate.ToString("MMMM d, yyyy")));
         }
     }
 }

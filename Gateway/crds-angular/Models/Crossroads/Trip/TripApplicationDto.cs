@@ -121,9 +121,6 @@ namespace crds_angular.Models.Crossroads.Trip
 
         public class ApplicationPageFive
         {
-            [JsonProperty(PropertyName = "professionaSkills")]
-            public string[] ProfessionalSkills { get; set; }
-
             [JsonProperty(PropertyName = "sponsorChildFirstName")]
             public string SponsorChildFirstName { get; set; }
 
@@ -135,6 +132,18 @@ namespace crds_angular.Models.Crossroads.Trip
 
             [JsonProperty(PropertyName = "sponsorChildNumber")]
             public string SponsorChildNumber { get; set; }
+
+            [JsonProperty(PropertyName = "sponsorChildTown")]
+            public string SponsorChildTown { get; set; }
+
+            [JsonProperty(PropertyName = "nolaFirstChoiceWorkTeam")]
+            public string NolaFirstChoiceWorkTeam { get; set; }
+
+            [JsonProperty(PropertyName = "nolaFirstChoiceExperience")]
+            public string NolaFirstChoiceExperience { get; set; }
+
+            [JsonProperty(PropertyName = "nolaSecondChoiceWorkTeam")]
+            public string NolaSecondChoiceWorkTeam { get; set; }
         }
 
         public class ApplicationPageSix

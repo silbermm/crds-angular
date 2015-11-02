@@ -32,11 +32,12 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Donation> GetDonationsForAuthenticatedUser(string userToken, bool? softCredit = null, string donationYear = null);
         CreateDonationDistDto GetRecurringGiftForSubscription(string subscription);
         CreateDonationDistDto GetRecurringGiftById(string authorizedUserToken, int recurringGiftId);
-        int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId);
+        int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId, int congregationId);
         void UpdateRecurringGiftDonorAccount(string authorizedUserToken, int recurringGiftId, int donorAccountId);
         void CancelRecurringGift(string authorizedUserToken, int recurringGiftId);
         void CancelRecurringGift(int recurringGiftId);
         int CreateDonorAccount(string institutionName, string routingNumber, string acctNumber, string encryptedAcct, int donorId, string processorAcctId, string processorId);
+        void DeleteDonorAccount(string authorizedUserToken, int donorAccountId);
         List<RecurringGift> GetRecurringGiftsForAuthenticatedUser(string userToken);
         void ProcessRecurringGiftDecline(string subscription_id);
         void UpdateRecurringGiftFailureCount(int recurringGiftId, int failureCount);

@@ -1,15 +1,17 @@
-<h1 class="page-header">My Profile</h1>
-<h2 class="subheading">Hello, special you.</h2>
+<span ng-bind-html="$root.MESSAGES.profileHeader.content | html"></span>
 <div class="profile-header">
   <div class="row">
     <profile-picture ng-if="profile.profileData.person.contactId" contact-id="profile.profileData.person.contactId"></profile-picture>
     <div class="profile-desc col-xs-7 col-sm-9">
       <h3 class="profile-name">{{profile.profileData.person.nickName}} {{profile.profileData.person.lastName}}</h3>
-<!-- Mock for site, not part of this current story
-      <!-- Handle a null church site here with something like "Please select your site" currently it's just blank when null
-      <p class="lead site-name"><a href="#Site" ng-click="set.showHousehold = true" data-toggle="tab" class="edit-church-site">Oakley <svg viewBox="0 0 32 32" class="icon icon-pencil4"><use xlink:href="#pencil4"></use></svg></a>
+      <!-- Handle a null church site here with something like "Please select your site" currently it's just blank when null-->
+      <p class="lead site-name">
+        <a href="#Site" ng-click="profile.locationFocus()" data-toggle="tab" class="edit-church-site">{{profile.displayLocation()}}
+          <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+            <use xlink:href="#pencil4"></use>
+          </svg>
+        </a>
       </p>
--->
       <!-- Mock for future profile progress bar
       <div class="col-sm-6 row">
         <progressbar value="55">55%</progressbar>
@@ -19,25 +21,7 @@
   </div>
 </div>
 <tabset>
-  <tab heading="Personal">
-    <ui-view name="personal"></ui-view>
+  <tab ng-repeat="tab in profile.tabs" heading="{{tab.title}}" active="tab.active" ng-click="profile.goToTab(tab)" >
+    <ui-view></ui-view>
   </tab>
-  <tab heading="Account" class="hidden-xs">
-    <ui-view name="account"></ui-view>
-  </tab>
-  <tab heading="Giving">
-    <ui-view name="giving"></ui-view>
-  </tab>
-  <tab heading="Skills" class="hidden-xs">
-    <ui-view name="skills"></ui-view>
-  </tab>
-  <tab heading="History" class="hidden-xs" active="set.showHistory"></tab>
-  <li role="tab" data-toggle="tab" class="dropdown hidden-md hidden-lg hidden-sm dropdown-toggle" data-toggle="dropdown">
-    <a href="#">More <span class="caret"></span></a>
-    <ul class="dropdown-menu" role="menu">
-      <li><a href="#" ng-click="set.showHousehold = true">Household</a></li>
-      <li><a href="#" ng-click="set.showSkills = true">Skills</a></li>
-      <li><a href="#" ng-click="set.showHistory = true">History</a></li>
-    </ul>
-  </li>
 </tabset>

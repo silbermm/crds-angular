@@ -179,7 +179,6 @@
     <Compile Include="Security\MPAuthTest.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
     <Compile Include="Services\AttributeServiceTest.cs" />
-    <Compile Include="Services\ContactAttributeServiceIntegrationTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\EzScanCheckScannerServiceTest.cs" />
@@ -190,6 +189,7 @@
     <Compile Include="Services\StripeEventServiceTest.cs" />
     <Compile Include="Services\StripeServiceTest.cs" />
     <Compile Include="Services\TripServiceTest.cs" />
+    <Compile Include="Services\ContactAttributeServiceTest.cs" />
     <Compile Include="Services\UserImpersonationServiceTest.cs" />
     <Compile Include="Services\VolunteerApplicationServiceTest.cs" />
   </ItemGroup>

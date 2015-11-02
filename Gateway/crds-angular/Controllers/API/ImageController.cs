@@ -82,6 +82,23 @@ namespace crds_angular.Controllers.API
                 (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching image found")));
         }
 
+        /// <summary>
+        /// Retrieves an image for a pledge campaign given a record ID.
+        /// </summary>
+        /// <param name="recordId"></param>
+        /// <returns>A byte stream?</returns>
+        [Route("api/image/pledgecampaign/{recordId:int}")]
+        [HttpGet]
+        public IHttpActionResult GetCampaignImage(Int32 recordId)
+        {
+            var token = _apiUserService.GetToken();
+            var files = _mpService.GetFileDescriptions("Pledge_Campaigns", recordId, token);
+            var file = files.FirstOrDefault(f => f.IsDefaultImage);
+            return file != null ?
+                GetImage(file.FileId, file.FileName, token) :
+                (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No campaign image found")));
+        }
+
         [Route("api/image/profile/")]
         [HttpPost]
         public IHttpActionResult Post()
@@ -90,8 +107,8 @@ namespace crds_angular.Controllers.API
             {
                 const String fileName = "profile.png";
 
-                var contactId = _authenticationService.GetContactId(token); 
-                var files = _mpService.GetFileDescriptions("Contacts", contactId, token);
+                var contactId = _authenticationService.GetContactId(token);
+                var files = _mpService.GetFileDescriptions("MyContact", contactId, token);
                 var file = files.FirstOrDefault(f => f.IsDefaultImage);
                 var base64String = Request.Content.ReadAsStringAsync().Result;
 
@@ -117,7 +134,7 @@ namespace crds_angular.Controllers.API
                 else
                 {
                     _mpService.CreateFile(
-                        "Contacts",
+                        "MyContact",
                         contactId,
                         fileName,
                         "Profile Image",

@@ -35,13 +35,6 @@ namespace crds_angular.Services
             return GetRecord(465, householdId, token);         
         }
 
-        public static string GetSkills(int pageId, string token)
-        {
-            var data = MinistryPlatformService.GetRecords(pageId, token);
-            var json = MPFormatConversion.MPFormatToJson(data);
-            return json.ToString();
-        }
-
         public static string GetStates(string token)
         {
             var mpObject = MinistryPlatformService.GetRecords(Convert.ToInt32(ConfigurationManager.AppSettings["States"]), token);

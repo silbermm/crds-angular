@@ -2,28 +2,53 @@
 (function() {
   module.exports = ProfileHouseholdController;
 
-  ProfileHouseholdController.$inject = ['$rootScope', '$location', '$anchorScroll', '$log', 'Profile', 'Lookup', 'Validation'];
+  ProfileHouseholdController.$inject = [
+    '$rootScope',
+    '$location',
+    '$anchorScroll',
+    '$timeout',
+    '$log',
+    'Profile',
+    'Lookup',
+    'Validation'];
 
   /**
    * The controller for the household form directive
    * Variables passed in include:
    *  - householdInfo -- this is what the form fields are bound too
    */
-  function ProfileHouseholdController($rootScope, $location, $anchorScroll, $log, Profile, Lookup, Validation) {
+  function ProfileHouseholdController(
+          $rootScope,
+          $location,
+          $anchorScroll,
+          $timeout,
+          $log,
+          Profile,
+          Lookup,
+          Validation) {
+
     var vm = this;
 
     vm.countries = getCountries();
     vm.displayName = displayName;
     vm.displayLocation = displayLocation;
     vm.isCollapsed = true;
-    vm.locations = getLocations();
     vm.states = getStates();
     vm.validation = Validation;
+    vm.validLocations = validLocations(vm.locations);
 
-    $rootScope.$on('homePhoneFocus', function(event,data) {
+    $rootScope.$on('homePhoneFocus', function(event, data) {
       vm.isCollapsed = false;
       $location.hash('homephonecont');
-      setTimeout(function() {
+      $timeout(function() {
+        $anchorScroll();
+      }, 500);
+    });
+
+    $rootScope.$on('locationFocus', function(event, data) {
+      vm.isCollapsed = false;
+      $location.hash('Site');
+      $timeout(function() {
         $anchorScroll();
       }, 500);
     });
@@ -57,19 +82,17 @@
       });
     }
 
-    function getLocations() {
-      return Lookup.query({
-        table: 'crossroadslocations'
-      }, function(data) {
-        return data;
-      });
-    }
-
     function getStates() {
       return Lookup.query({
         table: 'states'
       }, function(data) {
         return data;
+      });
+    }
+
+    function validLocations(locations) {
+      return _.map(locations, function(location) {
+        return location.dp_RecordID;
       });
     }
   }

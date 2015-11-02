@@ -24,14 +24,21 @@ namespace crds_angular.Controllers.API
         private readonly IDonationService _donationService;
         private readonly MPInterfaces.IDonorService _mpDonorService;
         private readonly MPInterfaces.IAuthenticationService _authenticationService;
+        private readonly IUserImpersonationService _impersonationService;
 
-        public DonorController(IDonorService donorService, IPaymentService stripePaymentService, IDonationService donationService, MPInterfaces.IDonorService mpDonorService, MPInterfaces.IAuthenticationService authenticationService)
+        public DonorController(IDonorService donorService, 
+                                IPaymentService stripePaymentService, 
+                                IDonationService donationService, 
+                                MPInterfaces.IDonorService mpDonorService, 
+                                MPInterfaces.IAuthenticationService authenticationService,
+                                IUserImpersonationService impersonationService)
         {
             _donorService = donorService;
             _stripePaymentService = stripePaymentService;
             _donationService = donationService;
             _authenticationService = authenticationService;
             _mpDonorService = mpDonorService;
+            _impersonationService = impersonationService;
         }
 
         /// <summary>
@@ -319,20 +326,33 @@ namespace crds_angular.Controllers.API
         /// Create a recurring gift for the authenticated user.
         /// </summary>
         /// <param name="recurringGiftDto">The data required to setup the recurring gift in MinistryPlatform and Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
         [HttpPost]
         [Route("api/donor/recurrence")]
-        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto)
+        public IHttpActionResult CreateRecurringGift([FromBody] RecurringGiftDto recurringGiftDto, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
                 try
                 {
-                    var contactDonor = _donorService.GetContactDonorForAuthenticatedUser(token);
+                    var contactDonor = (impersonateDonorId != null)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetContactDonorForAuthenticatedUser(token))
+                        : _donorService.GetContactDonorForAuthenticatedUser(token);
                     var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
-                    var recurringGift = _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
+                    var recurringGift = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.CreateRecurringGift(token, recurringGiftDto, donor))
+                        : _donorService.CreateRecurringGift(token, recurringGiftDto, donor);
 
                     recurringGiftDto.EmailAddress = donor.Email;
                     recurringGiftDto.RecurringGiftId = recurringGift;
@@ -356,21 +376,35 @@ namespace crds_angular.Controllers.API
         /// </summary>
         /// <param name="recurringGiftId">The ID of the recurring gift to edit</param>
         /// <param name="editGift">The data required to edit the recurring gift in MinistryPlatform and/or Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The input RecurringGiftDto, with donor email address and recurring gift ID from MinistryPlatform populated</returns>
         [RequiresAuthorization]
         [ResponseType(typeof(RecurringGiftDto))]
         [HttpPut]
         [Route("api/donor/recurrence/{recurringGiftId:int}")]
-        public IHttpActionResult EditRecurringGift([FromUri]int recurringGiftId, [FromBody] RecurringGiftDto editGift)
+        public IHttpActionResult EditRecurringGift([FromUri]int recurringGiftId, [FromBody] RecurringGiftDto editGift, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             editGift.RecurringGiftId = recurringGiftId;
 
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
                 try
                 {
-                    var donor = _donorService.GetContactDonorForAuthenticatedUser(token);
-                    var recurringGift = _donorService.EditRecurringGift(token, editGift, donor);
+                    var donor = (impersonateDonorId != null)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetContactDonorForAuthenticatedUser(token))
+                        : _donorService.GetContactDonorForAuthenticatedUser(token);
+
+                    var recurringGift = !string.IsNullOrWhiteSpace(impersonateUserId)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.EditRecurringGift(token, editGift, donor))
+                        : _donorService.EditRecurringGift(token, editGift, donor);
 
                     return Ok(recurringGift);
                 }
@@ -391,17 +425,27 @@ namespace crds_angular.Controllers.API
         /// Cancel a recurring gift for the authenticated user.  This simply end-dates the gift, and cancels the subscription at Stripe.
         /// </summary>
         /// <param name="recurringGiftId">The recurring gift ID to delete in MinistryPlatform and Stripe.</param>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>The RecurringGiftDto representing the gift that was deleted</returns>
         [RequiresAuthorization]
         [HttpDelete]
         [Route("api/donor/recurrence/{recurringGiftId:int}")]
-        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId)
+        public IHttpActionResult CancelRecurringGift([FromUri]int recurringGiftId, [FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return(Authorized(token =>
             {
+
                 try
                 {
-                    _donorService.CancelRecurringGift(token, recurringGiftId);
+                    var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+
+                    var result = (impersonateDonorId != null)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.CancelRecurringGift(token, recurringGiftId))
+                        : _donorService.CancelRecurringGift(token, recurringGiftId);
+
                     return (Ok());
                 }
                 catch (PaymentProcessorException stripeException)
@@ -420,17 +464,26 @@ namespace crds_angular.Controllers.API
         /// <summary>
         /// Retrieve list of recurring gifts for the logged-in donor.
         /// </summary>
+        /// <param name="impersonateDonorId">An optional donorId of a donor to impersonate</param>
         /// <returns>A list of RecurringGiftDto</returns>
+       // [RequiresAuthorization]
         [Route("api/donor/recurrence")]
         [ResponseType(typeof(List<RecurringGiftDto>))]
         [HttpGet]
-        public IHttpActionResult GetRecurringGifts()
+        public IHttpActionResult GetRecurringGifts([FromUri(Name = "impersonateDonorId")] int? impersonateDonorId = null)
         {
             return (Authorized(token =>
             {
+                var impersonateUserId = impersonateDonorId == null ? string.Empty : _mpDonorService.GetEmailViaDonorId(impersonateDonorId.Value).Email;
+                
                 try
                 {
-                    var recurringGifts = _donorService.GetRecurringGiftsForAuthenticatedUser(token);
+                    var recurringGifts = (impersonateDonorId != null)
+                        ? _impersonationService.WithImpersonation(token,
+                                                                  impersonateUserId,
+                                                                  () =>
+                                                                      _donorService.GetRecurringGiftsForAuthenticatedUser(token)) 
+                        : _donorService.GetRecurringGiftsForAuthenticatedUser(token);
 
                     if (recurringGifts == null || !recurringGifts.Any())
                     {
@@ -438,6 +491,35 @@ namespace crds_angular.Controllers.API
                     }
 
                     return (Ok(recurringGifts));
+                }
+                catch (UserImpersonationException e)
+                {
+                    return (e.GetRestHttpActionResult());
+                }
+            }));
+        }
+
+        /// <summary>
+        /// Retrieve list of pledges for the logged-in donor.
+        /// </summary>
+        /// <returns>A list of PledgeDto</returns>
+        [Route("api/donor/pledge")]
+        [ResponseType(typeof(List<PledgeDto>))]
+        [HttpGet]
+        public IHttpActionResult GetPledges()
+        {
+            return (Authorized(token =>
+            {
+                try
+                {
+                    var pledges = _donorService.GetPledgesForAuthenticatedUser(token);
+
+                    if (pledges == null || !pledges.Any())
+                    {
+                        return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching commitments found")));
+                    }
+
+                    return (Ok(pledges));
                 }
                 catch (UserImpersonationException e)
                 {

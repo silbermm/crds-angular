@@ -26,7 +26,9 @@ describe('GiveController', function() {
 
   beforeEach(angular.mock.module('crossroads', function($provide) {
     $provide.value('$state', {
-      go: function() {}
+      go: function() {},
+
+      get: function() {}
     });
 
     programList = [
@@ -955,6 +957,19 @@ describe('GiveController', function() {
       expect(controller.service.stateName('confirm')).toBe('give.recurring_account');
       expect(controller.service.stateName('change')).toBe('give.recurring_change');
       expect(controller.service.stateName('thankYou')).toBe('give.recurring_thank-you');
+    });
+  });
+
+  describe('Give convert to recurring gift', function() {
+    it('should change convert to recurring', function() {
+      GiveTransferService.givingType = 'one-time';
+      GiveTransferService.amount = '12345';
+      GiveTransferService.program = '3';
+      GiveTransferService.resetForConvert();
+
+      expect(GiveTransferService.amount).toBe('12345');
+      expect(GiveTransferService.program).toBe('3');
+      expect(GiveTransferService.givingType).toBe('month');
     });
   });
 
