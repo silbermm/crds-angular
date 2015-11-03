@@ -9,7 +9,7 @@
           A receipt has been sent to <strong>{{give.dto.email}}</strong>.
       </p>
       <br />
-      <section ng-if="give.dto.givingType">
+      <section ng-if="give.dto.program.AllowRecurringGiving">
           <a href="" ng-click="give.service.convertToRecurring()">Make this gift recurring</a>
       </section>
   </div>
