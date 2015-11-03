@@ -21,6 +21,9 @@ namespace crds_angular.Models.Crossroads
         [JsonProperty(PropertyName = "waitListGroupId")]
         public int WaitListGroupId { get; set; }
 
+        [JsonProperty(PropertyName = "childCareInd")]
+        public bool ChildCareAvailable { get; set; }
+
         public List<SignUpFamilyMembers> SignUpFamilyMembers { get; set; }
         
     }

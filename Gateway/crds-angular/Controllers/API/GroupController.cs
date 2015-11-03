@@ -80,12 +80,21 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var participant = participantService.GetParticipantRecord(token);
-                var contactId = authenticationService.GetContactId(token);
+                try
+                {
+                    var participant = participantService.GetParticipantRecord(token);
+                    var contactId = authenticationService.GetContactId(token);
 
-                var detail = groupService.getGroupDetails(groupId, contactId, participant, token);
+                    var detail = groupService.getGroupDetails(groupId, contactId, participant, token);
 
-                return Ok(detail);
+                    return Ok(detail);
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Get Group", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
             }
                 );
         }

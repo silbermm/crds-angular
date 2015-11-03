@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Crossroads.Utilities.Interfaces;
@@ -123,6 +124,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gwl != null)
                 {
                     g.WaitList = (Boolean) gwl;
+                }
+
+                object gcc = null;
+                groupDetails.TryGetValue("Child_Care_Available", out gcc);
+                if (gcc != null)
+                {
+                    g.ChildCareAvailable = (Boolean) gcc;
                 }
 
                 if (g.WaitList)
