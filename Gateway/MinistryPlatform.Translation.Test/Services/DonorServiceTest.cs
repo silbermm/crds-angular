@@ -1174,7 +1174,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Frequency_ID", 1},
                     {"Subscription_ID", "sub_asdf1234"},
                     {"Donor_Account_ID", 5},
-                    {"Consecutive_Failure_Count", 1}
+                    {"Consecutive_Failure_Count", 1},
+                    {"Processor_ID", "cus_123"},
+                    {"Processor_Account_ID", "bank_123"}
                 }
             };
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), ",\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
@@ -1189,6 +1191,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
             Assert.AreEqual(4, result.RecurringGiftId);
             Assert.AreEqual(5, result.DonorAccountId);
+            Assert.AreEqual("cus_123", result.StripeCustomerId);
+            Assert.AreEqual("bank_123", result.StripeAccountId);
         }
 
         [Test]
