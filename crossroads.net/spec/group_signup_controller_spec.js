@@ -102,7 +102,7 @@ describe('GroupSignupController', function() {
         var $stateParams = {'link': 'test'}
 
         groupSignupController = function() {
-          return $controller('GroupSignupController', {'$scope': scope, '$stateParams': $stateParams});
+          return $controller('CommunityGroupSignupController', {'$scope': scope, '$stateParams': $stateParams});
         };
 
         $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/profile')

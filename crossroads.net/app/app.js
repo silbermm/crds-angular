@@ -16,7 +16,8 @@ require('../lib/select.css');
       constants.MODULES.MPTOOLS,
       constants.MODULES.PROFILE,
       constants.MODULES.SEARCH,
-      constants.MODULES.TRIPS
+      constants.MODULES.TRIPS,
+      constants.MODULES.COMMUNITY_GROUPS
    ]);
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
@@ -26,7 +27,6 @@ require('../lib/select.css');
   require('./thedaily');
   require('./explore');
   require('./gotrips');
-  require('./community_groups_signup/group_signup_form.html');
   require('./my_serve');
   require('./volunteer_signup');
   require('./volunteer_application');

@@ -12,14 +12,16 @@ namespace MinistryPlatform.Models
         public string Name { get; set; }
         public IList<GroupParticipant> Participants { get; set; }
         public Boolean Full { get; set; }
-        public Boolean WaitList { get; set; } 
+        public Boolean WaitList { get; set; }
         public int WaitListGroupId { get; set; }
         public string PrimaryContact { get; set; }
         public int EventTypeId { get; set; }
+        public bool ChildCareAvailable { get; set; }
 
         public Group()
         {
             Participants = new List<GroupParticipant>();
+            ChildCareAvailable = false;
         }
     }
 }
