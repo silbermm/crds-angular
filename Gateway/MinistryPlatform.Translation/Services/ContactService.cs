@@ -132,6 +132,7 @@ namespace MinistryPlatform.Translation.Services
                 Household_Name = recordsDict.ToString("Household_Name"),
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
+                County = recordsDict.ToString("County"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),
                 Anniversary_Date = ParseAnniversaryDate(recordsDict.ToNullableDate("Anniversary_Date")),
                 Contact_ID = recordsDict.ToInt("Contact_ID"),

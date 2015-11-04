@@ -274,16 +274,16 @@ namespace crds_angular.Services
         }
 
 
-        public List<FamilyMember> FamilyThatUserCanSubmitFor(int contactId, string token)
+        public List<FamilyMember> FamilyThatUserCanSubmitFor(string token)
         {
-            var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var list = _serveService.GetImmediateFamilyParticipants(token);
             var family =
                 list.Where(
                     s =>
                         (s.RelationshipId == 0) || (s.RelationshipId == 29) ||
                         (s.RelationshipId == 21 && s.Age >= 10 && s.Age <= 13) ||
                         (s.RelationshipId == 6 && s.Age >= 10 && s.Age <= 13)).ToList();
-
+            //TODO: I don't like these rules hard coded here, Relationship IDs and age limits
             return family;
         }
     }

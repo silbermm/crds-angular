@@ -26,6 +26,7 @@ namespace crds_angular.test.controllers
         private Mock<IAuthenticationService> _authenticationServiceMock;
         private Mock<crds_angular.Services.Interfaces.IDonorService> _donorService;
         private Mock<IUserImpersonationService> _impersonationService;
+        private Mock<IAuthenticationService> _authenticationService;
 
         private string _authType;
         private string _authToken;
@@ -39,8 +40,9 @@ namespace crds_angular.test.controllers
             _serveServiceMock = new Mock<IServeService>();
             _donorService = new Mock<IDonorService>();
             _impersonationService = new Mock<IUserImpersonationService>();
+            _authenticationService = new Mock<IAuthenticationService>();
 
-            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object, _impersonationService.Object, _donorService.Object);
+            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object, _impersonationService.Object, _donorService.Object, _authenticationService.Object);
             _authenticationServiceMock = new Mock<IAuthenticationService>();
 
             _authType = "auth_type";
@@ -90,7 +92,7 @@ namespace crds_angular.test.controllers
                 }
             };
 
-            _serveServiceMock.Setup(x => x.GetImmediateFamilyParticipants(123456, _authType + " " + _authToken)).Returns(familyList);
+            _serveServiceMock.Setup(x => x.GetImmediateFamilyParticipants(_authType + " " + _authToken)).Returns(familyList);
             _personServiceMock.Setup(x => x.GetLoggedInUserProfile(_authType + " " + _authToken)).Returns(me);
             _personServiceMock.Setup(x => x.GetPerson(13579)).Returns(brady);
             

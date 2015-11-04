@@ -177,9 +177,9 @@ namespace crds_angular.Services
             return resp;
         }
 
-        public List<FamilyMemberTripDto> GetFamilyMembers(int contactId, int pledgeId, string token)
+        public List<FamilyMemberTripDto> GetFamilyMembers(int pledgeId, string token)
         {
-            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var family = _serveService.GetImmediateFamilyParticipants(token);
             var fam = new List<FamilyMemberTripDto>();
             foreach (var f in family)
             {
@@ -279,9 +279,9 @@ namespace crds_angular.Services
             return participants.Values.Where(x => x.Trips.Count > 0).OrderBy(o => o.Lastname).ThenBy(o => o.Nickname).ToList();
         }
 
-        public MyTripsDto GetMyTrips(int contactId, string token)
+        public MyTripsDto GetMyTrips(string token)
         {
-            var family = _serveService.GetImmediateFamilyParticipants(contactId, token);
+            var family = _serveService.GetImmediateFamilyParticipants(token);
             var familyTrips = new MyTripsDto();
 
             foreach (var member in family)

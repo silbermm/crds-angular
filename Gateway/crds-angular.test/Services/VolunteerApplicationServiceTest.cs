@@ -31,13 +31,12 @@ namespace crds_angular.test.Services
         [Test]
         public void FamilyThatUserCanSubmitFor()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamily();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
 
             _serveService.VerifyAll();
             Assert.AreEqual(mockFamily.Count - 1, family.Count);
@@ -47,13 +46,12 @@ namespace crds_angular.test.Services
         //Foster Relationship, age 10,11,12,13
         public void FosterThatICanSubmitFor()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyFosterAgeTen();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //only remove the spouse
             Assert.AreEqual(mockFamily.Count - 1, family.Count);
@@ -63,13 +61,12 @@ namespace crds_angular.test.Services
         //Foster Relationship 14+
         public void FosterThatICanNotSubmitFor()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyFosterAge14();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //remove the spouse and foster age 14
             Assert.AreEqual(mockFamily.Count - 2, family.Count);
@@ -79,13 +76,12 @@ namespace crds_angular.test.Services
         //Foster Relationship Under 10
         public void FosterUnderTen()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyFosterAge9();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //remove the spouse and foster under 10
             Assert.AreEqual(mockFamily.Count - 2, family.Count);
@@ -95,13 +91,12 @@ namespace crds_angular.test.Services
         //Child Relationship, age 10,11,12,13
         public void ChildICanSubmitFor()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyChildAgeTen();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //only remove the spouse
             Assert.AreEqual(mockFamily.Count - 1, family.Count);
@@ -111,13 +106,12 @@ namespace crds_angular.test.Services
         //Child Relationship, age 14+
         public void ChildICanNotSubmitFor()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyChildAge14();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //remove the spouse and child age 14
             Assert.AreEqual(mockFamily.Count - 2, family.Count);
@@ -127,13 +121,12 @@ namespace crds_angular.test.Services
         //Child Relationship Under 10
         public void ChildUnderTen()
         {
-            const int contactId = 1111;
             var mockFamily = MockFamilyChildAge9();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //remove the spouse and child under 10
             Assert.AreEqual(mockFamily.Count - 2, family.Count);
@@ -146,10 +139,10 @@ namespace crds_angular.test.Services
             const int contactId = 1111;
             var mockFamily = MockFamilyLegalWard();
 
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, It.IsAny<string>()))
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(It.IsAny<string>()))
                 .Returns(mockFamily);
 
-            var family = _fixture.FamilyThatUserCanSubmitFor(contactId, It.IsAny<string>());
+            var family = _fixture.FamilyThatUserCanSubmitFor(It.IsAny<string>());
             _serveService.VerifyAll();
             //remove the spouse only
             Assert.AreEqual(mockFamily.Count - 1, family.Count);

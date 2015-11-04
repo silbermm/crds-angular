@@ -76,12 +76,12 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(List<FamilyMember>))]
         [Route("api/volunteer-application/family/{contactId}")]
         public IHttpActionResult GetFamily(int contactId)
-        {
+        {//TODO: I don't think you need to pass in contactId, use the token instead
             return Authorized(token =>
             {
                 try
                 {
-                    var family = _volunteerApplicationService.FamilyThatUserCanSubmitFor(contactId, token);
+                    var family = _volunteerApplicationService.FamilyThatUserCanSubmitFor(token);
                     return Ok(family);
                 }
                 catch (Exception ex)
