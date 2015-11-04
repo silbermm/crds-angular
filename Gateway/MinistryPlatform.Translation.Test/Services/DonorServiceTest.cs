@@ -685,7 +685,6 @@ namespace MinistryPlatform.Translation.Test.Services
                     })},
                     {"Payment_Method", paymentType},
                     {"Decline_Reason", emailReason},
-                    {"Frequency", string.Empty}
                 }
             };
 
@@ -702,7 +701,7 @@ namespace MinistryPlatform.Translation.Test.Services
                                 c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&
                                 c.MergeData["Payment_Method"].Equals(expectedCommunication.MergeData["Payment_Method"]) &&
                                 c.MergeData["Decline_Reason"].Equals(expectedCommunication.MergeData["Decline_Reason"]) &&
-                                c.MergeData["Frequency"].Equals(expectedCommunication.MergeData["Frequency"])
+                                !c.MergeData.ContainsKey("Frequency")
                             )));
 
             _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,

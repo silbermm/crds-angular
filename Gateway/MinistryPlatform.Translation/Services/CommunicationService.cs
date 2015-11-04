@@ -167,11 +167,11 @@ namespace MinistryPlatform.Translation.Services
                     return templateBody;
                 }
                 return record.Aggregate(templateBody,
-                    (current, field) => current.Replace("[" + field.Key + "]", field.Value == null ? string.Empty : field.Value.ToString()));
+                    (current, field) => current.Replace("[" + field.Key + "]", field.Value.ToString()));
             }
             catch (Exception ex)
             {
-                _logger.Debug(string.Format("Failed to parse the template"));
+                _logger.Warn("Failed to parse the template", ex);
                 throw new TemplateParseException("Failed to parse the template", ex);
             }
         }
