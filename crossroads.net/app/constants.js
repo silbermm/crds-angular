@@ -13,6 +13,7 @@
       MPTOOLS: 'crossroads.mptools',
       PROFILE: 'crossroads.profile',
       MEDIA: 'crossroads.media',
+      COMMUNITY_GROUPS: 'crossroads.community'
     },
     ATTRIBUTE_TYPE_IDS: {
       ABUSE_HISTORY: 69,
@@ -30,7 +31,7 @@
       START_ATTEND_REASON: 59,
       TRIP_SKILLS: 61,
       TSHIRT_SIZES: 21,
-      TRIP_EXPERIENCE: 62,
+      TRIP_EXPERIENCE: 62
     },
     ATTRIBUTE_IDS: {
       ALL_ALLERGIES: 3971,
@@ -45,6 +46,6 @@
       PREVIOUS_TRIP_EXPERIENCE: 3949,
       VICTIM_OF_ABUSE: 3973,
       START_ATTEND_REASON: 59
-    },
+    }
   };
 })();

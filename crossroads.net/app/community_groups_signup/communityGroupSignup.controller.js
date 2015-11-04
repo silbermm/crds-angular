@@ -1,8 +1,28 @@
-'use strict';
 require('../services/group_service');
 (function() {
-	module.exports = function GroupSignupController($rootScope, $scope, Profile, Group, $log, $stateParams, Page, $modal) {
-		$log.debug("Inside GroupSignupController");
+  'use strict';
+	module.exports = CommunityGroupSignupController;
+  
+  CommunityGroupSignupController.$inject = [
+    '$rootScope',
+    '$scope',
+    'Profile',
+    'Group',
+    '$log',
+    '$stateParams',
+    'Page',
+    '$modal'
+  ];
+    
+  function CommunityGroupSignupController(
+    $rootScope,
+    $scope,
+    Profile,
+    Group,
+    $log,
+    $stateParams,
+    Page,
+    $modal) {
 
 		var vm = this;
 

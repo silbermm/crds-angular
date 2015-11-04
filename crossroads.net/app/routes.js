@@ -238,7 +238,7 @@
         parent: 'noSideBar',
         url: '{link:signupRouteType}',
         controller: 'GroupSignupController as groupsignup',
-        templateUrl: 'community_groups_signup/group_signup_form.html',
+        templateUrl: 'community_groups_signup/groupSignupForm.html',
         data: {
           isProtected: true,
           meta: {
