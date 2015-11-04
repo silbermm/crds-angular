@@ -201,20 +201,22 @@ namespace crds_angular.Controllers.API
                     }
                 }
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord(dto.Amount,
-                                                                                     fee,
-                                                                                     donor.DonorId,
-                                                                                     dto.ProgramId,
-                                                                                     pledgeId,
-                                                                                     charge.Id,
-                                                                                     dto.PaymentType,
-                                                                                     donor.ProcessorId,
-                                                                                     DateTime.Now,
-                                                                                     true,
-                                                                                     dto.Anonymous,
-                                                                                     false,
-                                                                                     null,
-                                                                                     null));
+                var donationAndDistribution = new DonationAndDistributionRecord
+                {
+                    DonationAmt = dto.Amount,
+                    FeeAmt = fee,
+                    DonorId = donor.DonorId,
+                    ProgramId = dto.ProgramId,
+                    PledgeId = pledgeId,
+                    ChargeId = charge.Id,
+                    PymtType = dto.PaymentType,
+                    ProcessorId = donor.ProcessorId,
+                    SetupDate = DateTime.Now,
+                    RegisteredDonor = true,
+                    Anonymous = dto.Anonymous
+                };
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);
@@ -257,20 +259,22 @@ namespace crds_angular.Controllers.API
                     }
                 }
 
-                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord(dto.Amount,
-                                                                                     fee,
-                                                                                     donor.DonorId,
-                                                                                     dto.ProgramId,
-                                                                                     pledgeId,
-                                                                                     charge.Id,
-                                                                                     dto.PaymentType,
-                                                                                     donor.ProcessorId,
-                                                                                     DateTime.Now,
-                                                                                     false,
-                                                                                     dto.Anonymous,
-                                                                                     false,
-                                                                                     null,
-                                                                                     null));
+                var donationAndDistribution = new DonationAndDistributionRecord
+                {
+                    DonationAmt = dto.Amount,
+                    FeeAmt = fee,
+                    DonorId = donor.DonorId,
+                    ProgramId = dto.ProgramId,
+                    PledgeId = pledgeId,
+                    ChargeId = charge.Id,
+                    PymtType = dto.PaymentType,
+                    ProcessorId = donor.ProcessorId,
+                    SetupDate = DateTime.Now,
+                    RegisteredDonor = false,
+                    Anonymous = dto.Anonymous
+                };
+
+                var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
                 if (!dto.GiftMessage.IsNullOrWhiteSpace() && pledgeId != null)
                 {
                     SendMessageFromDonor(pledgeId.Value, dto.GiftMessage);

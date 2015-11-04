@@ -179,16 +179,21 @@ namespace crds_angular.test.Services
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId)).Returns(donorAcctId);
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int) checks[0].Amount,
-                                                               123,
-                                                               contactDonorExisting.DonorId,
-                                                               "9090",
-                                                               null,
-                                                               "1020304",
-                                                               "check",
-                                                               contactDonorExisting.ProcessorId,
-                                                               checks[0].CheckDate.Value,
-                                                               true, false, false, null, donorAcctId, "batch123", null, "11111"))).Returns(321);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(d =>
+                                                                 d.DonationAmt == (int) checks[0].Amount &&
+                                                                 d.FeeAmt == 123 &&
+                                                                 d.DonorId == contactDonorExisting.DonorId &&
+                                                                 d.ProgramId.Equals("9090") &&
+                                                                 d.ChargeId.Equals("1020304") &&
+                                                                 d.PymtType.Equals("check") &&
+                                                                 d.ProcessorId.Equals(contactDonorExisting.ProcessorId) &&
+                                                                 d.SetupDate.Equals(checks[0].CheckDate) &&
+                                                                 d.RegisteredDonor &&
+                                                                 d.DonorAcctId == donorAcctId &&
+                                                                 d.CheckScannerBatchName.Equals("batch123") &&
+                                                                 d.CheckNumber.Equals("11111"))))
+                .Returns(321);
 
             var contactDonorNew = new ContactDonor
             {
@@ -234,16 +239,21 @@ namespace crds_angular.test.Services
 
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)checks[1].Amount,
-                                                               null,
-                                                               contactDonorNew.DonorId,
-                                                               "9090",
-                                                               null,
-                                                               "40302010",
-                                                               "check",
-                                                               contactDonorNew.ProcessorId,
-                                                               checks[1].CheckDate.Value,
-                                                               false, false, false, null, donorAcctId, "batch123", null, "22222"))).Returns(654);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(d =>
+                                                                 d.DonationAmt == (int) checks[1].Amount &&
+                                                                 d.FeeAmt == null &&
+                                                                 d.DonorId == contactDonorNew.DonorId &&
+                                                                 d.ProgramId.Equals("9090") &&
+                                                                 d.ChargeId.Equals("40302010") &&
+                                                                 d.PymtType.Equals("check") &&
+                                                                 d.ProcessorId.Equals(contactDonorNew.ProcessorId) &&
+                                                                 d.SetupDate.Equals(checks[1].CheckDate) &&
+                                                                 !d.RegisteredDonor &&
+                                                                 d.DonorAcctId == donorAcctId &&
+                                                                 d.CheckScannerBatchName.Equals("batch123") &&
+                                                                 d.CheckNumber.Equals("22222"))))
+                .Returns(654);
 
 
 

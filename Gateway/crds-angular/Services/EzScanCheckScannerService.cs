@@ -84,23 +84,23 @@ namespace crds_angular.Services
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
-                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)(check.Amount),
-                                                                                         fee,
-                                                                                         contactDonor.DonorId,
-                                                                                         programId,
-                                                                                         null,
-                                                                                         charge.Id,
-                                                                                         "check",
-                                                                                         contactDonor.ProcessorId,
-                                                                                         check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
-                                                                                         contactDonor.RegisteredUser,
-                                                                                         false, //Anonymous gift
-                                                                                         false,
-                                                                                         null,
-                                                                                         donorAccountId,
-                                                                                         batchDetails.Name,
-                                                                                         null,
-                                                                                         check.CheckNumber));
+                    var donationAndDistribution = new DonationAndDistributionRecord
+                    {
+                        DonationAmt = (int) (check.Amount),
+                        FeeAmt = fee,
+                        DonorId = contactDonor.DonorId,
+                        ProgramId = programId,
+                        ChargeId = charge.Id,
+                        PymtType = "check",
+                        ProcessorId = contactDonor.ProcessorId,
+                        SetupDate = check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
+                        RegisteredDonor = contactDonor.RegisteredUser,
+                        DonorAcctId = donorAccountId,
+                        CheckScannerBatchName = batchDetails.Name,
+                        CheckNumber = check.CheckNumber,
+                    };
+
+                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
 
                     check.DonationId = donationId;
 

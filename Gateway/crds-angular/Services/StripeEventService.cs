@@ -80,22 +80,24 @@ namespace crds_angular.Services
             var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
             var amount = charge.Amount / Constants.StripeDecimalConversionValue;
 
-            _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)amount,
-                                                                fee, // Fee amount
-                                                                createDonation.DonorId,
-                                                                createDonation.ProgramId,
-                                                                null, // Pledge ID
-                                                                invoice.Charge,
-                                                                createDonation.PaymentType,
-                                                                invoice.Customer,
-                                                                DateTime.Now,
-                                                                true, // Registered donor?
-                                                                false, //Anonymous gift? 
-                                                                true, // Recurring gift?
-                                                                createDonation.RecurringGiftId,
-                                                                createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null,
-                                                                null, // check scanner batch name
-                                                                (int)donationStatus));
+            var donationAndDistribution = new DonationAndDistributionRecord
+            {
+                DonationAmt = (int)amount,
+                FeeAmt = fee,
+                DonorId = createDonation.DonorId,
+                ProgramId = createDonation.ProgramId,
+                ChargeId = invoice.Charge,
+                PymtType = createDonation.PaymentType,
+                ProcessorId = invoice.Customer,
+                SetupDate = DateTime.Now,
+                RegisteredDonor = true,
+                RecurringGift = true,
+                RecurringGiftId = createDonation.RecurringGiftId,
+                DonorAcctId = createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null,
+                DonationStatus = (int)donationStatus
+            };
+
+            _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
          }
 
         private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)
