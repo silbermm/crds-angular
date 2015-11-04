@@ -16,7 +16,8 @@ require('../lib/select.css');
       constants.MODULES.MPTOOLS,
       constants.MODULES.PROFILE,
       constants.MODULES.SEARCH,
-      constants.MODULES.TRIPS
+      constants.MODULES.TRIPS,
+      constants.MODULES.COMMUNITY_GROUPS
    ]);
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));

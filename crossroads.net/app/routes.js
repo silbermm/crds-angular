@@ -18,7 +18,6 @@
     ) {
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
-    crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'signupRouteType', /\/sign-up\/.*$/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
 
@@ -233,22 +232,6 @@
         parent: 'noSideBar',
         url: '/demo/go-trip-giving',
         templateUrl: 'trip_giving/give.html'
-      })
-      .state('community-groups-signup', {
-        parent: 'noSideBar',
-        url: '{link:signupRouteType}',
-        controller: 'GroupSignupController as groupsignup',
-        templateUrl: 'community_groups_signup/groupSignupForm.html',
-        data: {
-          isProtected: true,
-          meta: {
-            title: 'Community Group Signup',
-            description: ''
-          }
-        },
-        resolve: {
-          loggedin: crds_utilities.checkLoggedin
-        }
       })
       .state('volunteer-request', {
         parent: 'noSideBar',

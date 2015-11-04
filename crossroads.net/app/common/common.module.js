@@ -14,4 +14,6 @@
   // require all profile common components
   require('./profile');
 
+  require('./community_groups');
+
 })();
