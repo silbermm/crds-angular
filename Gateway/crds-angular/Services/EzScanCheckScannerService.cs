@@ -100,7 +100,7 @@ namespace crds_angular.Services
                         RegisteredDonor = contactDonor.RegisteredUser,
                         DonorAcctId = donorAccountId,
                         CheckScannerBatchName = batchDetails.Name,
-                        CheckNumber = check.CheckNumber.TrimStart(' ', '0').Right(MinistryPlatformCheckNumberMaxLength)
+                        CheckNumber = (check.CheckNumber ?? string.Empty).TrimStart(' ', '0').Right(MinistryPlatformCheckNumberMaxLength)
                     };
 
                     var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
