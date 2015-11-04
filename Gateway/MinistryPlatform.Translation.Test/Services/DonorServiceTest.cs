@@ -169,6 +169,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
             const int donationStatus = 4;
+            const string itemNumber = "98766";
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -196,7 +197,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Recurring_Gift_ID", null},
                 {"Is_Recurring_Gift", false},
                 {"Donor_Account_ID",donorAcctId },
-                {"Check_Scanner_Batch", checkScannerBatchName}
+                {"Check_Scanner_Batch", checkScannerBatchName},
+                {"Item_Number", itemNumber}
             };
 
             var expectedDistributionValues = new Dictionary<string, object>
@@ -240,8 +242,25 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
+            var donationAndDistribution = new DonationAndDistributionRecord
+            {
+                DonationAmt = donationAmt,
+                FeeAmt = feeAmt,
+                DonorId = donorId,
+                ProgramId = programId,
+                ChargeId = chargeId,
+                PymtType = pymtType,
+                ProcessorId = processorId,
+                SetupDate = setupDate,
+                RegisteredDonor = true,
+                DonorAcctId = donorAcctId,
+                CheckScannerBatchName = checkScannerBatchName,
+                DonationStatus = donationStatus,
+                CheckNumber = itemNumber
+            };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, false, null, donorAcctId, checkScannerBatchName, donationStatus);
+            var response =
+                _fixture.CreateDonationAndDistributionRecord(donationAndDistribution);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -348,22 +367,22 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
+            var donationAndDistribution = new DonationAndDistributionRecord
+            {
+                DonationAmt = donationAmt,
+                FeeAmt = feeAmt,
+                DonorId = donorId,
+                ProgramId = programId,
+                ChargeId = chargeId,
+                PymtType = pymtType,
+                ProcessorId = processorId,
+                SetupDate = setupDate,
+                RegisteredDonor = true,
+                CheckScannerBatchName = checkScannerBatchName,
+                PledgeId = pledgeId
+            };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt,
-                                                                        feeAmt,
-                                                                        donorId,
-                                                                        programId,
-                                                                        pledgeId,
-                                                                        chargeId,
-                                                                        pymtType,
-                                                                        processorId,
-                                                                        setupDate,
-                                                                        true,
-                                                                        false,
-                                                                        false,
-                                                                        null,
-                                                                        null,
-                                                                        checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAndDistribution);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -601,6 +620,92 @@ namespace MinistryPlatform.Translation.Test.Services
 
             _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
                 emailReason, frequency);
+
+            _ministryPlatformService.VerifyAll();
+            _communicationService.VerifyAll();
+
+        }
+
+        [Test]
+        public void TestSendEmailNoFrequency()
+        {
+            const string program = "Crossroads";
+            const int declineEmailTemplate = 11940;
+            var donationDate = DateTime.Now;
+            const string emailReason = "rejected: lack of funds";
+            const int donorId = 9876;
+            const int donationAmt = 4343;
+            const string paymentType = "Bank";
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Your payment was rejected.  Darn.",
+                Subject = "Test Decline Email"
+            };
+
+            const string emailAddress = "me@here.com";
+            const int contactId = 3;
+            var contactList = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donor_ID", 1},
+                    {"Processor_ID", 2},
+                    {"Contact_ID", contactId},
+                    {"Email", emailAddress},
+                    {"Statement_Type", "Family"},
+                    {"Statement_Type_ID", 2},
+                    {"Statement_Frequency", "Quarterly"},
+                    {"Statement_Method", "Online"},
+                    {"Household_ID", 4},
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords("DonorByContactId", It.IsAny<string>(), It.IsAny<string>(), string.Empty, 0)).Returns(contactList);
+            var expectedCommunication = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = getTemplateResponse.Body,
+                EmailSubject = getTemplateResponse.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "giving@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "giving@crossroads.net",
+                ToContactId = contactId,
+                ToEmailAddress = emailAddress,
+                MergeData = new Dictionary<string, object>
+                {
+                    {"Program_Name", program},
+                    {"Donation_Amount", donationAmt.ToString("N2")},
+                    {"Donation_Date", donationDate.ToString("MM/dd/yyyy h:mmtt", new DateTimeFormatInfo
+                    {
+                        AMDesignator = "am",
+                        PMDesignator = "pm"
+                    })},
+                    {"Payment_Method", paymentType},
+                    {"Decline_Reason", emailReason},
+                }
+            };
+
+            _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
+            _communicationService.Setup(
+                mocked =>
+                    mocked.SendMessage(
+                        It.Is<Communication>(
+                            c =>
+                                c.EmailBody.Equals(expectedCommunication.EmailBody) && c.EmailSubject.Equals(expectedCommunication.EmailSubject) &&
+                                c.ToContactId == expectedCommunication.ToContactId && c.ToEmailAddress.Equals(expectedCommunication.ToEmailAddress) &&
+                                c.MergeData["Program_Name"].Equals(expectedCommunication.MergeData["Program_Name"]) &&
+                                c.MergeData["Donation_Amount"].Equals(expectedCommunication.MergeData["Donation_Amount"]) &&
+                                c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&
+                                c.MergeData["Payment_Method"].Equals(expectedCommunication.MergeData["Payment_Method"]) &&
+                                c.MergeData["Decline_Reason"].Equals(expectedCommunication.MergeData["Decline_Reason"]) &&
+                                !c.MergeData.ContainsKey("Frequency")
+                            )));
+
+            _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
+                emailReason, null);
 
             _ministryPlatformService.VerifyAll();
             _communicationService.VerifyAll();
@@ -1174,7 +1279,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Frequency_ID", 1},
                     {"Subscription_ID", "sub_asdf1234"},
                     {"Donor_Account_ID", 5},
-                    {"Consecutive_Failure_Count", 1}
+                    {"Consecutive_Failure_Count", 1},
+                    {"Processor_ID", "cus_123"},
+                    {"Processor_Account_ID", "bank_123"}
                 }
             };
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(45208, It.IsAny<string>(), ",\"sub_123\",", string.Empty, 0)).Returns(lookupResult);
@@ -1189,6 +1296,8 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(PaymentType.CreditCard.abbrv, result.PaymentType);
             Assert.AreEqual(4, result.RecurringGiftId);
             Assert.AreEqual(5, result.DonorAccountId);
+            Assert.AreEqual("cus_123", result.StripeCustomerId);
+            Assert.AreEqual("bank_123", result.StripeAccountId);
         }
 
         [Test]

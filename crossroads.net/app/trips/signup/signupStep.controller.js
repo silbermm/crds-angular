@@ -79,7 +79,7 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           break;
         case '6':
           evaluateFrequentFlyers();
-          evaluateInternationalExperience();
+          evaluateExperienceAbroad();
           break;
         default:
           break;
@@ -95,20 +95,20 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
       }
     }
 
+    function evaluateExperienceAbroad() {
+      if (!vm.experienceAbroad.attribute) {
+        vm.experienceAbroad.attribute = {
+          attributeId: attributes.EXPERIENCE_ABROAD
+        };
+      }
+    }
+
     function evaluateFrequentFlyers() {
       _.forEach(vm.frequentFlyers, function(flyer) {
         if (flyer.notes) {
           flyer.selected = true;
         }
       });
-    }
-
-    function evaluateInternationalExperience() {
-      if (!vm.experienceAbroad.attribute) {
-        vm.experienceAbroad.attribute = {
-          attributeId: attributes.EXPERIENCE_ABROAD
-        };
-      }
     }
 
     function evaluatePreviousTripExperience() {

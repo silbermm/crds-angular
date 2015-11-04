@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -400,25 +399,27 @@ namespace crds_angular.test.Services
             };
             _donorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
             _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, Constants.ResetFailCount));
-       
+
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int) (chargeAmount/Constants.StripeDecimalConversionValue),
-                                                               feeAmount,
-                                                               donorId,
-                                                               programId,
-                                                               null,
-                                                               chargeId,
-                                                               paymentType,
-                                                               processorId,
-                                                               It.IsAny<DateTime>(),
-                                                               true,
-                                                               false,
-                                                               true,
-                                                               recurringGiftId,
-                                                               donorAccountId+"",
-                                                               null,
-                                                               donationStatus)).Returns(123);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(
+                            d => d.DonationAmt == (int) (chargeAmount/Constants.StripeDecimalConversionValue) && 
+                                 d.FeeAmt == feeAmount && 
+                                 d.DonorId == donorId &&
+                                 d.ProgramId.Equals(programId) &&
+                                 d.PledgeId == null &&
+                                 d.ChargeId.Equals(chargeId) &&
+                                 d.PymtType.Equals(paymentType) &&
+                                 d.ProcessorId.Equals(processorId) &&
+                                 d.RegisteredDonor &&
+                                 !d.Anonymous &&
+                                 d.RecurringGift &&
+                                 d.RecurringGiftId == recurringGiftId &&
+                                 d.DonorAcctId.Equals(donorAccountId+"") &&
+                                 d.CheckScannerBatchName == null &&
+                                 d.DonationStatus == donationStatus &&
+                                 d.CheckNumber == null))).Returns(123);
 
             _fixture.InvoicePaymentSucceeded(eventTimestamp, invoice);
             _paymentService.VerifyAll();
@@ -470,11 +471,11 @@ namespace crds_angular.test.Services
         public void TestInvoicePaymentFailedCancelPlanAndSubscription()
         {
             const string processorId = "cus_123";
+            const string donorAccountProcessorId = "cus_456";
             const string subscriptionId = "sub_123";
             const int failCount = 3;
             const int recurringGiftId = 123456;
             const int donorId = 3421;
-            const int contactId = 765876;
             const int frequency = 2;
             const string id = "9876";
             const string charge = "ch_2468";
@@ -503,14 +504,8 @@ namespace crds_angular.test.Services
                 RecurringGiftId = recurringGiftId,
                 SubscriptionId = subscriptionId,
                 ConsecutiveFailureCount =  failCount,
-                DonorId =  donorId,                
-            };
-
-             var contactDonor = new ContactDonor
-            {
-                ContactId = contactId,
-                DonorId = donorId,
-                ProcessorId = processorId
+                DonorId =  donorId,
+                StripeCustomerId = donorAccountProcessorId
             };
 
              var plan = new StripePlan
@@ -525,19 +520,17 @@ namespace crds_angular.test.Services
 
             _mpDonorService.Setup(mocked => mocked.ProcessRecurringGiftDecline(subscriptionId));
             _mpDonorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(gift);
-            _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(donorId)).Returns(contactDonor);
-            _paymentService.Setup(mocked => mocked.CancelSubscription(processorId, subscriptionId)).Returns(subscription);
+            _paymentService.Setup(mocked => mocked.CancelSubscription(donorAccountProcessorId, subscriptionId)).Returns(subscription);
             _paymentService.Setup(mocked => mocked.CancelPlan(subscription.Plan.Id)).Returns(plan);
             _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(recurringGiftId));
            
 
             Assert.IsNull(_fixture.ProcessStripeEvent(e));
             _fixture.ProcessStripeEvent(e);
+            _donorService.VerifyAll();
             _mpDonorService.VerifyAll();
             _donorService.VerifyAll();
             _paymentService.VerifyAll();
-
-
         }
     }
 }
