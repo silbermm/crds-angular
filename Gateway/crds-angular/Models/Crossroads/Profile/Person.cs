@@ -101,6 +101,9 @@ namespace crds_angular.Models.Crossroads.Profile
 
         [JsonProperty(PropertyName = "postalCode")]
         public string PostalCode { get; set; }
+        
+        [JsonProperty(PropertyName = "county")]
+        public string County { get; set; }
 
         [JsonProperty(PropertyName = "state")]
         public string State { get; set; }
@@ -138,6 +141,7 @@ namespace crds_angular.Models.Crossroads.Profile
                 City = City,
                 State = State,
                 Postal_Code = PostalCode,
+                County = County,
                 Congregation_ID = CongregationId,
                 Household_ID = HouseholdId,
                 Passport_Country = PassportCountry,
@@ -169,6 +173,7 @@ namespace crds_angular.Models.Crossroads.Profile
                 City = City,
                 State = State,
                 Postal_Code = PostalCode,
+                County = County,
                 Foreign_Country = ForeignCountry
             };
         }
