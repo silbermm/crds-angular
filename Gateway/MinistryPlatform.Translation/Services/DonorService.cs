@@ -609,7 +609,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Donation_Date", setupDate.ToString("MM/dd/yyyy h:mmtt", _dateTimeFormat)},
                     {"Payment_Method", paymentType},
                     {"Decline_Reason", emailReason},
-                    {"Frequency", frequency}
+                    {"Frequency", frequency ?? string.Empty}
                 }
             };
 

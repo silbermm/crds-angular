@@ -167,7 +167,7 @@ namespace MinistryPlatform.Translation.Services
                     return templateBody;
                 }
                 return record.Aggregate(templateBody,
-                    (current, field) => current.Replace("[" + field.Key + "]", field.Value.ToString()));
+                    (current, field) => current.Replace("[" + field.Key + "]", field.Value == null ? string.Empty : field.Value.ToString()));
             }
             catch (Exception ex)
             {
