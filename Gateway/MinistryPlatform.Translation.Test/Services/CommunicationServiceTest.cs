@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -60,6 +61,35 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(replyEmailAddress, communication.ReplyToEmailAddress);
             Assert.AreEqual(toContactId, communication.ToContactId);
             Assert.AreEqual(toEmailAddress, communication.ToEmailAddress);
+        }
+
+        [Test]
+        public void TestParseTemplateBody()
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"DavidsGame", "Global Thermonuclear War"},
+                {"WoprsGame", "Chess"},
+                {"WhenToPlayChess", string.Empty}
+            };
+
+            var parsed = _fixture.ParseTemplateBody("David: Would you like to play a game of [DavidsGame]? / WOPR: Not right now, wouldn't you like to play a game of [WoprsGame] instead? / David: No, maybe some other time, [WhenToPlayChess]",
+                                       mergeData);
+
+            Assert.AreEqual("David: Would you like to play a game of Global Thermonuclear War? / WOPR: Not right now, wouldn't you like to play a game of Chess instead? / David: No, maybe some other time, ", parsed);
+        }
+
+        [Test]
+        [ExpectedException(typeof(TemplateParseException))]
+        public void TestParseTemplateBodyWithNullValueInMergeData()
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Key1", "Value1"},
+                {"Key2", null}
+            };
+
+            _fixture.ParseTemplateBody("This is [Key1] and [Key2]", mergeData);
         }
     }
 }

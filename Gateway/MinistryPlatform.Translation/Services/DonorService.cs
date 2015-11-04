@@ -608,11 +608,14 @@ namespace MinistryPlatform.Translation.Services
                     {"Donation_Amount", donationAmount.ToString("N2")},
                     {"Donation_Date", setupDate.ToString("MM/dd/yyyy h:mmtt", _dateTimeFormat)},
                     {"Payment_Method", paymentType},
-                    {"Decline_Reason", emailReason},
-                    {"Frequency", frequency}
+                    {"Decline_Reason", emailReason}
                 }
             };
 
+            if (!string.IsNullOrWhiteSpace(frequency))
+            {
+                comm.MergeData["Frequency"] = frequency;
+            }
 
             _communicationService.SendMessage(comm);
         }

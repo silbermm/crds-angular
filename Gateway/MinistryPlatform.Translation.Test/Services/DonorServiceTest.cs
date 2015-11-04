@@ -627,6 +627,92 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void TestSendEmailNoFrequency()
+        {
+            const string program = "Crossroads";
+            const int declineEmailTemplate = 11940;
+            var donationDate = DateTime.Now;
+            const string emailReason = "rejected: lack of funds";
+            const int donorId = 9876;
+            const int donationAmt = 4343;
+            const string paymentType = "Bank";
+
+            var getTemplateResponse = new MessageTemplate()
+            {
+                Body = "Your payment was rejected.  Darn.",
+                Subject = "Test Decline Email"
+            };
+
+            const string emailAddress = "me@here.com";
+            const int contactId = 3;
+            var contactList = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Donor_ID", 1},
+                    {"Processor_ID", 2},
+                    {"Contact_ID", contactId},
+                    {"Email", emailAddress},
+                    {"Statement_Type", "Family"},
+                    {"Statement_Type_ID", 2},
+                    {"Statement_Frequency", "Quarterly"},
+                    {"Statement_Method", "Online"},
+                    {"Household_ID", 4},
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords("DonorByContactId", It.IsAny<string>(), It.IsAny<string>(), string.Empty, 0)).Returns(contactList);
+            var expectedCommunication = new Communication
+            {
+                AuthorUserId = 5,
+                DomainId = 1,
+                EmailBody = getTemplateResponse.Body,
+                EmailSubject = getTemplateResponse.Subject,
+                FromContactId = 5,
+                FromEmailAddress = "giving@crossroads.net",
+                ReplyContactId = 5,
+                ReplyToEmailAddress = "giving@crossroads.net",
+                ToContactId = contactId,
+                ToEmailAddress = emailAddress,
+                MergeData = new Dictionary<string, object>
+                {
+                    {"Program_Name", program},
+                    {"Donation_Amount", donationAmt.ToString("N2")},
+                    {"Donation_Date", donationDate.ToString("MM/dd/yyyy h:mmtt", new DateTimeFormatInfo
+                    {
+                        AMDesignator = "am",
+                        PMDesignator = "pm"
+                    })},
+                    {"Payment_Method", paymentType},
+                    {"Decline_Reason", emailReason},
+                }
+            };
+
+            _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
+            _communicationService.Setup(
+                mocked =>
+                    mocked.SendMessage(
+                        It.Is<Communication>(
+                            c =>
+                                c.EmailBody.Equals(expectedCommunication.EmailBody) && c.EmailSubject.Equals(expectedCommunication.EmailSubject) &&
+                                c.ToContactId == expectedCommunication.ToContactId && c.ToEmailAddress.Equals(expectedCommunication.ToEmailAddress) &&
+                                c.MergeData["Program_Name"].Equals(expectedCommunication.MergeData["Program_Name"]) &&
+                                c.MergeData["Donation_Amount"].Equals(expectedCommunication.MergeData["Donation_Amount"]) &&
+                                c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&
+                                c.MergeData["Payment_Method"].Equals(expectedCommunication.MergeData["Payment_Method"]) &&
+                                c.MergeData["Decline_Reason"].Equals(expectedCommunication.MergeData["Decline_Reason"]) &&
+                                !c.MergeData.ContainsKey("Frequency")
+                            )));
+
+            _fixture.SendEmail(declineEmailTemplate, donorId, donationAmt, paymentType, donationDate, program,
+                emailReason, null);
+
+            _ministryPlatformService.VerifyAll();
+            _communicationService.VerifyAll();
+
+        }
+
+        [Test]
         public void TestGetContactDonorForDonorAccount()
         {
             const int donorId = 1234567;
