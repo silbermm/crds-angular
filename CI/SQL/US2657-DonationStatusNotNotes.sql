@@ -1,4 +1,3 @@
-
 USE [MinistryPlatform]
 GO
 
@@ -18,7 +17,9 @@ UPDATE [dbo].[dp_Pages]
 	,Donations.Registered_Donor
 	,Processor_Fee_Amount
 	,Donor_ID_Table.Donor_ID
-	,Donation_Status_ID_Table.Donation_Status'
-
+	,Donation_Status_ID_Table.Donation_Status
+	,Donation_Status_Notes
+	,Donations.Check_Scanner_Batch
+	,Is_Recurring_Gift'
  WHERE page_id = 297
  GO
