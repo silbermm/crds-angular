@@ -103,7 +103,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["Campaign_Name"], record[0].CampaignName);
             Assert.AreEqual(records[0]["Total_Pledge"], record[0].PledgeTotal);
             Assert.AreEqual(records[0]["Donation_Total"], record[0].PledgeDonations);
-            Assert.AreEqual(records[0]["Display_Name"], record[0].DonorDisplayName);
             Assert.AreEqual(records[0]["Start_Date"], record[0].CampaignStartDate);
             Assert.AreEqual(records[0]["End_Date"], record[0].CampaignEndDate);
 
@@ -113,7 +112,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["Campaign_Name"], record[1].CampaignName);
             Assert.AreEqual(records[1]["Total_Pledge"], record[1].PledgeTotal);
             Assert.AreEqual(records[1]["Donation_Total"], record[1].PledgeDonations);
-            Assert.AreEqual(records[1]["Display_Name"], record[1].DonorDisplayName);
             Assert.AreEqual(records[1]["Start_Date"], record[1].CampaignStartDate);
             Assert.AreEqual(records[1]["End_Date"], record[1].CampaignEndDate);
         }
