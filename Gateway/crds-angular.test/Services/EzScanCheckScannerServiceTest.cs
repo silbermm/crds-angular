@@ -7,7 +7,6 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
-using MvcContrib.TestHelper;
 using NUnit.Framework;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 
@@ -107,7 +106,7 @@ namespace crds_angular.test.Services
                     },
                     Amount = 1111,
                     CheckDate = DateTime.Now.AddHours(1),
-                    CheckNumber = "11111",
+                    CheckNumber = " 0 0 00000222111111111111111",
                     Name1 = "1 name 1",
                     Name2 = "1 name 2",
                     RoutingNumber = "1010",
@@ -192,7 +191,7 @@ namespace crds_angular.test.Services
                                                                  d.RegisteredDonor &&
                                                                  d.DonorAcctId == donorAcctId &&
                                                                  d.CheckScannerBatchName.Equals("batch123") &&
-                                                                 d.CheckNumber.Equals("11111"))))
+                                                                 d.CheckNumber.Equals("111111111111111"))))
                 .Returns(321);
 
             var contactDonorNew = new ContactDonor
