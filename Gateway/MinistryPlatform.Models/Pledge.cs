@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Policy;
 
 namespace MinistryPlatform.Models
 {
@@ -15,5 +14,7 @@ namespace MinistryPlatform.Models
         public decimal PledgeDonations { get; set; }
         public DateTime CampaignStartDate { get; set; }
         public DateTime CampaignEndDate { get; set; }
+        public int CampaignTypeId { get; set; }
+        public string CampaignTypeName { get; set; }
     }
 }
