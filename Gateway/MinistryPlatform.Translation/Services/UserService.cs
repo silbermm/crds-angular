@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -47,6 +50,11 @@ namespace MinistryPlatform.Translation.Services
             };
 
             return (user);
+        }
+
+        public void UpdateUser(string token, Dictionary<string, object> userUpdateValues)
+        {
+            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userUpdateValues, token);
         }
     }
 }

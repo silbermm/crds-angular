@@ -6,6 +6,7 @@ using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -18,11 +19,22 @@ namespace crds_angular.Controllers.API
     public class LoginController : MPAuth
     {
 
-        private crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly ILoginService _loginService;
 
-        public LoginController(crds_angular.Services.Interfaces.IPersonService personService)
+        public LoginController(ILoginService loginService, crds_angular.Services.Interfaces.IPersonService personService)
         {
+            _loginService = loginService;
             _personService = personService;
+        }
+
+        [HttpPost]
+        [Route("api/resetpassword/{email}")]
+        public IHttpActionResult ResetPassword(string email)
+        {
+            _loginService.SetPasswordResetToken(email);
+
+            return null;
         }
 
         [ResponseType(typeof(LoginReturn))]
