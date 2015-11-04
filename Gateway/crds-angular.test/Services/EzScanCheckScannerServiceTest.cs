@@ -179,7 +179,7 @@ namespace crds_angular.test.Services
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId)).Returns(donorAcctId);
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int) checks[0].Amount,
+                    mocked.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int) checks[0].Amount,
                                                                123,
                                                                contactDonorExisting.DonorId,
                                                                "9090",
@@ -187,8 +187,8 @@ namespace crds_angular.test.Services
                                                                "1020304",
                                                                "check",
                                                                contactDonorExisting.ProcessorId,
-                                                               It.IsAny<DateTime>(),
-                                                               true, false, false, null, donorAcctId, "batch123", null)).Returns(321);
+                                                               checks[0].CheckDate.Value,
+                                                               true, false, false, null, donorAcctId, "batch123", null, "11111"))).Returns(321);
 
             var contactDonorNew = new ContactDonor
             {
@@ -234,7 +234,7 @@ namespace crds_angular.test.Services
 
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int)checks[1].Amount,
+                    mocked.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)checks[1].Amount,
                                                                null,
                                                                contactDonorNew.DonorId,
                                                                "9090",
@@ -242,8 +242,8 @@ namespace crds_angular.test.Services
                                                                "40302010",
                                                                "check",
                                                                contactDonorNew.ProcessorId,
-                                                               It.IsAny<DateTime>(),
-                                                               false, false, false, null, donorAcctId, "batch123", null)).Returns(654);
+                                                               checks[1].CheckDate.Value,
+                                                               false, false, false, null, donorAcctId, "batch123", null, "22222"))).Returns(654);
 
 
 

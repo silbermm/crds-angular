@@ -169,6 +169,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
             const int donationStatus = 4;
+            const string itemNumber = "98766";
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -196,7 +197,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Recurring_Gift_ID", null},
                 {"Is_Recurring_Gift", false},
                 {"Donor_Account_ID",donorAcctId },
-                {"Check_Scanner_Batch", checkScannerBatchName}
+                {"Check_Scanner_Batch", checkScannerBatchName},
+                {"Item_Number", itemNumber}
             };
 
             var expectedDistributionValues = new Dictionary<string, object>
@@ -241,7 +243,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, false, null, donorAcctId, checkScannerBatchName, donationStatus);
+            var response = _fixture.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, false, null, donorAcctId, checkScannerBatchName, donationStatus, itemNumber));
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -349,7 +351,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt,
+            var response = _fixture.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord(donationAmt,
                                                                         feeAmt,
                                                                         donorId,
                                                                         programId,
@@ -363,7 +365,7 @@ namespace MinistryPlatform.Translation.Test.Services
                                                                         false,
                                                                         null,
                                                                         null,
-                                                                        checkScannerBatchName);
+                                                                        checkScannerBatchName));
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));

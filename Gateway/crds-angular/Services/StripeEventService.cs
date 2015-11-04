@@ -7,8 +7,10 @@ using log4net;
 using System.Text;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 
 namespace crds_angular.Services
 {
@@ -78,7 +80,7 @@ namespace crds_angular.Services
             var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
             var amount = charge.Amount / Constants.StripeDecimalConversionValue;
 
-            _mpDonorService.CreateDonationAndDistributionRecord((int)amount,
+            _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)amount,
                                                                 fee, // Fee amount
                                                                 createDonation.DonorId,
                                                                 createDonation.ProgramId,
@@ -93,7 +95,7 @@ namespace crds_angular.Services
                                                                 createDonation.RecurringGiftId,
                                                                 createDonation.DonorAccountId.HasValue ? createDonation.DonorAccountId.ToString() : null,
                                                                 null, // check scanner batch name
-                                                                (int)donationStatus);
+                                                                (int)donationStatus));
          }
 
         private void InvoicePaymentFailed(DateTime? created, StripeInvoice invoice)

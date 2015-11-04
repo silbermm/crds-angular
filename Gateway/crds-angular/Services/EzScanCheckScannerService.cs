@@ -5,7 +5,6 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
-using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -85,7 +84,7 @@ namespace crds_angular.Services
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
-                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
+                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord(new DonationAndDistributionRecord((int)(check.Amount),
                                                                                          fee,
                                                                                          contactDonor.DonorId,
                                                                                          programId,
@@ -99,7 +98,9 @@ namespace crds_angular.Services
                                                                                          false,
                                                                                          null,
                                                                                          donorAccountId,
-                                                                                         batchDetails.Name);
+                                                                                         batchDetails.Name,
+                                                                                         null,
+                                                                                         check.CheckNumber));
 
                     check.DonationId = donationId;
 
