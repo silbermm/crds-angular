@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using System.Data;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
+using Crossroads.Utilities.Interfaces;
 
 namespace crds_angular.DataAccess
 {
     public class EzScanCheckScannerDao : ICheckScannerDao
     {
         private readonly IDbConnection _dbConnection;
+        private readonly ICryptoProvider _crypto;
 
         /// <summary>
         /// This must match the length of the check_scanner.itemsStatus.ErrorMessage column.
         /// </summary>
         private const int ErrorMessageMaxLength = 2048;
 
-        public EzScanCheckScannerDao(IDbConnection dbConnection)
+        public EzScanCheckScannerDao(IDbConnection dbConnection, ICryptoProvider crypto)
         {
             _dbConnection = dbConnection;
+            _crypto = crypto;
         }
 
         public List<CheckScannerBatch> GetBatches(bool onlyOpenBatches = true)
@@ -86,11 +89,11 @@ namespace crds_angular.DataAccess
                             Id = reader[i++] as int? ?? 0,
                             Exported = (reader[i++] as long? ?? 0) > 0,
                             Error = reader[i++] as string,
-                            AccountNumber = reader[i++] as string,
+                            AccountNumber = _crypto.EncryptValueToString(reader[i++] as string),
                             Amount = (decimal)(reader[i++] as double? ?? 0.0),
                             CheckNumber = reader[i++] as string,
                             ScanDate = reader[i++] as DateTime?,
-                            RoutingNumber = reader[i++] as string,
+                            RoutingNumber = _crypto.EncryptValueToString(reader[i++] as string),
                             Name1 = reader[i++] as string,
                             CheckDate = reader[i++] as DateTime?,
                             Name2 = reader[i++] as string,

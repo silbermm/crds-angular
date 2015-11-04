@@ -169,6 +169,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
             const int donationStatus = 4;
+            const string itemNumber = "98766";
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -196,7 +197,8 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Recurring_Gift_ID", null},
                 {"Is_Recurring_Gift", false},
                 {"Donor_Account_ID",donorAcctId },
-                {"Check_Scanner_Batch", checkScannerBatchName}
+                {"Check_Scanner_Batch", checkScannerBatchName},
+                {"Item_Number", itemNumber}
             };
 
             var expectedDistributionValues = new Dictionary<string, object>
@@ -240,8 +242,25 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
+            var donationAndDistribution = new DonationAndDistributionRecord
+            {
+                DonationAmt = donationAmt,
+                FeeAmt = feeAmt,
+                DonorId = donorId,
+                ProgramId = programId,
+                ChargeId = chargeId,
+                PymtType = pymtType,
+                ProcessorId = processorId,
+                SetupDate = setupDate,
+                RegisteredDonor = true,
+                DonorAcctId = donorAcctId,
+                CheckScannerBatchName = checkScannerBatchName,
+                DonationStatus = donationStatus,
+                CheckNumber = itemNumber
+            };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt, feeAmt, donorId, programId, null, chargeId, pymtType, processorId, setupDate, true, false, false, null, donorAcctId, checkScannerBatchName, donationStatus);
+            var response =
+                _fixture.CreateDonationAndDistributionRecord(donationAndDistribution);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));
@@ -348,22 +367,22 @@ namespace MinistryPlatform.Translation.Test.Services
             };
             _communicationService.Setup(mocked => mocked.GetTemplate(It.IsAny<int>())).Returns(getTemplateResponse);
 
+            var donationAndDistribution = new DonationAndDistributionRecord
+            {
+                DonationAmt = donationAmt,
+                FeeAmt = feeAmt,
+                DonorId = donorId,
+                ProgramId = programId,
+                ChargeId = chargeId,
+                PymtType = pymtType,
+                ProcessorId = processorId,
+                SetupDate = setupDate,
+                RegisteredDonor = true,
+                CheckScannerBatchName = checkScannerBatchName,
+                PledgeId = pledgeId
+            };
 
-            var response = _fixture.CreateDonationAndDistributionRecord(donationAmt,
-                                                                        feeAmt,
-                                                                        donorId,
-                                                                        programId,
-                                                                        pledgeId,
-                                                                        chargeId,
-                                                                        pymtType,
-                                                                        processorId,
-                                                                        setupDate,
-                                                                        true,
-                                                                        false,
-                                                                        false,
-                                                                        null,
-                                                                        null,
-                                                                        checkScannerBatchName);
+            var response = _fixture.CreateDonationAndDistributionRecord(donationAndDistribution);
 
             // Explicitly verify each expectation...
             _communicationService.Verify(mocked => mocked.SendMessage(It.IsAny<Communication>()));

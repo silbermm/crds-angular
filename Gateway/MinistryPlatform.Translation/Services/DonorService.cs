@@ -255,33 +255,38 @@ namespace MinistryPlatform.Translation.Services
             
         }
         
-        public int CreateDonationAndDistributionRecord(int donationAmt, int? feeAmt, int donorId, string programId, int? pledgeId, string chargeId, string pymtType, string processorId, DateTime setupTime, bool registeredDonor, bool anonymous, bool recurringGift, int? recurringGiftId, string donorAcctId, string checkScannerBatchName = null, int? donationStatus = null)
+        public int CreateDonationAndDistributionRecord(DonationAndDistributionRecord donationAndDistribution)
         {
-            var pymtId = PaymentType.GetPaymentType(pymtType).id;
-            var fee = feeAmt.HasValue ? feeAmt / Constants.StripeDecimalConversionValue : null;
+            var pymtId = PaymentType.GetPaymentType(donationAndDistribution.PymtType).id;
+            var fee = donationAndDistribution.FeeAmt.HasValue ? donationAndDistribution.FeeAmt / Constants.StripeDecimalConversionValue : null;
 
             var apiToken = ApiLogin();
 
             var donationValues = new Dictionary<string, object>
             {
-                {"Donor_ID", donorId},
-                {"Donation_Amount", donationAmt},
+                {"Donor_ID", donationAndDistribution.DonorId},
+                {"Donation_Amount", donationAndDistribution.DonationAmt},
                 {"Processor_Fee_Amount", fee},
                 {"Payment_Type_ID", pymtId},
-                {"Donation_Date", setupTime},
-                {"Transaction_code", chargeId},
-                {"Registered_Donor", registeredDonor},
-                {"Anonymous", anonymous},
-                {"Processor_ID", processorId },
-                {"Donation_Status_Date", setupTime},
-                {"Donation_Status_ID", donationStatus ?? 1}, //hardcoded to pending if no status specified
-                {"Recurring_Gift_ID", recurringGiftId},
-                {"Is_Recurring_Gift", recurringGift},
-                {"Donor_Account_ID", donorAcctId}
+                {"Donation_Date", donationAndDistribution.SetupDate},
+                {"Transaction_code", donationAndDistribution.ChargeId},
+                {"Registered_Donor", donationAndDistribution.RegisteredDonor},
+                {"Anonymous", donationAndDistribution.Anonymous},
+                {"Processor_ID", donationAndDistribution.ProcessorId },
+                {"Donation_Status_Date", donationAndDistribution.SetupDate},
+                {"Donation_Status_ID", donationAndDistribution.DonationStatus ?? 1}, //hardcoded to pending if no status specified
+                {"Recurring_Gift_ID", donationAndDistribution.RecurringGiftId},
+                {"Is_Recurring_Gift", donationAndDistribution.RecurringGift},
+                {"Donor_Account_ID", donationAndDistribution.DonorAcctId},
             };
-            if (!string.IsNullOrWhiteSpace(checkScannerBatchName))
+            if (!string.IsNullOrWhiteSpace(donationAndDistribution.CheckScannerBatchName))
             {
-                donationValues["Check_Scanner_Batch"] = checkScannerBatchName;
+                donationValues["Check_Scanner_Batch"] = donationAndDistribution.CheckScannerBatchName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(donationAndDistribution.CheckNumber))
+            {
+                donationValues["Item_Number"] = donationAndDistribution.CheckNumber;
             }
 
             int donationId;
@@ -292,10 +297,10 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception e)
             {
-                throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donorId), e);
+                throw new ApplicationException(string.Format("CreateDonationRecord failed.  Donor Id: {0}", donationAndDistribution.DonorId), e);
             }
 
-            if (string.IsNullOrWhiteSpace(programId))
+            if (string.IsNullOrWhiteSpace(donationAndDistribution.ProgramId))
             {
                 return (donationId);
             }
@@ -303,12 +308,12 @@ namespace MinistryPlatform.Translation.Services
             var distributionValues = new Dictionary<string, object>
             {
                 {"Donation_ID", donationId},
-                {"Amount", donationAmt},
-                {"Program_ID", programId}                
+                {"Amount", donationAndDistribution.DonationAmt},
+                {"Program_ID", donationAndDistribution.ProgramId}                
             };
-            if (pledgeId != null)
+            if (donationAndDistribution.PledgeId != null)
             {
-                distributionValues.Add("Pledge_ID", pledgeId);
+                distributionValues.Add("Pledge_ID", donationAndDistribution.PledgeId);
             }
 
             try
@@ -323,7 +328,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                SetupConfirmationEmail(Convert.ToInt32(programId), donorId, donationAmt, setupTime, pymtType);
+                SetupConfirmationEmail(Convert.ToInt32(donationAndDistribution.ProgramId), donationAndDistribution.DonorId, donationAndDistribution.DonationAmt, donationAndDistribution.SetupDate, donationAndDistribution.PymtType);
             }
             catch (Exception)
             {

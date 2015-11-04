@@ -206,7 +206,8 @@ namespace crds_angular.test.controllers
                 ProgramId = "3", //crossroads
                 Amount = 86868,
                 DonorId = 394256,
-                EmailAddress = "test@test.com"
+                EmailAddress = "test@test.com",
+                PaymentType = "bank"
             };
 
             var donor = new ContactDonor
@@ -231,9 +232,25 @@ namespace crds_angular.test.controllers
                 .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, false, null, null, null, null))
-                    .Returns(donationId);
+                                       CreateDonationAndDistributionRecord(
+                                           It.Is<DonationAndDistributionRecord>(
+                                               d => d.DonationAmt == createDonationDTO.Amount &&
+                                                    d.FeeAmt == charge.BalanceTransaction.Fee &&
+                                                    d.DonorId == donor.DonorId &&
+                                                    d.ProgramId.Equals(createDonationDTO.ProgramId) &&
+                                                    d.PledgeId == null &&
+                                                    d.ChargeId.Equals(charge.Id) &&
+                                                    d.PymtType.Equals(createDonationDTO.PaymentType) &&
+                                                    d.ProcessorId.Equals(donor.ProcessorId) &&
+                                                    d.RegisteredDonor &&
+                                                    !d.Anonymous &&
+                                                    !d.RecurringGift &&
+                                                    d.RecurringGiftId == null &&
+                                                    d.DonorAcctId == null &&
+                                                    d.CheckScannerBatchName == null &&
+                                                    d.DonationStatus == null &&
+                                                    d.CheckNumber == null)))
+                .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
 
@@ -274,7 +291,8 @@ namespace crds_angular.test.controllers
                 EmailAddress = "test@test.com",
                 PledgeCampaignId = 23,
                 PledgeDonorId = 42,
-                GiftMessage = "Don't look a Gift Horse in the Mouth!"
+                GiftMessage = "Don't look a Gift Horse in the Mouth!",
+                PaymentType = "junk bonds"
             };
 
             var donor = new ContactDonor
@@ -312,8 +330,23 @@ namespace crds_angular.test.controllers
                 .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), true, false, false, null, null, null, null))
+                CreateDonationAndDistributionRecord(It.Is<DonationAndDistributionRecord>(
+                                               d => d.DonationAmt == createDonationDTO.Amount &&
+                                                    d.FeeAmt == charge.BalanceTransaction.Fee &&
+                                                    d.DonorId == donor.DonorId &&
+                                                    d.ProgramId.Equals(createDonationDTO.ProgramId) &&
+                                                    d.PledgeId == pledgeId &&
+                                                    d.ChargeId.Equals(charge.Id) &&
+                                                    d.PymtType.Equals(createDonationDTO.PaymentType) &&
+                                                    d.ProcessorId.Equals(donor.ProcessorId) &&
+                                                    d.RegisteredDonor &&
+                                                    !d.Anonymous &&
+                                                    !d.RecurringGift &&
+                                                    d.RecurringGiftId == null &&
+                                                    d.DonorAcctId == null &&
+                                                    d.CheckScannerBatchName == null &&
+                                                    d.DonationStatus == null &&
+                                                    d.CheckNumber == null)))
                     .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
@@ -356,7 +389,8 @@ namespace crds_angular.test.controllers
                 EmailAddress = "test@test.com",
                 PledgeCampaignId = 23,
                 PledgeDonorId = 42,
-                GiftMessage = "Don't look a Gift Horse in the Mouth!"
+                GiftMessage = "Don't look a Gift Horse in the Mouth!",
+                PaymentType = "card"
             };
 
             var donor = new ContactDonor
@@ -393,8 +427,23 @@ namespace crds_angular.test.controllers
 
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-                    createDonationDTO.ProgramId, pledgeId, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, false, null, null, null, null))
+                CreateDonationAndDistributionRecord(It.Is<DonationAndDistributionRecord>(
+                                           d => d.DonationAmt == createDonationDTO.Amount &&
+                                                d.FeeAmt == charge.BalanceTransaction.Fee &&
+                                                d.DonorId == donor.DonorId &&
+                                                d.ProgramId.Equals(createDonationDTO.ProgramId) &&
+                                                d.PledgeId == pledgeId &&
+                                                d.ChargeId.Equals(charge.Id) &&
+                                                d.PymtType.Equals(createDonationDTO.PaymentType) &&
+                                                d.ProcessorId.Equals(donor.ProcessorId) &&
+                                                !d.RegisteredDonor &&
+                                                !d.Anonymous &&
+                                                !d.RecurringGift &&
+                                                d.RecurringGiftId == null &&
+                                                d.DonorAcctId == null &&
+                                                d.CheckScannerBatchName == null &&
+                                                d.DonationStatus == null &&
+                                                d.CheckNumber == null)))
                     .Returns(donationId);
 
 
@@ -439,7 +488,8 @@ namespace crds_angular.test.controllers
                 ProgramId = "3", //crossroads
                 Amount = 86868,
                 DonorId = 394256,
-                EmailAddress = "test@test.com"
+                EmailAddress = "test@test.com",
+                PaymentType = "bank"
             };
 
             var donor = new ContactDonor
@@ -461,10 +511,24 @@ namespace crds_angular.test.controllers
                 Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
-                CreateDonationAndDistributionRecord(createDonationDTO.Amount, charge.BalanceTransaction.Fee, donor.DonorId,
-
-                    createDonationDTO.ProgramId, null, charge.Id, createDonationDTO.PaymentType, donor.ProcessorId, It.IsAny<DateTime>(), false, false, false, null, null, null, null))
-                    .Returns(donationId);
+                                       CreateDonationAndDistributionRecord(It.Is<DonationAndDistributionRecord>(
+                                           d => d.DonationAmt == createDonationDTO.Amount &&
+                                                d.FeeAmt == charge.BalanceTransaction.Fee &&
+                                                d.DonorId == donor.DonorId &&
+                                                d.ProgramId.Equals(createDonationDTO.ProgramId) &&
+                                                d.PledgeId == null &&
+                                                d.ChargeId.Equals(charge.Id) &&
+                                                d.PymtType.Equals(createDonationDTO.PaymentType) &&
+                                                d.ProcessorId.Equals(donor.ProcessorId) &&
+                                                !d.RegisteredDonor &&
+                                                !d.Anonymous &&
+                                                !d.RecurringGift &&
+                                                d.RecurringGiftId == null &&
+                                                d.DonorAcctId == null &&
+                                                d.CheckScannerBatchName == null &&
+                                                d.DonationStatus == null &&
+                                                d.CheckNumber == null)))
+                .Returns(donationId);
 
             IHttpActionResult result = fixture.Post(createDonationDTO);
 
