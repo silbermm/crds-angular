@@ -500,7 +500,7 @@ namespace crds_angular.Controllers.API
         }
 
         /// <summary>
-        /// Retrieve list of pledges for the logged-in donor.
+        /// Retrieve list of capital campaign pledges for the logged-in donor.
         /// </summary>
         /// <returns>A list of PledgeDto</returns>
         [Route("api/donor/pledge")]
@@ -512,7 +512,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var pledges = _donorService.GetPledgesForAuthenticatedUser(token);
+                    var pledges = _donorService.GetCapitalCampaignPledgesForAuthenticatedUser(token);
 
                     if (pledges == null || !pledges.Any())
                     {
