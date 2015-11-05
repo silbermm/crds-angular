@@ -40,6 +40,7 @@ namespace crds_angular.Services
         private readonly int _recurringGiftSetupEmailTemplateId;
         private readonly int _recurringGiftUpdateEmailTemplateId;
         private readonly int _recurringGiftCancelEmailTemplateId;
+        private readonly int _capitalCampaignPledgeTypeId;
 
         public DonorService(IDonorService mpDonorService, IContactService mpContactService,
             Interfaces.IPaymentService paymentService, IConfigurationWrapper configurationWrapper,
@@ -59,6 +60,7 @@ namespace crds_angular.Services
             _statementMethodNone = configurationWrapper.GetConfigIntValue("DonorStatementMethodNone");
             _statementMethodPostalMail = configurationWrapper.GetConfigIntValue("DonorStatementMethodPostalMail");
             _notSiteSpecificCongregation = configurationWrapper.GetConfigIntValue("NotSiteSpecificCongregation");
+            _capitalCampaignPledgeTypeId = configurationWrapper.GetConfigIntValue("PledgeCampaignTypeCapitalCampaign");
 
             _recurringGiftSetupEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftSetupEmailTemplateId");
             _recurringGiftUpdateEmailTemplateId = configurationWrapper.GetConfigIntValue("RecurringGiftUpdateEmailTemplateId");
@@ -485,11 +487,10 @@ namespace crds_angular.Services
             return (recurringGifts);
         }
 
-        public List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken)
+        public List<PledgeDto> GetCapitalCampaignPledgesForAuthenticatedUser(string userToken)
         {
-            var pledges = _pledgeService.GetPledgesForAuthUser(userToken);
-            var pled = pledges.Select(Mapper.Map<Pledge, PledgeDto>).ToList();
-            return (pled);
+            var pledges = _pledgeService.GetPledgesForAuthUser(userToken, new [] {_capitalCampaignPledgeTypeId});
+            return pledges.Select(Mapper.Map<Pledge, PledgeDto>).ToList();
         } 
 
         private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)

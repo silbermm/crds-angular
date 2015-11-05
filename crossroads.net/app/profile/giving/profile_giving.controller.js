@@ -16,6 +16,7 @@
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
     vm.recurring_giving_view_ready = false;
+    vm.createRecurring = createRecurring;
 
     activate();
 
@@ -53,6 +54,10 @@
         vm.pledge_commitments_data = false;
         vm.pledge_commitments_view_ready = true;
       });
+    }
+
+    function createRecurring() {
+      $state.go('give.recurring');
     }
   }
 })();

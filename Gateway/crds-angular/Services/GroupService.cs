@@ -117,6 +117,7 @@ namespace crds_angular.Services
                 detail.GroupId = g.GroupId;
                 detail.GroupFullInd = g.Full;
                 detail.WaitListInd = g.WaitList;
+                detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
 
                 //the first instance of family must always be the logged in user

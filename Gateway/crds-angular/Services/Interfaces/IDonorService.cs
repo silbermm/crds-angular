@@ -32,6 +32,6 @@ namespace crds_angular.Services.Interfaces
 
         List<RecurringGiftDto> GetRecurringGiftsForAuthenticatedUser(string userToken);
 
-        List<PledgeDto> GetPledgesForAuthenticatedUser(string userToken);
+        List<PledgeDto> GetCapitalCampaignPledgesForAuthenticatedUser(string userToken);
     }
 }

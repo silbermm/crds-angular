@@ -64,8 +64,18 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "pledge_donations")]
         [Required]
         public decimal PledgeDonations { get; set; }
-        
-        
+
+        /// <summary>
+        /// The campaign type ID of the pledge.
+        /// </summary>
+        [JsonProperty(PropertyName = "campaign_type_id")]
+        public int CampaignTypeId { get; set; }
+
+        /// <summary>
+        /// The campaign type name of the pledge.
+        /// </summary>
+        [JsonProperty(PropertyName = "campaign_type_name")]
+        public string CampaignTypeName { get; set; }
     }
 
    
