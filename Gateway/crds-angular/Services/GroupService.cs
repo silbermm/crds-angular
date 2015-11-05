@@ -84,6 +84,7 @@ namespace crds_angular.Services
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
                         }
                     }
+                    _mpGroupService.SendCommunityGroupConfirmationEmail(p);
                 }
 
                 return;

@@ -14,6 +14,7 @@ namespace MinistryPlatform.Translation.Services
     public class GroupService : BaseService, IGroupService
     {
         private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly ICommunicationService _communicationService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
@@ -23,17 +24,19 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
+        private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings(""));
 
         private readonly int GroupParticipantQualifiedServerPageView =
             Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
+            this._communicationService = communicationService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -269,6 +272,29 @@ namespace MinistryPlatform.Translation.Services
                 GroupId = record.ToInt("Group_ID"),
                 Name = record.ToString("Group_Name")
             }).ToList();
+        }
+
+        public void SendCommunityGroupConfirmationEmail(int p)
+        {
+            
+            var emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
+            var fromAddress = _communicationService.GetEmailFromContactId(7);
+            var confirmation = new Communication 
+            { 
+                EmailBody = emailTemplate.Body, 
+                EmailSubject = emailTemplate.Subject,
+                AuthorUserId = 7,
+                DomainId = 1,
+                FromContactId = 7,
+                FromEmailAddress = fromAddress,
+                MergeData = new Dictionary<string, object>(),
+                ReplyContactId = 7,
+                ReplyToEmailAddress = fromAddress,
+                TemplateId = CommunityGroupConfirmationTemplateId,
+                ToContactId = 0,
+                ToEmailAddress = ""
+            };
+            _communicationService.SendMessage(confirmation);
         }
     }
 }
