@@ -17,5 +17,8 @@ namespace crds_angular.Models.Crossroads
 
         [JsonProperty(PropertyName = "participantId")]
         public int ParticpantId { get; set; }
+
+        [JsonProperty(PropertyName = "childCareNeeded")]
+        public bool ChildCareNeeded { get; set; }
     }
 }

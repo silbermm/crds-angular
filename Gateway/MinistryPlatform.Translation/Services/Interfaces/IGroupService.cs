@@ -9,6 +9,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int addParticipantToGroup(int participantId,
                                   int groupId,
                                   int groupRoleId,
+                                  Boolean childCareNeeded,
                                   DateTime startDate,
                                   DateTime? endDate = null,
                                   Boolean? employeeRole = false);

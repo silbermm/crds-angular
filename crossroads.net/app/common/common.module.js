@@ -14,6 +14,10 @@
   // require all profile common components
   require('./profile');
 
+  // require all community group components
   require('./community_groups');
+
+  // require all childcare components
+  require('./childcare');
 
 })();

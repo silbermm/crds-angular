@@ -5,8 +5,10 @@ using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Moq;
 using System.Collections.Generic;
+using crds_angular.Models.Crossroads;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
+using Event = MinistryPlatform.Models.Event;
 
 namespace crds_angular.test.Services
 {
@@ -18,6 +20,20 @@ namespace crds_angular.test.Services
         private Mock<MPServices.IEventService> eventService;
         private Mock<MPServices.IContactRelationshipService> contactRelationshipService;
         private Mock<IConfigurationWrapper> config;
+
+        private readonly List<ParticipantSignup> mockParticipantSignup = new List<ParticipantSignup>
+        {
+            new ParticipantSignup()
+            {
+                particpantId = 999,
+                childCareNeeded = false
+            },
+            new ParticipantSignup()
+            {
+                particpantId = 888,
+                childCareNeeded = false
+            }
+        };
 
         private const int GROUP_ROLE_DEFAULT_ID = 123;
 
@@ -43,7 +59,7 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
@@ -71,7 +87,7 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
@@ -98,7 +114,7 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
@@ -120,8 +136,8 @@ namespace crds_angular.test.Services
             };
             groupService.Setup(mocked => mocked.getGroupDetails(456)).Returns(g);
 
-            groupService.Setup(mocked => mocked.addParticipantToGroup(999, 456, GROUP_ROLE_DEFAULT_ID, It.IsAny<DateTime>(), null, false)).Returns(999456);
-            groupService.Setup(mocked => mocked.addParticipantToGroup(888, 456, GROUP_ROLE_DEFAULT_ID, It.IsAny<DateTime>(), null, false)).Returns(888456);
+            groupService.Setup(mocked => mocked.addParticipantToGroup(999, 456, GROUP_ROLE_DEFAULT_ID, false, It.IsAny<DateTime>(), null, false)).Returns(999456);
+            groupService.Setup(mocked => mocked.addParticipantToGroup(888, 456, GROUP_ROLE_DEFAULT_ID, false, It.IsAny<DateTime>(), null, false)).Returns(888456);
 
             var events = new List<Event>
             {
@@ -145,7 +161,7 @@ namespace crds_angular.test.Services
             eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 555)).Returns(888555);
             eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 444)).Returns(888444);
 
-            fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+            fixture.addParticipantsToGroup(456, mockParticipantSignup);
 
             groupService.VerifyAll();
             eventService.VerifyAll();
