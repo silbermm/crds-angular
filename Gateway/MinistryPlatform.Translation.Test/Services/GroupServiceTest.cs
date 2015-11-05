@@ -55,6 +55,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Group_Name", "Test Group"},
                 {"Target_Size", (short) 1},
                 {"Group_Is_Full", false},
+                {"Child_Care_Available", true}
             };
 
             ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
@@ -80,10 +81,11 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Group_Role_ID", 789},
                 {"Start_Date", startDate},
                 {"End_Date", endDate},
-                {"Employee_Role", true}
+                {"Employee_Role", true},
+                {"Child_Care_Requested", true}
             };
 
-            int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, startDate, endDate, true);
+            int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, true, startDate, endDate, true);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
                 GroupsParticipantsPageId,

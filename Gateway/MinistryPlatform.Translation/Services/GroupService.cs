@@ -42,6 +42,7 @@ namespace MinistryPlatform.Translation.Services
         public int addParticipantToGroup(int participantId,
                                          int groupId,
                                          int groupRoleId,
+                                         Boolean childCareNeeded,
                                          DateTime startDate,
                                          DateTime? endDate = null,
                                          Boolean? employeeRole = false)
@@ -54,7 +55,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Group_Role_ID", groupRoleId},
                 {"Start_Date", startDate},
                 {"End_Date", endDate},
-                {"Employee_Role", employeeRole}
+                {"Employee_Role", employeeRole},
+                {"Child_Care_Requested", childCareNeeded}
             };
 
             int groupParticipantId =
