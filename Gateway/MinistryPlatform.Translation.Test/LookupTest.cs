@@ -31,19 +31,6 @@ namespace MinistryPlatform.Translation.Test
         }
 
         [Test]
-        public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
-        {
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(authData);
-            var token = authData["token"].ToString();
-
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-
-            var attribute = MinistryPlatformService.GetLookupRecord(pageId, attributeName, token, 1);
-            Assert.IsNotNull(attribute);
-        }
-
-        [Test]
         public void ShouldReturnAValidObjectWithUserIdAndEmailAddress()
         {
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);

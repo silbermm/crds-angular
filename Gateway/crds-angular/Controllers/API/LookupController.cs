@@ -15,10 +15,12 @@ namespace crds_angular.Controllers.API
     public class LookupController : MPAuth
     {
         private IConfigurationWrapper _configurationWrapper;
+        private readonly LookupService _lookupService;
 
-        public LookupController(IConfigurationWrapper configurationWrapper)
+        public LookupController(IConfigurationWrapper configurationWrapper, LookupService lookupService)
         {
             this._configurationWrapper = configurationWrapper;
+            _lookupService = lookupService;
         }
 
         [ResponseType(typeof (List<Dictionary<string, object>>))]
@@ -32,25 +34,25 @@ namespace crds_angular.Controllers.API
                 switch (table)
                 {
                     case "genders":
-                        ret = LookupService.Genders(t);
+                        ret = _lookupService.Genders(t);
                         break;
                     case "maritalstatus":
-                        ret = LookupService.MaritalStatus(t);
+                        ret = _lookupService.MaritalStatus(t);
                         break;
                     case "serviceproviders":
-                        ret = LookupService.ServiceProviders(t);
+                        ret = _lookupService.ServiceProviders(t);
                         break;
                     case "countries":
-                        ret = LookupService.Countries(t);
+                        ret = _lookupService.Countries(t);
                         break;
                     case "states":
-                        ret = LookupService.States(t);
+                        ret = _lookupService.States(t);
                         break;
                     case "crossroadslocations":
-                        ret = LookupService.CrossroadsLocations(t);
+                        ret = _lookupService.CrossroadsLocations(t);
                         break;
                     case "workteams":
-                        ret = LookupService.WorkTeams(t);
+                        ret = _lookupService.WorkTeams(t);
                         break;
                     default:
                         break;
@@ -71,7 +73,7 @@ namespace crds_angular.Controllers.API
             //TODO let's clean this up
             var authorizedWithCookie = Authorized(t =>
             {
-                var exists = LookupService.EmailSearch(email, t);
+                var exists = _lookupService.EmailSearch(email, t);
                 if (exists.Count == 0 || Convert.ToInt32(exists["dp_RecordID"]) == userId)
                 {
                     return Ok();
@@ -86,7 +88,7 @@ namespace crds_angular.Controllers.API
 
                 var authData = AuthenticationService.authenticate(apiUser, apiPassword);
                 var token = authData["token"].ToString();
-                var exists = LookupService.EmailSearch(email, token.ToString());
+                var exists = _lookupService.EmailSearch(email, token.ToString());
                 if (exists.Count == 0)
                 {
                     return Ok();
