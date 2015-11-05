@@ -1,11 +1,12 @@
 (function() {
   'use strict';
 
-  var MODULE = require('crds-constants').MODULES.CHILDCARE;
+  var MODULE = require('crds-constants').MODULES;
 
-  angular.module(MODULE, [])
+  angular.module(MODULE.CHILDCARE, [MODULE.CORE, MODULE.COMMON])
     .config(require('./childcare.routes'))
-    .directive('childCare', require('./childcare.directive'))
+    .directive('childcare', require('./childcare.directive'))
+    .factory('ChildcareEvents', require('./childcareEvents.service'))
     ;
 
   require('./childcare.html');

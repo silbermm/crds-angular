@@ -20,4 +20,7 @@
   // require all childcare components
   require('./childcare');
 
+  // require events
+  require('./events');
+
 })();

@@ -1,0 +1,27 @@
+require('crds-core');
+require('../../app/childcare');
+
+describe('Childcare Event Service', function() {
+  var MODULE = require('crds-constants').MODULES.CHILDCARE;
+  var helper = require('./childcare.helpers');
+
+  var $rootScope;
+  var scope;
+  var childcareEvent;
+
+  beforeEach(angular.mock.module(MODULE));
+
+  beforeEach(inject(function(_ChildcareEvents_) {
+    childcareEvent = _ChildcareEvents_;
+  }));
+
+  it('should store an event in the event property', function() {
+    childcareEvent.setEvent(helper.childcareEvent);
+    expect(childcareEvent.event).toEqual(helper.childcareEvent);
+  });
+
+  it('should store an array of events in the events property', function() {
+    childcareEvent.setEvents(helper.childcareEvents);
+    expect(childcareEvent.events).toEqual(helper.childcareEvents);
+  });
+});

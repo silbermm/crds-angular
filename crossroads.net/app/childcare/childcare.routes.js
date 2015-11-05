@@ -7,11 +7,11 @@
 
   function ChildcareRoutes($stateProvider) {
     $stateProvider
-      .state('childcare.event', {
+      .state('childcare-event', {
         parent: 'noSideBar',
         url: '/childcare/:eventId',
         template: '<childcare></childcare>',
-        date: {
+        data: {
           isProtected: true,
           meta: {
             title: 'Childcare Signup',
@@ -19,7 +19,15 @@
           }
         },
         resolve: {
-          loggedin: crds_utilities.checkLoggedin
+          loggedin: crds_utilities.checkLoggedin,
+          $stateParams: '$stateParams',
+          EventService: 'EventService',
+          ChildCareEvents: 'ChildCareEvents',
+          CurrentEvent: function($stateParams, EventService, ChildCareEvents) {
+            return EventService.event.get({eventId: $stateParams.eventId}, function(event) {
+              ChildCareEvents.setEvent(event);
+            }).$promise;
+          }
         }
       })
       ;
