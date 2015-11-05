@@ -7,8 +7,8 @@ namespace MinistryPlatform.Translation.Services
 {
     public class LookupService : BaseService
     {
-        private readonly MinistryPlatformServiceImpl _ministryPlatformServiceImpl;
-        public LookupService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, MinistryPlatformServiceImpl ministryPlatformServiceImpl)
+        private readonly IMinistryPlatformService _ministryPlatformServiceImpl;
+        public LookupService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformServiceImpl)
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformServiceImpl = ministryPlatformServiceImpl;
