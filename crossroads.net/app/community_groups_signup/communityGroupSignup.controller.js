@@ -11,7 +11,8 @@
     '$log',
     '$stateParams',
     'Page',
-    '$modal'
+    '$modal',
+    'ChildCare'
   ];
 
   function CommunityGroupsController(
@@ -22,12 +23,14 @@
     $log,
     $stateParams,
     Page,
-    $modal) {
+    $modal,
+    ChildCare) {
 
     var vm = this;
     vm.allSignedUp = allSignedUp;
     vm.alreadySignedUp = false;
     vm.childCareAvailable = false;
+    vm.childCareChange = childCareChange;
     vm.editProfile = editProfile;
     vm.formValid = true;
     vm.hasParticipantID = hasParticipantID;
@@ -150,6 +153,14 @@
       return result;
     }
 
+    function childCareChange(changedRecord) {
+      _.forEach(vm.response, function(found) {
+        if (found.participantId === changedRecord.participantId) {
+          found.childCareNeeded = changedRecord.value;
+        }
+      });
+    }
+
     function editProfile() {
       vm.modalInstance = $modal.open({
         templateUrl: 'editProfile.html',
@@ -161,21 +172,22 @@
     function hasParticipantID(array) {
       var result = {};
       result.partId = [];
-      if (array.length > 1) {
+      if (array.length > 0) {
         for (var i = 0; i < array.length; i++) {
           if (array[i].newAdd !== undefined && array[i].newAdd !== '') {
-            result.partId[result.partId.length] = array[i].newAdd;
+            result.partId[result.partId.length] = {
+              participantId: array[i].newAdd,
+              childCareNeeded: array[i].childCareNeeded
+            };
           }
         }
-      } else if (array.length === 1) {
-        result.partId[result.partId.length] = array[0].participantId;
       }
 
       return result;
     }
 
     function signup(form) {
-      var test = hasParticipantID(vm.response);
+      var participantArray = hasParticipantID(vm.response);
       var flag = false;
       for (var i = 0; i < vm.response.length; i++) {
         if (!vm.response[i].userInGroup &&
@@ -199,7 +211,7 @@
       //Add Person to group
       Group.Participant.save({
         groupId: vm.groupId
-      }, test).$promise.then(function(response) {
+      }, participantArray).$promise.then(function(response) {
         if (vm.waitListCase) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.successfullWaitlistSignup);
         } else {
@@ -210,6 +222,7 @@
         vm.showSuccess = true;
         vm.showWaitList = false;
         vm.showWaitSuccess = true;
+
       }, function(error) {
         // 422 indicates an HTTP "Unprocessable Entity", in this case meaning Group is Full
         // http://tools.ietf.org/html/rfc4918#section-11.2

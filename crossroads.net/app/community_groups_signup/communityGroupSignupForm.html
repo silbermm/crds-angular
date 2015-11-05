@@ -13,25 +13,30 @@
           <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
         </div>
 
-        <div ng-show="groupsignup.showContent">
+        <div class="row" ng-show="groupsignup.showContent">
           <legend>Participants</legend>
           <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
-          <p>
-            <div class="checkbox"  ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
-              <label>
-                <span ng-show="groupsignup.response.length > 1">
-                <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
-                <span>{{person['nickName']}}</span>
-                <span>({{person['emailAddress']}})</span>
-                <span ng-show="people.indexOf(person) === 0">
-                  <a href="" ng-click="groupsignup.editProfile()">
-                    <svg viewBox="0 0 32 32" class="icon icon-pencil4">
-                      <use xlink:href="#pencil4"></use>
-                    </svg>
-                  </a>
-                </span>
+            <p>
+              <div class="checkbox"  ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+                <label>
+                  <span ng-show="groupsignup.response.length > 1">
+                  <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
+                  <span>{{person['nickName']}}</span>
+                  <span>({{person['emailAddress']}})</span>
+                  <span ng-show="people.indexOf(person) === 0">
+                    <a href="" ng-click="groupsignup.editProfile()">
+                      <svg viewBox="0 0 32 32" class="icon icon-pencil4">
+                        <use xlink:href="#pencil4"></use>
+                      </svg>
+                    </a>
+                  </span>
+                  <div  ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
+                    <child-care-need
+                        participant-id='person.participantId'
+                        on-change='groupsignup.childCareChange'>
+                    </child-care-need>
+                  </div>
               </label>
-              <span class="label label-success" ng-show="groupsignup.childCareAvailable">Childcare Available</span>
             </div>
           </p>
           <p ng-show="!groupsignup.alreadySignedUp">
