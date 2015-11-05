@@ -147,7 +147,7 @@ namespace crds_angular.test.Services
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object, _groupService.Object,
-                _communicationService.Object);
+                _communicationService.Object, _authenticationService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();

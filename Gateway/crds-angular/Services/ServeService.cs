@@ -34,6 +34,7 @@ namespace crds_angular.Services
         private readonly IOpportunityService _opportunityService;
         private readonly IParticipantService _participantService;
         private readonly ICommunicationService _communicationService;
+        private readonly IAuthenticationService _authenticationService;
         private readonly List<string> TABLE_HEADERS = new List<string>()
             {
                 "Event Date",
@@ -46,7 +47,7 @@ namespace crds_angular.Services
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
             IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
             IGroupParticipantService groupParticipantService, IGroupService groupService,
-            ICommunicationService communicationService)
+            ICommunicationService communicationService, IAuthenticationService authenticationService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -56,12 +57,13 @@ namespace crds_angular.Services
             _groupParticipantService = groupParticipantService;
             _groupService = groupService;
             _communicationService = communicationService;
+            _authenticationService = authenticationService;
         }
 
-        public List<FamilyMember> GetImmediateFamilyParticipants(int contactId, string token)
+        public List<FamilyMember> GetImmediateFamilyParticipants(string token)
         {
             var relationships = new List<FamilyMember>();
-            // get for contact Id
+            var contactId = _authenticationService.GetContactId(token);
             var me = _participantService.GetParticipant(contactId);
             var myParticipant = new FamilyMember
             {
@@ -100,10 +102,10 @@ namespace crds_angular.Services
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
 
-        public List<QualifiedServerDto> GetQualifiedServers(int groupId, int contactId, string token)
+        public List<QualifiedServerDto> GetQualifiedServers(int groupId, string token)
         {
             var qualifiedServers = new List<QualifiedServerDto>();
-            var immediateFamilyParticipants = GetImmediateFamilyParticipants(contactId, token);
+            var immediateFamilyParticipants = GetImmediateFamilyParticipants(token);
 
             foreach (var participant in immediateFamilyParticipants)
             {
@@ -126,7 +128,7 @@ namespace crds_angular.Services
 
         public List<ServingDay> GetServingDays(string token, int contactId, long from, long to)
         {
-            var family = GetImmediateFamilyParticipants(contactId, token);
+            var family = GetImmediateFamilyParticipants(token);
             var participants = family.OrderBy(f => f.ParticipantId).Select(f => f.ParticipantId).ToList();
             var servingParticipants = _groupParticipantService.GetServingParticipants(participants, from, to, contactId);
             var servingDays = new List<ServingDay>();

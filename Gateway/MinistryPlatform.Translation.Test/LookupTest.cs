@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -19,28 +21,19 @@ namespace MinistryPlatform.Translation.Test
 
         private AuthenticationServiceImpl _fixture;
         private PlatformServiceClient _platformService;
-        private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private LookupService _lookupService;
+        private IConfigurationWrapper _configurationWrapper;
+        private IMinistryPlatformService _ministryPlatformService;
 
 
         [SetUp]
         public void SetUp()
         {
-            _ministryPlatformService = new Mock<IMinistryPlatformService>();
+            _configurationWrapper = new ConfigurationWrapper();
             _platformService = new PlatformServiceClient();
-            _fixture = new AuthenticationServiceImpl(_platformService, _ministryPlatformService.Object);
-        }
-
-        [Test]
-        public void FindAnAttribute([Values("Dentist", "Social media wizard")] string attributeName)
-        {
-            var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
-            Assert.IsNotNull(authData);
-            var token = authData["token"].ToString();
-
-            var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Attributes"]);
-
-            var attribute = MinistryPlatformService.GetLookupRecord(pageId, attributeName, token, 1);
-            Assert.IsNotNull(attribute);
+            _ministryPlatformService = new MinistryPlatformServiceImpl(_platformService, _configurationWrapper);
+            _lookupService = new LookupService(_fixture, _configurationWrapper, _ministryPlatformService);
+            _fixture = new AuthenticationServiceImpl(_platformService, _ministryPlatformService);
         }
 
         [Test]
@@ -51,7 +44,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = LookupService.EmailSearch(EMAIL, token);
+            var emails = _lookupService.EmailSearch(EMAIL, token);
             Assert.IsNotEmpty(emails);
         }
 
@@ -63,7 +56,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = LookupService.EmailSearch(EMAIL.ToUpper(), token);
+            var emails = _lookupService.EmailSearch(EMAIL.ToUpper(), token);
             Assert.IsNotEmpty(emails);
         }
 
@@ -75,7 +68,7 @@ namespace MinistryPlatform.Translation.Test
             var token = authData["token"].ToString();
             var contactId = _fixture.GetContactId(token);
             Assert.IsNotNull(contactId);
-            var emails = LookupService.EmailSearch("CRAP@CRAP.com", token);
+            var emails = _lookupService.EmailSearch("CRAP@CRAP.com", token);
             Assert.IsEmpty(emails);
         }
 
@@ -85,7 +78,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string, object>> genders = LookupService.Genders(token);
+            List<Dictionary<string, object>> genders = _lookupService.Genders(token);
             Assert.IsNotEmpty(genders);
             genders.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
@@ -96,7 +89,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string, object>> maritalStatus = LookupService.MaritalStatus(token);
+            List<Dictionary<string, object>> maritalStatus = _lookupService.MaritalStatus(token);
             Assert.IsNotEmpty(maritalStatus);
             maritalStatus.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
@@ -107,7 +100,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string, object>> ServiceProviders = LookupService.ServiceProviders(token);
+            List<Dictionary<string, object>> ServiceProviders = _lookupService.ServiceProviders(token);
             Assert.IsNotEmpty(ServiceProviders);
             ServiceProviders.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
@@ -118,7 +111,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string, object>> States = LookupService.States(token);
+            List<Dictionary<string, object>> States = _lookupService.States(token);
             Assert.IsNotEmpty(States);
             States.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
@@ -129,7 +122,7 @@ namespace MinistryPlatform.Translation.Test
             var authData = AuthenticationService.authenticate(USERNAME, PASSWORD);
             Assert.IsNotNull(authData);
             var token = authData["token"].ToString();
-            List<Dictionary<string, object>> Countries = LookupService.Countries(token);
+            List<Dictionary<string, object>> Countries = _lookupService.Countries(token);
             Assert.IsNotEmpty(Countries);
             Countries.ForEach(x => { Assert.IsInstanceOf<Dictionary<string, object>>(x); });
         }
@@ -142,7 +135,7 @@ namespace MinistryPlatform.Translation.Test
             Assert.IsNotNull(authData);
 
             var token = authData["token"].ToString();
-            var crossroadsLocations = LookupService.CrossroadsLocations(token);
+            var crossroadsLocations = _lookupService.CrossroadsLocations(token);
             Assert.IsNotEmpty(crossroadsLocations);
 
             Assert.Contains(clifton, crossroadsLocations);

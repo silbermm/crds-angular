@@ -35,16 +35,28 @@ namespace MinistryPlatform.Translation.Services
 
        public List<Dictionary<string, object>> GetLookupRecords(int pageId, String token)
         {
-            SelectQueryResult result = Call<SelectQueryResult>(token,
-                platformClient => platformClient.GetPageLookupRecords(pageId, string.Empty, string.Empty, 0));
-            return MPFormatConversion.MPFormatToList(result);
+            return MPFormatConversion.MPFormatToList(GetPageLookupRecords(token, pageId, string.Empty, string.Empty, 0));
         }
+
+       public List<Dictionary<string, object>> GetLookupRecords(String token, int pageId, string search, string sort, int maxNumberOfRecordsToReturn = 100)
+       {
+           return MPFormatConversion.MPFormatToList(GetPageLookupRecords(token, pageId, search, sort, maxNumberOfRecordsToReturn));
+       }
 
         public Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100)
         {
-            SelectQueryResult result = Call<SelectQueryResult>(token,
-                platformClient => platformClient.GetPageLookupRecords(pageId, search, null, maxNumberOfRecordsToReturn));
-            return MPFormatConversion.MPFormatToDictionary(result);
+            return GetLookupRecord(token, pageId, search, string.Empty, maxNumberOfRecordsToReturn );
+        }
+
+        public Dictionary<string, object> GetLookupRecord(String token, int pageId, string search, string sort, int maxNumberOfRecordsToReturn = 100)
+        {
+            return MPFormatConversion.MPFormatToDictionary(GetPageLookupRecords(token, pageId, search, sort, maxNumberOfRecordsToReturn));
+        }
+
+        private SelectQueryResult GetPageLookupRecords(String token, int pageId, string search, string sort, int maxNumberOfRecordsToReturn = 100)
+        {
+            return Call<SelectQueryResult>(token,
+                platformClient => platformClient.GetPageLookupRecords(pageId, search, sort, maxNumberOfRecordsToReturn));
         }
 
         public SelectQueryResult GetRecords(int pageId, String token, String search = "", String sort = "")

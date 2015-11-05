@@ -32,18 +32,12 @@
     vm.countries = getCountries();
     vm.displayName = displayName;
     vm.displayLocation = displayLocation;
-    vm.isCollapsed = true;
     vm.states = getStates();
     vm.validation = Validation;
     vm.validLocations = validLocations(vm.locations);
-
-    $rootScope.$on('homePhoneFocus', function(event, data) {
-      vm.isCollapsed = false;
-      $location.hash('homephonecont');
-      $timeout(function() {
-        $anchorScroll();
-      }, 500);
-    });
+    if (typeof vm.isCollapsed === 'undefined') {
+      vm.isCollapsed = true;
+    }
 
     $rootScope.$on('locationFocus', function(event, data) {
       vm.isCollapsed = false;
