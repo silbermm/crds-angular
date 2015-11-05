@@ -127,6 +127,7 @@ namespace crds_angular.Services
                     PreferredName = participant.PreferredName,
                     UserInGroup = _mpGroupService.checkIfUserInGroup(participantId, g.Participants),
                     ParticpantId = participantId,
+                    ChildCareNeeded = false
                 };
                 detail.SignUpFamilyMembers = new List<SignUpFamilyMembers> {fam};
 
