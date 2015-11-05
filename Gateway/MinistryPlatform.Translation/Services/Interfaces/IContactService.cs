@@ -8,6 +8,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         string GetContactEmail(int contactId);
         MyContact GetContactById(int contactId);
         MyContact GetContactByIdCard(string idCard);
+        int GetContactIdByParticipantId(int participantId);
         List<HouseholdMember> GetHouseholdFamilyMembers(int householdId);
         MyContact GetMyProfile(string token);
         int CreateContactForGuestGiver(string emailAddress, string displayName);

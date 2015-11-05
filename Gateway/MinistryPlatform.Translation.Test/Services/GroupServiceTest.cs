@@ -16,6 +16,8 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> ministryPlatformService;
         private Mock<IConfigurationWrapper> configWrapper;
         private Mock<IAuthenticationService> authService;
+        private Mock<ICommunicationService> communicationService;
+        private Mock<IContactService> contactService;
         private readonly int GroupsParticipantsPageId = 298;
         private readonly int GroupsParticipantsSubPage = 88;
         private readonly int GroupsPageId = 322;
@@ -29,7 +31,8 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService = new Mock<IMinistryPlatformService>();
             configWrapper = new Mock<IConfigurationWrapper>();
             authService = new Mock<IAuthenticationService>();
-            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object);
+            communicationService = new Mock<ICommunicationService>();
+            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object, communicationService.Object, contactService.Object);
 
 
             configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");

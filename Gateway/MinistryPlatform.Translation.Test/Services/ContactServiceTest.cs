@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -194,6 +196,23 @@ namespace MinistryPlatform.Translation.Test.Services
                 Assert.IsInstanceOf(typeof (ApplicationException), e);
                 Assert.AreSame(ex, e.InnerException);
             }
+        }
+
+        [Test]
+        public void shouldGetContactFromParticipant()
+        {
+            var participantId = 2375529;
+            var contactId = 2562386;
+
+            var platformServiceClient = new PlatformServiceClient();
+            var configurationWrapper = new ConfigurationWrapper();
+            var ministryPlatformService = new MinistryPlatformServiceImpl(platformServiceClient, configurationWrapper);
+
+            var contactService = new ContactService(new MinistryPlatformServiceImpl(platformServiceClient, configurationWrapper),
+                                                    new AuthenticationServiceImpl(platformServiceClient, ministryPlatformService),
+                                                    configurationWrapper);
+            var result = contactService.GetContactIdByParticipantId(participantId);
+            Assert.AreEqual(contactId, result);
         }
     }
 }

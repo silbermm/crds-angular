@@ -15,6 +15,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly ICommunicationService _communicationService;
+        private readonly IContactService _contactService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
@@ -31,12 +32,13 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
             this._communicationService = communicationService;
+            this._contactService = contactService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -276,11 +278,14 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public void SendCommunityGroupConfirmationEmail(int p)
+        public void SendCommunityGroupConfirmationEmail(int participantId)
         {
             
             var emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
             var fromAddress = _communicationService.GetEmailFromContactId(7);
+            var toContact = _contactService.GetContactIdByParticipantId(participantId);
+            var toAddress = _contactService.GetContactEmail(toContact);
+
             var confirmation = new Communication 
             { 
                 EmailBody = emailTemplate.Body, 
@@ -293,8 +298,8 @@ namespace MinistryPlatform.Translation.Services
                 ReplyContactId = 7,
                 ReplyToEmailAddress = fromAddress,
                 TemplateId = CommunityGroupConfirmationTemplateId,
-                ToContactId = 0,
-                ToEmailAddress = ""
+                ToContactId = toContact,
+                ToEmailAddress = toAddress
             };
             _communicationService.SendMessage(confirmation);
         }
