@@ -211,7 +211,7 @@
       //Add Person to group
       Group.Participant.save({
         groupId: vm.groupId
-      }, participantArray).$promise.then(function(response) {
+      }, participantArray.partId).$promise.then(function(response) {
         if (vm.waitListCase) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.successfullWaitlistSignup);
         } else {
