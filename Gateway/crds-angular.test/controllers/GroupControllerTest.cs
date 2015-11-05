@@ -51,9 +51,20 @@ namespace crds_angular.test.controllers
         [Test]
         public void testPostParticipantToGroupIsSuccessful()
         {
-            int groupId = 456;
+            const int groupId = 456;
 
-            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
+            List<ParticipantSignup> particpantIdToAdd = new List<ParticipantSignup>
+            {
+                new ParticipantSignup(){
+                    particpantId = 90210,
+                    childCareNeeded = false
+                },
+                new ParticipantSignup()
+                {
+                    particpantId = 41001,
+                    childCareNeeded = false
+                }
+            };
 
             List<Event> events = new List<Event>();
             Event e1 = new Event();
@@ -74,7 +85,7 @@ namespace crds_angular.test.controllers
             };
             groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd));
 
-            IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
+            IHttpActionResult result = fixture.Post(groupId, particpantIdToAdd);
 
             authenticationServiceMock.VerifyAll();
             groupServiceMock.VerifyAll();
@@ -88,11 +99,23 @@ namespace crds_angular.test.controllers
         {
             Exception ex = new Exception();
             int groupId = 456;
-            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
+            List<ParticipantSignup> particpantIdToAdd = new List<ParticipantSignup>
+            {
+                new ParticipantSignup()
+                {
+                    particpantId = 90210,
+                    childCareNeeded = false
+                }, 
+                new ParticipantSignup()
+                {
+                    particpantId = 41001,
+                    childCareNeeded = false
+                }
+            };
 
             groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd)).Throws(ex);
 
-            IHttpActionResult result = fixture.Post(groupId, new PartID { partId = particpantIdToAdd });
+            IHttpActionResult result = fixture.Post(groupId, particpantIdToAdd);
             authenticationServiceMock.VerifyAll();
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(BadRequestResult), result);
@@ -151,7 +174,7 @@ namespace crds_angular.test.controllers
         public void testCallGroupServiceFailsUnauthorized()
         {
             fixture.Request.Headers.Authorization = null;
-            IHttpActionResult result = fixture.Post(3, new PartID());
+            IHttpActionResult result = fixture.Post(3, new List<ParticipantSignup>());
             Assert.IsNotNull(result);
             Assert.IsInstanceOf(typeof(UnauthorizedResult), result);
             groupServiceMock.VerifyAll();
@@ -170,13 +193,25 @@ namespace crds_angular.test.controllers
             g.WaitList = false;
             g.Full = true;
 
-            List<int> particpantIdToAdd = new List<int> { 90210, 41001 };
+            var particpantIdToAdd = new List<ParticipantSignup>
+            {
+                new ParticipantSignup()
+                {
+                    particpantId = 90210,
+                    childCareNeeded = false
+                }, 
+                new ParticipantSignup()
+                {
+                    particpantId = 41001,
+                    childCareNeeded = false
+                }
+            };
             var groupFull = new GroupFullException(g);
             groupServiceMock.Setup(mocked => mocked.addParticipantsToGroup(groupId, particpantIdToAdd)).Throws(groupFull);
 
             try
             {
-                fixture.Post(333, new PartID { partId = particpantIdToAdd });
+                fixture.Post(333, particpantIdToAdd);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)

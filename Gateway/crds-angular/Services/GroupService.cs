@@ -40,7 +40,7 @@ namespace crds_angular.Services
             this.GroupRoleDefaultId = Convert.ToInt32(_configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
         }
 
-        public void addParticipantsToGroup(int groupId, List<int> participantIds)
+        public void addParticipantsToGroup(int groupId, List<ParticipantSignup> participants)
         {
             Group g;
 
@@ -55,7 +55,7 @@ namespace crds_angular.Services
                 throw (new ApplicationException(message, e));
             }
 
-            var numParticipantsToAdd = participantIds.Count;
+            var numParticipantsToAdd = participants.Count;
             var spaceRemaining = g.TargetSize - g.Participants.Count;
             if (((g.TargetSize > 0) && (numParticipantsToAdd > spaceRemaining)) || (g.Full))
             {
@@ -64,12 +64,13 @@ namespace crds_angular.Services
 
             try
             {
-                foreach (var p in participantIds)
+                foreach (var p in participants)
                 {
                     // First sign this user up for the community group
-                    int groupParticipantId = _mpGroupService.addParticipantToGroup(p,
+                    int groupParticipantId = _mpGroupService.addParticipantToGroup(p.particpantId,
                                                                                    Convert.ToInt32(groupId),
                                                                                    GroupRoleDefaultId,
+                                                                                   p.childCareNeeded,
                                                                                    DateTime.Now);
                     logger.Debug("Added user - group/participant id = " + groupParticipantId);
 
@@ -80,7 +81,7 @@ namespace crds_angular.Services
                     {
                         foreach (var e in events)
                         {
-                            int eventParticipantId = _eventService.registerParticipantForEvent(p, e.EventId);
+                            int eventParticipantId = _eventService.registerParticipantForEvent(p.particpantId, e.EventId);
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
                         }
                     }
@@ -127,6 +128,7 @@ namespace crds_angular.Services
                     PreferredName = participant.PreferredName,
                     UserInGroup = _mpGroupService.checkIfUserInGroup(participantId, g.Participants),
                     ParticpantId = participantId,
+                    ChildCareNeeded = false
                 };
                 detail.SignUpFamilyMembers = new List<SignUpFamilyMembers> {fam};
 
@@ -148,5 +150,6 @@ namespace crds_angular.Services
 
             return (detail);
         }
+
     }
 }

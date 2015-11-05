@@ -386,7 +386,7 @@ namespace crds_angular.Services
             {
                 return 0;
             }
-            var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, groupId, groupRoleId, groupStartDate);
+            var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, groupId, groupRoleId, false, groupStartDate);
             SendTripParticipantSuccess(applicant.ContactId, events);
             return groupParticipantId;
         }
