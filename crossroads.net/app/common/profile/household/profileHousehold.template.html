@@ -129,9 +129,14 @@
                 </li>
                 <li class="list-group-item clearfix">
                   <div class="row">
-                    <div class="form-group col-sm-6" id="homephonecont">
-                      <label for="homephone">Home Phone</label>
-                      <input ng-model="household.householdInfo.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+                    <div class="form-group col-sm-6" id="homephonecont" ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'homePhone') }">
+                      <label for="homePhone">Home Phone</label>
+                      <input ng-model="household.householdInfo.homePhone" type="text" class="form-control" id="homePhone" name="homePhone" placeholder="Enter home phone" ng-pattern="household.phoneFormat" ng-model-options="{updateOn: 'blur'}">
+                      <ng-messages for="household.householdForm.homePhone.$error" ng-if="household.validation.showErrors(household.householdForm, 'homePhone')">
+                        <span ng-message="pattern">
+                          <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                        </span>
+                      </ng-messages>
                     </div>
                   </div>
                 </li>
