@@ -132,10 +132,11 @@
                       <label for="provider" class="required">Crossroads Location</label>
                       <select class="form-control col-sm-12"
                               name="crLocation"
+                              required
                               valid-dropdown-value="household.validLocations"
                               ng-model="household.householdInfo.congregationId"
-                              ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations">
-                        <option value="" selected="selected" > -- Choose One -- </option>
+                              ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations | orderBy: ['OnlineSortOrder', 'name']">
+                        <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
                       </select>
                       <ng-messages for="household.householdForm.crLocation.$error" ng-if="household.validation.showErrors(household.householdForm, 'crLocation')">
                         <ng-messages-include src="on-submit-messages"></ng-messages-include>

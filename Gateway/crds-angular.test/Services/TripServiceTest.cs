@@ -123,14 +123,13 @@ namespace crds_angular.test.Services
         [Test]
         public void ShouldGetMyTrips()
         {
-            const int contactId = 12345;
             const string token = "faker";
             var mockFamily = new List<FamilyMember> { new FamilyMember { ContactId = 12345 }, new FamilyMember { ContactId = 98765 } };
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, token)).Returns(mockFamily);
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(token)).Returns(mockFamily);
 
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(contactId, token);
+            var myTrips = _fixture.GetMyTrips(token);
 
             _serveService.VerifyAll();
             _donationService.VerifyAll();
@@ -144,14 +143,13 @@ namespace crds_angular.test.Services
         [Test]
         public void FundraisingDaysLeftShouldNotBeNegative()
         {
-            const int contactId = 12345;
             const string token = "faker";
             var mockFamily = new List<FamilyMember> { new FamilyMember { ContactId = 12345 } };
-            _serveService.Setup(m => m.GetImmediateFamilyParticipants(contactId, token)).Returns(mockFamily);
+            _serveService.Setup(m => m.GetImmediateFamilyParticipants(token)).Returns(mockFamily);
 
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockFundingPastTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
-            var myTrips = _fixture.GetMyTrips(contactId, token);
+            var myTrips = _fixture.GetMyTrips(token);
 
             Assert.IsNotNull(myTrips);
             Assert.AreEqual(0, myTrips.MyTrips[0].FundraisingDaysLeft);

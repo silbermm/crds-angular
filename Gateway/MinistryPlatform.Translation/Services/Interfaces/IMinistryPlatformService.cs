@@ -8,6 +8,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IMinistryPlatformService
     {
+        List<Dictionary<string, object>> GetLookupRecords(String token, int pageId, string search, string sort, int maxNumberOfRecordsToReturn = 100);
+
         List<Dictionary<string, object>> GetLookupRecords(int pageId, String token);
         
         Dictionary<string, object> GetLookupRecord(int pageId, string search, String token, int maxNumberOfRecordsToReturn = 100);

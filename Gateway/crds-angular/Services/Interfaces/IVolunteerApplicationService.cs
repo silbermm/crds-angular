@@ -9,6 +9,6 @@ namespace crds_angular.Services.Interfaces
     {
         bool SaveStudent(StudentApplicationDto application);
         bool SaveAdult(AdultApplicationDto application);
-        List<FamilyMember> FamilyThatUserCanSubmitFor(int contactId, string token);
+        List<FamilyMember> FamilyThatUserCanSubmitFor(string token);
     }
 }
