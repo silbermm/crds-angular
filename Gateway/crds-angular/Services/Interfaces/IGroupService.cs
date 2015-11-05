@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace crds_angular.Services.Interfaces
 {
     public interface IGroupService
-    {
-        void addParticipantsToGroup(int groupId, List<int> participantIds);
-
+    {     
         GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken);
+
+        void addParticipantsToGroup(int groupId, List<ParticipantSignup> participants);
     }
 }
