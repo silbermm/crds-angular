@@ -79,5 +79,40 @@ namespace MinistryPlatform.Translation.Services
                     ex);
             }
         }
+
+        public List<EventParticipant> GetChildCareParticipants(int daysBeforeEvent)
+        {
+            try
+            {
+                var search = string.Format("{0},", daysBeforeEvent);
+                var records =
+                    WithApiLogin(
+                        apiToken =>
+                            (_ministryPlatformService.GetPageViewRecords("EventParticipantsChildCarePageView",
+                                                                         apiToken,
+                                                                         search)));
+
+                return records.Select(viewRecord => new EventParticipant
+                {
+                    ChildcareRequired = viewRecord.ToBool("Child_Care_Requested"),
+                    ContactId = viewRecord.ToInt("Contact_ID"),
+                    EventId = viewRecord.ToInt("Event_ID"),
+                    EventParticipantId = viewRecord.ToInt("Event_Participant_ID"),
+                    EventStartDateTime = viewRecord.ToDate("Event_Start_Date"),
+                    EventTitle = viewRecord.ToString("Event_Title"),
+                    GroupId = viewRecord.ToInt("Group_ID"),
+                    GroupName = viewRecord.ToString("Group_Name"),
+                    GroupParticipantId = viewRecord.ToInt("Group_Participant_ID"),
+                    ParticipantEmail = viewRecord.ToString("Email_Address"),
+                    ParticipantId = viewRecord.ToInt("Participant_ID")
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("GetChildCareParticipants failed.", ex);
+            }
+        }
+
+
     }
 }
