@@ -89,10 +89,12 @@
               // I now need to get the group-detail again for the wait list there are are two new possible cases
               // 1. the user is a already a member
               // 2. the user is not yet a member
+              // 3. TODO DE616 the user is already member of non-wait list group
               vm.groupDetails = Group.Detail.get({
                 groupId: vm.groupId
               }).$promise.then(function(response) {
                 vm.response = response.SignUpFamilyMembers;
+                vm.childCareAvailable = response.childCareInd;
                 if (allSignedUp(response)) {
                   vm.alreadySignedUp = true;
                 }
@@ -238,5 +240,6 @@
 
       });
     }
+
   }
 })();
