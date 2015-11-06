@@ -188,73 +188,16 @@ namespace MinistryPlatform.Translation.Test.Services
 
             ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
 
-            var theEvent = fixture.GetEventByParentEventId(parentEventId);
+            var events = fixture.GetEventsByParentEventId(parentEventId);
 
             ministryPlatformService.VerifyAll();
 
+            Assert.AreEqual(1, events.Count);
+            var theEvent = events[0];
             Assert.AreEqual(expectedEventId, theEvent.EventId);
             Assert.AreEqual("event-title-100", theEvent.EventTitle);
             Assert.AreEqual(12345, theEvent.PrimaryContact.ContactId);
             Assert.AreEqual("thecinnamonbagel@react.js", theEvent.PrimaryContact.EmailAddress);
-        }
-
-        [Test]
-        public void GetEventByParentIdReturnsNull()
-        {
-            const int parentEventId = 888;
-            var searchString = string.Format(",,,{0}", parentEventId);
-            const string pageKey = "EventsByParentEventID";
-
-            var mockEventDictionary = new List<Dictionary<string, object>>();
-
-            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
-
-            var theEvent = fixture.GetEventByParentEventId(parentEventId);
-
-            ministryPlatformService.VerifyAll();
-
-            Assert.IsNull(theEvent);
-        }
-
-        [Test]
-        public void GetEventByParentIdReturnsMultipleEvents()
-        {
-
-            const int parentEventId = 888;
-            var searchString = string.Format(",,,{0}", parentEventId);
-            var expectedMessage = string.Format("Duplicate Event ID detected, Parent Event: {0}", parentEventId);
-            const string pageKey = "EventsByParentEventID";
-
-            var mockEventDictionary = new List<Dictionary<string, object>>
-            {
-                new Dictionary<string, object>
-                {
-                    {"Event_ID", 999},
-                    {"Event_Title", "event-title-100"},
-                    {"Event_Type", "event-type-100"},
-                    {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
-                    {"Contact_ID", 12345},
-                    {"Email_Address", "thecinnamonbagel@react.js"}
-                },new Dictionary<string, object>
-                {
-                    {"Event_ID", 998},
-                    {"Event_Title", "event-title-900"},
-                    {"Event_Type", "event-type-900"},
-                    {"Event_Start_Date", new DateTime(2015, 3, 20, 8, 30, 0)},
-                    {"Event_End_Date", new DateTime(2015, 3, 20, 8, 30, 0)},
-                    {"Contact_ID", 356987},
-                    {"Email_Address", "thecanterbagel@dot.net"}
-                }
-            };
-
-            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
-
-            var ex = Assert.Throws<ApplicationException>(() => fixture.GetEventByParentEventId(parentEventId));
-
-            ministryPlatformService.VerifyAll();
-
-            Assert.AreEqual(ex.Message, expectedMessage);
         }
 
         [Test]
