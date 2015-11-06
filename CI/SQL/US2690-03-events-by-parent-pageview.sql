@@ -13,7 +13,8 @@ DECLARE @FieldList VARCHAR(1000) = 'Events.[Event_ID]
                                   , Parent_Event_ID_Table.[Event_ID] AS [Parent_Event ID]
                                   , Events.[Event_Start_Date]
                                   , Events.[Event_End_Date]
-                                  , Primary_Contact_Table.[Email_Address]';
+                                  , Primary_Contact_Table.[Email_Address]
+                                  , Event_Type_ID_Table.[Event_Type]';
 DECLARE @ViewClause VARCHAR(1000) = 'Events.[Event_ID] IS NOT NULL';
 DECLARE @Description VARCHAR(1000) = 'A view that lists Events with Parent ID to enable queries by Parent Event ID';
 
