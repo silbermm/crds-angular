@@ -44,12 +44,12 @@ FROM Donations D
  INNER JOIN Payment_Types PT ON PT.Payment_Type_ID = D.Payment_Type_ID
  INNER JOIN Donation_Distributions DD ON DD.Donation_ID = D.Donation_ID
  INNER JOIN Programs Prog ON Prog.Program_ID = DD.Program_ID
- INNER JOIN Congregations Cong ON Cong.Congregation_ID = Prog.Congregation_ID
+ INNER JOIN Congregations Cong ON Cong.Congregation_ID = DD.Congregation_ID
  INNER JOIN Statement_Headers SH ON SH.Statement_Header_ID = Prog.Statement_Header_ID
 WHERE Cong.Accounting_Company_ID = ISNULL(@AccountingCompanyID,Cong.Accounting_Company_ID)
  AND (ISNULL(@StmtHeaderID,'0') = '0' OR Prog.Statement_Header_ID IN (SELECT * FROM dp_Split(@StmtHeaderID,',')))
  AND (ISNULL(@ProgramID,'0') = '0' OR Prog.Program_ID IN (SELECT * FROM dp_Split(@ProgramID,',')))
- AND Prog.Congregation_ID = ISNULL(@CongregationID,Prog.Congregation_ID)
+ AND DD.Congregation_ID = ISNULL(@CongregationID,DD.Congregation_ID)
  AND @DomainID = Dom.Domain_GUID
  AND D.Batch_ID IS NOT NULL
  AND D.Donation_Date >= @FromDate 
@@ -85,11 +85,11 @@ GROUP BY D.Donor_ID
 
 CREATE INDEX IX_D_DonorID ON #D(Donor_ID)
 
-SELECT 
+SELECT
 Donor_Name = C.Display_Name
 ,Contact_Status = CS.Contact_Status
 ,Household_Name = H.Household_Name
-,Household_Congregation = ISNULL(Cong.Congregation_Name,'No Household Congr.')
+,Donation_Distribution_Congregation = ISNULL(Cong.Congregation_Name,'No Donation Distribution Congr.')
 ,Period_Amount
 ,Period_Donations
 ,First_Donation
@@ -98,14 +98,14 @@ Donor_Name = C.Display_Name
 ,Do.Donor_ID
 ,H.Household_ID
 ,Column_Group
-
 FROM Donors Do
- INNER JOIN #D ON #D.Donor_ID = Do.Donor_ID
- INNER JOIN Contacts C ON C.Contact_ID = Do.Contact_ID
- INNER JOIN Contact_Statuses CS ON CS.Contact_Status_ID = C.Contact_Status_ID
- LEFT OUTER JOIN Households H ON H.Household_ID = C.Household_ID
- LEFT OUTER JOIN Congregations Cong ON Cong.Congregation_ID = H.Congregation_ID
-
+INNER JOIN #D ON #D.Donor_ID = Do.Donor_ID
+INNER JOIN Contacts C ON C.Contact_ID = Do.Contact_ID
+INNER JOIN Contact_Statuses CS ON CS.Contact_Status_ID = C.Contact_Status_ID
+INNER JOIN Donations D ON D.Donor_ID = Do.Donor_ID
+INNER JOIN Donation_Distributions DD ON DD.Donation_ID = D.Donation_ID
+INNER JOIN Congregations Cong ON Cong.Congregation_ID = DD.Congregation_ID
+LEFT OUTER JOIN Households H ON H.Household_ID = C.Household_ID
 WHERE #D.Donor_ID IN (SELECT Donor_ID FROM #D GROUP BY Donor_ID HAVING SUM(#D.Period_Amount) >= ISNULL(@MinGiv,SUM(#D.Period_Amount)))
 
 
