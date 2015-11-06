@@ -25,7 +25,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
-        private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings(""));
+        private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupConfirmationTemplateId"));
 
         private readonly int GroupParticipantQualifiedServerPageView =
             Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
@@ -138,6 +138,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gcc != null)
                 {
                     g.ChildCareAvailable = (Boolean) gcc;
+                }
+
+                object gc = null;
+                groupDetails.TryGetValue("Congregation_ID_Text", out gc);
+                if (gc != null)
+                {
+                    g.Congregation = (string)gc;
                 }
 
                 if (g.WaitList)
@@ -278,13 +285,22 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public void SendCommunityGroupConfirmationEmail(int participantId)
+        public void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool childcareNeeded)
         {
             
             var emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
             var fromAddress = _communicationService.GetEmailFromContactId(7);
             var toContact = _contactService.GetContactIdByParticipantId(participantId);
-            var toAddress = _contactService.GetContactEmail(toContact);
+            var toContactInfo = _contactService.GetContactById(toContact);
+            var groupInfo = getGroupDetails(groupId);
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Nickname", toContactInfo.Nickname},
+                {"Group_Name", groupInfo.Name},
+                {"Congregation_Name", groupInfo.Congregation},
+                {"Childcare_Needed", (childcareNeeded) ? "You have requested Child Care services." : ""}
+            };
 
             var confirmation = new Communication 
             { 
@@ -294,12 +310,12 @@ namespace MinistryPlatform.Translation.Services
                 DomainId = 1,
                 FromContactId = 7,
                 FromEmailAddress = fromAddress,
-                MergeData = new Dictionary<string, object>(),
+                MergeData = mergeData,
                 ReplyContactId = 7,
                 ReplyToEmailAddress = fromAddress,
                 TemplateId = CommunityGroupConfirmationTemplateId,
                 ToContactId = toContact,
-                ToEmailAddress = toAddress
+                ToEmailAddress = toContactInfo.Email_Address
             };
             _communicationService.SendMessage(confirmation);
         }

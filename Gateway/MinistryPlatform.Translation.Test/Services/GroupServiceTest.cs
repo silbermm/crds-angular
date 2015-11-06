@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -32,6 +34,7 @@ namespace MinistryPlatform.Translation.Test.Services
             configWrapper = new Mock<IConfigurationWrapper>();
             authService = new Mock<IAuthenticationService>();
             communicationService = new Mock<ICommunicationService>();
+            contactService = new Mock<IContactService>();
             fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object, communicationService.Object, contactService.Object);
 
 
@@ -320,7 +323,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(2, groups[1].GroupId);
             Assert.AreEqual("group-two", groups[1].Name);
         }
-
 
         private List<Dictionary<string, object>> GroupsByEventId_MpResponse()
         {
