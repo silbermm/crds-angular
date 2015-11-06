@@ -50,6 +50,7 @@ WHERE Cong.Accounting_Company_ID = ISNULL(@AccountingCompanyID,Cong.Accounting_C
  AND (ISNULL(@StmtHeaderID,'0') = '0' OR Prog.Statement_Header_ID IN (SELECT * FROM dp_Split(@StmtHeaderID,',')))
  AND (ISNULL(@ProgramID,'0') = '0' OR Prog.Program_ID IN (SELECT * FROM dp_Split(@ProgramID,',')))
  AND DD.Congregation_ID = ISNULL(@CongregationID,DD.Congregation_ID)
+ AND Prog.Program_Type_ID <> 3
  AND @DomainID = Dom.Domain_GUID
  AND D.Batch_ID IS NOT NULL
  AND D.Donation_Date >= @FromDate 
