@@ -2,8 +2,8 @@
   <fieldset>
     <div class="col-sm-12">
       <legend>Your Household</legend>
-      <p>Update information for your household, which includes:
-        <br />
+      <span ng-bind-html="$root.MESSAGES.profileHousholdHeader.content | html"></span>
+      <p>
         <span ng-repeat="member in household.householdInfo.householdMembers">
             <strong>{{household.displayName(member)}}{{$last ? '' : ', '}}</strong>
           </span>
