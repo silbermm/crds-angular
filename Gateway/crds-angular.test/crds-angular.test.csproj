@@ -167,6 +167,7 @@
     <Compile Include="controllers\DonorControllerTest.cs" />
     <Compile Include="controllers\EventLocationControllerTest.cs" />
     <Compile Include="controllers\AccountControllerTest.cs" />
+    <Compile Include="controllers\LoginControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
     <Compile Include="controllers\GroupControllerTest.cs" />
     <Compile Include="controllers\ServeControllerTest.cs" />

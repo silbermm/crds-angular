@@ -16,6 +16,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         IList<int> GetContactIdByRoleId(int roleId, string token);
         void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary);
         void UpdateContact(int contactId, Dictionary<string, object> profileDictionary);
-        int GetContactIdByEmail(string email, string token);
+        int GetContactIdByEmail(string email);
     }
 }

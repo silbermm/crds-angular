@@ -389,16 +389,16 @@ namespace MinistryPlatform.Translation.Services
             });
         }
 
-        public int GetContactIdByEmail(string email, string token)
+        public int GetContactIdByEmail(string email)
         {
-            var records = _ministryPlatformService.GetRecordsDict(401, token, ("," + email));
+            var records = _ministryPlatformService.GetRecordsDict(_configurationWrapper.GetConfigIntValue("Contacts"), ApiLogin(), (email));
             if (records.Count != 1)
             {
                 throw new Exception("User email did not return exactly one user record");
             }
 
             var record = records[0];
-            return record.ToInt("Contact_ID");
+            return record.ToInt("dp_RecordID");
         }
     }
 }

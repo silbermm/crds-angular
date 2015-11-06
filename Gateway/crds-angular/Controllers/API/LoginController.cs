@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Net.Http;
 using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using System.Web.Http.Results;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
@@ -29,12 +31,37 @@ namespace crds_angular.Controllers.API
         }
 
         [HttpPost]
-        [Route("api/resetpassword/{email}")]
-        public IHttpActionResult ResetPassword(string email)
+        [Route("api/resetpasswordrequest/")]
+        public IHttpActionResult ResetPassword(PasswordResetRequest request)
         {
-            _loginService.SetPasswordResetToken(email);
+            try
+            {
+                _loginService.PasswordResetRequest(request.Email);
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                //return null;
+                //var x = ex.ToString();
+                return this.InternalServerError();
+            }
+        }
 
-            return null;
+        [HttpPost]
+        [Route("api/resetpasswordverify/")]
+        public IHttpActionResult AcceptResetRequest(PasswordResetVerification request)
+        {
+            throw new Exception("Not Implemented Yet");
+
+            //try
+            //{
+            //    _loginService.AcceptPasswordResetRequest(request.Email, request.Token, request.Password);
+            //    return this.Ok();
+            //}
+            //catch (Exception)
+            //{
+            //    return this.InternalServerError();
+            //}
         }
 
         [ResponseType(typeof(LoginReturn))]

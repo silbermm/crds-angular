@@ -8,5 +8,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         MinistryPlatformUser GetByUserId(string userId);
         MinistryPlatformUser GetByAuthenticationToken(string authToken);
         void UpdateUser(string token, Dictionary<string, object> userUpdateValues);
+        int GetUserIdByEmail(string email);
     }
 }

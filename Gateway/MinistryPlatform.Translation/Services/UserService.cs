@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -55,6 +56,18 @@ namespace MinistryPlatform.Translation.Services
         public void UpdateUser(string token, Dictionary<string, object> userUpdateValues)
         {
             MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userUpdateValues, token);
+        }
+
+        public int GetUserIdByEmail(string email)
+        {
+            var records = _ministryPlatformService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), ApiLogin(), ("," + email));
+            if (records.Count != 1)
+            {
+                throw new Exception("User email did not return exactly one user record");
+            }
+
+            var record = records[0];
+            return record.ToInt("dp_RecordID");      
         }
     }
 }
