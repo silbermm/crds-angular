@@ -1,30 +1,14 @@
 <div>
   <ng-form name="tripsSignup.tripAppPage5" role="form" novalidate>
-    <div ng-show="tripsSignup.isNica()">
+    <div ng-if="tripsSignup.isNica()">
       <legend>
         Child Sponsorship
       </legend>
 
-      <!-- <div class="row">
-        <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorChild') }">
-          <label class="control-label block" ng-class="{'required': tripsSignup.isNica()}">Have you sponsored a child through Crossroads in Nicaragua?</label>
-          <label class="radio-inline">
-            <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="yes" name="sponsorChild" id="sponsor-yes" ng-required="tripsSignup.isNica()">Yes
-          </label>
-          <label class="radio-inline">
-            <input ng-model="tripsSignup.signupService.page5.sponsorChildInNicaragua" type="radio" value="no" name="sponsorChild" id="sponsor-no" ng-required="tripsSignup.isNica()">No
-          </label>
-          <ng-messages for="tripsSignup.tripAppPage5.sponsorChild.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorChild')">
-            <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
-            </span>
-          </ng-messages>
-        </div>
-      </div> -->
-      <div class="row" collapse="!signupStep.requireSponsoredChild()">
+      <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorFirstName') }">
-          <label for="sponsor-firstname" class="control-label" ng-class="{'required': signupStep.requireSponsoredChild() }">Child's First Name</label>
-          <input ng-model="tripsSignup.signupService.page5.sponsorChildFirstName" type="text" class="form-control" name="sponsorFirstName" id="sponsor-firstname" placeholder="Enter sponsored child's first name" ng-required="tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes'">
+          <label for="sponsor-firstname" class="control-label required">Child's First Name</label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildFirstName" type="text" class="form-control" name="sponsorFirstName" id="sponsor-firstname" placeholder="Enter sponsored child's first name" ng-required="true">
           <ng-messages for="tripsSignup.tripAppPage5.sponsorFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorFirstName')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -32,8 +16,8 @@
           </ng-messages>
         </div>
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorLastName') }">
-          <label for="sponsor-lastname" class="control-label" ng-class="{'required': signupStep.requireSponsoredChild() }">Child's Last Name</label>
-          <input ng-model="tripsSignup.signupService.page5.sponsorChildLastName" type="text" class="form-control" name="sponsorLastName" id="sponsor-lastname" placeholder="Enter sponsored child's last name" ng-required="tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes'">
+          <label for="sponsor-lastname" class="control-label required">Child's Last Name</label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildLastName" type="text" class="form-control" name="sponsorLastName" id="sponsor-lastname" placeholder="Enter sponsored child's last name" ng-required="true>
           <ng-messages for="tripsSignup.tripAppPage5.sponsorLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorLastName')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
@@ -41,10 +25,10 @@
           </ng-messages>
         </div>
       </div>
-      <div class="row"collapse="!signupStep.requireSponsoredChild()">
+      <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorNumber') }">
-          <label for="sponsor-number" class="control-label" ng-class="{'required': signupStep.requireSponsoredChild() }">Child's Sponsorship Number</label>
-          <input ng-model="tripsSignup.signupService.page5.sponsorChildNumber" type="text" class="form-control" name="sponsorNumber" id="sponsor-number" placeholder="Enter sponsored child's id number" ng-required="tripsSignup.signupService.page5.sponsorChildInNicaragua === 'yes'">
+          <label for="sponsor-number" class="control-label required">Child's Sponsorship Number</label>
+          <input ng-model="tripsSignup.signupService.page5.sponsorChildNumber" type="text" class="form-control" name="sponsorNumber" id="sponsor-number" placeholder="Enter sponsored child's id number" ng-required="true">
           <ng-messages for="tripsSignup.tripAppPage5.sponsorNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorNumber')">
             <span ng-message="required">
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
