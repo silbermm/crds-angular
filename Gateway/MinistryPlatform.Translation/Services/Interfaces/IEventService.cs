@@ -13,6 +13,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Group> GetGroupsForEvent(int eventId);
         bool EventHasParticipant(int eventId, int participantId);
         Event GetEvent(int eventId);
-        Event GetEventByParentEventId(int parentEventId);
+        List<Event> GetEventsByParentEventId(int parentEventId);
     }
 }

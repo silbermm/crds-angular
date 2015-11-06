@@ -184,7 +184,7 @@ namespace MinistryPlatform.Translation.Services
             return filteredEvents;
         }
 
-        public Event GetEventByParentEventId(int parentEventId)
+        public List<Event> GetEventsByParentEventId(int parentEventId)
         {
             var token = ApiLogin();
             var searchStr = string.Format(",,,{0}", parentEventId);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -42,18 +43,7 @@ namespace crds_angular.Services
             var participants = _eventParticipantService.GetChildCareParticipants(daysBeforeEvent);
             foreach (var participant in participants)
             {
-                var childEvent = _eventService.GetEventByParentEventId(participant.EventId);
-
-                if (childEvent == null)
-                {
-                    //childcare event does not exist, don't send a message
-                    continue;
-                }
-                if (childEvent.EventType != "Childcare")
-                {
-                    //childcare event does not exist, don't send a message
-                    continue;
-                }
+                var childEvent = GetChildcareEvent(participant.EventId);
                 var mergeData = SetMergeData(participant.GroupName, participant.EventStartDateTime, participant.EventId);
                 var replyToContact = ReplyToContact(childEvent);
                 var communication = FormatCommunication(authorUserId, domainId, template, fromContact, replyToContact, participant, mergeData);
@@ -68,12 +58,30 @@ namespace crds_angular.Services
             }
         }
 
+        private Event GetChildcareEvent(int parentEventId)
+        {
+            var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
+            var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();
+
+            if (childcareEvents.Count == 0)
+            {
+                throw new ApplicationException(string.Format("Childcare Event Does Not Exist, parent event id: {0}", parentEventId));
+            }
+            if (childcareEvents.Count > 1)
+            {
+                throw new ApplicationException(string.Format("Mulitple Childcare Events Exist, parent event id: {0}", parentEventId));
+            }
+            return childcareEvents.First();
+        }
+
         private static MyContact ReplyToContact(Event childEvent)
         {
             var contact = childEvent.PrimaryContact;
-            var replyToContact = new MyContact();
-            replyToContact.Contact_ID = contact.ContactId;
-            replyToContact.Email_Address = contact.EmailAddress;
+            var replyToContact = new MyContact
+            {
+                Contact_ID = contact.ContactId,
+                Email_Address = contact.EmailAddress
+            };
             return replyToContact;
         }
 
