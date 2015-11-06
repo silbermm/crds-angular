@@ -44,10 +44,10 @@
               <svg viewBox="0 0 32 32" class="icon icon-crossroads">
                 <use xlink:href="#crossroads"></use>
               </svg>
-              <span ng-if="household.householdInfo.congregationId">
+              <span ng-if="household.displayLocation(household.householdInfo.congregationId)">
               {{household.displayLocation(household.householdInfo.congregationId)}}
               </span>
-              <span ng-if="!household.householdInfo.congregationId">Set Crossroads Location...</span>
+              <span ng-if="!household.displayLocation(household.householdInfo.congregationId)">Set Crossroads Location...</span>
             </div>
           </div>
           <!--/row-->
