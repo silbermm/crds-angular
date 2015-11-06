@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
@@ -371,7 +372,6 @@ namespace crds_angular.Services
             request.AddParameter("interval", interval);
             request.AddParameter("name", string.Format("Donor ID #{0} {1}ly", contactDonor.DonorId, interval));
             request.AddParameter("currency", "usd");
-            request.AddParameter("trial_period_days", recurringGiftDto.StartDate.Date.Subtract(DateTime.Today).Days);
             request.AddParameter("id", contactDonor.DonorId + " " + DateTime.Now);
 
             var response = _stripeRestClient.Execute<StripePlan>(request);
@@ -380,10 +380,14 @@ namespace crds_angular.Services
             return response.Data;
         }
 
-        public StripeSubscription CreateSubscription(string planName, string customer)
+        public StripeSubscription CreateSubscription(string planName, string customer, DateTime trialEndDate)
         {
             var request = new RestRequest("customers/" + customer +"/subscriptions", Method.POST);
             request.AddParameter("plan", planName);
+            if (trialEndDate.Date > DateTime.Today)
+            {
+                request.AddParameter("trial_end", trialEndDate.Date.ConvertDateTimeToEpoch());
+            }
 
             var response = _stripeRestClient.Execute<StripeSubscription>(request);
             CheckStripeResponse("Invalid subscription creation request", response);

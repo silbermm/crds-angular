@@ -9,6 +9,8 @@
     '$rootScope',
     '$log',
     '$timeout',
+    '$location',
+    '$anchorScroll',
     'MESSAGES',
     'ProfileReferenceData',
     'Profile',
@@ -20,6 +22,8 @@
       $rootScope,
       $log,
       $timeout,
+      $location,
+      $anchorScroll,
       MESSAGES,
       ProfileReferenceData,
       Profile,
@@ -42,6 +46,7 @@
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
+    vm.isHouseholdCollapsed = true;
     vm.hstep = 1;
     vm.isDobError = isDobError;
     vm.isMeridian = true;
@@ -149,7 +154,11 @@
     }
 
     function householdPhoneFocus() {
-      $rootScope.$emit('homePhoneFocus');
+      vm.isHouseholdCollapsed = false;
+      $location.hash('homephonecont');
+      $timeout(function() {
+        $anchorScroll();
+      }, 500);
     }
 
     function isDobError() {
@@ -178,14 +187,16 @@
       vm.householdForm.$submitted = true;
       $timeout(function() {
         vm.submitted = true;
-        if (vm.pform.$invalid) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          vm.submitted = false;
-          return;
-        }
 
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.isHouseholdCollapsed = false;
+          return;
+        }
+
+        if (vm.pform.$invalid) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.submitted = false;
           return;
         }
 
@@ -200,7 +211,7 @@
               vm.closeModal(true);
             }
           }, function() {
-            //TODO: Should we be emiting error message here?
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             $log.debug('person save unsuccessful');
           });
         }

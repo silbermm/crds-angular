@@ -85,9 +85,19 @@ namespace MinistryPlatform.Translation.Services
             return record.ToInt("Donor_ID");
         }
         
-        public List<Pledge> GetPledgesForAuthUser(string userToken)
+        public List<Pledge> GetPledgesForAuthUser(string userToken, int[] pledgeTypeIds = null)
         {
-            var records = _ministryPlatformService.GetRecordsDict(_myHouseholdPledges, userToken);
+            string search;
+            if (pledgeTypeIds != null && pledgeTypeIds.Any())
+            {
+                search = string.Format(",,,,,,,,,,,\"{0}\"", string.Join("\" or \"", pledgeTypeIds));
+            }
+            else
+            {
+                search = string.Empty;
+            }
+
+            var records = _ministryPlatformService.GetRecordsDict(_myHouseholdPledges, userToken, search);
             return records.Select(MapRecordToPledge).ToList();
         }
 
@@ -102,9 +112,10 @@ namespace MinistryPlatform.Translation.Services
                 CampaignName = record.ToString("Campaign_Name"),   
                 PledgeTotal = record["Total_Pledge"] as decimal? ?? 0,
                 PledgeDonations = record["Donation_Total"] as decimal? ?? 0,
-                DonorDisplayName = record.ToString("Display_Name"),
                 CampaignStartDate = record.ToDate("Start_Date"),
                 CampaignEndDate = record.ToDate("End_Date"),
+                CampaignTypeId = record.ToInt("Pledge_Campaign_Type_ID"),
+                CampaignTypeName = record.ToString("Campaign_Type")
             };
         }
     }

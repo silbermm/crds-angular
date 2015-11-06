@@ -26,17 +26,28 @@
               <svg viewBox="0 0 32 32" class="icon icon-home">
                 <use xlink:href="#home"></use>
               </svg>
-              {{household.householdInfo.addressLine1}} {{household.householdInfo.addressLine2}}, {{household.householdInfo.city}}, {{household.householdInfo.state}} {{household.householdInfo.postalCode}}
+              <span ng-if="household.householdInfo.addressLine1">
+                {{household.householdInfo.addressLine1}} {{household.householdInfo.addressLine2}}, {{household.householdInfo.city}}, {{household.householdInfo.state}} {{household.householdInfo.postalCode}}
+              </span>
+              <span ng-if="!household.householdInfo.addressLine1">Set Address...</span>
             </div>
             <div class="col-md-2">
               <svg viewBox="0 0 32 32" class="icon icon-phone3">
                 <use xlink:href="#phone3"></use>
-              </svg>{{household.householdInfo.homePhone}}</div>
+              </svg>
+              <span ng-if="household.householdInfo.homePhone">
+                {{household.householdInfo.homePhone}}
+              </span>
+              <span ng-if="!household.householdInfo.homePhone">Set Home Phone...</span>
+            </div>
             <div class="col-md-3">
               <svg viewBox="0 0 32 32" class="icon icon-crossroads">
                 <use xlink:href="#crossroads"></use>
               </svg>
+              <span ng-if="household.householdInfo.congregationId">
               {{household.displayLocation(household.householdInfo.congregationId)}}
+              </span>
+              <span ng-if="!household.householdInfo.congregationId">Set Crossroads Location...</span>
             </div>
           </div>
           <!--/row-->
@@ -118,9 +129,14 @@
                 </li>
                 <li class="list-group-item clearfix">
                   <div class="row">
-                    <div class="form-group col-sm-6" id="homephonecont">
-                      <label for="homephone">Home Phone</label>
-                      <input ng-model="household.householdInfo.homePhone" type="text" class="form-control" id="homephone" placeholder="Enter home phone">
+                    <div class="form-group col-sm-6" id="homephonecont" ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'homePhone') }">
+                      <label for="homePhone">Home Phone</label>
+                      <input ng-model="household.householdInfo.homePhone" type="text" class="form-control" id="homePhone" name="homePhone" placeholder="Enter home phone" ng-pattern="household.phoneFormat" ng-model-options="{updateOn: 'blur'}">
+                      <ng-messages for="household.householdForm.homePhone.$error" ng-if="household.validation.showErrors(household.householdForm, 'homePhone')">
+                        <span ng-message="pattern">
+                          <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                        </span>
+                      </ng-messages>
                     </div>
                   </div>
                 </li>
@@ -132,10 +148,11 @@
                       <label for="provider" class="required">Crossroads Location</label>
                       <select class="form-control col-sm-12"
                               name="crLocation"
+                              required
                               valid-dropdown-value="household.validLocations"
                               ng-model="household.householdInfo.congregationId"
-                              ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations">
-                        <option value="" selected="selected" > -- Choose One -- </option>
+                              ng-options="location.dp_RecordID as location.dp_RecordName for location in household.locations | orderBy: ['OnlineSortOrder', 'name']">
+                        <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
                       </select>
                       <ng-messages for="household.householdForm.crLocation.$error" ng-if="household.validation.showErrors(household.householdForm, 'crLocation')">
                         <ng-messages-include src="on-submit-messages"></ng-messages-include>

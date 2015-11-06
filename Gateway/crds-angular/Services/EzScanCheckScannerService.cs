@@ -5,9 +5,9 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
 using log4net;
-using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 
 namespace crds_angular.Services
 {
@@ -18,6 +18,8 @@ namespace crds_angular.Services
         private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly IPaymentService _paymentService;
+
+        private const int MinistryPlatformCheckNumberMaxLength = 15;
       
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
@@ -85,21 +87,23 @@ namespace crds_angular.Services
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
-                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord((int) (check.Amount),
-                                                                                         fee,
-                                                                                         contactDonor.DonorId,
-                                                                                         programId,
-                                                                                         null,
-                                                                                         charge.Id,
-                                                                                         "check",
-                                                                                         contactDonor.ProcessorId,
-                                                                                         check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
-                                                                                         contactDonor.RegisteredUser,
-                                                                                         false, //Anonymous gift
-                                                                                         false,
-                                                                                         null,
-                                                                                         donorAccountId,
-                                                                                         batchDetails.Name);
+                    var donationAndDistribution = new DonationAndDistributionRecord
+                    {
+                        DonationAmt = (int) (check.Amount),
+                        FeeAmt = fee,
+                        DonorId = contactDonor.DonorId,
+                        ProgramId = programId,
+                        ChargeId = charge.Id,
+                        PymtType = "check",
+                        ProcessorId = contactDonor.ProcessorId,
+                        SetupDate = check.CheckDate ?? (check.ScanDate ?? DateTime.Now),
+                        RegisteredDonor = contactDonor.RegisteredUser,
+                        DonorAcctId = donorAccountId,
+                        CheckScannerBatchName = batchDetails.Name,
+                        CheckNumber = (check.CheckNumber ?? string.Empty).TrimStart(' ', '0').Right(MinistryPlatformCheckNumberMaxLength)
+                    };
+
+                    var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
 
                     check.DonationId = donationId;
 
@@ -110,6 +114,8 @@ namespace crds_angular.Services
                 catch (Exception e)
                 {
                     check.Error = e.ToString();
+                    check.AccountNumber = _mpDonorService.DecryptCheckValue(check.AccountNumber);
+                    check.RoutingNumber = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
                     batchDetails.ErrorChecks.Add(check);
                     _checkScannerDao.UpdateCheckStatus(check.Id, check.Exported, check.Error);
                 }

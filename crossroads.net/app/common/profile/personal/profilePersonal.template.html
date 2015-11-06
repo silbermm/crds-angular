@@ -244,7 +244,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone }" >
+      <div class="form-group col-sm-6" >
         <label for="mobile-phone" ng-class="{'required': profile.requireMobilePhone}">Mobile Phone</label>
           <div class="small inline bold">
             <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
@@ -258,8 +258,8 @@
                  ng-model="profile.profileData.person.mobilePhone"
                  ng-required='profile.requireMobilePhone'
                  ng-pattern='profile.phoneFormat' >
-          <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone" >
-            <span ng-message='required'>
+          <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone')" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') }" >
+            <span ng-message='required' ng-if='profile.requireMobilePhone'>
               <span ng-bind-html='$root.MESSAGES.fieldCanNotBeBlank.content | html'></span>
             </span>
             <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span></span>
@@ -284,7 +284,7 @@
 
 
     <div class="row" ng-if="profile.profileData.person.householdId!==undefined">
-      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' />
+      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' is-collapsed='profile.isHouseholdCollapsed'/>
     </div>
     <!--/row-->
 

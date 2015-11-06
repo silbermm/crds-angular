@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Crossroads.Utilities.Interfaces;
@@ -38,6 +39,7 @@ namespace MinistryPlatform.Translation.Services
         public int addParticipantToGroup(int participantId,
                                          int groupId,
                                          int groupRoleId,
+                                         Boolean childCareNeeded,
                                          DateTime startDate,
                                          DateTime? endDate = null,
                                          Boolean? employeeRole = false)
@@ -50,7 +52,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Group_Role_ID", groupRoleId},
                 {"Start_Date", startDate},
                 {"End_Date", endDate},
-                {"Employee_Role", employeeRole}
+                {"Employee_Role", employeeRole},
+                {"Child_Care_Requested", childCareNeeded}
             };
 
             int groupParticipantId =
@@ -123,6 +126,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gwl != null)
                 {
                     g.WaitList = (Boolean) gwl;
+                }
+
+                object gcc = null;
+                groupDetails.TryGetValue("Child_Care_Available", out gcc);
+                if (gcc != null)
+                {
+                    g.ChildCareAvailable = (Boolean) gcc;
                 }
 
                 if (g.WaitList)

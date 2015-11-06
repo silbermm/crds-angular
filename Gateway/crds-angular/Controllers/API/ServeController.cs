@@ -66,12 +66,12 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof (List<FamilyMember>))]
         [Route("api/serve/family/{contactId}")]
         public IHttpActionResult GetFamily(int contactId)
-        {
+        {//TODO: I don't think you need to pass in contactId here, use the token
             return Authorized(token =>
             {
                 try
                 {
-                    var list = _serveService.GetImmediateFamilyParticipants(contactId, token);
+                    var list = _serveService.GetImmediateFamilyParticipants(token);
                     return Ok(list);
                 }
                 catch (Exception ex)
@@ -86,12 +86,12 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(List<QualifiedServerDto>))]
         [Route("api/serve/qualifiedservers/{groupId}/{contactId}")]
         public IHttpActionResult GetQualifiedServers(int groupId, int contactId)
-        {
+        {//TODO: I don't think you need to pass in contactId, use the token instead
             return Authorized(token =>
             {
                 try
                 {
-                    var list = _serveService.GetQualifiedServers(groupId,contactId, token);
+                    var list = _serveService.GetQualifiedServers(groupId, token);
                     return Ok(list);
                 }
                 catch (Exception ex)
