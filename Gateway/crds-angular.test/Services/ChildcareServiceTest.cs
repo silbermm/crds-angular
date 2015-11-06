@@ -26,7 +26,7 @@ namespace crds_angular.test.Services
             _communicationService = new Mock<ICommunicationService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _contactService = new Mock<IContactService>();
-            _eventService=new Mock<IEventService>();
+            _eventService = new Mock<IEventService>();
 
             _fixture = new ChildcareService(_eventParticipantService.Object,
                                             _communicationService.Object,
@@ -45,13 +45,24 @@ namespace crds_angular.test.Services
             {
                 new EventParticipant
                 {
-                    ParticipantId = 1
+                    ParticipantId = 1,
+                    EventId = 123
                 },
                 new EventParticipant
                 {
-                    ParticipantId = 2
+                    ParticipantId = 2,
+                    EventId = 456
                 }
             };
+
+            var mockPrimaryContact = new Contact
+            {
+                ContactId = 98765,
+                EmailAddress = "wonder-woman@ip.com"
+            };
+
+            var mockEvent1 = new Event {EventType = "Childcare", PrimaryContact = mockPrimaryContact};
+            var mockEvent2 = new Event {EventType = "Childcare", PrimaryContact = mockPrimaryContact};
 
             _configurationWrapper.Setup(m => m.GetConfigIntValue("NumberOfDaysBeforeEventToSend")).Returns(daysBefore);
             _configurationWrapper.Setup(m => m.GetConfigIntValue("ChildcareRequestTemplate")).Returns(emailTemplateId);
@@ -61,6 +72,8 @@ namespace crds_angular.test.Services
             _contactService.Setup(m => m.GetContactById(unassignedContact)).Returns(new MyContact());
             _eventParticipantService.Setup(m => m.GetChildCareParticipants(daysBefore)).Returns(participants);
             _communicationService.Setup(m => m.SendMessage(It.IsAny<Communication>())).Verifiable();
+            _eventService.Setup(m => m.GetEventByParentEventId(123)).Returns(mockEvent1);
+            _eventService.Setup(m => m.GetEventByParentEventId(456)).Returns(mockEvent2);
 
             _fixture.SendRequestForRsvp();
 
@@ -70,6 +83,7 @@ namespace crds_angular.test.Services
             _eventParticipantService.VerifyAll();
             _communicationService.VerifyAll();
             _communicationService.Verify(m => m.SendMessage(It.IsAny<Communication>()), Times.Exactly(2));
+            _eventService.VerifyAll();
         }
     }
 }

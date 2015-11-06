@@ -21,7 +21,7 @@ namespace crds_angular.Services
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-            IEventService eventService)
+                                IEventService eventService)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;

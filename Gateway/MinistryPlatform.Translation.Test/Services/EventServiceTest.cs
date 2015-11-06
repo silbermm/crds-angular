@@ -11,17 +11,6 @@ namespace MinistryPlatform.Translation.Test.Services
     [TestFixture]
     public class EventServiceTest
     {
-        private EventService fixture;
-        private Mock<IMinistryPlatformService> ministryPlatformService;
-        private Mock<IAuthenticationService> _authService;
-        private Mock<IConfigurationWrapper> _configWrapper;
-        private Mock<IGroupService> _groupService;
-        private const int EventParticipantId = 12345;
-        private readonly int EventParticipantPageId = 281;
-        private readonly int EventParticipantStatusDefaultID = 2;
-        private readonly int EventsPageId = 308;
-        private readonly string EventsWithEventTypeId = "EventsWithEventTypeId";
-
         [SetUp]
         public void SetUp()
         {
@@ -37,63 +26,16 @@ namespace MinistryPlatform.Translation.Test.Services
             fixture = new EventService(ministryPlatformService.Object, _authService.Object, _configWrapper.Object, _groupService.Object);
         }
 
-        [Test]
-        public void testRegisterParticipantForEvent()
-        {
-            ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<Dictionary<string, object>>(),
-                It.IsAny<string>(),
-                It.IsAny<Boolean>())).Returns(987);
-
-            var expectedValues = new Dictionary<string, object>
-            {
-                {"Participant_ID", 123},
-                {"Event_ID", 456},
-                {"Participation_Status_ID", EventParticipantStatusDefaultID},
-            };
-
-            int eventParticipantId = fixture.registerParticipantForEvent(123, 456);
-
-            ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
-                EventParticipantPageId,
-                456,
-                expectedValues,
-                It.IsAny<string>(),
-                true));
-
-            Assert.AreEqual(987, eventParticipantId);
-        }
-
-        [Test]
-        public void GetEventsByType()
-        {
-            const string eventType = "Oakley: Saturday at 4:30";
-
-            var search = ",," + eventType;
-            ministryPlatformService.Setup(mock => mock.GetRecordsDict(EventsPageId, It.IsAny<string>(), search, ""))
-                .Returns(MockEventsDictionary());
-
-            var events = fixture.GetEvents(eventType, It.IsAny<string>());
-            Assert.IsNotNull(events);
-        }
-
-        [Test]
-        public void GetEventsByTypeAndRange()
-        {
-            var eventTypeId = 1;
-            var search = ",," + eventTypeId;
-            ministryPlatformService.Setup(mock => mock.GetPageViewRecords(EventsWithEventTypeId, It.IsAny<string>(), search, "", 0))
-                .Returns(MockEventsDictionaryByEventTypeId());
-
-            var startDate = new DateTime(2015, 4, 1);
-            var endDate = new DateTime(2015, 4, 30);
-            var events = fixture.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>());
-            Assert.IsNotNull(events);
-            Assert.AreEqual(3, events.Count);
-            Assert.AreEqual("event-title-200", events[0].EventTitle);
-        }
+        private EventService fixture;
+        private Mock<IMinistryPlatformService> ministryPlatformService;
+        private Mock<IAuthenticationService> _authService;
+        private Mock<IConfigurationWrapper> _configWrapper;
+        private Mock<IGroupService> _groupService;
+        private const int EventParticipantId = 12345;
+        private readonly int EventParticipantPageId = 281;
+        private readonly int EventParticipantStatusDefaultID = 2;
+        private readonly int EventsPageId = 308;
+        private readonly string EventsWithEventTypeId = "EventsWithEventTypeId";
 
         private List<Dictionary<string, object>> MockEventsDictionaryByEventTypeId()
         {
@@ -175,24 +117,6 @@ namespace MinistryPlatform.Translation.Test.Services
             };
         }
 
-        [Test]
-        public void GetEventParticipant()
-        {
-            const int eventId = 1234;
-            const int participantId = 5678;
-            const string pageKey = "EventParticipantByEventIdAndParticipantId";
-            var mockEventParticipants = MockEventParticipantsByEventIdAndParticipantId();
-
-            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(mockEventParticipants);
-
-            var participant = fixture.GetEventParticipantRecordId(eventId, participantId);
-
-            ministryPlatformService.VerifyAll();
-            Assert.IsNotNull(participant);
-            Assert.AreEqual(8634, participant);
-        }
-
         private List<Dictionary<string, object>> MockEventParticipantsByEventIdAndParticipantId()
         {
             return new List<Dictionary<string, object>>
@@ -238,6 +162,175 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("event-title-100", theEvent.EventTitle);
             Assert.AreEqual(12345, theEvent.PrimaryContact.ContactId);
             Assert.AreEqual("thecinnamonbagel@react.js", theEvent.PrimaryContact.EmailAddress);
+        }
+
+        [Test]
+        public void GetEventByParentId()
+        {
+            const int expectedEventId= 999;
+            const int parentEventId = 888;
+            var searchString = string.Format(",,,{0}", parentEventId);
+            const string pageKey = "EventsByParentEventID";
+
+            var mockEventDictionary = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Event_ID", 999},
+                    {"Event_Title", "event-title-100"},
+                    {"Event_Type", "event-type-100"},
+                    {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Contact_ID", 12345},
+                    {"Email_Address", "thecinnamonbagel@react.js"}
+                }
+            };
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
+
+            var theEvent = fixture.GetEventByParentEventId(parentEventId);
+
+            ministryPlatformService.VerifyAll();
+
+            Assert.AreEqual(expectedEventId, theEvent.EventId);
+            Assert.AreEqual("event-title-100", theEvent.EventTitle);
+            Assert.AreEqual(12345, theEvent.PrimaryContact.ContactId);
+            Assert.AreEqual("thecinnamonbagel@react.js", theEvent.PrimaryContact.EmailAddress);
+        }
+
+        [Test]
+        public void GetEventByParentIdReturnsNull()
+        {
+            const int parentEventId = 888;
+            var searchString = string.Format(",,,{0}", parentEventId);
+            const string pageKey = "EventsByParentEventID";
+
+            var mockEventDictionary = new List<Dictionary<string, object>>();
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
+
+            var theEvent = fixture.GetEventByParentEventId(parentEventId);
+
+            ministryPlatformService.VerifyAll();
+
+            Assert.IsNull(theEvent);
+        }
+
+        [Test]
+        public void GetEventByParentIdReturnsMultipleEvents()
+        {
+
+            const int parentEventId = 888;
+            var searchString = string.Format(",,,{0}", parentEventId);
+            var expectedMessage = string.Format("Duplicate Event ID detected, Parent Event: {0}", parentEventId);
+            const string pageKey = "EventsByParentEventID";
+
+            var mockEventDictionary = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Event_ID", 999},
+                    {"Event_Title", "event-title-100"},
+                    {"Event_Type", "event-type-100"},
+                    {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
+                    {"Contact_ID", 12345},
+                    {"Email_Address", "thecinnamonbagel@react.js"}
+                },new Dictionary<string, object>
+                {
+                    {"Event_ID", 998},
+                    {"Event_Title", "event-title-900"},
+                    {"Event_Type", "event-type-900"},
+                    {"Event_Start_Date", new DateTime(2015, 3, 20, 8, 30, 0)},
+                    {"Event_End_Date", new DateTime(2015, 3, 20, 8, 30, 0)},
+                    {"Contact_ID", 356987},
+                    {"Email_Address", "thecanterbagel@dot.net"}
+                }
+            };
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
+
+            var ex = Assert.Throws<ApplicationException>(() => fixture.GetEventByParentEventId(parentEventId));
+
+            ministryPlatformService.VerifyAll();
+
+            Assert.AreEqual(ex.Message, expectedMessage);
+        }
+
+        [Test]
+        public void GetEventParticipant()
+        {
+            const int eventId = 1234;
+            const int participantId = 5678;
+            const string pageKey = "EventParticipantByEventIdAndParticipantId";
+            var mockEventParticipants = MockEventParticipantsByEventIdAndParticipantId();
+
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>()))
+                .Returns(mockEventParticipants);
+
+            var participant = fixture.GetEventParticipantRecordId(eventId, participantId);
+
+            ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(participant);
+            Assert.AreEqual(8634, participant);
+        }
+
+        [Test]
+        public void GetEventsByType()
+        {
+            const string eventType = "Oakley: Saturday at 4:30";
+
+            var search = ",," + eventType;
+            ministryPlatformService.Setup(mock => mock.GetRecordsDict(EventsPageId, It.IsAny<string>(), search, ""))
+                .Returns(MockEventsDictionary());
+
+            var events = fixture.GetEvents(eventType, It.IsAny<string>());
+            Assert.IsNotNull(events);
+        }
+
+        [Test]
+        public void GetEventsByTypeAndRange()
+        {
+            var eventTypeId = 1;
+            var search = ",," + eventTypeId;
+            ministryPlatformService.Setup(mock => mock.GetPageViewRecords(EventsWithEventTypeId, It.IsAny<string>(), search, "", 0))
+                .Returns(MockEventsDictionaryByEventTypeId());
+
+            var startDate = new DateTime(2015, 4, 1);
+            var endDate = new DateTime(2015, 4, 30);
+            var events = fixture.GetEventsByTypeForRange(eventTypeId, startDate, endDate, It.IsAny<string>());
+            Assert.IsNotNull(events);
+            Assert.AreEqual(3, events.Count);
+            Assert.AreEqual("event-title-200", events[0].EventTitle);
+        }
+
+        [Test]
+        public void TestRegisterParticipantForEvent()
+        {
+            ministryPlatformService.Setup(mocked => mocked.CreateSubRecord(
+                It.IsAny<int>(),
+                It.IsAny<int>(),
+                It.IsAny<Dictionary<string, object>>(),
+                It.IsAny<string>(),
+                It.IsAny<bool>())).Returns(987);
+
+            var expectedValues = new Dictionary<string, object>
+            {
+                {"Participant_ID", 123},
+                {"Event_ID", 456},
+                {"Participation_Status_ID", EventParticipantStatusDefaultID}
+            };
+
+            var eventParticipantId = fixture.registerParticipantForEvent(123, 456);
+
+            ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
+                EventParticipantPageId,
+                456,
+                expectedValues,
+                It.IsAny<string>(),
+                true));
+
+            Assert.AreEqual(987, eventParticipantId);
         }
     }
 }
