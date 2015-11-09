@@ -14,7 +14,7 @@ namespace crds_angular.test.controllers
     [TestFixture]
     internal class EventLocationControllerTest
     {
-        private EventLocationController controller;
+        private EventController controller;
 
         private Mock<IMinistryPlatformService> _ministryPlatfromServiceMock;
         private Mock<IApiUserService> _apiUserService;
@@ -28,7 +28,7 @@ namespace crds_angular.test.controllers
             _apiUserService = new Mock<IApiUserService>();
             _apiUserService.Setup(m => m.GetToken()).Returns("something");
 
-            controller = new EventLocationController(_ministryPlatfromServiceMock.Object, _apiUserService.Object);
+            controller = new EventController(_ministryPlatfromServiceMock.Object, _apiUserService.Object);
         }
 
 

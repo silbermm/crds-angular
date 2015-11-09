@@ -11,12 +11,12 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
-    public class EventLocationController : MPAuth
+    public class EventController : MPAuth
     {
         private IMinistryPlatformService _ministryPlatformService;        
         private readonly IApiUserService _apiUserService;
 
-        public EventLocationController(IMinistryPlatformService ministryPlatformService, IApiUserService apiUserService)
+        public EventController(IMinistryPlatformService ministryPlatformService, IApiUserService apiUserService)
         {
             this._ministryPlatformService = ministryPlatformService;            
             _apiUserService = apiUserService;
