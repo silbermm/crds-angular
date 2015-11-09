@@ -159,7 +159,7 @@
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
-        <CommandText>dbo.report_filter_programs_donations_multi_stmt_header</CommandText>
+        <CommandText>dbo.report_CRDS_filter_programs_donations_multi_stmt_header</CommandText>
       </Query>
       <Fields>
         <Field Name="Program_Name">
