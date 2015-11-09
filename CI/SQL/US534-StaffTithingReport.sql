@@ -6,7 +6,7 @@ GO
 -- Description:	This SP will sum donations for staff members for a specific timeframe
 --              Staff members are determined based on a role of "CR Staff"
 -- ===================================================================================
-ALTER PROCEDURE [dbo].[report_CRDS_Staff_Tithing]
+CREATE PROCEDURE [dbo].[report_CRDS_Staff_Tithing]
 	 @DomainID varchar(40)
 	,@UserID varchar(40)
 	,@PageID Int
