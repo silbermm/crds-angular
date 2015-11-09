@@ -203,15 +203,14 @@ namespace MinistryPlatform.Translation.Test.Services
         {
             var participantId = 2375529;
             var contactId = 2562386;
+            var mockContact = new Dictionary<string, object>
+            {
+                {"Contact_ID", contactId}
+            };
 
-            var platformServiceClient = new PlatformServiceClient();
-            var configurationWrapper = new ConfigurationWrapper();
-            var ministryPlatformService = new MinistryPlatformServiceImpl(platformServiceClient, configurationWrapper);
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(It.IsAny<int>(), participantId, It.IsAny<string>(), It.IsAny<bool>())).Returns(mockContact);
 
-            var contactService = new ContactService(new MinistryPlatformServiceImpl(platformServiceClient, configurationWrapper),
-                                                    new AuthenticationServiceImpl(platformServiceClient, ministryPlatformService),
-                                                    configurationWrapper);
-            var result = contactService.GetContactIdByParticipantId(participantId);
+            var result = _fixture.GetContactIdByParticipantId(participantId);
             Assert.AreEqual(contactId, result);
         }
     }

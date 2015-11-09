@@ -16,6 +16,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
+        private readonly IContentBlockService _contentBlockService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
@@ -32,13 +33,14 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
             this._communicationService = communicationService;
             this._contactService = contactService;
+            this._contentBlockService = contentBlockService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -299,7 +301,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Nickname", toContactInfo.Nickname},
                 {"Group_Name", groupInfo.Name},
                 {"Congregation_Name", groupInfo.Congregation},
-                {"Childcare_Needed", (childcareNeeded) ? "You have requested Child Care services." : ""}
+                {"Childcare_Needed", (childcareNeeded) ? _contentBlockService["communityGroupChildcare"].Content : ""}
             };
 
             var confirmation = new Communication 
