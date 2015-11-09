@@ -6,7 +6,7 @@ BEGIN
 UPDATE [dbo].[dp_Communications]
    SET [Author_User_ID] = 1529662
       ,[Subject] = 'Thank you for signing up for the [Group_Name]!'
-      ,[Body] = '<p class="MsoNormal"><font face="Arial, sans-serif"><span style="line-height: 17.1200008392334px;">Welcome [Nickname]!  You have successfully registered for the [Group_Name] which will be held at the [Congregation_Name] site.</span></font><br /></p><p class="MsoNormal"><font face="Arial, sans-serif"><span style="line-height: 17.1200008392334px;"><br /></span></font></p><p class="MsoNormal"><font face="Arial, sans-serif"><span style="line-height: 17.12px;">[Childcare_Needed]</span><br /></font></p><p class="MsoNormal"><span style="font-size:12.0pt;line-height:107%;
+      ,[Body] = '<p class="MsoNormal"><font face="Arial, sans-serif"><span style="line-height: 17.1200008392334px;">Welcome [Nickname]!  You have successfully registered for the [Group_Name] which will be held at the [Congregation_Name] site.</span></font><br /></p><p class="MsoNormal"><font face="Arial, sans-serif"><span style="line-height: 17.12px;">[Childcare_Needed]</span><br /></font></p><p class="MsoNormal"><span style="font-size:12.0pt;line-height:107%;
 font-family:"Arial","sans-serif""><o:p></o:p></span></p><p><span style="font-size:14.0pt; line-height:107%;">   </span>
 </p>'
       ,[Domain_ID] = 1
