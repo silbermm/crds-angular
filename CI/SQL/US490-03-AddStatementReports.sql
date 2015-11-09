@@ -37,6 +37,19 @@ BEGIN
 	);
 END;
 
+IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Role_Reports] WHERE [Report_ID] = 257 AND [Domain_ID] = 1 AND [Role_ID] = 7)
+BEGIN
+	INSERT INTO [dbo].[dp_Role_Reports] (
+		  Role_ID
+		, Report_ID
+		, Domain_ID
+	) VALUES (
+		  7
+		, 257
+		, 1
+	);
+END;
+
 IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Reports] WHERE [Report_ID] = 258)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Reports] ON;
@@ -70,5 +83,18 @@ BEGIN
 	) VALUES (
 		  258
 		, 299
+	);
+END;
+
+IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Role_Reports] WHERE [Report_ID] = 258 AND [Domain_ID] = 1 AND [Role_ID] = 7)
+BEGIN
+	INSERT INTO [dbo].[dp_Role_Reports] (
+		  Role_ID
+		, Report_ID
+		, Domain_ID
+	) VALUES (
+		  7
+		, 258
+		, 1
 	);
 END;
