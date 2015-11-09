@@ -113,7 +113,7 @@
           </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
-        <CommandText>dbo.report_filter_statement_headers</CommandText>
+        <CommandText>dbo.report_CRDS_filter_statement_headers</CommandText>
       </Query>
       <Fields>
         <Field Name="Statement_Header">
