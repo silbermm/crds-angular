@@ -6,6 +6,8 @@ using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
+
 namespace Crossroads.ChildcareRsvp
 {
     internal class Program
@@ -20,8 +22,10 @@ namespace Crossroads.ChildcareRsvp
 
             try
             {
+                Log.Info("starting childcare rsvp");
                 var childcareService = container.Resolve<ChildcareService>();
                 childcareService.SendRequestForRsvp();
+                Log.Info("all done");
             }
             catch (Exception ex)
             {
