@@ -75,9 +75,11 @@
             <div ng-show="currentMember.showFrequency">
               <div class="form-group" ng-class="{'has-error': formErrors.frequency}" >
                 <h5>How Often?
-                  <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline" popover-template="'serveFrequencyPopover.html'" popover-placement="right" popover-trigger="focus">
-                    <use xlink:href="#question-circle"></use>
-                  </svg>
+                  <span popover-template="'serveFrequencyPopover.html'" popover-placement="right" class="hidden-xs visible-sm-inline visible-md-inline visible-lg-inline">
+                    <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer">
+                      <use xlink:href="#question-circle"></use>
+                    </svg>
+                  </span>
                   <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer visible-xs-inline" ng-click="infoCollapsed = !infoCollapsed">
                     <use xlink:href="#question-circle"></use>
                   </svg>
