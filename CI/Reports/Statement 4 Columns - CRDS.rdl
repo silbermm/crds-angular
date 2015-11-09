@@ -449,7 +449,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>8in</Width>
+                  <Width>8.11458in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -467,7 +467,7 @@
                                     <Width>0.84375in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>0.84375in</Width>
+                                    <Width>0.95833in</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>0.92708in</Width>
@@ -817,7 +817,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Item #</Value>
+                                                    <Value>Payment Type</Value>
                                                     <Style>
                                                       <FontSize>9pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
@@ -1085,6 +1085,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1119,6 +1120,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1153,6 +1155,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1188,6 +1191,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1222,6 +1226,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1256,6 +1261,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1289,6 +1295,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -1323,6 +1330,7 @@
                                                 <Color>LightGrey</Color>
                                                 <Style>None</Style>
                                               </Border>
+                                              <BackgroundColor>=IIF(RowNumber("Tablix2") Mod 2 = 0, "#E7E7E7", "#FFFFFF")</BackgroundColor>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -2233,13 +2241,13 @@
                                             <TablixBody>
                                               <TablixColumns>
                                                 <TablixColumn>
-                                                  <Width>2.66667in</Width>
+                                                  <Width>2.70486in</Width>
                                                 </TablixColumn>
                                                 <TablixColumn>
-                                                  <Width>2.66667in</Width>
+                                                  <Width>2.70486in</Width>
                                                 </TablixColumn>
                                                 <TablixColumn>
-                                                  <Width>2.66667in</Width>
+                                                  <Width>2.70486in</Width>
                                                 </TablixColumn>
                                               </TablixColumns>
                                               <TablixRows>
@@ -2927,7 +2935,7 @@
                               </SortExpressions>
                               <Top>0.03139in</Top>
                               <Height>5.46319in</Height>
-                              <Width>8in</Width>
+                              <Width>8.11458in</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -2996,7 +3004,7 @@
               </SortExpression>
             </SortExpressions>
             <Height>5.49458in</Height>
-            <Width>8in</Width>
+            <Width>8.11458in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
