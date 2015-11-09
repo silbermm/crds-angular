@@ -1,3 +1,7 @@
+<script type="text/ng-template" id="attendanceReasonPopover.html">
+  <div ng-bind-html="$root.MESSAGES.attendanceReasonPopover.content | html"></div>
+</script>
+
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
     <p class="push-bottom" ng-bind-html="$root.MESSAGES.privacy.content | html"></p>
@@ -216,7 +220,7 @@
         <label for="start-attend-reason">Why did you start attending Crossroads?
         </label>
 
-        <span popover-placement="top" popover="We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads." >
+        <span popover-placement="top" popover-template="'attendanceReasonPopover.html'">
           <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" >
             <use xlink:href="#question-circle"></use>
           </svg>

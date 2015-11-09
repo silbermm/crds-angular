@@ -1643,6 +1643,12 @@
           <button popover-placement="top" popover="On the Top!" class="btn btn-default push-half-right">Example</button>
           <button popover="I have a title!" popover-title="The title." class="btn btn-default">Popover with Title</button>
           <hr />
+          <h5 class="push-top">Load popover content from CMS</h5>
+          <script type="text/ng-template" id="serveFrequencyPopover.html">
+            <div ng-bind-html="$root.MESSAGES.serveFrequencyPopover.content | html"></div>
+          </script>
+          <button popover="I have a title!" popover-template="'serveFrequencyPopover.html'" class="btn btn-default">Popover from CMS</button>
+          <hr />
           <h5 class="push-top flush-bottom">Info Icon Pattern</h5>
           <p>Popover on desktop, collapsable well on mobile</p>
           <label>Label
