@@ -105,29 +105,25 @@ namespace MinistryPlatform.Translation.Services
         {
             var token = ApiLogin();
             var r = ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, eventId.ToString());
-            if (r.Count == 1)
+            switch (r.Count)
             {
-                var record = r[0];
-                var e = new Event
-                {
-                    EventEndDate = record.ToDate("Event_End_Date"),
-                    EventId = record.ToInt("Event_ID"),
-                    EventStartDate = record.ToDate("Event_Start_Date"),
-                    EventTitle = record.ToString("Event_Title"),
-                    PrimaryContact = new Contact
+                case 1:
+                    var record = r[0];
+                    var e = new Event
                     {
-                        ContactId = record.ToInt("Contact_ID"),
-                        EmailAddress = record.ToString("Email_Address")
-                    }
-                };
-
-
-
-                return e;
-            }
-            if (r.Count == 0)
-            {
-                return null;
+                        EventEndDate = record.ToDate("Event_End_Date"),
+                        EventId = record.ToInt("Event_ID"),
+                        EventStartDate = record.ToDate("Event_Start_Date"),
+                        EventTitle = record.ToString("Event_Title"),
+                        PrimaryContact = new Contact
+                        {
+                            ContactId = record.ToInt("Contact_ID"),
+                            EmailAddress = record.ToString("Email_Address")
+                        }
+                    };
+                    return e;
+                case 0:
+                    return null;
             }
             throw new ApplicationException(string.Format("Duplicate Event ID detected: {0}", eventId));
         }
