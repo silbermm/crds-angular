@@ -77,24 +77,18 @@ INSERT INTO [dbo].[dp_Reports]
            ,0
            ,1)
 
-GO
-
 SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
 
+GO
 
 
-SET IDENTITY_INSERT [dbo].[dp_Report_Pages] ON
 
 INSERT INTO [dbo].[dp_Report_Pages]
-           ([Report_Page_ID]
-		   		 ,[Report_ID]
+           ([Report_ID]
            ,[Page_ID])
      VALUES
-           ('1613'
-		   ,'260'
-		   ,'297')
-
-SET IDENTITY_INSERT [dbo].[dp_Report_Pages] OFF
+           ('260'
+		  		 ,'297')
 
 GO
 
