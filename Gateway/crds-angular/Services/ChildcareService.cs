@@ -6,6 +6,7 @@ using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.Services
 {
@@ -56,6 +57,15 @@ namespace crds_angular.Services
                     LogError(participant, ex);
                 }
             }
+        }
+
+        public object GetMyChildcareEvent(int parentEventId)
+        {
+            throw new NotImplementedException();
+
+            //is logged in person member of parent event?
+
+            //get childcare event
         }
 
         private Event GetChildcareEvent(int parentEventId)

@@ -4,5 +4,6 @@ namespace crds_angular.Services.Interfaces
 
     {
         void SendRequestForRsvp();
+        object GetMyChildcareEvent(int parentEventId);
     }
 }
