@@ -19,7 +19,15 @@
       var vm = this;
 
       // gets the route resolved event
+      vm.childcareEvent = ChildcareEvents.childcareEvent;
       vm.event = ChildcareEvents.event;
+
+      activate();
+
+      /////////////////////////
+
+      function activate() {
+      }
     }
   }
 

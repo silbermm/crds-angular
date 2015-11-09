@@ -10,4 +10,7 @@
     ;
 
   require('./childcare.html');
+
+  require('./childcareEvent');
+
 })();

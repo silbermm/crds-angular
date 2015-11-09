@@ -26,7 +26,7 @@ describe('Childcare Module', function() {
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector) {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
-    
+
     ChildcareEvents = $injector.get('ChildcareEvents');
     ChildcareEvents.setEvent(helpers.childcareEvent);
 

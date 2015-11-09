@@ -16,12 +16,17 @@ describe('Childcare Event Service', function() {
   }));
 
   it('should store an event in the event property', function() {
-    childcareEvent.setEvent(helper.childcareEvent);
-    expect(childcareEvent.event).toEqual(helper.childcareEvent);
+    childcareEvent.setEvent(helper.event);
+    expect(childcareEvent.event).toEqual(helper.event);
   });
 
   it('should store an array of events in the events property', function() {
     childcareEvent.setEvents(helper.childcareEvents);
     expect(childcareEvent.events).toEqual(helper.childcareEvents);
+  });
+
+  it('should store an event in the childcareEvent property', function() {
+    childcareEvent.setChildcareEvent(helper.childcareEvent);
+    expect(childcareEvent.childcareEvent).toEqual(helper.childcareEvent);
   });
 });
