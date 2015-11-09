@@ -10,6 +10,7 @@
     '$log',
     '$timeout',
     '$location',
+    '$window',
     '$anchorScroll',
     'MESSAGES',
     'ProfileReferenceData',
@@ -23,6 +24,7 @@
       $log,
       $timeout,
       $location,
+      $window,
       $anchorScroll,
       MESSAGES,
       ProfileReferenceData,
@@ -66,6 +68,9 @@
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
+    $rootScope.$on('$stateChangeStart', stateChangeStart);
+    $window.onbeforeunload = onBeforeUnload;
+    
     activate();
 
     ////////////////////////////////
@@ -210,7 +215,9 @@
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
-          }, function() {
+          },
+
+          function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             $log.debug('person save unsuccessful');
           });
@@ -223,6 +230,21 @@
       return show;
     }
 
+    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
+      if (vm.pform.$dirty || vm.householdForm.$dirty) {
+        //TODO: fix tabs to ensure they are canceled as well
+        if (!$window.confirm('Are you sure you want to leave this page?')) {
+          event.preventDefault();
+          return;
+        }
+      }
+    }
+
+    function onBeforeUnload() {
+      if (vm.pform.$dirty || vm.householdForm.$dirty) {
+        return '';
+      }
+    };
   }
 
 })();
