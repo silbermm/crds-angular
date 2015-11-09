@@ -265,6 +265,8 @@
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
+    <Compile Include="Services\ChildcareService.cs" />
+    <Compile Include="Services\Interfaces\IChildcareService.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
     <Compile Include="Util\FileResult.cs" />
