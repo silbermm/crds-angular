@@ -29,4 +29,9 @@ describe('Childcare Event Service', function() {
     childcareEvent.setChildcareEvent(helper.childcareEvent);
     expect(childcareEvent.childcareEvent).toEqual(helper.childcareEvent);
   });
+
+  it('should store an array of children', function() {
+    childcareEvent.setChildren(helper.children);
+    expect(childcareEvent.children).toEqual(helper.children);
+  });
 });

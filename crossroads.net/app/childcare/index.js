@@ -13,4 +13,6 @@
 
   require('./childcareEvent');
 
+  require('./childcareChild');
+
 })();

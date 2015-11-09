@@ -28,7 +28,9 @@ describe('Childcare Module', function() {
     $rootScope = _$rootScope_;
 
     ChildcareEvents = $injector.get('ChildcareEvents');
-    ChildcareEvents.setEvent(helpers.childcareEvent);
+    ChildcareEvents.setEvent(helpers.event);
+    ChildcareEvents.setChildcareEvent(helpers.childcareEvent);
+    ChildcareEvents.setChildren(helpers.children);
 
     scope = $rootScope.$new();
     element = '<childcare></childcare>';
@@ -36,9 +38,18 @@ describe('Childcare Module', function() {
     scope.$digest();
   }));
 
-  it('should have some Childcare Events', function() {
+  it('should have an event set', function() {
     var isolated = element.isolateScope();
-    console.log(isolated);
-    expect(isolated.childcare.event).toEqual(helpers.childcareEvent);
+    expect(isolated.childcare.event).toEqual(helpers.event);
+  });
+
+  it('should have a childcareEvent set', function() {
+    var isolated = element.isolateScope();
+    expect(isolated.childcare.childcareEvent).toEqual(helpers.childcareEvent);
+  });
+
+  it('should have a list of children set', function() {
+    var isolated = element.isolateScope();
+    expect(isolated.childcare.children).toEqual(helpers.children);
   });
 });

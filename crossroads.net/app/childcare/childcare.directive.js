@@ -20,14 +20,12 @@
 
       // gets the route resolved event
       vm.childcareEvent = ChildcareEvents.childcareEvent;
+      vm.children = ChildcareEvents.children;
       vm.event = ChildcareEvents.event;
 
-      activate();
 
       /////////////////////////
 
-      function activate() {
-      }
     }
   }
 

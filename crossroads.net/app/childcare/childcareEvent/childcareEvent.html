@@ -1,5 +1,4 @@
-<div class="col-sm-12 serve-save event-childcare soft-half-top"
-     style="text-align:left"> 
+<div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left"> 
     
   <h4> Childcare 
     <svg viewBox="0 0 32 32"
@@ -12,27 +11,8 @@
     </svg>
   </h4>
 
-  <div>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" name="role">
-        <span class="opportunity-name ng-binding">Lucy Miller</span>
-      </label>
-    </div>
-
-    <div class="checkbox disabled">
-      <label>
-        <input type="checkbox" name="role" disabled="disabled">
-        <span class="opportunity-name ng-binding">Elliot Miller</span>
-      </label>
-    </div>
+  <div ng-repeat="child in childcareEvent.children" >
+    <childcare-child child='child'> </childcare-child> 
   </div>
-
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" name="role">
-      <span class="opportunity-name ng-binding">Baby Miller</span>
-    </label>
-  </div>
-
+    
 </div>

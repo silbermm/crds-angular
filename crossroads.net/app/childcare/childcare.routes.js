@@ -54,6 +54,27 @@
             }
             ChildCareEvents.setChildcareEvent(event);
             return event;
+          },
+
+          Children: function(ChildCareEvents) {
+            var children = [
+              {
+                id: 98765,
+                firstName: 'baby',
+                lastName: 'Silbernagel',
+                age: 1,
+                grade: 0
+              },
+              {
+                id: 9234265,
+                firstName: 'Miles',
+                lastName: 'Silbernagel',
+                age: 7,
+                grade: 2
+              }
+            ];
+            ChildCareEvents.setChildren(children);
+            return children;
           }
         }
       })

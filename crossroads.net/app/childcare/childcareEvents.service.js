@@ -12,13 +12,31 @@
   function ChildcareEvents() {
 
     var childCareEvents = {
+      childcareEvent: {},
+      children: [],
       event: {},
       events: [],
-      childcareEvent: {},
+      setChildcareEvent: setChildcareEvent,
+      setChildren: setChildren,
       setEvent: setEvent,
-      setEvents: setEvents,
-      setChildcareEvent: setChildcareEvent
+      setEvents: setEvents
     };
+
+    function setChildcareEvent(event) {
+      if (typeof event === 'object') {
+        childCareEvents.childcareEvent = event;
+      } else {
+        throw(new Error('this must be a single object'));
+      }
+    }
+
+    function setChildren(children) {
+      if (children.constructor === Array) {
+        childCareEvents.children = children;
+      } else {
+        throw(new Error('this must be an array '));
+      }
+    }
 
     function setEvent(event) {
       if (typeof event === 'object') {
@@ -33,14 +51,6 @@
         childCareEvents.events = events;
       } else {
         throw(new Error('this must be an array '));
-      }
-    }
-
-    function setChildcareEvent(event) {
-      if (typeof event === 'object') {
-        childCareEvents.childcareEvent = event;
-      } else {
-        throw(new Error('this must be a single object'));
       }
     }
 
