@@ -8,6 +8,7 @@ using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IEventService = crds_angular.Services.Interfaces.IEventService;
 
 namespace crds_angular.test.controllers
 {

@@ -16,6 +16,7 @@ namespace crds_angular.test.Services
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IContactService> _contactService;
         private Mock<IEventService> _eventService;
+        private Mock<IParticipantService> _participantService;
 
         private ChildcareService _fixture;
 
@@ -27,12 +28,14 @@ namespace crds_angular.test.Services
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _contactService = new Mock<IContactService>();
             _eventService = new Mock<IEventService>();
+            _participantService = new Mock<IParticipantService>();
 
             _fixture = new ChildcareService(_eventParticipantService.Object,
                                             _communicationService.Object,
                                             _configurationWrapper.Object,
                                             _contactService.Object,
-                                            _eventService.Object);
+                                            _eventService.Object,
+                                            _participantService.Object);
         }
 
         [Test]

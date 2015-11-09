@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
@@ -12,8 +8,6 @@ using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Controllers.API
 {
-   
-
     public class ChildcareController : MPAuth
     {
         private readonly IChildcareService _childcareService;
@@ -26,20 +20,19 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(Event))]
         [Route("api/childcare/event/{eventid}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult ChildcareEventById(int parentEventId)
+        public IHttpActionResult ChildcareEventById(int eventid)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    return Ok(_childcareService.GetMyChildcareEvent(parentEventId));
+                    return Ok(_childcareService.GetMyChildcareEvent(eventid, token));
                 }
                 catch (Exception e)
                 {
                     var apiError = new ApiErrorDto("Get Event by Id failed", e);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-
             });
         }
     }

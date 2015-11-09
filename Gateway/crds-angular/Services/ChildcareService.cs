@@ -17,19 +17,22 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IEventParticipantService _eventParticipantService;
         private readonly IEventService _eventService;
+        private readonly IParticipantService _participantService;
+
         private readonly ILog _logger = LogManager.GetLogger(typeof (ChildcareService));
 
         public ChildcareService(IEventParticipantService eventParticipantService,
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-                                IEventService eventService)
+                                IEventService eventService, IParticipantService participantService)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
             _eventService = eventService;
+            _participantService=participantService;
         }
 
         public void SendRequestForRsvp()
@@ -59,13 +62,16 @@ namespace crds_angular.Services
             }
         }
 
-        public object GetMyChildcareEvent(int parentEventId)
+        public Event GetMyChildcareEvent(int parentEventId, string token)
         {
-            throw new NotImplementedException();
-
-            //is logged in person member of parent event?
-
-            //get childcare event
+            var participantRecord = _participantService.GetParticipantRecord(token);
+            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
+            {
+                return null;
+            }
+            // token user is part of parent event, retrieve childcare event
+            var childcareEvent = GetChildcareEvent(parentEventId);
+            return childcareEvent;
         }
 
         private Event GetChildcareEvent(int parentEventId)
