@@ -366,6 +366,10 @@ namespace crds_angular.Services
 
             foreach (var applicant in dto.Applicants)
             {
+                if (_groupService.ParticipantGroupMember(dto.GroupId, applicant.ParticipantId))
+                {
+                    continue;
+                }
                 var groupParticipantId = AddGroupParticipant(dto.GroupId, groupRoleId, groupStartDate, events, applicant);
                 if (groupParticipantId != 0)
                 {
@@ -386,7 +390,6 @@ namespace crds_angular.Services
                 return 0;
             }
             var groupParticipantId = _groupService.addParticipantToGroup(applicant.ParticipantId, groupId, groupRoleId, false, groupStartDate);
-            SendTripParticipantSuccess(applicant.ContactId, events);
             return groupParticipantId;
         }
 
