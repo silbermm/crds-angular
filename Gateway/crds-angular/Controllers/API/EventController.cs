@@ -60,26 +60,6 @@ namespace crds_angular.Controllers.API
             });
         }
 
-        [ResponseType(typeof(Event))]
-        [Route("api/event/{eventid}/childcare")]
-        [AcceptVerbs("GET")]
-        public IHttpActionResult ChildcareEventById(int parentEventId)
-        {
-            return Authorized(token =>
-            {
-                try
-                {
-                    return Ok(_eventService.GetChildcareEvent(parentEventId));
-                }
-                catch (Exception e)
-                {
-                    var apiError = new ApiErrorDto("Get Event by Id failed", e);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
-                }
-
-            });
-        }
-
         private List<Event> ConvertToEvents(List<Dictionary<string, object>> todaysEvents)
         {
             //init our return variable
