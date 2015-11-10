@@ -26,6 +26,7 @@
       vm.event = ChildcareEvents.event;
       vm.getDate = getDate;
       vm.getTime = getTime;
+      vm.noChildcare = noChildcare;
 
       var startDate = moment(vm.event.EventStartDate);
       var endDate = moment(vm.event.EventEndDate);
@@ -40,6 +41,10 @@
         var startTime = startDate.format('hh:mma');
         var endTime = endDate.format('hh:mma');
         return startTime + ' - ' + endTime;
+      }
+
+      function noChildcare() {
+        return vm.childcareEvent.EventId === undefined;
       }
     }
   }

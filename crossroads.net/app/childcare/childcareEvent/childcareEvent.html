@@ -1,6 +1,8 @@
-<div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left"> 
+<span ng-if='childcareEvent.children.length < 1' ng-bind-html='$root.MESSAGES.noChildrenForChildcare.content | html'> </span>
 
+<div ng-if='childcareEvent.children.length > 0' >  
   <span ng-bind-html='$root.MESSAGES.childcareInstructions.content | html'> </span> 
+  
   
   <ng-form name='childcareEvent.form' ng-submit='childcareEvent.submit()'>
 
@@ -8,6 +10,11 @@
       <childcare-child child='child'> </childcare-child> 
     </div>
   
-    <input type='submit' value='Submit' class='btn btn-primary'>
+    <button ng-click='childcareEvent.submit()' 
+            class='btn btn-primary'
+            btn-loading='childcareEvent.saving'
+            data-loading-text='Submitting...'>
+      Submit
+    </button>
   </ng-form>
 </div>

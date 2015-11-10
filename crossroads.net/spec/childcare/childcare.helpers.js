@@ -3,18 +3,26 @@
   module.exports = {
     children: [
       {
-        id: 98765,
-        firstName: 'baby',
-        lastName: 'Silbernagel',
-        age: 1,
-        grade: 0
+        age: 8,
+        contactId: 768386,
+        email: null,
+        highSchoolGraduationYear: 2025,
+        lastName: 'Maddox',
+        loggedInUser: false,
+        participantId: 1446320,
+        preferredName: 'Claire',
+        relationshipId: 6
       },
       {
-        id: 9234265,
-        firstName: 'Miles',
-        lastName: 'Silbernagel',
-        age: 7,
-        grade: 2
+        age: 8,
+        contactId: 1519134,
+        email: null,
+        highSchoolGraduationYear: 0,
+        lastName: 'Queenan',
+        loggedInUser: false,
+        participantId: 1446324,
+        preferredName: 'Brady',
+        relationshipId: 21
       }
     ],
 
@@ -26,10 +34,12 @@
     },
 
     childcareEvent: {
-      eventId: 123,
-      eventTitle: 'Test Childcare Title',
-      EventStartDate: '2015-11-18T20:00:00',
-      EventEndDate: '2015-11-18T21:30:00'
+      EventEndDate: "2015-11-18T21:30:00",
+      EventId: 2760633,
+      EventLocation: null,
+      EventStartDate: "2015-11-18T20:00:00",
+      EventTitle: "Childcare",
+      EventType: "Childcare"
     },
 
     childcareEvents: [

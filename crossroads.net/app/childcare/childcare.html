@@ -3,9 +3,16 @@
 </h2>
 
 <div class='row'>
-  <childcare-event
-    children='childcare.children'
-    childcare-event='childcare.event' >
-  </childcare-event>
+  <div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left"> 
+
+    <span ng-if='childcare.noChildcare()' ng-bind-html='$root.MESSAGES.noChildcareForEvent.content | html'></span>
+
+    <childcare-event
+      children='childcare.children'
+      childcare-event='childcare.childcareEvent'
+      ng-if='!childcare.noChildcare()' >
+    </childcare-event>
+
+  </div>
 </div>
 

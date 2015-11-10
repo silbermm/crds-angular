@@ -14,6 +14,7 @@ describe('Childcare Event Directive', function() {
   var mockSession;
   var $httpBackend;
   var ChildcareEvents;
+  var ChildcareService;
   var isolate;
 
   beforeEach(function() {
@@ -33,11 +34,8 @@ describe('Childcare Event Directive', function() {
     ChildcareEvents.setChildcareEvent(helpers.childcareEvent);
     ChildcareEvents.setChildren(helpers.children);
 
-    // Mock out the messages
-    $rootScope.MESSAGES = [
-      generalError: {},
-      chooseOne: {}
-    ];
+    ChildcareService = $injector.get('ChildcareService');
+    $httpBackend = $injector.get('$httpBackend');
 
     scope = $rootScope.$new();
     element = '<childcare-event children=\'children\' childcare-event=\'childcareEvent\'></childcare-event>';
@@ -46,16 +44,29 @@ describe('Childcare Event Directive', function() {
     element = $compile(element)(scope);
     scope.$digest();
     isolate = element.isolateScope();
+
+    spyOn($rootScope, '$emit').and.callThrough();
+
+    $rootScope.MESSAGES = {
+      chooseOne: 'chooseOne',
+      childcareSaveSuccessful: 'saved',
+      childcareSaveError: 'error'
+    };
+
   }));
+
+  afterEach(function() {
+    $httpBackend.verifyNoOutstandingExpectation();
+    $httpBackend.verifyNoOutstandingRequest();
+  });
 
   it('should not save the form if no children have been selected', function() {
     expect(isolate.childcareEvent.submit()).toBe(false);
   });
 
   it('should display a growl notification if there are no children selected to save', function() {
-    spyOn($rootScope, '$emit').and.callThrough();     
     expect(isolate.childcareEvent.submit()).toBe(false);
-    expect($rootScope.$emit).toHaveBeenCalledWith('notify', jasmine.any(Object));
+    expect($rootScope.$emit).toHaveBeenCalled();
   });
 
   it('should save the form if children have been selected', function() {
@@ -63,6 +74,38 @@ describe('Childcare Event Directive', function() {
     expect(isolate.childcareEvent.submit()).toBe(true);
   });
 
+  it('should send the correct object to the api', function() {
+    isolate.childcareEvent.children[0].selected = true;
 
+    var participants = {
+      eventId: isolate.childcareEvent.childcareEvent.EventId,
+      participants: [
+        scope.children[0].participantId
+      ]
+    };
+
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/childcare/rsvp', participants).respond(200);
+    isolate.childcareEvent.submit();
+
+    $httpBackend.flush();
+    expect($rootScope.$emit).toHaveBeenCalledWith('notify', 'saved');
+  });
+
+  it('should display an error message with save is unsuccessful', function() {
+    isolate.childcareEvent.children[0].selected = true;
+
+    var participants = {
+      eventId: isolate.childcareEvent.childcareEvent.EventId,
+      participants: [
+        scope.children[0].participantId
+      ]
+    };
+
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/childcare/rsvp', participants).respond(500);
+    isolate.childcareEvent.submit();
+
+    $httpBackend.flush();
+    expect($rootScope.$emit).toHaveBeenCalledWith('notify', 'error');
+  });
 
 });
