@@ -1,19 +1,6 @@
 <div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left"> 
 
-  <h4 ng-bind-html='$root.MESSAGES.generalError.content | html'> 
-    
-  </h4> 
-
-  <h4> Childcare 
-    <svg viewBox="0 0 32 32"
-         class="icon icon-question-circle icon-subtle pointer"
-         popover-placement="right"
-         popover="If you don't see your child listed, please contact childcare@crossroads.net">
-      <use xmlns:xlink="http://www.w3.org/1999/xlink"
-           xlink:href="#question-circle">
-      </use>
-    </svg>
-  </h4>
+  <span ng-bind-html='$root.MESSAGES.childcareInstructions.content | html'> </span> 
   
   <ng-form name='childcareEvent.form' ng-submit='childcareEvent.submit()'>
 
@@ -21,6 +8,6 @@
       <childcare-child child='child'> </childcare-child> 
     </div>
   
-    <input type='submit' class='btn btn-primary'>
+    <input type='submit' value='Submit' class='btn btn-primary'>
   </ng-form>
 </div>

@@ -26,7 +26,6 @@
       vm.event = ChildcareEvents.event;
       vm.getDate = getDate;
       vm.getTime = getTime;
-      vm.submit = submit;
 
       var startDate = moment(vm.event.EventStartDate);
       var endDate = moment(vm.event.EventEndDate);
@@ -42,11 +41,6 @@
         var endTime = endDate.format('hh:mma');
         return startTime + ' - ' + endTime;
       }
-
-      function submit() {
-
-      }
-
     }
   }
 

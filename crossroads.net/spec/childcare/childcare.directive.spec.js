@@ -63,8 +63,4 @@ describe('Childcare Module', function() {
     expect(isolated.childcare.getTime()).toEqual('08:00pm - 09:30pm');
   });
 
-  it('should submit the form', function() {
-
-  });
-
 });

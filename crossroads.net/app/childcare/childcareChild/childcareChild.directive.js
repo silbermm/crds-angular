@@ -19,7 +19,6 @@
 
     function ChildcareChildController() {
       var vm = this;
-
     }
   }
 
