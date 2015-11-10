@@ -14,6 +14,5 @@ namespace crds_angular.Services.Interfaces
         Person GetLoggedInUserProfile(String token);
         Person GetPerson(int contactId);
         List<RoleDto> GetLoggedInUserRoles(string token);
-        bool ResetPassword(string email);
     }
 }
