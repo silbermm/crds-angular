@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Services;
+using crds_angular.Services.Interfaces;
+using crds_angular.Util;
+using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.test.Services
 {
@@ -17,6 +22,8 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IEventService> _eventService;
         private Mock<IParticipantService> _participantService;
+        private Mock<IServeService> _serveService;
+        private Mock<IDateTime> _dateTimeWrapper;
 
         private ChildcareService _fixture;
 
@@ -29,14 +36,36 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _eventService = new Mock<IEventService>();
             _participantService = new Mock<IParticipantService>();
+            _serveService = new Mock<IServeService>();
+            _dateTimeWrapper = new Mock<IDateTime>();
 
             _fixture = new ChildcareService(_eventParticipantService.Object,
                                             _communicationService.Object,
                                             _configurationWrapper.Object,
                                             _contactService.Object,
                                             _eventService.Object,
-                                            _participantService.Object);
+                                            _participantService.Object,
+                                            _serveService.Object,
+                                            _dateTimeWrapper.Object);
         }
+        
+        [Test, TestCaseSource("TestCases")]
+        public void CalcGrade(int expectedGrade, int graduationYear, DateTime mockDateTime)
+        {
+            _dateTimeWrapper.Setup(m => m.Today).Returns(mockDateTime);
+
+            var grade = _fixture.SchoolGrade(graduationYear);
+
+            Assert.AreEqual(expectedGrade, grade);
+        }
+
+        private static readonly object[] TestCases =
+        {
+            new object[] {0, 2014, new DateTime(2015, 5, 29)},
+            new object[] {2, 2025, new DateTime(2015, 5, 29)},
+            new object[] {3, 2025, new DateTime(2015, 11, 10)},
+            new object[] {0, 2035, new DateTime(2015, 5, 29)}
+        };
 
         [Test]
         public void SendTwoRsvpEmails()

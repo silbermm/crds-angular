@@ -449,6 +449,7 @@
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\CSV.cs" />
+    <Compile Include="Util\IDateTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

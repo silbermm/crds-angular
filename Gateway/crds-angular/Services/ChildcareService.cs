@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using crds_angular.Services.Interfaces;
+using crds_angular.Util;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -18,6 +19,8 @@ namespace crds_angular.Services
         private readonly IEventParticipantService _eventParticipantService;
         private readonly IEventService _eventService;
         private readonly IParticipantService _participantService;
+        private readonly IServeService _serveService;
+        private readonly IDateTime _dateTimeWrapper;
 
         private readonly ILog _logger = LogManager.GetLogger(typeof (ChildcareService));
 
@@ -25,14 +28,66 @@ namespace crds_angular.Services
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-                                IEventService eventService, IParticipantService participantService)
+                                IEventService eventService,
+                                IParticipantService participantService,
+                                IServeService serveService,
+                                IDateTime dateTimeWrapper)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
             _eventService = eventService;
-            _participantService=participantService;
+            _participantService = participantService;
+            _serveService = serveService;
+            _dateTimeWrapper = dateTimeWrapper;
+        }
+
+        public void MyChildren(string token)
+        {
+            var family = _serveService.GetImmediateFamilyParticipants(token);
+
+            foreach (var member in family)
+            {
+                // how do we decide which members to return? 
+                // have a DOB/Age
+                // have HS Grad Year if less than X years old?
+                // when does school year end?  Aug 1
+                // <18 yrs old
+                // birth - 5th grade
+                Console.WriteLine(member.RelationshipId);
+                var x = member.Age;
+                var y = member.PreferredName;
+                var z = member.HighSchoolGraduationYear;
+                var preferredName = member.PreferredName;
+                var b = member.ContactId;
+                var c = member.LastName;
+
+
+                //what do we do with graduation year?
+            }
+        }
+
+        public int SchoolGrade(int graduationYear)
+        {
+            if (graduationYear == 0)
+            {
+                return 0;
+            }
+            var today = _dateTimeWrapper.Today;
+            var todayMonth = today.Month;
+            var yearForCalc = today.Year;
+            if (todayMonth > 7)
+            {
+                yearForCalc = today.Year + 1;
+            }
+
+            var grade = 12 - (graduationYear - yearForCalc);
+            if (grade <= 12 && grade >= 0)
+            {
+                return grade;
+            }
+            return 0;
         }
 
         public void SendRequestForRsvp()
@@ -81,7 +136,7 @@ namespace crds_angular.Services
 
             if (childcareEvents.Count == 0)
             {
-                throw new ApplicationException(string.Format("Childcare Event Does Not Exist, parent event id: {0}", parentEventId));
+                return null;
             }
             if (childcareEvents.Count > 1)
             {

@@ -27,6 +27,8 @@ namespace crds_angular.Models.Crossroads.Serve
 
         [JsonProperty(PropertyName = "relationshipId")]
         public int RelationshipId { get; set; }
-        
+
+        [JsonProperty(PropertyName = "highSchoolGraduationYear")]
+        public int HighSchoolGraduationYear { get; set; }
     }
 }

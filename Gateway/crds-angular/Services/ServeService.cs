@@ -88,7 +88,7 @@ namespace crds_angular.Services
                 ParticipantId = contact.Participant_Id,
                 PreferredName = contact.Preferred_Name,
                 RelationshipId = contact.Relationship_Id,
-                Age = contact.Age
+                Age = contact.Age, HighSchoolGraduationYear = contact.HighSchoolGraduationYear
             }).ToList();
 
             relationships.AddRange(family);
