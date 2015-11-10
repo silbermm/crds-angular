@@ -217,7 +217,7 @@ namespace crds_angular.Services
 
                 plan = _paymentService.CreatePlan(recurringGiftDto, contactDonor);
 
-                stripeSubscription = _paymentService.CreateSubscription(plan.Id, customer.id);
+                stripeSubscription = _paymentService.CreateSubscription(plan.Id, customer.id, recurringGiftDto.StartDate);
 
                 var contact = _mpContactService.GetContactById(contactDonor.ContactId);
                 var congregation = contact.Congregation_ID ?? _notSiteSpecificCongregation;
@@ -423,7 +423,7 @@ namespace crds_angular.Services
                     {
                         // Otherwise, we need to cancel the old Subscription and create a new one
                         oldSubscription = _paymentService.CancelSubscription(existingGift.StripeCustomerId, stripeSubscription.Id);
-                        stripeSubscription = _paymentService.CreateSubscription(plan.Id, existingGift.StripeCustomerId);
+                        stripeSubscription = _paymentService.CreateSubscription(plan.Id, existingGift.StripeCustomerId, editGift.StartDate);
                     }
 
                     // In either case, we created a new Stripe Plan above, so cancel the old one

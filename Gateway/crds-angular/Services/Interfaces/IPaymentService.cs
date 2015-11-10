@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 
@@ -22,7 +23,7 @@ namespace crds_angular.Services.Interfaces
         StripeRefundData GetRefund(string refundId);
         StripeCharge GetCharge(string chargeId);
         StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
-        StripeSubscription CreateSubscription(string planName, string customer);
+        StripeSubscription CreateSubscription(string planName, string customer, DateTime trialEndDate);
         StripeSubscription UpdateSubscriptionPlan(string customerId, string subscriptionId, string planId);
         StripeSubscription GetSubscription(string customerId, string subscriptionId);
         StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);

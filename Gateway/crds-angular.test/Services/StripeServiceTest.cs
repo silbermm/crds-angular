@@ -7,6 +7,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Net;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Models;
@@ -15,7 +16,7 @@ using MinistryPlatform.Models;
 
 namespace crds_angular.test.Services
 {
-    class StripeServiceTest
+    public class StripeServiceTest
     {
         private Mock<IRestClient> _restClient;
         private Mock<IConfigurationWrapper> _configuration;
@@ -94,14 +95,14 @@ namespace crds_angular.test.Services
                 It.Is<RestRequest>(o =>
                     o.Method == Method.GET
                     && o.Resource.Equals("transfers/tx123/transactions")
-                    && ParameterMatches("count", 42, o.Parameters)
+                    && o.Parameters.Matches("count", 42)
             )));
             _restClient.Verify(mocked => mocked.Execute<StripeCharges>(
                 It.Is<RestRequest>(o =>
                     o.Method == Method.GET
                     && o.Resource.Equals("transfers/tx123/transactions")
-                    && ParameterMatches("count", 42, o.Parameters)
-                    && ParameterMatches("starting_after", "last_one_in_first_page", o.Parameters)
+                    && o.Parameters.Matches("count", 42)
+                    && o.Parameters.Matches("starting_after", "last_one_in_first_page")
             )));
             _restClient.VerifyAll();
             response.VerifyAll();
@@ -198,8 +199,8 @@ namespace crds_angular.test.Services
                 It.Is<RestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && ParameterMatches("description", "Crossroads Donor #pending", o.Parameters)
-                    && ParameterMatches("source", "token", o.Parameters)
+                    && o.Parameters.Matches("description", "Crossroads Donor #pending")
+                    && o.Parameters.Matches("source", "token")
                     )));
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
@@ -252,8 +253,8 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers")
-                    && ParameterMatches("description", "Crossroads Donor #pending", o.Parameters)
-                    && ParameterMatches("source", "token", o.Parameters)
+                    && o.Parameters.Matches("description", "Crossroads Donor #pending")
+                    && o.Parameters.Matches("source", "token")
                     )));
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
@@ -281,7 +282,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers/token")
-                    && ParameterMatches("description", "Crossroads Donor #102030", o.Parameters)
+                    && o.Parameters.Matches("description", "Crossroads Donor #102030")
                     )));
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
@@ -340,11 +341,11 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
-                    && ParameterMatches("amount", 9090 *Constants.StripeDecimalConversionValue, o.Parameters)
-                    && ParameterMatches("currency", "usd", o.Parameters)
-                    && ParameterMatches("customer", "cust_token", o.Parameters)
-                    && ParameterMatches("description", "Donor ID #98765", o.Parameters)
-                    && ParameterMatches("expand[]", "balance_transaction", o.Parameters)
+                    && o.Parameters.Matches("amount", 9090 * Constants.StripeDecimalConversionValue)
+                    && o.Parameters.Matches("currency", "usd")
+                    && o.Parameters.Matches("customer", "cust_token")
+                    && o.Parameters.Matches("description", "Donor ID #98765")
+                    && o.Parameters.Matches("expand[]", "balance_transaction")
                     )));
 
             _restClient.VerifyAll();
@@ -353,11 +354,6 @@ namespace crds_angular.test.Services
             Assert.AreSame(charge, response);
         }
 
-        private bool ParameterMatches(string name, object value, List<Parameter> parms)
-        {
-            return(parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
-        }
-        
         [Test]
         public void ShouldNotChargeCustomerIfAmountIsInvalid()
         {
@@ -433,7 +429,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("customers/customerToken")
-                    && ParameterMatches("source", "cardToken",o.Parameters)
+                    && o.Parameters.Matches("source", "cardToken")
                     )));
             _restClient.VerifyAll();
             stripeResponse.VerifyAll();
@@ -545,12 +541,11 @@ namespace crds_angular.test.Services
             _restClient.Verify(mocked => mocked.Execute<StripePlan>(It.Is<IRestRequest>(o =>
                 o.Method == Method.POST
                 && o.Resource.Equals("plans")
-                && ParameterMatches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue, o.Parameters)
-                && ParameterMatches("interval", interval, o.Parameters)
-                && ParameterMatches("name", "Donor ID #" + contactDonor.DonorId + " " + interval + "ly", o.Parameters)
-                && ParameterMatches("currency", "usd", o.Parameters)
-                && ParameterMatches("trial_period_days", expectedTrialDays, o.Parameters)
-                && ParameterMatches("id", contactDonor.DonorId + " " + DateTime.Now, o.Parameters))));
+                && o.Parameters.Matches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue)
+                && o.Parameters.Matches("interval", interval)
+                && o.Parameters.Matches("name", "Donor ID #" + contactDonor.DonorId + " " + interval + "ly")
+                && o.Parameters.Matches("currency", "usd")
+                && o.Parameters.Matches("id", contactDonor.DonorId + " " + DateTime.Now))));
 
             Assert.AreSame(stripePlan, response);
         }
@@ -571,7 +566,7 @@ namespace crds_angular.test.Services
             _restClient.Verify(
                 mocked =>
                     mocked.Execute<StripeCustomer>(
-                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/cus_123/sources") && ParameterMatches("source", "card_123", o.Parameters))));
+                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/cus_123/sources") && o.Parameters.Matches("source", "card_123"))));
 
             Assert.AreSame(stripeCustomer, response);
         }
@@ -590,12 +585,46 @@ namespace crds_angular.test.Services
 
             const string plan = "Take over the world.";
             const string customer = "cus_123";
+            var trialEndDate = DateTime.Today.AddDays(1);
 
-            var response = _fixture.CreateSubscription(plan, customer);
+            var expectedEpochTime = trialEndDate.ConvertDateTimeToEpoch();
+
+            var response = _fixture.CreateSubscription(plan, customer, trialEndDate);
             _restClient.Verify(
                 mocked =>
                     mocked.Execute<StripeSubscription>(
-                        It.Is<IRestRequest>(o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions") && ParameterMatches("plan", plan, o.Parameters))));
+                        It.Is<IRestRequest>(
+                            o =>
+                                o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions") && o.Parameters.Matches("plan", plan) &&
+                                o.Parameters.Matches("trial_end", expectedEpochTime))));
+
+            Assert.AreSame(stripeSubscription, response);
+        }
+
+        [Test]
+        public void TestCreateSubscriptionNoTrial()
+        {
+            var stripeSubscription = new StripeSubscription();
+
+            var stripeResponse = new Mock<IRestResponse<StripeSubscription>>(MockBehavior.Strict);
+            stripeResponse.SetupGet(mocked => mocked.ResponseStatus).Returns(ResponseStatus.Completed).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.StatusCode).Returns(HttpStatusCode.OK).Verifiable();
+            stripeResponse.SetupGet(mocked => mocked.Data).Returns(stripeSubscription).Verifiable();
+
+            _restClient.Setup(mocked => mocked.Execute<StripeSubscription>(It.IsAny<IRestRequest>())).Returns(stripeResponse.Object);
+
+            const string plan = "Take over the world.";
+            const string customer = "cus_123";
+            var trialEndDate = DateTime.Today;
+
+            var response = _fixture.CreateSubscription(plan, customer, trialEndDate);
+            _restClient.Verify(
+                mocked =>
+                    mocked.Execute<StripeSubscription>(
+                        It.Is<IRestRequest>(
+                            o =>
+                                o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions") && o.Parameters.Matches("plan", plan) &&
+                                !o.Parameters.Contains("trial_end"))));
 
             Assert.AreSame(stripeSubscription, response);
         }
@@ -645,7 +674,7 @@ namespace crds_angular.test.Services
                 mocked =>
                     mocked.Execute<StripeSubscription>(
                         It.Is<IRestRequest>(
-                            o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions/" + sub) && ParameterMatches("plan", plan, o.Parameters) && ParameterMatches("prorate", false, o.Parameters))));
+                            o => o.Method == Method.POST && o.Resource.Equals("customers/" + customer + "/subscriptions/" + sub) && o.Parameters.Matches("plan", plan) && o.Parameters.Matches("prorate", false))));
 
             Assert.AreSame(stripeSubscription, response);
         }
@@ -773,6 +802,19 @@ namespace crds_angular.test.Services
             response.VerifyAll();
             Assert.IsNotNull(result);
             Assert.AreSame(customer, result);
+        }
+    }
+
+    internal static class ParameterExtension
+    {
+        public static bool Matches(this List<Parameter> parms, string name, object value)
+        {
+            return (parms.Find(p => p.Name.Equals(name) && p.Value.Equals(value)) != null);
+        }
+
+        public static bool Contains(this List<Parameter> parms, string name)
+        {
+            return (parms.Find(p => p.Name.Equals(name)) != null);
         }
     }
 }

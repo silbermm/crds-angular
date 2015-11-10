@@ -18,8 +18,7 @@ SET
 		dp_Publications.Title,
 		dp_Publications.Description,
 		dp_Publications.Online_Sort_Order,
-		dp_Publications.Available_Online,
-		dp_Publications.Title', 
+		dp_Publications.Available_Online', 
    [Selected_Record_Expression] = 'dp_Publications.Title',                      
    [Display_Copy] = 1
 

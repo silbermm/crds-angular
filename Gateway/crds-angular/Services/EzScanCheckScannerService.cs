@@ -7,6 +7,7 @@ using crds_angular.Services.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
+using Crossroads.Utilities.Extensions;
 
 namespace crds_angular.Services
 {
@@ -17,6 +18,8 @@ namespace crds_angular.Services
         private readonly ILog _logger = LogManager.GetLogger(typeof (EzScanCheckScannerService));
         private readonly MPServices.IDonorService _mpDonorService;
         private readonly IPaymentService _paymentService;
+
+        private const int MinistryPlatformCheckNumberMaxLength = 15;
       
         public EzScanCheckScannerService(ICheckScannerDao checkScannerDao, IDonorService donorService, IPaymentService paymentService, MPServices.IDonorService mpDonorService)
         {
@@ -97,7 +100,7 @@ namespace crds_angular.Services
                         RegisteredDonor = contactDonor.RegisteredUser,
                         DonorAcctId = donorAccountId,
                         CheckScannerBatchName = batchDetails.Name,
-                        CheckNumber = check.CheckNumber,
+                        CheckNumber = (check.CheckNumber ?? string.Empty).TrimStart(' ', '0').Right(MinistryPlatformCheckNumberMaxLength)
                     };
 
                     var donationId = _mpDonorService.CreateDonationAndDistributionRecord(donationAndDistribution);
@@ -111,6 +114,8 @@ namespace crds_angular.Services
                 catch (Exception e)
                 {
                     check.Error = e.ToString();
+                    check.AccountNumber = _mpDonorService.DecryptCheckValue(check.AccountNumber);
+                    check.RoutingNumber = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
                     batchDetails.ErrorChecks.Add(check);
                     _checkScannerDao.UpdateCheckStatus(check.Id, check.Exported, check.Error);
                 }

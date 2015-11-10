@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Http;
-using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
-using RestSharp.Extensions;
 
 namespace crds_angular.Controllers.API
 {
@@ -18,11 +15,36 @@ namespace crds_angular.Controllers.API
     public class LoginController : MPAuth
     {
 
-        private crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly ILoginService _loginService;
 
-        public LoginController(crds_angular.Services.Interfaces.IPersonService personService)
+        public LoginController(ILoginService loginService, crds_angular.Services.Interfaces.IPersonService personService)
         {
+            _loginService = loginService;
             _personService = personService;
+        }
+
+        [HttpPost]
+        [Route("api/resetpasswordrequest/")]
+        public IHttpActionResult ResetPassword(PasswordResetRequest request)
+        {
+            try
+            {
+                _loginService.PasswordResetRequest(request.Email);
+                return this.Ok();
+            }
+            catch (Exception ex)
+            {
+                return this.InternalServerError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/resetpasswordverify/")]
+        public IHttpActionResult AcceptResetRequest(PasswordResetVerification request)
+        {
+            // Worked in successor story
+            throw new NotImplementedException();
         }
 
         [ResponseType(typeof(LoginReturn))]
@@ -30,7 +52,6 @@ namespace crds_angular.Controllers.API
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
-           
             return Authorized(token =>
             {
                 try
@@ -64,10 +85,12 @@ namespace crds_angular.Controllers.API
             var authData = TranslationService.Login(cred.username, cred.password);
             var token = authData["token"].ToString();
             var exp = authData["exp"].ToString();
+
             if (token == "")
             {
                 return this.Unauthorized();
             }
+
             var userRoles = _personService.GetLoggedInUserRoles(token);
             var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
@@ -80,6 +103,8 @@ namespace crds_angular.Controllers.API
                 roles = userRoles,
                 age = p.Age
             };
+
+            _loginService.ClearResetToken(r.userEmail);
 
            //ttpResponseHeadersExtensions.AddCookies();
            

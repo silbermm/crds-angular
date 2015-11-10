@@ -1,3 +1,7 @@
+<script type="text/ng-template" id="attendanceReasonPopover.html">
+  <div ng-bind-html="$root.MESSAGES.attendanceReasonPopover.content | html"></div>
+</script>
+
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
     <p class="push-bottom" ng-bind-html="$root.MESSAGES.privacy.content | html"></p>
@@ -214,25 +218,14 @@
       </div>
       <div class="form-group col-sm-6" ng-if='!profile.forTrips'>
         <label for="start-attend-reason">Why did you start attending Crossroads?
-            <a><svg viewBox="0 0 32 32"
-                 class="icon icon-question-circle icon-subtle pointer hidden-xs visible-sm-inline visible-md-inline visible-lg-inline"
-                 popover="We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads."
-                 popover-placement="right"
-                 popover-append-to-body="true"
-                 popover-trigger="focus">
-                <use xlink:href="#question-circle"></use>
-              </svg></a>
-<!--
-            <svg viewBox="0 0 32 32"
-                 class="icon icon-question-circle icon-subtle pointer visible-xs-inline"
-                 ng-click="infoCollapsed = !infoCollapsed">
-                <use xlink:href="#question-circle"></use>
-            </svg>
-            <div collapse="!infoCollapsed">
-                <div class="well well-sm">We want to know the first time you engaged in crossroads. Please remember, select the first invitation or reason you engaged crossroads.</div>
-            </div>
--->
         </label>
+
+        <span popover-placement="top" popover-template="'attendanceReasonPopover.html'">
+          <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" >
+            <use xlink:href="#question-circle"></use>
+          </svg>
+        </span>
+
         <select name="start-attend-reason"
                 class="form-control col-sm-12"
                 id="start-attend-reason"
@@ -244,7 +237,7 @@
     </div>
 
     <div class="row">
-      <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone }" >
+      <div class="form-group col-sm-6" >
         <label for="mobile-phone" ng-class="{'required': profile.requireMobilePhone}">Mobile Phone</label>
           <div class="small inline bold">
             <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
@@ -258,8 +251,8 @@
                  ng-model="profile.profileData.person.mobilePhone"
                  ng-required='profile.requireMobilePhone'
                  ng-pattern='profile.phoneFormat' >
-          <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone') && profile.requireMobilePhone" >
-            <span ng-message='required'>
+          <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone')" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') }" >
+            <span ng-message='required' ng-if='profile.requireMobilePhone'>
               <span ng-bind-html='$root.MESSAGES.fieldCanNotBeBlank.content | html'></span>
             </span>
             <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span></span>
@@ -284,7 +277,7 @@
 
 
     <div class="row" ng-if="profile.profileData.person.householdId!==undefined">
-      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' />
+      <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' is-collapsed='profile.isHouseholdCollapsed'/>
     </div>
     <!--/row-->
 

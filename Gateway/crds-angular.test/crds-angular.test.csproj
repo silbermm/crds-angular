@@ -167,6 +167,7 @@
     <Compile Include="controllers\DonorControllerTest.cs" />
     <Compile Include="controllers\EventLocationControllerTest.cs" />
     <Compile Include="controllers\AccountControllerTest.cs" />
+    <Compile Include="controllers\LoginControllerTest.cs" />
     <Compile Include="controllers\ProfileControllerTest.cs" />
     <Compile Include="controllers\GroupControllerTest.cs" />
     <Compile Include="controllers\ServeControllerTest.cs" />
@@ -179,10 +180,12 @@
     <Compile Include="Security\MPAuthTest.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
     <Compile Include="Services\AttributeServiceTest.cs" />
+    <Compile Include="Services\ChildcareServiceTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\EzScanCheckScannerServiceTest.cs" />
     <Compile Include="Services\GroupServiceTest.cs" />
+    <Compile Include="Services\LoginServiceTest.cs" />
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\ProgramServiceTest.cs" />
     <Compile Include="Services\ServeServiceTest.cs" />

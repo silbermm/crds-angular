@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "crds-angular", "crds-angular\crds-angular.csproj", "{DC3B7EDC-2B9A-49F4-A5C8-50BA4C3E2A7B}"
 EndProject
@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.AsyncJobs.Test",
 		{CD41507E-91AC-4C60-96E2-5CAC25F49A76} = {CD41507E-91AC-4C60-96E2-5CAC25F49A76}
 		{CC650D93-731C-4613-B358-FB4C76237455} = {CC650D93-731C-4613-B358-FB4C76237455}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.ChildcareRsvp", "Crossroads.ChildcareRsvp\Crossroads.ChildcareRsvp.csproj", "{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,6 +114,14 @@ Global
 		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Integration|Any CPU.Build.0 = Release|Any CPU
 		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B343A60C-8448-4F8C-AC73-EF4DE7188FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Demo|Any CPU.ActiveCfg = Demo|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Demo|Any CPU.Build.0 = Demo|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Integration|Any CPU.ActiveCfg = Integration|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Integration|Any CPU.Build.0 = Integration|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E88198E2-AEEC-45AB-B3FB-20CC8D44A38C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
