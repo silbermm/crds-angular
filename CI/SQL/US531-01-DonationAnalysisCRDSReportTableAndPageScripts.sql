@@ -6,7 +6,7 @@ BEGIN
   SET IDENTITY_INSERT [dbo].[dp_Reports] ON
 
   INSERT INTO [dbo].[dp_Reports] ([Report_ID], [Report_Name], [Description], [Report_Path], [Pass_Selected_Records], [Pass_LinkTo_Records], [On_Reports_Tab])
-  VALUES (259, 'Donation Analysis-CRDS', NULL, '/MPReports/Donation Analysis-CRDS', 0, 0, 1)
+  VALUES (259, 'CRDS Donation Analysis', NULL, '/MPReports/CRDS Donation Analysis', 0, 0, 1)
 
   SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
 END
