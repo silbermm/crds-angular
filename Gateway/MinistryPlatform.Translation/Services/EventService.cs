@@ -11,16 +11,16 @@ namespace MinistryPlatform.Translation.Services
 {
     public class EventService : BaseService, IEventService
     {
-        private readonly log4net.ILog logger =
+        private readonly log4net.ILog _logger =
             log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly int EventParticipantSubPageId = Convert.ToInt32(AppSettings("EventsParticipants"));
-        private readonly int EventParticipantPageId = Convert.ToInt32(AppSettings("EventParticipant"));
+        private readonly int _eventParticipantSubPageId = Convert.ToInt32(AppSettings("EventsParticipants"));
+        private readonly int _eventParticipantPageId = Convert.ToInt32(AppSettings("EventParticipant"));
 
-        private readonly int EventParticipantStatusDefaultID =
+        private readonly int _eventParticipantStatusDefaultId =
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
 
-        private IMinistryPlatformService ministryPlatformService;
+        private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IGroupService _groupService;
 
         public EventService(IMinistryPlatformService ministryPlatformService,
@@ -29,18 +29,18 @@ namespace MinistryPlatform.Translation.Services
                             IGroupService groupService)
             : base(authenticationService, configurationWrapper)
         {
-            this.ministryPlatformService = ministryPlatformService;
+            _ministryPlatformService = ministryPlatformService;
             _groupService = groupService;
         }
 
         public int registerParticipantForEvent(int participantId, int eventId)
         {
-            logger.Debug("Adding participant " + participantId + " to event " + eventId);
+            _logger.Debug("Adding participant " + participantId + " to event " + eventId);
             var values = new Dictionary<string, object>
             {
                 {"Participant_ID", participantId},
                 {"Event_ID", eventId},
-                {"Participation_Status_ID", EventParticipantStatusDefaultID},
+                {"Participation_Status_ID", _eventParticipantStatusDefaultId},
             };
 
             int eventParticipantId;
@@ -51,7 +51,7 @@ namespace MinistryPlatform.Translation.Services
                         apiToken =>
                         {
                             return
-                                (ministryPlatformService.CreateSubRecord(EventParticipantSubPageId,
+                                (_ministryPlatformService.CreateSubRecord(_eventParticipantSubPageId,
                                                                          eventId,
                                                                          values,
                                                                          apiToken,
@@ -67,7 +67,7 @@ namespace MinistryPlatform.Translation.Services
                     ex.InnerException);
             }
 
-            logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}",
+            _logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}",
                                        participantId,
                                        eventId,
                                        eventParticipantId));
@@ -76,14 +76,14 @@ namespace MinistryPlatform.Translation.Services
 
         public int unRegisterParticipantForEvent(int participantId, int eventId)
         {
-            logger.Debug("Removing participant " + participantId + " from event " + eventId);
+            _logger.Debug("Removing participant " + participantId + " from event " + eventId);
 
             int eventParticipantId;
             try
             {
                 // go get record id to delete
                 var recordId = GetEventParticipantRecordId(eventId, participantId);
-                eventParticipantId = ministryPlatformService.DeleteRecord(EventParticipantPageId, recordId, null, ApiLogin());
+                eventParticipantId = _ministryPlatformService.DeleteRecord(_eventParticipantPageId, recordId, null, ApiLogin());
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace MinistryPlatform.Translation.Services
                     ex.InnerException);
             }
 
-            logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}",
+            _logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}",
                                        participantId,
                                        eventId,
                                        eventParticipantId));
@@ -104,7 +104,7 @@ namespace MinistryPlatform.Translation.Services
         public Event GetEvent(int eventId)
         {
             var token = ApiLogin();
-            var r = ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, eventId.ToString());
+            var r = _ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, eventId.ToString());
             if (r.Count == 1)
             {
                 var record = r[0];
@@ -122,7 +122,6 @@ namespace MinistryPlatform.Translation.Services
                 };
 
 
-
                 return e;
             }
             if (r.Count == 0)
@@ -135,14 +134,14 @@ namespace MinistryPlatform.Translation.Services
         public int GetEventParticipantRecordId(int eventId, int participantId)
         {
             var search = "," + eventId + "," + participantId;
-            var participants = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).Single();
+            var participants = _ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).Single();
             return (int) participants["Event_Participant_ID"];
         }
 
         public bool EventHasParticipant(int eventId, int participantId)
         {
             var searchString = "," + eventId + "," + participantId;
-            var records = ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), searchString);
+            var records = _ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), searchString);
             return records.Count != 0;
         }
 
@@ -151,7 +150,7 @@ namespace MinistryPlatform.Translation.Services
             //this is using the basic Events page, any concern there?
             var pageId = Convert.ToInt32(ConfigurationManager.AppSettings["Events"]);
             var search = ",," + eventType;
-            var records = ministryPlatformService.GetRecordsDict(pageId, token, search);
+            var records = _ministryPlatformService.GetRecordsDict(pageId, token, search);
 
             return records.Select(record => new Event
             {
@@ -167,7 +166,7 @@ namespace MinistryPlatform.Translation.Services
         {
             const string viewKey = "EventsWithEventTypeId";
             var search = ",," + eventTypeId;
-            var eventRecords = ministryPlatformService.GetPageViewRecords(viewKey, token, search);
+            var eventRecords = _ministryPlatformService.GetPageViewRecords(viewKey, token, search);
 
             var events = eventRecords.Select(record => new Event
             {
@@ -183,6 +182,29 @@ namespace MinistryPlatform.Translation.Services
                 events.Where(e => e.EventStartDate.Date >= startDate.Date && e.EventStartDate.Date <= endDate.Date)
                     .ToList();
             return filteredEvents;
+        }
+
+        public List<Event> GetEventsByParentEventId(int parentEventId)
+        {
+            var token = ApiLogin();
+            var searchStr = string.Format(",,,{0}", parentEventId);
+            var records = _ministryPlatformService.GetPageViewRecords("EventsByParentEventID", token, searchStr);
+
+            var events = records.Select(record => new Event
+            {
+                EventTitle = record.ToString("Event_Title"),
+                EventType = record.ToString("Event_Type"),
+                EventStartDate = record.ToDate("Event_Start_Date", true),
+                EventEndDate = record.ToDate("Event_End_Date", true),
+                EventId = record.ToInt("Event_ID"),
+                PrimaryContact = new Contact
+                {
+                    ContactId = record.ToInt("Contact_ID"),
+                    EmailAddress = record.ToString("Email_Address")
+                }
+            }).ToList();
+
+            return events;
         }
 
         public List<Group> GetGroupsForEvent(int eventId)

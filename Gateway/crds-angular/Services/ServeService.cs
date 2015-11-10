@@ -28,7 +28,7 @@ namespace crds_angular.Services
     {
         private readonly IContactService _contactService;
         private readonly IContactRelationshipService _contactRelationshipService;
-        private readonly IEventService _eventService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEventService _eventService;
         private readonly IGroupParticipantService _groupParticipantService;
         private readonly IGroupService _groupService;
         private readonly IOpportunityService _opportunityService;
@@ -45,7 +45,7 @@ namespace crds_angular.Services
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public ServeService(IContactService contactService, IContactRelationshipService contactRelationshipService,
-            IOpportunityService opportunityService, IEventService eventService, IParticipantService participantService,
+            IOpportunityService opportunityService, MinistryPlatform.Translation.Services.Interfaces.IEventService eventService, IParticipantService participantService,
             IGroupParticipantService groupParticipantService, IGroupService groupService,
             ICommunicationService communicationService, IAuthenticationService authenticationService)
         {
@@ -88,7 +88,7 @@ namespace crds_angular.Services
                 ParticipantId = contact.Participant_Id,
                 PreferredName = contact.Preferred_Name,
                 RelationshipId = contact.Relationship_Id,
-                Age = contact.Age
+                Age = contact.Age, HighSchoolGraduationYear = contact.HighSchoolGraduationYear
             }).ToList();
 
             relationships.AddRange(family);

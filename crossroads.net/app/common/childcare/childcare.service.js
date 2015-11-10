@@ -7,7 +7,6 @@
 
   function ChildCareService($resource) {
     var childCareService = {
-      Need: $resource('__API_ENDPOINT__' + 'api/childcare/need')
 
     };
 

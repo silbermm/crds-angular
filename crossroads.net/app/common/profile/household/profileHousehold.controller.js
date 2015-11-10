@@ -34,6 +34,7 @@
     vm.displayLocation = displayLocation;
     vm.states = getStates();
     vm.validation = Validation;
+    vm.phoneFormat = vm.validation.phoneFormat();
     vm.validLocations = validLocations(vm.locations);
     if (typeof vm.isCollapsed === 'undefined') {
       vm.isCollapsed = true;

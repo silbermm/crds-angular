@@ -24,7 +24,7 @@ namespace crds_angular.Services
         private readonly IDonationService _donationService;
         private readonly IGroupService _groupService;
         private readonly IFormSubmissionService _formSubmissionService;
-        private readonly IEventService _mpEventService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEventService _mpEventService;
         private readonly IDonorService _mpDonorService;
         private readonly IPledgeService _mpPledgeService;
         private readonly ICampaignService _campaignService;
@@ -42,7 +42,7 @@ namespace crds_angular.Services
                            IDonationService donationService,
                            IGroupService groupService,
                            IFormSubmissionService formSubmissionService,
-                           IEventService eventService,
+                           MinistryPlatform.Translation.Services.Interfaces.IEventService eventService,
                            IDonorService donorService,
                            IPledgeService pledgeService,
                            ICampaignService campaignService,
