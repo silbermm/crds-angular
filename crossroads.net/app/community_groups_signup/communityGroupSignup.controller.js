@@ -186,7 +186,7 @@
     function hasParticipantID(array) {
       var result = {};
       result.partId = [];
-      if (array.length > 0) {
+      if (array.length > 1) {
         for (var i = 0; i < array.length; i++) {
           if (array[i].newAdd !== undefined && array[i].newAdd !== '') {
             result.partId[result.partId.length] = {
@@ -195,6 +195,11 @@
             };
           }
         }
+      } else if (array.length === 1) {
+        result.partId[0] = {
+          participantId: array[0].participantId,
+          childCareNeeded: array[0].childCareNeeded
+        };
       }
 
       return result;
