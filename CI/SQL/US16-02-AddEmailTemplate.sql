@@ -29,7 +29,7 @@ BEGIN
 SET IDENTITY_INSERT [dbo].[dp_Communications] ON 
 
 INSERT INTO [dbo].[dp_Communications]
-           ([Communications_ID],
+           ([Communication_ID],
             [Author_User_ID],
             [Subject],
             [Body],
