@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Childcare;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -17,6 +18,25 @@ namespace crds_angular.Controllers.API
         public ChildcareController(IChildcareService childcareService)
         {
             _childcareService = childcareService;
+        }
+
+        [Route("api/childcare/rsvp")]
+        [AcceptVerbs("POST")]
+        public IHttpActionResult SaveRsvp([FromBody] ChildcareRsvpDto saveRsvp)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    _childcareService.SaveRsvp(saveRsvp);
+                    return Ok();
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Childcare-SaveRsvp failed", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
         }
 
         [ResponseType(typeof(Event))]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Childcare;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
@@ -65,6 +66,26 @@ namespace crds_angular.Services
                 }
             }
             return myChildren;
+        }
+
+        public void SaveRsvp(ChildcareRsvpDto saveRsvp)
+        {
+            var eventId = saveRsvp.EventId;
+            var participants = saveRsvp.Participants;
+            var participantId = 0;
+
+            try
+            {
+                foreach (var p in participants)
+                {
+                    participantId = p;
+                    _eventService.registerParticipantForEvent(participantId, eventId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(string.Format("Save RSVP failed for event ({0}), participant ({1})", eventId, participantId), ex);
+            }
         }
 
         public int SchoolGrade(int graduationYear)
