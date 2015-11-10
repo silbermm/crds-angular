@@ -1,3 +1,7 @@
+<script type="text/ng-template" id="childcareContactPopover.html">
+  <div ng-bind-html="$root.MESSAGES.childcareContactPopover.content | html"></div>
+</script>
+
 <div class="serve-signup-wrapper">
   <h1 class="page-header">FI 101 Oakley</h1>
   <h2 class="subheading">First Impressions: Because you never get a second change to...you know.</h2>
@@ -79,9 +83,11 @@
                         <div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left;">
                           <h4>
                             Childcare
-                            <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" popover-placement="right" popover="If you don't see your child listed, please contact childcare@crossroads.net">
-                              <use xlink:href="#question-circle"></use>
-                            </svg>
+                            <span popover-placement="right" popover-template="'childcareContactPopover.html'">
+                              <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer">
+                                <use xlink:href="#question-circle"></use>
+                              </svg>
+                            </span>
                           </h4>
                           <div>
                             <div class="checkbox">

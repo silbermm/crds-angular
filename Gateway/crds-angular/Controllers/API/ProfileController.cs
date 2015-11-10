@@ -13,6 +13,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using log4net;
+using MinistryPlatform.Translation.Services.Interfaces;
 using IPersonService = crds_angular.Services.Interfaces.IPersonService;
 using IDonorService = crds_angular.Services.Interfaces.IDonorService;
 
@@ -25,13 +26,15 @@ namespace crds_angular.Controllers.API
         private readonly IServeService _serveService;
         private readonly IDonorService _donorService;
         private readonly IUserImpersonationService _impersonationService;
+        private readonly IAuthenticationService _authenticationService ;
 
-        public ProfileController(IPersonService personService, IServeService serveService, IUserImpersonationService impersonationService, IDonorService donorService)
+        public ProfileController(IPersonService personService, IServeService serveService, IUserImpersonationService impersonationService, IDonorService donorService, IAuthenticationService authenticationService)
         {
             _personService = personService;
             _serveService = serveService;
             _impersonationService = impersonationService;
             _donorService = donorService;
+            _authenticationService = authenticationService;
         }
 
         [ResponseType(typeof (Person))]
@@ -67,8 +70,7 @@ namespace crds_angular.Controllers.API
             {
                 // does the logged in user have permission to view this contact?
                 //TODO: Move this security logic to MP, if for some reason we absulutly can't then centerlize all security logic that exists in the gateway
-                var loggedInUser = _personService.GetLoggedInUserProfile(token);
-                var family = _serveService.GetImmediateFamilyParticipants(loggedInUser.ContactId, token);
+                var family = _serveService.GetImmediateFamilyParticipants(token);
                 Person person = null;
                 if (family.Where(f => f.ContactId == contactId).ToList().Count > 0)
                 {
@@ -95,8 +97,7 @@ namespace crds_angular.Controllers.API
             return Authorized(t =>
             {
                 // does the logged in user have permission to view this contact?
-                var loggedInUser = _personService.GetLoggedInUserProfile(t);
-                var family = _serveService.GetImmediateFamilyParticipants(loggedInUser.ContactId, t);
+                var family = _serveService.GetImmediateFamilyParticipants(t);
 
                 if (family.Where(f => f.ContactId == person.ContactId).ToList().Count > 0)
                 {

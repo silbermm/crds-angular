@@ -13,6 +13,7 @@
         householdId: '=?',
         householdInfo: '=',
         householdForm: '=',
+        isCollapsed: '=?',
         locations: '='
       },
       templateUrl: 'household/profileHousehold.template.html',

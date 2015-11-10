@@ -74,7 +74,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Donation_Total", 125.00M},
                     {"Display_Name", " Dr McSteamy"},
                     {"Start_Date", DateTime.Now.Date},
-                    {"End_Date", DateTime.Now.AddYears(5).Date}
+                    {"End_Date", DateTime.Now.AddYears(5).Date},
+                    {"Pledge_Campaign_Type_ID", 987},
+                    {"Campaign_Type", "campaign 1"}
                 },
                 new Dictionary<string, object>
                 {
@@ -87,7 +89,9 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Donation_Total", 1215.00M},
                     {"Display_Name", "Ice Creamy"},
                     {"Start_Date", DateTime.Now.AddMonths(10).Date},
-                    {"End_Date", DateTime.Now.AddYears(3).Date}
+                    {"End_Date", DateTime.Now.AddYears(3).Date},
+                    {"Pledge_Campaign_Type_ID", 654},
+                    {"Campaign_Type", "campaign 2"}
                 }
             };
 
@@ -103,9 +107,10 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["Campaign_Name"], record[0].CampaignName);
             Assert.AreEqual(records[0]["Total_Pledge"], record[0].PledgeTotal);
             Assert.AreEqual(records[0]["Donation_Total"], record[0].PledgeDonations);
-            Assert.AreEqual(records[0]["Display_Name"], record[0].DonorDisplayName);
             Assert.AreEqual(records[0]["Start_Date"], record[0].CampaignStartDate);
             Assert.AreEqual(records[0]["End_Date"], record[0].CampaignEndDate);
+            Assert.AreEqual(records[0]["Pledge_Campaign_Type_ID"], record[0].CampaignTypeId);
+            Assert.AreEqual(records[0]["Campaign_Type"], record[0].CampaignTypeName);
 
             Assert.AreEqual(records[1]["Pledge_ID"], record[1].PledgeId);
             Assert.AreEqual(records[1]["Pledge_Campaign_ID"], record[1].PledgeCampaignId);
@@ -113,9 +118,10 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["Campaign_Name"], record[1].CampaignName);
             Assert.AreEqual(records[1]["Total_Pledge"], record[1].PledgeTotal);
             Assert.AreEqual(records[1]["Donation_Total"], record[1].PledgeDonations);
-            Assert.AreEqual(records[1]["Display_Name"], record[1].DonorDisplayName);
             Assert.AreEqual(records[1]["Start_Date"], record[1].CampaignStartDate);
             Assert.AreEqual(records[1]["End_Date"], record[1].CampaignEndDate);
+            Assert.AreEqual(records[1]["Pledge_Campaign_Type_ID"], record[1].CampaignTypeId);
+            Assert.AreEqual(records[1]["Campaign_Type"], record[1].CampaignTypeName);
         }
     }
 }

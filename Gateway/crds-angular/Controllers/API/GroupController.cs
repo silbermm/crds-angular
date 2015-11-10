@@ -39,14 +39,14 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof (GroupDTO))]
         [Route("api/group/{groupId}/participants")]
-        public IHttpActionResult Post(int groupId, [FromBody] PartID partId)
+        public IHttpActionResult Post(int groupId, [FromBody] List<ParticipantSignup> partId)
         {
             return Authorized(token =>
             {
                 try
                 {
-                    groupService.addParticipantsToGroup(groupId, partId.partId);
-                    _logger.Debug(String.Format("Successfully added participants {0} to group {1}", partId.partId, groupId));
+                    groupService.addParticipantsToGroup(groupId, partId);
+                    _logger.Debug(String.Format("Successfully added participants {0} to group {1}", partId, groupId));
                     return (Ok());
                 }
                 catch (GroupFullException e)
@@ -80,12 +80,21 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                var participant = participantService.GetParticipantRecord(token);
-                var contactId = authenticationService.GetContactId(token);
+                try
+                {
+                    var participant = participantService.GetParticipantRecord(token);
+                    var contactId = authenticationService.GetContactId(token);
 
-                var detail = groupService.getGroupDetails(groupId, contactId, participant, token);
+                    var detail = groupService.getGroupDetails(groupId, contactId, participant, token);
 
-                return Ok(detail);
+                    return Ok(detail);
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Get Group", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+                
             }
                 );
         }

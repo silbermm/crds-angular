@@ -267,6 +267,8 @@
     <Compile Include="Models\Json\PasswordResetVerification.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\ChildcareService.cs" />
+    <Compile Include="Services\Interfaces\IChildcareService.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
     <Compile Include="Util\FileResult.cs" />
@@ -315,7 +317,7 @@
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroup.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityResponseDto.cs" />
-    <Compile Include="Models\Crossroads\PartID.cs" />
+    <Compile Include="Models\Crossroads\ParticipantSignup.cs" />
     <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />

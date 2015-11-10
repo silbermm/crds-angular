@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -16,6 +18,9 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IMinistryPlatformService> ministryPlatformService;
         private Mock<IConfigurationWrapper> configWrapper;
         private Mock<IAuthenticationService> authService;
+        private Mock<ICommunicationService> communicationService;
+        private Mock<IContactService> contactService;
+        private Mock<IContentBlockService> contentBlockService;
         private readonly int GroupsParticipantsPageId = 298;
         private readonly int GroupsParticipantsSubPage = 88;
         private readonly int GroupsPageId = 322;
@@ -29,7 +34,10 @@ namespace MinistryPlatform.Translation.Test.Services
             ministryPlatformService = new Mock<IMinistryPlatformService>();
             configWrapper = new Mock<IConfigurationWrapper>();
             authService = new Mock<IAuthenticationService>();
-            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object);
+            communicationService = new Mock<ICommunicationService>();
+            contactService = new Mock<IContactService>();
+            contentBlockService = new Mock<IContentBlockService>();
+            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object, communicationService.Object, contactService.Object, contentBlockService.Object);
 
 
             configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
@@ -55,6 +63,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Group_Name", "Test Group"},
                 {"Target_Size", (short) 1},
                 {"Group_Is_Full", false},
+                {"Child_Care_Available", true}
             };
 
             ministryPlatformService.Setup(mocked => mocked.GetRecordDict(GroupsPageId, 456, It.IsAny<string>(), false))
@@ -80,10 +89,11 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Group_Role_ID", 789},
                 {"Start_Date", startDate},
                 {"End_Date", endDate},
-                {"Employee_Role", true}
+                {"Employee_Role", true},
+                {"Child_Care_Requested", true}
             };
 
-            int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, startDate, endDate, true);
+            int groupParticipantId = fixture.addParticipantToGroup(123, 456, 789, true, startDate, endDate, true);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
                 GroupsParticipantsPageId,
@@ -315,7 +325,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(2, groups[1].GroupId);
             Assert.AreEqual("group-two", groups[1].Name);
         }
-
 
         private List<Dictionary<string, object>> GroupsByEventId_MpResponse()
         {

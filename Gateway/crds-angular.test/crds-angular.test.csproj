@@ -180,6 +180,7 @@
     <Compile Include="Security\MPAuthTest.cs" />
     <Compile Include="Services\AccountServiceTest.cs" />
     <Compile Include="Services\AttributeServiceTest.cs" />
+    <Compile Include="Services\ChildcareServiceTest.cs" />
     <Compile Include="Services\DonationServiceTest.cs" />
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\EzScanCheckScannerServiceTest.cs" />

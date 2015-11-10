@@ -43,7 +43,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.dietaryRestrictions = vm.signupService.person.attributeTypes[attributeTypes.DIETARY_RESTRICTIONS].attributes;
     vm.experienceAbroad = vm.signupService.person.singleAttributes[attributeTypes.EXPERIENCE_ABROAD];
     vm.frequentFlyers = vm.signupService.person.attributeTypes[attributeTypes.FREQUENT_FLYERS].attributes;
-    vm.hasPassport = hasPassport;
     vm.internationalExpSelected = vm.signupService.person.singleAttributes[attributeTypes.INTERNATIONAL_EXPERIENCE];
     vm.interExperience = InternationalExperience;
     vm.locations = Locations;
@@ -127,10 +126,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           spirit.endDate = new Date();
         }
       });
-    }
-
-    function hasPassport() {
-      return (vm.passportValid === 'true');
     }
 
     function requireSponsoredChild() {

@@ -21,14 +21,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "pledge_campaign_id")]
         [Required]
         public int PledgeCampaignId { get; set; }
-
-        /// <summary>
-        /// The ID of the MP pledge. 
-        /// </summary>
-        [JsonProperty(PropertyName = "donor_display_name")]
-        [Required]
-        public string DonorDisplayName { get; set; }
-
+        
         /// <summary>
         /// This is a name of the pledge campaign.
         /// </summary>
@@ -71,8 +64,18 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty(PropertyName = "pledge_donations")]
         [Required]
         public decimal PledgeDonations { get; set; }
-        
-        
+
+        /// <summary>
+        /// The campaign type ID of the pledge.
+        /// </summary>
+        [JsonProperty(PropertyName = "campaign_type_id")]
+        public int CampaignTypeId { get; set; }
+
+        /// <summary>
+        /// The campaign type name of the pledge.
+        /// </summary>
+        [JsonProperty(PropertyName = "campaign_type_name")]
+        public string CampaignTypeName { get; set; }
     }
 
    

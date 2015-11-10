@@ -1,15 +1,13 @@
-'use strict';
+(function() {
+  'use strict';
 
-var app = angular.module('crossroads');
+  var MODULES = require('crds-constants').MODULES;
 
-app.controller('GroupSignupController', [
-    '$rootScope',
-    '$scope',
-    'Profile',
-    'Group',
-    '$log',
-    '$stateParams',
-    'Page',
-    '$modal',
-    require('./group_signup_controller')]);;
+  angular.module(MODULES.COMMUNITY_GROUPS, [MODULES.COMMON])
+    .config(require('./communityGroups.routes'))
 
+    //.directive('communityGroupSignup', require('./communityGroups.directive'))
+    .controller('CommunityGroupSignupController', require('./communityGroupSignup.controller'))
+    ;
+  require('./communityGroupSignupForm.html');
+})();

@@ -7,7 +7,6 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
 using Moq;
-using MvcContrib.TestHelper;
 using NUnit.Framework;
 using MPServices=MinistryPlatform.Translation.Services.Interfaces;
 
@@ -107,7 +106,7 @@ namespace crds_angular.test.Services
                     },
                     Amount = 1111,
                     CheckDate = DateTime.Now.AddHours(1),
-                    CheckNumber = "11111",
+                    CheckNumber = " 0 0 00000222111111111111111",
                     Name1 = "1 name 1",
                     Name2 = "1 name 2",
                     RoutingNumber = "1010",
@@ -179,16 +178,21 @@ namespace crds_angular.test.Services
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorExisting.Account.ProcessorAccountId, contactDonorExisting.ProcessorId)).Returns(donorAcctId);
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int) checks[0].Amount,
-                                                               123,
-                                                               contactDonorExisting.DonorId,
-                                                               "9090",
-                                                               null,
-                                                               "1020304",
-                                                               "check",
-                                                               contactDonorExisting.ProcessorId,
-                                                               It.IsAny<DateTime>(),
-                                                               true, false, false, null, donorAcctId, "batch123", null)).Returns(321);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(d =>
+                                                                 d.DonationAmt == (int) checks[0].Amount &&
+                                                                 d.FeeAmt == 123 &&
+                                                                 d.DonorId == contactDonorExisting.DonorId &&
+                                                                 d.ProgramId.Equals("9090") &&
+                                                                 d.ChargeId.Equals("1020304") &&
+                                                                 d.PymtType.Equals("check") &&
+                                                                 d.ProcessorId.Equals(contactDonorExisting.ProcessorId) &&
+                                                                 d.SetupDate.Equals(checks[0].CheckDate) &&
+                                                                 d.RegisteredDonor &&
+                                                                 d.DonorAcctId == donorAcctId &&
+                                                                 d.CheckScannerBatchName.Equals("batch123") &&
+                                                                 d.CheckNumber.Equals("111111111111111"))))
+                .Returns(321);
 
             var contactDonorNew = new ContactDonor
             {
@@ -234,16 +238,21 @@ namespace crds_angular.test.Services
 
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int)checks[1].Amount,
-                                                               null,
-                                                               contactDonorNew.DonorId,
-                                                               "9090",
-                                                               null,
-                                                               "40302010",
-                                                               "check",
-                                                               contactDonorNew.ProcessorId,
-                                                               It.IsAny<DateTime>(),
-                                                               false, false, false, null, donorAcctId, "batch123", null)).Returns(654);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(d =>
+                                                                 d.DonationAmt == (int) checks[1].Amount &&
+                                                                 d.FeeAmt == null &&
+                                                                 d.DonorId == contactDonorNew.DonorId &&
+                                                                 d.ProgramId.Equals("9090") &&
+                                                                 d.ChargeId.Equals("40302010") &&
+                                                                 d.PymtType.Equals("check") &&
+                                                                 d.ProcessorId.Equals(contactDonorNew.ProcessorId) &&
+                                                                 d.SetupDate.Equals(checks[1].CheckDate) &&
+                                                                 !d.RegisteredDonor &&
+                                                                 d.DonorAcctId == donorAcctId &&
+                                                                 d.CheckScannerBatchName.Equals("batch123") &&
+                                                                 d.CheckNumber.Equals("22222"))))
+                .Returns(654);
 
 
 

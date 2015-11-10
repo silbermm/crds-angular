@@ -19,6 +19,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _householdDefaultSourceId;
         private readonly int _householdPositionDefaultId;
         private readonly int _addressesPageId;
+        private readonly int _participantsPageId;
         private readonly ILog _logger = LogManager.GetLogger(typeof (ContactService));
 
         private readonly IMinistryPlatformService _ministryPlatformService;
@@ -37,6 +38,7 @@ namespace MinistryPlatform.Translation.Services
             _householdPositionDefaultId = configuration.GetConfigIntValue("Household_Position_Default_ID");
             _addressesPageId = configuration.GetConfigIntValue("Addresses");
             _contactsPageId = configuration.GetConfigIntValue("Contacts");
+            _participantsPageId = configuration.GetConfigIntValue("Participants");
         }
 
         public string GetContactEmail(int contactId)
@@ -87,6 +89,13 @@ namespace MinistryPlatform.Translation.Services
             return ParseProfileRecord(pageViewRecords[0]);
         }
 
+        public int GetContactIdByParticipantId(int participantId)
+        {
+            var token = ApiLogin();
+            var participant = _ministryPlatformService.GetRecordDict(_participantsPageId, participantId, token);
+            return participant.ToInt("Contact_ID");
+        }
+
         public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
         {
             var token = ApiLogin();
@@ -132,6 +141,7 @@ namespace MinistryPlatform.Translation.Services
                 Household_Name = recordsDict.ToString("Household_Name"),
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
+                County = recordsDict.ToString("County"),
                 Postal_Code = recordsDict.ToString("Postal_Code"),
                 Anniversary_Date = ParseAnniversaryDate(recordsDict.ToNullableDate("Anniversary_Date")),
                 Contact_ID = recordsDict.ToInt("Contact_ID"),

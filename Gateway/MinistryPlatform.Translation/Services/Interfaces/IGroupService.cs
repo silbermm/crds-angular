@@ -9,6 +9,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int addParticipantToGroup(int participantId,
                                   int groupId,
                                   int groupRoleId,
+                                  Boolean childCareNeeded,
                                   DateTime startDate,
                                   DateTime? endDate = null,
                                   Boolean? employeeRole = false);
@@ -27,5 +28,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         bool ParticipantGroupMember(int groupId, int participantId);
 
         List<Group> GetGroupsForEvent(int eventId);
+
+        void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool childcareNeeded);
     }
 }

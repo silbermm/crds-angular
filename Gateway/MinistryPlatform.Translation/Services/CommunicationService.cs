@@ -171,7 +171,7 @@ namespace MinistryPlatform.Translation.Services
             }
             catch (Exception ex)
             {
-                _logger.Debug(string.Format("Failed to parse the template"));
+                _logger.Warn("Failed to parse the template", ex);
                 throw new TemplateParseException("Failed to parse the template", ex);
             }
         }

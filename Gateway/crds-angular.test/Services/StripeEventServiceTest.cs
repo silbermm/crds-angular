@@ -6,6 +6,7 @@ using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using Moq;
 using Newtonsoft.Json.Linq;
@@ -398,25 +399,27 @@ namespace crds_angular.test.Services
             };
             _donorService.Setup(mocked => mocked.GetRecurringGiftForSubscription(subscriptionId)).Returns(recurringGift);
             _mpDonorService.Setup(mocked => mocked.UpdateRecurringGiftFailureCount(recurringGift.RecurringGiftId.Value, Constants.ResetFailCount));
-       
+
             _mpDonorService.Setup(
                 mocked =>
-                    mocked.CreateDonationAndDistributionRecord((int) (chargeAmount/Constants.StripeDecimalConversionValue),
-                                                               feeAmount,
-                                                               donorId,
-                                                               programId,
-                                                               null,
-                                                               chargeId,
-                                                               paymentType,
-                                                               processorId,
-                                                               It.IsAny<DateTime>(),
-                                                               true,
-                                                               false,
-                                                               true,
-                                                               recurringGiftId,
-                                                               donorAccountId+"",
-                                                               null,
-                                                               donationStatus)).Returns(123);
+                    mocked.CreateDonationAndDistributionRecord(
+                        It.Is<DonationAndDistributionRecord>(
+                            d => d.DonationAmt == (int) (chargeAmount/Constants.StripeDecimalConversionValue) && 
+                                 d.FeeAmt == feeAmount && 
+                                 d.DonorId == donorId &&
+                                 d.ProgramId.Equals(programId) &&
+                                 d.PledgeId == null &&
+                                 d.ChargeId.Equals(chargeId) &&
+                                 d.PymtType.Equals(paymentType) &&
+                                 d.ProcessorId.Equals(processorId) &&
+                                 d.RegisteredDonor &&
+                                 !d.Anonymous &&
+                                 d.RecurringGift &&
+                                 d.RecurringGiftId == recurringGiftId &&
+                                 d.DonorAcctId.Equals(donorAccountId+"") &&
+                                 d.CheckScannerBatchName == null &&
+                                 d.DonationStatus == donationStatus &&
+                                 d.CheckNumber == null))).Returns(123);
 
             _fixture.InvoicePaymentSucceeded(eventTimestamp, invoice);
             _paymentService.VerifyAll();

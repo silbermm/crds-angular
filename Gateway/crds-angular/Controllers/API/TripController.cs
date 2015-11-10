@@ -16,13 +16,11 @@ namespace crds_angular.Controllers.API
     {
         private readonly ITripService _tripService;
         private readonly IPersonService _personService;
-        private readonly IAuthenticationService _authenticationService;
 
-        public TripController(ITripService tripService, IPersonService persionService, IAuthenticationService authenticationService)
+        public TripController(ITripService tripService, IPersonService persionService)
         {
             _tripService = tripService;
             _personService = persionService;
-            _authenticationService = authenticationService;
         }
 
         [AcceptVerbs("GET")]
@@ -34,8 +32,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var loggedInUser = _personService.GetLoggedInUserProfile(token);
-                    var familyMembers = _tripService.GetFamilyMembers(loggedInUser.ContactId, pledgeCampaignId, token);
+                    var familyMembers = _tripService.GetFamilyMembers(pledgeCampaignId, token);
                     return Ok(familyMembers);
                 }
                 catch (Exception ex)
@@ -181,8 +178,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var contactId = _authenticationService.GetContactId(token);
-                    var trips = _tripService.GetMyTrips(contactId, token);
+                    var trips = _tripService.GetMyTrips(token);
                     return Ok(trips);
                 }
                 catch (Exception ex)
