@@ -2592,10 +2592,6 @@
             <Label>Year-Quarter</Label>
           </ParameterValue>
           <ParameterValue>
-            <Value>7</Value>
-            <Label>Participant Type</Label>
-          </ParameterValue>
-          <ParameterValue>
             <Value>8</Value>
             <Label>Payment Type</Label>
           </ParameterValue>
