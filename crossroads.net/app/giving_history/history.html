@@ -41,9 +41,10 @@
       <div class="row">
         <!-- IS GIVING HISTORY - ng-show or ng-if on data from resource-->
         <div ng-show="giving_history_controller.donation_history && giving_history_controller.donation_view_ready">
-          <div class="col-sm-6 clearfix hidden-print">
-            <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom" onClick="window.print();">Print Statement</a>
+          <div class="col-sm-6 clearfix hidden-print" ng-if="!giving_history_controller.donations_all">
+            <a href="" class="btn btn-primary col-sm-6 col-md-5 col-xs-12 mobile-push-bottom disable" onClick="window.print();">Print Statement</a>
           </div>
+          <div class="col-sm-6" ng-if="giving_history_controller.donations_all"></div>
           <div class="col-sm-6" giving-years
                selected-year="giving_history_controller.selected_giving_year"
                all-years="giving_history_controller.donation_years"
