@@ -3,9 +3,9 @@
 
   module.exports = ChildcareEvent;
 
-  ChildcareEvent.$inject = [];
+  ChildcareEvent.$inject = ['$rootScope'];
 
-  function ChildcareEvent() {
+  function ChildcareEvent($rootScope) {
     return {
       restrict: 'E',
       scope: {
@@ -20,7 +20,27 @@
 
     function ChildcareEventController() {
       var vm = this;
+      vm.form = {};
+      vm.submit = submit;
 
+      ////////////////
+
+      function submit() {
+        var childrenToSave = _.find(vm.children, function(child) {
+          return child.selected;
+        });
+
+        if (_.isEmpty(childrenToSave)) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.chooseOne);
+          return false;
+        } else {
+
+          var childrenObj = _.map(childrenToSave, function(child) {
+          });
+
+          return true;
+        }
+      }
     }
   }
 
