@@ -1,4 +1,5 @@
-﻿using MinistryPlatform.Models;
+﻿using System.Collections.Generic;
+using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -6,5 +7,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         MinistryPlatformUser GetByUserId(string userId);
         MinistryPlatformUser GetByAuthenticationToken(string authToken);
+        void UpdateUser(Dictionary<string, object> userUpdateValues);
+        int GetUserIdByEmail(string email);
     }
 }
