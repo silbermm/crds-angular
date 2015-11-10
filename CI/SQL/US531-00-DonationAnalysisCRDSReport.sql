@@ -109,8 +109,6 @@ FROM #D
 INNER JOIN Donors Do ON Do.Donor_ID = #D.Donor_ID
 INNER JOIN Contacts C ON C.Contact_ID = Do.Contact_ID
 INNER JOIN Contact_Statuses CS ON CS.Contact_Status_ID = C.Contact_Status_ID
-INNER JOIN Donations D ON D.Donor_ID = #D.Donor_ID
-INNER JOIN Donation_Distributions DD ON DD.Donation_ID = D.Donation_ID
 LEFT OUTER JOIN Households H ON H.Household_ID = C.Household_ID
 GROUP BY
  C.Display_Name,
