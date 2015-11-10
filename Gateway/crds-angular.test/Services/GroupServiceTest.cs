@@ -154,13 +154,13 @@ namespace crds_angular.test.Services
             };
             groupService.Setup(mocked => mocked.getAllEventsForGroup(456)).Returns(events);
 
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 777)).Returns(999777);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 555)).Returns(999555);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 444)).Returns(999444);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 777,0,0)).Returns(999777);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 555, 0, 0)).Returns(999555);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 444, 0, 0)).Returns(999444);
 
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 777)).Returns(888777);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 555)).Returns(888555);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 444)).Returns(888444);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 777, 0, 0)).Returns(888777);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 555, 0, 0)).Returns(888555);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 444, 0, 0)).Returns(888444);
 
             fixture.addParticipantsToGroup(456, mockParticipantSignup);
 
