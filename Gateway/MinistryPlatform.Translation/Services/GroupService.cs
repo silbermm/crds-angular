@@ -295,6 +295,7 @@ namespace MinistryPlatform.Translation.Services
             var toContact = _contactService.GetContactIdByParticipantId(participantId);
             var toContactInfo = _contactService.GetContactById(toContact);
             var groupInfo = getGroupDetails(groupId);
+            var churchAdminContactId = Convert.ToInt32(AppSettings("ChurchAdminContact"));
 
             var mergeData = new Dictionary<string, object>
             {
@@ -308,12 +309,12 @@ namespace MinistryPlatform.Translation.Services
             { 
                 EmailBody = emailTemplate.Body, 
                 EmailSubject = emailTemplate.Subject,
-                AuthorUserId = 7,
-                DomainId = 1,
-                FromContactId = 7,
+                AuthorUserId = churchAdminContactId,
+                DomainId = Convert.ToInt32(AppSettings("DomainId")),
+                FromContactId = churchAdminContactId,
                 FromEmailAddress = fromAddress,
                 MergeData = mergeData,
-                ReplyContactId = 7,
+                ReplyContactId = churchAdminContactId,
                 ReplyToEmailAddress = fromAddress,
                 TemplateId = CommunityGroupConfirmationTemplateId,
                 ToContactId = toContact,
