@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
+using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -43,29 +45,26 @@ namespace crds_angular.Services
             _dateTimeWrapper = dateTimeWrapper;
         }
 
-        public void MyChildren(string token)
+        public List<FamilyMember> MyChildren(string token)
         {
             var family = _serveService.GetImmediateFamilyParticipants(token);
+            var myChildren = new List<FamilyMember>();
 
             foreach (var member in family)
             {
-                // how do we decide which members to return? 
-                // have a DOB/Age
-                // have HS Grad Year if less than X years old?
-                // when does school year end?  Aug 1
-                // <18 yrs old
-                // birth - 5th grade
-                Console.WriteLine(member.RelationshipId);
-                var x = member.Age;
-                var y = member.PreferredName;
-                var z = member.HighSchoolGraduationYear;
-                var preferredName = member.PreferredName;
-                var b = member.ContactId;
-                var c = member.LastName;
-
-
-                //what do we do with graduation year?
+                var schoolGrade = SchoolGrade(member.HighSchoolGraduationYear);
+                var maxAgeWithoutGrade = _configurationWrapper.GetConfigIntValue("MaxAgeWithoutGrade");
+                var maxGradeForChildcare = _configurationWrapper.GetConfigIntValue("MaxGradeForChildcare");
+                if (schoolGrade == 0 && member.Age <= maxAgeWithoutGrade)
+                {
+                    myChildren.Add(member);
+                }
+                else if (schoolGrade > 0 && schoolGrade <= maxGradeForChildcare)
+                {
+                    myChildren.Add(member);
+                }
             }
+            return myChildren;
         }
 
         public int SchoolGrade(int graduationYear)

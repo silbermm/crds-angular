@@ -131,7 +131,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Last Name", "person-one"},
                     {"Participant_ID", 654321},
                     {"Relationship_ID", 1},
-                    {"Age", 40}
+                    {"Age", 40}, {"HS_Graduation_Year", 0}
                 },
                 new Dictionary<string, object>()
                 {
@@ -141,7 +141,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Last Name", "person-two"},
                     {"Participant_ID", 3333333},
                     {"Relationship_ID", 1},
-                    {"Age", 40}
+                    {"Age", 40} , {"HS_Graduation_Year", 0}
                 }
             };
             _ministryPlatformService.Setup(
