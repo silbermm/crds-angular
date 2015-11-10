@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Net.Http;
-using System.ServiceModel.Security;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
-using System.Web.Http.Results;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models.DTO;
-using RestSharp.Extensions;
 
 namespace crds_angular.Controllers.API
 {
