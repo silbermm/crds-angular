@@ -184,6 +184,7 @@
     <Compile Include="Services\DonorServiceTest.cs" />
     <Compile Include="Services\EzScanCheckScannerServiceTest.cs" />
     <Compile Include="Services\GroupServiceTest.cs" />
+    <Compile Include="Services\LoginServiceTest.cs" />
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\ProgramServiceTest.cs" />
     <Compile Include="Services\ServeServiceTest.cs" />

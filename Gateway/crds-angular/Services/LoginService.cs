@@ -39,16 +39,20 @@ namespace crds_angular.Services
 
         public bool PasswordResetRequest(string email)
         {
-            // use service to get apiuser!!
-            // use api user here because there won't be a user token available
-            var apiUser = this._configurationWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = this._configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            var authData = AuthenticationService.authenticate(apiUser, apiPassword);
-            var token = authData["token"].ToString();
+            int user_ID = 0;
+            int contact_Id = 0;
 
-            // this is really getting the user id -- we need a function to get the contact id by the user id
-            int user_ID = _userService.GetUserIdByEmail(email);
-            int contactId = _contactService.GetContactIdByEmail(email);
+            // validate the email on the server side to avoid erroneous or malicious requests
+            try
+            {
+                user_ID = _userService.GetUserIdByEmail(email);
+                contact_Id = _contactService.GetContactIdByEmail(email);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(string.Format("Could not find email {0} for password reset", JsonConvert.SerializeObject(email, Formatting.Indented)), ex);
+                return false;
+            }
 
             // create a token -- see http://stackoverflow.com/questions/664673/how-to-implement-password-resets
             var resetArray = Encoding.UTF8.GetBytes(Guid.NewGuid() + email + System.DateTime.Now);
@@ -60,14 +64,14 @@ namespace crds_angular.Services
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;
             userUpdateValues["ResetToken"] = cleanToken; // swap out for real implementation
-            _userService.UpdateUser(token, userUpdateValues);
+            _userService.UpdateUser(userUpdateValues);
 
             // add the email here...
             var emailCommunication = new EmailCommunicationDTO
             {
                 FromContactId = 7, // church admin contact id
                 FromUserId = 5, // church admin user id
-                ToContactId = contactId,
+                ToContactId = contact_Id,
                 TemplateId = 13356,
                 MergeData = new Dictionary<string, object>
                     {
@@ -78,18 +82,31 @@ namespace crds_angular.Services
             try
             {
                 _emailCommunication.SendEmail(emailCommunication);
+                return true;
             }
             catch (Exception ex)
             {
                 _logger.Error(string.Format("Could not send email {0} for password reset", JsonConvert.SerializeObject(email, Formatting.Indented)), ex);
+                return false;
             }
-
-            return true;
         }
 
         public bool AcceptPasswordResetRequest(string email, string token, string password)
         {
-            throw new Exception("Not Implemented Yet");
+            // Worked in successor story
+            throw new NotImplementedException();
+        }
+
+        public bool ClearResetToken(string email)
+        {
+            int user_ID = _userService.GetUserIdByEmail(email);
+
+            Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
+            userUpdateValues["User_ID"] = user_ID;
+            userUpdateValues["ResetToken"] = null; // swap out for real implementation
+            _userService.UpdateUser(userUpdateValues);
+
+            return true;
         }
     }
 }

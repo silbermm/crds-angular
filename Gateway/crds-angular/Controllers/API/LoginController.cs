@@ -41,8 +41,6 @@ namespace crds_angular.Controllers.API
             }
             catch (Exception ex)
             {
-                //return null;
-                //var x = ex.ToString();
                 return this.InternalServerError();
             }
         }
@@ -51,7 +49,8 @@ namespace crds_angular.Controllers.API
         [Route("api/resetpasswordverify/")]
         public IHttpActionResult AcceptResetRequest(PasswordResetVerification request)
         {
-            throw new Exception("Not Implemented Yet");
+            // Worked in successor story
+            throw new NotImplementedException();
 
             //try
             //{
@@ -69,7 +68,6 @@ namespace crds_angular.Controllers.API
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
         {
-           
             return Authorized(token =>
             {
                 try
@@ -103,10 +101,12 @@ namespace crds_angular.Controllers.API
             var authData = TranslationService.Login(cred.username, cred.password);
             var token = authData["token"].ToString();
             var exp = authData["exp"].ToString();
+
             if (token == "")
             {
                 return this.Unauthorized();
             }
+
             var userRoles = _personService.GetLoggedInUserRoles(token);
             var p = _personService.GetLoggedInUserProfile(token);
             var r = new LoginReturn
@@ -119,6 +119,8 @@ namespace crds_angular.Controllers.API
                 roles = userRoles,
                 age = p.Age
             };
+
+            _loginService.ClearResetToken(r.userEmail);
 
            //ttpResponseHeadersExtensions.AddCookies();
            

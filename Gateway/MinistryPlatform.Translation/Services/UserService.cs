@@ -53,9 +53,9 @@ namespace MinistryPlatform.Translation.Services
             return (user);
         }
 
-        public void UpdateUser(string token, Dictionary<string, object> userUpdateValues)
+        public void UpdateUser(Dictionary<string, object> userUpdateValues)
         {
-            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userUpdateValues, token);
+            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userUpdateValues, ApiLogin());
         }
 
         public int GetUserIdByEmail(string email)
