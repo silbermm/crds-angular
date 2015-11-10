@@ -179,16 +179,13 @@ namespace crds_angular.test.Services
 
             var relations = new List<GroupSignupRelationships>
             {
-                new GroupSignupRelationships()
-                {
-                    RelationshipId = 111,
-                }
+                new GroupSignupRelationships {RelationshipId = 111}
             };
             groupService.Setup(mocked => mocked.GetGroupSignupRelations(90210)).Returns(relations);
 
             var contactRelations = new List<ContactRelationship>
             {
-                new ContactRelationship()
+                new ContactRelationship
                 {
                     Contact_Id = 333,
                     Relationship_Id = 111,
