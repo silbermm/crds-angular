@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
@@ -24,6 +25,13 @@ namespace crds_angular.Controllers.API
         [AcceptVerbs("POST")]
         public IHttpActionResult SaveRsvp([FromBody] ChildcareRsvpDto saveRsvp)
         {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+                var dataError = new ApiErrorDto("SaveRsvp Data Invalid", new InvalidOperationException("Invalid SaveRsvp Data" + errors));
+                throw new HttpResponseException(dataError.HttpResponseMessage);
+            }
+
             return Authorized(token =>
             {
                 try
