@@ -6,13 +6,13 @@
     <h3 class="subheading visible-print-block">Printed: {{giving_history_controller.currentDate | date:'M/d/yy'}}</h3>
 
     <div class="row push-top" ng-show="giving_history_controller.donation_history && giving_history_controller.donation_view_ready">
-      <household-information profile="giving_history_controller.profile" />
+      <household-information profile="giving_history_controller.profile"></household-information>
 
-      <p class="visible-print-block col-xs-6 text-right">
+      <div class="visible-print-block col-xs-6 text-right">
         <strong>Period : 01/01/{{giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
         <br />
         <div ng-bind-html="$root.MESSAGES.give_disclaimer.content | html"></div>
-      </p>
+      </div>
     </div>
 
     <preloader full-screen='false' ng-show="!giving_history_controller.overall_view_ready"> </preloader>
@@ -84,11 +84,13 @@
 
       <div class="row giving-statement-footer visible-print-block">
         <div class="col-xs-12">
-          <div class="logo">
-            <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
-          </div>
-          <div class="statement-address text-uppercase">
-            <small><div ng-bind-html="$root.MESSAGES.single_line_address.content | html"></div></small>
+          <div class="giving-statement-content clearfix">
+            <div class="giving-statement-logo pull-left">
+              <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
+            </div>
+            <div class="statement-address text-uppercase pull-right">
+              <small><div ng-bind-html="$root.MESSAGES.single_line_address.content | html"></div></small>
+            </div>
           </div>
         </div>
       </div>
