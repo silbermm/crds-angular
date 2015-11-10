@@ -65,12 +65,5 @@ namespace crds_angular.Services
 
             return person;
         }
-
-        public bool ResetPassword(string email)
-        {
-
-
-            return true;
-        }
     }
 }

@@ -45,16 +45,6 @@ namespace crds_angular.Controllers.API
         {
             // Worked in successor story
             throw new NotImplementedException();
-
-            //try
-            //{
-            //    _loginService.AcceptPasswordResetRequest(request.Email, request.Token, request.Password);
-            //    return this.Ok();
-            //}
-            //catch (Exception)
-            //{
-            //    return this.InternalServerError();
-            //}
         }
 
         [ResponseType(typeof(LoginReturn))]
