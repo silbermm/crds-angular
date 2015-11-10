@@ -6,7 +6,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IEventService
     {
-        int registerParticipantForEvent(int participantId, int eventId);
+        int registerParticipantForEvent(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0);
         int unRegisterParticipantForEvent(int participantId, int eventId);
         List<Event> GetEvents(string eventType, string token);
         List<Event> GetEventsByTypeForRange(int eventTypeId, DateTime startDate, DateTime endDate, string token);

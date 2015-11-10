@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int registerParticipantForEvent(int participantId, int eventId)
+        public int registerParticipantForEvent(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
         {
             _logger.Debug("Adding participant " + participantId + " to event " + eventId);
             var values = new Dictionary<string, object>
@@ -42,6 +42,15 @@ namespace MinistryPlatform.Translation.Services
                 {"Event_ID", eventId},
                 {"Participation_Status_ID", _eventParticipantStatusDefaultId},
             };
+
+            if (groupId != 0)
+            {
+                values.Add("Group_ID", groupId);
+            }
+            if (groupParticipantId != 0)
+            {
+                values.Add("Group_Participant_ID", groupParticipantId);
+            }
 
             int eventParticipantId;
             try
