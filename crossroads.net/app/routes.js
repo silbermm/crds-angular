@@ -131,7 +131,7 @@
         parent: 'noSideBar',
         url: '/forgot-password',
         templateUrl: 'login/forgot_password.html',
-        controller: 'PasswordController',
+        controller: 'PasswordController as pwController',
         data: {
           isProtected: false
         }
