@@ -1,5 +1,9 @@
 <div class="col-sm-12 serve-save event-childcare soft-half-top" style="text-align:left"> 
+
+  <h4 ng-bind-html='$root.MESSAGES.generalError.content | html'> 
     
+  </h4> 
+
   <h4> Childcare 
     <svg viewBox="0 0 32 32"
          class="icon icon-question-circle icon-subtle pointer"
@@ -10,9 +14,13 @@
       </use>
     </svg>
   </h4>
+  
+  <ng-form name='childcareEvent.form' ng-submit='childcareEvent.submit()'>
 
-  <div ng-repeat="child in childcareEvent.children" >
-    <childcare-child child='child'> </childcare-child> 
-  </div>
-    
+    <div ng-repeat="child in childcareEvent.children" >
+      <childcare-child child='child'> </childcare-child> 
+    </div>
+  
+    <input type='submit' class='btn btn-primary'>
+  </ng-form>
 </div>

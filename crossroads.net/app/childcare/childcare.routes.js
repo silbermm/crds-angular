@@ -23,37 +23,18 @@
           $stateParams: '$stateParams',
           EventService: 'EventService',
           ChildCareEvents: 'ChildcareEvents',
-          /*CurrentEvent: function($stateParams, EventService, ChildCareEvents) {*/
-            //return EventService.event.get({eventId: $stateParams.eventId}, function(event) {
-              //ChildCareEvents.setEvent(event);
-            //}).$promise;
-          /*}*/
-          CurrentEvent: function(ChildCareEvents) {
-            var event =  {
-              EventTitle: 'Test Event',
-              EventId: 34,
-              EventLocation: 'Oakley',
-              EventType: 'Community',
-              EventStartDate: '12/24/2015 9am',
-              EventEndDate: '12/24/2015 10am',
-              PrimaryContact: 'Matt'
-            };
-            ChildCareEvents.setEvent(event);
-            return event;
+          ChildcareService: 'ChildcareService',
+
+          CurrentEvent: function($stateParams, EventService, ChildCareEvents) {
+            return EventService.event.get({eventId: $stateParams.eventId}, function(event) {
+              ChildCareEvents.setEvent(event);
+            }).$promise;
           },
 
-          ChildcareEvent: function(ChildCareEvents) {
-            var event = {
-              EventTitle: 'Test Childcare Event',
-              EventId: 34343,
-              EventLocation: 'Oakley',
-              EventType: 'Childcare',
-              EventStartDate: '12/24/2015 9am',
-              EventEndDate: '12/24/2015 10am',
-              PrimaryContact: 'Matt'
-            }
-            ChildCareEvents.setChildcareEvent(event);
-            return event;
+          ChildcareEvent: function(ChildCareEvents, ChildcareService, $stateParams) {
+            return ChildcareService.ChildcareEvent.get({eventId: $stateParams.eventId}, function(event) {
+              ChildCareEvents.setChildcareEvent(event);
+            }).$promise;
           },
 
           Children: function(ChildCareEvents) {

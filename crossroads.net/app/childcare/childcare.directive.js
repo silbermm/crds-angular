@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  var moment = require('moment');
+
   module.exports = Childcare;
 
   Childcare.$inject = ['ChildcareEvents'];
@@ -22,9 +24,28 @@
       vm.childcareEvent = ChildcareEvents.childcareEvent;
       vm.children = ChildcareEvents.children;
       vm.event = ChildcareEvents.event;
+      vm.getDate = getDate;
+      vm.getTime = getTime;
+      vm.submit = submit;
 
+      var startDate = moment(vm.event.EventStartDate);
+      var endDate = moment(vm.event.EventEndDate);
 
-      /////////////////////////
+      //////////////////
+
+      function getDate() {
+        return startDate.format('MM/DD/YYYY');
+      }
+
+      function getTime() {
+        var startTime = startDate.format('hh:mma');
+        var endTime = endDate.format('hh:mma');
+        return startTime + ' - ' + endTime;
+      }
+
+      function submit() {
+
+      }
 
     }
   }

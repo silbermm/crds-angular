@@ -3,13 +3,13 @@
 
   module.exports = ChildcareEvents;
 
-  ChildcareEvents.$inject = [];
+  ChildcareEvents.$inject = ['$resource'];
 
   /**
    * Stores a single event or a collection of events
    * that should be resolved in the routes of childcare
    */
-  function ChildcareEvents() {
+  function ChildcareEvents($resource) {
 
     var childCareEvents = {
       childcareEvent: {},

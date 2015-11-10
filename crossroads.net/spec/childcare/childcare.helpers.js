@@ -20,12 +20,16 @@
 
     event: {
       eventId: 1234,
-      eventTitle: 'Test title'
+      eventTitle: 'Test title',
+      EventStartDate: '2015-11-18T20:00:00',
+      EventEndDate: '2015-11-18T21:30:00'
     },
 
     childcareEvent: {
       eventId: 123,
-      eventTitle: 'Test Childcare Title'
+      eventTitle: 'Test Childcare Title',
+      EventStartDate: '2015-11-18T20:00:00',
+      EventEndDate: '2015-11-18T21:30:00'
     },
 
     childcareEvents: [

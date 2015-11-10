@@ -7,6 +7,7 @@
     .config(require('./childcare.routes'))
     .directive('childcare', require('./childcare.directive'))
     .factory('ChildcareEvents', require('./childcareEvents.service'))
+    .factory('ChildcareService', require('./childcare.service'))
     ;
 
   require('./childcare.html');

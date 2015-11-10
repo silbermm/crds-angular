@@ -52,4 +52,19 @@ describe('Childcare Module', function() {
     var isolated = element.isolateScope();
     expect(isolated.childcare.children).toEqual(helpers.children);
   });
+
+  it('should get the correct date in the correct format', function() {
+    var isolated = element.isolateScope();
+    expect(isolated.childcare.getDate()).toEqual('11/18/2015');
+  });
+
+  it('should get the correct time span', function() {
+    var isolated = element.isolateScope();
+    expect(isolated.childcare.getTime()).toEqual('08:00pm - 09:30pm');
+  });
+
+  it('should submit the form', function() {
+
+  });
+
 });
