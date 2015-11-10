@@ -8,6 +8,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         string GetContactEmail(int contactId);
         MyContact GetContactById(int contactId);
         MyContact GetContactByIdCard(string idCard);
+        int GetContactIdByParticipantId(int participantId);
         List<HouseholdMember> GetHouseholdFamilyMembers(int householdId);
         MyContact GetMyProfile(string token);
         int CreateContactForGuestGiver(string emailAddress, string displayName);
@@ -16,5 +17,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         IList<int> GetContactIdByRoleId(int roleId, string token);
         void UpdateContact(int contactId, Dictionary<string, object> profileDictionary, Dictionary<string, object> householdDictionary, Dictionary<string, object> addressDictionary);
         void UpdateContact(int contactId, Dictionary<string, object> profileDictionary);
+        int GetContactIdByEmail(string email);
     }
 }

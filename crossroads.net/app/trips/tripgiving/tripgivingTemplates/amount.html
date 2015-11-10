@@ -16,9 +16,11 @@
           <label>
             <input type="checkbox" name="anonymous" ng-model="tripGiving.dto.anonymous" /> I want to give anonymously
           </label>
-          <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" popover-template="'tripAnonymousPopover.html'">
-            <use xlink:href="#question-circle"></use>
-          </svg>
+          <span popover-template="'tripAnonymousPopover.html'">
+            <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer" >
+              <use xlink:href="#question-circle"></use>
+            </svg>
+          </span>
         </div>
         <div class="form-group">
           <label>Message to {{tripGiving.tripParticipant.participantName}} </label>

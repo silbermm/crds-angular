@@ -479,7 +479,7 @@ namespace crds_angular.test.Services
                 m =>
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Exactly(5));
+            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>(), 0, 0), Times.Exactly(5));
             _opportunityService.Verify(
                 (m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)),
                 Times.Exactly(5));
@@ -556,7 +556,7 @@ namespace crds_angular.test.Services
                 m =>
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>()), Times.Exactly(5));
+            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsAny<int>(), 0, 0), Times.Exactly(5));
             _opportunityService.Verify(
                 (m => m.RespondToOpportunity(47, opportunityId, It.IsAny<string>(), It.IsAny<int>(), signUp)),
                 Times.Exactly(5));
@@ -619,7 +619,7 @@ namespace crds_angular.test.Services
                     m.GetEventsByTypeForRange(eventTypeId, It.IsAny<DateTime>(), It.IsAny<DateTime>(),
                         It.IsAny<string>()), Times.Exactly(1));
 
-            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsIn<int>(expectedEventIds)),
+            _eventService.Verify(m => m.registerParticipantForEvent(47, It.IsIn<int>(expectedEventIds), 0, 0),
                 Times.Exactly(3));
 
             _opportunityService.Verify(
@@ -814,7 +814,7 @@ namespace crds_angular.test.Services
 
             foreach (var mockEvent in mockEvents)
             {
-                _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvent.EventId));
+                _eventService.Setup(m => m.registerParticipantForEvent(mockParticipant.ParticipantId, mockEvent.EventId, 0, 0));
                 _opportunityService.Setup(
                     m =>
                         m.RespondToOpportunity(mockParticipant.ParticipantId, opportunityId, It.IsAny<string>(),

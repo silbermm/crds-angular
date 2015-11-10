@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.PlatformService;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -194,6 +196,22 @@ namespace MinistryPlatform.Translation.Test.Services
                 Assert.IsInstanceOf(typeof (ApplicationException), e);
                 Assert.AreSame(ex, e.InnerException);
             }
+        }
+
+        [Test]
+        public void shouldGetContactFromParticipant()
+        {
+            var participantId = 2375529;
+            var contactId = 2562386;
+            var mockContact = new Dictionary<string, object>
+            {
+                {"Contact_ID", contactId}
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetRecordDict(It.IsAny<int>(), participantId, It.IsAny<string>(), It.IsAny<bool>())).Returns(mockContact);
+
+            var result = _fixture.GetContactIdByParticipantId(participantId);
+            Assert.AreEqual(contactId, result);
         }
     }
 }
