@@ -4,7 +4,6 @@ using System.Linq;
 using crds_angular.Models.Crossroads.Childcare;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
-using crds_angular.Util;
 using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
@@ -70,21 +69,23 @@ namespace crds_angular.Services
 
         public void SaveRsvp(ChildcareRsvpDto saveRsvp)
         {
-            var eventId = saveRsvp.EventId;
-            var participants = saveRsvp.Participants;
             var participantId = 0;
 
             try
             {
-                foreach (var p in participants)
+                foreach (var p in saveRsvp.Participants)
                 {
                     participantId = p;
-                    _eventService.registerParticipantForEvent(participantId, eventId);
+                    if (_eventService.EventHasParticipant(saveRsvp.EventId, participantId))
+                    {
+                        continue;
+                    }
+                    _eventService.registerParticipantForEvent(participantId, saveRsvp.EventId);
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error(string.Format("Save RSVP failed for event ({0}), participant ({1})", eventId, participantId), ex);
+                _logger.Error(string.Format("Save RSVP failed for event ({0}), participant ({1})", saveRsvp.EventId, participantId), ex);
             }
         }
 
