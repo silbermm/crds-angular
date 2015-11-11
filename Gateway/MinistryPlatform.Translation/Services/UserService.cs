@@ -58,12 +58,12 @@ namespace MinistryPlatform.Translation.Services
             MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userUpdateValues, ApiLogin());
         }
 
-        public int GetUserIdByEmail(string email)
+        public int GetUserIdByUsername(string email)
         {
             var records = _ministryPlatformService.GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), ApiLogin(), ("," + email));
             if (records.Count != 1)
             {
-                throw new Exception("User email did not return exactly one user record");
+                throw new ApplicationException("User email did not return exactly one user record");
             }
 
             var record = records[0];
