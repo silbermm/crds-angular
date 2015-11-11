@@ -33,7 +33,18 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int registerParticipantForEvent(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
+        public int RegisterParticipantIfNotRegistered(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
+        {
+            var eventParticipantId = GetEventParticipantRecordId(eventId, participantId);
+            if (eventParticipantId != 0)
+            {
+                return eventParticipantId;
+            }
+            eventParticipantId = RegisterParticipantForEvent(participantId, eventId);
+            return eventParticipantId;
+        }
+
+        public int RegisterParticipantForEvent(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
         {
             _logger.Debug("Adding participant " + participantId + " to event " + eventId);
             var values = new Dictionary<string, object>
@@ -83,7 +94,7 @@ namespace MinistryPlatform.Translation.Services
             return (eventParticipantId);
         }
 
-        public int unRegisterParticipantForEvent(int participantId, int eventId)
+        public int UnregisterParticipantForEvent(int participantId, int eventId)
         {
             _logger.Debug("Removing participant " + participantId + " from event " + eventId);
 
@@ -143,8 +154,8 @@ namespace MinistryPlatform.Translation.Services
         public int GetEventParticipantRecordId(int eventId, int participantId)
         {
             var search = "," + eventId + "," + participantId;
-            var participants = _ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).Single();
-            return (int) participants["Event_Participant_ID"];
+            var participant = _ministryPlatformService.GetPageViewRecords("EventParticipantByEventIdAndParticipantId", ApiLogin(), search).FirstOrDefault();
+            return participant == null ? 0 : participant.ToInt("Event_Participant_ID");
         }
 
         public bool EventHasParticipant(int eventId, int participantId)

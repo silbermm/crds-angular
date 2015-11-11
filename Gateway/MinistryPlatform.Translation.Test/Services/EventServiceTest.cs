@@ -264,7 +264,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Participation_Status_ID", EventParticipantStatusDefaultID}
             };
 
-            var eventParticipantId = fixture.registerParticipantForEvent(123, 456);
+            var eventParticipantId = fixture.RegisterParticipantForEvent(123, 456);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
                 EventParticipantPageId,

@@ -500,11 +500,7 @@ namespace crds_angular.Services
             var destinationDocuments = _destinationService.DocumentsForDestination(destinationId);
             foreach (var e in events)
             {
-                if (_mpEventService.EventHasParticipant(e.EventId, applicant.ParticipantId))
-                {
-                    continue;
-                }
-                var eventParticipantId = _mpEventService.registerParticipantForEvent(applicant.ParticipantId, e.EventId);
+                var eventParticipantId=_mpEventService.RegisterParticipantIfNotRegistered(e.EventId, applicant.ParticipantId);
                 _eventParticipantService.AddDocumentsToTripParticipant(destinationDocuments, eventParticipantId);
             }
         }
