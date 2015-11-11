@@ -182,8 +182,7 @@ namespace crds_angular.Services
             var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
             if (refund != null && refund.Charge != null)
             {
-                donation.Status = refund.Charge.Status.Equals("succeeded") ? DonationStatus.Refunded : DonationStatus.Pending;
-                return refund.Charge;
+               return refund.Charge;
             }
 
             return null;
