@@ -39,7 +39,7 @@ namespace crds_angular.Services
             try
             {
                 user_ID = _userService.GetUserIdByEmail(email);
-                contact_Id = _contactService.GetContactIdByEmail(email);
+                contact_Id = _userService.GetContactIdByUserId(user_ID);
             }
             catch (Exception ex)
             {
