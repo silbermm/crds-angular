@@ -9,8 +9,6 @@
     '$rootScope',
     '$log',
     '$timeout',
-    '$location',
-    '$window',
     '$anchorScroll',
     'MESSAGES',
     'ProfileReferenceData',
@@ -23,8 +21,6 @@
       $rootScope,
       $log,
       $timeout,
-      $location,
-      $window,
       $anchorScroll,
       MESSAGES,
       ProfileReferenceData,
@@ -67,9 +63,6 @@
     vm.validation = Validation;
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
-
-    //$rootScope.$on('$stateChangeStart', stateChangeStart);
-    //$window.onbeforeunload = onBeforeUnload;
 
     activate();
 
@@ -230,21 +223,6 @@
       return show;
     }
 
-    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
-      if (vm.pform.$dirty || vm.householdForm.$dirty) {
-        //TODO: fix tabs to ensure they are canceled as well
-        if (!$window.confirm('Are you sure you want to leave this page?')) {
-          event.preventDefault();
-          return;
-        }
-      }
-    }
-
-    function onBeforeUnload() {
-      if (vm.pform.$dirty || vm.householdForm.$dirty) {
-        return '';
-      }
-    }
   }
 
 })();
