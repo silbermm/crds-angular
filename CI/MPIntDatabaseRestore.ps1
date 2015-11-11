@@ -9,7 +9,7 @@
 Param (
   [string]$DBServer = "mp-int-db.cloudapp.net", # default to mp-int-db
   [string]$DBName = "MinistryPlatform", # default to MinistryPlatform
-  [string]$BackupPath = $(throw "-BackupPath (backup file path on the DBServer) is required."),
+  [string]$BackupPath = "D:\SqlServer\Backup",
   [string]$DBUser = $(Get-ChildItem Env:MP_TARGET_DB_USER).Value, # Default to environment variable
   [string]$DBPassword = $(Get-ChildItem Env:MP_TARGET_DB_PASSWORD).Value # Default to environment variable
 )

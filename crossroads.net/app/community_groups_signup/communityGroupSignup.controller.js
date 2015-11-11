@@ -89,10 +89,24 @@
               // I now need to get the group-detail again for the wait list there are are two new possible cases
               // 1. the user is a already a member
               // 2. the user is not yet a member
+              // 3. DE616 the user is already member of non-wait list group
+              var originalMembers = vm.response;
               vm.groupDetails = Group.Detail.get({
                 groupId: vm.groupId
               }).$promise.then(function(response) {
-                vm.response = response.SignUpFamilyMembers;
+                var familyMembers = response.SignUpFamilyMembers;
+                _.forEach(familyMembers, function(member) {
+                  if (!member.userInGroup) {
+                    var m = _.find(originalMembers, function(i) {
+                      return i.participantId === member.participantId;
+                    });
+
+                    member.userInGroup = m.userInGroup;
+                  }
+                });
+
+                vm.response = familyMembers;
+                vm.childCareAvailable = response.childCareInd;
                 if (allSignedUp(response)) {
                   vm.alreadySignedUp = true;
                 }
@@ -172,7 +186,7 @@
     function hasParticipantID(array) {
       var result = {};
       result.partId = [];
-      if (array.length > 0) {
+      if (array.length > 1) {
         for (var i = 0; i < array.length; i++) {
           if (array[i].newAdd !== undefined && array[i].newAdd !== '') {
             result.partId[result.partId.length] = {
@@ -181,6 +195,11 @@
             };
           }
         }
+      } else if (array.length === 1) {
+        result.partId[0] = {
+          participantId: array[0].participantId,
+          childCareNeeded: array[0].childCareNeeded
+        };
       }
 
       return result;
@@ -238,5 +257,6 @@
 
       });
     }
+
   }
 })();

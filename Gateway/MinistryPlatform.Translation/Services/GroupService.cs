@@ -14,6 +14,9 @@ namespace MinistryPlatform.Translation.Services
     public class GroupService : BaseService, IGroupService
     {
         private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly ICommunicationService _communicationService;
+        private readonly IContactService _contactService;
+        private readonly IContentBlockService _contentBlockService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
@@ -23,17 +26,21 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
+        private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupConfirmationTemplateId"));
 
         private readonly int GroupParticipantQualifiedServerPageView =
             Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
             this._configurationWrapper = configurationWrapper;
+            this._communicationService = communicationService;
+            this._contactService = contactService;
+            this._contentBlockService = contentBlockService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -133,6 +140,13 @@ namespace MinistryPlatform.Translation.Services
                 if (gcc != null)
                 {
                     g.ChildCareAvailable = (Boolean) gcc;
+                }
+
+                object gc = null;
+                groupDetails.TryGetValue("Congregation_ID_Text", out gc);
+                if (gc != null)
+                {
+                    g.Congregation = (string)gc;
                 }
 
                 if (g.WaitList)
@@ -271,6 +285,42 @@ namespace MinistryPlatform.Translation.Services
                 GroupId = record.ToInt("Group_ID"),
                 Name = record.ToString("Group_Name")
             }).ToList();
+        }
+
+        public void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool childcareNeeded)
+        {
+            
+            var emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
+            var fromAddress = _communicationService.GetEmailFromContactId(7);
+            var toContact = _contactService.GetContactIdByParticipantId(participantId);
+            var toContactInfo = _contactService.GetContactById(toContact);
+            var groupInfo = getGroupDetails(groupId);
+            var churchAdminContactId = Convert.ToInt32(AppSettings("ChurchAdminContact"));
+
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Nickname", toContactInfo.Nickname},
+                {"Group_Name", groupInfo.Name},
+                {"Congregation_Name", groupInfo.Congregation},
+                {"Childcare_Needed", (childcareNeeded) ? _contentBlockService["communityGroupChildcare"].Content : ""}
+            };
+
+            var confirmation = new Communication 
+            { 
+                EmailBody = emailTemplate.Body, 
+                EmailSubject = emailTemplate.Subject,
+                AuthorUserId = churchAdminContactId,
+                DomainId = Convert.ToInt32(AppSettings("DomainId")),
+                FromContactId = churchAdminContactId,
+                FromEmailAddress = fromAddress,
+                MergeData = mergeData,
+                ReplyContactId = churchAdminContactId,
+                ReplyToEmailAddress = fromAddress,
+                TemplateId = CommunityGroupConfirmationTemplateId,
+                ToContactId = toContact,
+                ToEmailAddress = toContactInfo.Email_Address
+            };
+            _communicationService.SendMessage(confirmation);
         }
     }
 }

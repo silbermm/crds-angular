@@ -260,9 +260,19 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
+    <Compile Include="Controllers\API\ChildcareController.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
+    <Compile Include="Models\Crossroads\Childcare\ChildcareRsvpDto.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
+    <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\Interfaces\IEventService.cs" />
+    <Compile Include="Models\Json\PasswordResetRequest.cs" />
+    <Compile Include="Models\Json\PasswordResetVerification.cs" />
+    <Compile Include="Services\Interfaces\ILoginService.cs" />
+    <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\ChildcareService.cs" />
+    <Compile Include="Services\Interfaces\IChildcareService.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
     <Compile Include="Util\FileResult.cs" />
@@ -270,7 +280,7 @@
     <Compile Include="Controllers\API\EmailCommunicationController.cs" />
     <Compile Include="Controllers\API\DonationController.cs" />
     <Compile Include="Controllers\API\DonorController.cs" />
-    <Compile Include="Controllers\API\EventLocationController.cs" />
+    <Compile Include="Controllers\API\EventController.cs" />
     <Compile Include="Controllers\API\GroupController.cs" />
     <Compile Include="Controllers\API\CheckScannerController.cs" />
     <Compile Include="Controllers\API\ProgramController.cs" />
@@ -444,6 +454,8 @@
     <Compile Include="Services\VolunteerApplicationService.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Util\CSV.cs" />
+    <Compile Include="Util\DateTimeWrapper.cs" />
+    <Compile Include="Util\Interfaces\IDateTime.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

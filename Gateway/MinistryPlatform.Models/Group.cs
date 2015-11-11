@@ -17,6 +17,7 @@ namespace MinistryPlatform.Models
         public string PrimaryContact { get; set; }
         public int EventTypeId { get; set; }
         public bool ChildCareAvailable { get; set; }
+        public string Congregation { get; set; }
 
         public Group()
         {
