@@ -2,6 +2,7 @@
 {
     public class Participant
     {
+        public int ContactId { get; set; }
         public int ParticipantId { get; set;}
         public string EmailAddress { get; set; }
         public string PreferredName { get; set; }

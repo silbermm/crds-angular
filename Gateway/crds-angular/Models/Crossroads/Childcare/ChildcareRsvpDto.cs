@@ -9,6 +9,6 @@ namespace crds_angular.Models.Crossroads.Childcare
         public int EventId { get; set; }
 
         [JsonProperty(PropertyName = "participants")]
-        public List<int> Participants { get; set; }
+        public List<int> ChildParticipants { get; set; }
     }
 }

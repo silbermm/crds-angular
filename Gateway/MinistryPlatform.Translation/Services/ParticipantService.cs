@@ -47,6 +47,7 @@ namespace MinistryPlatform.Translation.Services
             }
             var participant = new Participant
             {
+                ContactId = result.ToInt("Contact_ID"),
                 ParticipantId = result.ToInt("dp_RecordID"),
                 EmailAddress = result.ToString("Email_Address"),
                 PreferredName = result.ToString("Nickname"),

@@ -36,7 +36,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    _childcareService.SaveRsvp(saveRsvp);
+                    _childcareService.SaveRsvp(saveRsvp, token);
                     return Ok();
                 }
                 catch (Exception e)

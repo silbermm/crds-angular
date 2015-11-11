@@ -426,7 +426,7 @@ namespace crds_angular.Services
             Opportunity previousOpportunity = null;
 
             //Try to register this user for the event
-            _eventService.registerParticipantForEvent(participant.ParticipantId, e.EventId);
+            _eventService.RegisterParticipantForEvent(participant.ParticipantId, e.EventId);
 
             // Make sure we are only rsvping for 1 opportunity by removing all existing responses
             deletedRSVPS.AddRange(from oid in opportunityIds
@@ -472,7 +472,7 @@ namespace crds_angular.Services
             {
                 templateId = AppSetting("RsvpNoTemplate");
                 //opportunityId = opportunityIds.First();
-                _eventService.unRegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+                _eventService.UnregisterParticipantForEvent(participant.ParticipantId, e.EventId);
             }
             catch (ApplicationException ex)
             {
