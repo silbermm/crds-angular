@@ -54,8 +54,8 @@ function htmlReplace() {
     }))
     .pipe(gulp.dest('./'));
 
-    gulp.src('./lib/load-image.all.min.js')
-      .pipe(gulp.dest('./assets'));
+  gulp.src('./lib/load-image.all.min.js')
+    .pipe(gulp.dest('./assets'));
 }
 
 var browserSyncCompiles = 0;
@@ -82,7 +82,7 @@ gulp.task('build-dev', ['webpack:build-dev'], function() {
   gulp.watch(watchPatterns, ['webpack:build-dev']);
 });
 
-gulp.task('build-browser-sync', function() {
+gulp.task('build-browser-sync', ['icons'], function() {
   webPackDevConfigs.forEach(function(element) {
 
     element.devtool = 'eval';
@@ -224,9 +224,11 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
     }))
     .pipe(gulp.dest('./'));
 
+  gulp.src('./lib/load-image.all.min.js')
+    .pipe(gulp.dest('./assets'));
 
-	gutil.log('[start]', 'Access crossroads.net at http://localhost:8080/#');
-	gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
+  gutil.log('[start]', 'Access crossroads.net at http://localhost:8080/#');
+  gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
 });
 
 gulp.task('webpack:build', ['icons', 'robots', 'apache-site-config'], function(callback) {
