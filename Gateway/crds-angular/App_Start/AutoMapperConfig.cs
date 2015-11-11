@@ -117,7 +117,7 @@ namespace crds_angular.App_Start
 
                     if (src.donationAmt < 0 )
                     {
-                        dest.Status = src.donationStatus == 1 ? (DonationStatus)1 : (DonationStatus)5;
+                        dest.Status = src.donationStatus == 1 ? DonationStatus.Pending : DonationStatus.Refunded;
                     }
                   
                 });
