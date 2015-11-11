@@ -85,6 +85,46 @@ namespace crds_angular.Services
             }
         }
 
+        private void SendConfirmation(int childcareEventId)
+        {
+            var templateId = _configurationWrapper.GetConfigIntValue("ChildcareConfirmationTemplate");
+            var authorUserId = _configurationWrapper.GetConfigIntValue("EmailAuthorId");
+            var template = _communicationService.GetTemplate(templateId);
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            const int domainId = 1;
+
+            var childEvent = _eventService.GetEvent(childcareEventId);
+           
+            if (childEvent.ParentEventId == null)
+            {
+                throw new ApplicationException("SendConfirmation: Parent Event Not Found.");
+            }
+            var parentEventId = (int) childEvent.ParentEventId;
+            var parentEvent = _eventService.GetEvent(parentEventId);
+            var replyToContact = ReplyToContact(childEvent);
+
+            var communication = FormatCommunication(authorUserId, domainId, template, fromContact, replyToContact, participant, mergeData);
+            try
+            {
+                _communicationService.SendMessage(communication);
+            }
+            catch (Exception ex)
+            {
+                LogError(participant, ex);
+            }
+        }
+
+        private Dictionary<string, object> SetConfirmationMergeData(Event childcareEvent, string kidsTable)
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"EventTitle", childcareEvent.EventTitle},
+                {"EventStartDate", childcareEvent.EventStartDate.ToString("g")},
+                {"ChildNames", kidsTable}
+            };
+            return mergeData;
+        }
+
         public int SchoolGrade(int graduationYear)
         {
             if (graduationYear == 0)

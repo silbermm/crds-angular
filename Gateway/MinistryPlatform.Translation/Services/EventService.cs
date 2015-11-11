@@ -134,6 +134,7 @@ namespace MinistryPlatform.Translation.Services
                     EventId = record.ToInt("Event_ID"),
                     EventStartDate = record.ToDate("Event_Start_Date"),
                     EventTitle = record.ToString("Event_Title"),
+                    ParentEventId = record.ToNullableInt("Parent_Event_ID"),
                     PrimaryContact = new Contact
                     {
                         ContactId = record.ToInt("Contact_ID"),

@@ -13,6 +13,7 @@ namespace MinistryPlatform.Models
         public string EventType { get; set; }
         public DateTime EventStartDate { get; set; }
         public DateTime EventEndDate { get; set; }
+        public int? ParentEventId { get; set; }
         public Contact PrimaryContact { get; set; }
 
         public IList<int> Participants

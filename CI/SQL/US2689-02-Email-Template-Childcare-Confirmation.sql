@@ -24,7 +24,7 @@ VALUES
      13548
     ,1
     ,'Childcare Confirmation'
-    ,'Thanks for letting us know your childcare needs for [GroupName] meeting on [EventStartDate]. We''ve marked you down for [ChildNames]'
+    ,'Thanks for letting us know your childcare needs for [EventTitle] meeting on [EventStartDate]. We''ve marked you down for [ChildNames]'
     ,1
     ,GetDate()
     ,7
