@@ -9,7 +9,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Page_ID]
            ,[View_Clause])
      VALUES
-           (92253
+           (2195
 		       ,'Donors Without Email Address'
            ,299
            ,'Contact_ID_Table.[Email_Address] IS NULL AND
@@ -29,7 +29,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Page_ID]
            ,[View_Clause])
      VALUES
-           (92254
+           (2195
 		   ,'Donors Without Mailing Address'
            ,299
            ,'(Contact_ID_Table_Household_ID_Table_Address_ID_Table.[Address_Line_1] IS NULL OR
