@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Childcare;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
+using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
+using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.Services
 {
@@ -16,19 +20,95 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IEventParticipantService _eventParticipantService;
         private readonly IEventService _eventService;
+        private readonly IParticipantService _participantService;
+        private readonly IServeService _serveService;
+        private readonly IDateTime _dateTimeWrapper;
+
         private readonly ILog _logger = LogManager.GetLogger(typeof (ChildcareService));
 
         public ChildcareService(IEventParticipantService eventParticipantService,
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-                                IEventService eventService)
+                                IEventService eventService,
+                                IParticipantService participantService,
+                                IServeService serveService,
+                                IDateTime dateTimeWrapper)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
             _eventService = eventService;
+            _participantService = participantService;
+            _serveService = serveService;
+            _dateTimeWrapper = dateTimeWrapper;
+        }
+
+        public List<FamilyMember> MyChildren(string token)
+        {
+            var family = _serveService.GetImmediateFamilyParticipants(token);
+            var myChildren = new List<FamilyMember>();
+
+            foreach (var member in family)
+            {
+                var schoolGrade = SchoolGrade(member.HighSchoolGraduationYear);
+                var maxAgeWithoutGrade = _configurationWrapper.GetConfigIntValue("MaxAgeWithoutGrade");
+                var maxGradeForChildcare = _configurationWrapper.GetConfigIntValue("MaxGradeForChildcare");
+                if (schoolGrade == 0 && member.Age <= maxAgeWithoutGrade)
+                {
+                    myChildren.Add(member);
+                }
+                else if (schoolGrade > 0 && schoolGrade <= maxGradeForChildcare)
+                {
+                    myChildren.Add(member);
+                }
+            }
+            return myChildren;
+        }
+
+        public void SaveRsvp(ChildcareRsvpDto saveRsvp)
+        {
+            var participantId = 0;
+
+            try
+            {
+                foreach (var p in saveRsvp.Participants)
+                {
+                    participantId = p;
+                    if (_eventService.EventHasParticipant(saveRsvp.EventId, participantId))
+                    {
+                        continue;
+                    }
+                    _eventService.registerParticipantForEvent(participantId, saveRsvp.EventId);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(string.Format("Save RSVP failed for event ({0}), participant ({1})", saveRsvp.EventId, participantId), ex);
+            }
+        }
+
+        public int SchoolGrade(int graduationYear)
+        {
+            if (graduationYear == 0)
+            {
+                return 0;
+            }
+            var today = _dateTimeWrapper.Today;
+            var todayMonth = today.Month;
+            var yearForCalc = today.Year;
+            if (todayMonth > 7)
+            {
+                yearForCalc = today.Year + 1;
+            }
+
+            var grade = 12 - (graduationYear - yearForCalc);
+            if (grade <= 12 && grade >= 0)
+            {
+                return grade;
+            }
+            return 0;
         }
 
         public void SendRequestForRsvp()
@@ -58,6 +138,18 @@ namespace crds_angular.Services
             }
         }
 
+        public Event GetMyChildcareEvent(int parentEventId, string token)
+        {
+            var participantRecord = _participantService.GetParticipantRecord(token);
+            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
+            {
+                return null;
+            }
+            // token user is part of parent event, retrieve childcare event
+            var childcareEvent = GetChildcareEvent(parentEventId);
+            return childcareEvent;
+        }
+
         private Event GetChildcareEvent(int parentEventId)
         {
             var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
@@ -65,7 +157,7 @@ namespace crds_angular.Services
 
             if (childcareEvents.Count == 0)
             {
-                throw new ApplicationException(string.Format("Childcare Event Does Not Exist, parent event id: {0}", parentEventId));
+                return null;
             }
             if (childcareEvents.Count > 1)
             {

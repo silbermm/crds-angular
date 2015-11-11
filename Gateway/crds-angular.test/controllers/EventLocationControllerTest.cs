@@ -8,16 +8,19 @@ using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
+using IEventService = crds_angular.Services.Interfaces.IEventService;
 
 namespace crds_angular.test.controllers
 {
     [TestFixture]
     internal class EventLocationControllerTest
     {
-        private EventLocationController controller;
+        private EventController controller;
 
         private Mock<IMinistryPlatformService> _ministryPlatfromServiceMock;
         private Mock<IApiUserService> _apiUserService;
+        private Mock<IEventService> _eventService;
+
 
 
         [SetUp]
@@ -28,7 +31,9 @@ namespace crds_angular.test.controllers
             _apiUserService = new Mock<IApiUserService>();
             _apiUserService.Setup(m => m.GetToken()).Returns("something");
 
-            controller = new EventLocationController(_ministryPlatfromServiceMock.Object, _apiUserService.Object);
+            _eventService = new Mock<IEventService>();
+
+            controller = new EventController(_ministryPlatfromServiceMock.Object, _apiUserService.Object, _eventService.Object);
         }
 
 

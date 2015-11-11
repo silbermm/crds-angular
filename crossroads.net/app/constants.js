@@ -13,7 +13,8 @@
       MPTOOLS: 'crossroads.mptools',
       PROFILE: 'crossroads.profile',
       MEDIA: 'crossroads.media',
-      COMMUNITY_GROUPS: 'crossroads.community'
+      COMMUNITY_GROUPS: 'crossroads.community',
+      CHILDCARE: 'crossroads.childcare'
     },
     ATTRIBUTE_TYPE_IDS: {
       ABUSE_HISTORY: 69,
