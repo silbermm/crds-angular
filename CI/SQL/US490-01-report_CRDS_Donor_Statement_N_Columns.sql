@@ -38,6 +38,10 @@ SET FMTONLY OFF
 CREATE TABLE #Campaigns (ID INT);
 INSERT INTO #Campaigns SELECT CONVERT(INT, Item) FROM dp_Split(@CampaignIDs, ',');
 
+-- Remove the "None" selection from the campaign IDs.
+-- "None" is added as a valid value in dbo.api_CRDS_MPP_GetPledgeCampaigns as a hack to workaround
+-- the fact that SSRS requires a multi-select dropdown to have a value, but in this case, we want to
+-- allow the user to not choose any campaign.
 DELETE FROM #Campaigns WHERE ID < 0;
 
 DECLARE @Campaign_Count INT;

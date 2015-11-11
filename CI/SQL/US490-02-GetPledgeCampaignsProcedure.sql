@@ -18,6 +18,10 @@ ALTER PROCEDURE [dbo].[api_CRDS_MPP_GetPledgeCampaigns]
 	@DomainID varchar(40)
 AS
 BEGIN
+	-- Add a "None" selection from the campaigns.
+	-- "None" is added as a valid value in dbo.api_CRDS_MPP_GetPledgeCampaigns as a hack to workaround
+	-- the fact that SSRS requires a multi-select dropdown to have a value, but in this case, we want to
+	-- allow the user to not choose any campaign.
 	SELECT
 		 -1 AS Sort_Order
 		,-1 AS Pledge_Campaign_ID
