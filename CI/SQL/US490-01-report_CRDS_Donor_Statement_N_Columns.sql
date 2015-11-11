@@ -271,6 +271,7 @@ FROM (SELECT Top 100 PERCENT D.Donation_ID
 	 LEFT OUTER JOIN Contacts PLDoC ON PLDoC.Contact_ID = PLDo.Contact_ID
 
 	WHERE Year(Donation_Date) = @StmtYr
+	 AND Donation_Status_ID = 2 -- Deposited
 	 AND Donation_Date < @ThroughDate+1
 	 AND @DomainID = Dom.Domain_GUID
 	 --AND D.Payment_Type_ID <> 6 --Omit Non Cash

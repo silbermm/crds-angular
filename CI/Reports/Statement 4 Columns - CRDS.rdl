@@ -981,7 +981,6 @@
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell>
@@ -2983,7 +2982,7 @@
                             </FilterValues>
                           </Filter>
                           <Filter>
-                            <FilterExpression>=IIF(Parameters!Print.Value=0,0,IIF(Ceiling((CountDistinct(Fields!Donation_ID.Value) + (CountDistinct(Fields!Campaign_Name.Value) * 4))/Parameters!RowsPerPage.Value) &gt; 4, 4, Ceiling((CountDistinct(Fields!Donation_ID.Value) + (CountDistinct(Fields!Campaign_Name.Value) * 4))/Parameters!RowsPerPage.Value)))</FilterExpression>
+                            <FilterExpression>=IIF(Parameters!Print.Value=0,0,IIF(Ceiling((CountDistinct(Fields!Donation_ID.Value) + (CountDistinct(Fields!Campaign_Name.Value) * 5))/Parameters!RowsPerPage.Value) &gt; 4, 4, Ceiling((CountDistinct(Fields!Donation_ID.Value) + (CountDistinct(Fields!Campaign_Name.Value) * 5))/Parameters!RowsPerPage.Value)))</FilterExpression>
                             <Operator>Equal</Operator>
                             <FilterValues>
                               <FilterValue DataType="Integer">=Parameters!Print.Value</FilterValue>
@@ -3082,6 +3081,7 @@
     <ReportParameter Name="UserID">
       <DataType>String</DataType>
       <Prompt>User ID</Prompt>
+      <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="PageID">
       <DataType>Integer</DataType>
@@ -3164,6 +3164,7 @@
         </Values>
       </DefaultValue>
       <Prompt>Rows Per Page</Prompt>
+      <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="StatementSettingsID">
       <DataType>Integer</DataType>
