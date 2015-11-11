@@ -16,7 +16,7 @@ param (
 $exitCode = 0
 $SQLCommonParams = @("-U", $DBUser, "-P", $DBPassword, "-S", $DBServer, "-b")
 
-Get-ChildItem $path | Foreach-Object {
+Get-ChildItem $path -recurse -filter *sql | Foreach-Object {
   $hashObj = Get-FileHash $_.FullName -Algorithm MD5
   $hash = $hashObj.hash
   #Store new scripts in the DB

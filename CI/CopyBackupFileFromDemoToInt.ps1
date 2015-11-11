@@ -8,8 +8,8 @@
 Param (
   [string]$DBServer = "mp-int-db.cloudapp.net", # default to mp-int-db
   [string]$DBName = "MinistryPlatform", # default to MinistryPlatform
-  [string]$BackupPath = $(throw "-BackupPath (backup file path) is required."),
-  [string]$DestinationPath = $(throw "-DestinationPath (target directory on remote server) is required.")
+  [string]$BackupPath = "/cygdrive/E/Program Files/Microsoft SQL Server/MSSQL11.MSSQLSERVER/MSSQL/Backup",
+  [string]$DestinationPath = "/cygdrive/D/SQLServer/Backup"
 )
 
 $exitCode = 0;

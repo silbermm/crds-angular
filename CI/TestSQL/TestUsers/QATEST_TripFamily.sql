@@ -1,6 +1,24 @@
 USE [MinistryPlatform]
 GO
 
+--Get the required data to add to our contact. 
+Declare @houseHoldID as int
+set @houseHoldID = (select houseHold_ID from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+Declare @participantID as int
+set @participantID = (select participant_record from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+Declare @userAccount as int
+set @userAccount = (select user_account from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+--Update old contact record so we can delete it. 
+UPDATE [dbo].Contacts
+SET Household_ID = null, Participant_Record = null, User_Account = null;
+WHERE email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+--Delete the old contact record
+DELETE FROM [dbo].Contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife';
+
 --Address
 SET IDENTITY_INSERT [dbo].[Addresses] ON;
 
@@ -13,16 +31,10 @@ INSERT INTO [dbo].Addresses
 
 SET IDENTITY_INSERT [dbo].[Addresses] OFF;
 
---Household
-SET IDENTITY_INSERT [dbo].[Households] ON;
-
-DECLARE @houseHoldID as int
-set @houseHoldID = IDENT_CURRENT('Households')+1;
-
-INSERT INTO [dbo].Households (Household_ID,  Household_Name,Address_ID,    Home_Phone,Domain_ID,Congregation_ID,Care_Person,Household_Source_ID,Family_Call_Number,Household_Preferences,Home_Phone_Unlisted,Home_Address_Unlisted,Bulk_Mail_Opt_Out,_Last_Donation,_Last_Activity,__ExternalHouseholdID,__ExternalBusinessID) 
-VALUES 						 (@houseHoldID,'Strife'        ,@addressId,'123-765-4323',1        ,6              ,null       ,38                 ,null              ,null                 ,null               ,null                 ,0                ,null          ,null          ,null                 ,null);
-
-SET IDENTITY_INSERT [dbo].[Households] OFF;
+--Household updates
+UPDATE [dbo].Households 
+SET Address_ID = @addressID, Home_Phone = '123-765-4323', Congregation_ID = 6
+WHERE houseHold_ID = @houseHoldID;
 
 --Cloud Strife Contact
 SET IDENTITY_INSERT [dbo].[Contacts] ON;
@@ -36,68 +48,45 @@ set @contactID = 100000000;
 
 INSERT INTO [dbo].Contacts 
 (Contact_ID,Company,Company_Name,Display_Name   ,Prefix_ID,First_Name,Middle_Name,Last_Name   ,Suffix_ID,Nickname ,Date_of_Birth   ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                  ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone ,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID ,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
-(@contactID,0      ,null        ,'Strife, Cloud',1        ,'Cloud'   ,'S'        ,'Strife'    ,null     ,'Cloud'  ,{d '1975-01-01'},1        ,2                ,1                ,@houseHoldID,1                    ,null              ,null        ,'mpcrds+CloudStrife@gmail.com' ,null          ,0                 ,0               ,'513-654-8745',null          ,null                 ,'555-365-4125',null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()      ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+(@contactID,0      ,null        ,'Strife, Cloud',1        ,'Cloud'   ,'S'        ,'Strife'    ,null     ,'Cloud'  ,{d '1975-01-01'},1        ,2                ,1                ,@houseHoldID,1                    ,@participantID    ,null        ,'mpcrds+CloudStrife@gmail.com' ,null          ,0                 ,0               ,'513-654-8745',null          ,null                 ,'555-365-4125',null       ,null     ,@userAccount,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()      ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+
 SET IDENTITY_INSERT [dbo].[Contacts] OFF;
 
 --This command resets the identity value so that if someone adds contacts a big ID. 
 DBCC CHECKIDENT (Contacts, reseed, @currentContactId);
 
---Cloud Strife Participant Record
-SET IDENTITY_INSERT [dbo].[Participants] ON;
-
-DECLARE @partID as int
-set @partID = IDENT_CURRENT('Participants')+1;
-
-INSERT INTO [dbo].Participants 
-(Participant_ID,Contact_ID,Participant_Type_ID,Attend_Start_Date,Participant_Start_Date    ,Participant_End_Date,Notes                       ,Domain_ID,__ExternalPersonID,_First_Attendance_Ever,_Second_Attendance_Ever,_Third_Attendance_Ever,_Last_Attendance_Ever) VALUES
-(@partID       ,@contactID,4                  ,null             ,{ts '2015-07-02 08:15:05'},null                ,'Created by Add Family Tool',1        ,null              ,null                  ,null                   ,null                  ,null                 );
-
-SET IDENTITY_INSERT [dbo].[Participants] OFF;
-
 -- Cloud Strife Donor RECORD
 SET IDENTITY_INSERT [dbo].[Donors] ON;
 
-DECLARE @donor_id as int
-set @donor_id =IDENT_CURRENT('Donors')+1;
-
 INSERT INTO [dbo].Donors 
-( Donor_ID,Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
-(@donor_id,@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
+(Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
+(@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
 
 SET IDENTITY_INSERT [dbo].[Donors] OFF;
 
---Cloud Strife User Record
-SET IDENTITY_INSERT [dbo].[Dp_Users] ON;
-
-DECLARE @userID as int
-set @userID = IDENT_CURRENT('Dp_Users')+1;
-
-INSERT INTO [dbo].dp_users 
-(User_ID,User_Name                      ,User_Email                     ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
-(@userID,'mpcrds+CloudStrife@gmail.com' ,'mpcrds+CloudStrife@gmail.com' ,'Cloud'     ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID()  ,null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0             ,0               ,0               ,0               );
-
-SET IDENTITY_INSERT [dbo].[Dp_Users] OFF;
-
---Cloud Strife User ROLE
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] ON;
-
-DECLARE @user_role_id as int
-set @user_role_id =IDENT_CURRENT('Dp_User_Roles')+1;
-
-INSERT INTO [dbo].Dp_User_Roles (User_Role_ID,User_ID,Role_ID,Domain_ID) 
-VALUES                         (@user_role_id,@userID,39    ,1);
-
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] OFF;
-
 --Cloud Strife Updates
-update [dbo].Contacts set Participant_Record = @partID where Contact_ID = @contactID;
-update [dbo].Contacts set User_Account = @userID where Contact_ID = @contactID;
 update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
 GO
 
 --Household for Tifa Lockhart
 DECLARE @houseHoldID as int
-set @houseHoldID = (select houseHold_ID from Households where Household_Name = 'Strife');
+set @houseHoldID = (select houseHold_ID from Contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+--Participant Record for Tifa
+Declare @participantID as int
+set @participantID = (select participant_record from contacts where email_address = 'mpcrds+tifalockhart@gmail.com' and last_name = 'Lockhart');
+
+--User Account for Tifa
+Declare @userAccount as int
+set @userAccount = (select user_account from contacts where email_address = 'mpcrds+tifalockhart@gmail.com' and last_name = 'Lockhart');
+
+--Update old contact record so we can delete it. 
+UPDATE [dbo].Contacts
+SET Household_ID = null, Participant_Record = null, User_Account = null;
+WHERE email_address = 'mpcrds+tifalockhart@gmail.com' and last_name = 'Lockhart');
+
+--Delete the old contact record
+DELETE FROM [dbo].Contacts where email_address = 'mpcrds+tifalockhart@gmail.com' and last_name = 'Lockheart';
 
 SET IDENTITY_INSERT [dbo].[Contacts] ON;
 
@@ -111,69 +100,45 @@ set @contactID = 100000001;
 --Tifa Lockhart contact record
 INSERT INTO [dbo].Contacts 
 (Contact_ID,Company,Company_Name,Display_Name    ,Prefix_ID,First_Name,Middle_Name,Last_Name ,Suffix_ID,Nickname,Date_of_Birth   ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                  ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
-(@contactID,0      ,null        ,'Lockhart, Tifa',2        ,'Tifa'    ,'A'        ,'Lockhart',null     ,'Tifa'  ,{d '1975-01-01'},2        ,2                ,1                ,@houseHoldID,1                    ,null              ,null        ,'mpcrds+tifalockhart@gmail.com',null          ,0                 ,0               ,'321-444-8184',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+(@contactID,0      ,null        ,'Lockhart, Tifa',2        ,'Tifa'    ,'A'        ,'Lockhart',null     ,'Tifa'  ,{d '1975-01-01'},2        ,2                ,1                ,@houseHoldID,1                    ,@participantID    ,null        ,'mpcrds+tifalockhart@gmail.com',null          ,0                 ,0               ,'321-444-8184',null          ,null                 ,null         ,null       ,null     ,@userAccount,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
 
 SET IDENTITY_INSERT [dbo].[Contacts] OFF;
 
---This command resets the identity value so that if someone adds contacts a big ID. 
+--This command resets the identity value so that if someone adds contacts a big ID is not used. 
 DBCC CHECKIDENT (Contacts, reseed, @currentContactId);
-
---Tifa Lockhart Participant record
-SET IDENTITY_INSERT [dbo].[Participants] ON;
-
-DECLARE @partID as int
-set @partID = IDENT_CURRENT('Participants')+1;
-
-INSERT INTO [dbo].Participants 
-(Participant_ID,Contact_ID,Participant_Type_ID,Attend_Start_Date,Participant_Start_Date    ,Participant_End_Date,Notes                       ,Domain_ID,__ExternalPersonID,_First_Attendance_Ever,_Second_Attendance_Ever,_Third_Attendance_Ever,_Last_Attendance_Ever) VALUES
-(@partID       ,@contactID,4                  ,null             ,{ts '2015-07-02 08:15:06'},null                ,'Created by Add Family Tool',1        ,null              ,null                  ,null                   ,null                  ,null                 );
-
-SET IDENTITY_INSERT [dbo].[Participants] OFF;
-
---Tifa Lockhart User Record
-SET IDENTITY_INSERT [dbo].[Dp_Users] ON;
-
-DECLARE @userID as int
-set @userID = IDENT_CURRENT('Dp_Users')+1;
-
-INSERT INTO [dbo].dp_users 
-(User_ID,User_Name                       ,User_Email                     ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
-(@userID,'mpcrds+tifalockhart@gmail.com' ,'mpcrds+tifalockhart@gmail.com','Tifa'      ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID()  ,null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0             ,0               ,0               ,0               );
-
-SET IDENTITY_INSERT [dbo].[Dp_Users] OFF;
-
---Tifa Lockhart User ROLE
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] ON;
-
-DECLARE @user_role_id as int
-set @user_role_id =IDENT_CURRENT('Dp_User_Roles')+1;
-
-INSERT INTO [dbo].Dp_User_Roles (User_Role_ID,User_ID,Role_ID,Domain_ID) 
-VALUES                         (@user_role_id,@userID,39    ,1);
-
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] OFF;
 
 -- Tifa Lockhart Donor RECORD
 SET IDENTITY_INSERT [dbo].[Donors] ON;
 
-DECLARE @donor_id as int
-set @donor_id =IDENT_CURRENT('Donors')+1;
-
 INSERT INTO [dbo].Donors 
-( Donor_ID,Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
-(@donor_id,@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
+(Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
+(@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
 
 SET IDENTITY_INSERT [dbo].[Donors] OFF;
 
 --Tifa Lockhart Updates
-update [dbo].Contacts set Participant_Record = @partID where Contact_ID = @contactID;
-update [dbo].Contacts set User_Account = @userID where Contact_ID = @contactID;
 update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
 GO
 
 --Marlene Wallace (age 14)
 DECLARE @houseHoldID as int
-set @houseHoldID = (select houseHold_ID from Households where Household_Name = 'Strife');
+set @houseHoldID = (select houseHold_ID from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+
+--Participant Record for Tifa
+Declare @participantID as int
+set @participantID = (select participant_record from contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace');
+
+--User Account for Tifa
+Declare @userAccount as int
+set @userAccount = (select user_account from contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace');
+
+--Update old contact record so we can delete it. 
+UPDATE [dbo].Contacts
+SET Household_ID = null, Participant_Record = null, User_Account = null;
+WHERE email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace');
+
+--Delete the old contact record
+DELETE FROM [dbo].Contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace';
 
 --Marlene Wallace Contact
 SET IDENTITY_INSERT [dbo].[Contacts] ON;
@@ -187,64 +152,24 @@ set @contactID = 100000002;
 
 INSERT INTO [dbo].Contacts 
 (Contact_ID,Company,Company_Name,Display_Name      ,Prefix_ID,First_Name,Middle_Name,Last_Name,Suffix_ID,Nickname ,Date_of_Birth   ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                    ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
-(@contactID,0      ,null        ,'Wallace, Marlene',null     ,'Marlene' ,null       ,'Wallace',null     ,'Marlene',{d '2001-01-01'},2        ,1                ,1                ,@houseHoldID,2                    ,null              ,null        ,'mpcrds+marlenewallace@gmail.com',null          ,0                 ,0               ,'123-548-4232',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+(@contactID,0      ,null        ,'Wallace, Marlene',null     ,'Marlene' ,null       ,'Wallace',null     ,'Marlene',{d '2001-01-01'},2        ,1                ,1                ,@houseHoldID,2                    ,@participantID    ,null        ,'mpcrds+marlenewallace@gmail.com',null          ,0                 ,0               ,'123-548-4232',null          ,null                 ,null         ,null       ,null     ,@userAccount,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
 
 SET IDENTITY_INSERT [dbo].[Contacts] OFF;
 
 --This command resets the identity value so that if someone adds contacts a big ID. 
 DBCC CHECKIDENT (Contacts, reseed, @currentContactId);
 
---Marlene Wallace Participant Record
-SET IDENTITY_INSERT [dbo].[Participants] ON;
-
-DECLARE @partID as int
-set @partID = IDENT_CURRENT('Participants')+1;
-
-INSERT INTO [dbo].Participants 
-(Participant_ID,Contact_ID,Participant_Type_ID,Attend_Start_Date,Participant_Start_Date    ,Participant_End_Date,Notes                       ,Domain_ID,__ExternalPersonID,_First_Attendance_Ever,_Second_Attendance_Ever,_Third_Attendance_Ever,_Last_Attendance_Ever) VALUES
-(@partID       ,@contactID,4                  ,null             ,{ts '2015-07-02 08:15:06'},null                ,'Created by Add Family Tool',1        ,null              ,null                  ,null                   ,null                  ,null                 );
-
-SET IDENTITY_INSERT [dbo].[Participants] OFF;
-
---Marlene Wallace USER
-SET IDENTITY_INSERT [dbo].[Dp_Users] ON;
-
-DECLARE @userID as int
-set @userID = IDENT_CURRENT('Dp_Users')+1;
-
-INSERT INTO [dbo].dp_users 
-(User_ID,User_Name                        ,User_Email                       ,Display_Name,Password                     ,Admin,Domain_ID,Publications_Manager,Contact_ID,Supervisor,User_GUID,Can_Impersonate,In_Recovery,Time_Zone,Locale,Theme,Setup_Admin,__ExternalPersonID,__ExternalUserID,Data_Service_Permissions,Read_Permitted,Create_Permitted,Update_Permitted,Delete_Permitted) VALUES
-(@userID,'mpcrds+marlenewallace@gmail.com','mpcrds+marlenewallace@gmail.com','Marlene'   ,CAST('welcome' as binary(16)),0    ,1        ,0                   ,@contactID,null      ,NEWID()  ,null           ,null       ,null     ,null  ,null ,0          ,null              ,null            ,null                    ,0             ,0               ,0               ,0           );
-
-SET IDENTITY_INSERT [dbo].[Dp_Users] OFF;
-
---Marlene Wallace User ROLE
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] ON;
-
-DECLARE @user_role_id as int
-set @user_role_id =IDENT_CURRENT('Dp_User_Roles')+1;
-
-INSERT INTO [dbo].Dp_User_Roles (User_Role_ID,User_ID,Role_ID,Domain_ID) 
-VALUES                         (@user_role_id,@userID,39    ,1);
-
-SET IDENTITY_INSERT [dbo].[Dp_User_Roles] OFF;
-
 -- Marlene Wallace Donor RECORD
 SET IDENTITY_INSERT [dbo].[Donors] ON;
 
-DECLARE @donor_id as int
-set @donor_id =IDENT_CURRENT('Donors')+1;
-
 INSERT INTO [dbo].Donors 
-( Donor_ID,Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
-(@donor_id,@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
+(Contact_ID,Statement_Frequency_ID,Statement_Type_ID,Statement_Method_ID,Setup_Date                ,Envelope_No,Cancel_Envelopes,Notes,First_Contact_Made,Domain_ID,__ExternalPersonID,_First_Donation_Date,_Last_Donation_Date,Processor_ID) VALUES
+(@contactID,3                     ,1                ,4                  ,{ts '2015-07-06 12:03:37'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null);
 
 SET IDENTITY_INSERT [dbo].[Donors] OFF;
 
 --Marlene Wallace Updates
-update [dbo].Contacts set Participant_Record = @partID where Contact_ID = @contactID;
 update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
-update [dbo].Contacts set User_Account = @userID where Contact_id = @contactID;
 GO
 
 --Cloud Strife's Request to Join Kids' Club Response Record

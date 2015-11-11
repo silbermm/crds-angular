@@ -7,9 +7,9 @@
 #   -DBPassword password         The SQLServer password to login to the DBServer (optional, defaults to environment variable MP_SOURCE_DB_PASSWORD)
 
 Param (
-  [string]$DBServer = "216.68.184.202", # default to external IP for MPTest02
+  [string]$DBServer = "MPTEST02", # default to external IP for MPTest02
   [string]$DBName = "MinistryPlatform", # default to MinistryPlatform
-  [string]$BackupPath = $(throw "-BackupPath (destination on server for backup files) is required."),
+  [string]$BackupPath = "E:\Program Files\Microsoft SQL Server\MSSQL11.MSSQLSERVER\MSSQL\Backup",
   [string]$DBUser = $(Get-ChildItem Env:MP_SOURCE_DB_USER).Value, # Default to environment variable
   [string]$DBPassword = $(Get-ChildItem Env:MP_SOURCE_DB_PASSWORD).Value # Default to environment variable
 )
