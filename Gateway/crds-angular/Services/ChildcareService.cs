@@ -76,7 +76,7 @@ namespace crds_angular.Services
                 foreach (var p in saveRsvp.Participants)
                 {
                     participantId = p;
-                    _eventService.RegisterParticipantIfNotRegistered(saveRsvp.EventId, participantId);
+                    _eventService.SafeRegisterParticipant(saveRsvp.EventId, participantId);
                 }
             }
             catch (Exception ex)

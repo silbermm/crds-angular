@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int RegisterParticipantIfNotRegistered(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
+        public int SafeRegisterParticipant(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
         {
             var eventParticipantId = GetEventParticipantRecordId(eventId, participantId);
             if (eventParticipantId != 0)
