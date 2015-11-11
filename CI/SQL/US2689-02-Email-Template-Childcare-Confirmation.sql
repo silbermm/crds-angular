@@ -24,7 +24,7 @@ VALUES
      13548
     ,1
     ,'Childcare Confirmation'
-    ,'Thanks for letting us know your childcare needs for [EventTitle] meeting on [EventStartDate]. We''ve marked you down for [ChildNames]'
+    ,'<div>Thanks for letting us know your childcare needs for [EventTitle] meeting on [EventStartDate].</div><div>We''ve marked you down for</div> [ChildNames] <div>If something changes and you won''t be attending or your kids won''t be with you, please contact us at</div><ul><li>childcareoakley@crossroads.net for Oakely Groups</li><li>childcaremason@crossroads.net for Mason Groups</li><li>childcareflorence@crossroads.net for Florence Groups</li></ul>'
     ,1
     ,GetDate()
     ,7
