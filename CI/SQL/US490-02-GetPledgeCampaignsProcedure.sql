@@ -19,7 +19,16 @@ ALTER PROCEDURE [dbo].[api_CRDS_MPP_GetPledgeCampaigns]
 AS
 BEGIN
 	SELECT
-		 Pledge_Campaign_ID
+		 -1 AS Sort_Order
+		,-1 AS Pledge_Campaign_ID
+		,'None' AS Display_Name
+		,-1 AS Pledge_Campaign_Type_ID
+		,0 AS Pledge_Beyond_End_Date
+		,'true' AS Is_Current
+	UNION ALL
+	SELECT
+		 1 AS Sort_Order
+		,Pledge_Campaign_ID
 		,Campaign_Name AS Display_Name
 		,Pledge_Campaign_Type_ID
 		,Pledge_Beyond_End_Date
@@ -28,5 +37,6 @@ BEGIN
 	WHERE
 		p.Domain_ID = d.Domain_ID
 		and d.Domain_GUID = @DomainID
-	ORDER BY Display_Name
+		--and d.Domain_ID = 1
+	ORDER BY Sort_Order, Display_Name
 END
