@@ -210,7 +210,9 @@
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
-          }, function() {
+          },
+
+          function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             $log.debug('person save unsuccessful');
           });
