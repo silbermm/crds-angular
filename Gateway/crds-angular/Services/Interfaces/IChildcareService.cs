@@ -11,6 +11,6 @@ namespace crds_angular.Services.Interfaces
         void SendRequestForRsvp();
         Event GetMyChildcareEvent(int parentEventId, string token);
         List<FamilyMember> MyChildren(string token);
-        void SaveRsvp(ChildcareRsvpDto saveRsvp);
+        void SaveRsvp(ChildcareRsvpDto saveRsvp, string token);
     }
 }

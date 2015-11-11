@@ -6,6 +6,7 @@ using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Services;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -67,17 +68,21 @@ namespace crds_angular.Services
             return myChildren;
         }
 
-        public void SaveRsvp(ChildcareRsvpDto saveRsvp)
+        public void SaveRsvp(ChildcareRsvpDto saveRsvp, string token)
         {
+            var participant = _participantService.GetParticipantRecord(token);
             var participantId = 0;
 
             try
             {
-                foreach (var p in saveRsvp.Participants)
+                foreach (var p in saveRsvp.ChildParticipants)
                 {
                     participantId = p;
                     _eventService.SafeRegisterParticipant(saveRsvp.EventId, participantId);
                 }
+
+                //send email to parent
+                SendConfirmation(saveRsvp.EventId,participant,saveRsvp.ChildParticipants);
             }
             catch (Exception ex)
             {
@@ -85,7 +90,7 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendConfirmation(int childcareEventId)
+        private void SendConfirmation(int childcareEventId, Participant participant, IEnumerable<int> kids )
         {
             var templateId = _configurationWrapper.GetConfigIntValue("ChildcareConfirmationTemplate");
             var authorUserId = _configurationWrapper.GetConfigIntValue("EmailAuthorId");
@@ -94,33 +99,43 @@ namespace crds_angular.Services
             const int domainId = 1;
 
             var childEvent = _eventService.GetEvent(childcareEventId);
-           
+
             if (childEvent.ParentEventId == null)
             {
                 throw new ApplicationException("SendConfirmation: Parent Event Not Found.");
             }
             var parentEventId = (int) childEvent.ParentEventId;
-            var parentEvent = _eventService.GetEvent(parentEventId);
+
+            var mergeData = SetConfirmationMergeData(parentEventId, kids);
             var replyToContact = ReplyToContact(childEvent);
 
-            var communication = FormatCommunication(authorUserId, domainId, template, fromContact, replyToContact, participant, mergeData);
+            var communication = FormatCommunication(authorUserId, domainId, template, fromContact, replyToContact, participant.ContactId, participant.EmailAddress, mergeData);
             try
             {
                 _communicationService.SendMessage(communication);
             }
             catch (Exception ex)
             {
-                LogError(participant, ex);
+                _logger.Error(string.Format("Send Childcare Confirmation email failed. Participant: {0}, Event: {1}", participant.ParticipantId, childcareEventId), ex);
             }
         }
 
-        private Dictionary<string, object> SetConfirmationMergeData(Event childcareEvent, string kidsTable)
+        private Dictionary<string, object> SetConfirmationMergeData(int parentEventId, IEnumerable<int> kids)
         {
+            var parentEvent = _eventService.GetEvent(parentEventId);
+            var kidList = kids.Select(kid => _contactService.GetContactByParticipantId(kid)).Select(contact => contact.First_Name + " " + contact.Last_Name).ToList();
+
+            var html = new HtmlElement("ul");
+            var elements = kidList.Select(kid => new HtmlElement("li", kid));
+            foreach (var htmlElement in elements)
+            {
+                html.Append(htmlElement);
+            }
             var mergeData = new Dictionary<string, object>
             {
-                {"EventTitle", childcareEvent.EventTitle},
-                {"EventStartDate", childcareEvent.EventStartDate.ToString("g")},
-                {"ChildNames", kidsTable}
+                {"EventTitle", parentEvent.EventTitle},
+                {"EventStartDate", parentEvent.EventStartDate.ToString("g")},
+                {"ChildNames", html.Build()}
             };
             return mergeData;
         }
@@ -162,7 +177,14 @@ namespace crds_angular.Services
                 var childEvent = GetChildcareEvent(participant.EventId);
                 var mergeData = SetMergeData(participant.GroupName, participant.EventStartDateTime, participant.EventId);
                 var replyToContact = ReplyToContact(childEvent);
-                var communication = FormatCommunication(authorUserId, domainId, template, fromContact, replyToContact, participant, mergeData);
+                var communication = FormatCommunication(authorUserId,
+                                                        domainId,
+                                                        template,
+                                                        fromContact,
+                                                        replyToContact,
+                                                        participant.ContactId,
+                                                        participant.ParticipantEmail,
+                                                        mergeData);
                 try
                 {
                     _communicationService.SendMessage(communication);
@@ -218,7 +240,8 @@ namespace crds_angular.Services
                                                          MessageTemplate template,
                                                          MyContact fromContact,
                                                          MyContact replyToContact,
-                                                         EventParticipant participant,
+                                                         int participantContactId,
+                                                         string participantEmail,
                                                          Dictionary<string, object> mergeData)
         {
             var communication = new Communication
@@ -231,8 +254,8 @@ namespace crds_angular.Services
                 FromEmailAddress = fromContact.Email_Address,
                 ReplyContactId = replyToContact.Contact_ID,
                 ReplyToEmailAddress = replyToContact.Email_Address,
-                ToContactId = participant.ContactId,
-                ToEmailAddress = participant.ParticipantEmail,
+                ToContactId = participantContactId,
+                ToEmailAddress = participantEmail,
                 MergeData = mergeData
             };
             return communication;

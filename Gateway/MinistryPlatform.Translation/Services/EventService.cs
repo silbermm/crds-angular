@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int SafeRegisterParticipant(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0)
+        public int SafeRegisterParticipant(int eventId, int participantId, int groupId = 0, int groupParticipantId = 0)
         {
             var eventParticipantId = GetEventParticipantRecordId(eventId, participantId);
             if (eventParticipantId != 0)
@@ -72,10 +72,10 @@ namespace MinistryPlatform.Translation.Services
                         {
                             return
                                 (_ministryPlatformService.CreateSubRecord(_eventParticipantSubPageId,
-                                                                         eventId,
-                                                                         values,
-                                                                         apiToken,
-                                                                         true));
+                                                                          eventId,
+                                                                          values,
+                                                                          apiToken,
+                                                                          true));
                         });
             }
             catch (Exception ex)
@@ -88,9 +88,9 @@ namespace MinistryPlatform.Translation.Services
             }
 
             _logger.Debug(string.Format("Added participant {0} to event {1}; record id: {2}",
-                                       participantId,
-                                       eventId,
-                                       eventParticipantId));
+                                        participantId,
+                                        eventId,
+                                        eventParticipantId));
             return (eventParticipantId);
         }
 
@@ -115,16 +115,17 @@ namespace MinistryPlatform.Translation.Services
             }
 
             _logger.Debug(string.Format("Removed participant {0} from event {1}; record id: {2}",
-                                       participantId,
-                                       eventId,
-                                       eventParticipantId));
+                                        participantId,
+                                        eventId,
+                                        eventParticipantId));
             return (eventParticipantId);
         }
 
         public Event GetEvent(int eventId)
         {
             var token = ApiLogin();
-            var r = _ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, eventId.ToString());
+            var searchString = string.Format("{0},", eventId);
+            var r = _ministryPlatformService.GetPageViewRecords("EventsWithDetail", token, searchString);
             if (r.Count == 1)
             {
                 var record = r[0];
