@@ -1,12 +1,14 @@
 ﻿using System;
-using NUnit.Framework;
-using crds_angular.Services;
-using MPServices = MinistryPlatform.Translation.Services.Interfaces;
-using Crossroads.Utilities.Interfaces;
-using Moq;
 using System.Collections.Generic;
+using crds_angular.Models.Crossroads;
+using crds_angular.Services;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
+using Moq;
+using NUnit.Framework;
+using Event = MinistryPlatform.Models.Event;
+using MPServices = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.test.Services
 {
@@ -18,6 +20,20 @@ namespace crds_angular.test.Services
         private Mock<MPServices.IEventService> eventService;
         private Mock<MPServices.IContactRelationshipService> contactRelationshipService;
         private Mock<IConfigurationWrapper> config;
+
+        private readonly List<ParticipantSignup> mockParticipantSignup = new List<ParticipantSignup>
+        {
+            new ParticipantSignup()
+            {
+                particpantId = 999,
+                childCareNeeded = false
+            },
+            new ParticipantSignup()
+            {
+                particpantId = 888,
+                childCareNeeded = false
+            }
+        };
 
         private const int GROUP_ROLE_DEFAULT_ID = 123;
 
@@ -43,12 +59,12 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOf(typeof(ApplicationException), e);
+                Assert.IsInstanceOf(typeof (ApplicationException), e);
                 Assert.AreSame(exception, e.InnerException);
             }
 
@@ -71,12 +87,12 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOf(typeof(GroupFullException), e);
+                Assert.IsInstanceOf(typeof (GroupFullException), e);
             }
 
             groupService.VerifyAll();
@@ -98,12 +114,12 @@ namespace crds_angular.test.Services
 
             try
             {
-                fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+                fixture.addParticipantsToGroup(456, mockParticipantSignup);
                 Assert.Fail("Expected exception was not thrown");
             }
             catch (Exception e)
             {
-                Assert.IsInstanceOf(typeof(GroupFullException), e);
+                Assert.IsInstanceOf(typeof (GroupFullException), e);
             }
 
             groupService.VerifyAll();
@@ -120,32 +136,27 @@ namespace crds_angular.test.Services
             };
             groupService.Setup(mocked => mocked.getGroupDetails(456)).Returns(g);
 
-            groupService.Setup(mocked => mocked.addParticipantToGroup(999, 456, GROUP_ROLE_DEFAULT_ID, It.IsAny<DateTime>(), null, false)).Returns(999456);
-            groupService.Setup(mocked => mocked.addParticipantToGroup(888, 456, GROUP_ROLE_DEFAULT_ID, It.IsAny<DateTime>(), null, false)).Returns(888456);
+            groupService.Setup(mocked => mocked.addParticipantToGroup(999, 456, GROUP_ROLE_DEFAULT_ID, false, It.IsAny<DateTime>(), null, false)).Returns(999456);
+            groupService.Setup(mocked => mocked.addParticipantToGroup(888, 456, GROUP_ROLE_DEFAULT_ID, false, It.IsAny<DateTime>(), null, false)).Returns(888456);
+            groupService.Setup(mocked => mocked.SendCommunityGroupConfirmationEmail(It.IsAny<int>(), 456, false));
 
             var events = new List<Event>
             {
-                new Event() {
-                    EventId = 777
-                },
-                new Event() {
-                    EventId = 555
-                },
-                new Event() {
-                    EventId = 444
-                },
+                new Event {EventId = 777},
+                new Event {EventId = 555},
+                new Event {EventId = 444}
             };
             groupService.Setup(mocked => mocked.getAllEventsForGroup(456)).Returns(events);
 
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 777)).Returns(999777);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 555)).Returns(999555);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 444)).Returns(999444);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 777, 456, 999456)).Returns(999777);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 555, 456, 999456)).Returns(999555);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(999, 444, 456, 999456)).Returns(999444);
 
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 777)).Returns(888777);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 555)).Returns(888555);
-            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 444)).Returns(888444);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 777, 456, 888456)).Returns(888777);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 555, 456, 888456)).Returns(888555);
+            eventService.Setup(mocked => mocked.registerParticipantForEvent(888, 444, 456, 888456)).Returns(888444);
 
-            fixture.addParticipantsToGroup(456, new List<int> { 999, 888 });
+            fixture.addParticipantsToGroup(456, mockParticipantSignup);
 
             groupService.VerifyAll();
             eventService.VerifyAll();
@@ -166,15 +177,16 @@ namespace crds_angular.test.Services
             };
             groupService.Setup(mocked => mocked.getGroupDetails(456)).Returns(g);
 
-            var relations = new List<GroupSignupRelationships> {
-                new GroupSignupRelationships() {
-                    RelationshipId = 111,
-                }
+            var relations = new List<GroupSignupRelationships>
+            {
+                new GroupSignupRelationships {RelationshipId = 111}
             };
             groupService.Setup(mocked => mocked.GetGroupSignupRelations(90210)).Returns(relations);
 
-            var contactRelations = new List<ContactRelationship> {
-                new ContactRelationship() {
+            var contactRelations = new List<ContactRelationship>
+            {
+                new ContactRelationship
+                {
                     Contact_Id = 333,
                     Relationship_Id = 111,
                     Participant_Id = 222

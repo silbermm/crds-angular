@@ -48,17 +48,19 @@ describe('GroupSignupController', function() {
     'userInGroup': true,
     SignUpFamilyMembers: [
       {
-        'First_Name': 'Shankar',
-        'Email_Address': 'shankx@test.com',
-        'userInGroup': false,
-        'participantId': '1234',
-        'newAdd': '1234'
+        First_Name: 'Shankar',
+        Email_Address: 'shankx@test.com',
+        userInGroup: false,
+        participantId: '1234',
+        newAdd: '1234',
+        childCareNeeded: false 
       },
       {
-        'First_Name': 'Luisa',
-        'Email_Address': 'Luisa@test.com',
-        'userInGroup': true,
-        'participantId': '1234'
+        First_Name: 'Luisa',
+        Email_Address: 'Luisa@test.com',
+        userInGroup: true,
+        participantId: '1234',
+        childCareNeeded: false
       }
     ]
   };
@@ -203,13 +205,16 @@ describe('GroupSignupController', function() {
           'Email_Address': 'shankx@test.com',
           'userInGroup': true,
           'participantId': '1234',
-          'newAdd': '1234'
+          'newAdd': '1234',
+          'childCareNeeded': false
         },
         {
           'First_Name': 'Luisa',
           'Email_Address': 'Luisa@test.com',
           'userInGroup': true,
-          'participantId': '1234'
+          'participantId': '1234',
+
+          'childCareNeeded': false
         }
       ]
     };
@@ -230,17 +235,19 @@ describe('GroupSignupController', function() {
           'Email_Address': 'shankx@test.com',
           'userInGroup': true,
           'participantId': '1234',
-          'newAdd': '1234'
+          'newAdd': '1234',
+          'childCareNeeded': false
         },
         {
           'First_Name': 'Luisa',
           'Email_Address': 'Luisa@test.com',
           'userInGroup': false,
-          'participantId': '1234'
+          'participantId': '1234',
+          'childCareNeeded': false
         }
       ];
     var result = controller.hasParticipantID(response);
-    expect(result.partId[0]).toEqual('1234');
+    expect(result.partId[0]).toEqual({ participantId: '1234', childCareNeeded: false });
 
     response =
       [
@@ -248,11 +255,33 @@ describe('GroupSignupController', function() {
           'First_Name': 'Shankar',
           'Email_Address': 'shankx@test.com',
           'userInGroup': true,
-          'participantId': '2222'
+          'participantId': '2222',
+          'childCareNeeded': false
         }
       ];
     result = controller.hasParticipantID(response);
-    expect(result.partId[0]).toEqual('2222');
+    expect(result.partId[0]).toEqual({ participantId: '2222', childCareNeeded: false });
+
+    response =
+      [
+        {
+          'First_Name': 'Shankar',
+          'Email_Address': 'shankx@test.com',
+          'userInGroup': true,
+          'participantId': '1234',
+          'childCareNeeded': false
+        },
+        {
+          'First_Name': 'Luisa',
+          'Email_Address': 'Luisa@test.com',
+          'userInGroup': false,
+          'participantId': '1234',
+          'childCareNeeded': false
+        }
+      ];
+    result = controller.hasParticipantID(response);
+    expect(result.partId[0]).toBeUndefined();
+
   });
 
   function verifyExpectations() {
