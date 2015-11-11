@@ -22,7 +22,7 @@
 </div>
 <ng-form name="profile.profileParentForm">
   <tabset>
-    <tab before-select="profile.tabCheck($event)" ng-repeat="tab in profile.tabs" heading="{{tab.title}}" active="tab.active" ng-click="profile.goToTab($event, tab)" >
+    <tab ng-repeat="tab in profile.tabs" heading="{{tab.title}}" active="tab.active" ng-click="profile.goToTab($event, tab)" >
       <ui-view></ui-view>
     </tab>
   </tabset>

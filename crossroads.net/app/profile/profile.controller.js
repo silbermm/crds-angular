@@ -37,9 +37,12 @@
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
     vm.saveSubscription = saveSubscription;
-    vm.tabs = getTabs();
-    vm.tabCheck = tabCheck;
-    vm.fooBar = false;
+    vm.tabs = [
+      { title:'Personal', active: false, route: 'profile.personal' },
+      { title:'Communications', active: false, route: 'profile.communications' },
+      { title:'Skills', active: false, route: 'profile.skills' },
+      { title: 'Giving History', active: false, route: 'profile.giving' }
+    ];
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
     $window.onbeforeunload = onBeforeUnload;
@@ -60,7 +63,6 @@
 
     ////////////
     function activate() {
-
       _.forEach(vm.tabs, function(tab) {
         tab.active = $state.current.name === tab.route;
       });
@@ -89,31 +91,11 @@
       return 13;
     }
 
-    function getTabs() {
-      return [
-        { title:'Personal', active: false, route: 'profile.personal' },
-        { title:'Communications', active: false, route: 'profile.communications' },
-        { title:'Skills', active: false, route: 'profile.skills' },
-        { title: 'Giving History', active: false, route: 'profile.giving' }
-      ];
-    }
-
-    function goToTab($event, tab) {
-      if (tab.title === 'Personal') {
-        vm.profileParentForm.$setPristine();
-      }
-
-      if (vm.fooBar) {
-        $state.go(tab.route);
-      }
-    }
-
     function locationFocus() {
       $rootScope.$emit('locationFocus');
     }
 
     function savePaperless() {
-      vm.profileParentForm.$setPristine();
     }
 
     function saveSubscription(subscription) {
@@ -131,7 +113,6 @@
       Profile.Subscriptions.save(subscription.Subscription).$promise
       .then(function(data) {
         subscription.Subscription.dp_RecordID = data.dp_RecordID;
-        vm.profileParentForm.$setPristine();
         $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
       },
 
@@ -140,15 +121,15 @@
       });
     }
 
-    function tabCheck(event) {
-      vm.fooBar = vm.profileParentForm.$dirty;
-      stateChangeStart(event);
+    function goToTab($event, tab) {
+      $state.go(tab.route);
     }
 
     function stateChangeStart(event, toState, toParams, fromState, fromParams) {
-      if (vm.profileParentForm.$dirty) {
+      if (fromState.name === 'profile.personal' && vm.profileParentForm.$dirty) {
         if (!$window.confirm('Are you sure you want to leave this page?')) {
           event.preventDefault();
+          vm.tabs[0].active = true;
           return;
         }
       }
