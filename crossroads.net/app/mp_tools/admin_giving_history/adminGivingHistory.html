@@ -15,13 +15,13 @@
         <h3 class="subheading visible-print-block">Printed: {{admin_giving_history_controller.currentDate | date:'M/d/yy'}}</h3>
 
         <div class="row push-top" ng-show="admin_giving_history_controller.donation_history && admin_giving_history_controller.donation_view_ready">
-            <household-information profile="admin_giving_history_controller.profile" />
+            <household-information profile="admin_giving_history_controller.profile"></household-information>
 
-            <p class="visible-print-block col-xs-6 text-right">
-                <strong>Period : 01/01/{{admin_giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{admin_giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
-                <br />
-                <small>No goods or services were provided by Crossroads in exchange for the contributions recorded on this statement.</small>
-            </p>
+            <div class="visible-print-block col-xs-6 text-right">
+              <strong>Period : 01/01/{{giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
+              <br />
+              <div ng-bind-html="$root.MESSAGES.give_disclaimer.content | html"></div>
+            </div>
         </div>
 
         <preloader full-screen='false' ng-show="!admin_giving_history_controller.overall_view_ready"> </preloader>
@@ -89,14 +89,16 @@
             </p>
 
             <div class="row giving-statement-footer visible-print-block">
-                <div class="col-xs-12">
-                    <div class="logo">
-                        <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
-                    </div>
-                    <div class="statement-address text-uppercase">
-                        <small>3500 Madison Road, Cincinnati, OH 45209 P513.731.7400 F513.731.3978 crossroads.net</small>
-                    </div>
+              <div class="col-xs-12">
+                <div class="giving-statement-content clearfix">
+                  <div class="giving-statement-logo pull-left">
+                    <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
+                  </div>
+                  <div class="statement-address text-uppercase pull-right">
+                    <small><div ng-bind-html="$root.MESSAGES.single_line_address.content | html"></div></small>
+                  </div>
                 </div>
+              </div>
             </div>
 
         </div>
