@@ -49,7 +49,7 @@ namespace crds_angular.Controllers.API
             return Authorized(token => {
                                            try
                                            {
-                                               return Ok(_eventService.getEvent(eventId));
+                                               return Ok(_eventService.GetEvent(eventId));
                                            }
                                            catch (Exception e)
                                            {

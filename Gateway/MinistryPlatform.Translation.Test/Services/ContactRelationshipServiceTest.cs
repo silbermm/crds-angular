@@ -20,21 +20,20 @@ namespace MinistryPlatform.Translation.Test.Services
 
         private readonly int CONTACT_RELATIONSHIP_PAGE = 265;
         private readonly int CONTACT_RELATIONSHIP_ID = 110;
-        
+
         [SetUp]
         public void SetUp()
         {
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
             _authService = new Mock<IAuthenticationService>();
             _configWrapper = new Mock<IConfigurationWrapper>();
-            _fixture = new ContactRelationshipService(_ministryPlatformService.Object,_authService.Object,_configWrapper.Object);
+            _fixture = new ContactRelationshipService(_ministryPlatformService.Object, _authService.Object, _configWrapper.Object);
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
 
-            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> { { "token", "ABC" }, { "exp", "123" } });
+            _authService.Setup(m => m.Authenticate(It.IsAny<string>(), It.IsAny<string>())).Returns(new Dictionary<string, object> {{"token", "ABC"}, {"exp", "123"}});
             _configWrapper.Setup(mocked => mocked.GetConfigIntValue("ContactRelationships")).Returns(CONTACT_RELATIONSHIP_PAGE);
             _configWrapper.Setup(mocked => mocked.GetConfigIntValue("ContactRelationshipsIds")).Returns(CONTACT_RELATIONSHIP_ID);
-
         }
 
         [Test]
@@ -43,8 +42,7 @@ namespace MinistryPlatform.Translation.Test.Services
             const int childId = 4384766;
             const int myId = 2186211;
 
-            
-           
+
             Relationship r = new Relationship
             {
                 RelationshipID = 43,
@@ -54,14 +52,14 @@ namespace MinistryPlatform.Translation.Test.Services
             };
 
             var dict = new Dictionary<string, object>
-                {
-                    {"Relationship_ID", r.RelationshipID},
-                    {"Related_Contact_ID", r.RelatedContactID},
-                    {"Start_Date", r.StartDate},
-                    {"End_Date", r.EndDate}
-                };
+            {
+                {"Relationship_ID", r.RelationshipID},
+                {"Related_Contact_ID", r.RelatedContactID},
+                {"Start_Date", r.StartDate},
+                {"End_Date", r.EndDate}
+            };
 
-           
+
             _ministryPlatformService.Setup(mocked =>
                                                mocked.CreateSubRecord(CONTACT_RELATIONSHIP_PAGE,
                                                                       myId,
@@ -72,7 +70,6 @@ namespace MinistryPlatform.Translation.Test.Services
             var id = _fixture.AddRelationship(r, myId);
             Assert.AreEqual(1, id);
             _ministryPlatformService.VerifyAll();
-
         }
 
         [Test]
@@ -111,7 +108,6 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(relationships[0].StartDate, result[0].StartDate);
             Assert.AreEqual(relationships[0].EndDate, result[0].EndDate);
             _ministryPlatformService.VerifyAll();
-
         }
 
         [Test]
@@ -131,7 +127,8 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Last Name", "person-one"},
                     {"Participant_ID", 654321},
                     {"Relationship_ID", 1},
-                    {"Age", 40}, {"HS_Graduation_Year", 0}
+                    {"Age", 40},
+                    {"HS_Graduation_Year", 0}
                 },
                 new Dictionary<string, object>()
                 {
@@ -141,13 +138,18 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Last Name", "person-two"},
                     {"Participant_ID", 3333333},
                     {"Relationship_ID", 1},
-                    {"Age", 40} , {"HS_Graduation_Year", 0}
+                    {"Age", 40},
+                    {"HS_Graduation_Year", 0}
                 }
             };
             _ministryPlatformService.Setup(
                 mocked =>
-                    mocked.GetSubpageViewRecords("MyContactFamilyRelationshipViewId", contactId, It.IsAny<string>(), "",
-                        "", 0))
+                    mocked.GetSubpageViewRecords("MyContactFamilyRelationshipViewId",
+                                                 contactId,
+                                                 It.IsAny<string>(),
+                                                 "",
+                                                 "",
+                                                 0))
                 .Returns(getSubpageViewRecordsResponse);
 
             var family = _fixture.GetMyImmediateFamilyRelationships(contactId, token).ToList();

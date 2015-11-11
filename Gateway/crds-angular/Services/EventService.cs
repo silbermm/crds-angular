@@ -16,14 +16,9 @@ namespace crds_angular.Services
             this._eventService = eventService;
         }
 
-        public Event getEvent(int eventId)
+        public Event GetEvent(int eventId)
         {
             return _eventService.GetEvent(eventId);
-        }
-
-        public Event GetChildcareEvent(int parentEventId)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
