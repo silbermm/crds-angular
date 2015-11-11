@@ -11,7 +11,6 @@
   require('./services');
   require('./skills');
   require('./giving');
-  require('./tabDecorator.js');
 
   require('./profile.html');
   require('./personal/profilePersonal.html');

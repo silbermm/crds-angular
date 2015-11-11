@@ -121,7 +121,7 @@
       });
     }
 
-    function goToTab($event, tab) {
+    function goToTab(tab) {
       $state.go(tab.route);
     }
 
