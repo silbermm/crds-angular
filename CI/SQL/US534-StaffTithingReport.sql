@@ -55,10 +55,10 @@ BEGIN
 
 	END
 END
-
-
+GO
 
 SET IDENTITY_INSERT [dbo].[dp_Reports] ON
+GO
 
 INSERT INTO [dbo].[dp_Reports]
            ([Report_ID]
@@ -76,12 +76,10 @@ INSERT INTO [dbo].[dp_Reports]
            ,0
            ,0
            ,1)
-
-SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
-
 GO
 
-
+SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
+GO
 
 INSERT INTO [dbo].[dp_Report_Pages]
            ([Report_ID]
@@ -89,7 +87,6 @@ INSERT INTO [dbo].[dp_Report_Pages]
      VALUES
            (260
 		  	,297)
-
 GO
 
 
