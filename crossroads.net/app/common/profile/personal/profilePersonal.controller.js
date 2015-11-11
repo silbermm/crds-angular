@@ -68,9 +68,9 @@
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
-    $rootScope.$on('$stateChangeStart', stateChangeStart);
-    $window.onbeforeunload = onBeforeUnload;
-    
+    //$rootScope.$on('$stateChangeStart', stateChangeStart);
+    //$window.onbeforeunload = onBeforeUnload;
+
     activate();
 
     ////////////////////////////////
@@ -244,7 +244,7 @@
       if (vm.pform.$dirty || vm.householdForm.$dirty) {
         return '';
       }
-    };
+    }
   }
 
 })();

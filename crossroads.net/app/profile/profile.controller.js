@@ -6,6 +6,8 @@
   ProfileController.$inject = [
     '$rootScope',
     '$state',
+    '$location',
+    '$window',
     'AttributeTypes',
     'Person',
     'Profile',
@@ -13,8 +15,11 @@
     'Locations',
     'PaymentService'];
 
-  function ProfileController($rootScope,
+  function ProfileController(
+      $rootScope,
       $state,
+      $location,
+      $window,
       AttributeTypes,
       Person,
       Profile,
@@ -33,6 +38,11 @@
     vm.profileData = { person: Person };
     vm.saveSubscription = saveSubscription;
     vm.tabs = getTabs();
+    vm.tabCheck = tabCheck;
+    vm.fooBar = false;
+
+    $rootScope.$on('$stateChangeStart', stateChangeStart);
+    $window.onbeforeunload = onBeforeUnload;
 
     //TODO: Move to resolve
     vm.subscriptions = Profile.Subscriptions.query();
@@ -88,8 +98,14 @@
       ];
     }
 
-    function goToTab(tab) {
-      $state.go(tab.route);
+    function goToTab($event, tab) {
+      if (tab.title === 'Personal') {
+        vm.profileParentForm.$setPristine();
+      }
+
+      if (vm.fooBar) {
+        $state.go(tab.route);
+      }
     }
 
     function locationFocus() {
@@ -97,16 +113,7 @@
     }
 
     function savePaperless() {
-
-      Profile.Subscriptions.save(subscription.Subscription).$promise
-      .then(function(data) {
-        subscription.Subscription.dp_RecordID = data.dp_RecordID;
-        $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
-      },
-
-      function(error) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      });
+      vm.profileParentForm.$setPristine();
     }
 
     function saveSubscription(subscription) {
@@ -124,12 +131,33 @@
       Profile.Subscriptions.save(subscription.Subscription).$promise
       .then(function(data) {
         subscription.Subscription.dp_RecordID = data.dp_RecordID;
+        vm.profileParentForm.$setPristine();
         $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
       },
 
       function(error) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
       });
+    }
+
+    function tabCheck(event) {
+      vm.fooBar = vm.profileParentForm.$dirty;
+      stateChangeStart(event);
+    }
+
+    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
+      if (vm.profileParentForm.$dirty) {
+        if (!$window.confirm('Are you sure you want to leave this page?')) {
+          event.preventDefault();
+          return;
+        }
+      }
+    }
+
+    function onBeforeUnload() {
+      if (vm.profileParentForm.$dirty) {
+        return '';
+      }
     }
   }
 })();
