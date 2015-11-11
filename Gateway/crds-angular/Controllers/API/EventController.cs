@@ -1,24 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Security;
+using IEventService = crds_angular.Services.Interfaces.IEventService;
 
 namespace crds_angular.Controllers.API
 {
-    public class EventLocationController : MPAuth
+    public class EventController : MPAuth
     {
         private IMinistryPlatformService _ministryPlatformService;        
         private readonly IApiUserService _apiUserService;
+        private readonly IEventService _eventService;
 
-        public EventLocationController(IMinistryPlatformService ministryPlatformService, IApiUserService apiUserService)
+        public EventController(IMinistryPlatformService ministryPlatformService, IApiUserService apiUserService, IEventService eventService)
         {
-            this._ministryPlatformService = ministryPlatformService;            
+            this._ministryPlatformService = ministryPlatformService;
+            _eventService = eventService;
             _apiUserService = apiUserService;
         }
 
@@ -35,6 +41,24 @@ namespace crds_angular.Controllers.API
             return this.Ok(events);
         }
 
+        [ResponseType(typeof (Event))]
+        [Route("api/event/{eventid}")]
+        [AcceptVerbs("GET")]
+        public IHttpActionResult EventById(int eventId)
+        {
+            return Authorized(token => {
+                                           try
+                                           {
+                                               return Ok(_eventService.GetEvent(eventId));
+                                           }
+                                           catch (Exception e)
+                                           {
+                                               var apiError = new ApiErrorDto("Get Event by Id failed", e);
+                                               throw new HttpResponseException(apiError.HttpResponseMessage);   
+                                           }
+                
+            });
+        }
 
         private List<Event> ConvertToEvents(List<Dictionary<string, object>> todaysEvents)
         {

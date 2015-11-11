@@ -12,5 +12,6 @@ namespace MinistryPlatform.Models
         public int Relationship_Id { get; set; }
         public DateTime Birth_date { get; set; }
         public int Age { get; set; }
+        public int HighSchoolGraduationYear { get; set; }
     }
 }

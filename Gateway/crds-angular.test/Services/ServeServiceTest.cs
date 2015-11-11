@@ -12,6 +12,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
+using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.test.Services
 {
