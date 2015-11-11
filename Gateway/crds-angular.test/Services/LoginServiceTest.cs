@@ -33,7 +33,7 @@ namespace crds_angular.test.Services
             _loginService = new LoginService(_configurationWrapper.Object, _contactService.Object, _emailCommunication.Object, _userService.Object);
 
             _contactService.Setup(m => m.GetContactIdByEmail(It.IsAny<string>())).Returns(123456);
-            _userService.Setup(m => m.GetUserIdByEmail(It.IsAny<string>())).Returns(123456);
+            _userService.Setup(m => m.GetUserIdByUsername(It.IsAny<string>())).Returns(123456);
         }
 
         [Test]

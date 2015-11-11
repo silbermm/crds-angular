@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
@@ -81,34 +82,42 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof(LoginReturn))]
         public IHttpActionResult Post([FromBody]Credentials cred)
         {
-            // try to login 
-            var authData = TranslationService.Login(cred.username, cred.password);
-            var token = authData["token"].ToString();
-            var exp = authData["exp"].ToString();
-
-            if (token == "")
+            try
             {
-                return this.Unauthorized();
+                // try to login 
+                var authData = TranslationService.Login(cred.username, cred.password);
+                var token = authData["token"].ToString();
+                var exp = authData["exp"].ToString();
+
+                if (token == "")
+                {
+                    return this.Unauthorized();
+                }
+
+                var userRoles = _personService.GetLoggedInUserRoles(token);
+                var p = _personService.GetLoggedInUserProfile(token);
+                var r = new LoginReturn
+                {
+                    userToken = token,
+                    userTokenExp = exp,
+                    userId = p.ContactId,
+                    username = p.FirstName,
+                    userEmail = p.EmailAddress,
+                    roles = userRoles,
+                    age = p.Age
+                };
+
+                _loginService.ClearResetToken(cred.username);
+
+                //ttpResponseHeadersExtensions.AddCookies();
+
+                return this.Ok(r);
             }
-
-            var userRoles = _personService.GetLoggedInUserRoles(token);
-            var p = _personService.GetLoggedInUserProfile(token);
-            var r = new LoginReturn
+            catch (Exception e)
             {
-                userToken = token,
-                userTokenExp = exp,
-                userId = p.ContactId,
-                username = p.FirstName,
-                userEmail = p.EmailAddress,
-                roles = userRoles,
-                age = p.Age
-            };
-
-            _loginService.ClearResetToken(r.userEmail);
-
-           //ttpResponseHeadersExtensions.AddCookies();
-           
-            return this.Ok(r);
+                var apiError = new ApiErrorDto("Login Failed", e);
+                throw new HttpResponseException(apiError.HttpResponseMessage);
+            }
         }
     }
 
