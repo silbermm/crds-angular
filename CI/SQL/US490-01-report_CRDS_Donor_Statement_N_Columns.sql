@@ -167,7 +167,6 @@ SELECT Donation_ID
 						WHEN Payment_Type_ID = 4 THEN 'One-time Credit Card'
 						ELSE ISNULL(Item_Number,Payment_Type) 
 					END
-	--, Item_Number
 	, Fund_Name
 	, Donation_Detail
 	, Donor_Name
@@ -234,8 +233,6 @@ FROM (SELECT Top 100 PERCENT D.Donation_ID
 	, CASE A.Foreign_Country WHEN 'USA' THEN NULL WHEN 'US' THEN NULL WHEN 'United States' THEN NULL ELSE UPPER(A.Foreign_Country) END AS Foreign_Country
 	, #DONORS.Statement_ID-- = CASE WHEN @CombineFamily = 0 OR C.Household_ID IS NULL OR Do.Statement_Type_ID = 1  THEN 'C' + CONVERT(Varchar(10),C.Contact_ID) ELSE 'F' + CONVERT(Varchar(10),H.Household_ID) END
 	, Do.Envelope_No
-	--, Pledge = CASE WHEN #D.Pledge_ID = PL.Pledge_ID THEN ISNULL(#D.Pledge,0) ELSE 0 END
-	--, Given_To_Pledge = CASE WHEN #D.Pledge_ID = PL.Pledge_ID THEN ISNULL(#D.Given_to_Pledge,0) ELSE 0 END
 	, ISNULL(#D.Pledge,0) AS PLEDGE
 	, ISNULL(#D.Given_to_Pledge,0) AS Given_To_Pledge
 	, D.Donor_ID
@@ -255,9 +252,6 @@ FROM (SELECT Top 100 PERCENT D.Donation_ID
 	FROM Donations D
 	 INNER JOIN Batches B ON B.Batch_ID = D.Batch_ID aND B.Finalize_Date IS NOT NULL
 	 INNER JOIN #DONORS ON #DONORS.Donor_ID = D.Donor_ID
-	 --INNER JOIN Donation_Distributions DD ON DD.Donation_ID = D.Donation_ID
-	 --INNER JOIN #D ON (#D.Donor_ID = D.Donor_ID AND COALESCE(DD.Pledge_ID, -1) = COALESCE(#D.Pledge_ID, -1))
-	 --LEFT OUTER JOIN #D ON (#D.Donor_ID = D.Donor_ID AND COALESCE(DD.Pledge_ID, -1) = COALESCE(#D.Pledge_ID, -1))
 	 INNER JOIN dp_Domains Dom ON Dom.Domain_ID = D.Domain_ID
 	 INNER JOIN Donors Do ON Do.Donor_ID = D.Donor_ID
 	 INNER JOIN Contacts C ON C.Contact_ID = Do.Contact_ID
@@ -273,14 +267,13 @@ FROM (SELECT Top 100 PERCENT D.Donation_ID
 	 LEFT OUTER JOIN Pledges Pl ON PL.Pledge_ID = DD.Pledge_ID
 	 LEFT OUTER JOIN Pledge_Campaigns PC ON PC.Pledge_Campaign_ID = PL.Pledge_Campaign_ID
 	 LEFT OUTER JOIN #D ON (#D.Donor_ID = D.Donor_ID AND PL.Pledge_ID = #D.Pledge_ID)
-	 --INNER JOIN #D ON (#D.Donor_ID = D.Donor_ID AND COALESCE(PL.Pledge_ID, -1) = COALESCE(#D.Pledge_ID, -1))
 	 LEFT OUTER JOIN Donors PLDo ON PLDo.Donor_ID = PL.Donor_ID
 	 LEFT OUTER JOIN Contacts PLDoC ON PLDoC.Contact_ID = PLDo.Contact_ID
 
 	WHERE Year(Donation_Date) = @StmtYr
 	 AND Donation_Date < @ThroughDate+1
 	 AND @DomainID = Dom.Domain_GUID
---	 AND D.Payment_Type_ID <> 6 --Omit Non Cash
+	 --AND D.Payment_Type_ID <> 6 --Omit Non Cash
 	 AND ISNULL(Prog.Tax_Deductible_Donations,0) = 1 --Omit Non Deductible
 	 AND Do.Statement_Method_ID <> 4
 	 AND Do.Statement_Frequency_ID <> 3
