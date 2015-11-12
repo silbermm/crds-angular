@@ -52,7 +52,7 @@ namespace crds_angular.Services
             RNGCryptoServiceProvider prov = new RNGCryptoServiceProvider();
             prov.GetBytes(resetArray);
             var resetToken = Encoding.UTF8.GetString(resetArray);
-            string cleanToken = Regex.Replace(resetToken, "[^A-Za-z0-9 _]", "");
+            string cleanToken = Regex.Replace(resetToken, "[^A-Za-z0-9]", "");
 
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;
