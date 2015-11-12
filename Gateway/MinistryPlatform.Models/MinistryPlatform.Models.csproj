@@ -58,6 +58,7 @@
     <Compile Include="Attribute.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="DonationAndDistributionRecord.cs" />
+    <Compile Include="DonorStatement.cs" />
     <Compile Include="EventParticipant.cs" />
     <Compile Include="Pledge.cs" />
     <Compile Include="Communication.cs" />

@@ -70,14 +70,12 @@
         resolve: {
           PaymentService: 'PaymentService',
           Subscriptions: function(Profile) {
-            debugger;
             return Profile.Subscriptions.query().$promise;
           },
-          Donor: function(PaymentService) {
-            // TODO: Should this be promise?
-            return PaymentService.getDonor();
-          }
-        },
+          Statement: function(Profile) {
+            return Profile.Statement.get().$promise;
+          },
+        }
       })
       .state('profile.skills', {
         url: '/skills',

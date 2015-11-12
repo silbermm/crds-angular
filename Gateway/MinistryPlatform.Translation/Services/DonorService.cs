@@ -32,6 +32,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _myHouseholdDonationDistributions;
         private readonly int _recurringGiftBySubscription;
         private readonly int _recurringGiftPageId;
+        private readonly int _myDonorPageId;
         private readonly int _myHouseholdDonationRecurringGifts;
         private readonly int _myHouseholdRecurringGiftsApiPageView;
         private readonly int _myHouseholdPledges;
@@ -52,7 +53,8 @@ namespace MinistryPlatform.Translation.Services
         private readonly IContactService _contactService;
         private readonly ICryptoProvider _crypto;
         private readonly DateTimeFormatInfo _dateTimeFormat;
-       
+        
+
         public DonorService(IMinistryPlatformService ministryPlatformService, IProgramService programService, ICommunicationService communicationService, IAuthenticationService authenticationService, IContactService contactService,  IConfigurationWrapper configuration, ICryptoProvider crypto)
             : base(authenticationService, configuration)
         {
@@ -72,6 +74,7 @@ namespace MinistryPlatform.Translation.Services
             _myHouseholdDonationDistributions = configuration.GetConfigIntValue("MyHouseholdDonationDistributions");
             _recurringGiftBySubscription = configuration.GetConfigIntValue("RecurringGiftBySubscription");
             _recurringGiftPageId = configuration.GetConfigIntValue("RecurringGifts");
+            _myDonorPageId = configuration.GetConfigIntValue("MyDonor");
             _myHouseholdDonationRecurringGifts = configuration.GetConfigIntValue("MyHouseholdDonationRecurringGifts");
             _myHouseholdRecurringGiftsApiPageView = configuration.GetConfigIntValue("MyHouseholdRecurringGiftsApiPageView");
             _myHouseholdPledges = configuration.GetConfigIntValue("MyHouseholdPledges");
@@ -928,6 +931,46 @@ namespace MinistryPlatform.Translation.Services
                 ProcessorId = record["Processor_ID"] as string
             };
         }
-    }
 
+        public DonorStatement GetDonorStatement(string token)
+        {
+            var records = _ministryPlatformService.GetRecordsDict(_myDonorPageId, token);
+
+            if (records.Count > 1)
+            {
+                throw new ApplicationException("More than 1 donor for the current contact");            
+            }
+
+            if (records.Count == 0)
+            {
+                return null;
+            }
+
+            var statementMethod = new DonorStatement();
+            statementMethod.DonorId = records[0].ToInt("dp_RecordID");
+            statementMethod.Paperless = records[0].ToString("Statement_Method_ID") == "2";
+            return statementMethod;
+        }
+
+        public void UpdateDonorStatement(string token, DonorStatement statement)
+        {
+            var dictionary = new Dictionary<string, object>
+            {
+                {"Donor_ID", statement.DonorId},
+                {"Statement_Method_ID", statement.Paperless ? "2" : "1"},
+            };
+
+            try
+            {
+                _ministryPlatformService.UpdateRecord(_myDonorPageId, dictionary, token);
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error updating statement method attribute, donor: {0} paperless: {1}",
+                                        statement.DonorId, statement.Paperless);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
+        }
+    }
 }

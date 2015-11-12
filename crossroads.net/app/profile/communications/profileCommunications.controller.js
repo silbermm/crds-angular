@@ -5,43 +5,28 @@
 
   ProfileCommunicationsController.$inject = [
     '$rootScope',
-    'Person',
     'Profile',
-    'PaymentService',
     'Subscriptions',
-    'Donor'];
+    'Statement'];
 
   function ProfileCommunicationsController($rootScope,
-                                           Person,
                                            Profile,
-                                           PaymentService,
                                            Subscriptions,
-                                           Donor) {
+                                           Statement) {
     var vm = this;
 
-
-    vm.donor = Donor;
-    vm.paperless = (Donor.Statement_Method_ID === 2 ? true : false);
+    vm.savePaperless = savePaperless;
     vm.saveSubscription = saveSubscription;
+    vm.statement = Statement;
     vm.subscriptions = Subscriptions;
 
     function savePaperless() {
+      if (!vm.statement) {
+        return;
+      }
 
-      //TODO: Move to resolve
-      vm.subscriptions = Profile.Subscriptions.query();
-      PaymentService.getDonor()
-        .then(function(donor) {
-          vm.donor = donor;
-          vm.paperless = (donor.Statement_Method_ID === 2 ? true : false);
-        },
-
-        function(error) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-        });
-
-      Profile.Subscriptions.save(subscription.Subscription).$promise
-        .then(function(data) {
-          subscription.Subscription.dp_RecordID = data.dp_RecordID;
+      Profile.Statement.save(vm.statement,
+        function(data) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
         },
 
