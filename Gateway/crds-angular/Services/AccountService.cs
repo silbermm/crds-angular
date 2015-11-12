@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.Infrastructure;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.MP;
 using crds_angular.Services.Interfaces;
@@ -16,12 +17,14 @@ namespace crds_angular.Services
         private IConfigurationWrapper _configurationWrapper;
         private ICommunicationService _communicationService;
         private IAuthenticationService _authenticationService;
+        private ISubscriptionsService _subscriptionsService;
 
-        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService, IAuthenticationService authenticationService)
+        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService, IAuthenticationService authenticationService, ISubscriptionsService subscriptionService)
         {
             this._configurationWrapper = configurationWrapper;
             this._communicationService = communicationService;
             this._authenticationService = authenticationService;
+            this._subscriptionsService = subscriptionService;
         }
         public bool ChangePassword(string token, string newPassword)
         {
@@ -191,6 +194,8 @@ namespace crds_angular.Services
             int userRoleRecordID = CreateUserRoleSubRecord(token, userRecordID);
             int participantRecordID = CreateParticipantRecord(token, contactRecordID);
 
+            CreateNewUserSubscriptions(contactRecordID, token);
+
             // TODO Contingent on cascading delete via contact
             Dictionary<string, string> returnValues = new Dictionary<string, string>();
             returnValues["firstname"] = newUserData.firstName;
@@ -198,6 +203,17 @@ namespace crds_angular.Services
             returnValues["email"] = newUserData.email;
             returnValues["password"] = newUserData.password; //TODO Conisder encrypting the password on the user model
             return returnValues;
+        }
+
+        private void CreateNewUserSubscriptions(int contactRecordId, string token)
+        {
+            Dictionary<string, object> newSubscription = new Dictionary<string, object>();
+            newSubscription["Publication_ID"] = this._configurationWrapper.GetConfigValue("KidsClubPublication");
+            newSubscription["Unsubscribed"] = false;
+            _subscriptionsService.SetSubscriptions(newSubscription, contactRecordId, token);
+            newSubscription["Publication_ID"] = this._configurationWrapper.GetConfigValue("CrossroadsPublication");
+            newSubscription["Unsubscribed"] = false;
+            _subscriptionsService.SetSubscriptions(newSubscription, contactRecordId, token);
         }
 
     }
