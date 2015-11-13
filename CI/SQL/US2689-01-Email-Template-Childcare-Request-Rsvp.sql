@@ -4,7 +4,7 @@ GO
 DELETE FROM [dp_Communications] WHERE [Communication_ID] = 13362;
 
 SET IDENTITY_INSERT [dbo].[dp_Communications] ON
-GO+
+GO
 
 INSERT INTO [dp_Communications]
   (
