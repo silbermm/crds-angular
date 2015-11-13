@@ -1,5 +1,7 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Http.Description;
+using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
@@ -24,8 +26,16 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                var donorStatement = _donorStatementService.GetDonorStatement(token);
-                return Ok(donorStatement);
+                try
+                {
+                    var donorStatement = _donorStatementService.GetDonorStatement(token);
+                    return Ok(donorStatement);
+                }                                
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Get Donor Statement", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
             }));
         }
 
@@ -35,8 +45,16 @@ namespace crds_angular.Controllers.API
         {
             return (Authorized(token =>
             {
-                _donorStatementService.SaveDonorStatement(token, donorStatement);
-                return this.Ok();
+                try
+                {
+                    _donorStatementService.SaveDonorStatement(token, donorStatement);
+                    return this.Ok();
+                }
+                catch (Exception ex)
+                {
+                    var apiError = new ApiErrorDto("Save Donor Statement", ex);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
             }));
         }  
     }
