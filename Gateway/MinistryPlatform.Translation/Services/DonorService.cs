@@ -946,18 +946,23 @@ namespace MinistryPlatform.Translation.Services
                 return null;
             }
 
+            var postalStatementId = _configurationWrapper.GetConfigValue("PostalMailStatement");
             var statementMethod = new DonorStatement();
             statementMethod.DonorId = records[0].ToInt("dp_RecordID");
-            statementMethod.Paperless = records[0].ToString("Statement_Method_ID") == "2";
+            
+            statementMethod.Paperless = records[0].ToString("Statement_Method_ID") != postalStatementId;
             return statementMethod;
         }
 
         public void UpdateDonorStatement(string token, DonorStatement statement)
-        {
+        {           
+            var onlineStatementId = _configurationWrapper.GetConfigValue("EmailOnlineStatement");
+            var postalStatementId = _configurationWrapper.GetConfigValue("PostalMailStatement");
+
             var dictionary = new Dictionary<string, object>
             {
                 {"Donor_ID", statement.DonorId},
-                {"Statement_Method_ID", statement.Paperless ? "2" : "1"},
+                {"Statement_Method_ID", statement.Paperless ? onlineStatementId : postalStatementId},
             };
 
             try
