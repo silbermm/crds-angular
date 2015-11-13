@@ -53,7 +53,7 @@
 
         <div class="row">
             <legend class="col-sm-12">Giving Statements</legend>
-            <div class="col-sm-12">
+            <div class="col-sm-12" ng-if="!profileCommunications.enableStatement()">
               <div class="alert alert-info" role="alert">
                 <span ng-if="!profileCommunications.hasDonor()" dynamic-content="$root.MESSAGES.profileStatementDonorDoesNotExist.content | html"></span>
                 <span ng-if="!profileCommunications.hasAddress() && profileCommunications.hasDonor()" dynamic-content="$root.MESSAGES.profileStatementAddressDoesNotExist.content | html"></span>
