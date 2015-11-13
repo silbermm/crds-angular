@@ -67,7 +67,7 @@
               <div class="col-xs-6" ng-if="!profileCommunications.enableStatement()">
                 <toggle-switch ng-model="profileCommunications.statement.paperless" disabled="true">
                 </toggle-switch>
-                <span ng-if="!profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileDonorDoesNotExist.content | html"></span>
+                <span ng-if="!profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileStatementDonorDoesNotExist.content | html"></span>
                 <span ng-if="!profileCommunications.hasAddress() && profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileStatementAddressDoesNotExist.content | html"></span>
               </div>
             </div>
