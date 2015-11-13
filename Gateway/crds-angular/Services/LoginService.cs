@@ -60,7 +60,6 @@ namespace crds_angular.Services
             _userService.UpdateUser(userUpdateValues);
 
             string baseURL = _configurationWrapper.GetConfigValue("BaseURL");
-            // http://www.crossroads.net/lostpassword?id=1234
             string resetLink = (@"https://" + baseURL + "/reset-password?token=" + cleanToken);
 
             // add the email here...
