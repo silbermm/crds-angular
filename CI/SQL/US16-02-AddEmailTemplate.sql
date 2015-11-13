@@ -9,10 +9,10 @@ SET
 
    [Author_User_ID] = 1,
    [Subject] = 'Password Reset Link',
-   [Body] = '<p>Someone requeted that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>To reset your password, visit the following address: http://www.crossroads.net/lostpassword?[resetlink]</p></div>',
-   [Domain_ID] = 3,
+   [Body] = '<p>Someone requeted that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>To reset your password, visit the following address: [resetlink]</p></div>',
+   [Domain_ID] = 1,
    [Start_Date] = '2015-11-03 00:00:00.000',
-   [Expire_Date] = 'NULL',
+   [Expire_Date] = NULL,
    [Communication_Status_ID] = 1,
    [From_Contact] = 7,
    [Reply_to_Contact] = 7,                      

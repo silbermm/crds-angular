@@ -59,6 +59,10 @@ namespace crds_angular.Services
             userUpdateValues["ResetToken"] = cleanToken; // swap out for real implementation
             _userService.UpdateUser(userUpdateValues);
 
+            string baseURL = _configurationWrapper.GetConfigValue("BaseURL");
+            // http://www.crossroads.net/lostpassword?id=1234
+            string resetLink = (@"https://" + baseURL + "/reset-password?token=" + cleanToken);
+
             // add the email here...
             var emailCommunication = new EmailCommunicationDTO
             {
@@ -68,7 +72,7 @@ namespace crds_angular.Services
                 TemplateId = 13356,
                 MergeData = new Dictionary<string, object>
                     {
-                        { "resetlink", cleanToken }
+                        { "resetlink", resetLink }
                     }
             };
 
