@@ -68,7 +68,6 @@
         templateUrl: 'communications/profileCommunications.html',
         controller: 'ProfileCommunicationsController as profileCommunications',
         resolve: {
-          PaymentService: 'PaymentService',
           Subscriptions: function(Profile) {
             return Profile.Subscriptions.query().$promise;
           },
