@@ -178,13 +178,11 @@ namespace crds_angular.Services
             {
                 return _paymentService.GetCharge(donation.Source.PaymentProcessorId);
             }
-
-            donation.Status = DonationStatus.Refunded;
-
+            
             var refund = _paymentService.GetRefund(donation.Source.PaymentProcessorId);
             if (refund != null && refund.Charge != null)
             {
-                return refund.Charge;
+               return refund.Charge;
             }
 
             return null;

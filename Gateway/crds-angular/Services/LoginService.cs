@@ -30,7 +30,7 @@ namespace crds_angular.Services
             _userService = userService;
         }
 
-        public bool PasswordResetRequest(string email)
+        public bool PasswordResetRequest(string username)
         {
             int user_ID = 0;
             int contact_Id = 0;
@@ -38,26 +38,29 @@ namespace crds_angular.Services
             // validate the email on the server side to avoid erroneous or malicious requests
             try
             {
-                user_ID = _userService.GetUserIdByEmail(email);
-                contact_Id = _contactService.GetContactIdByEmail(email);
+                user_ID = _userService.GetUserIdByUsername(username);
+                contact_Id = _userService.GetContactIdByUserId(user_ID);
             }
             catch (Exception ex)
             {
-                _logger.Error(string.Format("Could not find email {0} for password reset", JsonConvert.SerializeObject(email, Formatting.Indented)), ex);
+                _logger.Error(string.Format("Could not find email {0} for password reset", JsonConvert.SerializeObject(username, Formatting.Indented)), ex);
                 return false;
             }
 
             // create a token -- see http://stackoverflow.com/questions/664673/how-to-implement-password-resets
-            var resetArray = Encoding.UTF8.GetBytes(Guid.NewGuid() + email + System.DateTime.Now);
+            var resetArray = Encoding.UTF8.GetBytes(Guid.NewGuid() + username + System.DateTime.Now);
             RNGCryptoServiceProvider prov = new RNGCryptoServiceProvider();
             prov.GetBytes(resetArray);
             var resetToken = Encoding.UTF8.GetString(resetArray);
-            string cleanToken = Regex.Replace(resetToken, "[^A-Za-z0-9 _]", "");
+            string cleanToken = Regex.Replace(resetToken, "[^A-Za-z0-9]", "");
 
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;
             userUpdateValues["ResetToken"] = cleanToken; // swap out for real implementation
             _userService.UpdateUser(userUpdateValues);
+
+            string baseURL = _configurationWrapper.GetConfigValue("BaseURL");
+            string resetLink = (@"https://" + baseURL + "/reset-password?token=" + cleanToken);
 
             // add the email here...
             var emailCommunication = new EmailCommunicationDTO
@@ -68,7 +71,7 @@ namespace crds_angular.Services
                 TemplateId = 13356,
                 MergeData = new Dictionary<string, object>
                     {
-                        { "resetlink", cleanToken }
+                        { "resetlink", resetLink }
                     }
             };
 
@@ -79,7 +82,7 @@ namespace crds_angular.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(string.Format("Could not send email {0} for password reset", JsonConvert.SerializeObject(email, Formatting.Indented)), ex);
+                _logger.Error(string.Format("Could not send email {0} for password reset", JsonConvert.SerializeObject(username, Formatting.Indented)), ex);
                 return false;
             }
         }
@@ -90,9 +93,9 @@ namespace crds_angular.Services
             throw new NotImplementedException();
         }
 
-        public bool ClearResetToken(string email)
+        public bool ClearResetToken(string username)
         {
-            int user_ID = _userService.GetUserIdByEmail(email);
+            int user_ID = _userService.GetUserIdByUsername(username);
 
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;

@@ -34,7 +34,8 @@ namespace MinistryPlatform.Translation.Services
                 Preferred_Name = viewRecord.ToString("Preferred Name"),
                 Participant_Id = viewRecord.ToInt("Participant_ID"),
                 Relationship_Id = viewRecord.ToInt("Relationship_ID"),
-                Age = viewRecord.ToInt("Age")
+                Age = viewRecord.ToInt("Age"),
+                HighSchoolGraduationYear = viewRecord.ToInt("HS_Graduation_Year")
             }).ToList();
         }
 
@@ -65,22 +66,16 @@ namespace MinistryPlatform.Translation.Services
             var viewRecords = _ministryPlatformService.GetSubpageViewRecords(_getMyCurrentRelationships,
                                                                              contactId,
                                                                              token);
-            try
+
+            return viewRecords.Select(viewRecord => new ContactRelationship
             {
-                return viewRecords.Select(viewRecord => new ContactRelationship
-                {
-                    Contact_Id = (int) viewRecord["Contact_ID"],
-                    Email_Address = (string) viewRecord["Email_Address"],
-                    Last_Name = (string) viewRecord["Last Name"],
-                    Preferred_Name = (string) viewRecord["Preferred Name"],
-                    Participant_Id = (int) viewRecord["Participant_ID"],
-                    Relationship_Id = (int) viewRecord["Relationship_ID"]
-                }).ToList();
-            }
-            catch (Exception e)
-            {
-                throw;
-            }
+                Contact_Id = viewRecord.ToInt("Contact_ID"),
+                Email_Address = viewRecord.ToString("Email_Address"),
+                Last_Name = viewRecord.ToString("Last Name"),
+                Preferred_Name = viewRecord.ToString("Preferred Name"),
+                Participant_Id = viewRecord.ToInt("Participant_ID"),
+                Relationship_Id = viewRecord.ToInt("Relationship_ID")
+            }).ToList();
         }
 
         public int AddRelationship(Relationship relationship, int toContact)

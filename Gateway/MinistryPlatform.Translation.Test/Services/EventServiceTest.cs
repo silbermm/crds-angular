@@ -146,11 +146,12 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Event_Start_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
                     {"Event_End_Date", new DateTime(2015, 3, 28, 8, 30, 0)},
                     {"Contact_ID", 12345},
-                    {"Email_Address", "thecinnamonbagel@react.js"}
+                    {"Email_Address", "thecinnamonbagel@react.js"},
+                    {"Parent_Event_ID", 6543219}
                 }
             };
-
-            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), eventId.ToString(), string.Empty, 0)).Returns(mockEventDictionary);
+            var searchString = eventId + ",";
+            ministryPlatformService.Setup(m => m.GetPageViewRecords(pageKey, It.IsAny<string>(), searchString, string.Empty, 0)).Returns(mockEventDictionary);
 
             //Act
             var theEvent = fixture.GetEvent(eventId);
@@ -167,7 +168,7 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void GetEventByParentId()
         {
-            const int expectedEventId= 999;
+            const int expectedEventId = 999;
             const int parentEventId = 888;
             var searchString = string.Format(",,,{0}", parentEventId);
             const string pageKey = "EventsByParentEventID";
@@ -264,7 +265,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Participation_Status_ID", EventParticipantStatusDefaultID}
             };
 
-            var eventParticipantId = fixture.registerParticipantForEvent(123, 456);
+            var eventParticipantId = fixture.RegisterParticipantForEvent(123, 456);
 
             ministryPlatformService.Verify(mocked => mocked.CreateSubRecord(
                 EventParticipantPageId,

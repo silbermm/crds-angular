@@ -1,0 +1,20 @@
+<span ng-if='childcareEvent.children.length < 1' ng-bind-html='$root.MESSAGES.noChildrenForChildcare.content | html'> </span>
+
+<div ng-if='childcareEvent.children.length > 0' >  
+  <span ng-bind-html='$root.MESSAGES.childcareInstructions.content | html'> </span> 
+  
+  
+  <ng-form name='childcareEvent.form' ng-submit='childcareEvent.submit()'>
+
+    <div ng-repeat="child in childcareEvent.children" >
+      <childcare-child child='child'> </childcare-child> 
+    </div>
+  
+    <button ng-click='childcareEvent.submit()' 
+            class='btn btn-primary'
+            btn-loading='childcareEvent.saving'
+            data-loading-text='Submitting...'>
+      Submit
+    </button>
+  </ng-form>
+</div>

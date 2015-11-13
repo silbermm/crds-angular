@@ -1,4 +1,5 @@
 require('./events');
+require('./childcare');
 require('./mp_tools');
 require('../lib/select.css');
 
@@ -17,7 +18,8 @@ require('../lib/select.css');
       constants.MODULES.PROFILE,
       constants.MODULES.SEARCH,
       constants.MODULES.TRIPS,
-      constants.MODULES.COMMUNITY_GROUPS
+      constants.MODULES.COMMUNITY_GROUPS,
+      constants.MODULES.CHILDCARE
    ]);
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));

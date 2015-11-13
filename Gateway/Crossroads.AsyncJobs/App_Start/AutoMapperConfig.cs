@@ -8,6 +8,7 @@ using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
 using Group = MinistryPlatform.Models.Group;
 using Response = MinistryPlatform.Models.Response;
 
@@ -109,6 +110,10 @@ namespace Crossroads.AsyncJobs
                         PaymentProcessorId = src.transactionCode,
                         Name = ((src.softCreditDonorId != 0) ? src.donorDisplayName : null),
                     };
+                    if (src.donationAmt < 0)
+                    {
+                        dest.Status = src.donationStatus == 1 ? DonationStatus.Pending : DonationStatus.Refunded;
+                    }
                 });
 
             Mapper.CreateMap<ContactDonor, EZScanDonorDetails>()

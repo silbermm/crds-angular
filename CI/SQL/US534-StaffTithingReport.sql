@@ -55,10 +55,10 @@ BEGIN
 
 	END
 END
-
-
+GO
 
 SET IDENTITY_INSERT [dbo].[dp_Reports] ON
+GO
 
 INSERT INTO [dbo].[dp_Reports]
            ([Report_ID]
@@ -76,20 +76,17 @@ INSERT INTO [dbo].[dp_Reports]
            ,0
            ,0
            ,1)
-
-SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
-
 GO
 
-
+SET IDENTITY_INSERT [dbo].[dp_Reports] OFF
+GO
 
 INSERT INTO [dbo].[dp_Report_Pages]
            ([Report_ID]
            ,[Page_ID])
      VALUES
-           ('260'
-		  		 ,'297')
-
+           (260
+		  	,297)
 GO
 
 
@@ -98,7 +95,7 @@ INSERT INTO [dbo].[dp_Role_Reports]
            ,[Report_ID]
            ,[Domain_ID])
      VALUES
-           ('2'
-           ,'260'
-           ,'1')
+           (2
+           ,260
+           ,1)
 GO

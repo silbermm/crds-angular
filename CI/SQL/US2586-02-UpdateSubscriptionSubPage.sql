@@ -1,7 +1,12 @@
 USE [MinistryPlatform]
 GO
 
-IF EXISTS (SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 376)
+-- Fix issue where the same subpage was inserted with different ID's
+DELETE FROM [dbo].[dp_Role_Sub_Pages] WHERE sub_Page_ID = 376
+DELETE FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 376 AND Display_Name = 'Subscriptions'
+
+-- Now use the correct ID 424
+IF EXISTS (SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 424)
 
 BEGIN
 
@@ -28,7 +33,7 @@ SET
 	[Contact_ID_Field] = 'dp_Contact_Publications.Contact_ID',
     [Default_View] = 59
 
-WHERE [Sub_Page_ID] = 376
+WHERE [Sub_Page_ID] = 424
 
 END
 

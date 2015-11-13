@@ -78,17 +78,11 @@
 
       <div class="form-group col-sm-6" ng-if="profile.allowPasswordChange">
         <label for="password">Change Password</label>
-        <div class="input-group">
-          <input type="password" class="form-control" id="password" name="password" ng-model="fields.password" value="testpassword" />
-          <!--<input type="text" class="form-control" id="password-clear" name="password" ng-model="fields.password" ng-if="showPassword" value="testpassword" />-->
-          <span class="input-group-addon">
-        <label>
-          <input type="checkbox" ng-click="showPassword = !showPassword"> Show
-        </label>
-        </span>
-          </div>
-          <!-- /input-group -->
-      </div>
+        <password-field passwd="fields.password"
+                        submitted="profile.pform.$submitted"
+                        prefix="change"
+                        passwd-strength="true">
+        </password-field>
     </div>
 
     <div class="row">
@@ -241,7 +235,7 @@
         <label for="mobile-phone" ng-class="{'required': profile.requireMobilePhone}">Mobile Phone</label>
           <div class="small inline bold">
             <span ng-show="phoneToggle" class="link-styling" ng-click="phoneToggle = !phoneToggle">Don't have a mobile phone?</span>
-            <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="profile.householdPhoneFocus()">here</a>.</span>
+            <span ng-show="!phoneToggle" class="text-muted">Edit your household phone <a class="pointer" ng-click="profile.householdPhoneFocus()">below</a>.</span>
           </div>
           <input type="text"
                  class="form-control"
