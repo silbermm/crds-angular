@@ -5,9 +5,6 @@
 
   angular.module(constants.MODULES.COMMON, []);
 
-  // require the validation service
-  //require('./validation');
-
   // require all giving common components
   require('./giving');
 
