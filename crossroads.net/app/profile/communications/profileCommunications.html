@@ -60,8 +60,15 @@
                   <br><span class="text-muted small">Giving statements will be emailed to you.</span>
                 </label>
               </div>
-              <div class="col-xs-6">
-                <toggle-switch ng-click="profileCommunications.savePaperless()" ng-model="profileCommunications.statement.paperless"></toggle-switch>
+              <div class="col-xs-6" ng-if="profileCommunications.enableStatement()">
+                <toggle-switch ng-model="profileCommunications.statement.paperless" ng-click="profileCommunications.savePaperless()">
+                </toggle-switch>
+              </div>
+              <div class="col-xs-6" ng-if="!profileCommunications.enableStatement()">
+                <toggle-switch ng-model="profileCommunications.statement.paperless" disabled="true">
+                </toggle-switch>
+                <span ng-if="!profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileDonorDoesNotExist.content | html"></span>
+                <span ng-if="!profileCommunications.hasAddress() && profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileStatementAddressDoesNotExist.content | html"></span>
               </div>
             </div>
         </div><!--/row-->
