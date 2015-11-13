@@ -38,9 +38,9 @@
     vm.profileData = { person: Person };
     vm.tabs = [
       { title:'Personal', active: false, route: 'profile.personal' },
-      { title:'Communications', active: false, route: 'profile.communications' },
-      { title:'Skills', active: false, route: 'profile.skills' },
-      { title: 'Giving History', active: false, route: 'profile.giving' }
+      { title:'Communications', active: false, route: 'profile.communications', class:'hidden-xs'},
+      { title:'Skills', active: false, route: 'profile.skills', class:'hidden-xs' },
+      { title: 'Giving', active: false, route: 'profile.giving', class:'hidden-xs' }
     ];
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
