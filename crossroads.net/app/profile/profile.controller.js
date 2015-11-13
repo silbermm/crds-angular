@@ -36,7 +36,6 @@
     vm.locations = Locations;
     vm.locationFocus = locationFocus;
     vm.profileData = { person: Person };
-    vm.saveSubscription = saveSubscription;
     vm.tabs = [
       { title:'Personal', active: false, route: 'profile.personal' },
       { title:'Communications', active: false, route: 'profile.communications' },
@@ -46,18 +45,6 @@
 
     $rootScope.$on('$stateChangeStart', stateChangeStart);
     $window.onbeforeunload = onBeforeUnload;
-
-    //TODO: Move to resolve
-    vm.subscriptions = Profile.Subscriptions.query();
-    PaymentService.getDonor()
-      .then(function(donor) {
-        vm.donor = donor;
-        vm.paperless = (donor.Statement_Method_ID === 2 ? true : false);
-      },
-
-      function(error) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      });
 
     activate();
 
@@ -95,31 +82,6 @@
       $rootScope.$emit('locationFocus');
     }
 
-    function savePaperless() {
-    }
-
-    function saveSubscription(subscription) {
-      if (subscription.Subscription) {
-        subscription.Subscription.Unsubscribed = !subscription.Subscribed;
-      } else {
-        subscription.Subscription = {
-          Publication_ID: subscription.ID,
-          Publication_Title: subscription.Title,
-          Unsubscribed: !subscription.Subscribed
-        };
-
-      }
-
-      Profile.Subscriptions.save(subscription.Subscription).$promise
-      .then(function(data) {
-        subscription.Subscription.dp_RecordID = data.dp_RecordID;
-        $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
-      },
-
-      function(error) {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      });
-    }
 
     function goToTab(tab) {
       $state.go(tab.route);

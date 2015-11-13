@@ -261,6 +261,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\ChildcareController.cs" />
+    <Compile Include="Controllers\API\DonorStatementController.cs" />
+    <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
     <Compile Include="Models\Crossroads\Childcare\ChildcareRsvpDto.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
@@ -269,6 +271,8 @@
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Models\Json\PasswordResetRequest.cs" />
     <Compile Include="Models\Json\PasswordResetVerification.cs" />
+    <Compile Include="Services\DonorStatementService.cs" />
+    <Compile Include="Services\Interfaces\IDonorStatementService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\ChildcareService.cs" />

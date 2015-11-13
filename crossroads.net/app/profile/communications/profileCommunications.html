@@ -4,14 +4,14 @@
       <span ng-bind-html="$root.MESSAGES.profileCommunicationsHeader.content | html"></span>
       <div class="row">
         <legend class="col-sm-12">Email Communications</legend>
-        <div ng-repeat="subscription in profile.subscriptions" class="form-group clearfix toggle-input-group">
+        <div ng-repeat="subscription in profileCommunications.subscriptions" class="form-group clearfix toggle-input-group">
           <div class="col-xs-6">
             <label class="block">{{subscription.Title}}
               <br /><small class="text-muted">{{subscription.Description}}</small>
             </label>
           </div>
           <div class="col-xs-6">
-            <toggle-switch ng-click="profile.saveSubscription(subscription)" ng-model="subscription.Subscribed"></toggle-switch>
+            <toggle-switch ng-click="profileCommunications.saveSubscription(subscription)" ng-model="subscription.Subscribed"></toggle-switch>
           </div>
         </div>
       </div><!--/row-->
@@ -60,8 +60,15 @@
                   <br><span class="text-muted small">Giving statements will be emailed to you.</span>
                 </label>
               </div>
-              <div class="col-xs-6">
-                <toggle-switch ng-click="profile.savePaperless()" ng-model="profile.paperless"></toggle-switch>
+              <div class="col-xs-6" ng-if="profileCommunications.enableStatement()">
+                <toggle-switch ng-model="profileCommunications.statement.paperless" ng-click="profileCommunications.savePaperless()">
+                </toggle-switch>
+              </div>
+              <div class="col-xs-6" ng-if="!profileCommunications.enableStatement()">
+                <toggle-switch ng-model="profileCommunications.statement.paperless" disabled="true">
+                </toggle-switch>
+                <span ng-if="!profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileStatementDonorDoesNotExist.content | html"></span>
+                <span ng-if="!profileCommunications.hasAddress() && profileCommunications.hasDonor()" ng-bind-html="$root.MESSAGES.profileStatementAddressDoesNotExist.content | html"></span>
               </div>
             </div>
         </div><!--/row-->
