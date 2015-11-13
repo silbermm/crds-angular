@@ -127,24 +127,25 @@
     </div>
 
     <div class="row">
+
         <div class="form-group col-sm-6">
-            <label for="marital_status">Marital Status</label>
-            <select class="form-control col-sm-12" ng-model="profile.profileData.person.maritalStatusId" ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
+          <label for="marital_status"> Marital Status </label>
+            <select class="form-control col-sm-12"
+              ng-model="profile.profileData.person.maritalStatusId"
+              ng-options="status.dp_RecordID as status.dp_RecordName for status in profile.maritalStatuses">
               <option value="" disabled="disabled" selected="selected" style="display:none"> -- Choose One -- </option>
             </select>
         </div>
-
-        <div class="form-group col-sm-6" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'gender')}" >
-            <label class="block required">Gender</label>
-            <label class="radio-inline" ng-repeat="gender in profile.genders">
-                <input type="radio"
-                  id="gender-{{ gender.dp_RecordName}}"
-                  name="gender"
-                  ng-value="gender.dp_RecordID"
-                  ng-model="profile.profileData.person.genderId"
-                  required > {{ gender.dp_RecordName }}
-            </label>
-           <ng-messages for="profile.pform.gender.$error" ng-if="profile.validation.showErrors(profile.pform, 'gender')">
+      
+        <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'gender')}" >
+          <label class="block required"> Gender </label>
+          <label class="radio-inline" ng-repeat='genders in profile.genders'>
+            <input type="radio"
+                   name="testing"
+                   ng-value="genders.dp_RecordID"
+                   ng-model="profile.profileData.person.genderId" /> {{genders.dp_RecordName}}
+          </label>
+          <ng-messages for="profile.pform.gender.$error" ng-if="profile.validation.showErrors(profile.pform, 'gender')">
             <ng-messages-include src="on-submit-messages"></ng-messages-include>
             <ng-messages-include src="on-pause-messages"></ng-messages-include>
           </ng-messages>
@@ -273,7 +274,6 @@
     <div class="row" ng-if="profile.profileData.person.householdId!==undefined">
       <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' is-collapsed='profile.isHouseholdCollapsed'/>
     </div>
-    <!--/row-->
 
     <button id="save-personal" class="btn btn-primary" data-style="expand-left" ng-class='profile.buttonCss'  ng-click='profile.savePersonal()' >
       {{profile.buttonText}}
