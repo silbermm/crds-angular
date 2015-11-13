@@ -34,16 +34,6 @@
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     var now = new Date();
 
-    vm.gender = '1';
-
-    vm.color = 'blue';
-    vm.specialValue = {
-      "id": "12345",
-      "value": "green"
-    };
-
-    vm.isGenderChecked = isGenderChecked;
-
     vm.ageRestrictionMessage = $sce.trustAsHtml($rootScope.MESSAGES.ageRestriction.content);
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
@@ -53,7 +43,6 @@
     vm.crossroadsStartDate = new Date(1994, 0, 1);
     vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
     vm.formatAnniversaryDate = formatAnniversaryDate;
-    vm.genderValue = genderValue;
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
@@ -82,11 +71,6 @@
     ////////////////////////////////
     //// IMPLEMENTATION DETAILS ////
     ////////////////////////////////
-
-    function isGenderChecked(id) {
-      return id === vm.gender;
-    }
-
 
     function activate() {
 
@@ -161,10 +145,6 @@
       if (vm.pform['mobile-phone'].$valid) {
         vm.profileData.person.mobilePhone = vm.profileData.person.mobilePhone.replace(vm.phoneFormat, '$1-$2-$3');
       }
-    }
-
-    function genderValue(gender) {
-      return gender.dp_RecordID;
     }
 
     function formatAnniversaryDate(anniversaryDate) {
