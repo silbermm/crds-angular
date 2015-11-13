@@ -8,12 +8,11 @@
     .controller('ProfileController', require('./profile.controller'))
     ;
 
+  require('./communications');
   require('./services');
   require('./skills');
   require('./giving');
 
   require('./profile.html');
   require('./personal/profilePersonal.html');
-  require('./communications/profileCommunications.html');
-
 })();

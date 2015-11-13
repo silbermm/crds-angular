@@ -197,6 +197,9 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.CampaignEndDate, opts => opts.MapFrom(src => src.CampaignEndDate.ToString("MMMM d, yyyy")))
                 .ForMember(dest => dest.CampaignTypeId, opts => opts.MapFrom(src => src.CampaignTypeId))
                 .ForMember(dest => dest.CampaignTypeName, opts => opts.MapFrom(src => src.CampaignTypeName));
+
+            Mapper.CreateMap<DonorStatement, DonorStatementDTO>();
+            Mapper.CreateMap<DonorStatementDTO, DonorStatement>();
         }
     }
 }

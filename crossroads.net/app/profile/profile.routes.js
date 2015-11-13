@@ -66,6 +66,15 @@
       .state('profile.communications', {
         url: '/communications',
         templateUrl: 'communications/profileCommunications.html',
+        controller: 'ProfileCommunicationsController as profileCommunications',
+        resolve: {
+          Subscriptions: function(Profile) {
+            return Profile.Subscriptions.query().$promise;
+          },
+          Statement: function(Profile) {
+            return Profile.Statement.get().$promise;
+          },
+        }
       })
       .state('profile.skills', {
         url: '/skills',
