@@ -94,6 +94,7 @@
           configurePerson();
           vm.viewReady = true;
         }
+
       });
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
