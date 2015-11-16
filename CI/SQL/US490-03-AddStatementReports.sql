@@ -50,7 +50,7 @@ BEGIN
 	);
 END;
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Reports] WHERE [Report_ID] = 258)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Reports] WHERE [Report_ID] = 261)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Reports] ON;
 
@@ -63,7 +63,7 @@ BEGIN
 		, [Pass_LinkTo_Records]
 		, [On_Reports_Tab]
 	) VALUES (
-		  258
+		  261
 		, 'CRDS - Donor Stmts: 4 Column Selected'
 		, 'Create a statement with 4 colums of detail from statement headers for selected donors.'
 		, '/MPReports/Statement 4 Columns - CRDS'
@@ -75,18 +75,18 @@ BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Reports] OFF;
 END
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Report_Pages] WHERE [Report_ID] = 258 AND [Page_ID] = 299)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Report_Pages] WHERE [Report_ID] = 261 AND [Page_ID] = 299)
 BEGIN
 	INSERT INTO [dbo].[dp_Report_Pages] (
 		  Report_ID
 		, Page_ID
 	) VALUES (
-		  258
+		  261
 		, 299
 	);
 END;
 
-IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Role_Reports] WHERE [Report_ID] = 258 AND [Domain_ID] = 1 AND [Role_ID] = 7)
+IF NOT EXISTS (SELECT 1 FROM [dbo].[dp_Role_Reports] WHERE [Report_ID] = 261 AND [Domain_ID] = 1 AND [Role_ID] = 7)
 BEGIN
 	INSERT INTO [dbo].[dp_Role_Reports] (
 		  Role_ID
@@ -94,7 +94,7 @@ BEGIN
 		, Domain_ID
 	) VALUES (
 		  7
-		, 258
+		, 261
 		, 1
 	);
 END;
