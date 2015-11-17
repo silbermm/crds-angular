@@ -21,4 +21,5 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,'Contact_ID_Table.[User_Account] IS NOT NULL')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
+END
 GO
