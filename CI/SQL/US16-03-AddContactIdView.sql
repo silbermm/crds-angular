@@ -18,7 +18,7 @@ INSERT INTO [dbo].[dp_Page_Views]
 		   ,401
            ,'ContactIdByUser'
 		   ,'dp_Users.[User_ID] AS [User ID], Contact_ID_Table.[Contact_ID] AS [Contact ID]'
-           ,'where true')
+           ,'Contact_ID_Table.[User_Account] IS NOT NULL')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 END
