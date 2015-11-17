@@ -22,7 +22,7 @@ DECLARE @houseHoldID as int
 set @houseHoldID = (select Household_ID from contacts where contact_id = @contactID);
 
 UPDATE [dbo].Households 
-SET Address_ID = @addressID, Home_Phone = '123-867-5309', Congregation_ID = 6, Household_Source_ID = 38,                         
+SET Address_ID = @addressID, Home_Phone = '123-867-5309', Congregation_ID = 6, Household_Source_ID = 38                        
 WHERE houseHold_ID = @houseHoldID;
 
 --KidsClubDad Contact updates
@@ -37,12 +37,13 @@ set @contactID = (select contact_id from contacts where Email_Address = 'kidsclu
 
 --Household for kids club mom
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
 
 --KidsClubMom Contact updates
 UPDATE [dbo].Contacts 
 SET Prefix_ID = 2, Middle_Name = 'A', Nickname = 'Momma', Date_of_Birth = {d '1965-01-01'}, Gender_ID = 2, Marital_Status_ID = 2, HouseHold_ID = @houseHoldID, Household_Position_ID = 1, Mobile_Phone = '321-645-8184'
 WHERE contact_id = @contactID;
+GO
 
 --Kidsclubkid14@gmail.com contact 
 DECLARE @contactID as int
@@ -50,7 +51,7 @@ set @contactID = (select contact_id from contacts where Email_Address = 'kidsclu
 
 --Household for kidsclubkid14
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
 
 --KidsClubKid14 Contact Updates
 UPDATE [dbo].Contacts 
@@ -64,7 +65,7 @@ set @contactID = (select contact_id from contacts where Email_Address = 'kidsclu
 
 --Household for kidsclubkid17
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'kidsclubdad@gmail.com' and last_name = 'KidsClubAppFam');
 
 UPDATE [dbo].Contacts 
 SET Middle_Name = 'D', Date_of_Birth = {d '1998-01-01'}, Marital_Status_ID = 1, HouseHold_ID = @houseHoldID, Household_Position_ID = 4, Mobile_Phone = '654-818-1425'
@@ -78,7 +79,7 @@ DECLARE @respID as int
 set @respID = IDENT_CURRENT('Responses')+1;
 
 DECLARE @partID as int
-set @partID = (select Participant_Record from Contacts where display_name = 'KidsClubAppFam, DadJokes');
+set @partID = (select Participant_Record from Contacts where Email_Address = 'kidsclubdad@gmail.com' and Last_Name = 'KidsClubAppFam');
 
 INSERT INTO [dbo].Responses 
 (Response_ID,Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
@@ -94,7 +95,7 @@ DECLARE @respID as int
 set @respID = IDENT_CURRENT('Responses')+1;
 
 DECLARE @partID as int
-set @partID = (select Participant_Record from Contacts where display_name = 'KidsClubAppFam, Billy the Kid');
+set @partID = (select Participant_Record from Contacts where Email_Address = 'kidsclubkid14@gmail.com' and Last_Name = 'KidsClubAppFam');
 
 INSERT INTO [dbo].Responses 
 (Response_ID,Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
@@ -105,16 +106,16 @@ GO
 
 --Family Relationships
 DECLARE @dadContact as int
-set @dadContact = (select Contact_ID from Contacts where display_name = 'KidsClubAppFam, DadJokes');
+set @dadContact = (select Contact_ID from Contacts where Email_Address = 'kidsclubdad@gmail.com' and Last_Name = 'KidsClubAppFam');
 
 DECLARE @momContact as int
-set @momContact = (select Contact_ID from Contacts where display_name = 'KidsClubAppFam, Momma');
+set @momContact = (select Contact_ID from Contacts where Email_Address = 'kidsclubmom@gmail.com');
 
 DECLARE @kid14Contact as int
-set @kid14Contact = (select Contact_ID from Contacts where display_name = 'KidsClubAppFam, Billy the Kid');
+set @kid14Contact = (select Contact_ID from Contacts where email_address = 'kidsclubkid14@gmail.com');
 
 DECLARE @kid17Contact as int
-set @kid17Contact = (select Contact_ID from Contacts where display_name = 'KidsClubAppFam, kidsclub17');
+set @kid17Contact = (select Contact_ID from Contacts where email_address = 'kidsclubkid17@gmail.com');
 
 --Dad Married to Mom
 INSERT INTO [dbo].Contact_Relationships 
