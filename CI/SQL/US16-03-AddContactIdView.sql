@@ -2,7 +2,7 @@ USE [MinistryPlatform]
 GO
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
 
-IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_Views_ID] = 2194)
+IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 2194)
 BEGIN 
 
 INSERT INTO [dbo].[dp_Page_Views]
@@ -18,7 +18,8 @@ INSERT INTO [dbo].[dp_Page_Views]
 		   ,401
            ,'ContactIdByUser'
 		   ,'dp_Users.[User_ID] AS [User ID], Contact_ID_Table.[Contact_ID] AS [Contact ID]'
-           ,'where true')
+           ,'Contact_ID_Table.[User_Account] IS NOT NULL')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
+END
 GO
