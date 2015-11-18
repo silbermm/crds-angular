@@ -51,24 +51,3 @@ GO
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_Publication_Page_Views_dp_Publications]') AND parent_object_id = OBJECT_ID(N'[dbo].[Publication_Page_Views]'))
 ALTER TABLE [dbo].[Publication_Page_Views] CHECK CONSTRAINT [FK_Publication_Page_Views_dp_Publications]
 GO
-
-
--- INSERT Mapping data
-SET IDENTITY_INSERT dbo.Publication_Page_Views ON 
-
--- Associate Kids Club with Segmentation: Has Child of Age
-INSERT INTO dbo.Publication_Page_Views
-	(
-		[Publication_Page_View_ID],
-		[Publication_ID],
-		[Page_View_ID]
-	)
-	VALUES
-	(
-		1,
-		3,
-		2193
-	)
-
-SET IDENTITY_INSERT dbo.Publication_Page_Views OFF
-GO
