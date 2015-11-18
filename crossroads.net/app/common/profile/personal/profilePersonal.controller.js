@@ -185,6 +185,10 @@
       //force genders field to be dirty
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
+      if (vm.profileParentForm) {
+        vm.profileParentForm.$setPristine();
+      }
+
       $timeout(function() {
         vm.submitted = true;
 
