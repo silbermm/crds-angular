@@ -14,7 +14,7 @@ CREATE TABLE [dbo].[cr_Staff_Only_Feedback](
 	[Staff_Only_Feedback_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Contact_ID] [int] NOT NULL,
 	[Date_Submitted] [date] NOT NULL CONSTRAINT [DF_Staff_Only_Feedback_Date_Submitted]  DEFAULT (getdate()),
-	[Description] [nvarchar](2000),
+	[Description] [nvarchar](2000) NOT NULL,
  CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED 
 (
 	[Staff_Only_Feedback_ID] ASC
