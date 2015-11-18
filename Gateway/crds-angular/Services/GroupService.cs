@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Groups;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
@@ -105,6 +107,8 @@ namespace crds_angular.Services
             var signupRelations = _mpGroupService.GetGroupSignupRelations(g.GroupType);
 
             var currRelationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, authUserToken);
+
+            var events = _mpGroupService.getAllEventsForGroup(groupId);
 
             ContactRelationship[] familyToReturn = null;
 
