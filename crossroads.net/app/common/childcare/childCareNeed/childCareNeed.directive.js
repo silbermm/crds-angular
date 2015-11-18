@@ -26,7 +26,7 @@
       function onValueChange() {
         vm.onChange()({
           participantId: vm.participantId,
-          value: angular.copy(vm.currentValue)
+          value: vm.currentValue
         });
       }
     }
