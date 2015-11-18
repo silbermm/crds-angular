@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Security;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
@@ -72,35 +73,28 @@ namespace crds_angular.Controllers.API
                 string nameKey = "Event_Title";
                 string locationNameKey = "Room_Name";
                 string locationNumberKey = "Room_Number";
-                string time = "";
-                string meridian = "";
-                string name = "";
-                string location = "";
+      
+                var e = new Event();
+
                 if (thisEvent.ContainsKey(startDateKey) && thisEvent[startDateKey] != null)
                 {
                     DateTime startDate = (DateTime)thisEvent[startDateKey];
-                    time = startDate.ToString("h:mm");
-                    meridian = startDate.ToString("tt");
+                    e.time = startDate;
+                    e.meridian = startDate.ToString("tt");
                 }
                 if (thisEvent.ContainsKey(nameKey) && thisEvent[nameKey] != null)
                 {
-                    name = thisEvent[nameKey].ToString();
+                    e.name = thisEvent[nameKey].ToString();
                 }
                 if (thisEvent.ContainsKey(locationNameKey) && thisEvent[locationNameKey] != null)
                 {
-                    location = thisEvent[locationNameKey].ToString();
+                    e.location = thisEvent[locationNameKey].ToString();
                 }
                 if (thisEvent.ContainsKey(locationNumberKey) && thisEvent[locationNumberKey] != null)
                 {
-                    location += " "+thisEvent[locationNumberKey].ToString();
+                    e.location += " "+thisEvent[locationNumberKey].ToString();
                 }
-                var e = new Event
-                {
-                    time = time,
-                    meridian = meridian,
-                    name = name,
-                    location = location
-                };
+                
                 events.Add(e);
             }
             return events;
