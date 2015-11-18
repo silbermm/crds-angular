@@ -48,7 +48,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
     vm.locations = Locations;
     vm.person = vm.signupService.person;
     vm.passportValid = _.isEmpty(vm.signupService.person.passportNumber) ? '' : 'true';
-    vm.requireSponsoredChild = requireSponsoredChild;
     vm.scrubBottom = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_BOTTOM_SIZES];
     vm.scrubBottomSizes = ScrubBottomSizes;
     vm.scrubTop = vm.signupService.person.singleAttributes[attributeTypes.SCRUB_TOP_SIZES];
@@ -126,10 +125,6 @@ var attributes = require('crds-constants').ATTRIBUTE_IDS;
           spirit.endDate = new Date();
         }
       });
-    }
-
-    function requireSponsoredChild() {
-      return vm.signupService.page5.sponsorChildInNicaragua === 'yes';
     }
 
   }
