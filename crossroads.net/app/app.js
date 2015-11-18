@@ -18,13 +18,13 @@ require('../lib/select.css');
       constants.MODULES.PROFILE,
       constants.MODULES.SEARCH,
       constants.MODULES.TRIPS,
-      constants.MODULES.COMMUNITY_GROUPS,
+      constants.MODULES.SIGNUP,
       constants.MODULES.CHILDCARE
    ]);
 
   angular.module(constants.MODULES.CROSSROADS).config(require('./routes'));
 
-  require('./community_groups_signup');
+  require('./signup');
   require('./styleguide');
   require('./thedaily');
   require('./explore');
