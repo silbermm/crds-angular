@@ -6,9 +6,9 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>Data Source=mp-int-db.cloudapp.net;Initial Catalog=MinistryPlatform</ConnectString>
-        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
+        <IntegratedSecurity>true</IntegratedSecurity>
       </ConnectionProperties>
-      <rd:SecurityType>DataBase</rd:SecurityType>
+      <rd:SecurityType>Integrated</rd:SecurityType>
       <rd:DataSourceID>5c0e6ce6-a17c-4f8e-b6cd-2d98b3c81116</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -641,7 +641,7 @@
             <DataSetName>DataSet1</DataSetName>
             <Top>0.78889in</Top>
             <Height>0.5in</Height>
-            <Width>9.59167in</Width>
+            <Width>9.59166in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
