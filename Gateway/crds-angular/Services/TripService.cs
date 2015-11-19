@@ -419,7 +419,7 @@ namespace crds_angular.Services
             var rows = events.Select(e => new HtmlElement("tr")
                                          .Append(new HtmlElement("td", cellAttrs, e.EventTitle))
                                          .Append(new HtmlElement("td", cellAttrs, e.EventLocation))
-                                         .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString()))).ToList();
+                                         .Append(new HtmlElement("td", cellAttrs, e.EventStartDate.ToString("g")))).ToList();
 
             var headerLabels = new List<string> {"Event", "Location", "Date"};
             var headers = new HtmlElement("tr", headerLabels.Select(el => new HtmlElement("th", el)).ToList());
