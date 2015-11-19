@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
@@ -97,6 +98,26 @@ namespace crds_angular.Controllers.API
                 
             }
                 );
+        }
+
+        [ResponseType(typeof(List<Event>))]
+        [Route("api/group/{groupId}/events")]
+        public IHttpActionResult GetEvents(int groupId)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var eventList = groupService.GetGroupEvents(groupId);
+                    return Ok(eventList);
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Error getting ", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            }
+            );
         }
 
         // TODO: implement later

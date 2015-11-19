@@ -7,6 +7,7 @@ using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Event = crds_angular.Models.Crossroads.Event;
 
 namespace crds_angular.Services
 {
@@ -95,6 +96,13 @@ namespace crds_angular.Services
                 logger.Error("Could not add user to group", e);
                 throw (e);
             }
+        }
+
+        public List<Event> GetGroupEvents(int groupId)
+        {
+            var events = _mpGroupService.getAllEventsForGroup(groupId);
+            var eventList = AutoMapper.Mapper.Map<List<Event>>(events);
+            return eventList;
         }
 
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)

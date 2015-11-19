@@ -1,6 +1,7 @@
 ﻿using crds_angular.Models.Crossroads;
 using MinistryPlatform.Models;
 using System.Collections.Generic;
+using Event = crds_angular.Models.Crossroads.Event;
 
 namespace crds_angular.Services.Interfaces
 {
@@ -9,5 +10,7 @@ namespace crds_angular.Services.Interfaces
         GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken);
 
         void addParticipantsToGroup(int groupId, List<ParticipantSignup> participants);
+
+        List<Event> GetGroupEvents(int groupId);
     }
 }
