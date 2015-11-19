@@ -408,6 +408,14 @@
           Trip: 'Trip'
         }
       })
+      .state('tools.volunteerContact', {
+        url: '/volunteerContact',
+        controller: 'VolunteerContactController as contact',
+        templateUrl: 'volunteer_contact/contact.html',
+        resolve: {
+          MPTools: 'MPTools'
+        }
+      })
       .state('tools.checkBatchProcessor', {
         url: '/checkBatchProcessor',
         controller: 'CheckBatchProcessor as checkBatchProcessor',

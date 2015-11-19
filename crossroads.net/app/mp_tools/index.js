@@ -39,4 +39,7 @@
   // The Administrator Recurring Gift Tool
   require('./admin_recurring_gift');
 
+  // The Contact a volunteer group
+  require('./volunteer_contact');
+
 })();
