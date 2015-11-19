@@ -22,7 +22,7 @@ namespace Crossroads.BulkEmailSync
                 Log.Info("Starting Bulk Email Synchronization");
                 //var syncService = container.Resolve<BulkEmailSyncService>();
                 //syncService.RunService();
-                Log.Info("Finished Bulk Email Synchronization successfullyu");
+                Log.Info("Finished Bulk Email Synchronization successfully");
             }
             catch (Exception ex)
             {
