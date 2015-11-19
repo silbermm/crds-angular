@@ -59,6 +59,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     vm.isSouthAfrica = isSouthAfrica;
     vm.numberOfPages = 0;
     vm.pageHasErrors = true;
+    vm.passportInvalidContent = passportInvalidContent;
     vm.privateInvite = $location.search()['invite'];
     vm.profileData = {};
     vm.progressLabel = '';
@@ -297,6 +298,22 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         vm.pageHasErrors = true;
         vm.viewReady = true;
       });
+    }
+
+    function passportInvalidContent() {
+      var message = $rootScope.MESSAGES.TripNoPassport.content;
+      switch (vm.destination) {
+        case 'South Africa':
+          message = $rootScope.MESSAGES.TripNoPassportSouthAfrica.content;
+          break;
+        case 'India':
+          message = $rootScope.MESSAGES.TripNoPassportIndia.content;
+          break;
+        case 'Nicaragua':
+          message = $rootScope.MESSAGES.TripNoPassportNicaragua.content;
+          break;
+      }
+      return message;
     }
 
     function progressLabel() {

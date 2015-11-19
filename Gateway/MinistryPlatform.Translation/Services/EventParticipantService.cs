@@ -84,7 +84,8 @@ namespace MinistryPlatform.Translation.Services
         {
             try
             {
-                var search = string.Format("{0},", daysBeforeEvent);
+                var search = string.Format("\"{0}\",", daysBeforeEvent);
+
                 var records =
                     WithApiLogin(
                         apiToken =>
