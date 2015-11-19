@@ -38,14 +38,6 @@
           <DataField>ChildEventTitle</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="EventStartDate">
-          <DataField>EventStartDate</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="EventStartTime">
-          <DataField>EventStartTime</DataField>
-          <rd:TypeName>System.TimeSpan</rd:TypeName>
-        </Field>
         <Field Name="Event_Start_Date">
           <DataField>Event_Start_Date</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
@@ -58,8 +50,16 @@
           <DataField>ChildLastName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="HS_Graduation_Year">
+          <DataField>HS_Graduation_Year</DataField>
+          <rd:TypeName>System.Int16</rd:TypeName>
+        </Field>
         <Field Name="ChildFirstName">
           <DataField>ChildFirstName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AgeHighSchoolGrad">
+          <DataField>AgeHighSchoolGrad</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ChildAge">
@@ -865,7 +865,7 @@
       <Nullable>true</Nullable>
       <DefaultValue>
         <Values>
-          <Value>12/1/2015 12:00:00 AM</Value>
+          <Value>12/02/2015 00:00:00</Value>
         </Values>
       </DefaultValue>
       <Prompt>Report Date</Prompt>
