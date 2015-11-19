@@ -2,6 +2,60 @@
   'use strict';
 
   module.exports = {
+    family: [
+      {
+        age: 35,
+        contactId: 2186211,
+        email: 'matt.silbernagel@ingagepartners.com',
+        highSchoolGraduationYear: 0,
+        lastName: null,
+        loggedInUser: true,
+        participantId: 2213526,
+        preferredName: 'Matt',
+        relationshipId: 0
+      },
+      {
+        age: 7,
+        contactId: 5052038,
+        email: 'matt.silbernagel@ingagepartners.com',
+        highSchoolGraduationYear: 0,
+        lastName: 'Silbernagel',
+        loggedInUser: false,
+        participantId: 0,
+        preferredName: 'Miles',
+        relationshipId: 6
+      }
+    ],
+    group: {
+      SignUpFamilyMembers: [
+        {
+          nickName: 'Matt', 
+          emailAddress: 'matt.silbernagel@ingagepartners.com',
+          userInGroup: false
+        }
+      ],
+      childCareNeeded: true,
+      emailAddress: 'matt.silbernagel@ingagepartners.com',
+      nickName: 'Matt',
+      participantId: 2213526,
+      userInGroup: false,
+      childCareInd: true,
+      events: [
+        {
+          eventId: 2845310,
+          endDate: '2015-11-08T21:00:00',
+          location: 'Oakley',
+          meridian: null,
+          name: 'Oakley FI 101',
+          startDate: '2015-11-08T19:00:00',
+          time: null
+        }
+      ],
+      groupFullInd: false,
+      groupId: 109085,
+      waitListGroupId: 0,
+      waitListInd: false
+    },
     cmsInfo: {
       pages: [{
         className: 'OnetimeEventSignupPage',

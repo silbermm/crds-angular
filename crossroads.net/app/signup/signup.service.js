@@ -9,7 +9,8 @@
     var service = {
       cmsInfo: {},
       group: {},
-      events: []
+      events: [],
+      family: []
     };
 
     return service;

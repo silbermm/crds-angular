@@ -20,4 +20,6 @@
   // require events
   require('./events');
 
+  require('./serve');
+
 })();

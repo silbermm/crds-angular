@@ -21,6 +21,8 @@
       /*jshint validthis: true */
       var vm = this;
       vm.cmsInfo = SignupService.cmsInfo;
+      vm.family = SignupService.family;
+      vm.group = SignupService.group;
       vm.signupService = SignupService;
       vm.showCommunityGroups = showCommunityGroups;
       vm.showOnetimeEvent = showOnetimeEvent;

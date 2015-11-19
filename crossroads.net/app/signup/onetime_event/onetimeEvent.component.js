@@ -10,7 +10,9 @@
       restrict: 'E',
       templateUrl: 'onetime_event/onetimeEvent.html',
       scope: {
-        cmsInfo: '='
+        cmsInfo: '=',
+        group: '=',
+        family: '='
       },
       controller: OnetimeEventController,
       controllerAs: 'onetimeEvent',

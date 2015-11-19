@@ -27,19 +27,30 @@
         SignupService: 'SignupService',
         $q: '$q',
         Group: 'Group',
+        ServeOpportunities: 'ServeOpportunities',
+        Family: function(SignupService, ServeOpportunities) {
+          return ServeOpportunities.Family.query({}, function(data) {
+            SignupService.family = data;
+          }).$promise;
+        },
+
         CmsInfo: function($q, Page, SignupService, Group, $stateParams) {
           var deferred = $q.defer();
 
-          Page.get({link: $stateParams.link}).$promise.then(function(data){
+          Page.get({link: $stateParams.link}).$promise.then(function(data) {
             SignupService.cmsInfo = data;
             Group.Detail.get({groupId: data.pages[0].group}).$promise.then(function(group) {
                 SignupService.group = group;
-                deferred.resolve(); 
-              }, function() {
+                deferred.resolve();
+              },
+
+              function() {
                 deferred.reject();
               });
-          }, function() {
-            deferred.reject();                                                 
+          },
+
+          function() {
+            deferred.reject();
           });
 
           return deferred.promise;

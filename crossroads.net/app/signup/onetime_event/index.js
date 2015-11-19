@@ -9,4 +9,6 @@
 
   require('./onetimeEvent.html');
 
+  require('./onetime_event_block');
+
 })();
