@@ -779,6 +779,18 @@
       <DataType>DateTime</DataType>
       <Prompt>Report Date</Prompt>
     </ReportParameter>
+    <ReportParameter Name="DomainID">
+      <DataType>String</DataType>
+      <Prompt>DomainID</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="UserID">
+      <DataType>String</DataType>
+      <Prompt>UserID</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="PageID">
+      <DataType>String</DataType>
+      <Prompt>PageID</Prompt>
+    </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>7ab631f5-de07-480e-82a4-e9d8888e3b96</rd:ReportID>
