@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Net.Http;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Events;
 using crds_angular.Security;
-using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
-using crds_angular.Security;
 using IEventService = crds_angular.Services.Interfaces.IEventService;
 
 namespace crds_angular.Controllers.API
@@ -27,6 +22,31 @@ namespace crds_angular.Controllers.API
             this._ministryPlatformService = ministryPlatformService;
             _eventService = eventService;
             _apiUserService = apiUserService;
+        }
+
+        [AcceptVerbs("POST")]
+        [Route("api/event/{eventId}")]
+        public IHttpActionResult RsvpToEvent(int eventId, [FromBody] List<EventRsvpDTO> rsvpDtos)
+        {
+            if (ModelState.IsValid)
+            {
+                return Authorized(token =>
+                {
+                    try
+                    {
+                        _eventService.RegisterForEvent(rsvpDtos);
+                        return Ok();
+                    }
+                    catch (Exception e)
+                    {
+                        var apiError = new ApiErrorDto("Save Event Rsvp", e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
+                });
+            }
+            var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+            var dataError = new ApiErrorDto("Event Data Invalid", new InvalidOperationException("Invalid Event Data" + errors));
+            throw new HttpResponseException(dataError.HttpResponseMessage);
         }
 
         [ResponseType(typeof(List<Event>))]
@@ -73,28 +93,35 @@ namespace crds_angular.Controllers.API
                 string nameKey = "Event_Title";
                 string locationNameKey = "Room_Name";
                 string locationNumberKey = "Room_Number";
-      
-                var e = new Event();
-
+                string time = "";
+                string meridian = "";
+                string name = "";
+                string location = "";
                 if (thisEvent.ContainsKey(startDateKey) && thisEvent[startDateKey] != null)
                 {
                     DateTime startDate = (DateTime)thisEvent[startDateKey];
-                    e.time = startDate;
-                    e.meridian = startDate.ToString("tt");
+                    time = startDate.ToString("h:mm");
+                    meridian = startDate.ToString("tt");
                 }
                 if (thisEvent.ContainsKey(nameKey) && thisEvent[nameKey] != null)
                 {
-                    e.name = thisEvent[nameKey].ToString();
+                    name = thisEvent[nameKey].ToString();
                 }
                 if (thisEvent.ContainsKey(locationNameKey) && thisEvent[locationNameKey] != null)
                 {
-                    e.location = thisEvent[locationNameKey].ToString();
+                    location = thisEvent[locationNameKey].ToString();
                 }
                 if (thisEvent.ContainsKey(locationNumberKey) && thisEvent[locationNumberKey] != null)
                 {
-                    e.location += " "+thisEvent[locationNumberKey].ToString();
+                    location += " " + thisEvent[locationNumberKey].ToString();
                 }
-                
+                var e = new Event
+                {
+                    time = time,
+                    meridian = meridian,
+                    name = name,
+                    location = location
+                };
                 events.Add(e);
             }
             return events;

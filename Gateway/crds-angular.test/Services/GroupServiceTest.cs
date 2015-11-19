@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services;
+using crds_angular.test.Models.Crossroads.Events;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
@@ -40,6 +43,8 @@ namespace crds_angular.test.Services
         [SetUp]
         public void SetUp()
         {
+            Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
+
             authenticationService = new Mock<MPServices.IAuthenticationService>();
             groupService = new Mock<MPServices.IGroupService>(MockBehavior.Strict);
             eventService = new Mock<MPServices.IEventService>(MockBehavior.Strict);
@@ -175,7 +180,15 @@ namespace crds_angular.test.Services
                 WaitListGroupId = 10101,
                 GroupId = 98765
             };
+
+            var eventList = new List<Event>()
+            {
+                    EventHelpers.TranslationEvent()
+            };
+
             groupService.Setup(mocked => mocked.getGroupDetails(456)).Returns(g);
+
+            groupService.Setup(mocked => mocked.getAllEventsForGroup(456)).Returns(eventList);
 
             var relations = new List<GroupSignupRelationships>
             {
