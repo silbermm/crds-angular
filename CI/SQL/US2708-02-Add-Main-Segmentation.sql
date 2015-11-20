@@ -22,7 +22,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,417
            ,'Mailchimp Base Segmentation -- Basic information for contacts > 12 years old'
            ,'dp_Contact_Publications.Contact_Publication_ID, Publication_ID_Table.Publication_ID, Publication_ID_Table.Title, Publication_ID_Table.Third_Party_Publication_ID, Publication_ID_Table.Last_Successful_Sync, dp_Contact_Publications.Unsubscribed, dp_Contact_Publications.Third_Party_Contact_ID, Contact_ID_Table.Contact_ID, Contact_ID_Table.Email_Address, Contact_ID_Table.Nickname, Contact_ID_Table.Last_Name, Contact_ID_Table_Gender_ID_Table.Gender, Contact_ID_Table_Marital_Status_ID_Table.Marital_Status'
-           ,'Contact_ID_Table.Email_Address IS NOT NULL AND Contact_ID_Table.__Age>12')
+           ,'Contact_ID_Table.Email_Address IS NOT NULL AND (Contact_ID_Table.__Age>12 OR Contact_ID_Table.__Age is null)')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 
@@ -51,7 +51,7 @@ INSERT INTO [dbo].[dp_Page_Views]
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age = 3) AS Has_3_Year_Old
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age = 4 AND C2.HS_Graduation_Year is NULL) AS Has_PreK_4_Year_Old
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age = 5 AND C2.HS_Graduation_Year is NULL) AS Has_PreK_5_Year_Old'		   
-           ,'Contact_ID_Table.Email_Address IS NOT NULL AND Contact_ID_Table.__Age>12')
+           ,'Contact_ID_Table.Email_Address IS NOT NULL AND (Contact_ID_Table.__Age>12 OR Contact_ID_Table.__Age is null)')
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] OFF
 END
