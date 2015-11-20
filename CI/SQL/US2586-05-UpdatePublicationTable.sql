@@ -80,7 +80,7 @@ INSERT INTO [dbo].[dp_Publications]
             [Available_Online],
             [Online_Sort_Order])
      VALUES
-           ('Kids' Club & Student Ministry',
+           ('Kids'' Club & Student Ministry',
 		    'Once a week. Parents only.',
 			1,
 			1,
