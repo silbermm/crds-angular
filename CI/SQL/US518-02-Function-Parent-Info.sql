@@ -1,6 +1,10 @@
 USE [MinistryPlatform];
 GO
 
+/****** Object:  UserDefinedFunction [dbo].[crds_SponsoredChild]    Script Date: 11/19/2015 3:36:48 PM ******/
+DROP FUNCTION [dbo].[crds_FindParentAttendingRelatedEvent]
+GO
+
 /****** Object:  UserDefinedFunction [dbo].[crds_SponsoredChild]    Script Date: 11/19/2015 3:03:49 PM ******/
 
 SET ANSI_NULLS ON;
@@ -25,7 +29,8 @@ AS
                                                                   AND cr.Related_Contact_ID = @Contact
           INNER JOIN MinistryPlatform.dbo.Relationships r ON cr.Relationship_ID = r.Relationship_ID
                                                          AND r.ImmediateFamily = 1
-     WHERE ep.Event_ID IN( 
+     WHERE ep.Participation_Status_ID = 2 
+	      AND ep.Event_ID IN( 
                            SELECT childEvent.Parent_Event_ID
                            FROM MinistryPlatform.dbo.Events childEvent
                            WHERE childEvent.Event_ID = @Event );
