@@ -5,4 +5,3 @@ require("./volunteer_signup_form.html");
 
 app.controller("VolunteerController", require("./volunteer.controller"));
 app.factory("Opportunity", ["$resource", "Session", require('./opportunity_service')]);
-app.factory("ServeOpportunities", require('../services/serveOpportunities.service'));

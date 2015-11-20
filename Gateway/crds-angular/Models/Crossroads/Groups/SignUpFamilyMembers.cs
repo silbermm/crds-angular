@@ -1,7 +1,6 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Groups
 {
     public class SignUpFamilyMembers
 
