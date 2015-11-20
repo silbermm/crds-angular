@@ -13,7 +13,7 @@ GO
 SET QUOTED_IDENTIFIER ON;
 GO
 CREATE PROCEDURE [dbo].[report_CRDS_Childcare_By_Day]
-       @ReportDate DATETIME
+       @ReportDate DATETIME, @CongregationId INT
 AS
     BEGIN
         SET NOCOUNT ON;
@@ -36,7 +36,7 @@ AS
         FROM MinistryPlatform.dbo.Events child
              INNER JOIN MinistryPlatform.dbo.Event_Participants ep ON child.Event_ID = ep.Event_ID and ep.Participation_Status_ID = 2
              INNER JOIN MinistryPlatform.dbo.Events parentEvent ON child.Parent_Event_ID = parentEvent.Event_ID
-             INNER JOIN MinistryPlatform.dbo.Event_Groups eg ON parentEvent.Event_ID = eg.Event_ID
+             INNER JOIN MinistryPlatform.dbo.Event_Groups eg ON parentEvent.Event_ID = eg.Event_ID and parentEvent.Congregation_ID = @CongregationId
                                                             AND DATEDIFF(dd, parentEvent.Event_Start_Date, @ReportDate) = 0
              INNER JOIN MinistryPlatform.dbo.Groups g ON eg.Group_ID = g.Group_ID
                                                      AND g.Child_Care_Available = 1

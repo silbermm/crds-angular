@@ -20,6 +20,10 @@
           <QueryParameter Name="@ReportDate">
             <Value>=Parameters!ReportDate.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@CongregationId">
+            <Value>=Parameters!CongregationId.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
         <CommandText>report_CRDS_Childcare_By_Day</CommandText>
@@ -76,6 +80,27 @@
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="Sites">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>SELECT
+  Congregations.Congregation_ID
+  ,Congregations.Congregation_Name
+FROM
+  Congregations</CommandText>
+        <rd:DesignerState><QueryDefinition xmlns="http://schemas.microsoft.com/ReportingServices/QueryDefinition/Relational"><SelectedColumns><ColumnExpression ColumnOwner="Congregations" ColumnName="Congregation_ID" /><ColumnExpression ColumnOwner="Congregations" ColumnName="Congregation_Name" /></SelectedColumns></QueryDefinition></rd:DesignerState>
+      </Query>
+      <Fields>
+        <Field Name="Congregation_ID">
+          <DataField>Congregation_ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Congregation_Name">
+          <DataField>Congregation_Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -118,6 +143,7 @@
                                 <TextRun>
                                   <Value>Child Name</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -150,6 +176,7 @@
                                 <TextRun>
                                   <Value>Child Age</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -182,6 +209,7 @@
                                 <TextRun>
                                   <Value>HS Graduation Year</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -216,6 +244,7 @@
                                 <TextRun>
                                   <Value>Event</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -248,6 +277,7 @@
                                 <TextRun>
                                   <Value>Parent Name</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -280,6 +310,7 @@
                                 <TextRun>
                                   <Value>Parent Email</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -317,18 +348,21 @@
                                 <TextRun>
                                   <Value>=Fields!ChildFirstName.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value xml:space="preserve"> </Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
                                 <TextRun>
                                   <Value>=Fields!ChildLastName.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -361,6 +395,7 @@
                                 <TextRun>
                                   <Value>=Fields!ChildAge.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -395,6 +430,7 @@
                                 <TextRun>
                                   <Value>=Fields!HS_Graduation_Year.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -429,6 +465,7 @@
                                 <TextRun>
                                   <Value>=Fields!ParentEventTitle.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -461,6 +498,7 @@
                                 <TextRun>
                                   <Value>=Fields!ParentName.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -493,6 +531,7 @@
                                 <TextRun>
                                   <Value>=Fields!ParentEmail.Value</Value>
                                   <Style>
+                                    <FontFamily>Verdana</FontFamily>
                                     <FontSize>8pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -543,6 +582,7 @@
                               <TextRun>
                                 <Value>Start Time</Value>
                                 <Style>
+                                  <FontFamily>Verdana</FontFamily>
                                   <FontSize>8pt</FontSize>
                                 </Style>
                               </TextRun>
@@ -592,6 +632,7 @@
                               <TextRun>
                                 <Value>=Fields!Event_Start_Date.Value</Value>
                                 <Style>
+                                  <FontFamily>Verdana</FontFamily>
                                   <FontSize>8pt</FontSize>
                                   <Format>t</Format>
                                 </Style>
@@ -639,7 +680,7 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.78889in</Top>
+            <Top>0.81111in</Top>
             <Height>0.5in</Height>
             <Width>9.59166in</Width>
             <Style>
@@ -655,7 +696,14 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Childcare By Day</Value>
+                    <Value>Childcare By Day - </Value>
+                    <Style>
+                      <FontFamily>Verdana</FontFamily>
+                      <FontSize>20pt</FontSize>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>=Parameters!CongregationId.Label</Value>
                     <Style>
                       <FontFamily>Verdana</FontFamily>
                       <FontSize>20pt</FontSize>
@@ -668,7 +716,7 @@
             <rd:WatermarkTextbox>Title</rd:WatermarkTextbox>
             <rd:DefaultName>ReportTitle</rd:DefaultName>
             <Height>0.4in</Height>
-            <Width>5.5in</Width>
+            <Width>7.925in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -680,26 +728,30 @@
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Textbox Name="Textbox1">
+          <Textbox Name="Textbox3">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!Event_Start_Date.Value, "DataSet1")</Value>
+                    <Value>=Parameters!ReportDate.Value</Value>
                     <Style>
+                      <FontFamily>Verdana</FontFamily>
+                      <FontSize>18pt</FontSize>
                       <Format>d</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style />
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.46944in</Top>
-            <Height>0.25in</Height>
-            <Width>1in</Width>
+            <Top>0.44166in</Top>
+            <Height>0.34167in</Height>
+            <Width>2.29167in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -790,6 +842,22 @@
     <ReportParameter Name="PageID">
       <DataType>String</DataType>
       <Prompt>PageID</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CongregationId">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1</Value>
+        </Values>
+      </DefaultValue>
+      <Prompt>Site</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Sites</DataSetName>
+          <ValueField>Congregation_ID</ValueField>
+          <LabelField>Congregation_Name</LabelField>
+        </DataSetReference>
+      </ValidValues>
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
