@@ -8,7 +8,8 @@
     return {
       Participant: $resource(__API_ENDPOINT__ +  'api/group/:groupId/participants', {groupId: '@groupId'},
         {save: {method:'POST', isArray:true}}),
-      Detail: $resource(__API_ENDPOINT__ +  'api/group/:groupId', {groupId: '@groupId'})
+      Detail: $resource(__API_ENDPOINT__ +  'api/group/:groupId', {groupId: '@groupId'}),
+      Events: $resource(__API_ENDPOINT__ + 'api/group/:groupId/events')
     };
   }
 
