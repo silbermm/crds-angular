@@ -323,7 +323,7 @@
         }
       })
       .state('tools', {
-        parent: 'noSideBar',
+        parent: 'noHeaderOrFooter',
         abstract: true,
         url: '/mptools',
         templateUrl: 'mp_tools/tools.html',
@@ -409,9 +409,8 @@
         }
       })
       .state('tools.volunteerContact', {
-        url: '/volunteerContact',
-        controller: 'VolunteerContactController as contact',
-        templateUrl: 'volunteer_contact/contact.html',
+        url: '/volunteer-contact',
+        template: '<volunteer-contact></volunteer-contact>', 
         resolve: {
           MPTools: 'MPTools'
         }

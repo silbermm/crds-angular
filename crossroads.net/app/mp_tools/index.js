@@ -4,7 +4,7 @@
 
   var MODULE = 'crossroads.mptools';
 
-  angular.module(MODULE, ['crossroads.core', 'crossroads.common','crossroads.give', 'ui.select']);
+  angular.module(MODULE, ['crossroads.core', 'crossroads.common', 'crossroads.give', 'ui.select']);
   angular.module(MODULE).config(require('./mpTools.config'));
   angular.module(MODULE).factory('MPTools', require('./mpTools.service'));
   angular.module(MODULE).run(require('./mpTools.run'));

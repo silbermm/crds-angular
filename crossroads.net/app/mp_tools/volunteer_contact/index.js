@@ -1,11 +1,17 @@
 (function() {
   'use strict()';
 
-  var MODULE = 'crossroads.mptools';
+  var MODULE = require('crds-constants').MODULES.MPTOOLS;
 
   // HTML Files
   require('./contact.html');
 
-  angular.module(MODULE).controller('VolunteerContactController', require('./volunteerContact.controller'));
+  angular.module(MODULE)
+    .directive('volunteerContact', require('./volunteerContact.component'))
+
+    //.service('VolunteerContactService', require('./volunteerContact.service'))
+    ;
+
+  require('./volunteer_contact_form');
 
 })();
