@@ -34,7 +34,7 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        _eventService.RegisterForEvent(rsvpDtos);
+                        _eventService.RegisterForEvent(rsvpDtos, token);
                         return Ok();
                     }
                     catch (Exception e)

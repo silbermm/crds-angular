@@ -8,6 +8,6 @@ namespace crds_angular.Services.Interfaces
     public interface IEventService
     {
         Event GetEvent(int eventId);
-        void RegisterForEvent(List<EventRsvpDTO> eventDto);
+        void RegisterForEvent(List<EventRsvpDTO> eventDto, string token);
     }
 }
