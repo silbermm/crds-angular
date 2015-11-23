@@ -23,7 +23,7 @@
         </div>
         <div class="form-group col-sm-12" ng-show="tripsSignup.signupService.page6.validPassport === 'false'">
           <label>
-            <span ng-bind-html="$root.MESSAGES.TripNoPassport.content | html"></span>
+            <span ng-bind-html="tripsSignup.passportInvalidContent() | html"></span>
           </label>
         </div>
       </div>
@@ -136,7 +136,7 @@
               <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
-        </div> 
+        </div>
 
         <div class="col-sm-12 push-bottom" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'travelExperience') }">
           <label class="control-label block required">Do you have outside experience with serving abroad outside of Crossroads GO Trips?</label>

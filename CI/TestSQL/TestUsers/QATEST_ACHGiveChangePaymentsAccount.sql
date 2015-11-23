@@ -11,8 +11,8 @@ INSERT INTO [dbo].donors
 (@contactID,1                     ,1                ,2                  ,{ts '2015-08-05 12:26:57.503'},null       ,0              ,null ,null              ,1        ,null              ,null                ,null               ,'cus_6jygOjhaghblHo');
 
 DECLARE @donor_id as int
-set @donor_id = (Select donorID from donors where contact_id = @contactID);
+set @donor_id = (Select donor_ID from donors where contact_id = @contactID);
 
 --Update Contact Record
-update [dbo].Contacts set Donor_Record = @donorID where contact_id = @contactID;
+update [dbo].Contacts set Donor_Record = @donor_ID where contact_id = @contactID;
 GO

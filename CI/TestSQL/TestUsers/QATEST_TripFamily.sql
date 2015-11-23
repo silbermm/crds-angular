@@ -2,8 +2,8 @@ USE [MinistryPlatform]
 GO
 
 --Get the required data to add to our contact. 
-Declare @contactID
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife'));
+Declare @contactID as int
+Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -16,8 +16,8 @@ set @userAccount = (select user_account from contacts where contact_id = @contac
 
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
-SET Household_ID = null, Participant_Record = null, User_Account = null;
-WHERE email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
+SET Household_ID = null, Participant_Record = null, User_Account = null
+WHERE email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife';
 
 --Temporarily update the participant and user account records - Please don't fail.
 UPDATE [dbo].Participants 
@@ -34,6 +34,9 @@ WHERE CONTACT_ID = @contactID;
 
 DECLARE @communicationID as int
 set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
+
+DELETE from dp_Contact_Publications 
+WHERE contact_id = @contactID;
 
 DELETE from [dbo].dp_communication_messages 
 WHERE Communication_ID = @communicationID;
@@ -90,7 +93,7 @@ INSERT INTO Contact_Households
 (@contactID,@houseHoldID,1                    ,1                ,null          ,null ,null    ,1        );
 
 --Cloud Strife Updates
-update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
+update [dbo].Contacts set Donor_Record = (select donor_id from donors where contact_id = @contactID) where Contact_ID = @contactID;
 update [dbo].Contacts set Participant_Record = @participantID where CONTACT_ID = @contactID;
 update [dbo].Contacts set User_Account = @userAccount where Contact_ID = @contactID;
 update [dbo].Participants set Contact_id = @contactID where participant_id = @participantID;
@@ -98,7 +101,7 @@ update [dbo].dp_users set Contact_id = @contactId where user_id = @userAccount;
 GO
 
 --Household for Tifa Lockhart
-Declare @contactID --old contact ID
+Declare @contactID as int --old contact ID
 Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+tifalockhart@gmail.com' and last_name = 'Lockhart');
 
 DECLARE @houseHoldID as int
@@ -114,7 +117,7 @@ set @userAccount = (select user_account from contacts where contact_id = @contac
 
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
-SET Household_ID = null, Participant_Record = null, User_Account = null;
+SET Household_ID = null, Participant_Record = null, User_Account = null
 WHERE contact_id = @contactID;
 
 --Temporarily update the participant and user account records - Please don't fail.
@@ -129,6 +132,9 @@ WHERE USER_ID = @userAccount;
 --Just get rid of this so we can delete Tifa's old contact record
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
+
+DELETE from dp_Contact_Publications 
+WHERE contact_id = @contactID;
 
 DECLARE @communicationID as int
 set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
@@ -145,6 +151,7 @@ DELETE FROM [dbo].Contacts where contact_id = @contactID;
 SET IDENTITY_INSERT [dbo].[Contacts] ON;
 
 --Store the current identity value so we can reset it.
+DECLARE @currentContactId as int
 set @currentContactId = IDENT_CURRENT('Contacts');
 
 set @contactID = 100000001;
@@ -170,31 +177,31 @@ INSERT INTO Contact_Households
 (@contactID,@houseHoldID,1                    ,1                ,null          ,null ,null    ,1        );
 
 --Tifa Lockhart Updates
-update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
-update [dbo].Contacts set Participant_Record = @participantID where contact_id = @contact_id;
-update [dbo].Contacts set User_Account = @userAccount where contact_id = @contact_id;
+update [dbo].Contacts set Donor_Record = (select donor_id from donors where contact_id = @contactID) where Contact_ID = @contactID;
+update [dbo].Contacts set Participant_Record = @participantID where contact_id = @contactID;
+update [dbo].Contacts set User_Account = @userAccount where contact_id = @contactID;
 update [dbo].Participants set contact_id = @contactID where participant_id = @participantID;
 update [dbo].Dp_users set contact_id = @contactID where User_Id = @userAccount;
 GO
 
 --Marlene Wallace (age 14)
-Declare @contactID
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace'));
+Declare @contactID as int
+Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace');
 
 DECLARE @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife');
 
 --Participant Record for Marlene
 Declare @participantID as int
-set @participantID = (select participant_record from contacts where contact_id = @contactID;
+set @participantID = (select participant_record from contacts where contact_id = @contactID);
 
 --User Account for Marlene
 Declare @userAccount as int
-set @userAccount = (select user_account from contacts where contact_id = @contactId;
+set @userAccount = (select user_account from contacts where contact_id = @contactId);
 
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
-SET Household_ID = null, Participant_Record = null, User_Account = null;
+SET Household_ID = null, Participant_Record = null, User_Account = null
 WHERE contact_id = @contactID;
 
 --Temporarily update the participant and user account records - Please don't fail.
@@ -209,6 +216,9 @@ WHERE USER_ID = @userAccount;
 --Just get rid of this so we can delete Marlene's old contact record
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
+
+DELETE from dp_Contact_Publications 
+WHERE contact_id = @contactID;
 
 DECLARE @communicationID as int
 set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
@@ -229,7 +239,6 @@ SET IDENTITY_INSERT [dbo].[Contacts] ON;
 DECLARE @currentContactId as int
 set @currentContactId = IDENT_CURRENT('Contacts');
 
-DECLARE @contactID as int
 set @contactID = 100000002;
 
 INSERT INTO [dbo].Contacts 
@@ -252,7 +261,7 @@ INSERT INTO Contact_Households
 (@contactID,@houseHoldID,1                    ,2                ,null          ,null ,null    ,1        );
 
 --Marlene Wallace Updates
-update [dbo].Contacts set Donor_Record = @donor_id where Contact_ID = @contactID;
+update [dbo].Contacts set Donor_Record = (select donor_id from donors where contact_id = @contactID) where Contact_ID = @contactID;
 update [dbo].Contacts set Participant_Record = @participantID where contact_id = @contactID;
 update [dbo].Contacts set User_Account = @userAccount where contact_id = @contactID;
 update [dbo].Participants set Contact_ID = @contactID where participant_id = @participantID;

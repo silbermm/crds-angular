@@ -84,6 +84,14 @@
 
 
     function goToTab(tab) {
+      if (tab.title === 'Personal') {
+        vm.profileParentForm.$setPristine();
+
+        //TODO: If the bug is fixed on tabs we need to clean this up
+        //      This is here because dirty state on forms inside of tabs
+        //      and changing values on these other tabs make things dirty.
+      }
+
       $state.go(tab.route);
     }
 

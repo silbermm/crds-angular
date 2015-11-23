@@ -3,10 +3,16 @@
   <div class="col-sm-12">
     <div ng-show="groupsignup.viewReady">
       <h1 class="page-header" ng-bind-html="groupsignup.signupPage.title | html"></h1>
+      
         <div ng-show="groupsignup.alreadySignedUp" ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
 
         <div >
-          <p id="content" class="noPspace" dir="ltr" ng-bind-html="groupsignup.signupPage.content | html" ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
+
+          <p id="content" class="noPspace" dir="ltr"
+             ng-bind-html="groupsignup.signupPage.content | html"
+             ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp">
+          </p>
+
           <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
           <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
           <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
@@ -16,13 +22,23 @@
         <div class="row" ng-show="groupsignup.showContent">
           <legend>Participants</legend>
           <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
-            <p>
-              <div class="checkbox"  ng-repeat="person in groupsignup.response as people" ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
+            <p >
+              <div class="checkbox"
+                   ng-repeat="person in groupsignup.response as people"
+                   ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
                 <label>
                   <span ng-show="groupsignup.response.length > 1">
-                  <input name="input" type="checkbox" ng-checked="person['userInGroup']" ng-disabled="person['userInGroup']" ng-model="person['newAdd']" ng-true-value="'{{person['participantId']}}'" ng-false-value="''">&nbsp;</span>
-                  <span>{{person['nickName']}}</span>
-                  <span>({{person['emailAddress']}})</span>
+                    <input name="input"
+                           type="checkbox"
+                           ng-checked="person.userInGroup"
+                           ng-disabled="person.userInGroup"
+                           ng-model="person.newAdd"
+                           ng-true-value="'{{person.participantId}}'"
+                           ng-false-value="''">
+                    &nbsp;
+                  </span>
+                  <span>{{person.nickName}}</span>
+                  <span>({{person.emailAddress}})</span>
                   <span ng-show="people.indexOf(person) === 0">
                     <a href="" ng-click="groupsignup.editProfile()">
                       <svg viewBox="0 0 32 32" class="icon icon-pencil4">
@@ -30,13 +46,13 @@
                       </svg>
                     </a>
                   </span>
-                  <div  ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
-                    <child-care-need
-                        participant-id='person.participantId'
-                        on-change='groupsignup.childCareChange'>
-                    </child-care-need>
-                  </div>
-              </label>
+                </label>
+              </div>
+            <div ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
+              <child-care-need
+                  participant-id='person.participantId'
+                  on-change='groupsignup.childCareChange'>
+              </child-care-need>
             </div>
           </p>
           <p ng-show="!groupsignup.alreadySignedUp">
