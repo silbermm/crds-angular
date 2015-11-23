@@ -90,6 +90,7 @@ namespace MinistryPlatform.Translation.Services
 
         private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, int pageViewId)
         {
+            // TODO: See if we can filter pages by publicationId or by list of Contact_Publication_ID's
             var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token);
 
             foreach (var record in records)
