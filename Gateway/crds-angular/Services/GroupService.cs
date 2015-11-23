@@ -105,6 +105,17 @@ namespace crds_angular.Services
             return eventList;
         }
 
+        public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId)
+        {
+            var participants = _mpGroupService.getEventParticipantsForGroup(groupId, eventId);
+            var members = participants.Select(part => new GroupContactDTO
+            {
+                ContactId = part.ContactId,
+                DisplayName = part.LastName + ", " + part.NickName
+            }).ToList();
+            return members;
+        }
+
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)
         {
             int participantId = participant.ParticipantId;

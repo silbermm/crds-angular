@@ -322,5 +322,14 @@ namespace MinistryPlatform.Translation.Services
             };
             _communicationService.SendMessage(confirmation);
         }
+
+        public List<GroupParticipant> getEventParticipantsForGroup(int groupId, int eventId)
+        {
+            var records = ministryPlatformService.GetPageViewRecords("ParticipantsByGroupAndEvent", ApiLogin(), String.Format("{0},{1}", groupId, eventId));
+            return records.Select(rec => new GroupParticipant
+            {
+                ContactId = rec.ToInt("Contact_ID"), NickName = rec.ToString("Nickname"), LastName = rec.ToString("Last_Name")
+            }).ToList();
+        }
     }
 }
