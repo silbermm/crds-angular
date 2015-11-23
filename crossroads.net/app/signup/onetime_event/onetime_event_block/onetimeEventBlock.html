@@ -1,0 +1,48 @@
+<div class="col-sm-12 serve-opp-listings mobile-hard-sides">
+  <div class="panel panel-default">
+
+    <div class="panel-heading clearfix" ng-click="onetimeEventBlock.togglePanel()">
+      <span class="team-date"> {{onetimeEventBlock.getDate()}} </span>
+      <span class="team-name"> {{onetimeEventBlock.event.name}} </span>
+      <span class="team-time"> {{onetimeEventBlock.startTime()}} - {{onetimeEventBlock.endTime()}} </span>
+      <span class="team-location"> {{onetimeEventBlock.event.location}} </span>
+    </div><!--/panel-heading-->
+
+    <div class="panel-collapse collapse" collapse="onetimeEventBlock.isCollapsed">
+      <div class="panel-body soft-half-bottom">
+        <form ng-submit='onetimeEventBlock.submit()'>
+          <div class="row">
+            <div class="col-md-12">
+              <h5> Please indicate who is coming </h5>
+              <div ng-repeat="member in onetimeEventBlock.thisFamily">
+                <div class="checkbox" > 
+                  <label> 
+                    <input type='checkbox' ng-model="member.selected" >
+                    <span> {{member.preferredName}} </span>
+                    <span> {{member.emailAddress}} </span>
+                  </label>
+                </div>
+                <div  ng-show="onetimeEventBlock.showChildcare(member)"> 
+                  <child-care-need
+                        participant-id='member.participantId'
+                        on-change='onetimeEventBlock.childCareChange'>
+                  </child-care-need>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 serve-save soft-half-top">
+              <loading-button
+                 loading-text='Saving...'
+                 normal-text='Save'
+                 input-type='submit'
+                 input-classes='btn btn-primary'
+                 loading-class='disabled'
+                 loading='onetimeEventBlock.saving' >
+              </loading-button>
+            </div><!--/col-sm-12-->
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

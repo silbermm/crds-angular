@@ -1,0 +1,12 @@
+<h1> {{onetimeEvent.pageInfo.title}} </h1>
+<div ng-bind-html="onetimeEvent.pageInfo.content | html"> </div>
+<form name="onetimeEvent.onetime">
+  <div ng-repeat="event in onetimeEvent.events">
+    <onetime-event-block
+      event='event'
+      family='onetimeEvent.family'
+      group='onetimeEvent.group'>
+    </onetime-event-block>
+  </div>
+</form>
+

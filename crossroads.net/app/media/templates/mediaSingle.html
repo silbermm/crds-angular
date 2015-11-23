@@ -35,7 +35,6 @@
                    <div class="box sixteen-nine">
                      <div class="aspect-content media-aspect-content">
                         <div class="controls">
-
                           <div class="col-xs-2 col-sm-1">
                             <a href="" ng-click="singleMedia.setAudioPlayer(player, track)" ng-show="!player.playing">
                               <svg viewBox="0 0 32 32" class="icon icon-play4">
@@ -59,6 +58,11 @@
                             </div>
                           </div><!--/col-xs-10 col-sm-11-->
                         </div><!--/controls-->
+                        <div class="soundcloud-attribution">
+                          <div class="col-sm-12">
+                            <span class="label label-standard-dark-transparent">Uploaded by <a href="{{track.user.permalink_url}}">{{track.user.username}}</a> on <a href="{{track.permalink_url}}">Soundcloud</a></span>
+                          </div>
+                        </div><!--/soundcloud-attribution-->
                         <img data-src="{{singleMedia.imageUrl}}" class="img-responsive imgix-fluid img-full-width">
                     </div><!--/aspect-content media-aspect-content-->
                   </div><!--/box sixteen-nine-->
