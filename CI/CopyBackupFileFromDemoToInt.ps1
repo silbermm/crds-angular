@@ -20,7 +20,7 @@ $backupFileName="${BackupPath}/${DBName}-Backup-${backupDateStamp}.trn"
 
 echo "$(Get-Date -format 'yyyy-MM-dd HH:mm:ss') Beginning copy of file $backupFileName to server $DBServer"
 try {
-  $output = & "C:\Program Files\OpenSSH\bin\scp.exe" -i /home/Administrator/.ssh/id_dsa "$backupFileName" "CRAdmin@${DBServer}:${DestinationPath}"
+  $output = & "C:\Program Files\OpenSSH\bin\scp.exe" -i /home/Administrator/.ssh/id_dsa "$backupFileName" "CRAdmin@${DBServer}:${DestinationPath}" 2> $null
 } catch [System.Exception] {
   $exitCode = 1;
   $exitMessage = "ERROR - Copy failed: " + $_.Exception.Message;
