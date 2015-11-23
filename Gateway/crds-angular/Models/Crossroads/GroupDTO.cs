@@ -9,6 +9,9 @@ namespace crds_angular.Models.Crossroads
     
     public class GroupDTO
     {
+        [JsonProperty(PropertyName = "groupName")]
+        public string GroupName { get; set; }
+
         [JsonProperty(PropertyName = "groupId")]
         public int GroupId { get; set; }
 

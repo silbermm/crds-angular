@@ -135,6 +135,7 @@ namespace crds_angular.Services
 
             var detail = new GroupDTO();
             {
+                detail.GroupName = g.Name;
                 detail.GroupId = g.GroupId;
                 detail.GroupFullInd = g.Full;
                 detail.WaitListInd = g.WaitList;
