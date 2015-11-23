@@ -9,10 +9,18 @@
               <div class="col-lg-10 col-lg-offset-1 custom-poster mobile-hard-left mobile-hard-right ng-scope">
 
                 <div ng-click="singleMedia.playVideo()" ng-show="singleMedia.videoStillIsVisible">
-                  <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
-                	<use xlink:href="#youtube-play-bw"></use>
-                  </svg>
-                  <img data-src="{{singleMedia.imageUrl}}" class="img-responsive imgix-fluid img-full-width">
+                  <div class="box sixteen-nine">
+                    <div class="aspect-content media-aspect-content">
+                      <span>
+                        <svg viewBox="0 0 32 32" class="icon icon-youtube-play-bw">
+                          <use xlink:href="#youtube-play-bw"></use>
+                        </svg>
+                        <img data-src="{{singleMedia.imageUrl}}" class="img-responsive imgix-fluid img-full-width">
+                      </span>
+                    </div>
+                  </div>
+
+
                 </div>
 
                 <div ng-show="singleMedia.videoPlayerIsVisible" class="embed-responsive embed-responsive-16by9">
