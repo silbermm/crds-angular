@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="Attribute.cs" />
+    <Compile Include="BulkEmailPublication.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="DonationAndDistributionRecord.cs" />
     <Compile Include="DonorStatement.cs" />

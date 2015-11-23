@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
+using crds_angular.Services.Interfaces;
 using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -20,8 +21,10 @@ namespace Crossroads.BulkEmailSync
             try
             {
                 Log.Info("Starting Bulk Email Synchronization");
-                //var syncService = container.Resolve<BulkEmailSyncService>();
-                //syncService.RunService();
+
+                var syncService = container.Resolve<IBulkEmailSyncService>();
+                syncService.RunService();
+
                 Log.Info("Finished Bulk Email Synchronization successfully");
             }
             catch (Exception ex)

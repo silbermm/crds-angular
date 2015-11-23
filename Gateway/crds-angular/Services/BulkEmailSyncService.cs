@@ -3,13 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using crds_angular.Services.Interfaces;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
 
 namespace crds_angular.Services
 {
     public class BulkEmailSyncService : IBulkEmailSyncService
     {
+        private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
+        private readonly MPInterfaces.IApiUserService _apiUserService;
+
+        public BulkEmailSyncService(
+            MPInterfaces.IBulkEmailRepository bulkEmailRepository,  
+            MPInterfaces.IApiUserService apiUserService)
+        {
+            _bulkEmailRepository = bulkEmailRepository;
+            _apiUserService = apiUserService;
+        }
+
+
         public void RunService()
+        {
+            var token = _apiUserService.GetToken();
+
+            var publications = _bulkEmailRepository.GetPublications(token);
+
+            foreach (var publication in publications)
+            {
+                Console.WriteLine("{0} - {1}", publication.Title, publication.Description);
+            }
+
+            // Get Publications 
+            // For Each Publication
+            //   Get correpsonding Page Views
+            //   For each Page View
+            //     Get Page view records
+            //
+            //     If (ContactEmail != SubscriptionEmail)
+            //       Update/Delete MailChimp record
+            //     End if
+            //
+            //     Translate fot MailChimp Format
+            //     Add to batch
+            //   End For
+            //
+            //   ?? Do we need to merge PageView pages?
+            //
+            //   Save Batch
+            //
+        }
+
+
+        public void RunService_Sample()
         {
             // needs to be a configvalue, not hardcoded url
             var client = new RestSharp.RestClient("https://us12.api.mailchimp.com/3.0/"); // int 
