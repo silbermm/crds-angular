@@ -146,7 +146,10 @@ namespace crds_angular.Services
             }
             var account = _mpDonorService.DecryptCheckValue(checkDetails.AccountNumber);
             var routing = _mpDonorService.DecryptCheckValue(checkDetails.RoutingNumber);
-            var token = _paymentService.CreateToken(account, routing);
+
+            //TODO:: Will need to remove hard coded values and make var token = _paymentService.CreateToken(account, routing);
+            //TODO:: This was put into place for EZScan to test.
+            var token = _paymentService.CreateToken("000123456789", "110000000");
             var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
             
             contactDonor.Details = new ContactDetails
