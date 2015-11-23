@@ -3,7 +3,7 @@
         <div class="col-sm-12">
             <div class="row giving-intro">
                 <div class="col-sm-12">
-                    <div ng-bind-html="$root.MESSAGES.profileGivingTop.content | html"></div>
+                    <div dynamic-content="$root.MESSAGES.profileGivingTop.content | html"></div>
                 </div>
             </div>
             <!--/row-->
@@ -38,7 +38,7 @@
                           <svg viewBox="0 0 32 32" class="icon icon-ccw">
                           	<use xlink:href="#ccw"></use>
                           </svg>
-                        <div ng-bind-html="$root.MESSAGES.noRecurringGifts.content | html"></div>
+                        <div dynamic-content="$root.MESSAGES.noRecurringGifts.content | html"></div>
                       </div><!--/col-sm-12-->
                     </div><!--/no-data-->
                 </div>
@@ -62,7 +62,7 @@
                                 <svg viewBox="0 0 18 32" class="icon icon-dollar">
                                     <use xlink:href="#dollar"></use>
                                 </svg>
-                                <div ng-bind-html="$root.MESSAGES.no_giving_history.content | html">
+                                <div dynamic-content="$root.MESSAGES.no_giving_history.content | html">
                                 </div>
                             </div>
                             <!--/col-sm-12-->

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -18,6 +19,8 @@ namespace crds_angular.App_Start
     {
         public static void RegisterMappings()
         {
+            Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
+
             Mapper.CreateMap<Dictionary<string, object>, AccountInfo>()
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));
@@ -201,8 +204,8 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<DonorStatement, DonorStatementDTO>();
             Mapper.CreateMap<DonorStatementDTO, DonorStatement>();
 
-            Mapper.CreateMap<MinistryPlatform.Models.Event, Models.Crossroads.Event>()
-                .ForMember(dest => dest.eventId, opts => opts.MapFrom(src => src.EventId))
+            Mapper.CreateMap<MinistryPlatform.Models.Event, Models.Crossroads.Events.Event>()
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.name, opts => opts.MapFrom(src => src.EventTitle))
                 .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
                 .ForMember(dest => dest.time, opts => opts.MapFrom(src => src.EventStartDate.ToString("h:mm")))

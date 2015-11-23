@@ -207,24 +207,20 @@ namespace MinistryPlatform.Translation.Services
 
         public IList<Event> getAllEventsForGroup(int groupId)
         {
-            var events = new List<Event>();
             var apiToken = ApiLogin();
             var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
             if (groupEvents == null || groupEvents.Count == 0)
             {
                 return null;
             }
-            foreach (var tmpEvent in groupEvents)
+            return groupEvents.Select(tmpEvent => new Event
             {
-                var newEvent = new Event();
-                newEvent.EventId = tmpEvent.ToInt("Event_ID");
-                newEvent.EventLocation = tmpEvent.ToString("Location_Name");
-                newEvent.EventStartDate = tmpEvent.ToDate("Event_Start_Date");
-                newEvent.EventTitle = tmpEvent.ToString("Event_Title");
-
-                events.Add(newEvent);
-            }
-            return events;
+                EventId = tmpEvent.ToInt("Event_ID"), 
+                EventLocation = tmpEvent.ToString("Location_Name"), 
+                EventStartDate = tmpEvent.ToDate("Event_Start_Date"), 
+                EventEndDate = tmpEvent.ToDate("Event_End_Date"), 
+                EventTitle = tmpEvent.ToString("Event_Title")
+            }).ToList();
         }
 
         public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)
