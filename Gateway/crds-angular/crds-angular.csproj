@@ -265,6 +265,11 @@
     <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
     <Compile Include="Models\Crossroads\Childcare\ChildcareRsvpDto.cs" />
+    <Compile Include="Models\Crossroads\Events\Event.cs" />
+    <Compile Include="Models\Crossroads\Events\EventProfile.cs" />
+    <Compile Include="Models\Crossroads\Events\EventRsvpDTO.cs" />
+    <Compile Include="Models\Crossroads\Groups\GroupDTO.cs" />
+    <Compile Include="Models\Crossroads\Groups\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
     <Compile Include="Services\EventService.cs" />
@@ -326,7 +331,6 @@
     <Compile Include="Models\Crossroads\Opportunity\OpportunityGroupParticipant.cs" />
     <Compile Include="Models\Crossroads\Opportunity\OpportunityResponseDto.cs" />
     <Compile Include="Models\Crossroads\ParticipantSignup.cs" />
-    <Compile Include="Models\Crossroads\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\AccountInfo.cs" />
     <Compile Include="Models\Crossroads\CookieInfo.cs" />
     <Compile Include="Models\Crossroads\ProgramDTO.cs" />
@@ -337,7 +341,6 @@
     <Compile Include="Models\Crossroads\Serve\SaveRsvpDto.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRsvp.cs" />
     <Compile Include="Models\Crossroads\Serve\UpdatedEvents.cs" />
-    <Compile Include="Models\Crossroads\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\GroupOpportunity.cs" />
     <Compile Include="Models\Crossroads\Serve\EventType.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeRole.cs" />
@@ -346,7 +349,6 @@
     <Compile Include="Models\Crossroads\Serve\ServingTime.cs" />
     <Compile Include="Models\Crossroads\Serve\TeamMember.cs" />
     <Compile Include="Models\Crossroads\ServingRSVP.cs" />
-    <Compile Include="Models\Crossroads\Event.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckAccount.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerBatch.cs" />
     <Compile Include="Models\Crossroads\Stewardship\CheckScannerCheck.cs" />

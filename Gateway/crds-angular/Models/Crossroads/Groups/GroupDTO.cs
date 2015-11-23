@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using crds_angular.Models.Json;
+﻿using System.Collections.Generic;
+using crds_angular.Models.Crossroads.Events;
 using Newtonsoft.Json;
 
-
-namespace crds_angular.Models.Crossroads
+namespace crds_angular.Models.Crossroads.Groups
 {
     
     public class GroupDTO
@@ -25,6 +23,9 @@ namespace crds_angular.Models.Crossroads
         public bool ChildCareAvailable { get; set; }
 
         public List<SignUpFamilyMembers> SignUpFamilyMembers { get; set; }
+
+        [JsonProperty(PropertyName = "events")]
+        public List<Event> Events { get; set; } 
         
     }
 

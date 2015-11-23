@@ -64,8 +64,8 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (List<FamilyMember>))]
-        [Route("api/serve/family/{contactId}")]
-        public IHttpActionResult GetFamily(int contactId)
+        [Route("api/serve/family/{contactId?}")]
+        public IHttpActionResult GetFamily(int contactId = 0)
         {//TODO: I don't think you need to pass in contactId here, use the token
             return Authorized(token =>
             {

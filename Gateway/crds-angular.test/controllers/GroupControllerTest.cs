@@ -10,6 +10,7 @@ using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using crds_angular.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Groups;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
