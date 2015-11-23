@@ -26,7 +26,7 @@ DECLARE @houseHoldID as int
 set @houseHoldID = (select Household_ID from contacts where contact_id = @contactID);
 
 UPDATE [dbo].HouseHolds
-SET Address_ID = @addressID, Home_Phone = '123-867-5309', Congregation_ID = 6;
+SET Address_ID = @addressID, Home_Phone = '123-867-5309', Congregation_ID = 6
 WHERE Household_ID = @houseHoldID;
 
 --Rich donor
@@ -35,7 +35,7 @@ INSERT INTO [dbo].donors
 (@contactID,1                     ,1                ,2                  ,{ts '2015-08-05 12:26:57.503'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,'cus_7I3CcWLFnecIAV');
 
 DECLARE @donor_id as int
-set @donor_id = (Select donorID from donors where contact_id = @contactID);
+set @donor_id = (Select donor_ID from donors where contact_id = @contactID);
 
 --Rich Theil-Test Updates
 update [dbo].Contacts set Donor_Record = @donor_id where contact_id = @contactID;
@@ -47,11 +47,11 @@ set @contactID = (select contact_id from contacts where Email_Address = 'rtheil+
 
 --Household for Wife Theil-Test
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'rtheil+testing@crossroads.net');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'rtheil+testing@crossroads.net');
 
 --Update Contact Record
 UPDATE [dbo].Contacts 
-SET Prefix_ID = 2, Middle_Name = A, Gender_ID = 2, Marital_Status_ID = 2, Household_ID = @houseHoldID, Date_of_Birth = {d '1975-01-01'}, Mobile_Phone = '321-654-8184'
+SET Prefix_ID = 2, Middle_Name = 'A', Gender_ID = 2, Marital_Status_ID = 2, Household_ID = @houseHoldID, Date_of_Birth = {d '1975-01-01'}, Mobile_Phone = '321-654-8184'
 WHERE Contact_ID = @contactID;
 
 --Wife Donor
@@ -60,7 +60,7 @@ INSERT INTO [dbo].donors
 (@contactID,1                     ,1                ,2                  ,{ts '2015-08-05 12:26:57.503'},null       ,0               ,null ,null              ,1        ,null              ,null                ,null               ,null                );
 
 DECLARE @donor_id as int
-set @donor_id = (Select donorID from donors where contact_id = @contactID);
+set @donor_id = (Select donor_ID from donors where contact_id = @contactID);
 
 --Wife Theil-Test Updates
 update [dbo].Contacts set Donor_Record = @donor_id where contact_id = @contactID;
@@ -78,6 +78,7 @@ set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'rthe
 UPDATE[dbo].Contacts 
 SET Date_of_Birth = {d '2001-01-01'}, Gender_ID = 2, Marital_Status_ID = 1, Household_Position_ID = 2, HouseHold_ID = @houseHoldID, Mobile_Phone = '321-548-6154'
 WHERE Contact_ID = @contactID;
+GO
 
 --Kid17 Theil-Test Contact Record
 DECLARE @contactID as int
@@ -85,7 +86,7 @@ set @contactID = (select contact_id from contacts where Email_Address = 'rtheil+
 
 --Household for Kid17 Theil-Test
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'rtheil+testing@crossroads.net');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'rtheil+testing@crossroads.net');
 
 --Kid17 Theil-Test Contact Updates
 UPDATE [dbo].Contacts 

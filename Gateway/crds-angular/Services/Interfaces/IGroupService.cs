@@ -2,6 +2,7 @@
 using MinistryPlatform.Models;
 using System.Collections.Generic;
 using Event = crds_angular.Models.Crossroads.Event;
+using crds_angular.Models.Crossroads.Groups;
 
 namespace crds_angular.Services.Interfaces
 {

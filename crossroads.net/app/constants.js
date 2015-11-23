@@ -13,7 +13,9 @@
       MPTOOLS: 'crossroads.mptools',
       PROFILE: 'crossroads.profile',
       MEDIA: 'crossroads.media',
+      SIGNUP: 'crossroads.signup',
       COMMUNITY_GROUPS: 'crossroads.community',
+      ONETIME_SIGNUP: 'crossroads.onetime',
       CHILDCARE: 'crossroads.childcare'
     },
     ATTRIBUTE_TYPE_IDS: {
@@ -47,6 +49,12 @@
       PREVIOUS_TRIP_EXPERIENCE: 3949,
       VICTIM_OF_ABUSE: 3973,
       START_ATTEND_REASON: 59
+    },
+    CMS: {
+      PAGENAMES: {
+        COMMUNITYGROUPS: 'CommunityGroupSignupPage',
+        ONETIMEEVENTS: 'OnetimeEventSignupPage'
+      }
     }
   };
 })();

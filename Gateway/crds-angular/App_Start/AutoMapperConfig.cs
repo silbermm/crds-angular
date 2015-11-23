@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
@@ -18,6 +19,8 @@ namespace crds_angular.App_Start
     {
         public static void RegisterMappings()
         {
+            Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
+
             Mapper.CreateMap<Dictionary<string, object>, AccountInfo>()
                 .ForMember(dest => dest.EmailNotifications,
                     opts => opts.MapFrom(src => src["Bulk_Email_Opt_Out"]));

@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
