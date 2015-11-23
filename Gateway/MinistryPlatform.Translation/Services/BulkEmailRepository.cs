@@ -48,7 +48,7 @@ namespace MinistryPlatform.Translation.Services
             return publications;
         }
 
-        public Dictionary<int, BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds)
+        public List<BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds)
         {
             var subscribers = GetBaseSubscribers(token, publicationId);
 
@@ -57,7 +57,7 @@ namespace MinistryPlatform.Translation.Services
                 AddAdditionalFields(token, subscribers, pageViewId);
             }
 
-            return subscribers;
+            return subscribers.Values.ToList();
         }
 
         private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)

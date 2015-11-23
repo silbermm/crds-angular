@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Models;
+using Newtonsoft.Json;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
 
@@ -14,7 +16,7 @@ namespace crds_angular.Services
         private readonly MPInterfaces.IApiUserService _apiUserService;
 
         public BulkEmailSyncService(
-            MPInterfaces.IBulkEmailRepository bulkEmailRepository,  
+            MPInterfaces.IBulkEmailRepository bulkEmailRepository,
             MPInterfaces.IApiUserService apiUserService)
         {
             _bulkEmailRepository = bulkEmailRepository;
@@ -30,96 +32,91 @@ namespace crds_angular.Services
 
             // Get Publications 
             // For Each Publication
-            
+
             foreach (var publication in publications)
             {
-                Console.WriteLine("{0} - {1}", publication.Title, publication.Description);
-
                 //   Get correpsonding Page Views
                 var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
 
                 //     Get Page view records
                 var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
 
-                //   For each Page View
-                foreach (var pageViewId in pageViewIds)
-                {
-                    
+                //     If (ContactEmail != SubscriptionEmail)
+                //       Update/Delete MailChimp record
+                //     End if   
 
-                    //     If (ContactEmail != SubscriptionEmail)
-                    //       Update/Delete MailChimp record
-                    //     End if
-                    //
-                    //     Translate fot MailChimp Format
-                    //     Add to batch
+                SendBatch(publication, subscribers);
 
-                    Console.WriteLine("\t{0}", pageViewId);
-                }
+                // TODO: Query MailChimp to see if batch was successfull
 
-                //   End For
-                //
-                //   ?? Do we need to merge PageView pages?
-                //
-                //   Save Batch
+                // TODO: Update MP with 3rd Party Contact ID
+
+                // TODO: Update MP with last sync date
             }
         }
 
-        public void RunService_Sample()
+        public void SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
             // needs to be a configvalue, not hardcoded url
-            var client = new RestSharp.RestClient("https://us12.api.mailchimp.com/3.0/");
+            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
 
+            // TODO: Since this password was in public GitHub it needs to be invalidated and regenerated
             // needs to be a configvalue, not hardcoded url
             var password = "65ec517435aa07e010261c5a6692c7c7-us12";
 
-            client.Authenticator = new HttpBasicAuthenticator("noname", password); 
+            client.Authenticator = new HttpBasicAuthenticator("noname", password);
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
-            SubscriberOperation operation = new SubscriberOperation();
-            operation.operations = new List<Subscriber>();
-
-            // for loop starts here...
-
-            // subscribers info needs to be pulled from the DB -- merge fields should be serializeable
-            Subscriber s1 = new Subscriber();
-            s1.method = "POST";
-
-            // TODO: Use Third Party Publication ID here
-            var thirdPartyPublicationId = "67db650475";
-
-            s1.path = string.Format("lists/{0}/members", thirdPartyPublicationId);
-            // TODO: Do we need to store this somewhere to verify batch processed successfully
-            s1.operation_id = Guid.NewGuid().ToString();
-
-            string emailaddy = "\"me@me.com\"";
-            string mergeFields = "";
-            s1.body = String.Format("{{ \"status\":\"subscribed\", \"email_address\":{0}, \"merge_fields\":{1} }}", emailaddy, mergeFields);
-
-            // add to list here
-            operation.operations.Add(s1);
-
-            // for loop ends here...
+            var operation = AddSubscribers(publication, subscribers);
 
             request.RequestFormat = DataFormat.Json;
             request.AddBody(operation);
 
             var response = client.Execute(request);
 
-            //Console.WriteLine(response.Content);
-            //Console.ReadLine();
+            // TODO: Add code to Validate response
+        }
 
-            // handle logging down here
+        private static SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        {
+            SubscriberOperation operation = new SubscriberOperation();
+            operation.operations = new List<Subscriber>();
+
+            foreach (var subscriber in subscribers)
+            {
+                var mailChimpSubscriber = new Subscriber();
+                mailChimpSubscriber.method = "POST";
+
+                //TODO: Determine how to populate the ThirdPartyPublicationID? For now you may just write SQL to update table directly
+                mailChimpSubscriber.path = string.Format("lists/{0}/members", publication.ThirdPartyPublicationId);
+
+                // TODO: Do we need to store this somewhere to verify batch processed successfully
+                mailChimpSubscriber.operation_id = Guid.NewGuid().ToString();
+
+                string mergeFields = JsonConvert.SerializeObject(subscriber.MergeFields);
+                // TODO: Use JSON.NET to serialize this rather than a string
+                mailChimpSubscriber.body = String.Format("{{ \"status\":\"{0}\", \"email_address\":{1}, \"merge_fields\":{2} }}",
+                    // TODO: Determine if these are the right values
+                    subscriber.Subscribed ? "subscribed" : "unsubscribed", 
+                    subscriber.EmailAddress, 
+                    mergeFields);
+
+                // add to list here
+                operation.operations.Add(mailChimpSubscriber);
+            }
+            
+            return operation;
         }
     }
 
-    class SubscriberOperation
+    public class SubscriberOperation
     {
         public List<Subscriber> operations { get; set; }
     }
 
-    class Subscriber
+    public class Subscriber
     {
         public string method { get; set; }
         public string path { get; set; }
