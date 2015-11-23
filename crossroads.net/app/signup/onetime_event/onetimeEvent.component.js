@@ -22,6 +22,13 @@
     function OnetimeEventController() {
       var vm = this;
       vm.pageInfo = vm.cmsInfo.pages[0];
+
+      vm.events = _.filter(vm.group.events, function(event) {
+        var start = moment(event.startDate);
+        var now = moment();
+        return start.isAfter(now);
+      });
+
     }
   }
 

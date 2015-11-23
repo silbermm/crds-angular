@@ -16,7 +16,7 @@
       data: {
         isProtected: true,
         meta: {
-          title: 'Community Group Signup',
+          title: 'Signup Page',
           description: ''
         }
       },
