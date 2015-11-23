@@ -133,14 +133,16 @@ namespace MinistryPlatform.Translation.Test.Services
                 {"Event_ID", 123},
                 {"Location_Name", "Katrina's House"},
                 {"Event_Start_Date", new DateTime(2014, 3, 4)},
-                {"Event_Title", "Katrina's House Party"}
+                {"Event_Title", "Katrina's House Party"},
+                {"Event_End_Date", new DateTime(2014, 4, 4)}
             };
             var mock2 = new Dictionary<string, object>
             {
                 {"Event_ID", 456},
                 {"Location_Name", "Andy's House"},
                 {"Event_Start_Date", new DateTime(2014, 4, 4)},
-                {"Event_Title", "Andy's House Party"}
+                {"Event_Title", "Andy's House Party"},
+                {"Event_End_Date", new DateTime(2014, 4, 4)}
             };
             var mockSubPageView = new List<Dictionary<string, object>> {mock1, mock2};
 
