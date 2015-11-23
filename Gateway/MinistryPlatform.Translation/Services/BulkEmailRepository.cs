@@ -12,6 +12,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _bulkEmailPublicationPageViewId = Convert.ToInt32(AppSettings("BulkEmailPublicationsPageView"));
+        private readonly int _publicationPageViewSubPageId = Convert.ToInt32(AppSettings("PublicationPageViewSubPageId"));
 
 
         public BulkEmailRepository(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService) :
@@ -22,7 +23,8 @@ namespace MinistryPlatform.Translation.Services
 
         public List<BulkEmailPublication> GetPublications(string token)
         {
-            var records = _ministryPlatformService.GetPageViewRecords(_bulkEmailPublicationPageViewId, token);            
+
+            var records = _ministryPlatformService.GetPageViewRecords(_bulkEmailPublicationPageViewId, token);
 
             var publications = records.Select(record => new BulkEmailPublication
             {
@@ -32,6 +34,15 @@ namespace MinistryPlatform.Translation.Services
                 ThirdPartyPublicationId = record.ToString("Third_Party_Publication_ID"),
                 LastSuccessfulSync = record.ToDate("Last_Successful_Sync"),
             }).ToList();
+
+            return publications;
+        }
+
+        public List<int> GetPageViewIds(string token, int publicationId)
+        {
+            var records = _ministryPlatformService.GetSubPageRecords(_publicationPageViewSubPageId, publicationId, token);
+
+            var publications = records.Select(record => record.ToInt("Page_View_ID")).ToList();
 
             return publications;
         }

@@ -31,6 +31,13 @@ namespace crds_angular.Services
             foreach (var publication in publications)
             {
                 Console.WriteLine("{0} - {1}", publication.Title, publication.Description);
+
+                var pageViewsIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
+
+                foreach (var pageViewId in pageViewsIds)
+                {
+                    Console.WriteLine("\t{0}", pageViewId);
+                }
             }
 
             // Get Publications 

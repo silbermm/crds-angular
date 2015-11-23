@@ -26,3 +26,12 @@ INSERT INTO dbo.dp_Page_Views
 
 SET IDENTITY_INSERT dbo.dp_Page_Views OFF
 GO
+
+-- Update default field list to include the Page_View_ID
+UPDATE dbo.dp_Sub_Pages
+	SET 
+		Default_Field_List = 'Publication_Page_View_ID, Page_View_ID_Table.Page_View_ID, Page_View_ID_Table.View_Title, Page_View_ID_Table.Description'
+WHERE Sub_Page_ID = 543
+
+
+
