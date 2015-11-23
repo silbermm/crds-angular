@@ -59,16 +59,6 @@ GO
 
 TRUNCATE TABLE dbo.Publication_Page_Views
 
--- Associate default segmentation will all online publications
-INSERT INTO dbo.Publication_Page_Views
-	(
-		[Publication_ID],
-		[Page_View_ID]
-	)
-	SELECT Publication_ID, 2197
-		FROM dbo.dp_Publications p 
-		WHERE Available_Online = 1	
-
 -- Associate Kids Club with Segmentation: Has Child of Age
 INSERT INTO dbo.Publication_Page_Views
 	(

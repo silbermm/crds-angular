@@ -28,45 +28,51 @@ namespace crds_angular.Services
 
             var publications = _bulkEmailRepository.GetPublications(token);
 
+            // Get Publications 
+            // For Each Publication
+            
             foreach (var publication in publications)
             {
                 Console.WriteLine("{0} - {1}", publication.Title, publication.Description);
 
-                var pageViewsIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
+                //   Get correpsonding Page Views
+                var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
 
-                foreach (var pageViewId in pageViewsIds)
+                //     Get Page view records
+                var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
+
+                //   For each Page View
+                foreach (var pageViewId in pageViewIds)
                 {
+                    
+
+                    //     If (ContactEmail != SubscriptionEmail)
+                    //       Update/Delete MailChimp record
+                    //     End if
+                    //
+                    //     Translate fot MailChimp Format
+                    //     Add to batch
+
                     Console.WriteLine("\t{0}", pageViewId);
                 }
+
+                //   End For
+                //
+                //   ?? Do we need to merge PageView pages?
+                //
+                //   Save Batch
             }
-
-            // Get Publications 
-            // For Each Publication
-            //   Get correpsonding Page Views
-            //   For each Page View
-            //     Get Page view records
-            //
-            //     If (ContactEmail != SubscriptionEmail)
-            //       Update/Delete MailChimp record
-            //     End if
-            //
-            //     Translate fot MailChimp Format
-            //     Add to batch
-            //   End For
-            //
-            //   ?? Do we need to merge PageView pages?
-            //
-            //   Save Batch
-            //
         }
-
 
         public void RunService_Sample()
         {
             // needs to be a configvalue, not hardcoded url
-            var client = new RestSharp.RestClient("https://us12.api.mailchimp.com/3.0/"); // int 
+            var client = new RestSharp.RestClient("https://us12.api.mailchimp.com/3.0/");
 
-            client.Authenticator = new HttpBasicAuthenticator("noname", "65ec517435aa07e010261c5a6692c7c7-us12"); // int
+            // needs to be a configvalue, not hardcoded url
+            var password = "65ec517435aa07e010261c5a6692c7c7-us12";
+
+            client.Authenticator = new HttpBasicAuthenticator("noname", password); 
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -79,8 +85,14 @@ namespace crds_angular.Services
             // subscribers info needs to be pulled from the DB -- merge fields should be serializeable
             Subscriber s1 = new Subscriber();
             s1.method = "POST";
-            s1.path = "lists/67db650475/members"; // int
+
+            // TODO: Use Third Party Publication ID here
+            var thirdPartyPublicationId = "67db650475";
+
+            s1.path = string.Format("lists/{0}/members", thirdPartyPublicationId);
+            // TODO: Do we need to store this somewhere to verify batch processed successfully
             s1.operation_id = Guid.NewGuid().ToString();
+
             string emailaddy = "\"me@me.com\"";
             string mergeFields = "";
             s1.body = String.Format("{{ \"status\":\"subscribed\", \"email_address\":{0}, \"merge_fields\":{1} }}", emailaddy, mergeFields);

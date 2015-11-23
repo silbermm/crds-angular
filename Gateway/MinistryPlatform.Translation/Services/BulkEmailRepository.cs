@@ -13,6 +13,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _bulkEmailPublicationPageViewId = Convert.ToInt32(AppSettings("BulkEmailPublicationsPageView"));
         private readonly int _publicationPageViewSubPageId = Convert.ToInt32(AppSettings("PublicationPageViewSubPageId"));
+        private readonly int _segmentationBasePageViewId = Convert.ToInt32(AppSettings("SegmentationBasePageViewId"));
 
 
         public BulkEmailRepository(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService) :
@@ -45,6 +46,103 @@ namespace MinistryPlatform.Translation.Services
             var publications = records.Select(record => record.ToInt("Page_View_ID")).ToList();
 
             return publications;
+        }
+
+        public Dictionary<int, BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds)
+        {
+            var subscribers = GetBaseSubscribers(token, publicationId);
+
+            foreach (var pageViewId in pageViewIds)
+            {
+                AddAdditionalFields(token, subscribers, pageViewId);
+            }
+
+            return subscribers;
+        }
+
+        private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)
+        {
+            var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token);
+            var subscribers = new Dictionary<int, BulkEmailSubscriber>();
+
+            foreach (var record in records)
+            {
+                var recordPublicationId = record.ToInt("Publication_ID");
+                if (publicationId != recordPublicationId)
+                {
+                    // TODO: See if we can switch to not filtering here and just query the data once and match it up with corresponding publication later
+                    continue;
+                }
+
+                var subscriber = new BulkEmailSubscriber();
+                subscriber.ContactPublicationId = record.ToInt("Contact_Publication_ID");
+                subscriber.ContactId = record.ToInt("Contact_ID");
+                subscriber.EmailAddress = record.ToString("Email_Address");
+                subscriber.ThirdPartyContactId = record.ToString("Third_Party_Contact_ID");
+                subscriber.Subscribed = !record.ToBool("Unsubscribed");
+
+                AddMergeFields(subscriber, record);
+
+                subscribers.Add(subscriber.ContactPublicationId, subscriber);
+            }
+            return subscribers;
+        }
+
+        private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, int pageViewId)
+        {
+            var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token);
+
+            foreach (var record in records)
+            {
+                var contactPublicationId = record.ToInt("Contact_Publication_ID");
+
+                if (!subscribers.ContainsKey(contactPublicationId))
+                {
+                    continue;
+                }
+
+                var subscriber = subscribers[contactPublicationId];
+
+                AddMergeFields(subscriber, record);
+            }
+        }
+
+        private void AddMergeFields(BulkEmailSubscriber subscriber, Dictionary<string, object> record)
+        {
+            var columnsToSkip = new List<string>()
+            {
+                "dp_RecordID", 
+                "dp_RecordName",
+                "dp_Selected",
+                "dp_FileID",
+                "dp_RecordStatus",
+                "Contact_Publication_ID",
+                "Publication_ID",
+                "Title",
+                "Third_Party_Publication_ID",
+                "Last_Successful_Sync",
+                "Unsubscribed",
+                "Third_Party_Contact_ID",
+                "Contact_ID",
+                "Email_Address"
+            };
+
+                  
+            foreach (var column in record)
+            {
+                if (columnsToSkip.Contains(column.Key))
+                {
+                    continue;
+                }
+
+                if (subscriber.MergeFields.Keys.Contains(column.Key))
+                {
+                    continue;
+                }
+
+                var value = column.Value != null ? column.Value.ToString() : null;
+                subscriber.MergeFields.Add(column.Key, value);
+            }
         }
     }
 }
