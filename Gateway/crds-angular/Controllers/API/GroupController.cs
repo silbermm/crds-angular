@@ -13,6 +13,7 @@ using crds_angular.Security;
 using log4net;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Models.Crossroads.Events;
 
 namespace crds_angular.Controllers.API
 {

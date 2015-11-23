@@ -1,6 +1,4 @@
-﻿using System;
-using crds_angular.Models.Crossroads.Events;
-using MinistryPlatform.Models;
+﻿using crds_angular.Models.Crossroads.Events;
 using NUnit.Framework;
 
 

@@ -204,8 +204,8 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<DonorStatement, DonorStatementDTO>();
             Mapper.CreateMap<DonorStatementDTO, DonorStatement>();
 
-            Mapper.CreateMap<MinistryPlatform.Models.Event, Models.Crossroads.Event>()
-                .ForMember(dest => dest.eventId, opts => opts.MapFrom(src => src.EventId))
+            Mapper.CreateMap<MinistryPlatform.Models.Event, Models.Crossroads.Events.Event>()
+                .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.name, opts => opts.MapFrom(src => src.EventTitle))
                 .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
                 .ForMember(dest => dest.time, opts => opts.MapFrom(src => src.EventStartDate.ToString("h:mm")))

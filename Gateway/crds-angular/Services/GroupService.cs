@@ -9,7 +9,7 @@ using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
-using Event = crds_angular.Models.Crossroads.Event;
+using Event = crds_angular.Models.Crossroads.Events.Event;
 
 namespace crds_angular.Services
 {
@@ -145,7 +145,7 @@ namespace crds_angular.Services
                 detail.WaitListInd = g.WaitList;
                 detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
-                detail.Events = events.Select(Mapper.Map<Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
+                detail.Events = events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
                 //the first instance of family must always be the logged in user
                 var fam = new SignUpFamilyMembers
                 {
