@@ -105,18 +105,38 @@ namespace crds_angular.Controllers.API
         public IHttpActionResult GetEvents(int groupId)
         {
             return Authorized(token =>
-            {
-                try
                 {
-                    var eventList = groupService.GetGroupEvents(groupId);
-                    return Ok(eventList);
+                    try
+                    {
+                        var eventList = groupService.GetGroupEvents(groupId);
+                        return Ok(eventList);
+                    }
+                    catch (Exception e)
+                    {
+                        var apiError = new ApiErrorDto("Error getting events ", e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
                 }
-                catch (Exception e)
+            );
+        }
+
+        [ResponseType(typeof(List<GroupContactDTO>))]
+        [Route("api/group/{groupId}/event/{eventId}")]
+        public IHttpActionResult GetParticipants(int groupId, int eventId)
+        {
+            return Authorized(token =>
                 {
-                    var apiError = new ApiErrorDto("Error getting ", e);
-                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                    try
+                    {
+                        var memberList = groupService.GetGroupMembersByEvent(groupId, eventId);
+                        return Ok(memberList);
+                    }
+                    catch (Exception e)
+                    {
+                        var apiError = new ApiErrorDto("Error getting participating group members ", e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
                 }
-            }
             );
         }
 
