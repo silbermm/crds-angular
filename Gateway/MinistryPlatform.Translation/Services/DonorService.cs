@@ -540,7 +540,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
+        public void SetupConfirmationEmail(int programId, int donorId, decimal donationAmount, DateTime setupDate, string pymtType)
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.

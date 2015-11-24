@@ -4,7 +4,7 @@ namespace MinistryPlatform.Models
 {
     public class DonationAndDistributionRecord
     {
-        public int DonationAmt { get; set; }
+        public decimal DonationAmt { get; set; }
 
         public int? FeeAmt { get; set; }
 
