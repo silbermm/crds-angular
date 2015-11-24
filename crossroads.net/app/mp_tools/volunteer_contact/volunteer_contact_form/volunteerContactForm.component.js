@@ -3,9 +3,23 @@
 
   module.exports = VolunteerContactForm;
 
-  VolunteerContactForm.$inject = ['$rootScope', '$window', 'Validation', 'Group'];
+  VolunteerContactForm.$inject = [
+    '$rootScope',
+    '$window',
+    'Validation',
+    'Group',
+    'Session',
+    'VolunteerContact'
+  ];
 
-  function VolunteerContactForm($rootScope, $window, Validation, Group) {
+  function VolunteerContactForm(
+    $rootScope,
+    $window,
+    Validation,
+    Group,
+    Session,
+    VolunteerContact
+  ) {
     return {
       restrict: 'E',
       scope: {
@@ -20,36 +34,90 @@
     function VolunteerContactFormController() {
       var vm = this;
       vm.cancel = cancel;
-      vm.events = [];
+      vm.data = {}; // the form object
+      vm.eventChanged = eventChanged;
+      vm.eventChoosen = eventChoosen;
+      vm.eventDateTime = eventDateTime;
       vm.formData = {};
+      vm.loadingTo = false;
       vm.processing = false;
       vm.save = save;
-      vm.showForm = false;
       vm.validation = Validation;
-
-      activate();
-
-      function activate() {
-        Group.Events.query({groupId: vm.group.groupId}, function(data) {
-          vm.events = data;
-          vm.showForm = true;
-        },
-
-        function(err) {
-          console.error('Unable to get events');
-          console.error(err);
-        });
-      }
 
       function cancel() {
         $window.close();
       }
 
+      function eventChanged() {
+        if (vm.formData.event) {
+          vm.loadingTo = true;
+          Group.Participants.query({
+            groupId: vm.group.groupId,
+            eventId: vm.formData.event.eventId
+          },
+          
+          function(data) {
+            vm.to = _.map(data, function(d) {
+              return d.contactId; 
+            });
+            vm.formData.to = _.map(data, function(d){
+              return d.displayName + '; '; 
+            }); 
+            vm.loadingTo = false;
+          },
+
+          function (err) {
+            vm.loadingTo = false;
+            console.error(err);
+            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          });
+        } else {
+          vm.formData.to = undefined;
+        }
+      }
+
+      function eventChoosen() {
+        return !_.isEmpty(vm.formData.event);
+      }
+
+      function eventDateTime(event) {
+        var startDate = moment(event.startDate);
+        var endDate = moment(event.endDate);
+        var timestamp = _.template('${ date } ${ start } - ${ end }');
+        var display = timestamp({
+          date: startDate.format('MM/DD/YYYY'),
+          start: startDate.format('hh:mmA'),
+          end: endDate.format('hh:mmA')
+        });
+        return display;
+      }
+
       function save() {
         if (!vm.data.$valid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          return;
+          return false;
         }
+        vm.processing = true;
+
+        var toSend = {
+          fromContact: Session.exists('userId'),
+          toContacts: vm.to,
+          subject: vm.formData.subject,
+          body: vm.formData.body
+        };
+
+        VolunteerContact.GroupMail.save(toSend, function() {
+          vm.processing = false;
+          cancel(); 
+        },
+
+        function(err) {
+          vm.processing = false;
+          console.error(err);
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        });
+
+        return true;
       }
 
     }

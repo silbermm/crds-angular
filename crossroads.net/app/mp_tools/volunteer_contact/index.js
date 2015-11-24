@@ -8,8 +8,7 @@
 
   angular.module(MODULE)
     .directive('volunteerContact', require('./volunteerContact.component'))
-
-    //.service('VolunteerContactService', require('./volunteerContact.service'))
+    .service('VolunteerContact', require('./volunteerContact.service'))
     ;
 
   require('./volunteer_contact_form');

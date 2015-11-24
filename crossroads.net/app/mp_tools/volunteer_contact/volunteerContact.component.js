@@ -19,10 +19,10 @@
     function VolunteerContactController() {
 
       var vm = this;
-      vm.events = [];
       vm.group = {};
       vm.multipleRecordsSelected = true;
       vm.params = MPTools.getParams();
+      vm.showError = showError;
       vm.viewReady = false;
 
       activate();
