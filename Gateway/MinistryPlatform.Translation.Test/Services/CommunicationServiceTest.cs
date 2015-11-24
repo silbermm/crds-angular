@@ -54,13 +54,13 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(99, communication.AuthorUserId);
             Assert.AreEqual(mockBody, communication.EmailBody);
             Assert.AreEqual(mockSubject, communication.EmailSubject);
-            Assert.AreEqual(fromContactId, communication.FromContactId);
-            Assert.AreEqual(fromEmailAddress, communication.FromEmailAddress);
+            Assert.AreEqual(fromContactId, communication.FromContact.ContactId);
+            Assert.AreEqual(fromEmailAddress, communication.FromContact.EmailAddress);
             Assert.IsNull(communication.MergeData);
-            Assert.AreEqual(replyContactId, communication.ReplyContactId);
-            Assert.AreEqual(replyEmailAddress, communication.ReplyToEmailAddress);
-            Assert.AreEqual(toContactId, communication.ToContactId);
-            Assert.AreEqual(toEmailAddress, communication.ToEmailAddress);
+            Assert.AreEqual(replyContactId, communication.ReplyToContact.ContactId);
+            Assert.AreEqual(replyEmailAddress, communication.ReplyToContact.EmailAddress);
+            Assert.AreEqual(toContactId, communication.ToContacts[0].ContactId);
+            Assert.AreEqual(toEmailAddress, communication.ToContacts[0].EmailAddress);
         }
 
         [Test]

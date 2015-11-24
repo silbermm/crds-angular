@@ -33,5 +33,22 @@ namespace crds_angular.Controllers.API
                 }
             });
         }
+
+        [Route("api/sendgroupemail/")]
+        public IHttpActionResult Post([FromBody] CommunicationDTO communication)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    _emailCommunication.SendEmail(communication);
+                    return Ok();
+                }
+                catch (Exception ex)
+                {
+                    return InternalServerError(ex);
+                }
+            });
+        }
     }
 }
