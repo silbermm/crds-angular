@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
@@ -31,14 +32,13 @@ namespace crds_angular.Services
             communication.AuthorUserId = email.FromUserId ?? _communicationService.GetUserIdFromContactId(token, email.FromContactId);
 
             var sender = _personService.GetPerson(email.FromContactId);
-            communication.FromContactId = sender.ContactId;
-            communication.FromEmailAddress = sender.EmailAddress;
-            communication.ReplyContactId = sender.ContactId;
-            communication.ReplyToEmailAddress = sender.EmailAddress;
+            var from = new Contact { ContactId = sender.ContactId, EmailAddress = sender.EmailAddress };
+            communication.FromContact = from;
+            communication.ReplyToContact = from;
 
             var receiver = _personService.GetPerson(email.ToContactId);
-            communication.ToContactId = receiver.ContactId;
-            communication.ToEmailAddress = receiver.EmailAddress;
+            var recipient = new Contact {ContactId = receiver.ContactId, EmailAddress = receiver.EmailAddress};
+            communication.ToContacts.Add(recipient);
 
             var template = _communicationService.GetTemplate(email.TemplateId);
             communication.TemplateId = email.TemplateId;
@@ -48,6 +48,24 @@ namespace crds_angular.Services
             communication.MergeData = email.MergeData;
 
             _communicationService.SendMessage(communication);
+        }
+
+        public void SendEmail(CommunicationDTO emailData)
+        {
+            var comm = new Communication
+            {
+                AuthorUserId = 1,
+                DomainId = 1,
+                EmailBody = emailData.Body,
+                EmailSubject = emailData.Subject,
+                FromContact = new Contact{ ContactId = emailData.FromContactId, EmailAddress = _communicationService.GetEmailFromContactId(emailData.FromContactId) },
+                MergeData = new Dictionary<string, object>()
+            };
+            foreach (var to in emailData.ToContactIds)
+            {
+                comm.ToContacts.Add(new Contact { ContactId = to, EmailAddress = _communicationService.GetEmailFromContactId(to) });
+            }
+            _communicationService.SendMessage(comm);
         }
     }
 }

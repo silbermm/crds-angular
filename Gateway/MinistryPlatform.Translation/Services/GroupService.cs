@@ -307,14 +307,11 @@ namespace MinistryPlatform.Translation.Services
                 EmailSubject = emailTemplate.Subject,
                 AuthorUserId = churchAdminContactId,
                 DomainId = Convert.ToInt32(AppSettings("DomainId")),
-                FromContactId = churchAdminContactId,
-                FromEmailAddress = fromAddress,
+                FromContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 MergeData = mergeData,
-                ReplyContactId = churchAdminContactId,
-                ReplyToEmailAddress = fromAddress,
+                ReplyToContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 TemplateId = CommunityGroupConfirmationTemplateId,
-                ToContactId = toContact,
-                ToEmailAddress = toContactInfo.Email_Address
+                ToContacts = {new Contact{ContactId = toContact, EmailAddress = toContactInfo.Email_Address}}
             };
             _communicationService.SendMessage(confirmation);
         }

@@ -86,7 +86,7 @@ namespace MinistryPlatform.Translation.Services
             var token = ApiLogin();
 
             var communicationId = AddCommunication(communication, token);
-            AddCommunicationMessage(communication, communicationId, token);
+            AddCommunicationMessages(communication, communicationId, token);
         }
 
         private int AddCommunication(Communication communication, string token)
@@ -97,28 +97,31 @@ namespace MinistryPlatform.Translation.Services
                 {"Body", communication.EmailBody},
                 {"Author_User_Id", communication.AuthorUserId},
                 {"Start_Date", DateTime.Now},
-                {"From_Contact", communication.FromContactId},
-                {"Reply_to_Contact", communication.ReplyContactId},
+                {"From_Contact", communication.FromContact.ContactId},
+                {"Reply_to_Contact", communication.ReplyToContact.ContactId},
                 {"Communication_Status_ID", _communicationStatusId}
             };
             var communicationId = _ministryPlatformService.CreateRecord(_messagePageId, dictionary, token);
             return communicationId;
         }
 
-        private void AddCommunicationMessage(Communication communication, int communicationId, string token)
+        private void AddCommunicationMessages(Communication communication, int communicationId, string token)
         {
-            var dictionary = new Dictionary<string, object>
+            foreach (Contact contact in communication.ToContacts)
             {
-                {"Action_Status_ID", _actionStatusId},
-                {"Action_Status_Time", DateTime.Now},
-                {"Contact_ID", communication.ToContactId},
-                {"From", communication.FromEmailAddress},
-                {"To", communication.ToEmailAddress},
-                {"Reply_To", communication.ReplyToEmailAddress},
-                {"Subject", ParseTemplateBody(communication.EmailSubject, communication.MergeData)},
-                {"Body", ParseTemplateBody(communication.EmailBody, communication.MergeData)}
-            };
-            _ministryPlatformService.CreateSubRecord(_recipientsSubPageId, communicationId, dictionary, token);
+                var dictionary = new Dictionary<string, object>
+                {
+                    {"Action_Status_ID", _actionStatusId},
+                    {"Action_Status_Time", DateTime.Now},
+                    {"Contact_ID", contact.ContactId},
+                    {"From", communication.FromContact.ContactId},
+                    {"To", contact.EmailAddress},
+                    {"Reply_To", communication.ReplyToContact.EmailAddress},
+                    {"Subject", ParseTemplateBody(communication.EmailSubject, communication.MergeData)},
+                    {"Body", ParseTemplateBody(communication.EmailBody, communication.MergeData)}
+                };
+                _ministryPlatformService.CreateSubRecord(_recipientsSubPageId, communicationId, dictionary, token);
+            }
         }
 
         public MessageTemplate GetTemplate(int templateId)
@@ -148,12 +151,9 @@ namespace MinistryPlatform.Translation.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = fromContactId,
-                FromEmailAddress = fromEmailAddress,
-                ReplyContactId = replyContactId,
-                ReplyToEmailAddress = replyEmailAddress,
-                ToContactId = toContactId,
-                ToEmailAddress = toEmailAddress, 
+                FromContact = new Contact {ContactId = fromContactId, EmailAddress = fromEmailAddress},
+                ReplyToContact = new Contact {ContactId = replyContactId, EmailAddress = replyEmailAddress},
+                ToContacts = new List<Contact>{ new Contact{ContactId = toContactId, EmailAddress = toEmailAddress}},
                 MergeData = mergeData
             };
         }
