@@ -114,7 +114,7 @@ namespace MinistryPlatform.Translation.Services
                     {"Action_Status_ID", _actionStatusId},
                     {"Action_Status_Time", DateTime.Now},
                     {"Contact_ID", contact.ContactId},
-                    {"From", communication.FromContact.ContactId},
+                    {"From", communication.FromContact.EmailAddress},
                     {"To", contact.EmailAddress},
                     {"Reply_To", communication.ReplyToContact.EmailAddress},
                     {"Subject", ParseTemplateBody(communication.EmailSubject, communication.MergeData)},

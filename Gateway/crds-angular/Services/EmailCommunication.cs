@@ -52,18 +52,24 @@ namespace crds_angular.Services
 
         public void SendEmail(CommunicationDTO emailData)
         {
+            var from = new Contact {ContactId = emailData.FromContactId, EmailAddress = _communicationService.GetEmailFromContactId(emailData.FromContactId)};
             var comm = new Communication
             {
                 AuthorUserId = 1,
                 DomainId = 1,
                 EmailBody = emailData.Body,
                 EmailSubject = emailData.Subject,
-                FromContact = new Contact{ ContactId = emailData.FromContactId, EmailAddress = _communicationService.GetEmailFromContactId(emailData.FromContactId) },
-                MergeData = new Dictionary<string, object>()
+                FromContact = from,
+                ReplyToContact = from,
+                MergeData = new Dictionary<string, object>(),
+                ToContacts = new List<Contact>()
             };
             foreach (var to in emailData.ToContactIds)
             {
-                comm.ToContacts.Add(new Contact { ContactId = to, EmailAddress = _communicationService.GetEmailFromContactId(to) });
+                var contact = new Contact();
+                contact.ContactId = to;
+                contact.EmailAddress = _communicationService.GetEmailFromContactId(to);
+                comm.ToContacts.Add(contact);
             }
             _communicationService.SendMessage(comm);
         }
