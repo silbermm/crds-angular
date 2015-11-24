@@ -14,13 +14,16 @@ namespace crds_angular.Services
     {
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
+        private string _apiKey;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
-            MPInterfaces.IApiUserService apiUserService)
+            MPInterfaces.IApiUserService apiUserService,
+            string apiKey)
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
+            _apiKey = apiKey;
         }
 
 
@@ -41,13 +44,14 @@ namespace crds_angular.Services
                 //     Get Page view records
                 var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
 
+                // TODO: For US2782
                 //     If (ContactEmail != SubscriptionEmail)
                 //       Update/Delete MailChimp record
                 //     End if   
 
                 SendBatch(publication, subscribers);
 
-                // TODO: Query MailChimp to see if batch was successfull
+                // TODO: Query MailChimp to see if batch was successful
 
                 // TODO: Update MP with 3rd Party Contact ID
 
@@ -62,9 +66,9 @@ namespace crds_angular.Services
 
             // TODO: Since this password was in public GitHub it needs to be invalidated and regenerated
             // needs to be a configvalue, not hardcoded url
-            var password = "65ec517435aa07e010261c5a6692c7c7-us12";
+            //var password = "65ec517435aa07e010261c5a6692c7c7-us12";
 
-            client.Authenticator = new HttpBasicAuthenticator("noname", password);
+            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
