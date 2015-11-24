@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading;
 using System.Web;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
@@ -45,7 +47,6 @@ namespace crds_angular.Services
 
             // Get Publications 
             // For Each Publication
-
             foreach (var publication in publications)
             {
                 //   Get correpsonding Page Views
@@ -59,35 +60,26 @@ namespace crds_angular.Services
                 //       Update/Delete MailChimp record
                 //     End if   
 
-                var operationIdPair = SendBatch(publication, subscribers);
+                var operationId = SendBatch(publication, subscribers);
 
-                if (operationIdPair != null)
+                // add the publication and operation id in prep for polling 
+                if (!String.IsNullOrEmpty(operationId))
                 {
-                    
+                    listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
                 }
-                else
-                {
-                    
-                }
-
-                //listResponseIds.Add(publication.ThirdPartyPublicationId.ToString(), operationId.ToString());
-
-                // TODO: Query MailChimp to see if batch was successful
 
                 // TODO: Update MP with 3rd Party Contact ID
 
-                // TODO: Update MP with last sync date
+                // TODO: Update MP with last sync date -- does this need to be attempted sync?
             }
+
+            LogUpdateStatuses(listResponseIds);
         }
 
-        public KeyValuePair<string,string>? SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
             // needs to be a configvalue, not hardcoded url
             var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-
-            // TODO: Since this password was in public GitHub it needs to be invalidated and regenerated
-            // needs to be a configvalue, not hardcoded url
-            //var password = "65ec517435aa07e010261c5a6692c7c7-us12";
 
             client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
 
@@ -99,18 +91,64 @@ namespace crds_angular.Services
             request.RequestFormat = DataFormat.Json;
             request.AddBody(operation);
 
-            var responseValues = DeserializeToDictionary(client.Execute(request).Content);
+            var responseContent = client.Execute(request).Content;
+            var responseValues = DeserializeToDictionary(responseContent);
 
-            if (responseValues["status"].ToString() == "pending" || responseValues["status"].ToString() == "finished")
+            // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
+            if (responseValues["status"].ToString() == "started" || 
+                responseValues["status"].ToString() == "pending" || 
+                responseValues["status"].ToString() == "finished")
             {
-                return new KeyValuePair<string, string>(publication.ThirdPartyPublicationId, responseValues["id"].ToString());
+                return responseValues["id"].ToString();
             }
             else
             {
-                // failure condition is assumed, go ahead and log it and return null
-                // TODO: Add logging code here
+                // TODO: Add logging code here for failure
+                logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, responseContent));
+
                 return null;
             }
+        }
+
+        private void LogUpdateStatuses(Dictionary<string, string> publicationOperationIds)
+        {
+            // poll mailchimp to see if batch was successful -- also need to confirm during dev
+            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
+            var client = new RestClient("https://us12.api.mailchimp.com/3.0/batches");
+            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
+
+            do
+            {
+                // pause to allow the operations to complete -- consider switching this to async
+                Thread.Sleep(5000);
+
+                foreach (var idPair in publicationOperationIds)
+                {
+                    var request = new RestRequest("batches/" + idPair.Value, Method.GET);
+                    request.AddHeader("Content-Type", "application/json");
+
+                    var response = client.Execute(request).Content;
+                    var responseValues = DeserializeToDictionary(response);
+
+                    // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
+                    if (responseValues["status"].ToString() == "finished")
+                    {
+                        logger.Info(response);
+                        publicationOperationIds.Remove(idPair.Key);
+                    }
+                    else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
+                    {
+                        continue; // try again in another five seconds
+                    }
+                    else
+                    {
+                        // TODO: Add logging code here for failure
+                        logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response));
+                        publicationOperationIds.Remove(idPair.Key);
+                    }
+                }
+
+            } while (publicationOperationIds.Any());
         }
 
         private static SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
