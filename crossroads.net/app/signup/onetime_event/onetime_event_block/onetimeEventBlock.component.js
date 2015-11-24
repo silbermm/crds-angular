@@ -25,13 +25,14 @@
       vm.childCareChange = childCareChange;
       vm.endDateTime = moment(vm.event.endDate);
       vm.endTime = endTime;
-      vm.thisFamily = angular.copy(vm.family);
+      vm.getDate = getDate;
       vm.isCollapsed = true;
       vm.saving = false;
       vm.showChildcare = showChildcare;
       vm.startDateTime = moment(vm.event.startDate);
       vm.startTime = startTime;
       vm.submit = submit;
+      vm.thisFamily = angular.copy(vm.family);
       vm.togglePanel = togglePanel;
 
       function childCareChange(changedValue) {
@@ -53,13 +54,17 @@
           return {
             eventId: vm.event.eventId,
             participantId: member.participantId,
-            childCareNeeded: member.childCareNeeded
+            childCareNeeded: (member.childCareNeeded === undefined) ? false : member.childCareNeeded
           };
         }).value();
       }
 
+      function getDate() {
+        return vm.startDateTime.format('MM/DD/YYYY');
+      }
+
       function showChildcare(member) {
-        return member.age >= 18 && vm.group.childCareInd
+        return member.age >= 18 && vm.group.childCareInd;
       }
 
       function startTime() {
@@ -68,16 +73,20 @@
 
       function submit() {
         vm.saving = true;
-        var toSave = getDataToSave();  
+        var toSave = getDataToSave();
 
         if (_.isEmpty(toSave)) {
           vm.saving = false;
-          $rootScope.$emit('notify', $rootScope.MESSAGES.chooseOne);  
+          $rootScope.$emit('notify', $rootScope.MESSAGES.chooseOne);
           return;
         }
-        
+
+        console.log(vm.event.eventId);
+
+        console.log(toSave);
+
         EventService.event.save({eventId: vm.event.eventId}, toSave, function(saved) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);  
+          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);
           vm.saving = false;
         },
 

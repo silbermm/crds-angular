@@ -3,7 +3,7 @@
 
   var MODULES = require('crds-constants').MODULES;
 
-  angular.module(MODULES.ONETIME_SIGNUP, [MODULES.CORE])
+  angular.module(MODULES.ONETIME_SIGNUP, [MODULES.CORE, MODULES.COMMON])
     .directive('onetimeEvent', require('./onetimeEvent.component'))
     ;
 
