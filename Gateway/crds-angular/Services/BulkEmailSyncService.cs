@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using log4net;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
 
@@ -12,17 +15,26 @@ namespace crds_angular.Services
 {
     public class BulkEmailSyncService : IBulkEmailSyncService
     {
+        private readonly ILog logger = LogManager.GetLogger(typeof(GroupService));
+
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
         private readonly string _token;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        //var config = container.Resolve<IConfigurationWrapper>();
+        //var mongoUrl = config.GetEnvironmentVarAsString("MONGO_DB_CONN");
+
+        private string _apiKey;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
-            MPInterfaces.IApiUserService apiUserService)
+            MPInterfaces.IApiUserService apiUserService,
+            IConfigurationWrapper configWrapper)
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
             _token = _apiUserService.GetToken();
+            _apiKey = _configurationWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
         }
 
 
@@ -31,6 +43,7 @@ namespace crds_angular.Services
             var token = _token;
 
             var publications = _bulkEmailRepository.GetPublications(token);
+            Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
 
             // Get Publications 
             // For Each Publication
@@ -43,28 +56,40 @@ namespace crds_angular.Services
                 //     Get Page view records
                 var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
 
+                // TODO: Implement for US2782
                 //     If (ContactEmail != SubscriptionEmail)
                 //       Update/Delete MailChimp record
                 //     End if   
 
-                SendBatch(publication, subscribers);
+                var operationIdPair = SendBatch(publication, subscribers);
 
-                // TODO: Query MailChimp to see if batch was successfull
+                if (operationIdPair != null)
+                {
+                    
+                }
+                else
+                {
+                    
+                }
+
+                //listResponseIds.Add(publication.ThirdPartyPublicationId.ToString(), operationId.ToString());
+
+                // TODO: Query MailChimp to see if batch was successful
 
                 // TODO: Update MP with last sync date
             }
         }
 
-        public void SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        public KeyValuePair<string,string>? SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
             // needs to be a configvalue, not hardcoded url
             var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
 
             // TODO: Since this password was in public GitHub it needs to be invalidated and regenerated
             // needs to be a configvalue, not hardcoded url
-            var password = "65ec517435aa07e010261c5a6692c7c7-us12";
+            //var password = "65ec517435aa07e010261c5a6692c7c7-us12";
 
-            client.Authenticator = new HttpBasicAuthenticator("noname", password);
+            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -74,9 +99,18 @@ namespace crds_angular.Services
             request.RequestFormat = DataFormat.Json;
             request.AddBody(operation);
 
-            var response = client.Execute(request);
+            var responseValues = DeserializeToDictionary(client.Execute(request).Content);
 
-            // TODO: Add code to Validate response
+            if (responseValues["status"].ToString() == "pending" || responseValues["status"].ToString() == "finished")
+            {
+                return new KeyValuePair<string, string>(publication.ThirdPartyPublicationId, responseValues["id"].ToString());
+            }
+            else
+            {
+                // failure condition is assumed, go ahead and log it and return null
+                // TODO: Add logging code here
+                return null;
+            }
         }
 
         private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
@@ -116,6 +150,26 @@ namespace crds_angular.Services
             }
             
             return operation;
+        }
+
+        // From http://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
+        private Dictionary<string, object> DeserializeToDictionary(string jo)
+        {
+            var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(jo);
+            var values2 = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, object> d in values)
+            {
+                // if (d.Value.GetType().FullName.Contains("Newtonsoft.Json.Linq.JObject"))
+                if (d.Value is JObject)
+                {
+                    values2.Add(d.Key, DeserializeToDictionary(d.Value.ToString()));
+                }
+                else
+                {
+                    values2.Add(d.Key, d.Value);
+                }
+            }
+            return values2;
         }
     }
 
