@@ -115,7 +115,7 @@
               });
 
               //this is the case where the group is full and there is NO waitlist
-            } else if (response.groupFullInd && !response.waitListInd && !allSignedUp) {
+            } else if (response.groupFullInd && !response.waitListInd && !vm.alreadySignedUp) {
               vm.showFull = true;
               vm.waitListCase = false;
               vm.showContent = false;
