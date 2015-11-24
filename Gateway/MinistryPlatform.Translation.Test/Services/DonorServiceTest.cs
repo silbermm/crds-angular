@@ -151,7 +151,7 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void CreateDonationAndDistributionRecord()
         {
-            var donationAmt = 676767;
+            const decimal donationAmt = 676767;
             var feeAmt = 5656;
             var donorId = 1234567;
             var programId = "3";
@@ -278,7 +278,7 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void CreateDonationAndDistributionRecordWithPledge()
         {
-            var donationAmt = 676767;
+            const decimal donationAmt = 676767;
             var feeAmt = 5656;
             var donorId = 1234567;
             var programId = "3";

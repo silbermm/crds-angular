@@ -4,6 +4,7 @@ using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using log4net;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
@@ -64,13 +65,14 @@ namespace crds_angular.Services
                     var contactDonor = CreateDonor(check);
                     //Always use the customer ID and source ID from the Donor Account, if it exists
                     StripeCharge charge;
+                    var decimalAmt = check.Amount * Constants.StripeDecimalConversionValue;
                     if (contactDonor.HasAccount)
                     {
-                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
+                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int)decimalAmt, contactDonor.DonorId);
                     }
                     else
                     {
-                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);   
+                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) decimalAmt, contactDonor.DonorId);   
                     }
                    
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
@@ -83,13 +85,13 @@ namespace crds_angular.Services
                     var routing = _mpDonorService.DecryptCheckValue(check.RoutingNumber);
                     var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
                                      
-                    var donorAccountId =_mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
+                   var donorAccountId =_mpDonorService.UpdateDonorAccount(encryptedKey, charge.Source.id, contactDonor.ProcessorId);
                  
                     var programId = batchDetails.ProgramId == null ? null : batchDetails.ProgramId + "";
 
                     var donationAndDistribution = new DonationAndDistributionRecord
                     {
-                        DonationAmt = (int) (check.Amount),
+                        DonationAmt = check.Amount,
                         FeeAmt = fee,
                         DonorId = contactDonor.DonorId,
                         ProgramId = programId,

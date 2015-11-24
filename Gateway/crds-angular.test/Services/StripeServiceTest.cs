@@ -341,7 +341,7 @@ namespace crds_angular.test.Services
                 It.Is<IRestRequest>(o =>
                     o.Method == Method.POST
                     && o.Resource.Equals("charges")
-                    && o.Parameters.Matches("amount", 9090 * Constants.StripeDecimalConversionValue)
+                    && o.Parameters.Matches("amount", 9090)
                     && o.Parameters.Matches("currency", "usd")
                     && o.Parameters.Matches("customer", "cust_token")
                     && o.Parameters.Matches("description", "Donor ID #98765")

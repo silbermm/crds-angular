@@ -268,7 +268,7 @@ namespace crds_angular.Services
         public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId)
         {
             var request = new RestRequest("charges", Method.POST);
-            request.AddParameter("amount", amount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("amount", amount);
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
