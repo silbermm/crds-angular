@@ -14,6 +14,7 @@ namespace crds_angular.Services
     {
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
+        private readonly string _token;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -21,12 +22,13 @@ namespace crds_angular.Services
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
+            _token = _apiUserService.GetToken();
         }
 
 
         public void RunService()
         {
-            var token = _apiUserService.GetToken();
+            var token = _token;
 
             var publications = _bulkEmailRepository.GetPublications(token);
 
@@ -48,8 +50,6 @@ namespace crds_angular.Services
                 SendBatch(publication, subscribers);
 
                 // TODO: Query MailChimp to see if batch was successfull
-
-                // TODO: Update MP with 3rd Party Contact ID
 
                 // TODO: Update MP with last sync date
             }
@@ -79,13 +79,21 @@ namespace crds_angular.Services
             // TODO: Add code to Validate response
         }
 
-        private static SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
             SubscriberOperation operation = new SubscriberOperation();
             operation.operations = new List<Subscriber>();
 
             foreach (var subscriber in subscribers)
             {
+                // TODO: Update MP with 3rd Party Contact ID
+                if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
+                {//Assuming success here, update the ID to match the emailaddress
+                    //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
+                    subscriber.ThirdPartyContactId = subscriber.EmailAddress;
+                    _bulkEmailRepository.SetBaseSubscriber(_token, subscriber);
+                }
+
                 var mailChimpSubscriber = new Subscriber();
                 mailChimpSubscriber.method = "POST";
 

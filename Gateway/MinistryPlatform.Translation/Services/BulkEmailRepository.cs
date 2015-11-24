@@ -60,6 +60,18 @@ namespace MinistryPlatform.Translation.Services
             return subscribers.Values.ToList();
         }
 
+        private void SetBaseSubscriber(string token, BulkEmailSubscriber subscriber)
+        {
+            var subscriberDictionary = new Dictionary<string, object>
+            {
+                {"Contact_Publication_ID", subscriber.ContactPublicationId},
+                {"Unsubscribed", !subscriber.Subscribed},
+                {"Third_Party_Contact_ID", subscriber.ThirdPartyContactId}
+
+            };
+            _ministryPlatformService.UpdateRecord(417, subscriberDictionary, token);
+        }
+
         private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)
         {
             var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token);
