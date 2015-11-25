@@ -1,7 +1,7 @@
 USE [MinistryPlatform]
 GO
 
-IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 92266)
+IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 2200)
 BEGIN
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
 INSERT INTO [dbo].[dp_Page_Views]
