@@ -3,6 +3,9 @@ GO
 
 SET IDENTITY_INSERT dbo.dp_Page_Views ON
 
+IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 2199)
+
+BEGIN
 INSERT INTO dbo.dp_Page_Views
 	(
 		Page_View_ID,
@@ -25,6 +28,7 @@ INSERT INTO dbo.dp_Page_Views
 	)
 
 SET IDENTITY_INSERT dbo.dp_Page_Views OFF
+END
 GO
 
 -- Update default field list to include the Page_View_ID
