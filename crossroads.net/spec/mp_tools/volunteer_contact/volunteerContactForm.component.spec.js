@@ -26,7 +26,7 @@ describe('Volunteer Contact Form Component', function() {
     $compile = _$compile_;
     $rootScope = _$rootScope_;
     scope = $rootScope.$new();
-    
+
     spyOn($rootScope, '$emit').and.callThrough();
 
     $rootScope.MESSAGES = {
@@ -71,13 +71,27 @@ describe('Volunteer Contact Form Component', function() {
     expect(timestamp).toEqual('12/02/2015 02:00PM - 04:00PM');
   });
 
-  it('should get the list of the recipients', function() {
+  it('should get the list of the current volunteer recipients', function() {
     isolated.contactForm.formData.event = helpers.group.events[0];
+    isolated.contactForm.formData.recipients = 'current';
     isolated.contactForm.eventChanged();
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +  
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
                            'api/group/' + helpers.group.groupId +
-                           '/event/' + helpers.group.events[0].eventId).respond(200);
+                           '/event/' + helpers.group.events[0].eventId +
+                          '?recipients=current').respond(200);
     $httpBackend.flush();
+  });
+
+  it('should get the list of the potential volunteers', function() {
+    isolated.contactForm.formData.event = helpers.group.events[0];
+    isolated.contactForm.formData.recipients = 'potential';
+    isolated.contactForm.eventChanged();
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
+                           'api/group/' + helpers.group.groupId +
+                           '/event/' + helpers.group.events[0].eventId +
+                          '?recipients=potential').respond(200);
+    $httpBackend.flush();
+
   });
 
 });
