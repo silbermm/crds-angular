@@ -274,7 +274,9 @@
     <Compile Include="Models\Crossroads\Groups\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
+    <Compile Include="Services\BulkEmailSyncService.cs" />
     <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\Interfaces\IBulkEmailSyncService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Models\Json\PasswordResetRequest.cs" />
     <Compile Include="Models\Json\PasswordResetVerification.cs" />

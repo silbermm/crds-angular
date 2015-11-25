@@ -78,7 +78,7 @@ INSERT INTO dbo.dp_Sub_Pages
 		'Publication_Page_Views.Page_View_ID',
 		'Publication_Page_Views',
 		'Publication_Page_View_ID',
-		'Publication_Page_View_ID, Page_View_ID_Table.View_Title, Page_View_ID_Table.Description',
+		'Publication_Page_View_ID, Page_View_ID_Table.Page_View_ID, Page_View_ID_Table.View_Title, Page_View_ID_Table.Description',
 		'Publication_Page_View_ID',
 		'Publication_ID',
 		2,
@@ -87,3 +87,6 @@ INSERT INTO dbo.dp_Sub_Pages
 
 SET IDENTITY_INSERT dbo.dp_Sub_Pages OFF
 GO
+
+
+
