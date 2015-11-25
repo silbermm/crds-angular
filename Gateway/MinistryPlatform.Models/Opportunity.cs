@@ -19,6 +19,7 @@ namespace MinistryPlatform.Models
         public string GroupContactName { get; set; }
         public int GroupContactId { get; set; }
         public string GroupName { get; set; }
+        public int GroupId { get; set; }
         public TimeSpan ShiftStart { get; set; }
         public TimeSpan ShiftEnd { get; set; }
 

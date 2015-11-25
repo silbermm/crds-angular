@@ -307,16 +307,22 @@ namespace MinistryPlatform.Translation.Services
                 EmailSubject = emailTemplate.Subject,
                 AuthorUserId = churchAdminContactId,
                 DomainId = Convert.ToInt32(AppSettings("DomainId")),
-                FromContactId = churchAdminContactId,
-                FromEmailAddress = fromAddress,
+                FromContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 MergeData = mergeData,
-                ReplyContactId = churchAdminContactId,
-                ReplyToEmailAddress = fromAddress,
+                ReplyToContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 TemplateId = CommunityGroupConfirmationTemplateId,
-                ToContactId = toContact,
-                ToEmailAddress = toContactInfo.Email_Address
+                ToContacts = {new Contact{ContactId = toContact, EmailAddress = toContactInfo.Email_Address}}
             };
             _communicationService.SendMessage(confirmation);
+        }
+
+        public List<GroupParticipant> getEventParticipantsForGroup(int groupId, int eventId)
+        {
+            var records = ministryPlatformService.GetPageViewRecords("ParticipantsByGroupAndEvent", ApiLogin(), String.Format("{0},{1}", groupId, eventId));
+            return records.Select(rec => new GroupParticipant
+            {
+                ContactId = rec.ToInt("Contact_ID"), NickName = rec.ToString("Nickname"), LastName = rec.ToString("Last_Name")
+            }).ToList();
         }
     }
 }

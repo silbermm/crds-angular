@@ -425,8 +425,9 @@ namespace crds_angular.Services
             var deletedRSVPS = new List<int>();
             Opportunity previousOpportunity = null;
 
+            var opportunity = _opportunityService.GetOpportunityById(opportunityId,token);
             //Try to register this user for the event
-            _eventService.RegisterParticipantForEvent(participant.ParticipantId, e.EventId);
+            _eventService.RegisterParticipantForEvent(participant.ParticipantId, e.EventId, opportunity.GroupId);
 
             // Make sure we are only rsvping for 1 opportunity by removing all existing responses
             deletedRSVPS.AddRange(from oid in opportunityIds
@@ -541,12 +542,9 @@ namespace crds_angular.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = groupContact.Contact_ID,
-                FromEmailAddress = groupContact.Email_Address,
-                ReplyContactId = groupContact.Contact_ID,
-                ReplyToEmailAddress = groupContact.Email_Address,
-                ToContactId = toContact.Contact_ID,
-                ToEmailAddress = toContact.Email_Address,
+                FromContact = new Contact {ContactId = groupContact.Contact_ID, EmailAddress = groupContact.Email_Address},
+                ReplyToContact = new Contact {ContactId = groupContact.Contact_ID, EmailAddress = groupContact.Email_Address},
+                ToContacts = new List<Contact> {new Contact {ContactId = toContact.Contact_ID, EmailAddress = toContact.Email_Address}},
                 MergeData = mergeData
             };
         }

@@ -323,7 +323,7 @@
         }
       })
       .state('tools', {
-        parent: 'noSideBar',
+        parent: 'noHeaderOrFooter',
         abstract: true,
         url: '/mptools',
         templateUrl: 'mp_tools/tools.html',
@@ -406,6 +406,13 @@
         resolve: {
           MPTools: 'MPTools',
           Trip: 'Trip'
+        }
+      })
+      .state('tools.volunteerContact', {
+        url: '/volunteer-contact',
+        template: '<volunteer-contact></volunteer-contact>', 
+        resolve: {
+          MPTools: 'MPTools'
         }
       })
       .state('tools.checkBatchProcessor', {

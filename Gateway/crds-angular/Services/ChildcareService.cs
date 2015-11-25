@@ -250,12 +250,9 @@ namespace crds_angular.Services
                 DomainId = domainId,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = fromContact.Contact_ID,
-                FromEmailAddress = fromContact.Email_Address,
-                ReplyContactId = replyToContact.Contact_ID,
-                ReplyToEmailAddress = replyToContact.Email_Address,
-                ToContactId = participantContactId,
-                ToEmailAddress = participantEmail,
+                FromContact = new Contact {ContactId = fromContact.Contact_ID, EmailAddress = fromContact.Email_Address},
+                ReplyToContact = new Contact {ContactId = replyToContact.Contact_ID, EmailAddress = replyToContact.Email_Address},
+                ToContacts = new List<Contact> {new Contact {ContactId = participantContactId, EmailAddress = participantEmail}},
                 MergeData = mergeData
             };
             return communication;
