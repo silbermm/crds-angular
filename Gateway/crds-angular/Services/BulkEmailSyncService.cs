@@ -21,6 +21,7 @@ namespace crds_angular.Services
 
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
+        private readonly string _token;
         private readonly IConfigurationWrapper _configurationWrapper;
         //var config = container.Resolve<IConfigurationWrapper>();
         //var mongoUrl = config.GetEnvironmentVarAsString("MONGO_DB_CONN");
@@ -34,13 +35,14 @@ namespace crds_angular.Services
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
+            _token = _apiUserService.GetToken();
             _apiKey = _configurationWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
         }
 
 
         public void RunService()
         {
-            var token = _apiUserService.GetToken();
+            var token = _token;
 
             var publications = _bulkEmailRepository.GetPublications(token);
             Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
@@ -70,7 +72,7 @@ namespace crds_angular.Services
 
                 // TODO: Update MP with 3rd Party Contact ID
 
-                // TODO: Update MP with last sync date -- does this need to be attempted sync?
+                // TODO: Update MP with last sync date
             }
 
             LogUpdateStatuses(listResponseIds);
@@ -158,6 +160,14 @@ namespace crds_angular.Services
 
             foreach (var subscriber in subscribers)
             {
+                // TODO: Update MP with 3rd Party Contact ID
+                if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
+                {//Assuming success here, update the ID to match the emailaddress
+                    //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
+                    subscriber.ThirdPartyContactId = subscriber.EmailAddress;
+                    _bulkEmailRepository.SetBaseSubscriber(_token, subscriber);
+                }
+
                 var mailChimpSubscriber = new Subscriber();
                 mailChimpSubscriber.method = "POST";
 

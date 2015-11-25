@@ -8,5 +8,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<BulkEmailPublication> GetPublications(string token);
         List<int> GetPageViewIds(string token, int publicationId);
         List<BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds);
+        void SetBaseSubscriber(string token, BulkEmailSubscriber subscriber);
     }
 }
