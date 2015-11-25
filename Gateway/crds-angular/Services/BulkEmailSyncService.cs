@@ -113,6 +113,7 @@ namespace crds_angular.Services
         {
             // poll mailchimp to see if batch was successful -- also need to confirm during dev
             // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
+            // TODO: pull from config setting
             var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
             client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
 
