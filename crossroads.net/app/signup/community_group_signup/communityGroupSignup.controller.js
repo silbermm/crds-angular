@@ -29,6 +29,7 @@
     var vm = this;
     vm.allSignedUp = allSignedUp;
     vm.alreadySignedUp = false;
+    vm.atLeastOneParticipant = false;
     vm.childCareAvailable = false;
     vm.childCareChange = childCareChange;
     vm.editProfile = editProfile;
@@ -114,19 +115,28 @@
                 vm.viewReady = true;
               });
 
-              //this is the case where the group is full and there is NO waitlist
-            } else if (response.groupFullInd && !response.waitListInd && !vm.alreadySignedUp) {
-              vm.showFull = true;
+
+              //this is the case where the group is full and there is NO waitlist and at least one of your family IS a participant
+            } else if (response.groupFullInd && !response.waitListInd && vm.atLeastOneParticipant) {
               vm.waitListCase = false;
-              vm.showContent = false;
+              vm.showFull = true;
+              vm.showContent = true;
               vm.showWaitList = false;
               vm.viewReady = true;
-
+              
               //this is the case where the group is NOT full and there IS waitlist
             } else if (!response.groupFullInd && response.waitListInd) {
               vm.waitListCase = false;
               vm.showFull = false;
               vm.showContent = true;
+              vm.showWaitList = false;
+              vm.viewReady = true;  
+              
+              //this is the case where the group is full and there is NO waitlist
+            } else if (response.groupFullInd && !response.waitListInd && !vm.alreadySignedUp) {
+              vm.showFull = true;
+              vm.waitListCase = false;
+              vm.showContent = false;
               vm.showWaitList = false;
               vm.viewReady = true;
             }
@@ -154,6 +164,7 @@
             break;
           } else {
             result = true;
+            vm.atLeastOneParticipant = true;
             vm.childCareAvailable = false;
           }
         }
