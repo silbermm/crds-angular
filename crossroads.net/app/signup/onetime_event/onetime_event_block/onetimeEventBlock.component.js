@@ -54,6 +54,7 @@
           return {
             eventId: vm.event.eventId,
             participantId: member.participantId,
+            groupId: vm.group.groupId,
             childCareNeeded: (member.childCareNeeded === undefined) ? false : member.childCareNeeded
           };
         }).value();

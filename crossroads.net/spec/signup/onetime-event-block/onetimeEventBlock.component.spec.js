@@ -90,6 +90,7 @@ describe('Onetime Signup Event Block', function() {
     var toPost = [
       {
         eventId: isolated.onetimeEventBlock.event.eventId,
+        groupId: isolated.onetimeEventBlock.group.groupId,
         participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
         childCareNeeded: false
       }
@@ -109,6 +110,7 @@ describe('Onetime Signup Event Block', function() {
     var toPost = [
       {
         eventId: isolated.onetimeEventBlock.event.eventId,
+        groupId: isolated.onetimeEventBlock.group.groupId,
         participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
         childCareNeeded: false
       }
