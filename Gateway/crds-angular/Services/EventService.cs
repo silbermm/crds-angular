@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Event = MinistryPlatform.Models.Event;
@@ -52,11 +53,25 @@ namespace crds_angular.Services
             {
                 var saved = eventDto.Select(dto =>
                 {
-                    var retVal = _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId);
+                    // validate that there is not a participant record before creating
+                    var retVal = Functions.IntegerReturnValue(() =>
+                    {
+                        if (!_eventService.EventHasParticipant(dto.EventId, dto.ParticipantId))
+                        {
+                            return _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId);
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+                    });
+
+                    // validate that there is not a group participant record before creating
                     if (!_groupService.ParticipantGroupMember(dto.GroupId, dto.ParticipantId))
                     {
-                        _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, new DateTime());
+                        _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, DateTime.Today);
                     }
+                                         
                     return new RegisterEventObj()
                     {
                         EventId = dto.EventId,
