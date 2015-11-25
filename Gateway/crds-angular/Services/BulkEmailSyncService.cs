@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
+using System.Security.Cryptography;
 
 namespace crds_angular.Services
 {
@@ -165,10 +166,12 @@ namespace crds_angular.Services
                 }
 
                 var mailChimpSubscriber = new Subscriber();
-                mailChimpSubscriber.method = "POST";
+                mailChimpSubscriber.method = "PUT";
+
+                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress);
 
                 //TODO: Determine how to populate the ThirdPartyPublicationID? For now you may just write SQL to update table directly
-                mailChimpSubscriber.path = string.Format("lists/{0}/members", publication.ThirdPartyPublicationId);
+                mailChimpSubscriber.path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
 
                 // TODO: Do we need to store this somewhere to verify batch processed successfully
                 mailChimpSubscriber.operation_id = Guid.NewGuid().ToString();
@@ -206,6 +209,22 @@ namespace crds_angular.Services
                 }
             }
             return values2;
+        }
+
+        public string CalculateMD5Hash(string input)
+        {
+            // step 1, calculate MD5 hash from input
+            MD5 md5 = System.Security.Cryptography.MD5.Create();
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hash = md5.ComputeHash(inputBytes);
+
+            // step 2, convert byte array to hex string
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("X2"));
+            }
+            return sb.ToString();
         }
     }
 
