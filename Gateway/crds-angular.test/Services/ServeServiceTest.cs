@@ -492,12 +492,9 @@ namespace crds_angular.test.Services
                 DomainId = 1,
                 EmailBody = mockRsvpChangedTemplate.Body,
                 EmailSubject = mockRsvpChangedTemplate.Subject,
-                FromContactId = fakeGroupContact.Contact_ID,
-                FromEmailAddress = fakeGroupContact.Email_Address,
-                ReplyContactId = fakeGroupContact.Contact_ID,
-                ReplyToEmailAddress = fakeGroupContact.Email_Address,
-                ToContactId = fakeMyContact.Contact_ID,
-                ToEmailAddress = fakeMyContact.Email_Address
+                FromContact = new Contact {ContactId = fakeGroupContact.Contact_ID, EmailAddress = fakeGroupContact.Email_Address},
+                ReplyToContact = new Contact { ContactId = fakeGroupContact.Contact_ID, EmailAddress = fakeGroupContact.Email_Address },
+                ToContacts = new List<Contact> {new Contact{ContactId = fakeGroupContact.Contact_ID, EmailAddress = fakeMyContact.Email_Address}}
             };
 
             var mergeData = new Dictionary<string, object>
