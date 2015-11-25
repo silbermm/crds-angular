@@ -153,7 +153,7 @@ namespace crds_angular.Services
             } while (publicationOperationIds.Any());
         }
 
-        private static SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
             SubscriberOperation operation = new SubscriberOperation();
             operation.operations = new List<Subscriber>();

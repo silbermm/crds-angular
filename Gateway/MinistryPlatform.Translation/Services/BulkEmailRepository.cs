@@ -60,7 +60,7 @@ namespace MinistryPlatform.Translation.Services
             return subscribers.Values.ToList();
         }
 
-        private void SetBaseSubscriber(string token, BulkEmailSubscriber subscriber)
+        public void SetBaseSubscriber(string token, BulkEmailSubscriber subscriber)
         {
             var subscriberDictionary = new Dictionary<string, object>
             {
