@@ -39,6 +39,16 @@ namespace MinistryPlatform.Translation.Services
             return publications;
         }
 
+        public void SetPublication(string token, BulkEmailPublication publication)
+        {
+            var publicationDictionary = new Dictionary<string, object>
+            {
+                {"Publication_ID", publication.PublicationId},
+                {"Last_Successful_Sync", DateTime.Now}
+            };
+            _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Publications")), publicationDictionary, token);
+        }
+
         public List<int> GetPageViewIds(string token, int publicationId)
         {
             var records = _ministryPlatformService.GetSubPageRecords(_publicationPageViewSubPageId, publicationId, token);
@@ -69,7 +79,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Third_Party_Contact_ID", subscriber.ThirdPartyContactId}
 
             };
-            _ministryPlatformService.UpdateRecord(417, subscriberDictionary, token);
+            _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Subscribers")), subscriberDictionary, token);
         }
 
         private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)

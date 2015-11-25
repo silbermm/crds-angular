@@ -67,9 +67,8 @@ namespace crds_angular.Services
                     listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
                 }
 
-                // TODO: Update MP with 3rd Party Contact ID
-
-                // TODO: Update MP with last sync date
+                // Update MP with last sync date
+                _bulkEmailRepository.SetPublication(token, publication);
             }
 
             LogUpdateStatuses(listResponseIds);
