@@ -22,9 +22,6 @@ namespace crds_angular.Services
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
         private readonly string _token;
-        private readonly IConfigurationWrapper _configurationWrapper;
-        //var config = container.Resolve<IConfigurationWrapper>();
-        //var mongoUrl = config.GetEnvironmentVarAsString("MONGO_DB_CONN");
 
         private string _apiKey;
 
@@ -36,7 +33,7 @@ namespace crds_angular.Services
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
             _token = _apiUserService.GetToken();
-            _apiKey = _configurationWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
+            _apiKey = configWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
         }
 
 
@@ -116,7 +113,7 @@ namespace crds_angular.Services
         {
             // poll mailchimp to see if batch was successful -- also need to confirm during dev
             // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/batches");
+            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
             client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
 
             do
