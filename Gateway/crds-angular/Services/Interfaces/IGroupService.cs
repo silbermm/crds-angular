@@ -14,6 +14,6 @@ namespace crds_angular.Services.Interfaces
 
         List<Event> GetGroupEvents(int groupId);
 
-        List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId);
+        List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients);
     }
 }
