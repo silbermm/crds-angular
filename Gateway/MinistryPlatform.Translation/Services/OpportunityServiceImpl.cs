@@ -26,6 +26,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _opportunityResponses = Convert.ToInt32(AppSettings("OpportunityResponses"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
         private readonly int _contactOpportunityResponses = Convert.ToInt32(AppSettings("ContactOpportunityResponses"));
+        private readonly int _responsesByEventAndGroup = Convert.ToInt32(AppSettings("ResponsesByEventAndGroup"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService, IEventService eventService,
             IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IParticipantService participantService)
@@ -137,6 +138,23 @@ namespace MinistryPlatform.Translation.Services
 
 
             return response;
+        }
+
+        public List<GroupServingResponses> GetGroupResponsesForAnEvent(int groupId, int eventId)
+        {
+            var search = String.Format("{0}, {1}", groupId, eventId);
+            var records = _ministryPlatformService.GetPageViewRecords(_responsesByEventAndGroup, ApiLogin(), search);
+
+            return records.Select(rec => new GroupServingResponses
+            {
+                ContactId = rec.ToInt("Contact_ID"), 
+                EventId = rec.ToInt("Event_ID"), 
+                GroupId = rec.ToInt("Group_ID"), 
+                ParticipantId = rec.ToInt("Participant_ID"), 
+                ResponseResultId = rec.ToInt("Response_Result_ID"), 
+                ResponseDate = rec.ToDate("Response_Date")
+            }).ToList();
+
         }
 
         public List<Response> GetOpportunityResponses(int opportunityId, string token)
