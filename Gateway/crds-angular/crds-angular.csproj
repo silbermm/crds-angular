@@ -262,9 +262,11 @@
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\ChildcareController.cs" />
     <Compile Include="Controllers\API\DonorStatementController.cs" />
+    <Compile Include="Models\Crossroads\CommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
     <Compile Include="Models\Crossroads\Childcare\ChildcareRsvpDto.cs" />
+    <Compile Include="Models\Crossroads\GroupContactDTO.cs" />
     <Compile Include="Models\Crossroads\Events\Event.cs" />
     <Compile Include="Models\Crossroads\Events\EventProfile.cs" />
     <Compile Include="Models\Crossroads\Events\EventRsvpDTO.cs" />

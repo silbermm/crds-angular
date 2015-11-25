@@ -581,12 +581,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 DomainId = 1,
                 EmailBody = getTemplateResponse.Body,
                 EmailSubject = getTemplateResponse.Subject,
-                FromContactId = 5,
-                FromEmailAddress = "giving@crossroads.net",
-                ReplyContactId = 5,
-                ReplyToEmailAddress = "giving@crossroads.net",
-                ToContactId = contactId,
-                ToEmailAddress = emailAddress,
+                FromContact = new Contact {ContactId = 5, EmailAddress = "giving@crossroads.net"},
+                ReplyToContact = new Contact { ContactId = 5, EmailAddress = "giving@crossroads.net" },
+                ToContacts = new List<Contact> {new Contact{ContactId = contactId, EmailAddress = emailAddress}},
                 MergeData = new Dictionary<string, object>
                 {
                     {"Program_Name", program},
@@ -609,7 +606,7 @@ namespace MinistryPlatform.Translation.Test.Services
                         It.Is<Communication>(
                             c =>
                                 c.EmailBody.Equals(expectedCommunication.EmailBody) && c.EmailSubject.Equals(expectedCommunication.EmailSubject) &&
-                                c.ToContactId == expectedCommunication.ToContactId && c.ToEmailAddress.Equals(expectedCommunication.ToEmailAddress) &&
+                                c.ToContacts[0].ContactId == expectedCommunication.ToContacts[0].ContactId && c.ToContacts[0].EmailAddress.Equals(expectedCommunication.ToContacts[0].EmailAddress) &&
                                 c.MergeData["Program_Name"].Equals(expectedCommunication.MergeData["Program_Name"]) &&
                                 c.MergeData["Donation_Amount"].Equals(expectedCommunication.MergeData["Donation_Amount"]) &&
                                 c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&
@@ -668,12 +665,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 DomainId = 1,
                 EmailBody = getTemplateResponse.Body,
                 EmailSubject = getTemplateResponse.Subject,
-                FromContactId = 5,
-                FromEmailAddress = "giving@crossroads.net",
-                ReplyContactId = 5,
-                ReplyToEmailAddress = "giving@crossroads.net",
-                ToContactId = contactId,
-                ToEmailAddress = emailAddress,
+                FromContact = new Contact {ContactId = 5, EmailAddress = "giving@crossroads.net"},
+                ReplyToContact = new Contact {ContactId = 5, EmailAddress = "giving@crossroads.net" },
+                ToContacts = new List<Contact> {new Contact{ContactId = contactId, EmailAddress = emailAddress}},
                 MergeData = new Dictionary<string, object>
                 {
                     {"Program_Name", program},
@@ -695,7 +689,7 @@ namespace MinistryPlatform.Translation.Test.Services
                         It.Is<Communication>(
                             c =>
                                 c.EmailBody.Equals(expectedCommunication.EmailBody) && c.EmailSubject.Equals(expectedCommunication.EmailSubject) &&
-                                c.ToContactId == expectedCommunication.ToContactId && c.ToEmailAddress.Equals(expectedCommunication.ToEmailAddress) &&
+                                c.ToContacts[0].ContactId == expectedCommunication.ToContacts[0].ContactId && c.ToContacts[0].EmailAddress.Equals(expectedCommunication.ToContacts[0].EmailAddress) &&
                                 c.MergeData["Program_Name"].Equals(expectedCommunication.MergeData["Program_Name"]) &&
                                 c.MergeData["Donation_Amount"].Equals(expectedCommunication.MergeData["Donation_Amount"]) &&
                                 c.MergeData["Donation_Date"].Equals(expectedCommunication.MergeData["Donation_Date"]) &&

@@ -419,12 +419,9 @@ namespace MinistryPlatform.Translation.Services
             {
                 AuthorUserId = authorId,
                 DomainId = 1,
-                ToContactId = toEmail.ContactId,
-                ToEmailAddress = toEmail.Email,
-                FromContactId = fromContactId,
-                FromEmailAddress = fromEmail,
-                ReplyContactId = fromContactId,
-                ReplyToEmailAddress = fromEmail,
+                ToContacts = {new Contact{ContactId = toEmail.ContactId, EmailAddress = toEmail.Email}},
+                FromContact = {ContactId = fromContactId, EmailAddress = fromEmail},
+                ReplyToContact = {ContactId = fromContactId, EmailAddress = fromEmail},
                 EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
                 EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
                 MergeData = messageData
@@ -453,12 +450,9 @@ namespace MinistryPlatform.Translation.Services
                 DomainId = 1,
                 EmailBody = message,
                 EmailSubject = template.Subject,
-                FromContactId = 5,
-                FromEmailAddress = "updates@crossroads.net",
-                ReplyContactId = 5,
-                ReplyToEmailAddress = "updates@crossroads.net",
-                ToContactId = donorContact.ContactId,
-                ToEmailAddress = donorContact.Email,
+                FromContact = {ContactId = 5, EmailAddress = "updates@crossroads.net"},
+                ReplyToContact = { ContactId = 5, EmailAddress = "updates@crossroads.net" },
+                ToContacts = {new Contact{ContactId = donorContact.ContactId, EmailAddress = donorContact.Email}},
                 MergeData = new Dictionary<string, object>()
             };
             _communicationService.SendMessage(comm);
