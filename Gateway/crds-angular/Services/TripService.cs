@@ -451,12 +451,9 @@ namespace crds_angular.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = fromContact.Contact_ID,
-                FromEmailAddress = fromContact.Email_Address,
-                ReplyContactId = fromContact.Contact_ID,
-                ReplyToEmailAddress = fromContact.Email_Address,
-                ToContactId = fromContact.Contact_ID,
-                ToEmailAddress = invite.EmailAddress,
+                FromContact = new Contact {ContactId = fromContact.Contact_ID, EmailAddress = fromContact.Email_Address},
+                ReplyToContact = new Contact { ContactId = fromContact.Contact_ID, EmailAddress = fromContact.Email_Address },
+                ToContacts = new List<Contact> {new Contact{ContactId = fromContact.Contact_ID, EmailAddress = invite.EmailAddress}},
                 MergeData = mergeData
             };
         }

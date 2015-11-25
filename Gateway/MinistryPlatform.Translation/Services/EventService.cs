@@ -40,7 +40,7 @@ namespace MinistryPlatform.Translation.Services
             {
                 return eventParticipantId;
             }
-            eventParticipantId = RegisterParticipantForEvent(participantId, eventId);
+            eventParticipantId = RegisterParticipantForEvent(participantId, eventId, groupId, groupParticipantId);
             return eventParticipantId;
         }
 

@@ -23,7 +23,6 @@
     var params =  {};
 
     function setParams(location) {
-      console.log('saving location info to a service');
       params = {
         userGuid: location.search().ug,
         domainGuid: location.search().dg,

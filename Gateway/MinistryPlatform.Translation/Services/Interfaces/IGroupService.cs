@@ -30,5 +30,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Group> GetGroupsForEvent(int eventId);
 
         void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool childcareNeeded);
+        List<GroupParticipant> getEventParticipantsForGroup(int groupId, int eventId);
     }
 }
