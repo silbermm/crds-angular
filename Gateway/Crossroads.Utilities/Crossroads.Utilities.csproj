@@ -73,6 +73,7 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
+    <Compile Include="FunctionalHelpers\Functions.cs" />
     <Compile Include="Interfaces\IConfigurationWrapper.cs" />
     <Compile Include="Interfaces\IContentBlockService.cs" />
     <Compile Include="Messaging\Interfaces\IMessageFactory.cs" />
