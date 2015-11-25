@@ -124,13 +124,17 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof(List<GroupContactDTO>))]
         [Route("api/group/{groupId}/event/{eventId}")]
-        public IHttpActionResult GetParticipants(int groupId, int eventId)
+        public IHttpActionResult GetParticipants(int groupId, int eventId, string recipients)
         {
             return Authorized(token =>
                 {
                     try
                     {
-                        var memberList = groupService.GetGroupMembersByEvent(groupId, eventId);
+                        if (recipients != "current" || recipients != "potential")
+                        {
+                            throw new ApplicationException("Recipients should be 'current' or 'potential'");
+                        }
+                        var memberList = groupService.GetGroupMembersByEvent(groupId, eventId, recipients);
                         return Ok(memberList);
                     }
                     catch (Exception e)

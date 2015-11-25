@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Web;
 using Crossroads.Utilities.Interfaces;
 using log4net;
+using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -15,6 +18,7 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly ICommunicationService _communicationService;
+        private readonly IEventService _eventService;
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -33,7 +37,7 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IEventService eventService, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
@@ -41,6 +45,7 @@ namespace MinistryPlatform.Translation.Services
             this._communicationService = communicationService;
             this._contactService = contactService;
             this._contentBlockService = contentBlockService;
+            this._eventService = eventService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -208,18 +213,30 @@ namespace MinistryPlatform.Translation.Services
         public IList<Event> getAllEventsForGroup(int groupId)
         {
             var apiToken = ApiLogin();
-            var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
-            if (groupEvents == null || groupEvents.Count == 0)
+            var eventTypes = GetEventTypesForGroup(groupId, apiToken);
+            var events = new List<Event>();
+            foreach (var eventType in eventTypes.Where(eventType => eventType != String.Empty))
             {
-                return null;
+                events.AddRange(_eventService.GetEvents(eventType, apiToken));
             }
-            return groupEvents.Select(tmpEvent => new Event
+            
+            return events;
+        }
+
+        private IList<string> GetEventTypesForGroup(int groupId, string token)
+        {
+            var records = ministryPlatformService.GetSubpageViewRecords("GroupOpportunitiesEvents", groupId, token);
+            return records.Select(e =>
             {
-                EventId = tmpEvent.ToInt("Event_ID"), 
-                EventLocation = tmpEvent.ToString("Location_Name"), 
-                EventStartDate = tmpEvent.ToDate("Event_Start_Date"), 
-                EventEndDate = tmpEvent.ToDate("Event_End_Date"), 
-                EventTitle = tmpEvent.ToString("Event_Title")
+                try
+                {
+                    return e.ToString("Event_Type");
+                }
+                catch (Exception exception)
+                {
+                    logger.Debug("tried to parse a Event_Type_ID for a record and failed");
+                    return String.Empty;
+                }
             }).ToList();
         }
 

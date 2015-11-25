@@ -107,9 +107,21 @@ namespace crds_angular.Services
             return eventList;
         }
 
-        public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId)
+        public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients)
         {
-            var participants = _mpGroupService.getEventParticipantsForGroup(groupId, eventId);
+            var participants = new List<GroupParticipant>();
+            if (recipients == "current")
+            {
+                participants = _mpGroupService.getEventParticipantsForGroup(groupId, eventId);
+            }
+            else
+            {
+                var groupMembers = _mpGroupService.getGroupDetails(groupId).Participants;
+                participants = groupMembers.Select(p => new GroupParticipant {ContactId = p.ContactId, LastName = p.LastName, NickName = p.NickName}).ToList();
+                var rsvps = _mpGroupService.getEventParticipantsForGroup(groupId, eventId).Select(r => new GroupParticipant{ContactId = r.ContactId, LastName = r.LastName, NickName = r.NickName});
+                participants = participants.Except(rsvps).ToList();
+            }
+
             var members = participants.Select(part => new GroupContactDTO
             {
                 ContactId = part.ContactId,
