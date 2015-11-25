@@ -178,8 +178,8 @@ namespace crds_angular.Services
                 // TODO: Use JSON.NET to serialize this rather than a string
                 mailChimpSubscriber.body = String.Format("{{ \"status\":\"{0}\", \"email_address\":{1}, \"merge_fields\":{2} }}",
                     // TODO: Determine if these are the right values
-                    subscriber.Subscribed ? "subscribed" : "unsubscribed", 
-                    subscriber.EmailAddress, 
+                    subscriber.Subscribed ? "subscribed" : "unsubscribed",
+                    "\"" + subscriber.EmailAddress + "\"", 
                     mergeFields);
 
                 // add to list here
