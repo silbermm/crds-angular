@@ -15,6 +15,15 @@ IF NOT EXISTS ( SELECT 1 FROM [dbo].[dp_Tools] WHERE [Tool_Name] = @ToolName )
 BEGIN
   INSERT INTO [dbo].[dp_Tools] ([Tool_ID], [Tool_Name], [Description], [Launch_Page])
   VALUES (@ToolId, @ToolName, @Description, @LaunchPage)
+ELSE
+BEGIN   
+    UPDATE [dbo].[dp_Tools]
+    SET  [Description] = @Description
+      ,[Launch_Page] = @LaunchPage
+    OUTPUT INSERTED.Tool_ID INTO @ToolId
+    WHERE [Tool_Name] = @ToolName
+    select top 1 @ToolId = id from @ToolId
+  END
 END
 SET IDENTITY_INSERT [dbo].[dp_Tools] OFF
 
@@ -46,8 +55,13 @@ declare @Role int = 2 -- Administrator
 
 /* Integration Environment */
 IF EXISTS ( SELECT 1 FROM [dbo].[dp_Tools] WHERE [Tool_Name] = @ToolName )
-BEGIN
-  SELECT @ToolId = [Tool_ID] FROM [dbo].[dp_Tools] WHERE [Tool_Name] = @ToolName
+BEGIN  
+    UPDATE [dbo].[dp_Tools]
+    SET  [Description] = @Description
+      ,[Launch_Page] = @LaunchPage
+    OUTPUT INSERTED.Tool_ID INTO @ToolId
+    WHERE [Tool_Name] = @ToolName
+    select top 1 @ToolId = id from @ToolId
 END
 ELSE
 BEGIN
