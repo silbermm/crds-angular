@@ -115,7 +115,7 @@
               });
 
               //this is the case where the group is full and there is NO waitlist
-            } else if (response.groupFullInd && !response.waitListInd) {
+            } else if (response.groupFullInd && !response.waitListInd && !vm.alreadySignedUp) {
               vm.showFull = true;
               vm.waitListCase = false;
               vm.showContent = false;
@@ -154,6 +154,7 @@
             break;
           } else {
             result = true;
+            vm.childCareAvailable = false;
           }
         }
       } else {
@@ -161,6 +162,7 @@
           result = false;
         } else {
           result = true;
+          vm.childCareAvailable = false;
         }
       }
 

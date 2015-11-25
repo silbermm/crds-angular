@@ -125,7 +125,10 @@ namespace crds_angular.Services
                 detail.WaitListInd = g.WaitList;
                 detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
-                detail.Events = events.Select(Mapper.Map<Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
+                if (events != null)
+                {
+                    detail.Events = events.Select(Mapper.Map<Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
+                }
                 //the first instance of family must always be the logged in user
                 var fam = new SignUpFamilyMembers
                 {

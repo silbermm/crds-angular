@@ -5,6 +5,7 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
@@ -106,7 +107,7 @@ namespace crds_angular.test.Services
                         State = "1 state",
                         PostalCode = "1 postal"
                     },
-                    Amount = 1111,
+                    Amount = 111100,
                     CheckDate = DateTime.Now.AddHours(1),
                     CheckNumber = " 0 0 00000222111111111111111",
                     Name1 = "1 name 1",
@@ -126,7 +127,7 @@ namespace crds_angular.test.Services
                         State = "2 state",
                         PostalCode = "2 postal"
                     },
-                    Amount = 2222,
+                    Amount = 222200,
                     CheckDate = DateTime.Now.AddHours(3),
                     CheckNumber = "22222",
                     Name1 = "2 name 1",
@@ -158,7 +159,7 @@ namespace crds_angular.test.Services
             
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(contactDonorExisting);
            
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) (checks[0].Amount *Constants.StripeDecimalConversionValue), contactDonorExisting.DonorId)).Returns(new StripeCharge
             {
                 Id = "1020304",
                 Source = new StripeSource()
@@ -182,7 +183,7 @@ namespace crds_angular.test.Services
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord(
                         It.Is<DonationAndDistributionRecord>(d =>
-                                                                 d.DonationAmt == (int) checks[0].Amount &&
+                                                                 d.DonationAmt == checks[0].Amount &&
                                                                  d.FeeAmt == 123 &&
                                                                  d.DonorId == contactDonorExisting.DonorId &&
                                                                  d.ProgramId.Equals("9090") &&
@@ -233,7 +234,7 @@ namespace crds_angular.test.Services
                         "tok123",
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, (int)checks[1].Amount, contactDonorNew.DonorId)).Returns(mockCharge);
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, (int)(checks[1].Amount * Constants.StripeDecimalConversionValue), contactDonorNew.DonorId)).Returns(mockCharge);
 
             _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, mockCharge.Source.id, contactDonorNew.ProcessorId)).Returns(donorAcctId);
@@ -242,7 +243,7 @@ namespace crds_angular.test.Services
                 mocked =>
                     mocked.CreateDonationAndDistributionRecord(
                         It.Is<DonationAndDistributionRecord>(d =>
-                                                                 d.DonationAmt == (int) checks[1].Amount &&
+                                                                 d.DonationAmt == checks[1].Amount &&
                                                                  d.FeeAmt == null &&
                                                                  d.DonorId == contactDonorNew.DonorId &&
                                                                  d.ProgramId.Equals("9090") &&
