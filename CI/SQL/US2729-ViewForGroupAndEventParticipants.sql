@@ -12,7 +12,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Field_List]
            ,[View_Clause])
      VALUES
-           (92266
+           (2200
 		   ,'Participants By Group And Event'
            ,305
            ,'Get contact information for participants in an event for a particular group'
