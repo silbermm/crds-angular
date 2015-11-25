@@ -1,7 +1,7 @@
 USE [MinistryPlatform]
 GO
 
-IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 92267)
+IF NOT EXISTS (SELECT * FROM [dbo].[dp_Page_Views] WHERE [Page_View_ID] = 2201)
 BEGIN
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
 INSERT INTO [dbo].[dp_Page_Views]
@@ -12,7 +12,7 @@ INSERT INTO [dbo].[dp_Page_Views]
            ,[Field_List]
            ,[View_Clause])
      VALUES
-           (92267
+           (2201
 		   ,'Responses by Event and Group'
            ,382
            ,'Used to find all group members who have responded to an event.'

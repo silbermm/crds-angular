@@ -2,7 +2,10 @@ USE [MinistryPlatform];
 GO
 
 /****** Object:  UserDefinedFunction [dbo].[crds_SponsoredChild]    Script Date: 11/19/2015 3:36:48 PM ******/
+IF OBJECT_ID('dbo.crds_FindParentAttendingRelatedEvent', 'p') IS NOT NULL
+BEGIN
 DROP FUNCTION [dbo].[crds_FindParentAttendingRelatedEvent]
+END
 GO
 
 /****** Object:  UserDefinedFunction [dbo].[crds_SponsoredChild]    Script Date: 11/19/2015 3:03:49 PM ******/
