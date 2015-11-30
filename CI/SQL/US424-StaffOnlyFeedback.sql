@@ -68,10 +68,14 @@ BEGIN
            ,'Contact_ID'
            ,1
            ,0
-           ,'Contact_ID'
+           ,NULL
            ,0)
 	SET IDENTITY_INSERT [dbo].[dp_Sub_Pages] OFF
 END
+ELSE 
+	BEGIN
+		UPDATE dp_Sub_Pages set Contact_ID_Field = NULL where Sub_Page_ID = 544
+	END
 GO
 
 IF NOT EXISTS(SELECT * FROM [dbo].[dp_Role_Sub_Pages] WHERE [Role_Sub_Page_ID] = 16105)
