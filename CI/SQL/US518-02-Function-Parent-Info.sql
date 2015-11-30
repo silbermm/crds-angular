@@ -2,6 +2,7 @@ USE [MinistryPlatform];
 GO
 
 /****** Object:  UserDefinedFunction [dbo].[crds_SponsoredChild]    Script Date: 11/19/2015 3:36:48 PM ******/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[crds_FindParentAttendingRelatedEvent]') AND type in (N'TF'))
 DROP FUNCTION [dbo].[crds_FindParentAttendingRelatedEvent]
 GO
 
