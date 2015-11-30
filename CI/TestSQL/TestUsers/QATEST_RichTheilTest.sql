@@ -72,7 +72,7 @@ set @contactID = (select contact_id from contacts where Email_Address = 'rtheil+
 
 --Household for Kid14 Theil-Test
 DECLARE @houseHoldID as int
-set @houseHoldID = (select HouseHold_ID from Contact where email_address = 'rtheil+testing@crossroads.net');
+set @houseHoldID = (select HouseHold_ID from Contacts where email_address = 'rtheil+testing@crossroads.net');
 
 --Kid14 Theil-Test Contact Updates
 UPDATE[dbo].Contacts 
