@@ -48,7 +48,7 @@ Delete from [dbo].Activity_Log
 WHERE Contact_id = @contactID;
 
 --Delete the old contact record for cloud
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife';
+DELETE FROM [dbo].Contacts where Contact_ID = @contactID;
 
 --Address
 SET IDENTITY_INSERT [dbo].[Addresses] ON;
