@@ -18,7 +18,7 @@ INSERT INTO dbo.dp_Pages
 	)
 	VALUES
 	(
-		529,
+		535,
 		'Publication Page Views',
 		'Publication Page View',
 		'Publications and the related Page Views to be used for segmentation for MailChimp',
@@ -40,7 +40,7 @@ INSERT INTO dbo.dp_Page_Section_Pages
 	)
 	VALUES
 	(
-		529,
+		535,
 		1
 	)
 
@@ -72,7 +72,7 @@ INSERT INTO dbo.dp_Sub_Pages
 		'Page View',
 		376,
 		3,
-		529,
+		535,
 		'Publication_Page_View_ID',
 		352,
 		'Publication_Page_Views.Page_View_ID',
