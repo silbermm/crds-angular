@@ -15,6 +15,7 @@ CREATE TABLE [dbo].[cr_Staff_Only_Feedback](
 	[Contact_ID] [int] NOT NULL,
 	[Date_Submitted] [date] NOT NULL CONSTRAINT [DF_Staff_Only_Feedback_Date_Submitted]  DEFAULT (getdate()),
 	[Description] [nvarchar](2000) NOT NULL,
+	[Domain_ID] [int] NOT NULL,
  CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED 
 (
 	[Staff_Only_Feedback_ID] ASC
@@ -26,6 +27,13 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Staff_Only_Feedback_Contacts]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Staff_Only_Feedback]'))
 ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_Staff_Only_Feedback_Contacts] FOREIGN KEY([Contact_ID])
 REFERENCES [dbo].[Contacts] ([Contact_ID])
+GO
+
+ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains] FOREIGN KEY([Domain_ID])
+REFERENCES [dbo].[dp_Domains] ([Domain_ID])
+GO
+
+ALTER TABLE [dbo].[cr_Staff_Only_Feedback] CHECK CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains]
 GO
 
 IF NOT EXISTS(SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 542)
