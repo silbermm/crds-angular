@@ -16,7 +16,7 @@ CREATE TABLE [dbo].[cr_Staff_Only_Feedback](
 	[Date_Submitted] [date] NOT NULL CONSTRAINT [DF_Staff_Only_Feedback_Date_Submitted]  DEFAULT (getdate()),
 	[Description] [nvarchar](2000) NOT NULL,
 	[Domain_ID] [int] NOT NULL,
- CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED
 (
 	[Staff_Only_Feedback_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -36,7 +36,8 @@ GO
 ALTER TABLE [dbo].[cr_Staff_Only_Feedback] CHECK CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains]
 GO
 
-IF NOT EXISTS(SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 542)
+
+IF NOT EXISTS(SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 544)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Sub_Pages] ON
 	INSERT INTO [dbo].[dp_Sub_Pages]
@@ -55,7 +56,7 @@ BEGIN
            ,[Contact_ID_Field]
            ,[Display_Copy])
      VALUES
-           (542
+           (544
 		   ,'Staff Only Feedback'
            ,'Staff Only Feedback'
            ,292
@@ -84,7 +85,7 @@ BEGIN
      VALUES
            (16105
 		   ,2
-           ,542
+           ,544
            ,3)
 	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] OFF
 END

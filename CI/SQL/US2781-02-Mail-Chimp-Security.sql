@@ -62,7 +62,7 @@ INSERT INTO [dbo].[dp_Role_Pages]
      VALUES
            (13048
            ,62
-           ,529
+           ,535
            ,2
            ,0
            ,0
