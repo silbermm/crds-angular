@@ -4,6 +4,7 @@ using AutoMapper;
 using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using log4net;
 using MinistryPlatform.Models;
 using MPServices = MinistryPlatform.Translation.Services.Interfaces;
@@ -64,14 +65,8 @@ namespace crds_angular.Services
                     var contactDonor = CreateDonor(check);
                     //Always use the customer ID and source ID from the Donor Account, if it exists
                     StripeCharge charge;
-                    if (contactDonor.HasAccount)
-                    {
-                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int) (check.Amount), contactDonor.DonorId);
-                    }
-                    else
-                    {
-                        charge = _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int)(check.Amount), contactDonor.DonorId);   
-                    }
+                    var decimalAmt = check.Amount * Constants.StripeDecimalConversionValue;
+                    charge = contactDonor.HasAccount ? _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int)decimalAmt, contactDonor.DonorId) : _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) decimalAmt, contactDonor.DonorId);
                    
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
@@ -89,7 +84,7 @@ namespace crds_angular.Services
 
                     var donationAndDistribution = new DonationAndDistributionRecord
                     {
-                        DonationAmt = (int) (check.Amount),
+                        DonationAmt = check.Amount,
                         FeeAmt = fee,
                         DonorId = contactDonor.DonorId,
                         ProgramId = programId,
@@ -146,7 +141,10 @@ namespace crds_angular.Services
             }
             var account = _mpDonorService.DecryptCheckValue(checkDetails.AccountNumber);
             var routing = _mpDonorService.DecryptCheckValue(checkDetails.RoutingNumber);
-            var token = _paymentService.CreateToken(account, routing);
+
+            //TODO:: Will need to remove hard coded values and make var token = _paymentService.CreateToken(account, routing);
+            //TODO:: This was put into place for EZScan to test.
+            var token = _paymentService.CreateToken("000123456789", "110000000");
             var encryptedKey = _mpDonorService.CreateHashedAccountAndRoutingNumber(account, routing);
             
             contactDonor.Details = new ContactDetails

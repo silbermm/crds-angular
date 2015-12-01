@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         ContactDonor GetPossibleGuestContactDonor(string email);
         ContactDonor GetContactDonorForDonorAccount(string accountNumber, string routingNumber);
         int UpdatePaymentProcessorCustomerId(int donorId, string paymentProcessorCustomerId);
-        void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType);
+        void SetupConfirmationEmail(int programId, int donorId, decimal donationAmount, DateTime setupDate, string pymtType);
         ContactDonor GetEmailViaDonorId(int donorId);
         void SendEmail(int emailTemplate, int donorId, decimal donationAmount, string donationType, DateTime donationDate, string programName, string emailReason, string frequency = null);
         ContactDonor GetContactDonorForCheckAccount(string encryptedKey);

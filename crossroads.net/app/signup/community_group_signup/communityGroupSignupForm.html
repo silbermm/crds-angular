@@ -10,7 +10,7 @@
 
           <p id="content" class="noPspace" dir="ltr"
              ng-bind-html="groupsignup.signupPage.content | html"
-             ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp">
+             ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp && !groupsignup.showFull">
           </p>
 
           <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
@@ -22,7 +22,7 @@
         <div class="row" ng-show="groupsignup.showContent">
           <legend>Participants</legend>
           <form  class="form-group" name="myForm" role="form" ng-submit="groupsignup.signup(myForm)" id="myForm">
-            <p >
+            <p>
               <div class="checkbox"
                    ng-repeat="person in groupsignup.response as people"
                    ng-class="{'has-error':!groupsignup.formValid && !person['userInGroup']}">
@@ -31,7 +31,7 @@
                     <input name="input"
                            type="checkbox"
                            ng-checked="person.userInGroup"
-                           ng-disabled="person.userInGroup"
+                           ng-disabled="person.userInGroup || groupsignup.showFull"
                            ng-model="person.newAdd"
                            ng-true-value="'{{person.participantId}}'"
                            ng-false-value="''">
@@ -55,7 +55,7 @@
               </child-care-need>
             </div>
           </p>
-          <p ng-show="!groupsignup.alreadySignedUp">
+          <p ng-show="!groupsignup.alreadySignedUp && !groupsignup.showFull">
             <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
           </p>
         </form>

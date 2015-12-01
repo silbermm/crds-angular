@@ -14,8 +14,9 @@ CREATE TABLE [dbo].[cr_Staff_Only_Feedback](
 	[Staff_Only_Feedback_ID] [int] IDENTITY(1,1) NOT NULL,
 	[Contact_ID] [int] NOT NULL,
 	[Date_Submitted] [date] NOT NULL CONSTRAINT [DF_Staff_Only_Feedback_Date_Submitted]  DEFAULT (getdate()),
-	[Description] [nvarchar](2000),
- CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED 
+	[Description] [nvarchar](2000) NOT NULL,
+	[Domain_ID] [int] NOT NULL,
+ CONSTRAINT [PK_cr_Staff_Only_Feedback] PRIMARY KEY CLUSTERED
 (
 	[Staff_Only_Feedback_ID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -28,7 +29,15 @@ ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_St
 REFERENCES [dbo].[Contacts] ([Contact_ID])
 GO
 
-IF NOT EXISTS(SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 542)
+ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains] FOREIGN KEY([Domain_ID])
+REFERENCES [dbo].[dp_Domains] ([Domain_ID])
+GO
+
+ALTER TABLE [dbo].[cr_Staff_Only_Feedback] CHECK CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains]
+GO
+
+
+IF NOT EXISTS(SELECT * FROM [dbo].[dp_Sub_Pages] WHERE [Sub_Page_ID] = 544)
 BEGIN
 	SET IDENTITY_INSERT [dbo].[dp_Sub_Pages] ON
 	INSERT INTO [dbo].[dp_Sub_Pages]
@@ -47,7 +56,7 @@ BEGIN
            ,[Contact_ID_Field]
            ,[Display_Copy])
      VALUES
-           (542
+           (544
 		   ,'Staff Only Feedback'
            ,'Staff Only Feedback'
            ,292
@@ -59,10 +68,14 @@ BEGIN
            ,'Contact_ID'
            ,1
            ,0
-           ,'Contact_ID'
+           ,NULL
            ,0)
 	SET IDENTITY_INSERT [dbo].[dp_Sub_Pages] OFF
 END
+ELSE 
+	BEGIN
+		UPDATE dp_Sub_Pages set Contact_ID_Field = NULL where Sub_Page_ID = 544
+	END
 GO
 
 IF NOT EXISTS(SELECT * FROM [dbo].[dp_Role_Sub_Pages] WHERE [Role_Sub_Page_ID] = 16105)
@@ -76,7 +89,7 @@ BEGIN
      VALUES
            (16105
 		   ,2
-           ,542
+           ,544
            ,3)
 	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] OFF
 END

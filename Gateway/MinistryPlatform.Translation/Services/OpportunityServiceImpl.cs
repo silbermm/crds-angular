@@ -70,6 +70,7 @@ namespace MinistryPlatform.Translation.Services
                 GroupContactId = opp.ToInt("Contact_Person"),
                 GroupContactName = opp.ToString("Contact_Person_Text"),
                 GroupName = opp.ToString("Add_to_Group_Text"),
+                GroupId = opp.ToInt("Add_to_Group"),
                 ShiftStart = TimeSpan.Parse(opp.ToString("Shift_Start")),
                 ShiftEnd = TimeSpan.Parse(opp.ToString("Shift_End")),
                 Room = opp.ToString("Room")

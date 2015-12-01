@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Groups;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Event = crds_angular.Models.Crossroads.Events.Event;
 
 namespace crds_angular.Services
 {
@@ -97,6 +100,24 @@ namespace crds_angular.Services
             }
         }
 
+        public List<Event> GetGroupEvents(int groupId)
+        {
+            var events = _mpGroupService.getAllEventsForGroup(groupId);
+            var eventList = AutoMapper.Mapper.Map<List<Event>>(events);
+            return eventList;
+        }
+
+        public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId)
+        {
+            var participants = _mpGroupService.getEventParticipantsForGroup(groupId, eventId);
+            var members = participants.Select(part => new GroupContactDTO
+            {
+                ContactId = part.ContactId,
+                DisplayName = part.LastName + ", " + part.NickName
+            }).ToList();
+            return members;
+        }
+
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)
         {
             int participantId = participant.ParticipantId;
@@ -105,6 +126,8 @@ namespace crds_angular.Services
             var signupRelations = _mpGroupService.GetGroupSignupRelations(g.GroupType);
 
             var currRelationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, authUserToken);
+
+            var events = _mpGroupService.getAllEventsForGroup(groupId);
 
             ContactRelationship[] familyToReturn = null;
 
@@ -116,12 +139,16 @@ namespace crds_angular.Services
 
             var detail = new GroupDTO();
             {
+                detail.GroupName = g.Name;
                 detail.GroupId = g.GroupId;
                 detail.GroupFullInd = g.Full;
                 detail.WaitListInd = g.WaitList;
                 detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
-
+                if (events != null)
+                {
+                  detail.Events = events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
+                }
                 //the first instance of family must always be the logged in user
                 var fam = new SignUpFamilyMembers
                 {

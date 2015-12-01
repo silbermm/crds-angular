@@ -540,7 +540,7 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public void SetupConfirmationEmail(int programId, int donorId, int donationAmount, DateTime setupDate, string pymtType)
+        public void SetupConfirmationEmail(int programId, int donorId, decimal donationAmount, DateTime setupDate, string pymtType)
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
@@ -599,12 +599,9 @@ namespace MinistryPlatform.Translation.Services
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContactId = 5,
-                FromEmailAddress = "giving@crossroads.net",
-                ReplyContactId = 5,
-                ReplyToEmailAddress = "giving@crossroads.net",
-                ToContactId = contact.ContactId,
-                ToEmailAddress = contact.Email,
+                FromContact =  new Contact { ContactId = 5, EmailAddress = "giving@crossroads.net" },
+                ReplyToContact = new Contact { ContactId = 5, EmailAddress = "giving@crossroads.net" },
+                ToContacts = new List<Contact> {new Contact{ContactId = contact.ContactId, EmailAddress = contact.Email}},
                 MergeData = new Dictionary<string, object>
                 {
                     {"Program_Name", program},

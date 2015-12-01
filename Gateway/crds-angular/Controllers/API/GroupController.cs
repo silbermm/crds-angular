@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Net;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Groups;
 using crds_angular.Security;
 using log4net;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Models.Crossroads.Events;
 
 namespace crds_angular.Controllers.API
 {
@@ -97,6 +100,46 @@ namespace crds_angular.Controllers.API
                 
             }
                 );
+        }
+
+        [ResponseType(typeof(List<Event>))]
+        [Route("api/group/{groupId}/events")]
+        public IHttpActionResult GetEvents(int groupId)
+        {
+            return Authorized(token =>
+                {
+                    try
+                    {
+                        var eventList = groupService.GetGroupEvents(groupId);
+                        return Ok(eventList);
+                    }
+                    catch (Exception e)
+                    {
+                        var apiError = new ApiErrorDto("Error getting events ", e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
+                }
+            );
+        }
+
+        [ResponseType(typeof(List<GroupContactDTO>))]
+        [Route("api/group/{groupId}/event/{eventId}")]
+        public IHttpActionResult GetParticipants(int groupId, int eventId)
+        {
+            return Authorized(token =>
+                {
+                    try
+                    {
+                        var memberList = groupService.GetGroupMembersByEvent(groupId, eventId);
+                        return Ok(memberList);
+                    }
+                    catch (Exception e)
+                    {
+                        var apiError = new ApiErrorDto("Error getting participating group members ", e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
+                }
+            );
         }
 
         // TODO: implement later

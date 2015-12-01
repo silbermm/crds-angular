@@ -207,24 +207,20 @@ namespace MinistryPlatform.Translation.Services
 
         public IList<Event> getAllEventsForGroup(int groupId)
         {
-            var events = new List<Event>();
             var apiToken = ApiLogin();
             var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
             if (groupEvents == null || groupEvents.Count == 0)
             {
                 return null;
             }
-            foreach (var tmpEvent in groupEvents)
+            return groupEvents.Select(tmpEvent => new Event
             {
-                var newEvent = new Event();
-                newEvent.EventId = tmpEvent.ToInt("Event_ID");
-                newEvent.EventLocation = tmpEvent.ToString("Location_Name");
-                newEvent.EventStartDate = tmpEvent.ToDate("Event_Start_Date");
-                newEvent.EventTitle = tmpEvent.ToString("Event_Title");
-
-                events.Add(newEvent);
-            }
-            return events;
+                EventId = tmpEvent.ToInt("Event_ID"), 
+                EventLocation = tmpEvent.ToString("Location_Name"), 
+                EventStartDate = tmpEvent.ToDate("Event_Start_Date"), 
+                EventEndDate = tmpEvent.ToDate("Event_End_Date"), 
+                EventTitle = tmpEvent.ToString("Event_Title")
+            }).ToList();
         }
 
         public bool ParticipantQualifiedServerGroupMember(int groupId, int participantId)
@@ -311,16 +307,22 @@ namespace MinistryPlatform.Translation.Services
                 EmailSubject = emailTemplate.Subject,
                 AuthorUserId = churchAdminContactId,
                 DomainId = Convert.ToInt32(AppSettings("DomainId")),
-                FromContactId = churchAdminContactId,
-                FromEmailAddress = fromAddress,
+                FromContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 MergeData = mergeData,
-                ReplyContactId = churchAdminContactId,
-                ReplyToEmailAddress = fromAddress,
+                ReplyToContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
                 TemplateId = CommunityGroupConfirmationTemplateId,
-                ToContactId = toContact,
-                ToEmailAddress = toContactInfo.Email_Address
+                ToContacts = {new Contact{ContactId = toContact, EmailAddress = toContactInfo.Email_Address}}
             };
             _communicationService.SendMessage(confirmation);
+        }
+
+        public List<GroupParticipant> getEventParticipantsForGroup(int groupId, int eventId)
+        {
+            var records = ministryPlatformService.GetPageViewRecords("ParticipantsByGroupAndEvent", ApiLogin(), String.Format("{0},{1}", groupId, eventId));
+            return records.Select(rec => new GroupParticipant
+            {
+                ContactId = rec.ToInt("Contact_ID"), NickName = rec.ToString("Nickname"), LastName = rec.ToString("Last_Name")
+            }).ToList();
         }
     }
 }
