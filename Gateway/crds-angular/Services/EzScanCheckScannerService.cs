@@ -66,7 +66,7 @@ namespace crds_angular.Services
                     //Always use the customer ID and source ID from the Donor Account, if it exists
                     StripeCharge charge;
                     var decimalAmt = check.Amount * Constants.StripeDecimalConversionValue;
-                    charge = contactDonor.HasAccount ? _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, (int)decimalAmt, contactDonor.DonorId) : _paymentService.ChargeCustomer(contactDonor.ProcessorId, (int) decimalAmt, contactDonor.DonorId);
+                    charge = contactDonor.HasAccount ? _paymentService.ChargeCustomer(contactDonor.ProcessorId, contactDonor.Account.ProcessorAccountId, decimalAmt, contactDonor.DonorId) : _paymentService.ChargeCustomer(contactDonor.ProcessorId, decimalAmt, contactDonor.DonorId);
                    
                     var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 

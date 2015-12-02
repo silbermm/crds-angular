@@ -11,6 +11,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
+using Crossroads.Utilities;
 using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
@@ -188,7 +189,7 @@ namespace crds_angular.Controllers.API
             {
                 var contactId = _authenticationService.GetContactId(token);
                 var donor = _mpDonorService.GetContactDonor(contactId);
-                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount * Constants.StripeDecimalConversionValue, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
 
                 int? pledgeId = null;
@@ -224,7 +225,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonationDTO
                 {
                     ProgramId = dto.ProgramId,
-                    Amount = dto.Amount,
+                    Amount = (int) dto.Amount,
                     Id = donationId.ToString(),
                     Email = donor.Email
                 };
@@ -247,7 +248,7 @@ namespace crds_angular.Controllers.API
             try
             {
                 var donor = _gatewayDonorService.GetContactDonorForEmail(dto.EmailAddress);
-                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount, donor.DonorId);
+                var charge = _stripeService.ChargeCustomer(donor.ProcessorId, dto.Amount * Constants.StripeDecimalConversionValue, donor.DonorId);
                 var fee = charge.BalanceTransaction != null ? charge.BalanceTransaction.Fee : null;
                 int? pledgeId = null;
                 if (dto.PledgeCampaignId != null && dto.PledgeDonorId != null)
@@ -283,7 +284,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonationDTO()
                 {
                     ProgramId = dto.ProgramId,
-                    Amount = dto.Amount,
+                    Amount = (int)dto.Amount,
                     Id = donationId.ToString(),
                     Email = donor.Email
                 };

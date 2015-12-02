@@ -13,6 +13,7 @@ using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.Json;
 using MinistryPlatform.Translation.Services.Interfaces;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities;
 using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
@@ -228,7 +229,7 @@ namespace crds_angular.test.controllers
                 .Returns(donor);
 
             stripeServiceMock.Setup(
-                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId))
+                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount * Constants.StripeDecimalConversionValue, donor.DonorId))
                 .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
@@ -326,7 +327,7 @@ namespace crds_angular.test.controllers
             mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
 
             stripeServiceMock.Setup(
-                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId))
+                mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount * Constants.StripeDecimalConversionValue, donor.DonorId))
                 .Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
@@ -422,7 +423,7 @@ namespace crds_angular.test.controllers
 
             mpDonationService.Setup(mocked => mocked.SendMessageFromDonor(pledgeId, createDonationDTO.GiftMessage));
 
-            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId)).
+            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount * Constants.StripeDecimalConversionValue, donor.DonorId)).
                 Returns(charge);
 
 
@@ -506,8 +507,8 @@ namespace crds_angular.test.controllers
 
             fixture.Request.Headers.Authorization = null;
             gatewayDonorServiceMock.Setup(mocked => mocked.GetContactDonorForEmail(createDonationDTO.EmailAddress)).Returns(donor);
-            
-            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount, donor.DonorId)).
+
+            stripeServiceMock.Setup(mocked => mocked.ChargeCustomer(donor.ProcessorId, createDonationDTO.Amount * Constants.StripeDecimalConversionValue, donor.DonorId)).
                 Returns(charge);
 
             donorServiceMock.Setup(mocked => mocked.
