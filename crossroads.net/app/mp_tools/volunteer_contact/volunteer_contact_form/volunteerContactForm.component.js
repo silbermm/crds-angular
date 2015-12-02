@@ -41,6 +41,7 @@
       vm.formData = {};
       vm.loadingTo = false;
       vm.processing = false;
+      vm.recipientsChoosen = recipientsChoosen;
       vm.save = save;
       vm.validation = Validation;
 
@@ -49,30 +50,34 @@
       }
 
       function eventChanged() {
-        if (vm.formData.event) {
+        if (vm.formData.event && vm.formData.recipients) {
           vm.loadingTo = true;
           Group.Participants.query({
             groupId: vm.group.groupId,
-            eventId: vm.formData.event.eventId
+            eventId: vm.formData.event.eventId,
+            recipients: vm.formData.recipients
           },
-          
+
           function(data) {
             vm.to = _.map(data, function(d) {
-              return d.contactId; 
+              return d.contactId;
             });
-            vm.formData.to = _.map(data, function(d){
-              return d.displayName + '; '; 
-            }); 
+
+            vm.formData.to = _.map(data, function(d) {
+              return d.displayName + '; ';
+            });
+
             vm.loadingTo = false;
           },
 
-          function (err) {
+          function(err) {
             vm.loadingTo = false;
             console.error(err);
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           });
         } else {
           vm.formData.to = undefined;
+          vm.formData.recipients = undefined;
         }
       }
 
@@ -92,11 +97,16 @@
         return display;
       }
 
+      function recipientsChoosen() {
+        return !_.isEmpty(vm.formData.recipients);
+      }
+
       function save() {
         if (!vm.data.$valid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           return false;
         }
+
         vm.processing = true;
 
         var toSend = {
@@ -108,7 +118,7 @@
 
         VolunteerContact.GroupMail.save(toSend, function() {
           vm.processing = false;
-          cancel(); 
+          cancel();
         },
 
         function(err) {
@@ -119,7 +129,6 @@
 
         return true;
       }
-
     }
   }
 })();

@@ -33,8 +33,14 @@
         vm.multipleRecordsSelected = showError();
         Group.Detail.get({groupId: vm.params.recordId}, function(data) {
           vm.group = data;
-          vm.viewReady = true;
+          Group.Events.query({groupId: vm.group.groupId}, function(events) {
+            vm.group.events = events;
+            vm.viewReady = true;
+          });
+
         });
+
+        
       }
 
       function showError() {
