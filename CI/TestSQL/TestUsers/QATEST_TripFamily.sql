@@ -44,8 +44,11 @@ WHERE Communication_ID = @communicationID;
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;
 
+Delete from [dbo].Activity_Log
+WHERE Contact_id = @contactID;
+
 --Delete the old contact record for cloud
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+cloudstrife@gmail.com' and last_name = 'Strife';
+DELETE FROM [dbo].Contacts where Contact_ID = @contactID;
 
 --Address
 SET IDENTITY_INSERT [dbo].[Addresses] ON;
@@ -145,6 +148,9 @@ WHERE Communication_ID = @communicationID;
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;
 
+Delete from [dbo].Activity_Log
+WHERE Contact_id = @contactID;
+
 --Delete the old contact record
 DELETE FROM [dbo].Contacts where contact_id = @contactID;
 
@@ -228,6 +234,9 @@ WHERE Communication_ID = @communicationID;
 
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;
+
+Delete from [dbo].Activity_Log
+WHERE Contact_id = @contactID;
 
 --Delete the old contact record
 DELETE FROM [dbo].Contacts where email_address = 'mpcrds+marlenewallace@gmail.com' and last_name = 'Wallace';

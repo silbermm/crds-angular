@@ -97,6 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\BulkEmailRepository.cs" />
     <Compile Include="Enum\NumericDayOfWeek.cs" />
     <Compile Include="Enum\PaymentType.cs" />
     <Compile Include="Exceptions\GroupFullException.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Services\GetMyRecords.cs" />
     <Compile Include="Services\GroupParticipantService.cs" />
     <Compile Include="Services\GroupService.cs" />
+    <Compile Include="Services\Interfaces\IBulkEmailRepository.cs" />
     <Compile Include="Services\Interfaces\IApiUserService.cs" />
     <Compile Include="Services\Interfaces\IContactAttributeService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
