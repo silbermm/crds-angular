@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
-using System.Web;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
-using System.Security.Cryptography;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
@@ -61,12 +61,11 @@ namespace crds_angular.Services
                 {
                     listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
                 }
-
-                // Update MP with last sync date
-                _bulkEmailRepository.SetPublication(token, publication);
+                
+                _bulkEmailRepository.UpdateLastSyncDate(token, publication);
             }
 
-            LogUpdateStatuses(listResponseIds);
+            ProcessSynchronizationResultsWithRetries(listResponseIds);
         }
 
         public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
@@ -81,8 +80,16 @@ namespace crds_angular.Services
             request.RequestFormat = DataFormat.Json;
             request.AddBody(operation);
 
-            var responseContent = client.Execute(request).Content;
-            var responseValues = DeserializeToDictionary(responseContent);
+            var response = client.Execute(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                // TODO: Should these be exceptions?
+                logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                return null;
+            }
+
+            var responseValues = DeserializeToDictionary(response.Content);
 
             // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
             if (responseValues["status"].ToString() == "started" || 
@@ -93,52 +100,81 @@ namespace crds_angular.Services
             }
             else
             {
+                // TODO: Should these be exceptions?
                 // TODO: Add logging code here for failure
-                logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, responseContent));
-
+                logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, response.Content));
                 return null;
             }
         }
 
-        private void LogUpdateStatuses(Dictionary<string, string> publicationOperationIds)
+        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
         {
             // poll mailchimp to see if batch was successful -- also need to confirm during dev
-            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
-            var client = GetBulkEmailClient();
+            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous            
+
+            int maxRetries = 720;
+            var attempts = 0;
 
             do
-            {
+            {                
+                attempts++;
+                
+                if (attempts > maxRetries)
+                {
+                    // TODO: Should these be exceptions?
+                    // Probably an infinite loop so stop processing and log error
+                    logger.Error(string.Format("Failed to LogUpdateStatuses after {0} total retries", attempts));
+                    return;
+                }
+
                 // pause to allow the operations to complete -- consider switching this to async
                 Thread.Sleep(5000);
 
-                for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
-                {
-                    var idPair = publicationOperationIds.ElementAt(index);
-                    var request = new RestRequest("batches/" + idPair.Value, Method.GET);
-                    request.AddHeader("Content-Type", "application/json");
-
-                    var response = client.Execute(request).Content;
-                    var responseValues = DeserializeToDictionary(response);
-
-                    // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
-                    if (responseValues["status"].ToString() == "finished")
-                    {
-                        logger.Info(response);                        
-                        publicationOperationIds.Remove(idPair.Key);
-                    }
-                    else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
-                    {
-                        continue; // try again in another five seconds
-                    }
-                    else
-                    {
-                        // TODO: Add logging code here for failure
-                        logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response));
-                        publicationOperationIds.Remove(idPair.Key);
-                    }
-                }
+                publicationOperationIds = ProcessSynchronizationResults(publicationOperationIds);
 
             } while (publicationOperationIds.Any());
+        }
+
+        private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
+        {
+            var client = GetBulkEmailClient();
+
+            for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
+            {
+                var idPair = publicationOperationIds.ElementAt(index);
+                var request = new RestRequest("batches/" + idPair.Value, Method.GET);
+                request.AddHeader("Content-Type", "application/json");
+
+                var response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    logger.Error(string.Format("StatusCode = {0}", response.StatusCode));
+                    continue;
+                }
+
+                var responseValues = DeserializeToDictionary(response.Content);
+
+                if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
+                {
+                    continue;
+                }
+
+                if (responseValues["status"].ToString() == "finished")
+                {                    
+                    // TODO: See if we have failures and log as error if they exist
+                    logger.Info(response.Content);
+                }
+                else
+                {
+                    // TODO: Should these be exceptions?
+                    // TODO: Add logging code here for failure
+                    logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response.Content));
+                }
+
+                publicationOperationIds.Remove(idPair.Key);
+            }
+
+            return publicationOperationIds;
         }
 
         private RestClient GetBulkEmailClient()
@@ -161,7 +197,8 @@ namespace crds_angular.Services
             {
                 // TODO: Update MP with 3rd Party Contact ID
                 if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
-                {//Assuming success here, update the ID to match the emailaddress
+                {
+                    //Assuming success here, update the ID to match the emailaddress
                     //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
                     subscriber.ThirdPartyContactId = subscriber.EmailAddress;
                     _bulkEmailRepository.SetBaseSubscriber(_token, subscriber);
@@ -216,8 +253,8 @@ namespace crds_angular.Services
         public string CalculateMD5Hash(string input)
         {
             // step 1, calculate MD5 hash from input
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            MD5 md5 = MD5.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
             byte[] hash = md5.ComputeHash(inputBytes);
 
             // step 2, convert byte array to hex string
