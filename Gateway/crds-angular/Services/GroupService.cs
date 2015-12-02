@@ -17,11 +17,10 @@ namespace crds_angular.Services
     {
         private readonly ILog logger = LogManager.GetLogger(typeof (GroupService));
 
-        private IGroupService _mpGroupService;
-        private IConfigurationWrapper _configurationWrapper;
-        private IAuthenticationService _authenticationService;
-        private IEventService _eventService;
-        private IContactRelationshipService _contactRelationshipService;
+        private readonly IGroupService _mpGroupService;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IEventService _eventService;
+        private readonly IContactRelationshipService _contactRelationshipService;
 
         /// <summary>
         /// This is retrieved in the constructor from AppSettings
@@ -30,17 +29,14 @@ namespace crds_angular.Services
 
         public GroupService(IGroupService mpGroupService,
                             IConfigurationWrapper configurationWrapper,
-                            IAuthenticationService authenticationService,
                             IEventService eventService,
                             IContactRelationshipService contactRelationshipService)
         {
-            this._mpGroupService = mpGroupService;
-            this._configurationWrapper = configurationWrapper;
-            this._authenticationService = authenticationService;
-            this._eventService = eventService;
-            this._contactRelationshipService = contactRelationshipService;
-
-            this.GroupRoleDefaultId = Convert.ToInt32(_configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
+            _mpGroupService = mpGroupService;
+            _configurationWrapper = configurationWrapper;
+            _eventService = eventService;
+            _contactRelationshipService = contactRelationshipService;
+            GroupRoleDefaultId = Convert.ToInt32(_configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
         }
 
         public void addParticipantsToGroup(int groupId, List<ParticipantSignup> participants)
@@ -96,38 +92,47 @@ namespace crds_angular.Services
             catch (Exception e)
             {
                 logger.Error("Could not add user to group", e);
-                throw (e);
+                throw;
             }
         }
 
-        public List<Event> GetGroupEvents(int groupId)
+        public List<Event> GetGroupEvents(int groupId, string token)
         {
-            var events = _mpGroupService.getAllEventsForGroup(groupId);
-            var eventList = AutoMapper.Mapper.Map<List<Event>>(events);
+            var eventTypes = _mpGroupService.GetEventTypesForGroup(groupId, token);
+            var events = new List<MinistryPlatform.Models.Event>();
+            foreach (var eventType in eventTypes.Where(eventType => eventType != String.Empty))
+            {
+                events.AddRange(_eventService.GetEvents(eventType, token));
+            }
+            var futureEvents = events.Where(e => e.EventStartDate >= DateTime.Now).OrderBy(e => e.EventStartDate);
+            var eventList = AutoMapper.Mapper.Map<List<Event>>(futureEvents);
             return eventList;
         }
 
         public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients)
         {
-            var participants = new List<GroupParticipant>();
             if (recipients == "current")
             {
-                participants = _mpGroupService.getEventParticipantsForGroup(groupId, eventId);
+                return _mpGroupService.getEventParticipantsForGroup(groupId, eventId)
+                    .Select(part => new GroupContactDTO
+                {
+                    ContactId = part.ContactId,
+                    DisplayName = part.LastName + ", " + part.NickName
+                }).ToList();
             }
             else
             {
                 var groupMembers = _mpGroupService.getGroupDetails(groupId).Participants;
-                participants = groupMembers.Select(p => new GroupParticipant {ContactId = p.ContactId, LastName = p.LastName, NickName = p.NickName}).ToList();
-                var rsvps = _mpGroupService.getEventParticipantsForGroup(groupId, eventId).Select(r => new GroupParticipant{ContactId = r.ContactId, LastName = r.LastName, NickName = r.NickName});
-                participants = participants.Except(rsvps).ToList();
+                var participants = groupMembers.Select(p => new GroupParticipant {ContactId = p.ContactId, LastName = p.LastName, NickName = p.NickName}).ToList();
+                var rsvps = _mpGroupService.getEventParticipantsForGroup(groupId, eventId).Select(r => new GroupParticipant{ContactId = r.ContactId, LastName = r.LastName, NickName = r.NickName}).ToList();
+
+                return participants.Where(p => rsvps.All(r => r.ContactId != p.ContactId)).Select(part => new GroupContactDTO
+                {
+                    ContactId = part.ContactId,
+                    DisplayName = part.LastName + ", " + part.NickName
+                }).ToList();
             }
 
-            var members = participants.Select(part => new GroupContactDTO
-            {
-                ContactId = part.ContactId,
-                DisplayName = part.LastName + ", " + part.NickName
-            }).ToList();
-            return members;
         }
 
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)

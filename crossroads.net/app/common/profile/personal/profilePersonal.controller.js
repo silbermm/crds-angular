@@ -58,10 +58,12 @@
     vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
     vm.passwordPrefix = 'account-page';
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
+    vm.requireEmail = true;
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
     vm.savePersonal = savePersonal;
     vm.showMobilePhoneError = showMobilePhoneError;
     vm.submitted = false;
+    vm.underThirteen = underThirteen;
     vm.validation = Validation;
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
@@ -96,6 +98,8 @@
         }
 
       });
+
+      underThirteen();
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
@@ -228,6 +232,13 @@
     function showMobilePhoneError() {
       var show = vm.validation.showErrors(vm.pform, 'mobile-phone') && vm.requireMobilePhone;
       return show;
+    }
+
+    function underThirteen() {
+      var birthdate = crds_utilities.convertStringToDate(vm.profileData.person.dateOfBirth);
+      var thirteen = new Date();
+      thirteen.setFullYear(thirteen.getFullYear() - 13);
+      vm.requireEmail = birthdate.getTime() < thirteen.getTime();
     }
 
   }

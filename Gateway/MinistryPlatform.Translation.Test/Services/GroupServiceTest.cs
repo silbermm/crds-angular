@@ -21,7 +21,6 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<ICommunicationService> communicationService;
         private Mock<IContactService> contactService;
         private Mock<IContentBlockService> contentBlockService;
-        private Mock<IEventService> eventService;
         private readonly int GroupsParticipantsPageId = 298;
         private readonly int GroupsParticipantsSubPage = 88;
         private readonly int GroupsPageId = 322;
@@ -38,8 +37,7 @@ namespace MinistryPlatform.Translation.Test.Services
             communicationService = new Mock<ICommunicationService>();
             contactService = new Mock<IContactService>();
             contentBlockService = new Mock<IContentBlockService>();
-            eventService = new Mock<IEventService>();
-            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, eventService.Object, authService.Object, communicationService.Object, contactService.Object, contentBlockService.Object);
+            fixture = new GroupService(ministryPlatformService.Object, configWrapper.Object, authService.Object, communicationService.Object, contactService.Object, contentBlockService.Object);
 
 
             configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
@@ -111,39 +109,14 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void TestGetAllEventsForGroupNoGroupFound()
         {
-            const string pageKey = "GroupOpportunitiesEvents";
+            const string pageKey = "GroupEventsSubPageView";
             const int groupId = 987654;
             const string token = "ABC";
 
-            var mockEventTypes = new List<Dictionary<string, object>>();
-            var eType = new Dictionary<String, object> { { "Event_Type", "Party" } };
-            mockEventTypes.Add(eType);
-
-            ministryPlatformService.Setup(m => m.GetSubpageViewRecords(pageKey, groupId, token, "", "", 0)).Returns(mockEventTypes);
-            eventService.Setup(m => m.GetEvents("Party", token)).Returns(new List<Event>());
+            ministryPlatformService.Setup(m => m.GetSubpageViewRecords(pageKey, groupId, token, "", "", 0)).Returns((List<Dictionary<string, object>>) null);
 
             var groupEvents = fixture.getAllEventsForGroup(groupId);
-            Assert.IsEmpty(groupEvents);
-
-            ministryPlatformService.VerifyAll();
-        }
-
-        [Test]
-        public void TestGetAllEventsForGroupNoEventTypesFound()
-        {
-            const string pageKey = "GroupOpportunitiesEvents";
-            const int groupId = 987654;
-            const string token = "ABC";
-
-            var mockEventTypes = new List<Dictionary<string, object>>();
-            var eType = new Dictionary<String, object> { { "Opportunity_Name", "Party Time" } };
-            mockEventTypes.Add(eType);
-
-            ministryPlatformService.Setup(m => m.GetSubpageViewRecords(pageKey, groupId, token, "", "", 0)).Returns(mockEventTypes);
-            eventService.Setup(m => m.GetEvents("Party", token)).Returns(new List<Event>());
-
-            var groupEvents = fixture.getAllEventsForGroup(groupId);
-            Assert.IsEmpty(groupEvents);
+            Assert.IsNull(groupEvents);
 
             ministryPlatformService.VerifyAll();
         }
@@ -151,37 +124,29 @@ namespace MinistryPlatform.Translation.Test.Services
         [Test]
         public void TestGetAllEventsForGroup()
         {
-            const string pageKey = "GroupOpportunitiesEvents";
+            const string pageKey = "GroupEventsSubPageView";
             const int groupId = 987654;
             const string token = "ABC";
 
-            var mock1 = new Event
+            var mock1 = new Dictionary<string, object>
             {
-                EventId = 123,
-                EventLocation = "Katrina's House",
-                EventStartDate = new DateTime(2014, 4, 4),
-                EventTitle = "Katrina's House Party",
-                EventEndDate = new DateTime(2014, 4, 4),
-                EventType = "Party"
+                {"Event_ID", 123},
+                {"Location_Name", "Katrina's House"},
+                {"Event_Start_Date", new DateTime(2014, 3, 4)},
+                {"Event_Title", "Katrina's House Party"},
+                {"Event_End_Date", new DateTime(2014, 4, 4)}
             };
-            var mock2 = new Event
+            var mock2 = new Dictionary<string, object>
             {
-                EventId = 456, 
-                EventLocation = "Andy's House", 
-                EventStartDate = new DateTime(2014, 4, 4), 
-                EventTitle = "Andy's House Party", 
-                EventEndDate = new DateTime(2014, 4, 4), 
-                EventType = "Party"
+                {"Event_ID", 456},
+                {"Location_Name", "Andy's House"},
+                {"Event_Start_Date", new DateTime(2014, 4, 4)},
+                {"Event_Title", "Andy's House Party"},
+                {"Event_End_Date", new DateTime(2014, 4, 4)}
             };
-            var mockSubPageView = new List<Event> {mock1, mock2};
+            var mockSubPageView = new List<Dictionary<string, object>> {mock1, mock2};
 
-            var mockEventTypes = new List<Dictionary<string, object>>();
-            var eType = new Dictionary<String, object> {{"Event_Type", "Party"}};
-            mockEventTypes.Add(eType);
-
-
-            ministryPlatformService.Setup(m => m.GetSubpageViewRecords(pageKey, groupId, token, "", "", 0)).Returns(mockEventTypes);
-            eventService.Setup(m => m.GetEvents("Party", token)).Returns(mockSubPageView);
+            ministryPlatformService.Setup(m => m.GetSubpageViewRecords(pageKey, groupId, token, "", "", 0)).Returns(mockSubPageView);
 
             var events = fixture.getAllEventsForGroup(groupId);
             ministryPlatformService.VerifyAll();

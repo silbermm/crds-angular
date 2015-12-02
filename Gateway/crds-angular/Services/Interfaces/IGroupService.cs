@@ -12,7 +12,7 @@ namespace crds_angular.Services.Interfaces
 
         void addParticipantsToGroup(int groupId, List<ParticipantSignup> participants);
 
-        List<Event> GetGroupEvents(int groupId);
+        List<Event> GetGroupEvents(int groupId, string token = null);
 
         List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients);
     }

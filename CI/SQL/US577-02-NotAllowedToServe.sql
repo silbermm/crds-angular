@@ -25,6 +25,12 @@ CREATE TABLE [dbo].[cr_Serve_Restrictions](
 END
 GO
 
+IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'Domain_ID' AND Object_ID = Object_ID(N'cr_Serve_Restrictions'))
+BEGIN
+    ALTER TABLE dbo.cr_Serve_Restrictions ADD Domain_ID int NOT NULL CONSTRAINT DF_cr_Serve_Restrictions_Domain_ID DEFAULT 1
+END
+GO
+
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Serve_Restrictions_Contacts]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Serve_Restrictions]'))
 ALTER TABLE [dbo].[cr_Serve_Restrictions]  WITH CHECK ADD  CONSTRAINT [FK_cr_Serve_Restrictions_Contacts] FOREIGN KEY([Contact_ID])
 REFERENCES [dbo].[Contacts] ([Contact_ID])
