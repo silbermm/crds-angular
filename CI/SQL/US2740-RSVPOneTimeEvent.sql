@@ -24,7 +24,7 @@ VALUES
      13714
     ,1
     ,'Event RSVP'
-    ,'<div>Thank you for RSVPing to [Event_Name]! Below is the list of people that you have signed up. <br /> <br /> [HTML_Table] </div>'
+    ,'<div>Thank you for RSVPing to [Event_Name]! Below is the list of people that you have signed up. <br /> <br /> [HTML_Table] <br /><br /> [Childcare] </div>'
     ,1
     ,GetDate()
     ,7

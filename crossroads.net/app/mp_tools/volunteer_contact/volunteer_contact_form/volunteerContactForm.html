@@ -20,9 +20,37 @@
     </div>
   </div>
  
+  <div ng-show="contactForm.eventChoosen()">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="radio">
+        <label>
+           <input type="radio"
+                  name="recipients"
+                  id="recipients-current"
+                  value="current"
+                  ng-model='contactForm.formData.recipients'
+                  ng-change="contactForm.eventChanged()">
+           Current Volunteers
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+           <input type="radio"
+                  name="recipients"
+                  id="recipients-potential"
+                  value="potential"
+                  ng-model='contactForm.formData.recipients'
+                  ng-change="contactForm.eventChanged()">
+           Potiential Volunteers 
+        </label>
+      </div>
+    </div>
+  </div>
+  
   <preloader ng-if="contactForm.loadingTo" > </preloader>
 
-  <div ng-show="contactForm.eventChoosen() && !contactForm.loadingTo">
+  <div ng-show="contactForm.recipientsChoosen() && !contactForm.loadingTo">
     <div class="form-group" >
       <label for="to" class="col-sm-2 control-label"> To: </label>
       <div class="col-sm-9">

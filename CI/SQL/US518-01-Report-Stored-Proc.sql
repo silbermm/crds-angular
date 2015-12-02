@@ -3,8 +3,11 @@ GO
 
 /****** Object:  StoredProcedure [dbo].[report_CRDS_Childcare_By_Day]    Script Date: 11/19/2015 3:16:17 PM ******/
 
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[report_CRDS_Childcare_By_Day]') AND type in (N'P'))
+
+IF OBJECT_ID('dbo.report_CRDS_Childcare_By_Day', 'p') IS NOT NULL
+BEGIN
 DROP PROCEDURE [dbo].[report_CRDS_Childcare_By_Day];
+END
 GO
 
 /****** Object:  StoredProcedure [dbo].[report_CRDS_Childcare_By_Day]    Script Date: 11/19/2015 3:16:17 PM ******/
