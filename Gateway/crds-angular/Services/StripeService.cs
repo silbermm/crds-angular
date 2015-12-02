@@ -265,10 +265,10 @@ namespace crds_angular.Services
             return defaultSource;
         }
 
-        public StripeCharge ChargeCustomer(string customerToken, int amount, int donorId)
+        public StripeCharge ChargeCustomer(string customerToken, decimal amount, int donorId)
         {
             var request = new RestRequest("charges", Method.POST);
-            request.AddParameter("amount", amount);
+            request.AddParameter("amount", (int)(amount * Constants.StripeDecimalConversionValue));
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("description", "Donor ID #" + donorId);
@@ -280,10 +280,10 @@ namespace crds_angular.Services
             return response.Data;
         }
 
-        public StripeCharge ChargeCustomer(string customerToken, string customerSourceId, int amount, int donorId)
+        public StripeCharge ChargeCustomer(string customerToken, string customerSourceId, decimal amount, int donorId)
         {
             var request = new RestRequest("charges", Method.POST);
-            request.AddParameter("amount", amount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("amount",(int)(amount * Constants.StripeDecimalConversionValue));
             request.AddParameter("currency", "usd");
             request.AddParameter("customer", customerToken);
             request.AddParameter("source", customerSourceId);
