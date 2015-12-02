@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.EnterpriseServices;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
 using crds_angular.Models.Crossroads.Events;
-using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Functions;
+using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Event = MinistryPlatform.Models.Event;
@@ -18,12 +15,12 @@ namespace crds_angular.Services
 {
     public class EventService : MinistryPlatformBaseService, IEventService
     {
-
         private readonly TranslationEventService _eventService;
         private readonly IGroupService _groupService;
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
-        
+        private readonly IContentBlockService _contentBlockService;
+
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -34,12 +31,17 @@ namespace crds_angular.Services
             "Location"
         };
 
-        public EventService(TranslationEventService eventService, IGroupService groupService, ICommunicationService communicationService, IContactService contactService)
+        public EventService(TranslationEventService eventService,
+                            IGroupService groupService,
+                            ICommunicationService communicationService,
+                            IContactService contactService,
+                            IContentBlockService contentBlockService)
         {
-            this._eventService = eventService;
-            this._groupService = groupService;
-            this._communicationService = communicationService;
-            this._contactService = contactService;
+            _eventService = eventService;
+            _groupService = groupService;
+            _communicationService = communicationService;
+            _contactService = contactService;
+            _contentBlockService = contentBlockService;
         }
 
         public Event GetEvent(int eventId)
@@ -60,10 +62,7 @@ namespace crds_angular.Services
                         {
                             return _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId);
                         }
-                        else
-                        {
-                            return 1;
-                        }
+                        return 1;
                     });
 
                     // validate that there is not a group participant record before creating
@@ -71,12 +70,13 @@ namespace crds_angular.Services
                     {
                         _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, DateTime.Today);
                     }
-                                         
+
                     return new RegisterEventObj()
                     {
                         EventId = dto.EventId,
                         ParticipantId = dto.ParticipantId,
-                        RegisterResult = retVal
+                        RegisterResult = retVal,
+                        ChildcareRequested = dto.ChildCareNeeded
                     };
                 }).ToList();
 
@@ -88,14 +88,16 @@ namespace crds_angular.Services
             }
         }
 
-        private void SendRsvpMessage(List<RegisterEventObj> saved, String token)
+        private void SendRsvpMessage(List<RegisterEventObj> saved, string token)
         {
             var evnt = _eventService.GetEvent(saved.First().EventId);
+            var childcareRequested = saved.Any(s => s.ChildcareRequested);
             var loggedIn = _contactService.GetMyProfile(token);
             var mergeData = new Dictionary<string, object>
             {
                 {"Event_Name", evnt.EventTitle},
-                {"HTML_Table", SetupTable(saved, evnt).Build()}
+                {"HTML_Table", SetupTable(saved, evnt).Build()},
+                {"Childcare", (childcareRequested) ? _contentBlockService["eventRsvpChildcare"].Content : ""}
             };
 
             var comm = _communicationService.GetTemplateAsCommunication(
@@ -112,7 +114,7 @@ namespace crds_angular.Services
             _communicationService.SendMessage(comm);
         }
 
-        private HtmlElement SetupTable(List<RegisterEventObj> regData, Event evnt )
+        private HtmlElement SetupTable(List<RegisterEventObj> regData, Event evnt)
         {
             var tableAttrs = new Dictionary<string, string>()
             {
@@ -129,16 +131,15 @@ namespace crds_angular.Services
 
             var htmlrows = regData.Select(rsvp =>
             {
-                
                 var p = _contactService.GetContactByParticipantId(rsvp.ParticipantId);
                 return new HtmlElement("tr")
-                    .Append(new HtmlElement("td", cellAttrs,  evnt.EventStartDate.ToShortDateString()))
+                    .Append(new HtmlElement("td", cellAttrs, evnt.EventStartDate.ToShortDateString()))
                     .Append(new HtmlElement("td", cellAttrs, p.First_Name + " " + p.Last_Name))
                     .Append(new HtmlElement("td", cellAttrs, evnt.EventStartDate.ToShortTimeString()))
                     .Append(new HtmlElement("td", cellAttrs, evnt.EventEndDate.ToShortTimeString()))
                     .Append(new HtmlElement("td", cellAttrs, evnt.EventLocation));
             }).ToList();
-        
+
             return new HtmlElement("table", tableAttrs)
                 .Append(SetupTableHeader)
                 .Append(htmlrows);
@@ -155,6 +156,7 @@ namespace crds_angular.Services
             public int RegisterResult { get; set; }
             public int ParticipantId { get; set; }
             public int EventId { get; set; }
+            public bool ChildcareRequested { get; set; }
         }
     }
 }
