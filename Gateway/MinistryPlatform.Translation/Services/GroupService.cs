@@ -18,7 +18,6 @@ namespace MinistryPlatform.Translation.Services
     {
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly ICommunicationService _communicationService;
-        private readonly IEventService _eventService;
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
         private readonly ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -37,7 +36,7 @@ namespace MinistryPlatform.Translation.Services
 
         private IMinistryPlatformService ministryPlatformService;
 
-        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IEventService eventService, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
+        public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
@@ -45,7 +44,6 @@ namespace MinistryPlatform.Translation.Services
             this._communicationService = communicationService;
             this._contactService = contactService;
             this._contentBlockService = contentBlockService;
-            this._eventService = eventService;
         }
 
         public int addParticipantToGroup(int participantId,
@@ -213,24 +211,30 @@ namespace MinistryPlatform.Translation.Services
         public IList<Event> getAllEventsForGroup(int groupId)
         {
             var apiToken = ApiLogin();
-            var eventTypes = GetEventTypesForGroup(groupId, apiToken);
-            var events = new List<Event>();
-            foreach (var eventType in eventTypes.Where(eventType => eventType != String.Empty))
+            var groupEvents = ministryPlatformService.GetSubpageViewRecords("GroupEventsSubPageView", groupId, apiToken);
+            if (groupEvents == null || groupEvents.Count == 0)
             {
-                events.AddRange(_eventService.GetEvents(eventType, apiToken));
+                return null;
             }
-            
-            return events;
+            return groupEvents.Select(tmpEvent => new Event
+            {
+                EventId = tmpEvent.ToInt("Event_ID"),
+                EventLocation = tmpEvent.ToString("Location_Name"),
+                EventStartDate = tmpEvent.ToDate("Event_Start_Date"),
+                EventEndDate = tmpEvent.ToDate("Event_End_Date"),
+                EventTitle = tmpEvent.ToString("Event_Title")
+            }).ToList();
         }
 
-        private IList<string> GetEventTypesForGroup(int groupId, string token)
+        public IList<string> GetEventTypesForGroup(int groupId, string token)
         {
-            var records = ministryPlatformService.GetSubpageViewRecords("GroupOpportunitiesEvents", groupId, token);
+            var loginToken = token ?? ApiLogin();
+            var records = ministryPlatformService.GetSubpageViewRecords("GroupOpportunitiesEvents", groupId, loginToken);
             return records.Select(e =>
             {
                 try
                 {
-                    return e.ToString("Event_Type");
+                    return e.ToString("Event Type");
                 }
                 catch (Exception exception)
                 {

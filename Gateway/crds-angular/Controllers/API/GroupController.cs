@@ -110,7 +110,7 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        var eventList = groupService.GetGroupEvents(groupId);
+                        var eventList = groupService.GetGroupEvents(groupId, token);
                         return Ok(eventList);
                     }
                     catch (Exception e)
@@ -130,7 +130,7 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        if (recipients != "current" || recipients != "potential")
+                        if (recipients != "current" && recipients != "potential")
                         {
                             throw new ApplicationException("Recipients should be 'current' or 'potential'");
                         }
