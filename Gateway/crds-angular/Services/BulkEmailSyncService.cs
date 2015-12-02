@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -40,39 +41,42 @@ namespace crds_angular.Services
 
         public void RunService()
         {
-            var token = _token;
+            //var token = _token;
 
-            var publications = _bulkEmailRepository.GetPublications(token);
-            Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
+            //var publications = _bulkEmailRepository.GetPublications(token);
+            //Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
 
-            // Get Publications 
-            // For Each Publication
-            foreach (var publication in publications)
-            {
-                //   Get correpsonding Page Views
-                var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
+            //// Get Publications 
+            //// For Each Publication
+            //foreach (var publication in publications)
+            //{
+            //    //   Get correpsonding Page Views
+            //    var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
 
-                //     Get Page view records
-                var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
+            //    //     Get Page view records
+            //    var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
 
-                // TODO: Implement for US2782
-                //     If (ContactEmail != SubscriptionEmail)
-                //       Update/Delete MailChimp record
-                //     End if   
+            //    // TODO: Implement for US2782
+            //    //     If (ContactEmail != SubscriptionEmail)
+            //    //       Update/Delete MailChimp record
+            //    //     End if   
 
-                var operationId = SendBatch(publication, subscribers);
+            //    var operationId = SendBatch(publication, subscribers);
 
-                // add the publication and operation id in prep for polling 
-                if (!String.IsNullOrEmpty(operationId))
-                {
-                    listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
-                }
+            //    // add the publication and operation id in prep for polling 
+            //    if (!String.IsNullOrEmpty(operationId))
+            //    {
+            //        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
+            //    }
 
-                // Update MP with last sync date
-                _bulkEmailRepository.SetPublication(token, publication);
-            }
+            //    // Update MP with last sync date
+            //    _bulkEmailRepository.SetPublication(token, publication);
+            //}
 
-            LogUpdateStatuses(listResponseIds);
+            //LogUpdateStatuses(listResponseIds);
+
+            // ^^^^^^^^^^^^^^ live code commented out for testing getting changes from mailchimp
+            SyncOptIns();
         }
 
         public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
@@ -226,6 +230,61 @@ namespace crds_angular.Services
                 sb.Append(hash[i].ToString("X2"));
             }
             return sb.ToString();
+        }
+
+        /*** Everything below this line is for 2785 ***/
+
+        public bool SyncOptIns()
+        {
+            var token = _token;
+
+            var publications = _bulkEmailRepository.GetPublications(token);
+            Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
+
+            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
+            client.Authenticator = new HttpBasicAuthenticator("crds_admin", _apiKey);
+
+            foreach (var publication in publications)
+            {
+                // query mailchimp to get list activity
+                var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + publication.LastSuccessfulSync +
+                    "&fields=members.id,members.email_address,members.status&activity=status", Method.GET);
+                request.AddHeader("Content-Type", "application/json");
+
+                try
+                {
+                    var responseContent = client.Execute(request).Content;
+                    var responseContentJson = JObject.Parse(responseContent);
+                    List<BulkEmailSubscriberOpt> subscribers = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOpt>>(responseContentJson["members"].ToString());
+                    //_bulkEmailRepository.
+                }
+                catch (Exception ex)
+                {
+                    var y = ex;
+                }
+
+                //// this needs to be returned, because we can't guarantee that the operation won't fail after it begins
+                //if (responseValues["status"].ToString() == "finished")
+                //{
+                //    logger.Info(response);
+                //    //publicationOperationIds.Remove(idPair.Key);
+                //}
+                //else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
+                //{
+                //    continue; // try again in another five seconds
+                //}
+                //else
+                //{
+                //    // TODO: Add logging code here for failure
+                //    logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response));
+                //    //publicationOperationIds.Remove(idPair.Key);
+                //}
+
+            }
+
+            //LogUpdateStatuses(listResponseIds);
+
+            return true;
         }
     }
 

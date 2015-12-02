@@ -167,5 +167,35 @@ namespace MinistryPlatform.Translation.Services
                 subscriber.MergeFields.Add(column.Key, value);
             }
         }
+
+        // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ everything above here is existing code
+
+        public void SetSubscriberSyncs(string token, List<BulkEmailSubscriberOpt> subscriberOpts)
+        {
+            foreach (var subscriberOpt in subscriberOpts)
+            {
+                UpdateContactPublication(token, subscriberOpt);
+            }
+        }
+
+        public void UpdateContactPublication(string token, BulkEmailSubscriberOpt subscriberOpt)
+        {
+            // TODO: Determine if we need to pull a PK value from the subscribers before trying to update the table
+            try
+            {
+                Dictionary<string, object> subscriberOptDict = new Dictionary<string, object>
+                {
+                    {"Third_Party_Contact_ID", subscriberOpt.id},
+                    {"Unsubscribed", (subscriberOpt.status == "subscribed" ? false : true)}
+                };
+
+                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Subscribers"), subscriberOptDict, token);
+                
+            }
+            catch (Exception e)
+            {
+                
+            }
+        }
     }
 }
