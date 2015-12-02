@@ -24,12 +24,10 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsParticipantsPageId = Convert.ToInt32(AppSettings("GroupsParticipants"));
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
-        private readonly int GroupsEventsPageId = Convert.ToInt32(AppSettings("GroupsEvents"));
-        private readonly int EventsGroupsPageId = Convert.ToInt32(AppSettings("EventsGroups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
-        private readonly int GetServingTeamsPageId = Convert.ToInt32(AppSettings("MyServingTeams"));
         private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupConfirmationTemplateId"));
+        private readonly int CommunityGroupWaitListConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupWaitListConfirmationTemplateId"));
 
         private readonly int GroupParticipantQualifiedServerPageView =
             Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
@@ -304,10 +302,17 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool childcareNeeded)
+        public void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool waitlist, bool childcareNeeded)
         {
-            
-            var emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
+            MessageTemplate emailTemplate;
+            if (waitlist)
+            {
+                emailTemplate = _communicationService.GetTemplate(CommunityGroupWaitListConfirmationTemplateId);
+            }
+            else
+            {
+                emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
+            }            
             var fromAddress = _communicationService.GetEmailFromContactId(7);
             var toContact = _contactService.GetContactIdByParticipantId(participantId);
             var toContactInfo = _contactService.GetContactById(toContact);
