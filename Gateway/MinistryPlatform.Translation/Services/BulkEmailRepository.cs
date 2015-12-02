@@ -163,8 +163,12 @@ namespace MinistryPlatform.Translation.Services
                     continue;
                 }
 
-                var value = column.Value != null ? column.Value.ToString() : null;
-                subscriber.MergeFields.Add(column.Key, value);
+                if (column.Value == null)
+                {
+                    continue;
+                }
+                
+                subscriber.MergeFields.Add(column.Key, column.Value.ToString());
             }
         }
     }

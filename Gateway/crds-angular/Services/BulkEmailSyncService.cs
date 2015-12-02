@@ -122,8 +122,9 @@ namespace crds_angular.Services
                 // pause to allow the operations to complete -- consider switching this to async
                 Thread.Sleep(5000);
 
-                foreach (var idPair in publicationOperationIds)
+                for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
                 {
+                    var idPair = publicationOperationIds.ElementAt(index);
                     var request = new RestRequest("batches/" + idPair.Value, Method.GET);
                     request.AddHeader("Content-Type", "application/json");
 
@@ -133,7 +134,7 @@ namespace crds_angular.Services
                     // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
                     if (responseValues["status"].ToString() == "finished")
                     {
-                        logger.Info(response);
+                        logger.Info(response);                        
                         publicationOperationIds.Remove(idPair.Key);
                     }
                     else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
