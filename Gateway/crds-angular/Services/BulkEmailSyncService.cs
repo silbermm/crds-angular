@@ -22,9 +22,8 @@ namespace crds_angular.Services
 
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
+        private readonly IConfigurationWrapper _configWrapper;
         private readonly string _token;
-
-        private string _apiKey;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -33,8 +32,8 @@ namespace crds_angular.Services
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
-            _token = _apiUserService.GetToken();
-            _apiKey = configWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
+            _configWrapper = configWrapper;
+            _token = _apiUserService.GetToken();            
         }
 
 
@@ -45,14 +44,9 @@ namespace crds_angular.Services
             var publications = _bulkEmailRepository.GetPublications(token);
             Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
 
-            // Get Publications 
-            // For Each Publication
             foreach (var publication in publications)
             {
-                //   Get correpsonding Page Views
                 var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
-
-                //     Get Page view records
                 var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
 
                 // TODO: Implement for US2782
@@ -77,10 +71,7 @@ namespace crds_angular.Services
 
         public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
-            // needs to be a configvalue, not hardcoded url
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-
-            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
+            var client = GetBulkEmailClient();
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
@@ -113,9 +104,7 @@ namespace crds_angular.Services
         {
             // poll mailchimp to see if batch was successful -- also need to confirm during dev
             // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
-            // TODO: pull from config setting
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
+            var client = GetBulkEmailClient();
 
             do
             {
@@ -150,6 +139,17 @@ namespace crds_angular.Services
                 }
 
             } while (publicationOperationIds.Any());
+        }
+
+        private RestClient GetBulkEmailClient()
+        {
+            var apiUrl = _configWrapper.GetConfigValue("BulkEmailApiUrl");
+            var apiKey = _configWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
+           
+            var client = new RestClient(apiUrl);
+            client.Authenticator = new HttpBasicAuthenticator("noname", apiKey);
+
+            return client;
         }
 
         private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
