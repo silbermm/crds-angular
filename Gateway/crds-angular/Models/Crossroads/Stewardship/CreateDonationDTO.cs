@@ -8,7 +8,7 @@ namespace crds_angular.Models.Crossroads.Stewardship
         public string ProgramId { get; set; }
         
         [JsonProperty(PropertyName = "amount")]
-        public decimal Amount { get; set; }
+        public int Amount { get; set; }
         
         [JsonProperty(PropertyName = "donor_id")]
         public int DonorId { get; set; }
