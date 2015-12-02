@@ -53,7 +53,7 @@ namespace crds_angular.test.Services
 
             config.Setup(mocked => mocked.GetConfigIntValue("Group_Role_Default_ID")).Returns(GROUP_ROLE_DEFAULT_ID);
 
-            fixture = new GroupService(groupService.Object, config.Object, authenticationService.Object, eventService.Object, contactRelationshipService.Object);
+            fixture = new GroupService(groupService.Object, config.Object, eventService.Object, contactRelationshipService.Object);
         }
 
         [Test]

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Web;
 using Crossroads.Utilities.Interfaces;
 using log4net;
+using log4net.Repository.Hierarchy;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -215,11 +218,29 @@ namespace MinistryPlatform.Translation.Services
             }
             return groupEvents.Select(tmpEvent => new Event
             {
-                EventId = tmpEvent.ToInt("Event_ID"), 
-                EventLocation = tmpEvent.ToString("Location_Name"), 
-                EventStartDate = tmpEvent.ToDate("Event_Start_Date"), 
-                EventEndDate = tmpEvent.ToDate("Event_End_Date"), 
+                EventId = tmpEvent.ToInt("Event_ID"),
+                EventLocation = tmpEvent.ToString("Location_Name"),
+                EventStartDate = tmpEvent.ToDate("Event_Start_Date"),
+                EventEndDate = tmpEvent.ToDate("Event_End_Date"),
                 EventTitle = tmpEvent.ToString("Event_Title")
+            }).ToList();
+        }
+
+        public IList<string> GetEventTypesForGroup(int groupId, string token)
+        {
+            var loginToken = token ?? ApiLogin();
+            var records = ministryPlatformService.GetSubpageViewRecords("GroupOpportunitiesEvents", groupId, loginToken);
+            return records.Select(e =>
+            {
+                try
+                {
+                    return e.ToString("Event Type");
+                }
+                catch (Exception exception)
+                {
+                    logger.Debug("tried to parse a Event_Type_ID for a record and failed");
+                    return String.Empty;
+                }
             }).ToList();
         }
 
