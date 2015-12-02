@@ -111,7 +111,6 @@ namespace crds_angular.Services
 
         public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients)
         {
-            //var participants = new List<GroupParticipant>();
             if (recipients == "current")
             {
                 return _mpGroupService.getEventParticipantsForGroup(groupId, eventId)
