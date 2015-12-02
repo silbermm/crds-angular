@@ -170,7 +170,7 @@ namespace crds_angular.Services
                 var mailChimpSubscriber = new Subscriber();
                 mailChimpSubscriber.method = "PUT";
 
-                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress);
+                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress.ToLower());
 
                 //TODO: Determine how to populate the ThirdPartyPublicationID? For now you may just write SQL to update table directly
                 mailChimpSubscriber.path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
