@@ -80,11 +80,12 @@ namespace crds_angular.Services
                     {
                         foreach (var e in events)
                         {
-                            int eventParticipantId = _eventService.RegisterParticipantForEvent(p.particpantId, e.EventId, groupId, groupParticipantId);
+                            _eventService.RegisterParticipantForEvent(p.particpantId, e.EventId, groupId, groupParticipantId);
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
                         }
                     }
-                    _mpGroupService.SendCommunityGroupConfirmationEmail(p.particpantId, groupId, p.childCareNeeded);
+                    var waitlist = g.GroupType == _configurationWrapper.GetConfigIntValue("GroupType_Waitlit");
+                    _mpGroupService.SendCommunityGroupConfirmationEmail(p.particpantId, groupId, waitlist, p.childCareNeeded);                    
                 }
 
                 return;
