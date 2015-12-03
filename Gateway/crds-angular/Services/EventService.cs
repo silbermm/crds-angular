@@ -20,7 +20,7 @@ namespace crds_angular.Services
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
-
+        private readonly IGroupParticipantService _groupParticipantService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -35,13 +35,15 @@ namespace crds_angular.Services
                             IGroupService groupService,
                             ICommunicationService communicationService,
                             IContactService contactService,
-                            IContentBlockService contentBlockService)
+                            IContentBlockService contentBlockService,
+                            IGroupParticipantService groupParticipantService)
         {
             _eventService = eventService;
             _groupService = groupService;
             _communicationService = communicationService;
             _contactService = contactService;
             _contentBlockService = contentBlockService;
+            _groupParticipantService = groupParticipantService;
         }
 
         public Event GetEvent(int eventId)
@@ -55,21 +57,21 @@ namespace crds_angular.Services
             {
                 var saved = eventDto.Select(dto =>
                 {
+                    var groupParticipantId = _groupParticipantService.Get(dto.GroupId, dto.ParticipantId);
+                    if (groupParticipantId == 0)
+                    {
+                        groupParticipantId = _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, DateTime.Today);
+                    }
+
                     // validate that there is not a participant record before creating
                     var retVal = Functions.IntegerReturnValue(() =>
                     {
                         if (!_eventService.EventHasParticipant(dto.EventId, dto.ParticipantId))
                         {
-                            return _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId);
+                            return _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId, groupParticipantId);
                         }
                         return 1;
                     });
-
-                    // validate that there is not a group participant record before creating
-                    if (!_groupService.ParticipantGroupMember(dto.GroupId, dto.ParticipantId))
-                    {
-                        _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, DateTime.Today);
-                    }
 
                     return new RegisterEventObj()
                     {
