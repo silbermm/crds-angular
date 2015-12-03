@@ -20,7 +20,7 @@
             <div class="visible-print-block col-xs-6 text-right">
               <strong>Period : 01/01/{{giving_history_controller.beginning_donation_date | date:'yyyy'}} - {{giving_history_controller.ending_donation_date | date:'MM/dd/yyyy'}}</strong>
               <br />
-              <div ng-bind-html="$root.MESSAGES.give_disclaimer.content | html"></div>
+              <div dynamic-content="$root.MESSAGES.give_disclaimer.content | html"></div>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
                         <svg viewBox="0 0 18 32" class="icon icon-dollar">
                             <use xlink:href="#dollar"></use>
                         </svg>
-                        <div ng-bind-html="$root.MESSAGES.no_giving_history.content | html">
+                        <div dynamic-content="$root.MESSAGES.no_giving_history.content | html">
                         </div>
                     </div><!--/col-sm-12-->
                 </div><!--/no-data-->
@@ -84,7 +84,7 @@
             </div>
             <!-- END OF SOFT CREDIT DONATION HISTORY -->
 
-            <p class="push-top hidden-print" ng-bind-html="$root.MESSAGES.givingHistoryFooter.content | html">
+            <p class="push-top hidden-print" dynamic-content="$root.MESSAGES.givingHistoryFooter.content | html">
                 <br />
             </p>
 
@@ -95,7 +95,7 @@
                     <img src="//crossroads-media.s3.amazonaws.com/images/logo.svg" alt="crossroads">
                   </div>
                   <div class="statement-address text-uppercase pull-right">
-                    <small><div ng-bind-html="$root.MESSAGES.single_line_address.content | html"></div></small>
+                    <small><div dynamic-content="$root.MESSAGES.single_line_address.content | html"></div></small>
                   </div>
                 </div>
               </div>

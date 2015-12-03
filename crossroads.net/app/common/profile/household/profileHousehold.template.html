@@ -2,7 +2,7 @@
   <fieldset>
     <div class="col-sm-12">
       <legend>Your Household</legend>
-      <span ng-bind-html="$root.MESSAGES.profileHousholdHeader.content | html"></span>
+      <span dynamic-content="$root.MESSAGES.profileHousholdHeader.content | html"></span>
       <p>
         <span ng-repeat="member in household.householdInfo.householdMembers">
             <strong>{{household.displayName(member)}}{{$last ? '' : ', '}}</strong>
@@ -99,10 +99,10 @@
                       <input ng-model="household.householdInfo.postalCode" type="text" class="form-control" id="zip" name="zip" placeholder="Enter zip code" required invalid-zip>
                       <ng-messages for="household.householdForm.zip.$error" ng-if="household.validation.showErrors(household.householdForm, 'zip')">
                         <ng-message when="invalidZip">
-                          <span ng-bind-html="$root.MESSAGES.invalidZip.content | html"></span>
+                          <span dynamic-content="$root.MESSAGES.invalidZip.content | html"></span>
                         </ng-message>
                         <ng-message when="required">
-                          <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                         </ng-message>
                       </ng-messages>
                     </div>
@@ -134,7 +134,7 @@
                       <input ng-model="household.householdInfo.homePhone" type="text" class="form-control" id="homePhone" name="homePhone" placeholder="Enter home phone" ng-pattern="household.phoneFormat" ng-model-options="{updateOn: 'blur'}">
                       <ng-messages for="household.householdForm.homePhone.$error" ng-if="household.validation.showErrors(household.householdForm, 'homePhone')">
                         <span ng-message="pattern">
-                          <span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span>
+                          <span dynamic-content="$root.MESSAGES.invalidPhone.content | html"></span>
                         </span>
                       </ng-messages>
                     </div>

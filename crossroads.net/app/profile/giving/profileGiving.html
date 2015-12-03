@@ -101,7 +101,7 @@
                     </commitment-list>
 
                     <div ng-if="giving_profile_controller.pledge_commitments_data"
-                         ng-bind-html="$root.MESSAGES.commitmentDonations.content | html"></div>
+                         dynamic-content="$root.MESSAGES.commitmentDonations.content | html"></div>
                 </div>
 
                 <div class="row" ng-if="giving_profile_controller.pledge_commitments_data">
@@ -118,13 +118,13 @@
                         <svg viewBox="0 0 23 32" class="icon icon-file-text-o">
                             <use xlink:href="#file-text-o"></use>
                         </svg>
-                        <div ng-bind-html="$root.MESSAGES.no_commitments.content | html"></div>
+                        <div dynamic-content="$root.MESSAGES.no_commitments.content | html"></div>
                     </div>
                 </div>
             </div>
 
             <div class="panel panel-default push-top">
-                <div class="panel-body text-muted small" role="alert" ng-bind-html="$root.MESSAGES.profileGivingDisclaimer.content | html" ></div>
+                <div class="panel-body text-muted small" role="alert" dynamic-content="$root.MESSAGES.profileGivingDisclaimer.content | html" ></div>
                 <!--/panel-body-->
             </div>
             <!--/panel-->
