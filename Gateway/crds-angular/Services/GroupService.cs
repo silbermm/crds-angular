@@ -106,7 +106,7 @@ namespace crds_angular.Services
                 events.AddRange(_eventService.GetEvents(eventType, token));
             }
             var futureEvents = events.Where(e => e.EventStartDate >= DateTime.Now).OrderBy(e => e.EventStartDate);
-            var eventList = AutoMapper.Mapper.Map<List<Event>>(futureEvents);
+            var eventList = Mapper.Map<List<Event>>(futureEvents.GroupBy(x => x.EventId).Select(y => y.First()));
             return eventList;
         }
 
