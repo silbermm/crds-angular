@@ -5,6 +5,7 @@ using crds_angular.Models.Crossroads.Events;
 using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
+using MinistryPlatform.Translation.Models.People;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Event = MinistryPlatform.Models.Event;
 using IEventService = crds_angular.Services.Interfaces.IEventService;
@@ -86,6 +87,21 @@ namespace crds_angular.Services
             {
                 throw new ApplicationException("Unable to add event participant: " + e.Message);
             }
+        }
+
+        public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
+        {
+            var pageId = AppSetting("EventsReadyForReminder");
+            var events = _eventService.EventsByPageId(token, pageId);
+            var eventList = AutoMapper.Mapper.Map<List<crds_angular.Models.Crossroads.Events.Event>>(events);
+            
+            // Childcare will be included in the email for event, so don't send a duplicate.
+            return eventList.Where(evt => evt.EventType != "Childcare").ToList();
+        }
+
+        public IList<Participant> EventPaticpants(int eventId, string token)
+        {
+            return _eventService.EventParticipants(token, eventId).ToList();
         }
 
         private void SendRsvpMessage(List<RegisterEventObj> saved, string token)

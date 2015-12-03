@@ -208,7 +208,7 @@ namespace crds_angular.Services
             return childcareEvent;
         }
 
-        private Event GetChildcareEvent(int parentEventId)
+        public Event GetChildcareEvent(int parentEventId)
         {
             var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
             var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();

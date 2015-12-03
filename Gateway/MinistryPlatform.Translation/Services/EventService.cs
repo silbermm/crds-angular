@@ -229,6 +229,31 @@ namespace MinistryPlatform.Translation.Services
             return events;
         }
 
+        public IEnumerable<Event> EventsByPageId(string token, int pageViewId)
+        {
+            return _ministryPlatformService.GetRecordsDict(pageViewId, token).Select(record => new Event()
+            {
+                EventId = (int)record["Event_ID"],
+                EventTitle = (string)record["Event_Title"],
+                EventStartDate = (DateTime)record["Event_Start_Date"],
+                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventType = record.ToString("Event_Type")
+            }).ToList();
+        }
+
+        public IEnumerable<MinistryPlatform.Translation.Models.People.Participant> EventParticipants(string token, int eventId)
+        {
+
+            return _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token).Select(person => new MinistryPlatform.Translation.Models.People.Participant()
+            {
+                ParticipantId = person.ToInt("Participant_ID"),
+                ContactId = person.ToInt("Contact_ID"),
+                EmailAddress = person.ToString("Email_Address"),
+                DisplayName = person.ToString("Display_Name"),
+                GroupName = person.ToString("Group_Name")           
+            });
+        }
+
         public List<Group> GetGroupsForEvent(int eventId)
         {
             return _groupService.GetGroupsForEvent(eventId);
