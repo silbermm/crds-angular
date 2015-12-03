@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Timers;
 using System.Text;
 using System.Threading;
 using crds_angular.Services.Interfaces;
@@ -18,12 +19,13 @@ namespace crds_angular.Services
 {
     public class BulkEmailSyncService : IBulkEmailSyncService
     {
-        private readonly ILog logger = LogManager.GetLogger(typeof(GroupService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(GroupService));
 
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
         private readonly IConfigurationWrapper _configWrapper;
-        private readonly string _token;
+        private string _token;
+        private System.Timers.Timer _refreshTokenTimer;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -33,39 +35,64 @@ namespace crds_angular.Services
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
             _configWrapper = configWrapper;
+
+            _token = _apiUserService.GetToken();
+            
+            ConfigureRefreshTokenTimer();
+        }
+
+        private void ConfigureRefreshTokenTimer()
+        {
+            // Hack to get around token expiring every 15 minutes when updating large number of Third_Party_Contact_Id, 
+            // so fire event every 10 minutes and get a new token
+            _refreshTokenTimer = new System.Timers.Timer(10*60*1000);
+            _refreshTokenTimer.AutoReset = true;
+            _refreshTokenTimer.Elapsed += RefreshTokenTimerElapsed;
+        }
+
+        private void RefreshTokenTimerElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            _logger.Info("Refreshing token");
             _token = _apiUserService.GetToken();            
         }
 
 
         public void RunService()
         {
-            var token = _token;
+            try
+            {                
+                _refreshTokenTimer.Start();
 
-            var publications = _bulkEmailRepository.GetPublications(token);
-            Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
+                var publications = _bulkEmailRepository.GetPublications(_token);
+                Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
 
-            foreach (var publication in publications)
-            {
-                var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
-                var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
-
-                // TODO: Implement for US2782
-                //     If (ContactEmail != SubscriptionEmail)
-                //       Update/Delete MailChimp record
-                //     End if   
-
-                var operationId = SendBatch(publication, subscribers);
-
-                // add the publication and operation id in prep for polling 
-                if (!String.IsNullOrEmpty(operationId))
+                foreach (var publication in publications)
                 {
-                    listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
-                }
-                
-                _bulkEmailRepository.UpdateLastSyncDate(token, publication);
-            }
+                    var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
+                    var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
 
-            ProcessSynchronizationResultsWithRetries(listResponseIds);
+                    // TODO: Implement for US2782
+                    //     If (ContactEmail != SubscriptionEmail)
+                    //       Update/Delete MailChimp record
+                    //     End if   
+
+                    var operationId = SendBatch(publication, subscribers);
+
+                    // add the publication and operation id in prep for polling 
+                    if (!String.IsNullOrEmpty(operationId))
+                    {
+                        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
+                    }
+
+                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
+                }
+
+                ProcessSynchronizationResultsWithRetries(listResponseIds);
+            }
+            finally
+            {
+                _refreshTokenTimer.Stop();
+            }
         }
 
         public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
@@ -84,8 +111,9 @@ namespace crds_angular.Services
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                 // TODO: Should these be exceptions?
-                logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                _logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
                 return null;
             }
 
@@ -100,9 +128,10 @@ namespace crds_angular.Services
             }
             else
             {
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                 // TODO: Should these be exceptions?
                 // TODO: Add logging code here for failure
-                logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, response.Content));
+                _logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, response.Content));
                 return null;
             }
         }
@@ -121,9 +150,10 @@ namespace crds_angular.Services
                 
                 if (attempts > maxRetries)
                 {
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                     // TODO: Should these be exceptions?
                     // Probably an infinite loop so stop processing and log error
-                    logger.Error(string.Format("Failed to LogUpdateStatuses after {0} total retries", attempts));
+                    _logger.Error(string.Format("Failed to LogUpdateStatuses after {0} total retries", attempts));
                     return;
                 }
 
@@ -148,7 +178,8 @@ namespace crds_angular.Services
                 var response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
-                    logger.Error(string.Format("StatusCode = {0}", response.StatusCode));
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                    _logger.Error(string.Format("StatusCode = {0}", response.StatusCode));
                     continue;
                 }
 
@@ -160,15 +191,27 @@ namespace crds_angular.Services
                 }
 
                 if (responseValues["status"].ToString() == "finished")
-                {                    
-                    // TODO: See if we have failures and log as error if they exist
-                    logger.Info(response.Content);
+                {                                        
+                    var total = responseValues["total_operations"];                    
+                    var errors = responseValues["errored_operations"];
+
+                    if (errors.ToString() == "0")
+                    {
+                        _logger.InfoFormat("Processed {0} total records", total); 
+                    }
+                    else
+                    {
+                        _logger.ErrorFormat("Processed {0} total records with {1} errors", total, errors); 
+                    }
+
+                    _logger.Info(response.Content);
                 }
                 else
                 {
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                     // TODO: Should these be exceptions?
                     // TODO: Add logging code here for failure
-                    logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response.Content));
+                    _logger.ErrorFormat("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response.Content);
                 }
 
                 publicationOperationIds.Remove(idPair.Key);
@@ -195,13 +238,12 @@ namespace crds_angular.Services
 
             foreach (var subscriber in subscribers)
             {
-                // TODO: Update MP with 3rd Party Contact ID
                 if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
                 {
                     //Assuming success here, update the ID to match the emailaddress
                     //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
                     subscriber.ThirdPartyContactId = subscriber.EmailAddress;
-                    _bulkEmailRepository.SetBaseSubscriber(_token, subscriber);
+                    _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
                 var mailChimpSubscriber = new Subscriber();

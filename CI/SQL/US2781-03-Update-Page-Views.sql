@@ -10,7 +10,7 @@ WHERE Page_View_ID = 2197
 
 UPDATE dbo.dp_Page_Views 
 SET
-	Field_List = 'dp_Contact_Publications.Contact_Publication_ID, Contact_ID_Table.Contact_ID 
+	Field_List = 'dp_Contact_Publications.Contact_Publication_ID, dp_Contact_Publications.Publication_ID, Contact_ID_Table.Contact_ID 
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age < 1) AS HAS_INFANT
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age = 1) AS HAS_1_YEAR
 ,(Select Count(*) FROM Contacts C2, Contact_Relationships R WHERE Contact_ID_Table.Contact_ID = R.Contact_ID AND C2.Contact_ID = R.Related_Contact_ID AND (R.End_Date is null OR R.End_Date>getDate()) AND C2.__Age = 2) AS HAS_2_YEAR
