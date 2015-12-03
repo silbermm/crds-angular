@@ -9,6 +9,9 @@
 			ng-if='contact.viewReady && !contact.multipleRecordsSelected'>
   <div>
     <h2 class='header noPspace'> Contact Volunteers for {{contact.group.groupName}} </h2>
-    <volunteer-contact-form group='contact.group' > </volunteer-contact-form>
+    <volunteer-contact-form group='contact.group' ng-show="contact.group.events.length > 0" > </volunteer-contact-form>
+    <div class="alert alert-warning" role="alert" ng-show="contact.group.events.length < 1">
+      There are no upcoming events for this group.  
+    </div>
   </div>
 </div>

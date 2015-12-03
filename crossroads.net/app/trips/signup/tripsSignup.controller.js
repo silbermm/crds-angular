@@ -40,7 +40,7 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
       Validation,
       $window,
       $anchorScroll,
-      $stateParams ) {
+      $stateParams) {
 
     var vm = this;
     vm.ageLimitReached = true;
@@ -162,11 +162,26 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     }
 
     function enforceAgeRestriction() {
-      if (_.includes(Campaign.ageExceptions, Number(vm.signupService.contactId))) {
-        return undefined;
+      var minAge = 13;
+
+      if (Number(vm.contactId) !== Number(vm.signupService.person.contactId)) {
+        minAge = undefined;
       }
 
-      return Campaign.ageLimit;
+      if (_.includes(Campaign.ageExceptions, Number(vm.signupService.person.contactId))) {
+        return minAge;
+      }
+
+      var ageRestriction;
+      if (minAge === undefined) {
+        ageRestriction = Campaign.ageLimit;
+      } else if (Campaign.ageLimit < minAge) {
+        ageRestriction = minAge;
+      } else {
+        ageRestriction = Campaign.ageLimit;
+      }
+
+      return ageRestriction;
     }
 
     function frequentFlyerChanged(flyer) {
