@@ -1,17 +1,17 @@
 <div ng-if="!gpExport.allowAccess()" class="alert alert-danger" role="alert">
-  <div ng-bind-html="$root.MESSAGES.mptool_invalid_access.content | html"></div>
+  <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
 </div>
 
 <div ng-if="gpExport.allowAccess()">
   <div ng-if="gpExport.error" class="alert alert-danger" role="alert">
-    <div ng-bind-html="$root.MESSAGES.gpexport_generation_error.content | html"></div>
+    <div dynamic-content="$root.MESSAGES.gpexport_generation_error.content | html"></div>
   </div>
 
   <div class="row ng-scope">
     <div class="col-sm-8 col-sm-offset-2">
       <h1 class="page-header">GP Deposit Export</h1>
       <p>You have selected {{gpExport.selectedDeposits.length}} Deposits to export.</p>
-      <div ng-bind-html="$root.MESSAGES.gpexport_download_desc.content | html"></div>
+      <div dynamic-content="$root.MESSAGES.gpexport_download_desc.content | html"></div>
       <p>Deposits to be Downloaded:</p>
       <div ng-show="gpExport.selectedDeposits.length > 0">
         <ul>

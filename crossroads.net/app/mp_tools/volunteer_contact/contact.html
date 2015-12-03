@@ -1,7 +1,7 @@
 <preloader full-screen='true' ng-show="!contact.viewReady"> </preloader>
 
 <div ng-if="contact.viewReady && contact.multipleRecordsSelected" class="alert alert-danger" role="alert">
-  <div ng-bind-html="$root.MESSAGES.mptool_access_error.content | html"></div>
+  <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
 <div class='col-sm-10 col-sm-offset-1'
