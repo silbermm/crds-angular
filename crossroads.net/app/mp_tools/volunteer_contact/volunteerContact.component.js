@@ -37,10 +37,7 @@
             vm.group.events = events;
             vm.viewReady = true;
           });
-
         });
-
-        
       }
 
       function showError() {

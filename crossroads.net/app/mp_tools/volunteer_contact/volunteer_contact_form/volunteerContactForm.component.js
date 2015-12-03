@@ -43,6 +43,8 @@
       vm.processing = false;
       vm.recipientsChoosen = recipientsChoosen;
       vm.save = save;
+      vm.showEmailForm = showEmailForm;
+      vm.showNoParticipants = showNoParticipants;
       vm.validation = Validation;
 
       function cancel() {
@@ -129,6 +131,19 @@
 
         return true;
       }
+
+      function showEmailForm() {
+        return vm.recipientsChoosen() &&
+          !vm.loadingTo &&
+          vm.formData.to.length > 0;
+      }
+
+      function showNoParticipants() {
+        return vm.recipientsChoosen() &&
+          !vm.loadingTo &&
+          vm.formData.to.length < 1;
+      }
     }
+
   }
 })();
