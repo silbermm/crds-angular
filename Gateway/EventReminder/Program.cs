@@ -21,6 +21,7 @@ using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using EventService = crds_angular.Services.EventService;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Services;
 using IEventService = crds_angular.Services.Interfaces.IEventService;
 
 
@@ -82,8 +83,10 @@ namespace EventReminder
         {
             var mergeData = new Dictionary<string, object>
             {
+                {"Nickname", participant.DisplayName},
                 {"Event_Name", evt.name},
-                                
+                {"Event_Start_Date", evt.StartDate.ToShortDateString()},
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()}
             };
 
             if (children.Any())
@@ -98,16 +101,17 @@ namespace EventReminder
                     mergeData.Add("Childcare", childcareString);
                 }
 
-                // Add the other data and build communication
-                
             }
             
         }
 
         public static String ChildcareData(IList<Participant> children)
         {
-
-            return "";
+            var el = new HtmlElement("span",
+                                     new Dictionary<string, string>(),
+                                     "You have indicated that you need childcare for the following children:")
+                                     .Append(new HtmlElement("ul").Append(children.Select(child => new HtmlElement("li", child.DisplayName)).ToList()));                        
+            return el.Build();
         }
 
     }

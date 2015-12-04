@@ -70,28 +70,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\crds-angular\MinistryPlatform.config">
-      <Link>MinistryPlatform.config</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.Debug.config">
-      <Link>MinistryPlatform.Debug.config</Link>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.Demo.config">
-      <Link>MinistryPlatform.Demo.config</Link>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.Integration.config">
-      <Link>MinistryPlatform.Integration.config</Link>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.local test.config">
-      <Link>MinistryPlatform.local test.config</Link>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.MPTest01.config">
-      <Link>MinistryPlatform.MPTest01.config</Link>
-    </None>
-    <None Include="..\crds-angular\MinistryPlatform.Release.config">
-      <Link>MinistryPlatform.Release.config</Link>
-    </None>
     <None Include="..\crds-angular\Unity.config">
       <Link>Unity.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -111,12 +89,37 @@
     <None Include="App.Release.config">
       <DependentUpon>App.config</DependentUpon>
     </None>
+    <None Include="MinistryPlatform.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.Debug.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.Demo.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.Integration.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.local test.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.MPTest01.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="MinistryPlatform.Release.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\crds-angular\crds-angular.csproj">
       <Project>{dc3b7edc-2b9a-49f4-a5c8-50ba4c3e2a7b}</Project>
       <Name>crds-angular</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crossroads.Utilities\Crossroads.Utilities.csproj">
+      <Project>{61238A82-D410-4330-BD25-889239FC7873}</Project>
+      <Name>Crossroads.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\MinistryPlatform.Models\MinistryPlatform.Models.csproj">
       <Project>{cd41507e-91ac-4c60-96e2-5cac25f49a76}</Project>
