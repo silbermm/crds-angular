@@ -256,33 +256,14 @@ namespace crds_angular.Services
                     var responseContent = client.Execute(request).Content;
                     var responseContentJson = JObject.Parse(responseContent);
                     List<BulkEmailSubscriberOpt> subscribers = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOpt>>(responseContentJson["members"].ToString());
-                    //_bulkEmailRepository.
+                    subscribers.ForEach(r => r.publicationID = publication.PublicationId);
+                    _bulkEmailRepository.SetSubscriberSyncs(token, subscribers);
                 }
                 catch (Exception ex)
                 {
-                    var y = ex;
+                    logger.Error(string.Format("Opt-in sync failed for publication {0} Detail: {1}", publication.PublicationId, ex));
                 }
-
-                //// this needs to be returned, because we can't guarantee that the operation won't fail after it begins
-                //if (responseValues["status"].ToString() == "finished")
-                //{
-                //    logger.Info(response);
-                //    //publicationOperationIds.Remove(idPair.Key);
-                //}
-                //else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
-                //{
-                //    continue; // try again in another five seconds
-                //}
-                //else
-                //{
-                //    // TODO: Add logging code here for failure
-                //    logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response));
-                //    //publicationOperationIds.Remove(idPair.Key);
-                //}
-
             }
-
-            //LogUpdateStatuses(listResponseIds);
 
             return true;
         }

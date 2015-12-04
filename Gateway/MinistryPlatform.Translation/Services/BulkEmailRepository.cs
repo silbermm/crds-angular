@@ -183,18 +183,30 @@ namespace MinistryPlatform.Translation.Services
             // TODO: Determine if we need to pull a PK value from the subscribers before trying to update the table
             try
             {
+                var searchString = string.Format(",\"{0}\",,,,,,,\"{1}\"", subscriberOpt.publicationID, subscriberOpt.email_address);
+                var contactPublications = _ministryPlatformService.GetPageViewRecords(_configurationWrapper.GetConfigIntValue("SegmentationBasePageViewId"), token, searchString);
+
+                // do not update if there is no corresponding subscriber -- this may be handled in a future story
+                if (contactPublications.Count == 0)
+                {
+                    return;
+                }
+
+                var contactPublication = contactPublications.SingleOrDefault();
+                var contactPublicationID = contactPublication.ToString("Contact_Publication_ID");
+
                 Dictionary<string, object> subscriberOptDict = new Dictionary<string, object>
                 {
-                    {"Third_Party_Contact_ID", subscriberOpt.id},
+                    {"Contact_Publication_ID", contactPublicationID},
+                    //{"Third_Party_Contact_ID", subscriberOpt.id},
                     {"Unsubscribed", (subscriberOpt.status == "subscribed" ? false : true)}
                 };
 
-                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Subscribers"), subscriberOptDict, token);
-                
+                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Subscribers"), subscriberOptDict, token);         
             }
             catch (Exception e)
             {
-                
+                var y = e.ToString(); // remove logging from this layer once we're done, as it can be handled in the service layer
             }
         }
     }

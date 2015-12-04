@@ -5,5 +5,6 @@
         public string id { get; set; }
         public string email_address { get; set; }
         public string status { get; set; }
+        public int publicationID { get; set; }
     }
 }
