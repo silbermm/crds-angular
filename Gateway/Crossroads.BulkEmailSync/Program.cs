@@ -6,6 +6,7 @@ using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace Crossroads.BulkEmailSync
 {
     class Program
