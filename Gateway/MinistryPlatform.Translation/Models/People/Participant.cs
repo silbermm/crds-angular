@@ -14,6 +14,6 @@ namespace MinistryPlatform.Translation.Models.People
         public string EmailAddress { get; set; }
         public string role { get; set; }
         public string GroupName { get; set; }
-
+        public string Nickname { get; set; }
     }
 }

@@ -38,8 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.BulkEmailSync", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.EventReminder", "EventReminder\Crossroads.EventReminder.csproj", "{13B48D32-0626-4897-9B9C-03F921365F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crossroads.EventReminder.Test", "EventReminder.Test\Crossroads.EventReminder.Test.csproj", "{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,14 +142,6 @@ Global
 		{13B48D32-0626-4897-9B9C-03F921365F99}.Integration|Any CPU.Build.0 = Release|Any CPU
 		{13B48D32-0626-4897-9B9C-03F921365F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13B48D32-0626-4897-9B9C-03F921365F99}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Demo|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Demo|Any CPU.Build.0 = Debug|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Integration|Any CPU.ActiveCfg = Release|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Integration|Any CPU.Build.0 = Release|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EA9FF4A-AFC3-448A-AA2F-EF51E372D704}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

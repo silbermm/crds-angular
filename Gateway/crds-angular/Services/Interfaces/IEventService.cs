@@ -13,5 +13,6 @@ namespace crds_angular.Services.Interfaces
         void RegisterForEvent(List<EventRsvpDTO> eventDto, string token);
         IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token);
         IList<Participant> EventPaticpants(int eventId, string token);
+        void SendReminderEmails();
     }
 }

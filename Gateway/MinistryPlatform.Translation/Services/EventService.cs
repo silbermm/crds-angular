@@ -20,6 +20,9 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _eventParticipantStatusDefaultId =
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
 
+        private readonly int _eventPageNeedReminders =
+            Convert.ToInt32(AppSettings("EventsReadyForReminder"));
+
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IGroupService _groupService;
 
@@ -237,7 +240,12 @@ namespace MinistryPlatform.Translation.Services
                 EventTitle = (string)record["Event_Title"],
                 EventStartDate = (DateTime)record["Event_Start_Date"],
                 EventEndDate = (DateTime)record["Event_End_Date"],
-                EventType = record.ToString("Event_Type")
+                EventType = record.ToString("Event_Type"),
+                PrimaryContact = new Contact()
+                {
+                    ContactId = record.ToInt("Primary_Contact_ID"),
+                    EmailAddress = record.ToString("Primary_Contact_Email_Address")
+                }
             }).ToList();
         }
 
@@ -250,8 +258,19 @@ namespace MinistryPlatform.Translation.Services
                 ContactId = person.ToInt("Contact_ID"),
                 EmailAddress = person.ToString("Email_Address"),
                 DisplayName = person.ToString("Display_Name"),
+                Nickname = person.ToString("Nickname"),
                 GroupName = person.ToString("Group_Name")           
             });
+        }
+
+        public void SetReminderFlag(int eventId, string token)
+        {
+            var dict = new Dictionary<string, object>
+            {
+                {"Event_ID", eventId},
+                {"Reminder_Sent", 1}
+            };
+            _ministryPlatformService.UpdateRecord(_eventPageNeedReminders, dict, token);
         }
 
         public List<Group> GetGroupsForEvent(int eventId)
