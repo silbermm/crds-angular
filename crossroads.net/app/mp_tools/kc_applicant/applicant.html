@@ -1,5 +1,5 @@
 <div ng-if='applicant.showError()' class='alert alert-danger' role='alert'>
-  <span ng-bind-html='applicant.errorMessage.content | html'></span>
+  <span dynamic-content='applicant.errorMessage.content | html'></span>
 </div>
 
 <preloader full-screen='true' ng-show="!applicant.viewReady"> </preloader>
@@ -8,7 +8,7 @@
   <div>
     <h2 class='header noPspace'> Kids Club Application  </h2>
 
-    <p id="successMessage" ng-bind-html="applicant.pageInfo.success | html" ng-show="applicant.showSuccess"></p>
+    <p id="successMessage" dynamic-content="applicant.pageInfo.success | html" ng-show="applicant.showSuccess"></p>
 
     <div id='adult-application' ng-if='applicant.showAdult() && !applicant.showSuccess'>
       <kids-club-adult-application volunteer='applicant.person'

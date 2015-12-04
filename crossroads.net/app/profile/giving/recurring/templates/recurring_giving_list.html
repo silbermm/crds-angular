@@ -1,6 +1,6 @@
 <table class="table gift-table push-top">
-  <tbody ng-repeat="recurringGift in recurringGifts track by $index">
-    <tr>
+  <tbody>
+    <tr ng-repeat="recurringGift in recurringGifts track by $index">
       <td>
           {{recurringGift.program_name}}
           <div class="text-muted">

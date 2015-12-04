@@ -1,5 +1,5 @@
 <div ng-if="su2s.showError()" class="alert alert-danger" role="alert">
-  <div ng-bind-html="$root.MESSAGES.mptool_access_error.content | html"></div>
+  <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
 <form name="su2sForm">
@@ -26,8 +26,8 @@
       <ui-select multiple ng-model="su2s.participants" require-multiple name="participants">
         <ui-select-match placeholder="Click here to choose group members...">{{$item.nickname}} {{$item.lastname}}</ui-select-match>
         <ui-select-choices repeat="person in su2s.allParticipants | filter: $select.search track by person.participantId">
-          <span ng-bind-html="person.nickname | highlight: $select.search"></span>
-          <span ng-bind-html="person.lastname | highlight: $select.search"></span>
+          <span dynamic-content="person.nickname | highlight: $select.search"></span>
+          <span dynamic-content="person.lastname | highlight: $select.search"></span>
         </ui-select-choices>
       </ui-select>
     </div>

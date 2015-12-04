@@ -14,15 +14,49 @@
       </select>
       <ng-messages for="contactForm.data.eventChooser.$error" ng-if="contactForm.validation.showErrors(contactForm.data, 'eventChooser')">
         <span ng-message="required">
-          <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
         </span>
       </ng-messages>
     </div>
   </div>
  
+  <div ng-show="contactForm.eventChoosen()">
+    <div class="col-sm-offset-2 col-sm-10">
+      <div class="radio">
+        <label>
+           <input type="radio"
+                  name="recipients"
+                  id="recipients-current"
+                  value="current"
+                  ng-model='contactForm.formData.recipients'
+                  ng-change="contactForm.eventChanged()">
+           Current Volunteers
+        </label>
+      </div>
+
+      <div class="radio">
+        <label>
+           <input type="radio"
+                  name="recipients"
+                  id="recipients-potential"
+                  value="potential"
+                  ng-model='contactForm.formData.recipients'
+                  ng-change="contactForm.eventChanged()">
+           Potential Volunteers 
+        </label>
+      </div>
+    </div>
+  </div>
+  
   <preloader ng-if="contactForm.loadingTo" > </preloader>
 
-  <div ng-show="contactForm.eventChoosen() && !contactForm.loadingTo">
+  <div class="col-sm-12" ng-show="contactForm.showNoParticipants()">
+    <div class="alert alert-warning" role="alert" > 
+      There are no participants to email.  
+    </div>
+  </div>
+
+  <div ng-show="contactForm.showEmailForm()">
     <div class="form-group" >
       <label for="to" class="col-sm-2 control-label"> To: </label>
       <div class="col-sm-9">
@@ -36,7 +70,7 @@
         <input type="text" name="subject" class="form-control" ng-model="contactForm.formData.subject" required>
         <ng-messages for="contactForm.data.subject.$error" ng-if="contactForm.validation.showErrors(contactForm.data, 'subject')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -48,7 +82,7 @@
         <textarea rows="6" name="body" class="form-control" ng-model="contactForm.formData.body" required> </textarea>
         <ng-messages for="contactForm.data.body.$error" ng-if="contactForm.validation.showErrors(contactForm.data, 'body')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>

@@ -1,5 +1,5 @@
 <div ng-if='trip.hasError()' class='alert alert-danger' role='alert'>
-  <div ng-repeat="error in trip.errorMessages" ng-bind-html='error | html'></div>
+  <div ng-repeat="error in trip.errorMessages" dynamic-content='error | html'></div>
 </div>
 
 <preloader full-screen='true' ng-show="!trip.viewReady"> </preloader>
