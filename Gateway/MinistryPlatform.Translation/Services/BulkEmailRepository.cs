@@ -60,11 +60,12 @@ namespace MinistryPlatform.Translation.Services
 
         public List<BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds)
         {
-            var subscribers = GetBaseSubscribers(token, publicationId);
+            var publcationFilter = string.Format(",\"{0}\"", publicationId);
+            var subscribers = GetBaseSubscribers(token, publcationFilter);
 
             foreach (var pageViewId in pageViewIds)
             {
-                AddAdditionalFields(token, subscribers, publicationId, pageViewId);
+                AddAdditionalFields(token, subscribers, publcationFilter, pageViewId);
             }
 
             return subscribers.Values.ToList();
@@ -82,10 +83,9 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Subscribers")), subscriberDictionary, token);
         }
 
-        private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)
+        private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, string publicationFilter)
         {
-            var searchString = string.Format(",\"{0}\"", publicationId);
-            var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token, searchString);
+            var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token, publicationFilter);
             var subscribers = new Dictionary<int, BulkEmailSubscriber>();
 
             foreach (var record in records)
@@ -104,10 +104,9 @@ namespace MinistryPlatform.Translation.Services
             return subscribers;
         }
 
-        private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, int publicationId, int pageViewId)
+        private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, string publicationFilter, int pageViewId)
         {            
-            var searchString = string.Format(",\"{0}\"", publicationId);
-            var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token, searchString);
+            var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token, publicationFilter);
 
             foreach (var record in records)
             {

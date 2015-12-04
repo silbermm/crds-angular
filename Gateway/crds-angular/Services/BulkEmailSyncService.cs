@@ -140,7 +140,8 @@ namespace crds_angular.Services
 
         private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
         {
-            int maxRetries = 720;
+            const int secondsToSleep = 5;
+            const int maxRetries = 60*60/secondsToSleep;
             var attempts = 0;
 
             do
@@ -157,7 +158,7 @@ namespace crds_angular.Services
                 }
 
                 // pause to allow the operations to complete -- consider switching this to async
-                Thread.Sleep(5000);
+                Thread.Sleep(secondsToSleep * 1000);
 
                 publicationOperationIds = ProcessSynchronizationResults(publicationOperationIds);
 
