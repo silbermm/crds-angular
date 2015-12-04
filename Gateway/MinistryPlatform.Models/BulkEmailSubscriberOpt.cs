@@ -1,10 +1,12 @@
-﻿namespace MinistryPlatform.Models
+﻿using Newtonsoft.Json;
+
+namespace MinistryPlatform.Models
 {
     public class BulkEmailSubscriberOpt
     {
-        public string id { get; set; }
-        public string email_address { get; set; }
-        public string status { get; set; }
-        public int publicationID { get; set; }
+        public string ThirdPartySystemID { get; set; }
+        public string EmailAddress { get; set; }
+        public string Status { get; set; }
+        public int PublicationID { get; set; }
     }
 }

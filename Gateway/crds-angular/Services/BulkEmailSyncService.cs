@@ -17,6 +17,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
+using AutoMapper;
+using crds_angular.App_Start;
 
 namespace crds_angular.Services
 {
@@ -42,6 +44,9 @@ namespace crds_angular.Services
             _token = _apiUserService.GetToken();
             
             ConfigureRefreshTokenTimer();
+
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
         }
 
         private void ConfigureRefreshTokenTimer()
@@ -69,8 +74,9 @@ namespace crds_angular.Services
                 var publications = _bulkEmailRepository.GetPublications(_token);
                 Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
 
-                // run this first?? 
-                PullOptsFromThirdParty();
+                // this is run first to capture any opt-ins/outs in mailchimp to avoid overwriting
+                // them during the bulk sync 
+                PullOptsFromThirdParty(publications);
 
                 foreach (var publication in publications)
                 {
@@ -307,13 +313,8 @@ namespace crds_angular.Services
             return sb.ToString();
         }
 
-        public bool PullOptsFromThirdParty()
+        private void PullOptsFromThirdParty(List<BulkEmailPublication> publications)
         {
-            var token = _token;
-
-            var publications = _bulkEmailRepository.GetPublications(token);
-            Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
-
             var client = GetBulkEmailClient();
 
             foreach (var publication in publications)
@@ -327,30 +328,26 @@ namespace crds_angular.Services
                 {
                     var responseContent = client.Execute(request).Content;
                     var responseContentJson = JObject.Parse(responseContent);
-                    List<BulkEmailSubscriberOpt> subscribers = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOpt>>(responseContentJson["members"].ToString());
-                    subscribers.ForEach(r => r.publicationID = publication.PublicationId);
-                    _bulkEmailRepository.SetSubscriberSyncs(token, subscribers);
+                    List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
+                    List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
+
+                    foreach (var subscriberDTO in subscribersDTOs)
+                    {
+                        subscriberDTO.PublicationID = publication.PublicationId;
+                        subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
+                    }
+
+                    _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
                 }
                 catch (Exception ex)
                 {
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                    // TODO: Should these be exceptions?
+                    // TODO: Add logging code here for failure
                     _logger.Error(string.Format("Opt-in sync failed for publication {0} Detail: {1}", publication.PublicationId, ex));
                 }
             }
-
-            return true;
         }
     }
 
-    public class SubscriberOperation
-    {
-        public List<Subscriber> operations { get; set; }
-    }
-
-    public class Subscriber
-    {
-        public string method { get; set; }
-        public string path { get; set; }
-        public string operation_id { get; set; }
-        public string body { get; set; }
-    }
 }

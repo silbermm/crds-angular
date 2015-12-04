@@ -14,7 +14,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _bulkEmailPublicationPageViewId = Convert.ToInt32(AppSettings("BulkEmailPublicationsPageView"));
         private readonly int _publicationPageViewSubPageId = Convert.ToInt32(AppSettings("PublicationPageViewSubPageId"));
         private readonly int _segmentationBasePageViewId = Convert.ToInt32(AppSettings("SegmentationBasePageViewId"));
-
+        private readonly int _subscribersBasePageViewId = Convert.ToInt32(AppSettings("Subscribers"));
 
         public BulkEmailRepository(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService) :
             base(authenticationService, configurationWrapper)
@@ -175,8 +175,8 @@ namespace MinistryPlatform.Translation.Services
 
         public void UpdateContactPublication(string token, BulkEmailSubscriberOpt subscriberOpt)
         {
-            var searchString = string.Format(",\"{0}\",,,,,,,\"{1}\"", subscriberOpt.publicationID, subscriberOpt.email_address);
-            var contactPublications = _ministryPlatformService.GetPageViewRecords(_configurationWrapper.GetConfigIntValue("SegmentationBasePageViewId"), token, searchString);
+            var searchString = string.Format(",\"{0}\",,,,,,,\"{1}\"", subscriberOpt.PublicationID, subscriberOpt.EmailAddress);
+            var contactPublications = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token, searchString);
 
             // do not update if there is no corresponding subscriber -- this may be handled in a future story
             if (contactPublications.Count == 0)
@@ -190,10 +190,10 @@ namespace MinistryPlatform.Translation.Services
             Dictionary<string, object> subscriberOptDict = new Dictionary<string, object>
             {
                 {"Contact_Publication_ID", contactPublicationID},
-                {"Unsubscribed", (subscriberOpt.status == "subscribed" ? false : true)}
+                {"Unsubscribed", (subscriberOpt.Status == "subscribed" ? false : true)}
             };
 
-            _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Subscribers"), subscriberOptDict, token);         
+            _ministryPlatformService.UpdateRecord(_subscribersBasePageViewId, subscriberOptDict, token);         
         }
     }
 }

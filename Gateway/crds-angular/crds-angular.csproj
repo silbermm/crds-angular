@@ -274,6 +274,7 @@
     <Compile Include="Models\Crossroads\Groups\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
+    <Compile Include="Models\MailChimp\BulkEmailSubscriberOptDTO.cs" />
     <Compile Include="Services\BulkEmailSyncService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\Interfaces\IBulkEmailSyncService.cs" />
