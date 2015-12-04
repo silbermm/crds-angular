@@ -27,6 +27,7 @@ namespace MinistryPlatform.Translation.Test.Services
         private Mock<IAuthenticationService> _authenticationService;
         private Mock<IConfigurationWrapper> _configWrapper;
         private Mock<IParticipantService> _participantService;
+        private Mock<IApiUserService> _apiUserService;
 
         private OpportunityServiceImpl _fixture;
 
@@ -40,6 +41,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _authenticationService = new Mock<IAuthenticationService>();
             _configWrapper = new Mock<IConfigurationWrapper>();
             _participantService = new Mock<IParticipantService>();
+            _apiUserService = new Mock<IApiUserService>();
 
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_USER")).Returns("uid");
             _configWrapper.Setup(m => m.GetEnvironmentVarAsString("API_PASSWORD")).Returns("pwd");
@@ -49,7 +51,9 @@ namespace MinistryPlatform.Translation.Test.Services
             _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object,
                                                   _eventService.Object,
                                                   _authenticationService.Object,
-                                                  _configWrapper.Object, _participantService.Object);
+                                                  _configWrapper.Object,
+                                                  _participantService.Object,
+                                                  _apiUserService.Object);
         }
 
         [Test]
