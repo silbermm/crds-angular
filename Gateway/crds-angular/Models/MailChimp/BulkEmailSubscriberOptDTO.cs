@@ -14,6 +14,7 @@ namespace crds_angular.Models.MailChimp
         public string EmailAddress { get; set; }
         [JsonProperty("status")]
         public string Status { get; set; }
+        [JsonIgnore]
         public int PublicationID { get; set; }
     }
 }

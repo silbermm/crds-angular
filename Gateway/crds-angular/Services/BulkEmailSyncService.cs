@@ -326,7 +326,18 @@ namespace crds_angular.Services
 
                 try
                 {
-                    var responseContent = client.Execute(request).Content;
+
+                    var response = client.Execute(request);
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                        // TODO: Should these be exceptions?
+                        _logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                        return;
+                    }
+
+                    var responseContent = response.Content;
                     var responseContentJson = JObject.Parse(responseContent);
                     List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
                     List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
