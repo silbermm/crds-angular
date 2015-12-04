@@ -331,13 +331,14 @@ namespace crds_angular.Services
 
                     if (response.StatusCode != HttpStatusCode.OK)
                     {
-                        // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                        // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
                         // TODO: Should these be exceptions?
-                        _logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                        _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
                         return;
                     }
 
                     var responseContent = response.Content;
+
                     var responseContentJson = JObject.Parse(responseContent);
                     List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
                     List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
@@ -352,10 +353,7 @@ namespace crds_angular.Services
                 }
                 catch (Exception ex)
                 {
-                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
-                    // TODO: Should these be exceptions?
-                    // TODO: Add logging code here for failure
-                    _logger.Error(string.Format("Opt-in sync failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+                    _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
                 }
             }
         }
