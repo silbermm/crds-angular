@@ -62,6 +62,7 @@
     <Compile Include="DonationAndDistributionRecord.cs" />
     <Compile Include="DonorStatement.cs" />
     <Compile Include="EventParticipant.cs" />
+    <Compile Include="GroupServingResponses.cs" />
     <Compile Include="Pledge.cs" />
     <Compile Include="Communication.cs" />
     <Compile Include="CommunicationPreferences.cs" />

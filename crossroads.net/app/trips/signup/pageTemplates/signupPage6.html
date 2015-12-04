@@ -6,7 +6,7 @@
     </legend>
 
       <div class="row">
-        <div class="col-sm-12" ng-bind-html="$root.MESSAGES.TripPassport.content | html"></div>
+        <div class="col-sm-12" dynamic-content="$root.MESSAGES.TripPassport.content | html"></div>
         <div class="form-group col-sm-12" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport') }">
           <label class="control-label block required">Do you have a valid passport?</label>
           <label id="passport-yes" class="radio-inline">
@@ -17,13 +17,13 @@
           </label>
           <ng-messages for="tripsSignup.tripAppPage6.passport.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passport')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
         <div class="form-group col-sm-12" ng-show="tripsSignup.signupService.page6.validPassport === 'false'">
           <label>
-            <span ng-bind-html="tripsSignup.passportInvalidContent() | html"></span>
+            <span dynamic-content="tripsSignup.passportInvalidContent() | html"></span>
           </label>
         </div>
       </div>
@@ -34,7 +34,7 @@
               <input ng-model="signupStep.person.passportNumber" type="text" class="form-control" name="passportNumber" id="passport-number" required placeholder="Enter passport number" />
               <ng-messages for="tripsSignup.tripAppPage6.passportNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportNumber')">
                 <span ng-message="required">
-                  <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                  <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                 </span>
               </ng-messages>
           </div>
@@ -44,10 +44,10 @@
           <input ng-model="signupStep.person.passportExpiration" type="text" class="form-control" name="passportExpire" id="passport-expire" validate-date="MM/DD/YYYY" required ng-model-options="{updateOn: 'blur'}" placeholder="mm/dd/yyyy" />
           <ng-messages for="tripsSignup.tripAppPage6.passportExpire.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportExpire')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
             <span ng-message="invalidDate">
-              <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -55,14 +55,14 @@
 
       <div class="row" ng-if="tripsSignup.signupService.page6.validPassport === 'true'">
         <div class="form-group col-sm-12">
-          <span ng-bind-html="$root.MESSAGES.TripPassportName.content | html"></span>
+          <span dynamic-content="$root.MESSAGES.TripPassportName.content | html"></span>
           <div class="row">
             <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName') }">
                 <label for="passport-firstname" class="control-label required">First Name</label>
                 <input ng-model="signupStep.person.passportFirstname" type="text" class="form-control" name="passportFirstName" id="passport-firstname" required placeholder="Enter first name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportFirstName')">
                   <span ng-message="required">
-                    <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                    <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                   </span>
                 </ng-messages>
             </div>
@@ -77,7 +77,7 @@
                 <input ng-model="signupStep.person.passportLastname" type="text" class="form-control" name="passportLastName" id="passport-lastname" required placeholder="Enter last name">
                 <ng-messages for="tripsSignup.tripAppPage6.passportLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportLastName')">
                   <span ng-message="required">
-                    <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                    <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                   </span>
                 </ng-messages>
             </div>
@@ -86,7 +86,7 @@
                 <input ng-model="signupStep.person.passportCountry" type="text" class="form-control" name="passportCountry" id="passport-country" required placeholder="Enter passport country">
                 <ng-messages for="tripsSignup.tripAppPage6.passportCountry.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'passportCountry')">
                   <span ng-message="required">
-                    <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                    <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                   </span>
                 </ng-messages>
             </div>
@@ -133,7 +133,7 @@
           </div>
           <ng-messages for="tripsSignup.tripAppPage6.internationalTrips.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'internationalTrips')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -149,7 +149,7 @@
           </label>
           <ng-messages for="tripsSignup.tripAppPage6.travelExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'travelExperience')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -167,7 +167,7 @@
             </textarea>
             <ng-messages for="tripsSignup.tripAppPage6.describeExperienceAbroad.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'describeExperienceAbroad')">
               <span ng-message="required">
-                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
             </ng-messages>
           </div>
@@ -179,7 +179,7 @@
           <legend>
             Past Abuse History (This will in no way keep you from GOing to India)
           </legend>
-          <div ng-bind-html="$root.MESSAGES.trip_abuse.content | html"></div>
+          <div dynamic-content="$root.MESSAGES.trip_abuse.content | html"></div>
           <div class="form-group" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'abuse') }">
             <label class="control-label block required">Are you aware of ever having been sexually victimized in any way?</label>
             <div class="radio" ng-repeat="option in signupStep.abuseOptions.attributes">
@@ -195,7 +195,7 @@
             </div>
             <ng-messages for="tripsSignup.tripAppPage6.abuse.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage6, 'abuse')">
               <span ng-message="required">
-                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
             </ng-messages>
           </div>

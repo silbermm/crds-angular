@@ -57,7 +57,7 @@
     </div>
 
     <ng-messages for="donationDetailsForm.recurringStartDate.$error" ng-show="startDateError()">
-      <span ng-message="required"><span ng-bind-html="$root.MESSAGES.invalidRecurringStartDate.content | html"></span></span>
+      <span ng-message="required"><span dynamic-content="$root.MESSAGES.invalidRecurringStartDate.content | html"></span></span>
     </ng-messages>
 
   </div>

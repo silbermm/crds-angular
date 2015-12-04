@@ -1,31 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
+using System.Timers;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
-using System.Web;
+using crds_angular.Models.MailChimp;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Serializers;
 using log4net;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using RestSharp;
-using System.Security.Cryptography;
+using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
 namespace crds_angular.Services
 {
     public class BulkEmailSyncService : IBulkEmailSyncService
     {
-        private readonly ILog logger = LogManager.GetLogger(typeof(GroupService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof(GroupService));
 
         private readonly MPInterfaces.IBulkEmailRepository _bulkEmailRepository;
         private readonly MPInterfaces.IApiUserService _apiUserService;
-        private readonly string _token;
-
-        private string _apiKey;
+        private readonly IConfigurationWrapper _configWrapper;
+        private string _token;
+        private System.Timers.Timer _refreshTokenTimer;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -34,68 +37,93 @@ namespace crds_angular.Services
         {
             _bulkEmailRepository = bulkEmailRepository;
             _apiUserService = apiUserService;
+            _configWrapper = configWrapper;
+
             _token = _apiUserService.GetToken();
-            _apiKey = configWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
+            
+            ConfigureRefreshTokenTimer();
+        }
+
+        private void ConfigureRefreshTokenTimer()
+        {
+            // Hack to get around token expiring every 15 minutes when updating large number of Third_Party_Contact_Id, 
+            // so fire event every 10 minutes and get a new token
+            _refreshTokenTimer = new System.Timers.Timer(10*60*1000);
+            _refreshTokenTimer.AutoReset = true;
+            _refreshTokenTimer.Elapsed += RefreshTokenTimerElapsed;
+        }
+
+        private void RefreshTokenTimerElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+        {
+            _logger.Info("Refreshing token");
+            _token = _apiUserService.GetToken();            
         }
 
 
         public void RunService()
         {
-            //var token = _token;
+            try
+            {                
+                _refreshTokenTimer.Start();
 
-            //var publications = _bulkEmailRepository.GetPublications(token);
-            //Dictionary<string,string> listResponseIds = new Dictionary<string, string>();
+                var publications = _bulkEmailRepository.GetPublications(_token);
+                Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
 
-            //// Get Publications 
-            //// For Each Publication
-            //foreach (var publication in publications)
-            //{
-            //    //   Get correpsonding Page Views
-            //    var pageViewIds = _bulkEmailRepository.GetPageViewIds(token, publication.PublicationId);
+                // run this first?? 
+                PullOptsFromThirdParty();
 
-            //    //     Get Page view records
-            //    var subscribers = _bulkEmailRepository.GetSubscribers(token, publication.PublicationId, pageViewIds);
+                foreach (var publication in publications)
+                {
+                    var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
+                    var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
 
-            //    // TODO: Implement for US2782
-            //    //     If (ContactEmail != SubscriptionEmail)
-            //    //       Update/Delete MailChimp record
-            //    //     End if   
+                    // TODO: Implement for US2782
+                    //     If (ContactEmail != SubscriptionEmail)
+                    //       Update/Delete MailChimp record
+                    //     End if   
 
-            //    var operationId = SendBatch(publication, subscribers);
+                    var operationId = SendBatch(publication, subscribers);
 
-            //    // add the publication and operation id in prep for polling 
-            //    if (!String.IsNullOrEmpty(operationId))
-            //    {
-            //        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
-            //    }
+                    // add the publication and operation id in prep for polling 
+                    if (!String.IsNullOrEmpty(operationId))
+                    {
+                        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
+                    }
 
-            //    // Update MP with last sync date
-            //    _bulkEmailRepository.SetPublication(token, publication);
-            //}
+                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
+                }
 
-            //LogUpdateStatuses(listResponseIds);
-
-            // ^^^^^^^^^^^^^^ live code commented out for testing getting changes from mailchimp
-            SyncOptIns();
+                ProcessSynchronizationResultsWithRetries(listResponseIds);
+            }
+            finally
+            {
+                _refreshTokenTimer.Stop();
+            }
         }
 
         public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
-            // needs to be a configvalue, not hardcoded url
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-
-            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
+            var client = GetBulkEmailClient();
 
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
-            var operation = AddSubscribers(publication, subscribers);
-
+            var batch = AddSubscribersToBatch(publication, subscribers);
+            request.JsonSerializer = new RestsharpJsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(operation);
+            request.AddBody(batch);
 
-            var responseContent = client.Execute(request).Content;
-            var responseValues = DeserializeToDictionary(responseContent);
+            var response = client.Execute(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                // TODO: Should these be exceptions?
+                _logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                return null;
+            }
+
+            var responseValues = DeserializeToDictionary(response.Content);
 
             // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
             if (responseValues["status"].ToString() == "started" || 
@@ -106,94 +134,141 @@ namespace crds_angular.Services
             }
             else
             {
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                // TODO: Should these be exceptions?
                 // TODO: Add logging code here for failure
-                logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, responseContent));
-
+                _logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, response.Content));
                 return null;
             }
         }
 
-        private void LogUpdateStatuses(Dictionary<string, string> publicationOperationIds)
+        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
         {
-            // poll mailchimp to see if batch was successful -- also need to confirm during dev
-            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous
-            // TODO: pull from config setting
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-            client.Authenticator = new HttpBasicAuthenticator("noname", _apiKey);
+            const int secondsToSleep = 5;
+            const int maxRetries = 60*60/secondsToSleep;
+            var attempts = 0;
 
             do
-            {
-                // pause to allow the operations to complete -- consider switching this to async
-                Thread.Sleep(5000);
-
-                foreach (var idPair in publicationOperationIds)
+            {                
+                attempts++;
+                
+                if (attempts > maxRetries)
                 {
-                    var request = new RestRequest("batches/" + idPair.Value, Method.GET);
-                    request.AddHeader("Content-Type", "application/json");
-
-                    var response = client.Execute(request).Content;
-                    var responseValues = DeserializeToDictionary(response);
-
-                    // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
-                    if (responseValues["status"].ToString() == "finished")
-                    {
-                        logger.Info(response);
-                        publicationOperationIds.Remove(idPair.Key);
-                    }
-                    else if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
-                    {
-                        continue; // try again in another five seconds
-                    }
-                    else
-                    {
-                        // TODO: Add logging code here for failure
-                        logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response));
-                        publicationOperationIds.Remove(idPair.Key);
-                    }
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                    // TODO: Should these be exceptions?
+                    // Probably an infinite loop so stop processing and log error
+                    _logger.Error(string.Format("Failed to LogUpdateStatuses after {0} total retries", attempts));
+                    return;
                 }
+
+                // pause to allow the operations to complete -- consider switching this to async
+                Thread.Sleep(secondsToSleep * 1000);
+
+                publicationOperationIds = ProcessSynchronizationResults(publicationOperationIds);
 
             } while (publicationOperationIds.Any());
         }
 
-        private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
         {
-            SubscriberOperation operation = new SubscriberOperation();
-            operation.operations = new List<Subscriber>();
+            var client = GetBulkEmailClient();
+
+            for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
+            {
+                var idPair = publicationOperationIds.ElementAt(index);
+                var request = new RestRequest("batches/" + idPair.Value, Method.GET);
+                request.AddHeader("Content-Type", "application/json");
+
+                var response = client.Execute(request);
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                    _logger.Error(string.Format("StatusCode = {0}", response.StatusCode));
+                    continue;
+                }
+
+                var responseValues = DeserializeToDictionary(response.Content);
+
+                if (responseValues["status"].ToString() == "started" || responseValues["status"].ToString() == "pending")
+                {
+                    continue;
+                }
+
+                if (responseValues["status"].ToString() == "finished")
+                {                                        
+                    var total = responseValues["total_operations"];                    
+                    var errors = responseValues["errored_operations"];
+
+                    if (errors.ToString() == "0")
+                    {
+                        _logger.InfoFormat("Processed {0} total records", total); 
+                    }
+                    else
+                    {
+                        _logger.ErrorFormat("Processed {0} total records with {1} errors", total, errors); 
+                    }
+
+                    _logger.Info(response.Content);
+                }
+                else
+                {
+                    // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                    // TODO: Should these be exceptions?
+                    // TODO: Add logging code here for failure
+                    _logger.ErrorFormat("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response.Content);
+                }
+
+                publicationOperationIds.Remove(idPair.Key);
+            }
+
+            return publicationOperationIds;
+        }
+
+        private RestClient GetBulkEmailClient()
+        {
+            var apiUrl = _configWrapper.GetConfigValue("BulkEmailApiUrl");
+            var apiKey = _configWrapper.GetEnvironmentVarAsString("BULK_EMAIL_API_KEY");
+           
+            var client = new RestClient(apiUrl);
+            client.Authenticator = new HttpBasicAuthenticator("noname", apiKey);
+
+            return client;
+        }
+
+        private SubscriberBatchDTO AddSubscribersToBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        {
+            var batch = new SubscriberBatchDTO();
+            batch.Operations = new List<SubscriberOperationDTO>();
 
             foreach (var subscriber in subscribers)
             {
-                // TODO: Update MP with 3rd Party Contact ID
                 if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
-                {//Assuming success here, update the ID to match the emailaddress
+                {
+                    //Assuming success here, update the ID to match the emailaddress
                     //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
                     subscriber.ThirdPartyContactId = subscriber.EmailAddress;
-                    _bulkEmailRepository.SetBaseSubscriber(_token, subscriber);
+                    _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
-                var mailChimpSubscriber = new Subscriber();
-                mailChimpSubscriber.method = "PUT";
+                var mailChimpSubscriber = new SubscriberDTO();
+                mailChimpSubscriber.Subscribed = subscriber.Subscribed;
+                mailChimpSubscriber.EmailAddress = subscriber.EmailAddress;
+                mailChimpSubscriber.MergeFields = subscriber.MergeFields;
 
-                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress);
+                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress.ToLower());
 
-                //TODO: Determine how to populate the ThirdPartyPublicationID? For now you may just write SQL to update table directly
-                mailChimpSubscriber.path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
+                var operation = new SubscriberOperationDTO();
+                operation.Method = "PUT";                
+                operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
 
-                // TODO: Do we need to store this somewhere to verify batch processed successfully
-                mailChimpSubscriber.operation_id = Guid.NewGuid().ToString();
+                // TODO: Do we need to store this somewhere to verify subscriber processed successfully
+                operation.OperationId = Guid.NewGuid().ToString();
+                operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
 
-                string mergeFields = JsonConvert.SerializeObject(subscriber.MergeFields);
-                // TODO: Use JSON.NET to serialize this rather than a string
-                mailChimpSubscriber.body = String.Format("{{ \"status\":\"{0}\", \"email_address\":{1}, \"merge_fields\":{2} }}",
-                    // TODO: Determine if these are the right values
-                    subscriber.Subscribed ? "subscribed" : "unsubscribed",
-                    "\"" + subscriber.EmailAddress + "\"", 
-                    mergeFields);
-
-                // add to list here
-                operation.operations.Add(mailChimpSubscriber);
+                batch.Operations.Add(operation);
             }
             
-            return operation;
+            return batch;
         }
 
         // From http://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
@@ -219,8 +294,8 @@ namespace crds_angular.Services
         public string CalculateMD5Hash(string input)
         {
             // step 1, calculate MD5 hash from input
-            MD5 md5 = System.Security.Cryptography.MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            MD5 md5 = MD5.Create();
+            byte[] inputBytes = Encoding.ASCII.GetBytes(input);
             byte[] hash = md5.ComputeHash(inputBytes);
 
             // step 2, convert byte array to hex string
@@ -232,17 +307,14 @@ namespace crds_angular.Services
             return sb.ToString();
         }
 
-        /*** Everything below this line is for 2785 ***/
-
-        public bool SyncOptIns()
+        public bool PullOptsFromThirdParty()
         {
             var token = _token;
 
             var publications = _bulkEmailRepository.GetPublications(token);
             Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
 
-            var client = new RestClient("https://us12.api.mailchimp.com/3.0/");
-            client.Authenticator = new HttpBasicAuthenticator("crds_admin", _apiKey);
+            var client = GetBulkEmailClient();
 
             foreach (var publication in publications)
             {
@@ -261,7 +333,7 @@ namespace crds_angular.Services
                 }
                 catch (Exception ex)
                 {
-                    logger.Error(string.Format("Opt-in sync failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+                    _logger.Error(string.Format("Opt-in sync failed for publication {0} Detail: {1}", publication.PublicationId, ex));
                 }
             }
 
