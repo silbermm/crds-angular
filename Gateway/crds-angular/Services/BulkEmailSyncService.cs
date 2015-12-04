@@ -6,8 +6,10 @@ using System.Security.Cryptography;
 using System.Timers;
 using System.Text;
 using System.Threading;
+using crds_angular.Models.MailChimp;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
+using Crossroads.Utilities.Serializers;
 using log4net;
 using MinistryPlatform.Models;
 using Newtonsoft.Json;
@@ -102,10 +104,10 @@ namespace crds_angular.Services
             var request = new RestRequest("batches", Method.POST);
             request.AddHeader("Content-Type", "application/json");
 
-            var operation = AddSubscribers(publication, subscribers);
-
+            var batch = AddSubscribersToBatch(publication, subscribers);
+            request.JsonSerializer = new RestsharpJsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
-            request.AddBody(operation);
+            request.AddBody(batch);
 
             var response = client.Execute(request);
 
@@ -138,9 +140,6 @@ namespace crds_angular.Services
 
         private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
         {
-            // poll mailchimp to see if batch was successful -- also need to confirm during dev
-            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous            
-
             int maxRetries = 720;
             var attempts = 0;
 
@@ -167,6 +166,9 @@ namespace crds_angular.Services
 
         private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
         {
+            // poll mailchimp to see if batch was successful -- also need to confirm during dev
+            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous            
+
             var client = GetBulkEmailClient();
 
             for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
@@ -231,10 +233,10 @@ namespace crds_angular.Services
             return client;
         }
 
-        private SubscriberOperation AddSubscribers(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        private SubscriberBatchDTO AddSubscribersToBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
         {
-            SubscriberOperation operation = new SubscriberOperation();
-            operation.operations = new List<Subscriber>();
+            var batch = new SubscriberBatchDTO();
+            batch.Operations = new List<SubscriberOperationDTO>();
 
             foreach (var subscriber in subscribers)
             {
@@ -246,30 +248,25 @@ namespace crds_angular.Services
                     _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
-                var mailChimpSubscriber = new Subscriber();
-                mailChimpSubscriber.method = "PUT";
+                var mailChimpSubscriber = new SubscriberDTO();
+                mailChimpSubscriber.Subscribed = subscriber.Subscribed;
+                mailChimpSubscriber.EmailAddress = subscriber.EmailAddress;
+                mailChimpSubscriber.MergeFields = subscriber.MergeFields;
 
                 var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress.ToLower());
 
-                //TODO: Determine how to populate the ThirdPartyPublicationID? For now you may just write SQL to update table directly
-                mailChimpSubscriber.path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
+                var operation = new SubscriberOperationDTO();
+                operation.Method = "PUT";                
+                operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
 
-                // TODO: Do we need to store this somewhere to verify batch processed successfully
-                mailChimpSubscriber.operation_id = Guid.NewGuid().ToString();
+                // TODO: Do we need to store this somewhere to verify subscriber processed successfully
+                operation.OperationId = Guid.NewGuid().ToString();
+                operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
 
-                string mergeFields = JsonConvert.SerializeObject(subscriber.MergeFields);
-                // TODO: Use JSON.NET to serialize this rather than a string
-                mailChimpSubscriber.body = String.Format("{{ \"status\":\"{0}\", \"email_address\":{1}, \"merge_fields\":{2} }}",
-                    // TODO: Determine if these are the right values
-                    subscriber.Subscribed ? "subscribed" : "unsubscribed",
-                    "\"" + subscriber.EmailAddress + "\"", 
-                    mergeFields);
-
-                // add to list here
-                operation.operations.Add(mailChimpSubscriber);
+                batch.Operations.Add(operation);
             }
             
-            return operation;
+            return batch;
         }
 
         // From http://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
@@ -307,18 +304,5 @@ namespace crds_angular.Services
             }
             return sb.ToString();
         }
-    }
-
-    public class SubscriberOperation
-    {
-        public List<Subscriber> operations { get; set; }
-    }
-
-    public class Subscriber
-    {
-        public string method { get; set; }
-        public string path { get; set; }
-        public string operation_id { get; set; }
-        public string body { get; set; }
     }
 }
