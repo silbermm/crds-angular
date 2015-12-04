@@ -39,7 +39,7 @@ namespace MinistryPlatform.Translation.Services
             return publications;
         }
 
-        public void SetPublication(string token, BulkEmailPublication publication)
+        public void UpdateLastSyncDate(string token, BulkEmailPublication publication)
         {
             var publicationDictionary = new Dictionary<string, object>
             {
@@ -60,17 +60,18 @@ namespace MinistryPlatform.Translation.Services
 
         public List<BulkEmailSubscriber> GetSubscribers(string token, int publicationId, List<int> pageViewIds)
         {
-            var subscribers = GetBaseSubscribers(token, publicationId);
+            var publcationFilter = string.Format(",\"{0}\"", publicationId);
+            var subscribers = GetBaseSubscribers(token, publcationFilter);
 
             foreach (var pageViewId in pageViewIds)
             {
-                AddAdditionalFields(token, subscribers, pageViewId);
+                AddAdditionalFields(token, subscribers, publcationFilter, pageViewId);
             }
 
             return subscribers.Values.ToList();
         }
 
-        public void SetBaseSubscriber(string token, BulkEmailSubscriber subscriber)
+        public void UpdateSubscriber(string token, BulkEmailSubscriber subscriber)
         {
             var subscriberDictionary = new Dictionary<string, object>
             {
@@ -82,20 +83,13 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Subscribers")), subscriberDictionary, token);
         }
 
-        private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, int publicationId)
+        private Dictionary<int, BulkEmailSubscriber> GetBaseSubscribers(string token, string publicationFilter)
         {
-            var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token);
+            var records = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token, publicationFilter);
             var subscribers = new Dictionary<int, BulkEmailSubscriber>();
 
             foreach (var record in records)
             {
-                var recordPublicationId = record.ToInt("Publication_ID");
-                if (publicationId != recordPublicationId)
-                {
-                    // TODO: See if we can switch to not filtering here and just query the data once and match it up with corresponding publication later
-                    continue;
-                }
-
                 var subscriber = new BulkEmailSubscriber();
                 subscriber.ContactPublicationId = record.ToInt("Contact_Publication_ID");
                 subscriber.ContactId = record.ToInt("Contact_ID");
@@ -110,10 +104,9 @@ namespace MinistryPlatform.Translation.Services
             return subscribers;
         }
 
-        private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, int pageViewId)
-        {
-            // TODO: See if we can filter pages by publicationId or by list of Contact_Publication_ID's
-            var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token);
+        private void AddAdditionalFields(string token, Dictionary<int, BulkEmailSubscriber> subscribers, string publicationFilter, int pageViewId)
+        {            
+            var records = _ministryPlatformService.GetPageViewRecords(pageViewId, token, publicationFilter);
 
             foreach (var record in records)
             {
@@ -163,8 +156,12 @@ namespace MinistryPlatform.Translation.Services
                     continue;
                 }
 
-                var value = column.Value != null ? column.Value.ToString() : null;
-                subscriber.MergeFields.Add(column.Key, value);
+                if (column.Value == null)
+                {
+                    continue;
+                }
+                
+                subscriber.MergeFields.Add(column.Key, column.Value.ToString());
             }
         }
     }
