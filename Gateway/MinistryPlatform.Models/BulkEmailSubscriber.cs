@@ -19,5 +19,10 @@ namespace MinistryPlatform.Models
         {
             MergeFields = new Dictionary<string, string>();
         }
+
+        public BulkEmailSubscriber Clone()
+        {
+            return (BulkEmailSubscriber) MemberwiseClone();
+        }
     }
 }
