@@ -327,17 +327,32 @@ namespace MinistryPlatform.Translation.Services
                 {"Childcare_Needed", (childcareNeeded) ? _contentBlockService["communityGroupChildcare"].Content : ""}
             };
 
+            var domainId = Convert.ToInt32(AppSettings("DomainId"));
+            var from = new Contact()
+            {
+                ContactId = churchAdminContactId,
+                EmailAddress = fromAddress
+            };
+
+            List<Contact> to = new List<Contact>
+            {
+                new Contact {
+                    ContactId = toContact,
+                    EmailAddress = toContactInfo.Email_Address
+                }
+            };
+
             var confirmation = new Communication 
             { 
                 EmailBody = emailTemplate.Body, 
                 EmailSubject = emailTemplate.Subject,
                 AuthorUserId = churchAdminContactId,
-                DomainId = Convert.ToInt32(AppSettings("DomainId")),
-                FromContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
+                DomainId = domainId,
+                FromContact = from,
                 MergeData = mergeData,
-                ReplyToContact = {ContactId = churchAdminContactId, EmailAddress = fromAddress},
+                ReplyToContact = from,
                 TemplateId = CommunityGroupConfirmationTemplateId,
-                ToContacts = {new Contact{ContactId = toContact, EmailAddress = toContactInfo.Email_Address}}
+                ToContacts = to
             };
             _communicationService.SendMessage(confirmation);
         }

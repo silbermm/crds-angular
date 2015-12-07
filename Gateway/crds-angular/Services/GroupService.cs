@@ -84,7 +84,7 @@ namespace crds_angular.Services
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
                         }
                     }
-                    var waitlist = g.GroupType == _configurationWrapper.GetConfigIntValue("GroupType_Waitlit");
+                    var waitlist = g.GroupType == _configurationWrapper.GetConfigIntValue("GroupType_Waitlist");
                     _mpGroupService.SendCommunityGroupConfirmationEmail(p.particpantId, groupId, waitlist, p.childCareNeeded);                    
                 }
 
