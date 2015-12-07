@@ -9,6 +9,6 @@
         FileNotFound = 4,
         FileFound = 5,
         FileContainsInvalidData = 6,
-        LoadFileSuccess = 7,
+        ReadFileSuccess = 7,
     }
 }

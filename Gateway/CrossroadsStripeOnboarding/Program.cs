@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.Mime;
 using CrossroadsStripeOnboarding.Models;
+using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
 
 namespace CrossroadsStripeOnboarding
@@ -8,35 +11,31 @@ namespace CrossroadsStripeOnboarding
     {
         static void Main()
         {
-            var msg = Messages.NotRun;
-            while (msg != Messages.Success)
+            var result = new KeyValuePair<Messages, StripeJsonExport>(Messages.NotRun, null);
+            while (result.Key != Messages.Success)
             {
-                Console.Write("Enter the exports file path/location or X to close the program: ");
-                msg = LoadExportFile.ReadFile(Console.ReadLine());
+                Console.WriteLine("Enter the exports file path/location or X to close the program: ");
+                result = LoadExportFile.ReadFile(Console.ReadLine());
                 
-                if (msg == Messages.LoadFileSuccess)
+                if (result.Key == Messages.ReadFileSuccess)
                 {
                     //TODO::add success path
-                }
-                else if (msg == Messages.FileNameRequired || msg == Messages.FileNotFound)
-                {
-                    Console.Write("Please enter a valid file.");
-                }
-                else if (msg == Messages.FileContainsInvalidData)
-                {
-                    Console.Write("The file contains invalid data please investigate.");
-                }
-                else if (msg == Messages.Close)
-                {
-                    msg = Messages.Success;
+                    Console.WriteLine("The file was processed successfully.  Prease any key to exit.");
                     Console.ReadKey();
+                    Environment.Exit(0);
                 }
-            }
-
-            if (msg == Messages.Success)
-            {
-                Console.Write("The file was processed successfully.  Prease any key to exit.");
-                Console.ReadKey();
+                else if (result.Key == Messages.FileNameRequired || result.Key == Messages.FileNotFound)
+                {
+                    Console.WriteLine("Please enter a valid file.");
+                }
+                else if (result.Key == Messages.FileContainsInvalidData)
+                {
+                    Console.WriteLine("The file contains invalid data please investigate.");
+                }
+                else if (result.Key == Messages.Close)
+                {
+                    Environment.Exit(0);
+                }
             }
         }
     }
