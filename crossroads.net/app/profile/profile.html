@@ -1,4 +1,4 @@
-<span ng-bind-html="$root.MESSAGES.profileHeader.content | html"></span>
+<span dynamic-content="$root.MESSAGES.profileHeader.content | html"></span>
 <div class="profile-header">
   <div class="row">
     <profile-picture ng-if="profile.profileData.person.contactId" contact-id="profile.profileData.person.contactId"></profile-picture>

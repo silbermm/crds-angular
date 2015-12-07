@@ -1,7 +1,7 @@
 <preloader full-screen='true' ng-show="!contact.viewReady"> </preloader>
 
 <div ng-if="contact.viewReady && contact.multipleRecordsSelected" class="alert alert-danger" role="alert">
-  <div ng-bind-html="$root.MESSAGES.mptool_access_error.content | html"></div>
+  <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
 <div class='col-sm-10 col-sm-offset-1'
@@ -9,6 +9,9 @@
 			ng-if='contact.viewReady && !contact.multipleRecordsSelected'>
   <div>
     <h2 class='header noPspace'> Contact Volunteers for {{contact.group.groupName}} </h2>
-    <volunteer-contact-form group='contact.group' > </volunteer-contact-form>
+    <volunteer-contact-form group='contact.group' ng-show="contact.group.events.length > 0" > </volunteer-contact-form>
+    <div class="alert alert-warning" role="alert" ng-show="contact.group.events.length < 1">
+      There are no upcoming events for this group.  
+    </div>
   </div>
 </div>

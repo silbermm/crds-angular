@@ -1,20 +1,20 @@
 <!-- TODO Can this error handling be updated to utilize ngMessages? -->
 <div class="alert alert-success" role="alert" ng-if="volunteer.created">
-  <span ng-bind-html="$root.MESSAGES.succesfulResponse.content | html"></span>
+  <span dynamic-content="$root.MESSAGES.succesfulResponse.content | html"></span>
 </div>
 
 <div class="alert alert-danger" role="alert" ng-if="volunteer.rejected">
-  <span ng-bind-html="$root.MESSAGES.failedResponse.content | html"></span>
+  <span dynamic-content="$root.MESSAGES.failedResponse.content | html"></span>
 </div>
 
 <preloader full-screen='true' ng-show="!volunteer.viewReady"> </preloader>
 
 <div ng-show="volunteer.viewReady">
-  <h2 class="header noPspace" ng-bind-html="volunteer.pageInfo.title | html"></h2>
+  <h2 class="header noPspace" dynamic-content="volunteer.pageInfo.title | html"></h2>
   <div>
-    <p id="content" class="noPspace" dir="ltr" ng-bind-html="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
-    <p id="existingMemberMessage" ng-bind-html="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
-    <p id="successMessage" ng-bind-html="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
+    <p id="content" class="noPspace" dir="ltr" dynamic-content="volunteer.pageInfo.content | html" ng-show="volunteer.showContent"></p>
+    <p id="existingMemberMessage" dynamic-content="volunteer.pageInfo.existingMember | html" ng-show="volunteer.showAllSignedUp"></p>
+    <p id="successMessage" dynamic-content="volunteer.pageInfo.success | html" ng-show="volunteer.showSuccess"></p>
   </div>
 
   <div ng-show="volunteer.showContent">

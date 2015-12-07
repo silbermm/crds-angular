@@ -279,9 +279,9 @@
             }).$promise.then(
               function(contact) {
                 var age = contact.age;
-                var cmsPath = '/kids-club-applicant-form/adult-applicant-form/';
+                var cmsPath = '/volunteer-application/adult-applicant-form/';
                 if ((age >= 10) && (age <= 15)) {
-                  cmsPath = '/kids-club-applicant-form/student-applicant-form/';
+                  cmsPath = '/volunteer-application/student-applicant-form/';
                 }
 
                 Page.get({

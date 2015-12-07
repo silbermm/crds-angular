@@ -15,6 +15,15 @@ namespace crds_angular.Models.Crossroads.Events
         [JsonProperty(PropertyName = "endDate")]
         public DateTime EndDate { get; set; }
 
+        [JsonProperty(PropertyName = "eventType")]
+        public String EventType { get; set; }
+
+        [JsonProperty(PropertyName = "primaryContactId")]
+        public int PrimaryContactId { get; set; }
+
+        [JsonProperty(PropertyName = "primaryContactEmailAddress")]
+        public string PrimaryContactEmailAddress { get; set; }
+
         // TODO: get rid of the time property and use startDate instead
         public string time { get; set; }
 
@@ -23,6 +32,7 @@ namespace crds_angular.Models.Crossroads.Events
 
         public string name { get; set; }
         public string location { get; set; }
+
 
     }
 }

@@ -17,6 +17,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         Response GetMyOpportunityResponses(int contactId, int opportunityId, string token);
         Response GetOpportunityResponse(int contactId, int opportunityId);
         Response GetOpportunityResponse(int opportunityId, int eventId, Participant participant);
+        List<int> GetContactsOpportunityResponseByGroupAndEvent(int groupId, int eventId);
         List<Response> GetOpportunityResponses(int opportunityId, string token);
         void RespondToOpportunity(RespondToOpportunityDto opportunityResponse);
         int RespondToOpportunity(int participantId, int opportunityId, string comments, int eventId, bool response);

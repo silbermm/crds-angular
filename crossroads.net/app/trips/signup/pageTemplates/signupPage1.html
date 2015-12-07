@@ -1,7 +1,7 @@
 <div>
   <div class="row">
     <div class="col-sm-12">
-      <div ng-bind-html="$root.MESSAGES.trip_disclaimer.content | html"></div>
+      <div dynamic-content="$root.MESSAGES.trip_disclaimer.content | html"></div>
     </div>
   </div>
   <preloader full-screen='true' ng-show="!tripsSignup.viewReady"> </preloader>

@@ -3,7 +3,7 @@
     <div class='row' ng-show='tripsSignup.underAge()'>
       <div class="col-sm-12">
         <legend>Guardian Information</legend>
-        <span ng-bind-html="$root.MESSAGES.TripGuardianInformation.content | html"></span>
+        <span dynamic-content="$root.MESSAGES.TripGuardianInformation.content | html"></span>
       </div><!--/col-sm-12-->
 
       <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'guardianFirstName') }">
@@ -34,7 +34,7 @@
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.tshirtSize.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'tshirtSize')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div><!--/form-group-->
@@ -50,7 +50,7 @@
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubBottom.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubBottom')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -65,7 +65,7 @@
         </select>
         <ng-messages for="tripsSignup.tripAppPage2.scrubTop.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'scrubTop')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div><!--/form-group-->
@@ -91,7 +91,7 @@
           </label>
           <ng-messages for="tripsSignup.tripAppPage2.referral.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'referral')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
       </div><!--/form-group-->
@@ -122,7 +122,7 @@
 
         <ng-messages for="tripsSignup.tripAppPage2.diet.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'diet')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -159,7 +159,7 @@
 
         <ng-messages for="tripsSignup.tripAppPage2.slife.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'slife')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
 
@@ -172,7 +172,7 @@
           <textarea ng-model="tripsSignup.signupService.page2.why" ng-required="true" cols="1" rows="4" class="form-control" name="why" id="why" maxlength="1000" placeholder="{{ tripsSignup.whyPlaceholder }}"></textarea>
           <ng-messages for="tripsSignup.tripAppPage2.why.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage2, 'why')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
       </div><!--/form-group-->
