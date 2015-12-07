@@ -13,7 +13,7 @@ namespace CrossroadsStripeOnboarding.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201512060241529_Initial"; }
+            get { return "201512071726262_Initial"; }
         }
         
         string IMigrationMetadata.Source

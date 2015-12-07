@@ -12,9 +12,14 @@ namespace CrossroadsStripeOnboarding.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Type = c.String(),
-                        Institution = c.String(),
+                        Type = c.Int(nullable: false),
+                        OldCardId = c.String(),
+                        NewCardId = c.String(),
+                        Fingerprint = c.String(),
                         Last4 = c.String(),
+                        ExpMonth = c.Int(nullable: false),
+                        ExpYear = c.Int(nullable: false),
+                        Institution = c.String(),
                         StripeCustomerId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)

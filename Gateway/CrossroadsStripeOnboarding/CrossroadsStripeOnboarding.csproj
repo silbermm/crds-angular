@@ -49,6 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EfEnumToLookup">
+      <HintPath>..\packages\ef-enum-to-lookup.1.9.0\lib\net45\EfEnumToLookup.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -67,11 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\201512060241529_Initial.cs" />
-    <Compile Include="Migrations\201512060241529_Initial.Designer.cs">
-      <DependentUpon>201512060241529_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201512071726262_Initial.cs" />
+    <Compile Include="Migrations\201512071726262_Initial.Designer.cs">
+      <DependentUpon>201512071726262_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountType.cs" />
     <Compile Include="Models\StripeAccount.cs" />
     <Compile Include="Models\StripeCustomer.cs" />
     <Compile Include="Program.cs" />
@@ -106,8 +110,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201512060241529_Initial.resx">
-      <DependentUpon>201512060241529_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201512071726262_Initial.resx">
+      <DependentUpon>201512071726262_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

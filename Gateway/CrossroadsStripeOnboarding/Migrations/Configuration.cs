@@ -1,3 +1,5 @@
+using EfEnumToLookup.LookupGenerator;
+
 namespace CrossroadsStripeOnboarding.Migrations
 {
     using System.Data.Entity.Migrations;
@@ -11,6 +13,8 @@ namespace CrossroadsStripeOnboarding.Migrations
 
         protected override void Seed(Models.StripeOnboardingContext context)
         {
+            var enumToLookup = new EnumToLookup();
+            enumToLookup.Apply(context);
         }
     }
 }
