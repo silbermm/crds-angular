@@ -8,7 +8,7 @@ using Microsoft.Practices.Unity.Configuration;
 using EventService = crds_angular.Services.EventService;
 using IEventService = crds_angular.Services.Interfaces.IEventService;
 
-
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace EventReminder
 {
     public class Program

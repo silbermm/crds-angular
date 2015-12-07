@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Timers;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using crds_angular.Models.MailChimp;
@@ -18,7 +17,6 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using AutoMapper;
-using crds_angular.App_Start;
 
 namespace crds_angular.Services
 {
@@ -44,9 +42,6 @@ namespace crds_angular.Services
             _token = _apiUserService.GetToken();
             
             ConfigureRefreshTokenTimer();
-
-            //force AutoMapper to register
-            AutoMapperConfig.RegisterMappings();
         }
 
         private void ConfigureRefreshTokenTimer()
@@ -83,10 +78,7 @@ namespace crds_angular.Services
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
 
-                    // TODO: Implement for US2782
-                    //     If (ContactEmail != SubscriptionEmail)
-                    //       Update/Delete MailChimp record
-                    //     End if   
+                    
 
                     var operationId = SendBatch(publication, subscribers);
 
@@ -115,6 +107,7 @@ namespace crds_angular.Services
             request.AddHeader("Content-Type", "application/json");
 
             var batch = AddSubscribersToBatch(publication, subscribers);
+
             request.JsonSerializer = new RestsharpJsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
             request.AddBody(batch);
@@ -250,31 +243,52 @@ namespace crds_angular.Services
             {
                 if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
                 {
+                    if (!string.IsNullOrEmpty(subscriber.ThirdPartyContactId))
+                    {                        
+                        var unsubscribeOperation = UnsubscribeOldEmailAddress(publication, subscriber);
+                        batch.Operations.Add(unsubscribeOperation);
+                    }
+
                     //Assuming success here, update the ID to match the emailaddress
                     //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
                     subscriber.ThirdPartyContactId = subscriber.EmailAddress;
                     _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
-                var mailChimpSubscriber = new SubscriberDTO();
-                mailChimpSubscriber.Subscribed = subscriber.Subscribed;
-                mailChimpSubscriber.EmailAddress = subscriber.EmailAddress;
-                mailChimpSubscriber.MergeFields = subscriber.MergeFields;
-
-                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress.ToLower());
-
-                var operation = new SubscriberOperationDTO();
-                operation.Method = "PUT";                
-                operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
-
-                // TODO: Do we need to store this somewhere to verify subscriber processed successfully
-                operation.OperationId = Guid.NewGuid().ToString();
-                operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
-
+                var operation = GetOperation(publication, subscriber);
                 batch.Operations.Add(operation);
             }
             
             return batch;
+        }
+
+        private SubscriberOperationDTO UnsubscribeOldEmailAddress(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
+        {
+            var updatedSubcriber = subscriber.Clone();
+            updatedSubcriber.Subscribed = false;
+            var updateOperation = GetOperation(publication, updatedSubcriber);
+            return updateOperation;
+        }
+
+        private SubscriberOperationDTO GetOperation(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
+        {
+            var mailChimpSubscriber = new SubscriberDTO();
+            
+            mailChimpSubscriber.Subscribed = subscriber.Subscribed;
+            mailChimpSubscriber.EmailAddress = subscriber.ThirdPartyContactId;
+            mailChimpSubscriber.MergeFields = subscriber.MergeFields;
+
+            var hashedEmail = CalculateMD5Hash(mailChimpSubscriber.EmailAddress.ToLower());
+
+            var operation = new SubscriberOperationDTO();
+            operation.Method = "PUT";
+            operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
+
+            // TODO: Do we need to store this somewhere to verify subscriber processed successfully
+            operation.OperationId = Guid.NewGuid().ToString();
+            operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
+
+            return operation;
         }
 
         // From http://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
@@ -358,5 +372,4 @@ namespace crds_angular.Services
             }
         }
     }
-
 }
