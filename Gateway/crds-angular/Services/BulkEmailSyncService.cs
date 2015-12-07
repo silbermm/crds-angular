@@ -29,6 +29,8 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configWrapper;
         private string _token;
         private System.Timers.Timer _refreshTokenTimer;
+        // TODO: Consider changing this to read record count in query to accommodate pagination
+        private const int MAX_SYNC_RECORDS = 1000000;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -335,7 +337,7 @@ namespace crds_angular.Services
             {
                 // query mailchimp to get list activity
                 var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + publication.LastSuccessfulSync +
-                    "&fields=members.id,members.email_address,members.status&activity=status", Method.GET);
+                    "&fields=members.id,members.email_address,members.status&activity=status&count=" + MAX_SYNC_RECORDS, Method.GET);
                 request.AddHeader("Content-Type", "application/json");
 
                 try
