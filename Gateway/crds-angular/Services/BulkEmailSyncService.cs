@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Timers;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using crds_angular.Models.MailChimp;
@@ -18,7 +17,6 @@ using Newtonsoft.Json.Linq;
 using RestSharp;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 using AutoMapper;
-using crds_angular.App_Start;
 
 namespace crds_angular.Services
 {
@@ -44,9 +42,6 @@ namespace crds_angular.Services
             _token = _apiUserService.GetToken();
             
             ConfigureRefreshTokenTimer();
-
-            //force AutoMapper to register
-            AutoMapperConfig.RegisterMappings();
         }
 
         private void ConfigureRefreshTokenTimer()
