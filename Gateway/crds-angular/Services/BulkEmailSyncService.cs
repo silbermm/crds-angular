@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Timers;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using crds_angular.Models.MailChimp;
@@ -16,6 +17,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
+using AutoMapper;
+using crds_angular.App_Start;
 
 namespace crds_angular.Services
 {
@@ -41,6 +44,9 @@ namespace crds_angular.Services
             _token = _apiUserService.GetToken();
             
             ConfigureRefreshTokenTimer();
+
+            //force AutoMapper to register
+            AutoMapperConfig.RegisterMappings();
         }
 
         private void ConfigureRefreshTokenTimer()
@@ -67,6 +73,10 @@ namespace crds_angular.Services
 
                 var publications = _bulkEmailRepository.GetPublications(_token);
                 Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
+
+                // this is run first to capture any opt-ins/outs in mailchimp to avoid overwriting
+                // them during the bulk sync 
+                PullOptsFromThirdParty(publications);
 
                 foreach (var publication in publications)
                 {
@@ -167,9 +177,6 @@ namespace crds_angular.Services
 
         private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
         {
-            // poll mailchimp to see if batch was successful -- also need to confirm during dev
-            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous            
-
             var client = GetBulkEmailClient();
 
             for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
@@ -305,5 +312,51 @@ namespace crds_angular.Services
             }
             return sb.ToString();
         }
+
+        private void PullOptsFromThirdParty(List<BulkEmailPublication> publications)
+        {
+            var client = GetBulkEmailClient();
+
+            foreach (var publication in publications)
+            {
+                // query mailchimp to get list activity
+                var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + publication.LastSuccessfulSync +
+                    "&fields=members.id,members.email_address,members.status&activity=status", Method.GET);
+                request.AddHeader("Content-Type", "application/json");
+
+                try
+                {
+
+                    var response = client.Execute(request);
+
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
+                        // TODO: Should these be exceptions?
+                        _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                        return;
+                    }
+
+                    var responseContent = response.Content;
+
+                    var responseContentJson = JObject.Parse(responseContent);
+                    List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
+                    List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
+
+                    foreach (var subscriberDTO in subscribersDTOs)
+                    {
+                        subscriberDTO.PublicationID = publication.PublicationId;
+                        subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
+                    }
+
+                    _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+                }
+            }
+        }
     }
+
 }
