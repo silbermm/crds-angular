@@ -16,7 +16,7 @@ namespace MinistryPlatform.Translation.Services
 {
     public class GroupService : BaseService, IGroupService
     {
-        //private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IConfigurationWrapper _configurationWrapper;
         private readonly ICommunicationService _communicationService;
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
@@ -32,13 +32,13 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupParticipantQualifiedServerPageView =
             Convert.ToInt32(AppSettings("GroupsParticipantsQualifiedServerPageView"));
 
-        private readonly IMinistryPlatformService ministryPlatformService;
+        private IMinistryPlatformService ministryPlatformService;
 
         public GroupService(IMinistryPlatformService ministryPlatformService, IConfigurationWrapper configurationWrapper, IAuthenticationService authenticationService, ICommunicationService communicationService, IContactService contactService, IContentBlockService contentBlockService)
             : base(authenticationService, configurationWrapper)
         {
             this.ministryPlatformService = ministryPlatformService;
-            //this._configurationWrapper = configurationWrapper;
+            this._configurationWrapper = configurationWrapper;
             this._communicationService = communicationService;
             this._contactService = contactService;
             this._contentBlockService = contentBlockService;
