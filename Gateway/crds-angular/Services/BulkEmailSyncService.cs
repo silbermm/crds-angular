@@ -260,7 +260,7 @@ namespace crds_angular.Services
                     _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
-                var operation = GetUpdateOperation(publication, subscriber);
+                var operation = GetOperation(publication, subscriber);
                 batch.Operations.Add(operation);
             }
             
@@ -271,11 +271,11 @@ namespace crds_angular.Services
         {
             var updatedSubcriber = subscriber.Clone();
             updatedSubcriber.Subscribed = false;
-            var updateOperation = GetUpdateOperation(publication, updatedSubcriber);
+            var updateOperation = GetOperation(publication, updatedSubcriber);
             return updateOperation;
         }
 
-        private SubscriberOperationDTO GetUpdateOperation(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
+        private SubscriberOperationDTO GetOperation(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
         {
             var mailChimpSubscriber = new SubscriberDTO();
             
@@ -377,5 +377,4 @@ namespace crds_angular.Services
             }
         }
     }
-
 }
