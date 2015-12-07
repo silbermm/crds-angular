@@ -100,6 +100,7 @@
     <Compile Include="RecurringGift.cs" />
     <Compile Include="Response.cs" />
     <Compile Include="GPExportDatum.cs" />
+    <Compile Include="BulkEmailSubscriberOpt.cs" />
     <Compile Include="TripDistribution.cs" />
     <Compile Include="TripDocuments.cs" />
     <Compile Include="TripFormResponse.cs" />
