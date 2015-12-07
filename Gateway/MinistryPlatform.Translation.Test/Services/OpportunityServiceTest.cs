@@ -15,15 +15,11 @@ namespace MinistryPlatform.Translation.Test.Services
     public class OpportunityServiceTest
     {
         private const int _signedupToServeSubPageViewId = 79;
-        private const int _groupOpportunitiesEventsPageViewId = 77;
         private const int _opportunityPageId = 348;
         private const int _eventPageId = 308;
-        private const int _groupsParticipants = 298;
         private const int _groupsParticipantsSubPageId = 88;
-        private DateTime _today;
 
         private Mock<IMinistryPlatformService> _ministryPlatformService;
-        private Mock<IEventService> _eventService;
         private Mock<IAuthenticationService> _authenticationService;
         private Mock<IConfigurationWrapper> _configWrapper;
         private Mock<IParticipantService> _participantService;
@@ -35,9 +31,7 @@ namespace MinistryPlatform.Translation.Test.Services
         public void SetUp()
         {
             var now = DateTime.Now;
-            _today = new DateTime(now.Year, now.Month, now.Day);
             _ministryPlatformService = new Mock<IMinistryPlatformService>();
-            _eventService = new Mock<IEventService>();
             _authenticationService = new Mock<IAuthenticationService>();
             _configWrapper = new Mock<IConfigurationWrapper>();
             _participantService = new Mock<IParticipantService>();
@@ -49,7 +43,6 @@ namespace MinistryPlatform.Translation.Test.Services
 
 
             _fixture = new OpportunityServiceImpl(_ministryPlatformService.Object,
-                                                  _eventService.Object,
                                                   _authenticationService.Object,
                                                   _configWrapper.Object,
                                                   _participantService.Object,

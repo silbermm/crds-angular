@@ -12,25 +12,17 @@ namespace MinistryPlatform.Translation.Services
 {
     public class OpportunityServiceImpl : BaseService, IOpportunityService
     {
-        private readonly IAuthenticationService _authenticationService;
         private readonly int _eventPage = Convert.ToInt32(AppSettings("Events"));
-        private readonly IEventService _eventService;
         private readonly IParticipantService _participantService;
         private readonly IApiUserService _apiUserService;
-
-        private readonly int _groupOpportunitiesEventsPageViewId =
-            Convert.ToInt32(AppSettings("GroupOpportunitiesEvents"));
-
         private readonly int _groupParticpantsSubPageView = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly int _opportunityPage = Convert.ToInt32(AppSettings("OpportunityPage"));
         private readonly int _opportunityResponses = Convert.ToInt32(AppSettings("OpportunityResponses"));
         private readonly int _signedupToServeSubPageViewId = Convert.ToInt32(AppSettings("SignedupToServe"));
         private readonly int _contactOpportunityResponses = Convert.ToInt32(AppSettings("ContactOpportunityResponses"));
-        //private readonly int _responsesByEventAndGroup = Convert.ToInt32(AppSettings("ResponsesByEventAndGroup"));
 
         public OpportunityServiceImpl(IMinistryPlatformService ministryPlatformService,
-                                      IEventService eventService,
                                       IAuthenticationService authenticationService,
                                       IConfigurationWrapper configurationWrapper,
                                       IParticipantService participantService,
@@ -38,8 +30,6 @@ namespace MinistryPlatform.Translation.Services
             : base(authenticationService, configurationWrapper)
         {
             _ministryPlatformService = ministryPlatformService;
-            _eventService = eventService;
-            _authenticationService = authenticationService;
             _participantService = participantService;
             _apiUserService = apiUserService;
         }
