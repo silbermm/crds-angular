@@ -79,9 +79,6 @@ namespace crds_angular.Services
                 {
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
-
-                    
-
                     var operationId = SendBatch(publication, subscribers);
 
                     // add the publication and operation id in prep for polling 
@@ -336,7 +333,8 @@ namespace crds_angular.Services
             foreach (var publication in publications)
             {
                 // query mailchimp to get list activity
-                var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + publication.LastSuccessfulSync +
+                var lastSuccessfulSync = publication.LastSuccessfulSync.ToString("s");                
+                var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + lastSuccessfulSync +
                     "&fields=members.id,members.email_address,members.status&activity=status&count=" + MAX_SYNC_RECORDS, Method.GET);
                 request.AddHeader("Content-Type", "application/json");
 
