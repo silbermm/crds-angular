@@ -7,8 +7,8 @@
             <ng-messages for="creditCardForm.ccNumber.$error" ng-show="submitError(ccNumber)">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
-            <span ng-show="!creditCard.ccValid && creditCardForm.ccNumber.$dirty && !submitError(ccNumber)" ng-bind-html="$root.MESSAGES.invalidCard.content | html"></span>
-            <span ng-show="creditCard.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+            <span ng-show="!creditCard.ccValid && creditCardForm.ccNumber.$dirty && !submitError(ccNumber)" dynamic-content="$root.MESSAGES.invalidCard.content | html"></span>
+            <span ng-show="creditCard.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
         </div>
         <div class="row">
             <!-- Show this expDate input if we are changing existing account info and the form is dirty - this works around a ui-mask/placeholder bug -->
@@ -21,7 +21,7 @@
                 <ng-messages for="creditCardForm.expDate.$error" ng-if="bankinfoSubmitted">
                   <ng-messages-include src="on-submit-messages"></ng-messages-include>
                 </ng-messages>
-				<span ng-show="creditCard.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+				<span ng-show="creditCard.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
             </div>
             <!-- Show this expDate input if we are NOT changing existing account info OR the form is pristine - this works around a ui-mask/placeholder bug -->
             <div class="form-group col-xs-4  col-md-3" ng-class="{'has-error': expDateError() || creditCard.declinedPayment }" ng-if="!changeAccountInfo || creditCardForm.$pristine">
@@ -33,23 +33,23 @@
                 <ng-messages for="creditCardForm.expDate.$error" ng-if="bankinfoSubmitted">
                   <ng-messages-include src="on-submit-messages"></ng-messages-include>
                 </ng-messages>
-				<span ng-show="creditCard.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+				<span ng-show="creditCard.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
             </div>
             <div class="form-group col-xs-4 col-md-2" ng-class="{'has-error': cvvError(cvcValid) || creditCard.declinedPayment }">
                 <label for="cvv">CVV</label>
                 <input type="tel" name="cvc" class="form-control" ng-model="creditCard.cvc" maxlength="4" ng-model-options="{ updateOn: 'blur' }" ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.cvc}}">
-                <span ng-show="cvvError(cvcValid) && !submitError(cvc)" ng-bind-html="$root.MESSAGES.invalidCvv.content | html"></span>
+                <span ng-show="cvvError(cvcValid) && !submitError(cvc)" dynamic-content="$root.MESSAGES.invalidCvv.content | html"></span>
                 <ng-messages for="creditCardForm.cvc.$error" ng-show="submitError(cvc)">
                   <ng-messages-include src="on-submit-messages"></ng-messages-include>
                 </ng-messages>
-				<span ng-show="creditCard.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+				<span ng-show="creditCard.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
           </div>
           <div class="form-group col-xs-4 col-md-3"  ng-class="{'has-error': billingZipCodeError() || creditCard.declinedPayment }">
                 <label for="billingZipCode">Zip Code</label>
                 <input type="tel" name="billingZipCode" class="form-control" ng-model="creditCard.billingZipCode" maxlength="10" ng-model-options="{ updateOn: 'blur'}" invalid-zip ng-change="resetDefaultCardPlaceholderValues()" ng-required="!useExistingAccountInfo()" placeholder="{{defaultCardPlaceholderValues.billingZipCode}}">
-                <span ng-show="blurBillingZipCodeError()" ng-bind-html="$root.MESSAGES.invalidZip.content | html"></span>
-                <span ng-show="submitError(billingZipCode) && !blurBillingZipCodeError()" ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
-				<span ng-show="creditCard.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+                <span ng-show="blurBillingZipCodeError()" dynamic-content="$root.MESSAGES.invalidZip.content | html"></span>
+                <span ng-show="submitError(billingZipCode) && !blurBillingZipCodeError()" dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+				<span ng-show="creditCard.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
             </div>
         </div>
     </section>

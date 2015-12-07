@@ -287,6 +287,9 @@
     <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\ChildcareService.cs" />
     <Compile Include="Services\Interfaces\IChildcareService.cs" />
+    <Compile Include="Models\MailChimp\SubscriberDTO.cs" />
+    <Compile Include="Models\MailChimp\SubscriberOperationDTO.cs" />
+    <Compile Include="Models\MailChimp\SubscriberBatchDTO.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
     <Compile Include="Util\FileResult.cs" />

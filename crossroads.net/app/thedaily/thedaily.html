@@ -3,7 +3,7 @@
     <h1 class="page-header">The Daily</h1>
     <h2 class="subheading">Spend time connecting with God on a daily basis.</h2>
 
-    <div ng-bind-html="$root.MESSAGES.thedaily_desc.content | html"></div>
+    <div dynamic-content="$root.MESSAGES.thedaily_desc.content | html"></div>
 
     <hr>
 
@@ -22,19 +22,19 @@
               </span>
 
             </div><!-- /input-group -->
-            <span ng-show="mailchimp.result === 'error'" ng-cloak ng-bind-html="mailchimp.errorMessage"></span>
+            <span ng-show="mailchimp.result === 'error'" ng-cloak dynamic-content="mailchimp.errorMessage"></span>
           </div><!-- /.col-lg-12 -->
         </div><!-- /.row -->
 
         <!-- Show success message if MailChimp returned successfully. -->
         <div class="push-bottom bold" ng-show="mailchimp.result === 'success'" ng-cloak>
-          <span ng-bind-html="mailchimp.successMessage"></span>
+          <span dynamic-content="mailchimp.successMessage"></span>
         </div>
 
 
       </form>
 
-    <div ng-bind-html="$root.MESSAGES.thedaily_unsub.content | html"></div>
+    <div dynamic-content="$root.MESSAGES.thedaily_unsub.content | html"></div>
 
   </div>
 </row><!--/row-->

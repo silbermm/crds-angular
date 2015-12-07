@@ -11,6 +11,7 @@ using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
 using crds_angular.Util;
+using Crossroads.Utilities;
 using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
@@ -224,7 +225,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonationDTO
                 {
                     ProgramId = dto.ProgramId,
-                    Amount = dto.Amount,
+                    Amount = (int) dto.Amount,
                     Id = donationId.ToString(),
                     Email = donor.Email
                 };
@@ -283,7 +284,7 @@ namespace crds_angular.Controllers.API
                 var response = new DonationDTO()
                 {
                     ProgramId = dto.ProgramId,
-                    Amount = dto.Amount,
+                    Amount = (int)dto.Amount,
                     Id = donationId.ToString(),
                     Email = donor.Email
                 };
