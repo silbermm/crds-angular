@@ -190,9 +190,6 @@
       //force genders field to be dirty
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
-      if (vm.profileParentForm) {
-        vm.profileParentForm.$setPristine();
-      }
 
       $timeout(function() {
         vm.submitted = true;
@@ -216,6 +213,10 @@
           vm.profileData.person.$save(function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
             $log.debug('person save successful');
+            if (vm.profileParentForm) {
+              vm.profileParentForm.$setPristine();
+            }
+
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
