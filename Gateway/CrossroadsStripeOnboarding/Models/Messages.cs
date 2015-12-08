@@ -10,5 +10,7 @@
         FileFound = 5,
         FileContainsInvalidData = 6,
         ReadFileSuccess = 7,
+        ImportFileSuccess = 8,
+        SkipImportProcess = 9,
     }
 }

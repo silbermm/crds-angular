@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Mime;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
@@ -11,30 +10,38 @@ namespace CrossroadsStripeOnboarding
     {
         static void Main()
         {
+            LoadAndImportFile();
+        }
+
+        private static void LoadAndImportFile()
+        {
             var result = new KeyValuePair<Messages, StripeJsonExport>(Messages.NotRun, null);
-            while (result.Key != Messages.Success)
+
+            while (result.Key != Messages.ImportFileSuccess && result.Key != Messages.SkipImportProcess )
             {
-                Console.WriteLine("Enter the exports file path/location or X to close the program: ");
+                Console.WriteLine("Enter the exports file path/location to import.  Otherwise press S to skip this step or X to close the program: ");
                 result = LoadExportFile.ReadFile(Console.ReadLine());
-                
-                if (result.Key == Messages.ReadFileSuccess)
+
+                switch (result.Key)
                 {
-                    //TODO::add success path
-                    Console.WriteLine("The file was processed successfully.  Prease any key to exit.");
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                }
-                else if (result.Key == Messages.FileNameRequired || result.Key == Messages.FileNotFound)
-                {
-                    Console.WriteLine("Please enter a valid file.");
-                }
-                else if (result.Key == Messages.FileContainsInvalidData)
-                {
-                    Console.WriteLine("The file contains invalid data please investigate.");
-                }
-                else if (result.Key == Messages.Close)
-                {
-                    Environment.Exit(0);
+                    case Messages.ReadFileSuccess:
+                        result = LoadExportFile.ImportFile(result.Value);
+
+                        if (result.Key == Messages.ImportFileSuccess)
+                        {
+                            Console.WriteLine("The file was processed successfully.");
+                        }
+                        break;
+                    case Messages.FileNameRequired:
+                    case Messages.FileNotFound:
+                        Console.WriteLine("Please enter a valid file.");
+                        break;
+                    case Messages.FileContainsInvalidData:
+                        Console.WriteLine("The file contains invalid data please investigate.");
+                        break;
+                    case Messages.Close:
+                        Environment.Exit(0);
+                        break;
                 }
             }
         }
