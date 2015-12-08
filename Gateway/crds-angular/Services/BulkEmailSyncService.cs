@@ -69,31 +69,24 @@ namespace crds_angular.Services
                 _refreshTokenTimer.Start();
 
                 var publications = _bulkEmailRepository.GetPublications(_token);
-                Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
-
-                // this is run first to capture any opt-ins/outs in mailchimp to avoid overwriting
-                // them during the bulk sync 
-                PullOptsFromThirdParty(publications);
+                var publicationOperationIds = new Dictionary<string, BulkEmailPublication>();
 
                 foreach (var publication in publications)
                 {
+                    PullSubscriptionStatusChangesFromThirdParty(publication);
+
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
-
-                    
-
                     var operationId = SendBatch(publication, subscribers);
 
                     // add the publication and operation id in prep for polling 
                     if (!String.IsNullOrEmpty(operationId))
                     {
-                        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
+                        publicationOperationIds.Add(operationId, publication);
                     }
-
-                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
                 }
 
-                ProcessSynchronizationResultsWithRetries(listResponseIds);
+                ProcessSynchronizationResultsWithRetries(publicationOperationIds);
             }
             finally
             {
@@ -143,7 +136,7 @@ namespace crds_angular.Services
             }
         }
 
-        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
+        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, BulkEmailPublication> publicationOperationIds)
         {
             const int secondsToSleep = 5;
             const int maxRetries = 60*60/secondsToSleep;
@@ -170,14 +163,14 @@ namespace crds_angular.Services
             } while (publicationOperationIds.Any());
         }
 
-        private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
+        private Dictionary<string, BulkEmailPublication> ProcessSynchronizationResults(Dictionary<string, BulkEmailPublication> publicationOperationIds)
         {
             var client = GetBulkEmailClient();
 
             for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
             {
                 var idPair = publicationOperationIds.ElementAt(index);
-                var request = new RestRequest("batches/" + idPair.Value, Method.GET);
+                var request = new RestRequest("batches/" + idPair.Key, Method.GET);
                 request.AddHeader("Content-Type", "application/json");
 
                 var response = client.Execute(request);
@@ -195,7 +188,7 @@ namespace crds_angular.Services
                     continue;
                 }
 
-                if (responseValues["status"].ToString() == "finished")
+                 if (responseValues["status"].ToString() == "finished")
                 {                                        
                     var total = responseValues["total_operations"];                    
                     var errors = responseValues["errored_operations"];
@@ -210,6 +203,10 @@ namespace crds_angular.Services
                     }
 
                     _logger.Info(response.Content);
+
+                    var publication = idPair.Value;
+                    publication.LastSuccessfulSync = DateTime.Parse(responseValues["completed_at"].ToString());
+                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
                 }
                 else
                 {
@@ -329,48 +326,49 @@ namespace crds_angular.Services
             return sb.ToString();
         }
 
-        private void PullOptsFromThirdParty(List<BulkEmailPublication> publications)
+        private void PullSubscriptionStatusChangesFromThirdParty(BulkEmailPublication publication)
         {
             var client = GetBulkEmailClient();
 
-            foreach (var publication in publications)
+            // query mailchimp to get list activity         
+            var lastSuccessfulSync = publication.LastSuccessfulSync.ToUniversalTime().ToString("u");
+            var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + lastSuccessfulSync +
+                                          "&fields=members.id,members.email_address,members.status&activity=status&count=" + MAX_SYNC_RECORDS,
+                                          Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+
+            try
             {
-                // query mailchimp to get list activity
-                var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + publication.LastSuccessfulSync +
-                    "&fields=members.id,members.email_address,members.status&activity=status&count=" + MAX_SYNC_RECORDS, Method.GET);
-                request.AddHeader("Content-Type", "application/json");
 
-                try
+                var response = client.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
                 {
-
-                    var response = client.Execute(request);
-
-                    if (response.StatusCode != HttpStatusCode.OK)
-                    {
-                        // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
-                        // TODO: Should these be exceptions?
-                        _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
-                        return;
-                    }
-
-                    var responseContent = response.Content;
-
-                    var responseContentJson = JObject.Parse(responseContent);
-                    List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
-                    List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
-
-                    foreach (var subscriberDTO in subscribersDTOs)
-                    {
-                        subscriberDTO.PublicationID = publication.PublicationId;
-                        subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
-                    }
-
-                    _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
+                    // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
+                    // TODO: Should these be exceptions?
+                    _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                    return;
                 }
-                catch (Exception ex)
+
+                var responseContent = response.Content;
+
+                var responseContentJson = JObject.Parse(responseContent);
+                List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
+                List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
+
+                foreach (var subscriberDTO in subscribersDTOs)
                 {
-                    _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+                    subscriberDTO.PublicationID = publication.PublicationId;
+                    subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
+
+                    _logger.InfoFormat("Changing subscription status for {0} to {1}", subscriberDTO.EmailAddress, subscriberDTO.Status);
                 }
+
+                _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
             }
         }
     }

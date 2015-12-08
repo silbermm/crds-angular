@@ -44,7 +44,7 @@ namespace MinistryPlatform.Translation.Services
             var publicationDictionary = new Dictionary<string, object>
             {
                 {"Publication_ID", publication.PublicationId},
-                {"Last_Successful_Sync", DateTime.Now}
+                {"Last_Successful_Sync", publication.LastSuccessfulSync}
             };
             _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Publications")), publicationDictionary, token);
         }
