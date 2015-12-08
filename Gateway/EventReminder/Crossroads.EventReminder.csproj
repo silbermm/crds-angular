@@ -71,6 +71,40 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\crds-angular\MinistryPlatform.config">
+      <Link>MinistryPlatform.config</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Debug.config">
+      <Link>MinistryPlatform.Debug.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Demo.config">
+      <Link>MinistryPlatform.Demo.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Integration.config">
+      <Link>MinistryPlatform.Integration.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.local test.config">
+      <Link>MinistryPlatform.local test.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.MPTest01.config">
+      <Link>MinistryPlatform.MPTest01.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
+    <None Include="..\crds-angular\MinistryPlatform.Release.config">
+      <Link>MinistryPlatform.Release.config</Link>
+      <DependentUpon>MinistryPlatform.config</DependentUpon>
+      <IsTransformFile>True</IsTransformFile>
+    </None>
     <None Include="..\crds-angular\Unity.config">
       <Link>Unity.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -89,27 +123,6 @@
     </None>
     <None Include="App.Release.config">
       <DependentUpon>App.config</DependentUpon>
-    </None>
-    <None Include="MinistryPlatform.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.Debug.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.Demo.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.Integration.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.local test.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.MPTest01.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="MinistryPlatform.Release.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
