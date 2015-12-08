@@ -12,5 +12,7 @@
         ReadFileSuccess = 7,
         ImportFileSuccess = 8,
         SkipImportProcess = 9,
+        PlansAndSubscriptionsSuccess = 10,
+        PlansAndSubscriptionsFail = 11,
     }
 }

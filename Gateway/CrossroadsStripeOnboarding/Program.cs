@@ -11,6 +11,7 @@ namespace CrossroadsStripeOnboarding
         static void Main()
         {
             LoadAndImportFile();
+            CreateStripePlansAndSubscriptions();
         }
 
         private static void LoadAndImportFile()
@@ -44,6 +45,33 @@ namespace CrossroadsStripeOnboarding
                         break;
                 }
             }
+        }
+
+        private static void CreateStripePlansAndSubscriptions()
+        {
+            var result = Messages.NotRun;
+
+            while (result != Messages.PlansAndSubscriptionsSuccess)
+            {
+                Console.WriteLine("To create Stripe Plans and Subscritions press any key to continue or X to close the Program: ");
+                var command = Console.ReadLine();
+
+                if (command != null && command.Trim().Length != 0 && command.Equals("X"))
+                {
+                    Environment.Exit(0);
+                }
+
+                result = StripePlansAndSubscriptions.generate();
+
+                if (result != Messages.PlansAndSubscriptionsSuccess)
+                {
+                    Console.WriteLine("An error occured while creating stripe plans and subscriptions.");
+                }
+            }
+
+
+            Console.WriteLine("The file was processed successfully. Press any key to close.");
+            Console.ReadKey();
         }
     }
 }
