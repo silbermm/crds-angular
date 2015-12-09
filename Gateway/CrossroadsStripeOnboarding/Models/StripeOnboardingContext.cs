@@ -4,9 +4,7 @@ namespace CrossroadsStripeOnboarding.Models
 
     public class StripeOnboardingContext : DbContext
     {
-        public StripeOnboardingContext(): base("StripeOnboardingContext")
-        {
-        }
+        public StripeOnboardingContext(): base("StripeOnboardingContext") {}
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

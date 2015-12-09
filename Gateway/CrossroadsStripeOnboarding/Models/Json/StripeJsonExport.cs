@@ -6,7 +6,11 @@ namespace CrossroadsStripeOnboarding.Models.Json
 {
     public class StripeJsonExport
     {
-        [JsonProperty("old_customer_id")]
+        public StripeJsonExport(Dictionary<string, StripeJsonCustomer> customersMap)
+        {
+            CustomersMap = customersMap;
+        }
+
         public Dictionary<string, StripeJsonCustomer> CustomersMap;
     }
 

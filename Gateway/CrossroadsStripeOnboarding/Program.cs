@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using crds_angular.Models.Crossroads;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
@@ -10,8 +11,14 @@ namespace CrossroadsStripeOnboarding
     {
         static void Main()
         {
-            LoadAndImportFile();
-            CreateStripePlansAndSubscriptions();
+            using (var db = new MinistryPlatformContext())
+            {
+                var donor = db.Donors.Find(3950248);
+                Console.Write(donor);
+            }
+
+            //LoadAndImportFile();
+            //CreateStripePlansAndSubscriptions();
         }
 
         private static void LoadAndImportFile()

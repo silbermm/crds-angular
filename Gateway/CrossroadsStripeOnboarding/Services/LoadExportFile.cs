@@ -3,6 +3,8 @@ using System.IO;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace CrossroadsStripeOnboarding.Services
 {
     public class LoadExportFile
@@ -35,24 +37,27 @@ namespace CrossroadsStripeOnboarding.Services
 
         private static KeyValuePair<Messages, StripeJsonExport> LoadFileToJson(string file)
         {
-            // read JSON directly from a file
-            using (var reader = File.OpenText(@file))
-            {
-                var serializer = new JsonSerializer();
-                var jsonExport = (StripeJsonExport) serializer.Deserialize(reader, typeof(StripeJsonExport));
+            var jsonObject = JObject.Parse(File.ReadAllText(@file));
+            var jsonString = JsonConvert.SerializeObject(jsonObject);
+            var json = JsonConvert.DeserializeObject<Dictionary<string, StripeJsonCustomer>>(jsonString);
 
-                return new KeyValuePair<Messages, StripeJsonExport>(Messages.ReadFileSuccess, jsonExport); 
-            }
+            return new KeyValuePair<Messages, StripeJsonExport>(Messages.ReadFileSuccess, new StripeJsonExport(json)); 
         }
 
         public static KeyValuePair<Messages, StripeJsonExport> ImportFile(StripeJsonExport jsonExport)
         {
             using (var db = new StripeOnboardingContext())
             {
+                DumbDatabaseContent(db);
                 ImportCustomerAndAccounts(db, jsonExport.CustomersMap);
             }
 
             return new KeyValuePair<Messages, StripeJsonExport>(Messages.ImportFileSuccess, jsonExport);
+        }
+
+        private static void DumbDatabaseContent(StripeOnboardingContext db)
+        {
+            db.Database.ExecuteSqlCommand("DELETE FROM [StripeAccounts]; DELETE FROM [StripeCustomers];");
         }
 
         private static void ImportCustomerAndAccounts(StripeOnboardingContext db, Dictionary<string, StripeJsonCustomer> customersMap)
@@ -81,14 +86,20 @@ namespace CrossroadsStripeOnboarding.Services
 
         private static void ImportAccounts(StripeOnboardingContext db, StripeJsonCustomer customerDetails, StripeCustomer customer)
         {
-            foreach (var bankDetails in customerDetails.BanksMap)
+            if (customerDetails.BanksMap != null)
             {
-                ImportAccount(db, bankDetails.Key, bankDetails.Value, customer);
+                foreach (var bankDetails in customerDetails.BanksMap)
+                {
+                    ImportAccount(db, bankDetails.Key, bankDetails.Value, customer);
+                }
             }
 
-            foreach (var cardDetails in customerDetails.CardsMap)
+            if (customerDetails.CardsMap != null)
             {
-                ImportAccount(db, cardDetails.Key, cardDetails.Value, customer);
+                foreach (var cardDetails in customerDetails.CardsMap)
+                {
+                    ImportAccount(db, cardDetails.Key, cardDetails.Value, customer);
+                }
             }
         }
 
@@ -104,10 +115,9 @@ namespace CrossroadsStripeOnboarding.Services
                 ExpMonth = accountDetails.ExpMonth,
                 ExpYear = accountDetails.ExpYear,
                 Institution = accountDetails.Institution,
-                StripeCustomerId = customer.Id,
             };
-
-            db.StripeAccounts.Add(account);
+            
+            customer.StripeAccounts.Add(account);
         }
     }
 }
