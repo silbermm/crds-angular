@@ -1,27 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
-using crds_angular.Models.Crossroads;
+using System.Configuration;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
+using Microsoft.Practices.Unity;
+using Microsoft.Practices.Unity.Configuration;
 
 namespace CrossroadsStripeOnboarding
 {
     class Program
     {
-        static void Main()
+        private static void Main()
         {
-            using (var db = new MinistryPlatformContext())
-            {
-                var donor = db.Donors.Find(3950248);
-                Console.Write(donor);
-            }
-
-            //LoadAndImportFile();
-            //CreateStripePlansAndSubscriptions();
+            var program = new Program();
+            program.run();
         }
 
-        private static void LoadAndImportFile()
+        private StripePlansAndSubscriptions _stripePlansAndSubscriptions ;
+
+        public Program()
+        {
+            var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
+            var container = new UnityContainer();
+            section.Configure(container);
+            _stripePlansAndSubscriptions = container.Resolve<StripePlansAndSubscriptions>();
+        }
+
+        public void run()
+        {
+            LoadAndImportFile();
+            CreateStripePlansAndSubscriptions();
+        }
+
+        private void LoadAndImportFile()
         {
             var result = new KeyValuePair<Messages, StripeJsonExport>(Messages.NotRun, null);
 
@@ -54,7 +66,7 @@ namespace CrossroadsStripeOnboarding
             }
         }
 
-        private static void CreateStripePlansAndSubscriptions()
+        private void CreateStripePlansAndSubscriptions()
         {
             var result = Messages.NotRun;
 
@@ -68,7 +80,7 @@ namespace CrossroadsStripeOnboarding
                     Environment.Exit(0);
                 }
 
-                result = StripePlansAndSubscriptions.generate();
+                result = _stripePlansAndSubscriptions.generate();
 
                 if (result != Messages.PlansAndSubscriptionsSuccess)
                 {
