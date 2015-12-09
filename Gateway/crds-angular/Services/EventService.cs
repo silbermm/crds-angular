@@ -144,7 +144,10 @@ namespace crds_angular.Services
                 {"Nickname", participant.Nickname},
                 {"Event_Title", evt.name},
                 {"Event_Start_Date", evt.StartDate.ToShortDateString()},
-                {"Event_Start_Time", evt.StartDate.ToShortTimeString()}
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
+                {"cmsChildcareEventReminder", null},
+                {"Childcare_Children", null},
+                {"Childcare_Contact", null} // Set these three parameters no matter what...
             };
 
             if (children.Any())
