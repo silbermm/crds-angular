@@ -17,7 +17,7 @@ namespace CrossroadsStripeOnboarding
             program.run();
         }
 
-        private StripePlansAndSubscriptions _stripePlansAndSubscriptions ;
+        private readonly StripePlansAndSubscriptions _stripePlansAndSubscriptions ;
 
         public Program()
         {
