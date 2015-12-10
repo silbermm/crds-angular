@@ -39,9 +39,9 @@
                 <ui-select-match placeholder="Click here to choose check batch...">{{$select.selected.name}}</ui-select-match>
                 <ui-select-choices repeat="batch in checkBatchProcessor.batches | filter: $select.search track by batch.id">
                   <div ng-class="batch.status == 'exported' ? 'brand-warning' : ''">
-                    <div dynamic-content="batch.name | highlight: $select.search"></div>
+                    <div ng-bind-html="batch.name | highlight: $select.search"></div>
                     <small>
-                      Scan Date: <span dynamic-content="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
+                      Scan Date: <span ng-bind-html="''+batch.scanDate | date: 'MMM d, yyyy' | highlight: $select.search "></span>
                     </small>
                   </div>
                 </ui-select-choices>
@@ -71,7 +71,7 @@
               <ui-select ng-model="checkBatchProcessor.program" name="program" id="program" required>
                 <ui-select-match placeholder="Click here to choose the program...">{{$select.selected.Name}}</ui-select-match>
                 <ui-select-choices repeat="program in checkBatchProcessor.programs | filter: $select.search track by program.ProgramId">
-                  <div dynamic-content="program.Name | highlight: $select.search"></div>
+                  <div ng-bind-html="program.Name | highlight: $select.search"></div>
                 </ui-select-choices>
               </ui-select>
             </div>
