@@ -29,6 +29,7 @@ ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_St
 REFERENCES [dbo].[Contacts] ([Contact_ID])
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Staff_Only_Feedback_dp_Domains]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Staff_Only_Feedback]'))
 ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains] FOREIGN KEY([Domain_ID])
 REFERENCES [dbo].[dp_Domains] ([Domain_ID])
 GO
