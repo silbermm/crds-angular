@@ -192,7 +192,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
     if(err){
       throw new gutil.PluginError('webpack-dev-server', err);
     }
-    gutil.log('[start]', 'http://localhost:8080/webpack-dev-server/index.html');
+    gutil.log('[start]', 'https://localhost:8080/webpack-dev-server/index.html');
   });
 
   gulp.src('app/index.html')
@@ -227,8 +227,8 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
   gulp.src('./lib/load-image.all.min.js')
     .pipe(gulp.dest('./assets'));
 
-  gutil.log('[start]', 'Access crossroads.net at http://localhost:8080/#');
-  gutil.log('[start]', 'Access crossroads.net Live Reload at http://localhost:8080/webpack-dev-server/#');
+  gutil.log('[start]', 'Access crossroads.net at https://localhost:8080/#');
+  gutil.log('[start]', 'Access crossroads.net Live Reload at https://localhost:8080/webpack-dev-server/#');
 });
 
 gulp.task('webpack:build', ['icons', 'robots', 'apache-site-config'], function(callback) {
