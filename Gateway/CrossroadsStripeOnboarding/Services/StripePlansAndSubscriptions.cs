@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
@@ -13,10 +14,12 @@ namespace CrossroadsStripeOnboarding.Services
     {
 
         private readonly IPaymentService _paymentService;
+        private readonly int _additionalTrialPeriod;
 
         public StripePlansAndSubscriptions(IPaymentService paymentService)
         {
             _paymentService = paymentService;
+            _additionalTrialPeriod = Int32.Parse(ConfigurationManager.AppSettings.Get("additonalTrialPeriodMonths"));
         }
 
         public Messages generate()
@@ -93,7 +96,7 @@ namespace CrossroadsStripeOnboarding.Services
 
         private DateTime GetStartDate(RecurringGift gift)
         {
-            return gift.Frequency_ID == 1 ? GetStartDateForWeek() : GetStartForMonth(gift);
+            return (gift.Frequency_ID == 1 ? GetStartDateForWeek() : GetStartForMonth(gift)).AddMonths(_additionalTrialPeriod);
         }
 
         private DateTime GetStartDateForWeek()
