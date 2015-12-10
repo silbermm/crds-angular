@@ -11,11 +11,11 @@ namespace CrossroadsStripeOnboarding.Services
     public class StripePlansAndSubscriptions
     {
 
-        private readonly IPaymentService _paymentServiced;
+        private readonly IPaymentService _paymentService;
 
         public StripePlansAndSubscriptions(IPaymentService paymentService)
         {
-            _paymentServiced = paymentService;
+            _paymentService = paymentService;
         }
 
         public Messages generate()
@@ -55,8 +55,8 @@ namespace CrossroadsStripeOnboarding.Services
 
         private void CreatePlanAndSubscription(RecurringGift gift, StripeAccount account)
         {
-            _paymentServiced.CreatePlan(MapToRecurringGiftDto(gift), MapToContactDonor(gift));
-            //CreateSubscription(string planName, string customer, DateTime trialEndDate)
+            var plan = _paymentService.CreatePlan(MapToRecurringGiftDto(gift), MapToContactDonor(gift));
+            _paymentService.CreateSubscription(plan.Name, account.StripeCustomer.CustomerId, DateTime trialEndDate)
             MapToRecurringGiftDto(gift);
         }
 
