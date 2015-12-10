@@ -78,19 +78,18 @@ ELSE
 	END
 GO
 
-IF NOT EXISTS(SELECT * FROM [dbo].[dp_Role_Sub_Pages] WHERE [Role_Sub_Page_ID] = 16105)
+DECLARE @ADMIN_ROLE int = 2;
+DECLARE @SUB_PAGE int = 544;
+DECLARE @ACCESS int = 3;
+IF NOT EXISTS (SELECT 1 FROM dbo.dp_Role_Sub_Pages where Role_ID = @ADMIN_ROLE and Sub_Page_ID = @SUB_PAGE)
 BEGIN
-	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] ON
 	INSERT INTO [dbo].[dp_Role_Sub_Pages]
-           ([Role_Sub_Page_ID]
-		   ,[Role_ID]
+           ([Role_ID]
            ,[Sub_Page_ID]
            ,[Access_Level])
      VALUES
-           (16105
-		   ,2
-           ,544
-           ,3)
-	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] OFF
+           (@ADMIN_ROLE
+           ,@SUB_PAGE
+           ,@ACCESS)
 END
 GO
