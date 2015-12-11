@@ -39,32 +39,27 @@ namespace CrossroadsStripeOnboarding.Services
 
         private static KeyValuePair<Messages, StripeJsonExport> LoadFileToJson(string file)
         {
-            //var jsonObject = JObject.Parse(File.ReadAllText(@file));
-            //var jsonString = JsonConvert.SerializeObject(jsonObject);
-            //var json = JsonConvert.DeserializeObject<Dictionary<string, StripeJsonCustomer>>(jsonString);
-
             var jsonReader = new JsonTextReader(new StringReader(File.ReadAllText(@file)));
             var json = new Dictionary<string, StripeJsonCustomer>();
             jsonReader.Read();
             string propertyName = string.Empty;
             while (jsonReader.Read())
             {
-                if (jsonReader.TokenType == JsonToken.PropertyName)
+                switch (jsonReader.TokenType)
                 {
-                    propertyName = (string)jsonReader.Value + "|" + Random.Next();
-                    continue;
-                }
-
-                if (jsonReader.TokenType == JsonToken.StartObject)
-                {
-                    var o = JObject.Load(jsonReader);
-                    var customer = o.ToObject<StripeJsonCustomer>();
-                    json.Add(propertyName, customer);
-                }
-
-                if (jsonReader.TokenType == JsonToken.EndObject)
-                {
-                    propertyName = null;
+                    case JsonToken.PropertyName:
+                        propertyName = (string)jsonReader.Value + "|" + Random.Next();
+                        continue;
+                    case JsonToken.StartObject:
+                        var o = JObject.Load(jsonReader);
+                        var customer = o.ToObject<StripeJsonCustomer>();
+                        json.Add(propertyName, customer);
+                        continue;
+                    case JsonToken.EndObject:
+                        propertyName = string.Empty;
+                        break;
+                    default:
+                        continue;
                 }
             }
 
