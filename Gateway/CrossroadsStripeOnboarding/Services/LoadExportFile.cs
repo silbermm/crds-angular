@@ -97,7 +97,7 @@ namespace CrossroadsStripeOnboarding.Services
             var customer = new StripeCustomer
             {
                 CustomerId = customerDetails.NewCustomerId,
-                ExternalPersonId = oldCustomerId,
+                ExternalPersonId = oldCustomerId.Split('|')[0],
                 Imported = false,
             };
 
