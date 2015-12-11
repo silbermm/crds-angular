@@ -16,9 +16,13 @@ namespace CrossroadsStripeOnboarding.Models
 
         public int Frequency_ID { get; set; }
 
+        public Frequency Frequency { get { return (Frequency) Frequency_ID; } }
+
         public int? Day_Of_Month { get; set; }
 
         public int? Day_Of_Week_ID { get; set; }
+
+        public DayOfWeek? DayOfWeek { get { return (Day_Of_Week_ID == null ? (DayOfWeek?) null : (DayOfWeek) Day_Of_Week_ID); } }
 
         [Column(TypeName = "money")]
         public decimal Amount { get; set; }

@@ -49,6 +49,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CommandLine">
+      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="EfEnumToLookup">
       <HintPath>..\packages\ef-enum-to-lookup.1.9.0\lib\net45\EfEnumToLookup.dll</HintPath>
     </Reference>
@@ -88,8 +94,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\DayOfWeek.cs" />
     <Compile Include="Models\Donor.cs" />
     <Compile Include="Models\DonorAccount.cs" />
+    <Compile Include="Models\Frequency.cs" />
     <Compile Include="Models\Messages.cs" />
     <Compile Include="Models\Json\StripeJsonExport.cs" />
     <Compile Include="Migrations\201512071726262_Initial.cs" />
@@ -107,6 +115,7 @@
     <Compile Include="Models\StripeOnboardingContext.cs" />
     <Compile Include="Services\StripePlansAndSubscriptions.cs" />
     <Compile Include="Services\LoadExportFile.cs" />
+    <Compile Include="Services\VerifyStripeSubscriptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\crds-angular\MinistryPlatform.config">

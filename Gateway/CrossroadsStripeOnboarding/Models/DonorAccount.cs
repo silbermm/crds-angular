@@ -35,6 +35,8 @@ namespace CrossroadsStripeOnboarding.Models
 
         public int Account_Type_ID { get; set; }
 
+        public AccountType AccountType { get { return (AccountType) Account_Type_ID; } }
+
         public bool Closed { get; set; }
 
         public int? Bank_ID { get; set; }

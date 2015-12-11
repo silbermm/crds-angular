@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using CommandLine;
+using CommandLine.Text;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
+using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
@@ -11,24 +14,44 @@ namespace CrossroadsStripeOnboarding
 {
     class Program
     {
-        private static void Main()
-        {
-            var program = new Program();
-            program.run();
-        }
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
 
-        private readonly StripePlansAndSubscriptions _stripePlansAndSubscriptions ;
-
-        public Program()
+        private static void Main(string [] args)
         {
             var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();
             section.Configure(container);
-            _stripePlansAndSubscriptions = container.Resolve<StripePlansAndSubscriptions>();
+
+            var program = container.Resolve<Program>();
+            program.run(args);
         }
 
-        public void run()
+        private readonly StripePlansAndSubscriptions _stripePlansAndSubscriptions;
+        private readonly VerifyStripeSubscriptions _verifyStripeSubscriptions;
+
+        public Program(StripePlansAndSubscriptions stripePlansAndSubscriptions, VerifyStripeSubscriptions verifyStripeSubscriptions)
         {
+            _stripePlansAndSubscriptions = stripePlansAndSubscriptions;
+            _verifyStripeSubscriptions = verifyStripeSubscriptions;
+        }
+
+        public void run(string [] args)
+        {
+            var options = new Options();
+            if (!Parser.Default.ParseArguments(args, options))
+            {
+                logger.Error("Invalid Arguments.");
+                logger.Error(options.GetUsage());
+                Environment.Exit(1);
+            }
+
+            if (options.VerifyMode)
+            {
+                logger.Info("Running in verify mode");
+                _verifyStripeSubscriptions.Verify();
+                Environment.Exit(0);
+            }
+
             LoadAndImportFile();
             CreateStripePlansAndSubscriptions();
         }
@@ -91,6 +114,23 @@ namespace CrossroadsStripeOnboarding
 
             Console.WriteLine("The file was processed successfully. Press any key to close.");
             Console.ReadKey();
+        }
+
+        public class Options
+        {
+            [Option('V', "verify", Required = false, DefaultValue = false,
+              HelpText = "Execute in verification mode - by default will run in execute mode")]
+            public bool VerifyMode { get; set; }
+
+            [ParserState]
+            public IParserState LastParserState { get; set; }
+
+            [HelpOption]
+            public string GetUsage()
+            {
+                return HelpText.AutoBuild(this,
+                  (HelpText current) => HelpText.DefaultParsingErrorsHandler(this, current));
+            }
         }
     }
 }

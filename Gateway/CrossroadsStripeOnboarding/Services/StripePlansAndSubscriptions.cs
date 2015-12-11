@@ -101,7 +101,7 @@ namespace CrossroadsStripeOnboarding.Services
 
         private DateTime GetStartDateForWeek()
         {
-            var days = DateTime.Today.DayOfWeek == DayOfWeek.Tuesday ? 7 : ((int)DayOfWeek.Tuesday - (int)DateTime.Today.DayOfWeek + 7) % 7;
+            var days = DateTime.Today.DayOfWeek == System.DayOfWeek.Tuesday ? 7 : ((int)System.DayOfWeek.Tuesday - (int)DateTime.Today.DayOfWeek + 7) % 7;
             return DateTime.Today.AddDays(days);
         }
 
