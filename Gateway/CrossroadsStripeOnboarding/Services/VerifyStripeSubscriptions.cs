@@ -85,7 +85,7 @@ namespace CrossroadsStripeOnboarding.Services
                     ? null
                     : sub.Plan.Interval.ToLower().Equals("month") ? Frequency.Monthly : sub.Plan.Interval.ToLower().Equals("week") ? Frequency.Weekly : (Frequency?) null;
                 var stripeFrequency = freq == null ? Null : freq.ToString();
-                var startDate = sub == null || string.IsNullOrWhiteSpace(sub.Start) ? (DateTime?)null : StripeEpochTime.ConvertEpochToDateTime(long.Parse(sub.Start));
+                var startDate = sub == null || string.IsNullOrWhiteSpace(sub.CurrentPeriodEnd) ? (DateTime?)null : StripeEpochTime.ConvertEpochToDateTime(long.Parse(sub.CurrentPeriodEnd));
                 var stripeRepeat = freq != null && freq == Frequency.Monthly && startDate != null
                     ? startDate.Value.Day+""
                     : freq != null && freq == Frequency.Weekly && startDate != null ? startDate.Value.DayOfWeek.ToString() : Null;
@@ -101,7 +101,7 @@ namespace CrossroadsStripeOnboarding.Services
                             stripeAccountType = AccountType.CreditCard.ToString();
                             stripeAccountLast4 = source.last4;
                         }
-                        else if ("bank".Equals(source.@object))
+                        else if ("bank_account".Equals(source.@object))
                         {
                             stripeAccountType = AccountType.Bank.ToString();
                             stripeAccountLast4 = source.bank_last4;
