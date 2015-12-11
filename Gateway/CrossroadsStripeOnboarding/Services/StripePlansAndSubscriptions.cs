@@ -60,7 +60,7 @@ namespace CrossroadsStripeOnboarding.Services
         private void CreatePlanAndSubscription(RecurringGift gift, StripeAccount account, MinistryPlatformContext mpDB, StripeOnboardingContext stripeDB)
         {
             var plan = _paymentService.CreatePlan(MapToRecurringGiftDto(gift), MapToContactDonor(gift));
-            var subscription = _paymentService.CreateSubscription(plan.Name, account.StripeCustomer.CustomerId, GetStartDate(gift));
+            var subscription = _paymentService.CreateSubscription(plan.Id, account.StripeCustomer.CustomerId, GetStartDate(gift));
             UpdateRecurringGiftAndDonorAccount(gift, account, subscription, mpDB, stripeDB);
 
         }

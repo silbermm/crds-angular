@@ -369,7 +369,7 @@ namespace crds_angular.Services
 
             var interval = EnumMemberSerializationUtils.ToEnumString(recurringGiftDto.PlanInterval);
 
-            request.AddParameter("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue);
+            request.AddParameter("amount", (int) recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue);
             request.AddParameter("interval", interval);
             request.AddParameter("name", string.Format("Donor ID #{0} {1}ly", contactDonor.DonorId, interval));
             request.AddParameter("currency", "usd");
