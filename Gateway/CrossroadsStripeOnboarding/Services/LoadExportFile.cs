@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
@@ -9,6 +10,7 @@ namespace CrossroadsStripeOnboarding.Services
 {
     public class LoadExportFile
     {
+        private static readonly Random Random = new Random();
         public static KeyValuePair<Messages, StripeJsonExport> ReadFile(string file)
         {
             var msg = ValidateIsFile(file);
@@ -37,9 +39,34 @@ namespace CrossroadsStripeOnboarding.Services
 
         private static KeyValuePair<Messages, StripeJsonExport> LoadFileToJson(string file)
         {
-            var jsonObject = JObject.Parse(File.ReadAllText(@file));
-            var jsonString = JsonConvert.SerializeObject(jsonObject);
-            var json = JsonConvert.DeserializeObject<Dictionary<string, StripeJsonCustomer>>(jsonString);
+            //var jsonObject = JObject.Parse(File.ReadAllText(@file));
+            //var jsonString = JsonConvert.SerializeObject(jsonObject);
+            //var json = JsonConvert.DeserializeObject<Dictionary<string, StripeJsonCustomer>>(jsonString);
+
+            var jsonReader = new JsonTextReader(new StringReader(File.ReadAllText(@file)));
+            var json = new Dictionary<string, StripeJsonCustomer>();
+            jsonReader.Read();
+            string propertyName = string.Empty;
+            while (jsonReader.Read())
+            {
+                if (jsonReader.TokenType == JsonToken.PropertyName)
+                {
+                    propertyName = (string)jsonReader.Value + "|" + Random.Next();
+                    continue;
+                }
+
+                if (jsonReader.TokenType == JsonToken.StartObject)
+                {
+                    var o = JObject.Load(jsonReader);
+                    var customer = o.ToObject<StripeJsonCustomer>();
+                    json.Add(propertyName, customer);
+                }
+
+                if (jsonReader.TokenType == JsonToken.EndObject)
+                {
+                    propertyName = null;
+                }
+            }
 
             return new KeyValuePair<Messages, StripeJsonExport>(Messages.ReadFileSuccess, new StripeJsonExport(json)); 
         }
