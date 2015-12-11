@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Newtonsoft.Json;
 
 namespace CrossroadsStripeOnboarding.Models.Json
@@ -11,6 +10,7 @@ namespace CrossroadsStripeOnboarding.Models.Json
             CustomersMap = customersMap;
         }
 
+        [JsonProperty, JsonConverter(typeof(StripeCustomerDictionaryConverter))]
         public Dictionary<string, StripeJsonCustomer> CustomersMap;
     }
 
