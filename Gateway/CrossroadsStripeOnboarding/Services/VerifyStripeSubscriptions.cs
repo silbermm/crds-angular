@@ -37,7 +37,9 @@ namespace CrossroadsStripeOnboarding.Services
 
             foreach (var gift in recurringGifts)
             {
-                Logger.Info(string.Format("Processing gift #{0} ({1}%)", ++giftsProcessed, (giftsProcessed / giftsToProcess) * 100M));
+                var percentComplete = (int)Math.Round( (double)(100 * ++giftsProcessed) / giftsToProcess);
+
+                Logger.Info(string.Format("Processing gift #{0} ({1}% complete)", giftsProcessed, percentComplete));
 
                 var success = true;
                 var errorMessage = string.Empty; 
@@ -60,11 +62,16 @@ namespace CrossroadsStripeOnboarding.Services
                     try
                     {
                         sub = _paymentService.GetSubscription(gift.DonorAccount.Processor_ID, gift.Subscription_ID);
+                        if (sub == null || string.IsNullOrWhiteSpace(sub.Id))
+                        {
+                            success = false;
+                            errorMessage = string.Format("Stripe problem: Nothing returned for subscription {0} for customer {1}", gift.Subscription_ID, gift.DonorAccount.Processor_ID);
+                        }
                     }
                     catch (Exception e)
                     {
                         success = false;
-                        errorMessage = string.Format("Could not lookup subscription for customer {0}, subscription {1}: {2}",
+                        errorMessage = string.Format("Stripe exception: Could not lookup subscription for customer {0} subscription {1}: {2}",
                                                      gift.DonorAccount.Processor_ID,
                                                      gift.Subscription_ID,
                                                      e.Message);
@@ -72,8 +79,8 @@ namespace CrossroadsStripeOnboarding.Services
                     }
                 }
 
-                var stripeSubscriptionId = sub == null ? Null : sub.Id;
-                var stripeAmount = sub == null || sub.Plan == null ? 0M : sub.Plan.Amount;
+                var stripeSubscriptionId = string.IsNullOrWhiteSpace(gift.Subscription_ID) ? Null : gift.Subscription_ID;
+                var stripeAmount = sub == null || sub.Plan == null ? 0M : sub.Plan.Amount / 100M;
                 var freq = sub == null || sub.Plan == null
                     ? null
                     : sub.Plan.Interval.ToLower().Equals("month") ? Frequency.Monthly : sub.Plan.Interval.ToLower().Equals("week") ? Frequency.Weekly : (Frequency?) null;

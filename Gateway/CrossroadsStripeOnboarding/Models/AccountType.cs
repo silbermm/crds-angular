@@ -3,6 +3,6 @@
     public enum AccountType
     {
         Bank = 1,
-        CreditCard = 2
+        CreditCard = 3
     }
 }
