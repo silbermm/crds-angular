@@ -37,9 +37,9 @@ namespace CrossroadsStripeOnboarding.Services
 
             foreach (var gift in recurringGifts)
             {
-                var percentComplete = (int)Math.Round( (double)(100 * ++giftsProcessed) / giftsToProcess);
+                var percentComplete = (int)Math.Round( (double)(++giftsProcessed) / giftsToProcess);
 
-                Logger.Info(string.Format("Processing gift #{0} ({1}% complete)", giftsProcessed, percentComplete));
+                Logger.Info(string.Format("Processing gift #{0} ({1:0%} complete)", giftsProcessed, percentComplete));
 
                 var success = true;
                 var errorMessage = string.Empty; 
