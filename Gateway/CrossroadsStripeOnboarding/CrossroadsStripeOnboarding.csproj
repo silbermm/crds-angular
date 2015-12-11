@@ -98,6 +98,7 @@
     <Compile Include="Models\Donor.cs" />
     <Compile Include="Models\DonorAccount.cs" />
     <Compile Include="Models\Frequency.cs" />
+    <Compile Include="Models\Json\StripeCustomerDictionaryConverter.cs" />
     <Compile Include="Models\Messages.cs" />
     <Compile Include="Models\Json\StripeJsonExport.cs" />
     <Compile Include="Migrations\201512071726262_Initial.cs" />
