@@ -715,6 +715,21 @@ WHERE Group_Type_ID = 9</CommandText>
         </DataSetReference>
       </ValidValues>
     </ReportParameter>
+    <ReportParameter Name="PageID">
+      <DataType>String</DataType>
+      <Prompt>PageID</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="DomainID">
+      <DataType>String</DataType>
+      <Prompt>DomainID</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="UserID">
+      <DataType>String</DataType>
+      <Prompt>UserID</Prompt>
+      <Hidden>true</Hidden>
+    </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportServerUrl>http://adminint.crossroads.net/reportserver</rd:ReportServerUrl>
