@@ -118,6 +118,7 @@
     <None Include="packages.config" />
     <Content Include="Unity.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

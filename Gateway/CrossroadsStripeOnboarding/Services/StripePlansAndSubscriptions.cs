@@ -34,18 +34,18 @@ namespace CrossroadsStripeOnboarding.Services
 
         private void CreatePlanAndSubscriptions(MinistryPlatformContext mpDB, StripeOnboardingContext stripeDB)
         {
-            foreach (var gift in GetActiveRecurringGifts(mpDB))
+            foreach (var gift in GetActiveNoneProcessedRecurringGifts(mpDB))
             {
                 var account = GetStripeAccount(stripeDB, gift.Donor.C__ExternalPersonID, gift.DonorAccount.Account_Number);
                 CreatePlanAndSubscription(gift, account, mpDB, stripeDB);
             }
         }
 
-        private IEnumerable<RecurringGift> GetActiveRecurringGifts(MinistryPlatformContext db)
+        private IEnumerable<RecurringGift> GetActiveNoneProcessedRecurringGifts(MinistryPlatformContext db)
         {
             return
                 (from r in db.RecurringGifts
-                    where r.End_Date == null
+                    where r.End_Date == null && r.DonorAccount.Processor_Account_ID == null
                     select r).ToList();
         }
 
