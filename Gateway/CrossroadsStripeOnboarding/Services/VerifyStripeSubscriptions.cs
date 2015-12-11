@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.Json;
 using crds_angular.Services.Interfaces;
 using CrossroadsStripeOnboarding.Models;
 using log4net;
@@ -26,7 +27,7 @@ namespace CrossroadsStripeOnboarding.Services
         public void Verify()
         {
             Logger.Info("Starting verification process");
-            var recurringGifts = _mpContext.RecurringGifts;
+            var recurringGifts = _mpContext.RecurringGifts.ToList();
             var giftsToProcess = recurringGifts.Count();
             Logger.Info(string.Format("Verifying {0} recurring gifts", giftsToProcess));
 
@@ -36,7 +37,7 @@ namespace CrossroadsStripeOnboarding.Services
 
             foreach (var gift in recurringGifts)
             {
-                Logger.Info(string.Format("Processing gift #{0} ({1}%)", ++giftsProcessed, giftsProcessed / giftsToProcess));
+                Logger.Info(string.Format("Processing gift #{0} ({1}%)", ++giftsProcessed, (giftsProcessed / giftsToProcess) * 100M));
 
                 var success = true;
                 var errorMessage = string.Empty; 
@@ -77,12 +78,13 @@ namespace CrossroadsStripeOnboarding.Services
                     ? null
                     : sub.Plan.Interval.ToLower().Equals("month") ? Frequency.Monthly : sub.Plan.Interval.ToLower().Equals("week") ? Frequency.Weekly : (Frequency?) null;
                 var stripeFrequency = freq == null ? Null : freq.ToString();
-                var stripeRepeat = freq != null && freq == Frequency.Monthly
-                    ? DateTime.Parse(sub.Start).Day+""
-                    : freq != null && freq == Frequency.Weekly ? DateTime.Parse(sub.Start).DayOfWeek.ToString() : Null;
-                string stripeAccountType = Null;
-                string stripeAccountLast4 = Null;
-                if (sub != null)
+                var startDate = sub == null || string.IsNullOrWhiteSpace(sub.Start) ? (DateTime?)null : StripeEpochTime.ConvertEpochToDateTime(long.Parse(sub.Start));
+                var stripeRepeat = freq != null && freq == Frequency.Monthly && startDate != null
+                    ? startDate.Value.Day+""
+                    : freq != null && freq == Frequency.Weekly && startDate != null ? startDate.Value.DayOfWeek.ToString() : Null;
+                var stripeAccountType = Null;
+                var stripeAccountLast4 = Null;
+                if (sub != null && !string.IsNullOrWhiteSpace(sub.Customer))
                 {
                     try
                     {

@@ -10,13 +10,14 @@ using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
 
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace CrossroadsStripeOnboarding
 {
-    class Program
+    public class Program
     {
         private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
 
-        private static void Main(string [] args)
+        public static void Main(string [] args)
         {
             var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();

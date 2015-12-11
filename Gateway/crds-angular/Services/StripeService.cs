@@ -246,6 +246,7 @@ namespace crds_angular.Services
 
             foreach (var source in sources.Where(source => source.id == defaultSourceId))
             {
+                defaultSource.@object = source.@object;
                 if (source.@object == "bank_account")
                 {
                     defaultSource.routing_number = source.routing_number;

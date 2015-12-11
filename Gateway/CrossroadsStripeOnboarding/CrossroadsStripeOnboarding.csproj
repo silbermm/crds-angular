@@ -120,6 +120,7 @@
   <ItemGroup>
     <None Include="..\crds-angular\MinistryPlatform.config">
       <Link>MinistryPlatform.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="App.config">
       <SubType>Designer</SubType>
