@@ -5,6 +5,7 @@ using crds_angular.Models.Json;
 using crds_angular.Services.Interfaces;
 using CrossroadsStripeOnboarding.Models;
 using log4net;
+using log4net.Appender;
 
 namespace CrossroadsStripeOnboarding.Services
 {
@@ -26,7 +27,9 @@ namespace CrossroadsStripeOnboarding.Services
 
         public void Verify()
         {
-            Logger.Info("Starting verification process");
+            var appender = VerifyOutput.Logger.Repository.GetAppenders().First(x => x.Name.Equals("VerifyOutputLog"));
+
+            Logger.Info(string.Format("Starting verification process - CSV results will be written to {0}", ((FileAppender)appender).File));
             var recurringGifts = _mpContext.RecurringGifts.ToList();
             var giftsToProcess = recurringGifts.Count();
             Logger.Info(string.Format("Verifying {0} recurring gifts", giftsToProcess));
@@ -37,9 +40,9 @@ namespace CrossroadsStripeOnboarding.Services
 
             foreach (var gift in recurringGifts)
             {
-                var percentComplete = (int)Math.Round( (double)(++giftsProcessed) / giftsToProcess);
+                var percentComplete = (int)Math.Round( (double)(++giftsProcessed * 100.0) / giftsToProcess);
 
-                Logger.Info(string.Format("Processing gift #{0} ({1:0%} complete)", giftsProcessed, percentComplete));
+                Logger.Info(string.Format("Processing gift #{0} ({1}% complete)", giftsProcessed, percentComplete));
 
                 var success = true;
                 var errorMessage = string.Empty; 
