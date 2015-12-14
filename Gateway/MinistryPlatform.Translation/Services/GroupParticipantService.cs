@@ -1,27 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Linq.Expressions;
 using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class GroupParticipantService :  IGroupParticipantService
+    public class GroupParticipantService : IGroupParticipantService
     {
-        private IDbConnection _dbConnection;
-        private IConfigurationWrapper _configurationWrapper;
+        private readonly IDbConnection _dbConnection;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly IApiUserService _apiUserService;
 
-        public GroupParticipantService(IDbConnection dbConnection, IConfigurationWrapper configurationWrapper)
-            
+        public GroupParticipantService(IDbConnection dbConnection,
+                                       IConfigurationWrapper configurationWrapper,
+                                       IMinistryPlatformService ministryPlatformService,
+                                       IApiUserService apiUserService)
+
         {
-            this._dbConnection = dbConnection;
+            _dbConnection = dbConnection;
             _configurationWrapper = configurationWrapper;
+            _ministryPlatformService = ministryPlatformService;
+            _apiUserService = apiUserService;
+        }
+
+        public int Get(int groupId, int participantId)
+        {
+            var searchString = string.Format(",{0},{1}", groupId, participantId);
+            var token = _apiUserService.GetToken();
+            var groupParticipant = _ministryPlatformService.GetPageViewRecords("GroupParticipantsById", token, searchString).FirstOrDefault();
+            return groupParticipant != null ? groupParticipant.ToInt("Group_Participant_ID") : 0;
         }
 
         public List<GroupServingParticipant> GetServingParticipants(List<int> participants, long from, long to, int loggedInContactId)
@@ -137,7 +151,10 @@ namespace MinistryPlatform.Translation.Services
         {
             var columnIndex = record.GetOrdinal(columnName);
             var reader = record as SqlDataReader;
-            if (reader == null) throw new Exception("The DataReader is not a SqlDataReader");
+            if (reader == null)
+            {
+                throw new Exception("The DataReader is not a SqlDataReader");
+            }
 
             var myTimeSpan = reader.GetTimeSpan(columnIndex);
             return myTimeSpan;
@@ -158,7 +175,7 @@ namespace MinistryPlatform.Translation.Services
         private static int? SafeInt32(IDataRecord record, string fieldName)
         {
             var ordinal = record.GetOrdinal(fieldName);
-            return !record.IsDBNull(ordinal) ? record.GetInt32(ordinal) : (int?)null;
+            return !record.IsDBNull(ordinal) ? record.GetInt32(ordinal) : (int?) null;
         }
     }
 }

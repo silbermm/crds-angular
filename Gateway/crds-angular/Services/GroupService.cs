@@ -21,6 +21,7 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IEventService _eventService;
         private readonly IContactRelationshipService _contactRelationshipService;
+        private readonly IOpportunityService _opportunityService;
 
         /// <summary>
         /// This is retrieved in the constructor from AppSettings
@@ -30,12 +31,14 @@ namespace crds_angular.Services
         public GroupService(IGroupService mpGroupService,
                             IConfigurationWrapper configurationWrapper,
                             IEventService eventService,
-                            IContactRelationshipService contactRelationshipService)
+                            IContactRelationshipService contactRelationshipService,
+                            IOpportunityService opportunityService)
         {
             _mpGroupService = mpGroupService;
             _configurationWrapper = configurationWrapper;
             _eventService = eventService;
             _contactRelationshipService = contactRelationshipService;
+            _opportunityService = opportunityService;
             GroupRoleDefaultId = Convert.ToInt32(_configurationWrapper.GetConfigIntValue("Group_Role_Default_ID"));
         }
 
@@ -84,8 +87,8 @@ namespace crds_angular.Services
                             logger.Debug("Added participant " + p + " to group event " + e.EventId);
                         }
                     }
-                    var waitlist = g.GroupType == _configurationWrapper.GetConfigIntValue("GroupType_Waitlit");
-                    _mpGroupService.SendCommunityGroupConfirmationEmail(p.particpantId, groupId, waitlist, p.childCareNeeded);                    
+                    var waitlist = g.GroupType == _configurationWrapper.GetConfigIntValue("GroupType_Waitlist");
+                    _mpGroupService.SendCommunityGroupConfirmationEmail(p.particpantId, groupId, waitlist, p.childCareNeeded);
                 }
 
                 return;
@@ -106,34 +109,36 @@ namespace crds_angular.Services
                 events.AddRange(_eventService.GetEvents(eventType, token));
             }
             var futureEvents = events.Where(e => e.EventStartDate >= DateTime.Now).OrderBy(e => e.EventStartDate);
-            var eventList = AutoMapper.Mapper.Map<List<Event>>(futureEvents);
+            var eventList = Mapper.Map<List<Event>>(futureEvents.GroupBy(x => x.EventId).Select(y => y.First()));
             return eventList;
         }
 
         public List<GroupContactDTO> GetGroupMembersByEvent(int groupId, int eventId, string recipients)
         {
-            if (recipients == "current")
-            {
-                return _mpGroupService.getEventParticipantsForGroup(groupId, eventId)
-                    .Select(part => new GroupContactDTO
+            return recipients == "current" ? GroupMembersThatAreServingForEvent(groupId, eventId) : GroupMembersThatHaveNotRepliedToEvent(groupId, eventId);
+        }
+
+        private List<GroupContactDTO> GroupMembersThatAreServingForEvent(int groupId, int eventId)
+        {
+            return _mpGroupService.getEventParticipantsForGroup(groupId, eventId)
+                .Select(part => new GroupContactDTO
                 {
                     ContactId = part.ContactId,
                     DisplayName = part.LastName + ", " + part.NickName
                 }).ToList();
-            }
-            else
+        }
+
+        private List<GroupContactDTO> GroupMembersThatHaveNotRepliedToEvent(int groupId, int eventId)
+        {
+            var groupMembers = _mpGroupService.getGroupDetails(groupId).Participants;
+            var participants = groupMembers.Select(p => new GroupParticipant {ContactId = p.ContactId, LastName = p.LastName, NickName = p.NickName}).ToList();
+            var responses = _opportunityService.GetContactsOpportunityResponseByGroupAndEvent(groupId, eventId);
+
+            return participants.Where(p => responses.All(r => r != p.ContactId)).Select(part => new GroupContactDTO
             {
-                var groupMembers = _mpGroupService.getGroupDetails(groupId).Participants;
-                var participants = groupMembers.Select(p => new GroupParticipant {ContactId = p.ContactId, LastName = p.LastName, NickName = p.NickName}).ToList();
-                var rsvps = _mpGroupService.getEventParticipantsForGroup(groupId, eventId).Select(r => new GroupParticipant{ContactId = r.ContactId, LastName = r.LastName, NickName = r.NickName}).ToList();
-
-                return participants.Where(p => rsvps.All(r => r.ContactId != p.ContactId)).Select(part => new GroupContactDTO
-                {
-                    ContactId = part.ContactId,
-                    DisplayName = part.LastName + ", " + part.NickName
-                }).ToList();
-            }
-
+                ContactId = part.ContactId,
+                DisplayName = part.LastName + ", " + part.NickName
+            }).ToList();
         }
 
         public GroupDTO getGroupDetails(int groupId, int contactId, Participant participant, string authUserToken)
@@ -165,7 +170,7 @@ namespace crds_angular.Services
                 detail.WaitListGroupId = g.WaitListGroupId;
                 if (events != null)
                 {
-                  detail.Events = events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
+                    detail.Events = Enumerable.ToList<Event>(events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>));
                 }
                 //the first instance of family must always be the logged in user
                 var fam = new SignUpFamilyMembers
@@ -196,6 +201,5 @@ namespace crds_angular.Services
 
             return (detail);
         }
-
     }
 }

@@ -8,7 +8,10 @@
                 .ForMember(dest => dest.name, opts => opts.MapFrom(src => src.EventTitle))
                 .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.EventStartDate))
-                .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EventEndDate));
+                .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EventEndDate))
+                .ForMember(dest => dest.EventType, opts => opts.MapFrom(src => src.EventType))
+                .ForMember(dest => dest.PrimaryContactId, opts => opts.MapFrom(src => src.PrimaryContact.ContactId))
+                .ForMember(dest => dest.PrimaryContactEmailAddress, opts => opts.MapFrom(src => src.PrimaryContact.EmailAddress));
         }
     }
 }

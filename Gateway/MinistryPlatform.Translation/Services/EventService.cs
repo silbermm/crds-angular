@@ -20,6 +20,9 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _eventParticipantStatusDefaultId =
             Convert.ToInt32(AppSettings("Event_Participant_Status_Default_ID"));
 
+        private readonly int _eventPageNeedReminders =
+            Convert.ToInt32(AppSettings("EventsReadyForReminder"));
+
         private readonly IMinistryPlatformService _ministryPlatformService;
         private readonly IGroupService _groupService;
 
@@ -227,6 +230,47 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
 
             return events;
+        }
+
+        public IEnumerable<Event> EventsByPageId(string token, int pageViewId)
+        {
+            return _ministryPlatformService.GetRecordsDict(pageViewId, token).Select(record => new Event()
+            {
+                EventId = (int)record["Event_ID"],
+                EventTitle = (string)record["Event_Title"],
+                EventStartDate = (DateTime)record["Event_Start_Date"],
+                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventType = record.ToString("Event_Type"),
+                PrimaryContact = new Contact()
+                {
+                    ContactId = record.ToInt("Primary_Contact_ID"),
+                    EmailAddress = record.ToString("Primary_Contact_Email_Address")
+                }
+            }).ToList();
+        }
+
+        public IEnumerable<MinistryPlatform.Translation.Models.People.Participant> EventParticipants(string token, int eventId)
+        {
+
+            return _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token).Select(person => new MinistryPlatform.Translation.Models.People.Participant()
+            {
+                ParticipantId = person.ToInt("Participant_ID"),
+                ContactId = person.ToInt("Contact_ID"),
+                EmailAddress = person.ToString("Email_Address"),
+                DisplayName = person.ToString("Display_Name"),
+                Nickname = person.ToString("Nickname"),
+                GroupName = person.ToString("Group_Name")           
+            });
+        }
+
+        public void SetReminderFlag(int eventId, string token)
+        {
+            var dict = new Dictionary<string, object>
+            {
+                {"Event_ID", eventId},
+                {"Reminder_Sent", 1}
+            };
+            _ministryPlatformService.UpdateRecord(_eventPageNeedReminders, dict, token);
         }
 
         public List<Group> GetGroupsForEvent(int eventId)

@@ -23,7 +23,7 @@
             <ng-messages for="bankAccountForm.routing.$error" ng-if="bankinfoSubmitted">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
-			<span ng-show="bankAccount.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+			<span ng-show="bankAccount.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
         </div>
         <div class="form-group" ng-class="{'has-error': accountError() || bankAccount.declinedPayment }">
             <label for="account">Account Number</label>
@@ -34,6 +34,6 @@
             <ng-messages for="bankAccountForm.account.$error" ng-if="bankinfoSubmitted">
               <ng-messages-include src="on-submit-messages"></ng-messages-include>
             </ng-messages>
-			<span ng-show="bankAccount.declinedPayment" ng-bind-html="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
+			<span ng-show="bankAccount.declinedPayment" dynamic-content="$root.MESSAGES.invalidPaymentMethodInformation.content | html"></span>
   </section>
 </ng-form>

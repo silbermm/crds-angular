@@ -34,7 +34,6 @@
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
     var now = new Date();
 
-    vm.ageRestrictionMessage = $sce.trustAsHtml($rootScope.MESSAGES.ageRestriction.content);
     vm.allowPasswordChange = angular.isDefined(vm.allowPasswordChange) ?  vm.allowPasswordChange : 'true';
     vm.allowSave = angular.isDefined(vm.allowSave) ? vm.allowSave : 'true';
     vm.closeModal = closeModal;
@@ -190,9 +189,6 @@
       //force genders field to be dirty
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
-      if (vm.profileParentForm) {
-        vm.profileParentForm.$setPristine();
-      }
 
       $timeout(function() {
         vm.submitted = true;
@@ -216,6 +212,10 @@
           vm.profileData.person.$save(function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
             $log.debug('person save successful');
+            if (vm.profileParentForm) {
+              vm.profileParentForm.$setPristine();
+            }
+
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
@@ -235,10 +235,14 @@
     }
 
     function underThirteen() {
-      var birthdate = crds_utilities.convertStringToDate(vm.profileData.person.dateOfBirth);
-      var thirteen = new Date();
-      thirteen.setFullYear(thirteen.getFullYear() - 13);
-      vm.requireEmail = birthdate.getTime() < thirteen.getTime();
+      if (vm.profileData.person.dateOfBirth !== '') {
+        var birthdate = crds_utilities.convertStringToDate(vm.profileData.person.dateOfBirth);
+        var thirteen = new Date();
+        thirteen.setFullYear(thirteen.getFullYear() - 13);
+        vm.requireEmail = birthdate.getTime() < thirteen.getTime();
+      } else {
+        vm.requireEmail = true;
+      }
     }
 
   }

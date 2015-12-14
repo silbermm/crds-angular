@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MinistryPlatform.Models;
+using Participant = MinistryPlatform.Translation.Models.People.Participant;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -15,5 +16,8 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         bool EventHasParticipant(int eventId, int participantId);
         Event GetEvent(int eventId);
         List<Event> GetEventsByParentEventId(int parentEventId);
+        IEnumerable<Event> EventsByPageId(string token, int pageViewId);
+        IEnumerable<Participant> EventParticipants(string token, int eventId);
+        void SetReminderFlag(int eventId, string token);
     }
 }

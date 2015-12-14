@@ -2,21 +2,21 @@
 <div class="row">
   <div class="col-sm-12">
     <div ng-show="groupsignup.viewReady">
-      <h1 class="page-header" ng-bind-html="groupsignup.signupPage.title | html"></h1>
+      <h1 class="page-header" dynamic-content="groupsignup.signupPage.title | html"></h1>
       
-        <div ng-show="groupsignup.alreadySignedUp" ng-bind-html="groupsignup.signupPage.existingMember | html"></div>
+        <div ng-show="groupsignup.alreadySignedUp" dynamic-content="groupsignup.signupPage.existingMember | html"></div>
 
         <div >
 
           <p id="content" class="noPspace" dir="ltr"
-             ng-bind-html="groupsignup.signupPage.content | html"
+             dynamic-content="groupsignup.signupPage.content | html"
              ng-show="groupsignup.showContent && !groupsignup.waitListCase && !groupsignup.alreadySignedUp && !groupsignup.showFull">
           </p>
 
-          <p id="successMessage" ng-bind-html="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
-          <p id="fullGroupMessage" ng-bind-html="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
-          <p id="waitListMessage" ng-bind-html="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
-          <p id="waitSuccessMessage" ng-bind-html="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
+          <p id="successMessage" dynamic-content="groupsignup.signupPage.success | html" ng-show="groupsignup.showSuccess && !groupsignup.waitListCase"></p>
+          <p id="fullGroupMessage" dynamic-content="groupsignup.signupPage.full | html" ng-show="groupsignup.showFull"></p>
+          <p id="waitListMessage" dynamic-content="groupsignup.signupPage.waitList | html" ng-show="groupsignup.showWaitList && groupsignup.waitListCase && !groupsignup.alreadySignedUp"></p>
+          <p id="waitSuccessMessage" dynamic-content="groupsignup.signupPage.waitSuccess | html" ng-show="groupsignup.showWaitSuccess && groupsignup.waitListCase"></p>
         </div>
 
         <div class="row" ng-show="groupsignup.showContent">
@@ -47,19 +47,19 @@
                     </a>
                   </span>
                 </label>
+                <div ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
+                  <child-care-need
+                      participant-id='person.participantId'
+                      on-change='groupsignup.childCareChange'>
+                  </child-care-need>
+                </div>
               </div>
-            <div ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
-              <child-care-need
-                  participant-id='person.participantId'
-                  on-change='groupsignup.childCareChange'>
-              </child-care-need>
-            </div>
-          </p>
-          <p ng-show="!groupsignup.alreadySignedUp && !groupsignup.showFull">
-            <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
-          </p>
-        </form>
-      </div>
+            </p>
+            <p ng-show="!groupsignup.alreadySignedUp && !groupsignup.showFull">
+              <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+            </p>
+          </form>
+        </div>
 
       <script type="text/ng-template" id="editProfile.html">
         <div class="modal-header">

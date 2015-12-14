@@ -29,6 +29,7 @@ ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_St
 REFERENCES [dbo].[Contacts] ([Contact_ID])
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_cr_Staff_Only_Feedback_dp_Domains]') AND parent_object_id = OBJECT_ID(N'[dbo].[cr_Staff_Only_Feedback]'))
 ALTER TABLE [dbo].[cr_Staff_Only_Feedback]  WITH CHECK ADD  CONSTRAINT [FK_cr_Staff_Only_Feedback_dp_Domains] FOREIGN KEY([Domain_ID])
 REFERENCES [dbo].[dp_Domains] ([Domain_ID])
 GO
@@ -77,19 +78,18 @@ ELSE
 	END
 GO
 
-IF NOT EXISTS(SELECT * FROM [dbo].[dp_Role_Sub_Pages] WHERE [Role_Sub_Page_ID] = 16105)
+DECLARE @ADMIN_ROLE int = 2;
+DECLARE @SUB_PAGE int = 544;
+DECLARE @ACCESS int = 3;
+IF NOT EXISTS (SELECT 1 FROM dbo.dp_Role_Sub_Pages where Role_ID = @ADMIN_ROLE and Sub_Page_ID = @SUB_PAGE)
 BEGIN
-	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] ON
 	INSERT INTO [dbo].[dp_Role_Sub_Pages]
-           ([Role_Sub_Page_ID]
-		   ,[Role_ID]
+           ([Role_ID]
            ,[Sub_Page_ID]
            ,[Access_Level])
      VALUES
-           (16105
-		   ,2
-           ,544
-           ,3)
-	SET IDENTITY_INSERT [dbo].[dp_Role_Sub_Pages] OFF
+           (@ADMIN_ROLE
+           ,@SUB_PAGE
+           ,@ACCESS)
 END
 GO

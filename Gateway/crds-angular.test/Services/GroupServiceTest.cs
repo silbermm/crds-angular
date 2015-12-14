@@ -22,6 +22,7 @@ namespace crds_angular.test.Services
         private Mock<MPServices.IGroupService> groupService;
         private Mock<MPServices.IEventService> eventService;
         private Mock<MPServices.IContactRelationshipService> contactRelationshipService;
+        private Mock<MPServices.IOpportunityService> opportunityService;
         private Mock<IConfigurationWrapper> config;
 
         private readonly List<ParticipantSignup> mockParticipantSignup = new List<ParticipantSignup>
@@ -49,11 +50,12 @@ namespace crds_angular.test.Services
             groupService = new Mock<MPServices.IGroupService>(MockBehavior.Strict);
             eventService = new Mock<MPServices.IEventService>(MockBehavior.Strict);
             contactRelationshipService = new Mock<MPServices.IContactRelationshipService>();
+            opportunityService = new Mock<MPServices.IOpportunityService>();
             config = new Mock<IConfigurationWrapper>();
 
             config.Setup(mocked => mocked.GetConfigIntValue("Group_Role_Default_ID")).Returns(GROUP_ROLE_DEFAULT_ID);
 
-            fixture = new GroupService(groupService.Object, config.Object, eventService.Object, contactRelationshipService.Object);
+            fixture = new GroupService(groupService.Object, config.Object, eventService.Object, contactRelationshipService.Object, opportunityService.Object);
         }
 
         [Test]
@@ -183,7 +185,7 @@ namespace crds_angular.test.Services
 
             var eventList = new List<Event>()
             {
-                    EventHelpers.TranslationEvent()
+                EventHelpers.TranslationEvent()
             };
 
             groupService.Setup(mocked => mocked.getGroupDetails(456)).Returns(g);

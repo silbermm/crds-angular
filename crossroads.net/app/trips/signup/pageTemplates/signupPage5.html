@@ -5,7 +5,7 @@
         Child Sponsorship
       </legend>
 
-      <div class="col-sm-12" ng-bind-html="$root.MESSAGES.nicaraguaSponsoredChildRequired.content | html"></div>
+      <div class="col-sm-12" dynamic-content="$root.MESSAGES.nicaraguaSponsoredChildRequired.content | html"></div>
 
       <div class="row">
         <div class="form-group col-sm-6" ng-class="{'has-error': tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorFirstName') }">
@@ -13,7 +13,7 @@
           <input ng-model="tripsSignup.signupService.page5.sponsorChildFirstName" type="text" class="form-control" name="sponsorFirstName" id="sponsor-firstname" placeholder="Enter sponsored child's first name" required>
           <ng-messages for="tripsSignup.tripAppPage5.sponsorFirstName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorFirstName')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -22,7 +22,7 @@
           <input ng-model="tripsSignup.signupService.page5.sponsorChildLastName" type="text" class="form-control" name="sponsorLastName" id="sponsor-lastname" placeholder="Enter sponsored child's last name" required>
           <ng-messages for="tripsSignup.tripAppPage5.sponsorLastName.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorLastName')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -33,7 +33,7 @@
           <input ng-model="tripsSignup.signupService.page5.sponsorChildNumber" type="text" class="form-control" name="sponsorNumber" id="sponsor-number" placeholder="Enter sponsored child's id number" required>
           <ng-messages for="tripsSignup.tripAppPage5.sponsorNumber.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'sponsorNumber')">
             <span ng-message="required">
-              <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
             </span>
           </ng-messages>
         </div>
@@ -69,7 +69,7 @@
               </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaFirstChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaFirstChoiceWorkTeam')">
                   <span ng-message="required">
-                    <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                    <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                   </span>
                 </ng-messages>
               </div>
@@ -81,7 +81,7 @@
             <textarea ng-model="tripsSignup.signupService.page5.nolaFirstChoiceExperience" cols="1" rows="4" class="form-control" name="workteamExperience" id="workteam-experience" ng-required="tripsSignup.isNola()" maxlength="250"></textarea>
             <ng-messages for="tripsSignup.tripAppPage5.workteamExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'workteamExperience')">
               <span ng-message="required">
-                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
             </ng-messages>
           </div>
@@ -100,7 +100,7 @@
                 </select>
                 <ng-messages for="tripsSignup.tripAppPage5.nolaSecondChoiceWorkTeam.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'nolaSecondChoiceWorkTeam')">
                   <span ng-message="required">
-                    <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                    <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
                   </span>
                 </ng-messages>
               </div>
@@ -124,7 +124,7 @@
             </textarea>
             <ng-messages for="tripsSignup.tripAppPage5.tripExperience.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'tripExperience')">
               <span ng-message="required">
-                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
             </ng-messages>
           </div>
@@ -152,7 +152,7 @@
 
             <ng-messages for="tripsSignup.tripAppPage5.professionchoice.$error" ng-if="tripsSignup.validation.showErrors(tripsSignup.tripAppPage5, 'professionchoice')">
               <span ng-message="required">
-                <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
               </span>
             </ng-messages>
 
