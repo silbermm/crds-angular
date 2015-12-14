@@ -137,12 +137,19 @@
       })
       .state('resetPassword', {
         parent: 'noSideBar',
-        url: '/reset-password',
+        url: '/reset-password?token',
         templateUrl: 'login/reset_password.html',
-        controller: 'LoginController',
+        controller: 'ResetPasswordController as resetPwController',
         data: {
           isProtected: false
-        }
+        },
+          resolve: {
+            PasswordService: 'PasswordService',
+            $stateParams: '$stateParams',
+            Email: function(PasswordService, $stateParams) {
+              return PasswordService.ResetPasswordVerify.save($stateParams.token).$promise;
+            }
+          }
       })
       .state('myprofile', {
         parent: 'noSideBar',

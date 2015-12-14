@@ -10,5 +10,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         void UpdateUser(Dictionary<string, object> userUpdateValues);
         int GetUserIdByUsername(string username);
         int GetContactIdByUserId(int userId);
+        int GetUserIdByResetToken(string resetToken);
     }
 }

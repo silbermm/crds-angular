@@ -7,6 +7,7 @@ using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json;
 //using WebMatrix.WebData;
@@ -103,6 +104,19 @@ namespace crds_angular.Services
             _userService.UpdateUser(userUpdateValues);
 
             return true;
+        }
+
+        public string VerifyResetToken(string token)
+        {
+            var user_ID = _userService.GetUserIdByResetToken(token).ToString();
+            MinistryPlatformUser user = _userService.GetByUserId(user_ID);
+
+            Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
+            userUpdateValues["User_ID"] = user_ID;
+            userUpdateValues["ResetToken"] = null; 
+            _userService.UpdateUser(userUpdateValues);
+
+            return "";
         }
     }
 }

@@ -81,5 +81,18 @@ namespace MinistryPlatform.Translation.Services
             var record = records[0];
             return record.ToInt("Contact ID");
         }
+
+        public int GetUserIdByResetToken(string resetToken)
+        {
+            var records = _ministryPlatformService.GetPageViewRecords(92267, ApiLogin(), ("," + resetToken));
+
+            if (records.Count != 1)
+            {
+                throw new Exception("User ID did not return exactly one user record");
+            }
+
+            var record = records[0];
+            return record.ToInt("User ID");
+        }
     }
 }
