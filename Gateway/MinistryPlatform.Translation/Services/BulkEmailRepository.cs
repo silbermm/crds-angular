@@ -14,7 +14,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int _bulkEmailPublicationPageViewId = Convert.ToInt32(AppSettings("BulkEmailPublicationsPageView"));
         private readonly int _publicationPageViewSubPageId = Convert.ToInt32(AppSettings("PublicationPageViewSubPageId"));
         private readonly int _segmentationBasePageViewId = Convert.ToInt32(AppSettings("SegmentationBasePageViewId"));
-
+        private readonly int _subscribersBasePageViewId = Convert.ToInt32(AppSettings("Subscribers"));
 
         public BulkEmailRepository(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformService) :
             base(authenticationService, configurationWrapper)
@@ -44,7 +44,7 @@ namespace MinistryPlatform.Translation.Services
             var publicationDictionary = new Dictionary<string, object>
             {
                 {"Publication_ID", publication.PublicationId},
-                {"Last_Successful_Sync", DateTime.Now}
+                {"Last_Successful_Sync", publication.LastSuccessfulSync}
             };
             _ministryPlatformService.UpdateRecord(Convert.ToInt32(AppSettings("Publications")), publicationDictionary, token);
         }
@@ -163,6 +163,37 @@ namespace MinistryPlatform.Translation.Services
                 
                 subscriber.MergeFields.Add(column.Key, column.Value.ToString());
             }
+        }
+
+        public void SetSubscriberSyncs(string token, List<BulkEmailSubscriberOpt> subscriberOpts)
+        {
+            foreach (var subscriberOpt in subscriberOpts)
+            {
+                UpdateContactPublication(token, subscriberOpt);
+            }
+        }
+
+        public void UpdateContactPublication(string token, BulkEmailSubscriberOpt subscriberOpt)
+        {
+            var searchString = string.Format(",\"{0}\",,,,,,,\"{1}\"", subscriberOpt.PublicationID, subscriberOpt.EmailAddress);
+            var contactPublications = _ministryPlatformService.GetPageViewRecords(_segmentationBasePageViewId, token, searchString);
+
+            // do not update if there is no corresponding subscriber -- this may be handled in a future story
+            if (contactPublications.Count == 0)
+            {
+                return;
+            }
+
+            var contactPublication = contactPublications.SingleOrDefault();
+            var contactPublicationID = contactPublication.ToString("Contact_Publication_ID");
+
+            Dictionary<string, object> subscriberOptDict = new Dictionary<string, object>
+            {
+                {"Contact_Publication_ID", contactPublicationID},
+                {"Unsubscribed", (subscriberOpt.Status == "subscribed" ? false : true)}
+            };
+
+            _ministryPlatformService.UpdateRecord(_subscribersBasePageViewId, subscriberOptDict, token);         
         }
     }
 }

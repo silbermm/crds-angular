@@ -31,14 +31,14 @@ By default webpack inserts `http://content.crossroads.net` everywhere it finds `
 
 For windows users:
 
-``` set CRDS_API_ENDPOINT = http://path-to-api-host/ ```
-``` set CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
+``` set CRDS_API_ENDPOINT = https://path-to-api-host/ ```
+``` set CRDS_CMS_ENDPOINT = https://path-to-content-host/ ```
 ``` set CRDS_STRIPE_PUBKEY = <obtain from Stripe site>```
 
 Mac and Linux:
 
-``` export CRDS_API_ENDPOINT = http://path-to-api-host/ ```
-``` export CRDS_CMS_ENDPOINT = http://path-to-content-host/ ```
+``` export CRDS_API_ENDPOINT = https://path-to-api-host/ ```
+``` export CRDS_CMS_ENDPOINT = https://path-to-content-host/ ```
 ``` export CRDS_STRIPE_PUBKEY = <obtain from Stripe site>```
 
 **Keep in mind that this way of setting environment variables will not be persistent, windows users will have to add this variable in system settings and linux/mac users will have to set it in their .bashrc/.zshrc files for persistence.**

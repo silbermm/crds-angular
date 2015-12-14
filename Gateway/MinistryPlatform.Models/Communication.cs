@@ -4,6 +4,11 @@ namespace MinistryPlatform.Models
 {
     public class Communication
     {
+        public Communication()
+        {
+            ToContacts = new List<Contact>();
+        }
+
         public int AuthorUserId { get; set; }
         public int DomainId { get; set; }
         public string EmailSubject { get; set; }

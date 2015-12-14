@@ -3,9 +3,9 @@
 
   module.exports = VolunteerContact;
 
-  VolunteerContact.$inject = ['$window', '$log', 'MPTools', 'Group'];
+  VolunteerContact.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Group'];
 
-  function VolunteerContact($window, $log, MPTools, Group) {
+  function VolunteerContact($rootScope, $window, $log, MPTools, Group) {
 
     return {
       restrict: 'E',
@@ -19,6 +19,7 @@
     function VolunteerContactController() {
 
       var vm = this;
+      vm.errorMessage = $rootScope.MESSAGES.toolsError;
       vm.group = {};
       vm.multipleRecordsSelected = true;
       vm.params = MPTools.getParams();
@@ -41,9 +42,13 @@
       }
 
       function showError() {
-        return vm.params.selectedCount > 1 ||
+        if (vm.params.selectedCount > 1 ||
           vm.params.recordDescription === undefined ||
-          vm.params.recordId === '-1';
+          vm.params.recordId === '-1') {
+          vm.viewReady = true;
+          return true;
+        }
+        return false;
       }
     }
   }

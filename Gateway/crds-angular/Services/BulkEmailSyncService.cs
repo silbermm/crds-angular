@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
+using AutoMapper;
 
 namespace crds_angular.Services
 {
@@ -28,6 +29,8 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configWrapper;
         private string _token;
         private System.Timers.Timer _refreshTokenTimer;
+        // TODO: Consider changing this to read record count in query to accommodate pagination
+        private const int MAX_SYNC_RECORDS = 1000000;
 
         public BulkEmailSyncService(
             MPInterfaces.IBulkEmailRepository bulkEmailRepository,
@@ -66,30 +69,24 @@ namespace crds_angular.Services
                 _refreshTokenTimer.Start();
 
                 var publications = _bulkEmailRepository.GetPublications(_token);
-                Dictionary<string, string> listResponseIds = new Dictionary<string, string>();
+                var publicationOperationIds = new Dictionary<string, BulkEmailPublication>();
 
                 foreach (var publication in publications)
                 {
+                    PullSubscriptionStatusChangesFromThirdParty(publication);
+
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
-
-                    // TODO: Implement for US2782
-                    //     If (ContactEmail != SubscriptionEmail)
-                    //       Update/Delete MailChimp record
-                    //     End if   
-
                     var operationId = SendBatch(publication, subscribers);
 
                     // add the publication and operation id in prep for polling 
                     if (!String.IsNullOrEmpty(operationId))
                     {
-                        listResponseIds.Add(publication.ThirdPartyPublicationId, operationId);
+                        publicationOperationIds.Add(operationId, publication);
                     }
-
-                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
                 }
 
-                ProcessSynchronizationResultsWithRetries(listResponseIds);
+                ProcessSynchronizationResultsWithRetries(publicationOperationIds);
             }
             finally
             {
@@ -105,6 +102,7 @@ namespace crds_angular.Services
             request.AddHeader("Content-Type", "application/json");
 
             var batch = AddSubscribersToBatch(publication, subscribers);
+
             request.JsonSerializer = new RestsharpJsonNetSerializer();
             request.RequestFormat = DataFormat.Json;
             request.AddBody(batch);
@@ -138,7 +136,7 @@ namespace crds_angular.Services
             }
         }
 
-        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, string> publicationOperationIds)
+        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, BulkEmailPublication> publicationOperationIds)
         {
             const int secondsToSleep = 5;
             const int maxRetries = 60*60/secondsToSleep;
@@ -165,17 +163,14 @@ namespace crds_angular.Services
             } while (publicationOperationIds.Any());
         }
 
-        private Dictionary<string, string> ProcessSynchronizationResults(Dictionary<string, string> publicationOperationIds)
+        private Dictionary<string, BulkEmailPublication> ProcessSynchronizationResults(Dictionary<string, BulkEmailPublication> publicationOperationIds)
         {
-            // poll mailchimp to see if batch was successful -- also need to confirm during dev
-            // testing if the response is synchronous or asynchronous -- 99% sure it's synchronous            
-
             var client = GetBulkEmailClient();
 
             for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
             {
                 var idPair = publicationOperationIds.ElementAt(index);
-                var request = new RestRequest("batches/" + idPair.Value, Method.GET);
+                var request = new RestRequest("batches/" + idPair.Key, Method.GET);
                 request.AddHeader("Content-Type", "application/json");
 
                 var response = client.Execute(request);
@@ -193,7 +188,7 @@ namespace crds_angular.Services
                     continue;
                 }
 
-                if (responseValues["status"].ToString() == "finished")
+                 if (responseValues["status"].ToString() == "finished")
                 {                                        
                     var total = responseValues["total_operations"];                    
                     var errors = responseValues["errored_operations"];
@@ -208,6 +203,10 @@ namespace crds_angular.Services
                     }
 
                     _logger.Info(response.Content);
+
+                    var publication = idPair.Value;
+                    publication.LastSuccessfulSync = DateTime.Parse(responseValues["completed_at"].ToString());
+                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
                 }
                 else
                 {
@@ -243,31 +242,52 @@ namespace crds_angular.Services
             {
                 if (subscriber.EmailAddress != subscriber.ThirdPartyContactId)
                 {
+                    if (!string.IsNullOrEmpty(subscriber.ThirdPartyContactId))
+                    {                        
+                        var unsubscribeOperation = UnsubscribeOldEmailAddress(publication, subscriber);
+                        batch.Operations.Add(unsubscribeOperation);
+                    }
+
                     //Assuming success here, update the ID to match the emailaddress
                     //TODO: US2782 - need to also recongnize this is an email change and handle this acordingly
                     subscriber.ThirdPartyContactId = subscriber.EmailAddress;
                     _bulkEmailRepository.UpdateSubscriber(_token, subscriber);
                 }
 
-                var mailChimpSubscriber = new SubscriberDTO();
-                mailChimpSubscriber.Subscribed = subscriber.Subscribed;
-                mailChimpSubscriber.EmailAddress = subscriber.EmailAddress;
-                mailChimpSubscriber.MergeFields = subscriber.MergeFields;
-
-                var hashedEmail = CalculateMD5Hash(subscriber.EmailAddress.ToLower());
-
-                var operation = new SubscriberOperationDTO();
-                operation.Method = "PUT";                
-                operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
-
-                // TODO: Do we need to store this somewhere to verify subscriber processed successfully
-                operation.OperationId = Guid.NewGuid().ToString();
-                operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
-
+                var operation = GetOperation(publication, subscriber);
                 batch.Operations.Add(operation);
             }
             
             return batch;
+        }
+
+        private SubscriberOperationDTO UnsubscribeOldEmailAddress(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
+        {
+            var updatedSubcriber = subscriber.Clone();
+            updatedSubcriber.Subscribed = false;
+            var updateOperation = GetOperation(publication, updatedSubcriber);
+            return updateOperation;
+        }
+
+        private SubscriberOperationDTO GetOperation(BulkEmailPublication publication, BulkEmailSubscriber subscriber)
+        {
+            var mailChimpSubscriber = new SubscriberDTO();
+            
+            mailChimpSubscriber.Subscribed = subscriber.Subscribed;
+            mailChimpSubscriber.EmailAddress = subscriber.ThirdPartyContactId;
+            mailChimpSubscriber.MergeFields = subscriber.MergeFields;
+
+            var hashedEmail = CalculateMD5Hash(mailChimpSubscriber.EmailAddress.ToLower());
+
+            var operation = new SubscriberOperationDTO();
+            operation.Method = "PUT";
+            operation.Path = string.Format("lists/{0}/members/{1}", publication.ThirdPartyPublicationId, hashedEmail);
+
+            // TODO: Do we need to store this somewhere to verify subscriber processed successfully
+            operation.OperationId = Guid.NewGuid().ToString();
+            operation.Body = JsonConvert.SerializeObject(mailChimpSubscriber);
+
+            return operation;
         }
 
         // From http://stackoverflow.com/questions/1207731/how-can-i-deserialize-json-to-a-simple-dictionarystring-string-in-asp-net
@@ -304,6 +324,52 @@ namespace crds_angular.Services
                 sb.Append(hash[i].ToString("X2"));
             }
             return sb.ToString();
+        }
+
+        private void PullSubscriptionStatusChangesFromThirdParty(BulkEmailPublication publication)
+        {
+            var client = GetBulkEmailClient();
+
+            // query mailchimp to get list activity         
+            var lastSuccessfulSync = publication.LastSuccessfulSync.ToUniversalTime().ToString("u");
+            var request = new RestRequest("lists/" + publication.ThirdPartyPublicationId + "/members?since_last_changed=" + lastSuccessfulSync +
+                                          "&fields=members.id,members.email_address,members.status&activity=status&count=" + MAX_SYNC_RECORDS,
+                                          Method.GET);
+            request.AddHeader("Content-Type", "application/json");
+
+            try
+            {
+
+                var response = client.Execute(request);
+
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
+                    // TODO: Should these be exceptions?
+                    _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                    return;
+                }
+
+                var responseContent = response.Content;
+
+                var responseContentJson = JObject.Parse(responseContent);
+                List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
+                List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
+
+                foreach (var subscriberDTO in subscribersDTOs)
+                {
+                    subscriberDTO.PublicationID = publication.PublicationId;
+                    subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
+
+                    _logger.InfoFormat("Changing subscription status for {0} to {1}", subscriberDTO.EmailAddress, subscriberDTO.Status);
+                }
+
+                _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+            }
         }
     }
 }

@@ -121,7 +121,7 @@
             <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="maxDate">
-            <span ng-if="profile.enforceAgeRestriction" dynamic-content="profile.ageRestrictionMessage"></span>
+            <span ng-if="profile.enforceAgeRestriction" dynamic-content="$root.MESSAGES.ageRestriction.content | html"></span>
             <span ng-if="!profile.enforceAgeRestriction"  dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>

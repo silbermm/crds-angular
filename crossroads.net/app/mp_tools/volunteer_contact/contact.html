@@ -1,6 +1,6 @@
 <preloader full-screen='true' ng-show="!contact.viewReady"> </preloader>
 
-<div ng-if="contact.viewReady && contact.multipleRecordsSelected" class="alert alert-danger" role="alert">
+<div ng-if="contact.viewReady && contact.showError()" class="alert alert-danger" role="alert">
   <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
