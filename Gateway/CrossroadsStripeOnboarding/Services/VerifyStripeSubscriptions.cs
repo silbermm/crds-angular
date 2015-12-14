@@ -83,7 +83,7 @@ namespace CrossroadsStripeOnboarding.Services
                 }
 
                 var stripeSubscriptionId = string.IsNullOrWhiteSpace(gift.Subscription_ID) ? Null : gift.Subscription_ID;
-                var stripeAmount = sub == null || sub.Plan == null ? 0M : sub.Plan.Amount / 100M;
+                var stripeAmount = sub == null || sub.Plan == null ? 0.00M : (decimal)(sub.Plan.Amount / 100.00M);
                 var freq = sub == null || sub.Plan == null
                     ? null
                     : sub.Plan.Interval.ToLower().Equals("month") ? Frequency.Monthly : sub.Plan.Interval.ToLower().Equals("week") ? Frequency.Weekly : (Frequency?) null;
@@ -160,7 +160,7 @@ namespace CrossroadsStripeOnboarding.Services
                                                   bool success,
                                                   string errorMessage)
         {
-            VerifyOutput.Info(string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}",
+            VerifyOutput.Info(string.Format("{0},{1},{2:F2},{3:F2},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13}",
                                             mpRecurringGiftId,
                                             stripeSubscriptionId,
                                             mpAmount,
