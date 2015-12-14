@@ -7,12 +7,12 @@ the migration after it has been completed.
 
 ##Prerequisites & Assumptions
 The following criteria are required for this process to successfully run.
-1. Stripe has processed the Forte export file and has created Customers in the Live environment
-2. Stripe has delivered their JSON Mapping file to Crossroads
+* Stripe has processed the Forte export file and has created Customers in the Live environment
+* Stripe has delivered their JSON Mapping file to Crossroads
 ** This file contains a mapping from "old" customer id (person ID in Legacy) to a "new" Customer ID in Stripe
 ** The new Customer in Stripe also has the proper payment (bank or credit card) information associated to the Customer as the Default Source
-3. The data migration has been run, to create MinistryPlatform Donors, Recurring Gifts, and Donor Accounts from Legacy crossroads.net
-4. The following environment variables are set to proper values on the Windows PC/VM where the executable will run:
+* The data migration has been run, to create MinistryPlatform Donors, Recurring Gifts, and Donor Accounts from Legacy crossroads.net
+* The following environment variables are set to proper values on the Windows PC/VM where the executable will run:
 ** APP_LOG_ROOT - a path where Log4Net log files will be written (e.g. c:\logfiles)
 ** CRDS_API_ENDPOINT - the Gateway API endpoint (e.g. https://gatewayint.crossroads.net/gateway/)
 ** CRDS_CMS_ENDPOINT - the CMS API endpoint (e.g. https://contentint.crossroads.net/)
