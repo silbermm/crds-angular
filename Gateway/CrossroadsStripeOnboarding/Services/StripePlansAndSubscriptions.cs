@@ -112,14 +112,18 @@ namespace CrossroadsStripeOnboarding.Services
 
         private DateTime GetStartForMonth5th()
         {
-            var months = DateTime.Today.Day < 5 ? 0 : 1;
-            return DateTime.Today.AddMonths(months);
+            var today = DateTime.Today;
+            var months = today.Day < 5 ? 0 : 1;
+            var fifth = new DateTime(today.Year, today.Month, 5);
+            return fifth.AddMonths(months);
         }
 
         private DateTime GetStartForMonth20th()
         {
-            var months = DateTime.Today.Day < 20 ? 0 : 1;
-            return DateTime.Today.AddMonths(months);
+            var today = DateTime.Today;
+            var months = today.Day < 20 ? 0 : 1;
+            var twentieth = new DateTime(today.Year, today.Month, 20);
+            return twentieth.AddMonths(months);
         }
     }
 }
