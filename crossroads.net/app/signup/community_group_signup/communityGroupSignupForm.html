@@ -47,19 +47,19 @@
                     </a>
                   </span>
                 </label>
+                <div ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
+                  <child-care-need
+                      participant-id='person.participantId'
+                      on-change='groupsignup.childCareChange'>
+                  </child-care-need>
+                </div>
               </div>
-            <div ng-show="groupsignup.childCareAvailable && !person.userInGroup"> 
-              <child-care-need
-                  participant-id='person.participantId'
-                  on-change='groupsignup.childCareChange'>
-              </child-care-need>
-            </div>
-          </p>
-          <p ng-show="!groupsignup.alreadySignedUp && !groupsignup.showFull">
-            <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
-          </p>
-        </form>
-      </div>
+            </p>
+            <p ng-show="!groupsignup.alreadySignedUp && !groupsignup.showFull">
+              <input type="submit" name="submit_group_signup" value="Sign Up" id="submit_group_signup" class="btn btn-primary push-half-bottom">
+            </p>
+          </form>
+        </div>
 
       <script type="text/ng-template" id="editProfile.html">
         <div class="modal-header">
