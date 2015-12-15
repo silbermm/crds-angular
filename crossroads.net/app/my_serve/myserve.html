@@ -16,7 +16,7 @@
   <div class="serve-signup-cont clearfix col-sm-9 col-sm-pull-3 soft-ends">
 
     <div data-ng-show="serve.showNoOpportunitiesMsg()">
-      <span ng-bind-html="$root.MESSAGES.noServingOpportunities.content | html"></span>
+      <span dynamic-content="$root.MESSAGES.noServingOpportunities.content | html"></span>
     </div>
 
     <form name='serveForm'>

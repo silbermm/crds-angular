@@ -1,10 +1,10 @@
 <script type="text/ng-template" id="attendanceReasonPopover.html">
-  <div ng-bind-html="$root.MESSAGES.attendanceReasonPopover.content | html"></div>
+  <div dynamic-content="$root.MESSAGES.attendanceReasonPopover.content | html"></div>
 </script>
 
 <section ng-show="profile.viewReady" class="email-modal">
   <ng-form role="form" name="profile.pform" novalidate>
-    <p class="push-bottom" ng-bind-html="$root.MESSAGES.privacy.content | html"></p>
+    <p class="push-bottom" dynamic-content="$root.MESSAGES.privacy.content | html"></p>
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'firstName')}">
@@ -12,7 +12,7 @@
         <input type="text" class="form-control" id="first-name" name="firstName" placeholder="Enter first name" ng-model="profile.profileData.person.firstName" required>
         <ng-messages for="profile.pform.firstName.$error" ng-if="profile.validation.showErrors(profile.pform, 'firstName')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -29,7 +29,7 @@
         <input type="text" class="form-control" id="last-name" name="lastName" placeholder="Enter last name" ng-model="profile.profileData.person.lastName" required>
         <ng-messages for="profile.pform.lastName.$error" ng-if="profile.validation.showErrors(profile.pform, 'lastName')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -46,7 +46,7 @@
         <input type="text" class="form-control" id="nickname" name="nickname" placeholder="Enter nick name" ng-model="profile.profileData.person.nickName" required>
         <ng-messages for="profile.pform.nickname.$error" ng-if="profile.validation.showErrors(profile.pform, 'nickname')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -65,13 +65,13 @@
                unique-email />
         <ng-messages for="profile.pform.email.$error" ng-if="profile.validation.showErrors(profile.pform, 'email')">
           <span ng-message="required">
-            <span ng-bind-html="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
           </span>
           <span ng-message="unique">
-            <span ng-bind-html="$root.MESSAGES.emailInUse.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.emailInUse.content | html"></span>
           </span>
           <span ng-message="email">
-            <span ng-bind-html="$root.MESSAGES.invalidEmail.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidEmail.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -115,14 +115,14 @@
         <ng-messages for="profile.pform.birthdate.$error" ng-if="profile.validation.showErrors(profile.pform, 'birthdate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <span ng-message="date">
-            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="minDate">
-            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="maxDate">
-            <span ng-if="profile.enforceAgeRestriction" dynamic-content="profile.ageRestrictionMessage"></span>
-            <span ng-if="!profile.enforceAgeRestriction"  ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span ng-if="profile.enforceAgeRestriction" dynamic-content="$root.MESSAGES.ageRestriction.content | html"></span>
+            <span ng-if="!profile.enforceAgeRestriction"  dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -204,13 +204,13 @@
         <ng-messages for="profile.pform.startAttendDate.$error" ng-if="profile.validation.showErrors(profile.pform, 'startAttendDate')">
           <ng-messages-include src="on-submit-messages"></ng-messages-include>
           <span ng-message="date">
-            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="minDate">
-            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
           <span ng-message="maxDate">
-            <span ng-bind-html="$root.MESSAGES.invalidData.content | html"></span>
+            <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
           </span>
         </ng-messages>
       </div>
@@ -251,9 +251,9 @@
                  ng-pattern='profile.phoneFormat' >
           <ng-messages for="profile.pform['mobile-phone'].$error" ng-if="profile.validation.showErrors(profile.pform, 'mobile-phone')" ng-class="{'has-error':  profile.validation.showErrors(profile.pform, 'mobile-phone') }" >
             <span ng-message='required' ng-if='profile.requireMobilePhone'>
-              <span ng-bind-html='$root.MESSAGES.fieldCanNotBeBlank.content | html'></span>
+              <span dynamic-content='$root.MESSAGES.fieldCanNotBeBlank.content | html'></span>
             </span>
-            <span ng-message="pattern"><span ng-bind-html="$root.MESSAGES.invalidPhone.content | html"></span></span>
+            <span ng-message="pattern"><span dynamic-content="$root.MESSAGES.invalidPhone.content | html"></span></span>
           </ng-messages>
       </div>
 

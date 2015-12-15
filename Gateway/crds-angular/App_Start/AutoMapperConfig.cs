@@ -7,6 +7,7 @@ using crds_angular.Models.Crossroads.Events;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
+using crds_angular.Models.MailChimp;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using DonationStatus = crds_angular.Models.Crossroads.Stewardship.DonationStatus;
@@ -210,6 +211,9 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
                 .ForMember(dest => dest.time, opts => opts.MapFrom(src => src.EventStartDate.ToString("h:mm")))
                 .ForMember(dest => dest.meridian, opts => opts.MapFrom(src => src.EventStartDate.ToString("tt")));
+
+            Mapper.CreateMap<BulkEmailSubscriberOptDTO, BulkEmailSubscriberOpt>();
+            Mapper.CreateMap<BulkEmailSubscriberOpt, BulkEmailSubscriberOptDTO>();
         }
     }
 }
