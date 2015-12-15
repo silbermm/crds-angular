@@ -130,49 +130,36 @@ WHERE contact_id = @contactID;
 GO
 
 --Kathyrn Cradduck-Test's Request to Join Kids' Club Response Record
-SET IDENTITY_INSERT [dbo].[Responses] ON;
-
-DECLARE @respID as int
-set @respID = IDENT_CURRENT('Responses')+1;
-
 DECLARE @partID as int
-set @partID = (select Participant_Record from Contacts where display_name = 'Cradduck-Test, Kathyrn');
+set @partID = (select Participant_Record from Contacts where email_address = 'kcradduck+testing@crossroads.net' and last_name = 'Cradduck-Test');
 
 INSERT INTO [dbo].Responses 
-(Response_ID,Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
-(@respID    ,{ts '2015-07-02 08:17:17'},115           ,@partID       ,'Request on 7/2/2015 8:17:17 AM',null              ,null      ,null     ,null ,null ,null                 ,null              ,0     ,1        ,null    ,null             );
-
-SET IDENTITY_INSERT [dbo].[Responses] OFF;
+(Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
+({ts '2015-07-02 08:17:17'},115           ,@partID       ,'Request on 7/2/2015 8:17:17 AM',null              ,null      ,null     ,null ,null ,null                 ,null              ,0     ,1        ,null    ,null             );
 GO
 
 --Kid14 Cradduck-Test's Request to Join Kids' Club Response Record
-SET IDENTITY_INSERT [dbo].[Responses] ON;
-
-DECLARE @respID as int
-set @respID = IDENT_CURRENT('Responses')+1;
-
 DECLARE @partID as int
-set @partID = (select Participant_Record from Contacts where display_name = 'Cradduck-Test, Kid14');
+set @partID = (select Participant_Record from Contacts where email_address = 'kcradduck+kid14@crossroads.net' and last_name = 'Cradduck-Test');
 
 INSERT INTO [dbo].Responses 
-(Response_ID,Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
-(@respID    ,{ts '2015-07-02 08:20:21'},115           ,@partID       ,'Request on 7/2/2015 8:20:21 AM',null              ,null      ,null     ,null ,null ,null                 ,null              ,0 ,1        ,null    ,null             )
+(Response_Date             ,Opportunity_ID,Participant_ID,Comments                        ,Website_Submission,First_Name,Last_Name,Email,Phone,Follow_up_Information,Response_Result_ID,Closed,Domain_ID,Event_ID,__ExternalCESTPID) VALUES
+({ts '2015-07-02 08:20:21'},115           ,@partID       ,'Request on 7/2/2015 8:20:21 AM',null              ,null      ,null     ,null ,null ,null                 ,null              ,0 ,1        ,null    ,null             )
 
-SET IDENTITY_INSERT [dbo].[Responses] OFF;
 GO
 
 --Family Relationships
 DECLARE @momContact as int
-set @momContact = (select Contact_ID from Contacts where display_name = 'Cradduck-Test, Kathryn');
+set @momContact = (select Contact_ID from Contacts where email_address = 'kcradduck+testing@crossroads.net' and last_name = 'Cradduck-Test');
 
 DECLARE @dadContact as int
-set @dadContact = (select Contact_ID from Contacts where display_name = 'Cradduck-Test, Husband');
+set @dadContact = (select Contact_ID from Contacts where email_address = 'kcradduck+husband@crossroads.net' and last_name = 'Cradduck-Test');
 
 DECLARE @kid14Contact as int
-set @kid14Contact = (select Contact_ID from Contacts where display_name = 'Cradduck-Test, Kid14');
+set @kid14Contact = (select Contact_ID from Contacts where email_address = 'kcradduck+kid14@crossroads.net' and last_name = 'Cradduck-Test');
 
 DECLARE @kid17Contact as int
-set @kid17Contact = (select Contact_ID from Contacts where display_name = 'Cradduck-Test, Kid17');
+set @kid17Contact = (select Contact_ID from Contacts where email_address = 'kcradduck+kid17@crossroads.net' and last_name = 'Cradduck-Test');
 
 --Dad Married to Mom
 INSERT INTO [dbo].Contact_Relationships 
@@ -206,43 +193,55 @@ SET IDENTITY_INSERT [dbo].[Contact_Relationships] OFF;
 GO
 
 --Some Groups for the family so sign up to serve is functional
+DECLARE @kathrynPartID as int
+SET @kathrynPartID = (select Participant_record from contacts where email_address = 'kcradduck+testing@crossroads.net' and last_name = 'Cradduck-Test');
+
+DECLARE @husbandPartID as int
+SET @husbandPartID = (select Participant_record from contacts where email_address = 'kcradduck+husband@crossroads.net' and last_name = 'Cradduck-Test');
+
+DECLARE @kid14PartID as int
+SET @kid14PartID = (select Participant_record from contacts where email_address = 'kcradduck+kid14@crossroads.net' and last_name = 'Cradduck-Test');
+
+DECLARE @kid17PartID as int
+SET @kid17PartID = (select Participant_record from contacts where email_address = 'kcradduck+kid17@crossroads.net' and last_name = 'Cradduck-Test');
+
 --Kathyrn Signs up for KC Florence Nursery!
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                         ,Participant_ID                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) KC Florence Nursery') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kathryn') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                         ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) KC Florence Nursery') ,@kathrynPartID ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 --Test Husband signs up for FI Florence Parking and the Nursery!
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                         ,Participant_ID                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) KC Florence Nursery') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Husband') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                         ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) KC Florence Nursery') ,@husbandPartID ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                         ,Participant_ID                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Parking') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Husband') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                         ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Parking') ,@husbandPartID ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 --Kid14 and Kid17 sign up for 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                        ,Participant_ID                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kid14') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                        ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Coffee') ,@kid14PartID   ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                        ,Participant_ID                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kid17') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                        ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Florence Coffee') ,@kid17PartID   ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 --Everyone signs up for Oakley Coffee
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                      ,Participant_ID                                                                 ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kathryn') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                      ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,@kathrynPartID ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                      ,Participant_ID                                                                 ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Husband') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                      ,Participant_ID ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,@husbandPartID ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                      ,Participant_ID                                                                  ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kid14') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                      ,Participant_ID,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,@kid14PartID  ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                      ,Participant_ID                                                                  ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where Display_Name = 'Cradduck-Test, Kid17') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+(Group_ID                                                                      ,Participant_ID,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
+((select TOP 1 group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,@kid17PartID  ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 GO

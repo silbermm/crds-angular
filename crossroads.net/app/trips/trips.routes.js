@@ -19,7 +19,7 @@
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
             return Page.get({
-              url: '/tripgiving/'
+              url: '/trips/search/'
             }).$promise;
           }
         },

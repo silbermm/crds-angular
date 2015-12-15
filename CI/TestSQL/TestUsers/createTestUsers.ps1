@@ -16,7 +16,7 @@ foreach($user in $userList)
 		$json = $person | ConvertTo-Json;
 		
 		try {
-			$response = Invoke-RestMethod 'http://gatewayint.crossroads.net/gateway/api/User' -Method Post -Body $json -ContentType 'application/json'
+			$response = Invoke-RestMethod 'https://gatewayint.crossroads.net/gateway/api/User' -Method Post -Body $json -ContentType 'application/json'
 			write-host "Successfully added user account" $user.email"!" -foregroundcolor green
 		}		
 		catch{
