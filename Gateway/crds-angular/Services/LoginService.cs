@@ -22,13 +22,15 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IEmailCommunication _emailCommunication;
         private readonly IUserService _userService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public LoginService(IConfigurationWrapper configurationWrapper, IContactService contactService, IEmailCommunication emailCommunication, IUserService userService)
+        public LoginService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IContactService contactService, IEmailCommunication emailCommunication, IUserService userService)
         {
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
             _emailCommunication = emailCommunication;
             _userService = userService;
+            _authenticationService = authenticationService;
         }
 
         public bool PasswordResetRequest(string username)
@@ -88,10 +90,20 @@ namespace crds_angular.Services
             }
         }
 
-        public bool AcceptPasswordResetRequest(string email, string token, string password)
+        public bool ResetPassword(string password, string token)
         {
-            // Worked in successor story
-            throw new NotImplementedException();
+            var user = _userService.GetUserByResetToken(token);
+
+            //_authenticationService.ChangePassword()
+
+            // THIS IS DISABLED FOR TESTING THE FRONT END --> we actually need to move the reset stuff to the actual
+            // code section that is resetting the password
+            //Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
+            //userUpdateValues["User_ID"] = user.UserRecordId;
+            //userUpdateValues["PasswordResetToken"] = null; 
+            //_userService.UpdateUser(userUpdateValues);
+
+            return true;
         }
 
         public bool ClearResetToken(string username)
@@ -108,15 +120,10 @@ namespace crds_angular.Services
 
         public string VerifyResetToken(string token)
         {
-            var user_ID = _userService.GetUserIdByResetToken(token).ToString();
-            MinistryPlatformUser user = _userService.GetByUserId(user_ID);
+            // TODO: Ask Jim about adding fields to the MinistryPlatformUser to get id and email in one call
+            var user = _userService.GetUserByResetToken(token);
 
-            Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
-            userUpdateValues["User_ID"] = user_ID;
-            userUpdateValues["ResetToken"] = null; 
-            _userService.UpdateUser(userUpdateValues);
-
-            return "";
+            return user.UserEmail;
         }
     }
 }

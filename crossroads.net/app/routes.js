@@ -147,7 +147,8 @@
             PasswordService: 'PasswordService',
             $stateParams: '$stateParams',
             Email: function(PasswordService, $stateParams) {
-              return PasswordService.ResetPasswordVerify.save($stateParams.token).$promise;
+              var token = { token: $stateParams.token };
+              return PasswordService.VerifyResetToken.save(token).$promise;
             }
           }
       })

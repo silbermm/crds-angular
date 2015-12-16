@@ -34,6 +34,12 @@ namespace MinistryPlatform.Translation.Services
             return (GetUser(searchString));
         }
 
+        public MinistryPlatformUser GetUserByResetToken(string resetToken)
+        {
+            var searchString = string.Format(",,,,,\"{0}\"", resetToken);
+            return (GetUser(searchString));
+        }
+
         private MinistryPlatformUser GetUser(string searchString)
         {
             var records = _ministryPlatformService.GetPageViewRecords(_usersApiLookupPageViewId, ApiLogin(), searchString);
@@ -43,11 +49,14 @@ namespace MinistryPlatform.Translation.Services
             }
 
             var record = records.First();
+            // TODO: Verify that the field is right (email)
             var user = new MinistryPlatformUser
             {
                 CanImpersonate = record["Can_Impersonate"] as bool? ?? false,
                 Guid = record.ContainsKey("User_GUID") ? record["User_GUID"].ToString() : null,
-                UserId = record["User_Name"] as string
+                UserId = record["User_Name"] as string,
+                UserEmail = record["User_Email"] as string,
+                UserRecordId = Int32.Parse(record["dp_RecordID"].ToString())// dp_RecordID
             };
 
             return (user);
@@ -82,17 +91,19 @@ namespace MinistryPlatform.Translation.Services
             return record.ToInt("Contact ID");
         }
 
-        public int GetUserIdByResetToken(string resetToken)
+        public string GetUserEmailByResetToken(string resetToken)
         {
-            var records = _ministryPlatformService.GetPageViewRecords(92267, ApiLogin(), ("," + resetToken));
+            // TODO: Switch this to use the config value
+            var records = _ministryPlatformService.GetPageViewRecords(92271, ApiLogin(), ("," + resetToken));
 
+            // How do we account for an invalid token? Return an error in the login service and in turn return a 500?
             if (records.Count != 1)
             {
                 throw new Exception("User ID did not return exactly one user record");
             }
 
             var record = records[0];
-            return record.ToInt("User ID");
+            return record["User_Email"].ToString();
         }
     }
 }
