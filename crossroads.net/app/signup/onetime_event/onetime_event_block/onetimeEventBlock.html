@@ -13,16 +13,16 @@
         <form ng-submit='onetimeEventBlock.submit()'>
           <div class="row">
             <div class="col-md-12">
-              <h5> Please indicate who is coming </h5>
+              <h5> Please indicate who will attend the event </h5>
               <div ng-repeat="member in onetimeEventBlock.thisFamily">
-                <div class="checkbox" > 
-                  <label> 
+                <div class="checkbox" >
+                  <label>
                     <input type='checkbox' ng-model="member.selected" >
                     <span> {{member.preferredName}} </span>
                     <span> {{member.emailAddress}} </span>
                   </label>
                 </div>
-                <div  ng-show="onetimeEventBlock.showChildcare(member)"> 
+                <div  ng-show="onetimeEventBlock.showChildcare(member)">
                   <child-care-need
                         participant-id='member.participantId'
                         on-change='onetimeEventBlock.childCareChange'>
