@@ -22,13 +22,16 @@
                     <span> {{member.emailAddress}} </span>
                   </label>
                 </div>
-                <div  ng-show="onetimeEventBlock.showChildcare(member)">
+                <!-- <div  ng-show="onetimeEventBlock.showChildcare(member)">
                   <child-care-need
                         participant-id='member.participantId'
                         on-change='onetimeEventBlock.childCareChange'>
                   </child-care-need>
-                </div>
+                </div> -->
               </div>
+            </div>
+            <div class="col-md-12 soft-half-top" ng-show="onetimeEventBlock.group.childCareInd">
+              show button here
             </div>
             <div class="col-sm-12 serve-save soft-half-top">
               <loading-button
