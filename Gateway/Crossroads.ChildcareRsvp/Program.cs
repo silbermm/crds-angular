@@ -32,6 +32,7 @@ namespace Crossroads.ChildcareRsvp
                 Log.Error("Childcare RSVP Email Process failed.", ex);
                 Environment.Exit(9999);
             }
+            Environment.Exit(0);
         }
     }
 }
