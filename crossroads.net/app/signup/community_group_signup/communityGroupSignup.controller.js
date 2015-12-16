@@ -12,8 +12,7 @@
     '$stateParams',
     'Page',
     '$modal',
-    'ChildCare',
-    'SignupService'
+    'ChildCare'
   ];
 
   function CommunityGroupsController(
@@ -25,8 +24,7 @@
     $stateParams,
     Page,
     $modal,
-    ChildCare,
-    SignupService) {
+    ChildCare) {
 
     var vm = this;
     vm.allSignedUp = allSignedUp;
