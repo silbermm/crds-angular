@@ -168,6 +168,7 @@ namespace crds_angular.Services
                 detail.WaitListInd = g.WaitList;
                 detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
+                detail.OnlineRsvpMinimumAge = g.MinimumAge;
                 if (events != null)
                 {
                     detail.Events = Enumerable.ToList<Event>(events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>));
