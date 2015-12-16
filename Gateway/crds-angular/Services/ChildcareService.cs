@@ -8,6 +8,7 @@ using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using log4net;
+using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
@@ -21,9 +22,11 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IEventParticipantService _eventParticipantService;
         private readonly IEventService _eventService;
+        private readonly crds_angular.Services.Interfaces.IEventService _crdsEventService;
         private readonly IParticipantService _participantService;
         private readonly IServeService _serveService;
         private readonly IDateTime _dateTimeWrapper;
+        private readonly IApiUserService _apiUserService;
 
         private readonly ILog _logger = LogManager.GetLogger(typeof (ChildcareService));
 
@@ -34,16 +37,20 @@ namespace crds_angular.Services
                                 IEventService eventService,
                                 IParticipantService participantService,
                                 IServeService serveService,
-                                IDateTime dateTimeWrapper)
+                                IDateTime dateTimeWrapper,
+                                Interfaces.IEventService crdsEventService,
+                                IApiUserService apiUserService)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
+            _crdsEventService = crdsEventService;
             _eventService = eventService;
             _participantService = participantService;
             _serveService = serveService;
             _dateTimeWrapper = dateTimeWrapper;
+            _apiUserService = apiUserService;
         }
 
         public List<FamilyMember> MyChildren(string token)
@@ -170,11 +177,20 @@ namespace crds_angular.Services
             var template = _communicationService.GetTemplate(templateId);
             var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
             const int domainId = 1;
+            var token = _apiUserService.GetToken();
 
             var participants = _eventParticipantService.GetChildCareParticipants(daysBeforeEvent);
             foreach (var participant in participants)
             {
                 var childEvent = GetChildcareEvent(participant.EventId);
+                var childcareParticipants = _crdsEventService.EventPaticpants(childEvent.EventId, token);
+                var mine = _crdsEventService.MyChildrenParticipants(participant.ContactId, childcareParticipants, token);
+
+                if (mine.Any())
+                {
+                    // i have kids already signed up for childcare!
+                    continue;
+                }
                 var mergeData = SetMergeData(participant.GroupName, participant.EventStartDateTime, participant.EventId);
                 var replyToContact = ReplyToContact(childEvent);
                 var communication = FormatCommunication(authorUserId,

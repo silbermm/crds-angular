@@ -24,6 +24,9 @@ namespace crds_angular.test.Services
         private Mock<IParticipantService> _participantService;
         private Mock<IServeService> _serveService;
         private Mock<IDateTime> _dateTimeWrapper;
+        // Interfaces.IEventService crdsEventService, IApiUserService apiUserService
+        private Mock<crds_angular.Services.Interfaces.IEventService> _crdsEventService;
+        private Mock<IApiUserService> _apiUserService;
 
         private ChildcareService _fixture;
 
@@ -38,6 +41,8 @@ namespace crds_angular.test.Services
             _participantService = new Mock<IParticipantService>();
             _serveService = new Mock<IServeService>();
             _dateTimeWrapper = new Mock<IDateTime>();
+            _crdsEventService = new Mock<crds_angular.Services.Interfaces.IEventService>();
+            _apiUserService = new Mock<IApiUserService>();
 
             _fixture = new ChildcareService(_eventParticipantService.Object,
                                             _communicationService.Object,
@@ -46,7 +51,9 @@ namespace crds_angular.test.Services
                                             _eventService.Object,
                                             _participantService.Object,
                                             _serveService.Object,
-                                            _dateTimeWrapper.Object);
+                                            _dateTimeWrapper.Object,
+                                            _crdsEventService.Object,
+                                            _apiUserService.Object);
         }
 
         [Test]
