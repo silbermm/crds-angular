@@ -40,51 +40,7 @@ namespace crds_angular.Controllers.API
             _mpDonorService = mpDonorService;
             _impersonationService = impersonationService;
         }
-
-        /// <summary>
-        /// Retrieve list of donations for the specified donor, optionally for the specified year, and optionally returns only soft credit donations (by default returns only direct gifts).
-        /// </summary>
-        /// <param name="donorId"></param>
-        /// <param name="softCredit">A bool indicating if the result should contain soft-credit (true) or direct (false) donations.  Defaults to false.</param>
-        /// <param name="donationYear">A year filter (YYYY format) for donations returned - defaults to null, meaning return all available donations regardless of year.</param>
-        /// <returns>A list of DonationDTOs</returns>
-        [Route("api/donor/{donorId:int}/donations/{donationYear:regex(\\d{4})?}")]
-        [HttpGet]
-        public IHttpActionResult GetDonations(int donorId, string donationYear = null, [FromUri(Name = "softCredit")]bool? softCredit = false)
-        {
-            return (Authorized(token =>
-            {
-                var donations = _donationService.GetDonationsForDonor(donorId, donationYear, softCredit.GetValueOrDefault(false));
-                if (donations == null || !donations.HasDonations)
-                {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No matching donations found")));
-                }
-
-                return (Ok(donations));
-            }));
-        }
-
-        /// <summary>
-        /// Retrieve a list of donation years for the specified donor.  This includes any year the donor has given either directly, or via soft-credit.
-        /// </summary>
-        /// <param name="donorId"></param>
-        /// <returns>A list of years (string)</returns>
-        [Route("api/donor/{donorId:int}/donations/years")]
-        [HttpGet]
-        public IHttpActionResult GetDonationYears(int donorId)
-        {
-            return (Authorized(token =>
-            {
-                var donationYears = _donationService.GetDonationYearsForDonor(donorId);
-                if (donationYears == null || !donationYears.HasYears)
-                {
-                    return (RestHttpActionResult<ApiErrorDto>.WithStatus(HttpStatusCode.NotFound, new ApiErrorDto("No donation years found")));
-                }
-
-                return (Ok(donationYears));
-            }));
-        }
-
+    
         [ResponseType(typeof(DonorDTO))]
         [Route("api/donor/{email?}")]
         public IHttpActionResult Get(string email="")
