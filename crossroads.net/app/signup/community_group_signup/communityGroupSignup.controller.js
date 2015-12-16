@@ -12,7 +12,8 @@
     '$stateParams',
     'Page',
     '$modal',
-    'ChildCare'
+    'ChildCare',
+    'SignupService'
   ];
 
   function CommunityGroupsController(
@@ -24,7 +25,8 @@
     $stateParams,
     Page,
     $modal,
-    ChildCare) {
+    ChildCare,
+    SignupService) {
 
     var vm = this;
     vm.allSignedUp = allSignedUp;
@@ -62,8 +64,9 @@
         console.log('Can\'t get your profile! ' + err);
       });
 
+      var link = (_.endsWith($stateParams.link, '/') === false) ? $stateParams.link + '/' : $stateParams.link;
       var pageRequest = Page.get({
-        url: $stateParams.link
+        url: link
       }, function() {
         if (pageRequest.pages.length > 0) {
           vm.signupPage = pageRequest.pages[0];

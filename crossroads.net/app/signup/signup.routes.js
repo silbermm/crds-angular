@@ -36,9 +36,13 @@
 
         CmsInfo: function($q, Page, SignupService, Group, $stateParams) {
           var deferred = $q.defer();
-
-          Page.get({link: $stateParams.link}).$promise.then(function(data) {
+          var link = addTrailingSlashIfNecessary($stateParams.link);
+          Page.get({link: link}).$promise.then(function(data) {
+            if (data.pages.length === 0) {
+              deferred.reject();
+            }; 
             SignupService.cmsInfo = data;
+            
             Group.Detail.get({groupId: data.pages[0].group}).$promise.then(function(group) {
                 SignupService.group = group;
                 deferred.resolve();
@@ -57,6 +61,14 @@
         }
       }
     });
+  }
+
+  function addTrailingSlashIfNecessary(link) {
+    if (_.endsWith(link, '/') === false) {
+      return link + '/';
+    }
+
+    return link;
   }
 
 })();
