@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Runtime.InteropServices;
 using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Functions;
@@ -27,9 +25,9 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
         private readonly IApiUserService _apiUserService;
-        private readonly IChildcareService _childcareService;
         private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IGroupParticipantService _groupParticipantService;
+        private readonly IParticipantService _participantService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -41,7 +39,6 @@ namespace crds_angular.Services
         };
 
 
-
         public EventService(TranslationEventService eventService,
                             IGroupService groupService,
                             ICommunicationService communicationService,
@@ -49,9 +46,8 @@ namespace crds_angular.Services
                             IContentBlockService contentBlockService,
                             IConfigurationWrapper configurationWrapper,
                             IApiUserService apiUserService,
-                            IChildcareService childcareService,
                             IContactRelationshipService contactRelationshipService,
-                            IGroupParticipantService groupParticipantService)
+                            IGroupParticipantService groupParticipantService, IParticipantService participantService)
         {
             _eventService = eventService;
             _groupService = groupService;
@@ -60,9 +56,9 @@ namespace crds_angular.Services
             _contentBlockService = contentBlockService;
             _configurationWrapper = configurationWrapper;
             _apiUserService = apiUserService;
-            _childcareService = childcareService;
             _contactRelationshipService = contactRelationshipService;
             _groupParticipantService = groupParticipantService;
+            _participantService = participantService;
         }
 
         public Event GetEvent(int eventId)
@@ -79,11 +75,20 @@ namespace crds_angular.Services
                     var groupParticipantId = _groupParticipantService.Get(dto.GroupId, dto.ParticipantId);
                     if (groupParticipantId == 0)
                     {
-                        groupParticipantId = _groupService.addParticipantToGroup(dto.ParticipantId, dto.GroupId, AppSetting("Group_Role_Default_ID"), dto.ChildCareNeeded, DateTime.Today);
+                        groupParticipantId = _groupService.addParticipantToGroup(dto.ParticipantId,
+                                                                                 dto.GroupId,
+                                                                                 AppSetting("Group_Role_Default_ID"),
+                                                                                 dto.ChildCareNeeded,
+                                                                                 DateTime.Today);
                     }
 
                     // validate that there is not a participant record before creating
-                    var retVal = Functions.IntegerReturnValue(() => !_eventService.EventHasParticipant(dto.EventId, dto.ParticipantId) ? _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId, groupParticipantId) : 1);
+                    var retVal =
+                        Functions.IntegerReturnValue(
+                            () =>
+                                !_eventService.EventHasParticipant(dto.EventId, dto.ParticipantId)
+                                    ? _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId, groupParticipantId)
+                                    : 1);
 
                     return new RegisterEventObj()
                     {
@@ -107,7 +112,7 @@ namespace crds_angular.Services
             var pageId = AppSetting("EventsReadyForReminder");
             var events = _eventService.EventsByPageId(token, pageId);
             var eventList = AutoMapper.Mapper.Map<List<crds_angular.Models.Crossroads.Events.Event>>(events);
-            
+
             // Childcare will be included in the email for event, so don't send a duplicate.
             return eventList.Where(evt => evt.EventType != "Childcare").ToList();
         }
@@ -121,20 +126,19 @@ namespace crds_angular.Services
         {
             var token = _apiUserService.GetToken();
             var eventList = EventsReadyForReminder(token);
-            
+
             eventList.ForEach(evt =>
             {
                 // get the participants...
                 var participants = EventPaticpants(evt.EventId, token);
 
                 // does the event have a childcare event?
-                var childcare = _childcareService.GetChildcareEvent(evt.EventId);
+                var childcare = GetChildcareEvent(evt.EventId);
                 var childcareParticipants = childcare != null ? EventPaticpants(childcare.EventId, token) : new List<Participant>();
 
                 participants.ForEach(participant => SendEventReminderEmail(evt, participant, childcare, childcareParticipants, token));
                 _eventService.SetReminderFlag(evt.EventId, token);
             });
-            
         }
 
         private void SendEventReminderEmail(Models.Crossroads.Events.Event evt, Participant participant, Event childcareEvent, IList<Participant> children, string token)
@@ -153,8 +157,7 @@ namespace crds_angular.Services
             if (children.Any())
             {
                 // determine if any of the children are related to the participant
-                var relationships = _contactRelationshipService.GetMyCurrentRelationships(participant.ContactId, token);
-                var mine = children.Where(child => relationships.Any(rel => rel.Contact_Id == child.ContactId)).ToList();
+                var mine = MyChildrenParticipants(participant.ContactId, children, token);
                 // build the HTML for the [Childcare] data
                 if (mine.Any())
                 {
@@ -166,25 +169,32 @@ namespace crds_angular.Services
             }
 
             var comm = _communicationService.GetTemplateAsCommunication(
-               AppSetting("EventReminderTemplateId"),
-               evt.PrimaryContactId,
-               evt.PrimaryContactEmailAddress,
-               evt.PrimaryContactId,
-               evt.PrimaryContactEmailAddress,
-               participant.ContactId,
-               participant.EmailAddress,
-               mergeData
-               );
+                AppSetting("EventReminderTemplateId"),
+                evt.PrimaryContactId,
+                evt.PrimaryContactEmailAddress,
+                evt.PrimaryContactId,
+                evt.PrimaryContactEmailAddress,
+                participant.ContactId,
+                participant.EmailAddress,
+                mergeData
+                );
 
             _communicationService.SendMessage(comm);
         }
- 
+
+        public List<Participant> MyChildrenParticipants(int contactId, IList<Participant> children, string token)
+        {
+            var relationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, token);
+            var mine = children.Where(child => relationships.Any(rel => rel.Contact_Id == child.ContactId)).ToList();
+            return mine;
+        }
+
         private String ChildcareData(IList<Participant> children)
         {
             var el = new HtmlElement("span",
                                      new Dictionary<string, string>(),
                                      "You have indicated that you need childcare for the following children:")
-                                     .Append(new HtmlElement("ul").Append(children.Select(child => new HtmlElement("li", child.DisplayName)).ToList()));
+                .Append(new HtmlElement("ul").Append(children.Select(child => new HtmlElement("li", child.DisplayName)).ToList()));
             return el.Build();
         }
 
@@ -194,15 +204,15 @@ namespace crds_angular.Services
             var childcareRequested = saved.Any(s => s.ChildcareRequested);
             var loggedIn = _contactService.GetMyProfile(token);
 
-            var childcareHref = new HtmlElement("a", 
-                new Dictionary<string, string>()
-                {
-                    {
-                        "href", 
-                        string.Format("https://{0}/childcare/{1}", _configurationWrapper.GetConfigValue("BaseUrl"), evnt.EventId)
-                    }
-                }, 
-                "this link").Build(); 
+            var childcareHref = new HtmlElement("a",
+                                                new Dictionary<string, string>()
+                                                {
+                                                    {
+                                                        "href",
+                                                        string.Format("https://{0}/childcare/{1}", _configurationWrapper.GetConfigValue("BaseUrl"), evnt.EventId)
+                                                    }
+                                                },
+                                                "this link").Build();
             var childcare = _contentBlockService["eventRsvpChildcare"].Content.Replace("[url]", childcareHref);
 
             var mergeData = new Dictionary<string, object>
@@ -269,6 +279,34 @@ namespace crds_angular.Services
             public int ParticipantId { get; set; }
             public int EventId { get; set; }
             public bool ChildcareRequested { get; set; }
+        }
+
+        public Event GetMyChildcareEvent(int parentEventId, string token)
+        {
+            var participantRecord = _participantService.GetParticipantRecord(token);
+            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
+            {
+                return null;
+            }
+            // token user is part of parent event, retrieve childcare event
+            var childcareEvent = GetChildcareEvent(parentEventId);
+            return childcareEvent;
+        }
+
+        public Event GetChildcareEvent(int parentEventId)
+        {
+            var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
+            var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();
+
+            if (childcareEvents.Count == 0)
+            {
+                return null;
+            }
+            if (childcareEvents.Count > 1)
+            {
+                throw new ApplicationException(string.Format("Mulitple Childcare Events Exist, parent event id: {0}", parentEventId));
+            }
+            return childcareEvents.First();
         }
     }
 }

@@ -8,9 +8,9 @@ using crds_angular.Util.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using log4net;
+using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.Services
 {
@@ -20,10 +20,12 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IContactService _contactService;
         private readonly IEventParticipantService _eventParticipantService;
-        private readonly IEventService _eventService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEventService _eventService;
+        private readonly crds_angular.Services.Interfaces.IEventService _crdsEventService;
         private readonly IParticipantService _participantService;
         private readonly IServeService _serveService;
         private readonly IDateTime _dateTimeWrapper;
+        private readonly IApiUserService _apiUserService;
 
         private readonly ILog _logger = LogManager.GetLogger(typeof (ChildcareService));
 
@@ -31,19 +33,22 @@ namespace crds_angular.Services
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-                                IEventService eventService,
+                                MinistryPlatform.Translation.Services.Interfaces.IEventService eventService,
                                 IParticipantService participantService,
                                 IServeService serveService,
-                                IDateTime dateTimeWrapper)
+                                IDateTime dateTimeWrapper,
+                                IApiUserService apiUserService, Interfaces.IEventService crdsEventService)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
+            _crdsEventService = crdsEventService;
             _eventService = eventService;
             _participantService = participantService;
             _serveService = serveService;
             _dateTimeWrapper = dateTimeWrapper;
+            _apiUserService = apiUserService;
         }
 
         public List<FamilyMember> MyChildren(string token)
@@ -170,11 +175,20 @@ namespace crds_angular.Services
             var template = _communicationService.GetTemplate(templateId);
             var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
             const int domainId = 1;
+            var token = _apiUserService.GetToken();
 
             var participants = _eventParticipantService.GetChildCareParticipants(daysBeforeEvent);
             foreach (var participant in participants)
             {
-                var childEvent = GetChildcareEvent(participant.EventId);
+                var childEvent = _crdsEventService.GetChildcareEvent(participant.EventId);
+                var childcareParticipants = _crdsEventService.EventPaticpants(childEvent.EventId, token);
+                var mine = _crdsEventService.MyChildrenParticipants(participant.ContactId, childcareParticipants, token);
+
+                if (mine.Any())
+                {
+                    // i have kids already signed up for childcare!
+                    continue;
+                }
                 var mergeData = SetMergeData(participant.GroupName, participant.EventStartDateTime, participant.EventId);
                 var replyToContact = ReplyToContact(childEvent);
                 var communication = FormatCommunication(authorUserId,
@@ -196,33 +210,9 @@ namespace crds_angular.Services
             }
         }
 
-        public Event GetMyChildcareEvent(int parentEventId, string token)
-        {
-            var participantRecord = _participantService.GetParticipantRecord(token);
-            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
-            {
-                return null;
-            }
-            // token user is part of parent event, retrieve childcare event
-            var childcareEvent = GetChildcareEvent(parentEventId);
-            return childcareEvent;
-        }
+        
 
-        public Event GetChildcareEvent(int parentEventId)
-        {
-            var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
-            var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();
-
-            if (childcareEvents.Count == 0)
-            {
-                return null;
-            }
-            if (childcareEvents.Count > 1)
-            {
-                throw new ApplicationException(string.Format("Mulitple Childcare Events Exist, parent event id: {0}", parentEventId));
-            }
-            return childcareEvents.First();
-        }
+        
 
         private static MyContact ReplyToContact(Event childEvent)
         {
