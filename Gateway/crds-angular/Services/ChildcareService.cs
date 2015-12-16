@@ -11,7 +11,6 @@ using log4net;
 using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-//using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.Services
 {
