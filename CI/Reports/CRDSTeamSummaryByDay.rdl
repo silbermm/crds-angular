@@ -62,7 +62,8 @@
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <CommandText>SELECT Group_ID, Group_Name FROM Groups
-WHERE Group_Type_ID = 9</CommandText>
+WHERE Group_Type_ID = 9
+ORDER BY Group_Name</CommandText>
       </Query>
       <Fields>
         <Field Name="Group_ID">
@@ -579,6 +580,23 @@ WHERE Group_Type_ID = 9</CommandText>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>TeamSummaryData</DataSetName>
+            <SortExpressions>
+              <SortExpression>
+                <Value>=Fields!Opportunity_Title.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!Shift_Start.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!Room.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!Last_Name.Value</Value>
+              </SortExpression>
+              <SortExpression>
+                <Value>=Fields!Nickname.Value</Value>
+              </SortExpression>
+            </SortExpressions>
             <Top>1.36333in</Top>
             <Left>0.23833in</Left>
             <Height>0.47917in</Height>
@@ -706,7 +724,7 @@ WHERE Group_Type_ID = 9</CommandText>
     </ReportParameter>
     <ReportParameter Name="GroupID">
       <DataType>Integer</DataType>
-      <Prompt>Group ID</Prompt>
+      <Prompt>Group</Prompt>
       <ValidValues>
         <DataSetReference>
           <DataSetName>GroupLookup</DataSetName>
@@ -732,6 +750,6 @@ WHERE Group_Type_ID = 9</CommandText>
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportServerUrl>http://adminint.crossroads.net/reportserver</rd:ReportServerUrl>
+  <rd:ReportServerUrl>http://localhost/ReportServer</rd:ReportServerUrl>
   <rd:ReportID>7ab631f5-de07-480e-82a4-e9d8888e3b96</rd:ReportID>
 </Report>
