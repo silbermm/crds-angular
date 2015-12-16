@@ -9,6 +9,8 @@
 
   function TripRoutes($stateProvider, $urlMatcherFactory, $locationProvider) {
 
+    $urlMatcherFactory.strictMode(false)
+
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',

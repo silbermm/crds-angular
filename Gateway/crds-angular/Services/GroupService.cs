@@ -104,7 +104,7 @@ namespace crds_angular.Services
         {
             var eventTypes = _mpGroupService.GetEventTypesForGroup(groupId, token);
             var events = new List<MinistryPlatform.Models.Event>();
-            foreach (var eventType in eventTypes.Where(eventType => eventType != String.Empty))
+            foreach (var eventType in eventTypes.Where(eventType => !string.IsNullOrEmpty(eventType)))
             {
                 events.AddRange(_eventService.GetEvents(eventType, token));
             }

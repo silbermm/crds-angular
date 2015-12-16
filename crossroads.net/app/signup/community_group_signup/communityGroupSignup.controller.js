@@ -63,9 +63,8 @@
         console.log('Can\'t get your profile! ' + err);
       });
 
-      var pageRequest = Page.get({
-        url: $stateParams.link
-      }, function() {
+      var link = (_.endsWith($stateParams.link, '/') === false) ? $stateParams.link + '/' : $stateParams.link;
+      var pageRequest = Page.get({url: link}, function() {
         if (pageRequest.pages.length > 0) {
           vm.signupPage = pageRequest.pages[0];
           vm.groupId = vm.signupPage.group;
@@ -231,7 +230,6 @@
           break;
         }
       }
-
       if (vm.response.length === 1) {
         flag = true;
       }

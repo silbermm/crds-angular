@@ -31,7 +31,7 @@
     vm.donationService = DonationService;
     vm.dto = GiveTransferService;
     vm.emailAlreadyRegisteredGrowlDivRef = 1000;
-    vm.emailPrefix = 'give';
+    vm.dto.emailPrefix = 'give';
     vm.giveFlow = GiveFlow;
     vm.initDefaultState = initDefaultState;
     vm.onEmailFound = onEmailFound;
