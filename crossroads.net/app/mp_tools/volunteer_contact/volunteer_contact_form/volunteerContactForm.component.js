@@ -65,7 +65,7 @@
               return d.contactId;
             });
 
-            vm.formData.to = _.pluck(data, 'displayName').join(', ');
+            vm.formData.to = _.pluck(data, 'displayName').join('; ');
             vm.loadingTo = false;
           },
 
