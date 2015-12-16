@@ -181,10 +181,10 @@ namespace crds_angular.Services
             foreach (var participant in participants)
             {
                 var childEvent = _crdsEventService.GetChildcareEvent(participant.EventId);
-                var childcareParticipants = _crdsEventService.EventPaticpants(childEvent.EventId, token);
+                var childcareParticipants = _crdsEventService.EventParticpants(childEvent.EventId, token);
                 var mine = _crdsEventService.MyChildrenParticipants(participant.ContactId, childcareParticipants, token);
 
-                if (mine.Any())
+                if (mine!=null && mine.Any())
                 {
                     // i have kids already signed up for childcare!
                     continue;

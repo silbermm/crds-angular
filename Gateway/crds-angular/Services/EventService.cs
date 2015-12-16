@@ -117,7 +117,7 @@ namespace crds_angular.Services
             return eventList.Where(evt => evt.EventType != "Childcare").ToList();
         }
 
-        public IList<Participant> EventPaticpants(int eventId, string token)
+        public IList<Participant> EventParticpants(int eventId, string token)
         {
             return _eventService.EventParticipants(token, eventId).ToList();
         }
@@ -130,11 +130,11 @@ namespace crds_angular.Services
             eventList.ForEach(evt =>
             {
                 // get the participants...
-                var participants = EventPaticpants(evt.EventId, token);
+                var participants = EventParticpants(evt.EventId, token);
 
                 // does the event have a childcare event?
                 var childcare = GetChildcareEvent(evt.EventId);
-                var childcareParticipants = childcare != null ? EventPaticpants(childcare.EventId, token) : new List<Participant>();
+                var childcareParticipants = childcare != null ? EventParticpants(childcare.EventId, token) : new List<Participant>();
 
                 participants.ForEach(participant => SendEventReminderEmail(evt, participant, childcare, childcareParticipants, token));
                 _eventService.SetReminderFlag(evt.EventId, token);
