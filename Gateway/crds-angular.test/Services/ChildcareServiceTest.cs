@@ -52,8 +52,7 @@ namespace crds_angular.test.Services
                                             _participantService.Object,
                                             _serveService.Object,
                                             _dateTimeWrapper.Object,
-                                            _crdsEventService.Object,
-                                            _apiUserService.Object);
+                                            _apiUserService.Object, _crdsEventService.Object);
         }
 
         [Test]

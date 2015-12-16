@@ -11,7 +11,7 @@ using log4net;
 using Microsoft.Ajax.Utilities;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
-using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
+//using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
 
 namespace crds_angular.Services
 {
@@ -21,7 +21,7 @@ namespace crds_angular.Services
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IContactService _contactService;
         private readonly IEventParticipantService _eventParticipantService;
-        private readonly IEventService _eventService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEventService _eventService;
         private readonly crds_angular.Services.Interfaces.IEventService _crdsEventService;
         private readonly IParticipantService _participantService;
         private readonly IServeService _serveService;
@@ -34,12 +34,11 @@ namespace crds_angular.Services
                                 ICommunicationService communicationService,
                                 IConfigurationWrapper configurationWrapper,
                                 IContactService contactService,
-                                IEventService eventService,
+                                MinistryPlatform.Translation.Services.Interfaces.IEventService eventService,
                                 IParticipantService participantService,
                                 IServeService serveService,
                                 IDateTime dateTimeWrapper,
-                                Interfaces.IEventService crdsEventService,
-                                IApiUserService apiUserService)
+                                IApiUserService apiUserService, Interfaces.IEventService crdsEventService)
         {
             _eventParticipantService = eventParticipantService;
             _communicationService = communicationService;
@@ -182,7 +181,7 @@ namespace crds_angular.Services
             var participants = _eventParticipantService.GetChildCareParticipants(daysBeforeEvent);
             foreach (var participant in participants)
             {
-                var childEvent = GetChildcareEvent(participant.EventId);
+                var childEvent = _crdsEventService.GetChildcareEvent(participant.EventId);
                 var childcareParticipants = _crdsEventService.EventPaticpants(childEvent.EventId, token);
                 var mine = _crdsEventService.MyChildrenParticipants(participant.ContactId, childcareParticipants, token);
 
@@ -212,33 +211,9 @@ namespace crds_angular.Services
             }
         }
 
-        public Event GetMyChildcareEvent(int parentEventId, string token)
-        {
-            var participantRecord = _participantService.GetParticipantRecord(token);
-            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
-            {
-                return null;
-            }
-            // token user is part of parent event, retrieve childcare event
-            var childcareEvent = GetChildcareEvent(parentEventId);
-            return childcareEvent;
-        }
+        
 
-        public Event GetChildcareEvent(int parentEventId)
-        {
-            var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
-            var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();
-
-            if (childcareEvents.Count == 0)
-            {
-                return null;
-            }
-            if (childcareEvents.Count > 1)
-            {
-                throw new ApplicationException(string.Format("Mulitple Childcare Events Exist, parent event id: {0}", parentEventId));
-            }
-            return childcareEvents.First();
-        }
+        
 
         private static MyContact ReplyToContact(Event childEvent)
         {
