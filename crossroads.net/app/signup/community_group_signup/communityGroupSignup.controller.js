@@ -65,9 +65,7 @@
       });
 
       var link = (_.endsWith($stateParams.link, '/') === false) ? $stateParams.link + '/' : $stateParams.link;
-      var pageRequest = Page.get({
-        url: link
-      }, function() {
+      var pageRequest = Page.get({url: link}, function() {
         if (pageRequest.pages.length > 0) {
           vm.signupPage = pageRequest.pages[0];
           vm.groupId = vm.signupPage.group;
@@ -222,6 +220,7 @@
     }
 
     function signup(form) {
+      console.log(vm.response);
       var participantArray = hasParticipantID(vm.response);
       var flag = false;
       for (var i = 0; i < vm.response.length; i++) {
@@ -232,13 +231,13 @@
           break;
         }
       }
-
       if (vm.response.length === 1) {
         flag = true;
       }
 
       vm.formValid = flag;
       if (!vm.formValid) {
+        console.log('form is not valid');
         $rootScope.$emit('notify', $rootScope.MESSAGES.noPeopleSelectedError);
         return;
       }
