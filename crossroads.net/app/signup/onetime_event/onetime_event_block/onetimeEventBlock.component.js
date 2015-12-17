@@ -89,17 +89,9 @@
         }
 
         console.log(vm.event.eventId);
-
         console.log(toSave);
-
-        // test block
-        // vm.saving = false;
-        // return false;
-
-        // test block
-
         EventService.event.save(toSave, function(saved) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);
+          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpOneTimeEventSuccess);
           vm.saving = false;
         },
 
