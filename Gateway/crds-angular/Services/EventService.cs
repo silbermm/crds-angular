@@ -164,11 +164,11 @@ namespace crds_angular.Services
                     mergeData.Add("Childcare_Contact", new HtmlElement("span", "If you need to cancel, please email " + childcareEvent.PrimaryContact.EmailAddress).Build());
                 }
             }
-
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
             var comm = _communicationService.GetTemplateAsCommunication(
                AppSetting("EventReminderTemplateId"),
-               evt.PrimaryContactId,
-               evt.PrimaryContactEmailAddress,
+               defaultContact.Contact_ID,               
+               defaultContact.Email_Address,
                evt.PrimaryContactId,
                evt.PrimaryContactEmailAddress,
                participant.ContactId,
@@ -211,11 +211,11 @@ namespace crds_angular.Services
                 {"HTML_Table", SetupTable(saved, evnt).Build()},
                 {"Childcare", (childcareRequested) ? childcare : ""}
             };
-
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
             var comm = _communicationService.GetTemplateAsCommunication(
                 AppSetting("OneTimeEventRsvpTemplate"),
-                evnt.PrimaryContact.ContactId,
-                evnt.PrimaryContact.EmailAddress,
+                defaultContact.Contact_ID,
+                defaultContact.Email_Address,
                 evnt.PrimaryContact.ContactId,
                 evnt.PrimaryContact.EmailAddress,
                 loggedIn.Contact_ID,

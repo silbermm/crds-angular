@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
@@ -185,21 +186,25 @@ namespace crds_angular.test.Services
                 EmailAddress = "wonder-woman@ip.com"
             };
 
+            var defaultContact = new MyContact
+            {
+                Contact_ID = 123456,
+                Email_Address = "gmail@gmail.com"
+            };
+
             var mockEvent1 = new Event {EventType = "Childcare", PrimaryContact = mockPrimaryContact};
             var mockEvent2 = new Event {EventType = "DoggieDaycare", PrimaryContact = mockPrimaryContact};
             var mockEvents = new List<Event> {mockEvent1, mockEvent2};
 
             _configurationWrapper.Setup(m => m.GetConfigIntValue("NumberOfDaysBeforeEventToSend")).Returns(daysBefore);
             _configurationWrapper.Setup(m => m.GetConfigIntValue("ChildcareRequestTemplate")).Returns(emailTemplateId);
-            _configurationWrapper.Setup(m => m.GetConfigIntValue("EmailAuthorId")).Returns(1);
-            _configurationWrapper.Setup(m => m.GetConfigIntValue("UnassignedContact")).Returns(unassignedContact);
-            _communicationService.Setup(m => m.GetTemplate(emailTemplateId)).Returns(new MessageTemplate());
-            _contactService.Setup(m => m.GetContactById(unassignedContact)).Returns(new MyContact());
+            _communicationService.Setup(m => m.GetTemplate(emailTemplateId)).Returns(new MessageTemplate());            
             _eventParticipantService.Setup(m => m.GetChildCareParticipants(daysBefore)).Returns(participants);
             _communicationService.Setup(m => m.SendMessage(It.IsAny<Communication>())).Verifiable();
             _eventService.Setup(m => m.GetEventsByParentEventId(123)).Returns(mockEvents);
             _eventService.Setup(m => m.GetEventsByParentEventId(456)).Returns(mockEvents);
-
+            _configurationWrapper.Setup(m => m.GetConfigIntValue("DefaultContactEmailId")).Returns(1234);
+            _contactService.Setup(mocked => mocked.GetContactById(1234)).Returns(defaultContact);            
             _fixture.SendRequestForRsvp();
 
             _configurationWrapper.VerifyAll();
