@@ -23,6 +23,7 @@
     function OnetimeEventBlockController() {
       var vm = this;
       vm.childCareChange = childCareChange;
+      vm.childcareRequested = false;
       vm.endDateTime = moment(vm.event.endDate);
       vm.endTime = endTime;
       vm.getDate = getDate;
@@ -59,7 +60,7 @@
         var dto = {
           eventId: vm.event.eventId,
           groupId: vm.group.groupId,
-          childCareNeeded: true,
+          childCareNeeded: vm.childcareRequested,
           participants: participants
         };
         return dto;
@@ -92,12 +93,12 @@
         console.log(toSave);
 
         // test block
-        vm.saving = false;
-        return false;
+        // vm.saving = false;
+        // return false;
 
         // test block
 
-        EventService.event.save({eventId: vm.event.eventId}, toSave, function(saved) {
+        EventService.event.save(toSave, function(saved) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);
           vm.saving = false;
         },
