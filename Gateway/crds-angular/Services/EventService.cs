@@ -72,15 +72,15 @@ namespace crds_angular.Services
             var today = DateTime.Today;
             try
             {
-                var saved = eventDto.Participants.Select(participantId =>
+                var saved = eventDto.Participants.Select(participant =>
                 {
-                    var groupParticipantId = _groupParticipantService.Get(eventDto.GroupId, participantId);
+                    var groupParticipantId = _groupParticipantService.Get(eventDto.GroupId, participant.ParticipantId);
                     if (groupParticipantId == 0)
                     {
-                        groupParticipantId = _groupService.addParticipantToGroup(participantId,
+                        groupParticipantId = _groupService.addParticipantToGroup(participant.ParticipantId,
                                                                                  eventDto.GroupId,
                                                                                  defaultGroupRoleId,
-                                                                                 eventDto.ChildCareNeeded,
+                                                                                 participant.ChildcareRequested,
                                                                                  today);
                     }
 
@@ -90,16 +90,16 @@ namespace crds_angular.Services
                     var retVal =
                         Functions.IntegerReturnValue(
                             () =>
-                                !_eventService.EventHasParticipant(eventDto.EventId, participantId)
-                                    ? _eventService.RegisterParticipantForEvent(participantId, eventDto.EventId, eventDto.GroupId, groupParticipantId)
+                                !_eventService.EventHasParticipant(eventDto.EventId, participant.ParticipantId)
+                                    ? _eventService.RegisterParticipantForEvent(participant.ParticipantId, eventDto.EventId, eventDto.GroupId, groupParticipantId)
                                     : 1);
 
                     return new RegisterEventObj()
                     {
                         EventId = eventDto.EventId,
-                        ParticipantId = participantId,
+                        ParticipantId = participant.ParticipantId,
                         RegisterResult = retVal,
-                        ChildcareRequested = eventDto.ChildCareNeeded
+                        ChildcareRequested = participant.ChildcareRequested
                     };
                 }).ToList();
 

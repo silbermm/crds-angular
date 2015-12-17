@@ -11,10 +11,16 @@ namespace crds_angular.Models.Crossroads.Events
         [JsonProperty(PropertyName = "groupId")]
         public int GroupId { get; set; }
 
-        [JsonProperty(PropertyName = "childCareNeeded")]
-        public bool ChildCareNeeded { get; set; }
-
         [JsonProperty(PropertyName = "participants")]
-        public List<int> Participants { get; set; }
+        public List<EventRsvpParticipant> Participants { get; set; }
+    }
+
+    public class EventRsvpParticipant
+    {
+        [JsonProperty(PropertyName = "participantId")]
+        public int ParticipantId { get; set; }
+
+        [JsonProperty(PropertyName = "childcareRequested")]
+        public bool ChildcareRequested { get; set; }
     }
 }

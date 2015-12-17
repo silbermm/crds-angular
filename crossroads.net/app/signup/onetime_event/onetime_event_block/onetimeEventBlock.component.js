@@ -3,9 +3,9 @@
 
   module.exports = OnetimeEventBlock;
 
-  OnetimeEventBlock.$inject = ['$rootScope', 'EventService'];
+  OnetimeEventBlock.$inject = ['$rootScope', 'EventService', '$sce'];
 
-  function OnetimeEventBlock($rootScope, EventService) {
+  function OnetimeEventBlock($rootScope, EventService, $sce) {
     return {
       restrict: 'E',
       replace: true,
@@ -28,6 +28,7 @@
       vm.endTime = endTime;
       vm.getDate = getDate;
       vm.isCollapsed = true;
+      vm.popoverText = htmlToPlaintext($rootScope.MESSAGES.oneTimeEventChildcarePopup.content);
       vm.saving = false;
       vm.showChildcare = showChildcare;
       vm.startDateTime = moment(vm.event.startDate);
@@ -52,7 +53,12 @@
         var participants = _.chain(vm.thisFamily).filter(function(member) {
           return member.selected;
         }).map(function(member) {
-          return member.participantId;
+          // return member.participantId;
+
+          return {
+            participantId: member.participantId,
+            childcareRequested: (vm.childcareRequested) && (member.age >= 18)
+          };
         }).value();
 
         console.log('participants: ' + participants);
@@ -60,7 +66,6 @@
         var dto = {
           eventId: vm.event.eventId,
           groupId: vm.group.groupId,
-          childCareNeeded: vm.childcareRequested,
           participants: participants
         };
         return dto;
@@ -68,6 +73,10 @@
 
       function getDate() {
         return vm.startDateTime.format('MM/DD/YYYY');
+      }
+
+      function htmlToPlaintext(text) {
+        return text ? String(text).replace(/<[^>]+>/gm, '') : '';
       }
 
       function showChildcare(member) {
