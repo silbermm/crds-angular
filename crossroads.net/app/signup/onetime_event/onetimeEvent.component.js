@@ -22,13 +22,15 @@
     function OnetimeEventController() {
       var vm = this;
       vm.pageInfo = vm.cmsInfo.pages[0];
+      vm.family = _.filter(vm.family, function(f) {
+        return f.age >= vm.group.minAge;
+      });
 
       vm.events = _.filter(vm.group.events, function(event) {
         var start = moment(event.startDate);
         var now = moment();
         return start.isAfter(now);
       });
-
     }
   }
 
