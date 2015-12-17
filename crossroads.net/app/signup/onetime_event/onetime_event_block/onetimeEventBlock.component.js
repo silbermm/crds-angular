@@ -48,16 +48,21 @@
       }
 
       function getDataToSave() {
-        return _.chain(vm.thisFamily).filter(function(member) {
+        var participants = _.chain(vm.thisFamily).filter(function(member) {
           return member.selected;
         }).map(function(member) {
-          return {
-            eventId: vm.event.eventId,
-            participantId: member.participantId,
-            groupId: vm.group.groupId,
-            childCareNeeded: (member.childCareNeeded === undefined) ? false : member.childCareNeeded
-          };
+          return member.participantId;
         }).value();
+
+        console.log('participants: ' + participants);
+
+        var dto = {
+          eventId: vm.event.eventId,
+          groupId: vm.group.groupId,
+          childCareNeeded: true,
+          participants: participants
+        };
+        return dto;
       }
 
       function getDate() {
@@ -85,6 +90,12 @@
         console.log(vm.event.eventId);
 
         console.log(toSave);
+
+        // test block
+        vm.saving = false;
+        return false;
+
+        // test block
 
         EventService.event.save({eventId: vm.event.eventId}, toSave, function(saved) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);

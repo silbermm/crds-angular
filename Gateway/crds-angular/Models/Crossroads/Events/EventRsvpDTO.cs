@@ -1,9 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Events
 {
-    public class EventRsvpDTO
+    public class EventRsvpDto
     {
         [JsonProperty(PropertyName = "eventId")]
         public int EventId { get; set; }
@@ -12,10 +12,9 @@ namespace crds_angular.Models.Crossroads.Events
         public int GroupId { get; set; }
 
         [JsonProperty(PropertyName = "childCareNeeded")]
-        public Boolean ChildCareNeeded { get; set; }
+        public bool ChildCareNeeded { get; set; }
 
-        [JsonProperty(PropertyName = "participantId")]
-        public int ParticipantId { get; set; }
-        
+        [JsonProperty(PropertyName = "participants")]
+        public List<int> Participants { get; set; }
     }
 }
