@@ -417,7 +417,12 @@ namespace crds_angular.Services
                     {
                         // If we just changed the amount, we just need to update the Subscription to point to the new plan
                         oldSubscription = _paymentService.GetSubscription(existingGift.StripeCustomerId, stripeSubscription.Id);
-                        stripeSubscription = _paymentService.UpdateSubscriptionPlan(existingGift.StripeCustomerId, stripeSubscription.Id, plan.Id);
+                        stripeSubscription = _paymentService.UpdateSubscriptionPlan(existingGift.StripeCustomerId,
+                                                                                    stripeSubscription.Id,
+                                                                                    plan.Id,
+                                                                                    oldSubscription.TrialEnd != null && oldSubscription.TrialEnd > DateTime.Now
+                                                                                        ? oldSubscription.TrialEnd
+                                                                                        : null);
                     }
                     else
                     {
