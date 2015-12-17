@@ -171,7 +171,7 @@ namespace crds_angular.Services
         {
             var daysBeforeEvent = _configurationWrapper.GetConfigIntValue("NumberOfDaysBeforeEventToSend");
             var templateId = _configurationWrapper.GetConfigIntValue("ChildcareRequestTemplate");
-            const int authorUserId = 5;
+            var authorUserId = _configurationWrapper.GetConfigIntValue("DefaultUserAuthorId"); ;
             var template = _communicationService.GetTemplate(templateId);
             var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             const int domainId = 1;
