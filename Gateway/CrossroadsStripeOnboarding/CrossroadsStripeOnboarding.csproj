@@ -167,6 +167,10 @@
       <Project>{dc3b7edc-2b9a-49f4-a5c8-50ba4c3e2a7b}</Project>
       <Name>crds-angular</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Crossroads.Utilities\Crossroads.Utilities.csproj">
+      <Project>{61238A82-D410-4330-BD25-889239FC7873}</Project>
+      <Name>Crossroads.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MinistryPlatform.Models\MinistryPlatform.Models.csproj">
       <Project>{cd41507e-91ac-4c60-96e2-5cac25f49a76}</Project>
       <Name>MinistryPlatform.Models</Name>

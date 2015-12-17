@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using crds_angular.Services;
+using Crossroads.Utilities.Services;
 using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -19,6 +20,9 @@ namespace Crossroads.ChildcareRsvp
             var section = (UnityConfigurationSection) ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();
             section.Configure(container);
+
+            TlsHelper.AllowTls12();
+
 
             try
             {
