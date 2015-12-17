@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using CommandLine;
 using CommandLine.Text;
+using Crossroads.Utilities.Services;
 using CrossroadsStripeOnboarding.Models;
 using CrossroadsStripeOnboarding.Models.Json;
 using CrossroadsStripeOnboarding.Services;
@@ -22,6 +23,8 @@ namespace CrossroadsStripeOnboarding
             var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();
             section.Configure(container);
+
+            TlsHelper.AllowTls12();
 
             var program = container.Resolve<Program>();
             program.run(args);
