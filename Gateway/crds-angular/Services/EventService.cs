@@ -25,9 +25,9 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IContentBlockService _contentBlockService;
         private readonly IApiUserService _apiUserService;
-        private readonly IChildcareService _childcareService;
         private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IGroupParticipantService _groupParticipantService;
+        private readonly IParticipantService _participantService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -46,9 +46,8 @@ namespace crds_angular.Services
                             IContentBlockService contentBlockService,
                             IConfigurationWrapper configurationWrapper,
                             IApiUserService apiUserService,
-                            IChildcareService childcareService,
                             IContactRelationshipService contactRelationshipService,
-                            IGroupParticipantService groupParticipantService)
+                            IGroupParticipantService groupParticipantService, IParticipantService participantService)
         {
             _eventService = eventService;
             _groupService = groupService;
@@ -57,9 +56,9 @@ namespace crds_angular.Services
             _contentBlockService = contentBlockService;
             _configurationWrapper = configurationWrapper;
             _apiUserService = apiUserService;
-            _childcareService = childcareService;
             _contactRelationshipService = contactRelationshipService;
             _groupParticipantService = groupParticipantService;
+            _participantService = participantService;
         }
 
         public Event GetEvent(int eventId)
@@ -122,7 +121,7 @@ namespace crds_angular.Services
             return eventList.Where(evt => evt.EventType != "Childcare").ToList();
         }
 
-        public IList<Participant> EventPaticpants(int eventId, string token)
+        public IList<Participant> EventParticpants(int eventId, string token)
         {
             return _eventService.EventParticipants(token, eventId).ToList();
         }
@@ -135,11 +134,11 @@ namespace crds_angular.Services
             eventList.ForEach(evt =>
             {
                 // get the participants...
-                var participants = EventPaticpants(evt.EventId, token);
+                var participants = EventParticpants(evt.EventId, token);
 
                 // does the event have a childcare event?
-                var childcare = _childcareService.GetChildcareEvent(evt.EventId);
-                var childcareParticipants = childcare != null ? EventPaticpants(childcare.EventId, token) : new List<Participant>();
+                var childcare = GetChildcareEvent(evt.EventId);
+                var childcareParticipants = childcare != null ? EventParticpants(childcare.EventId, token) : new List<Participant>();
 
                 participants.ForEach(participant => SendEventReminderEmail(evt, participant, childcare, childcareParticipants, token));
                 _eventService.SetReminderFlag(evt.EventId, token);
@@ -162,8 +161,7 @@ namespace crds_angular.Services
             if (children.Any())
             {
                 // determine if any of the children are related to the participant
-                var relationships = _contactRelationshipService.GetMyCurrentRelationships(participant.ContactId, token);
-                var mine = children.Where(child => relationships.Any(rel => rel.Contact_Id == child.ContactId)).ToList();
+                var mine = MyChildrenParticipants(participant.ContactId, children, token);
                 // build the HTML for the [Childcare] data
                 if (mine.Any())
                 {
@@ -186,6 +184,13 @@ namespace crds_angular.Services
                 );
 
             _communicationService.SendMessage(comm);
+        }
+
+        public List<Participant> MyChildrenParticipants(int contactId, IList<Participant> children, string token)
+        {
+            var relationships = _contactRelationshipService.GetMyCurrentRelationships(contactId, token);
+            var mine = children.Where(child => relationships.Any(rel => rel.Contact_Id == child.ContactId)).ToList();
+            return mine;
         }
 
         private String ChildcareData(IList<Participant> children)
@@ -278,6 +283,34 @@ namespace crds_angular.Services
             public int ParticipantId { get; set; }
             public int EventId { get; set; }
             public bool ChildcareRequested { get; set; }
+        }
+
+        public Event GetMyChildcareEvent(int parentEventId, string token)
+        {
+            var participantRecord = _participantService.GetParticipantRecord(token);
+            if (!_eventService.EventHasParticipant(parentEventId, participantRecord.ParticipantId))
+            {
+                return null;
+            }
+            // token user is part of parent event, retrieve childcare event
+            var childcareEvent = GetChildcareEvent(parentEventId);
+            return childcareEvent;
+        }
+
+        public Event GetChildcareEvent(int parentEventId)
+        {
+            var childEvents = _eventService.GetEventsByParentEventId(parentEventId);
+            var childcareEvents = childEvents.Where(childEvent => childEvent.EventType == "Childcare").ToList();
+
+            if (childcareEvents.Count == 0)
+            {
+                return null;
+            }
+            if (childcareEvents.Count > 1)
+            {
+                throw new ApplicationException(string.Format("Mulitple Childcare Events Exist, parent event id: {0}", parentEventId));
+            }
+            return childcareEvents.First();
         }
     }
 }

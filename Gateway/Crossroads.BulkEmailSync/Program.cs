@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Reflection;
 using crds_angular.App_Start;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Services;
 using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -19,6 +20,8 @@ namespace Crossroads.BulkEmailSync
             var section = (UnityConfigurationSection)ConfigurationManager.GetSection("unity");
             var container = new UnityContainer();
             section.Configure(container);
+
+            TlsHelper.AllowTls12();
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
