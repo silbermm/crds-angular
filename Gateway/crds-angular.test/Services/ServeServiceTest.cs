@@ -7,6 +7,7 @@ using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -31,6 +32,7 @@ namespace crds_angular.test.Services
         private Mock<IGroupParticipantService> _groupParticipantService;
         private Mock<IGroupService> _groupService;
         private Mock<ICommunicationService> _communicationService;
+        private Mock<IConfigurationWrapper> _configurationWrapper;
 
         private ServeService _fixture;
 
@@ -83,6 +85,7 @@ namespace crds_angular.test.Services
             _groupParticipantService = new Mock<IGroupParticipantService>();
             _groupService = new Mock<IGroupService>();
             _communicationService = new Mock<ICommunicationService>();
+            _configurationWrapper = new Mock<IConfigurationWrapper>();
 
             fakeOpportunity.EventTypeId = 3;
             fakeOpportunity.GroupContactId = 23;
@@ -149,7 +152,7 @@ namespace crds_angular.test.Services
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object, _groupService.Object,
-                _communicationService.Object, _authenticationService.Object);
+                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -461,6 +464,13 @@ namespace crds_angular.test.Services
                 OpportunityName = "Previous Opportunity"
             });
 
+            _configurationWrapper.Setup(m => m.GetConfigIntValue("DefaultContactEmailId")).Returns(1234);
+            _contactService.Setup(m => m.GetContactById(1234)).Returns(new MyContact()
+            {
+                Email_Address = "gmail@google.com",
+                Contact_ID = 1234567890
+            });
+            
             SaveRsvpDto dto = new SaveRsvpDto
             {
                 ContactId = contactId,
@@ -531,6 +541,13 @@ namespace crds_angular.test.Services
 
             SetUpRSVPMocks(contactId, eventTypeId, opportunityId, signUp, SetupMockEvents());
 
+            _configurationWrapper.Setup(m => m.GetConfigIntValue("DefaultContactEmailId")).Returns(1234);
+            _contactService.Setup(m => m.GetContactById(1234)).Returns(new MyContact()
+            {
+                Email_Address = "gmail@google.com",
+                Contact_ID = 1234567890
+            });
+
             // The current Opportunity
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>()))
                 .Returns(fakeOpportunity);
@@ -591,6 +608,13 @@ namespace crds_angular.test.Services
                 OpportunityId = 1,
                 OpportunityName = "Previous Opportunity",
                 GroupContactId = fakeOpportunity.GroupContactId
+            });
+
+            _configurationWrapper.Setup(m => m.GetConfigIntValue("DefaultContactEmailId")).Returns(1234);
+            _contactService.Setup(m => m.GetContactById(1234)).Returns(new MyContact()
+            {
+                Email_Address = "gmail@google.com",
+                Contact_ID = 1234567890
             });
 
             SaveRsvpDto dto = new SaveRsvpDto
