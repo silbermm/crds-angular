@@ -151,6 +151,13 @@ namespace MinistryPlatform.Translation.Services
                     g.Congregation = (string)gc;
                 }
 
+                object ma = null;
+                groupDetails.TryGetValue("Online_RSVP_Minimum_Age", out ma);
+                if (ma != null)
+                {
+                    g.MinimumAge = (int) ma;
+                }
+
                 if (g.WaitList)
                 {
                     var subGroups = ministryPlatformService.GetSubPageRecords(GroupsSubgroupsPageId,

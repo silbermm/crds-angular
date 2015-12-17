@@ -40,6 +40,7 @@
       participantId: 2213526,
       userInGroup: false,
       childCareInd: true,
+      minAge: 10,
       events: [
         {
           eventId: 2845310,

@@ -11,6 +11,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
 using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
+using Participant = MinistryPlatform.Translation.Models.People.Participant;
 
 namespace crds_angular.test.Services
 {
@@ -25,6 +26,9 @@ namespace crds_angular.test.Services
         private Mock<IParticipantService> _participantService;
         private Mock<IServeService> _serveService;
         private Mock<IDateTime> _dateTimeWrapper;
+        // Interfaces.IEventService crdsEventService, IApiUserService apiUserService
+        private Mock<crds_angular.Services.Interfaces.IEventService> _crdsEventService;
+        private Mock<IApiUserService> _apiUserService;
 
         private ChildcareService _fixture;
 
@@ -39,6 +43,8 @@ namespace crds_angular.test.Services
             _participantService = new Mock<IParticipantService>();
             _serveService = new Mock<IServeService>();
             _dateTimeWrapper = new Mock<IDateTime>();
+            _crdsEventService = new Mock<crds_angular.Services.Interfaces.IEventService>();
+            _apiUserService = new Mock<IApiUserService>();
 
             _fixture = new ChildcareService(_eventParticipantService.Object,
                                             _communicationService.Object,
@@ -47,7 +53,8 @@ namespace crds_angular.test.Services
                                             _eventService.Object,
                                             _participantService.Object,
                                             _serveService.Object,
-                                            _dateTimeWrapper.Object);
+                                            _dateTimeWrapper.Object,
+                                            _apiUserService.Object, _crdsEventService.Object);
         }
 
         [Test]
@@ -171,12 +178,14 @@ namespace crds_angular.test.Services
                 new EventParticipant
                 {
                     ParticipantId = 1,
-                    EventId = 123
+                    EventId = 123,
+                    ContactId = 987654
                 },
                 new EventParticipant
                 {
                     ParticipantId = 2,
-                    EventId = 456
+                    EventId = 456,
+                    ContactId = 456123
                 }
             };
 
@@ -201,10 +210,23 @@ namespace crds_angular.test.Services
             _communicationService.Setup(m => m.GetTemplate(emailTemplateId)).Returns(new MessageTemplate());            
             _eventParticipantService.Setup(m => m.GetChildCareParticipants(daysBefore)).Returns(participants);
             _communicationService.Setup(m => m.SendMessage(It.IsAny<Communication>())).Verifiable();
-            _eventService.Setup(m => m.GetEventsByParentEventId(123)).Returns(mockEvents);
-            _eventService.Setup(m => m.GetEventsByParentEventId(456)).Returns(mockEvents);
+
+            var kids = new List<Participant> { new Participant { ContactId = 456321987 } };
+            _crdsEventService.Setup(m => m.EventParticpants(987654321, It.IsAny<string>())).Returns(kids);
+            var mockChildcareEvent = new Event {EventId = 987654321};
+            var mockContact = new Contact
+            {
+                ContactId = 8888888,
+                EmailAddress = "sometest@test.com"
+            };
+            mockChildcareEvent.PrimaryContact = mockContact;
+            _crdsEventService.Setup(m => m.GetChildcareEvent(participants[0].EventId)).Returns(mockChildcareEvent);
+            _crdsEventService.Setup(m => m.GetChildcareEvent(participants[1].EventId)).Returns(mockChildcareEvent);
             _configurationWrapper.Setup(m => m.GetConfigIntValue("DefaultContactEmailId")).Returns(1234);
-            _contactService.Setup(mocked => mocked.GetContactById(1234)).Returns(defaultContact);            
+            _contactService.Setup(mocked => mocked.GetContactById(1234)).Returns(defaultContact); 
+            var myKids = new List<Participant>();
+            _crdsEventService.Setup(m => m.MyChildrenParticipants(987654, kids, It.IsAny<string>())).Returns(myKids);
+
             _fixture.SendRequestForRsvp();
 
             _configurationWrapper.VerifyAll();

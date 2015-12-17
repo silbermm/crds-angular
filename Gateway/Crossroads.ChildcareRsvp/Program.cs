@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Reflection;
 using crds_angular.Services;
+using Crossroads.Utilities.Services;
 using log4net;
 using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Configuration;
@@ -20,6 +21,9 @@ namespace Crossroads.ChildcareRsvp
             var container = new UnityContainer();
             section.Configure(container);
 
+            TlsHelper.AllowTls12();
+
+
             try
             {
                 Log.Info("starting childcare rsvp");
@@ -32,6 +36,7 @@ namespace Crossroads.ChildcareRsvp
                 Log.Error("Childcare RSVP Email Process failed.", ex);
                 Environment.Exit(9999);
             }
+            Environment.Exit(0);
         }
     }
 }
