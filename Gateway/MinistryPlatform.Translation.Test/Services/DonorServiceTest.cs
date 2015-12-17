@@ -171,6 +171,12 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donationStatus = 4;
             const string itemNumber = "98766";
 
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
+
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationId);
@@ -180,7 +186,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
             _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             var expectedDonationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
@@ -295,6 +301,12 @@ namespace MinistryPlatform.Translation.Test.Services
             var searchString = ",\"" + donorId + "\"";
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+            
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -303,7 +315,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
                 donationDistPageId, It.IsAny<Dictionary<string, object>>(),
                 It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
 
             var expectedDonationValues = new Dictionary<string, object>
@@ -599,6 +611,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
             _communicationService.Setup(
                 mocked =>
@@ -633,6 +651,12 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donorId = 9876;
             const int donationAmt = 4343;
             const string paymentType = "Bank";
+
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
 
             var getTemplateResponse = new MessageTemplate()
             {
@@ -681,7 +705,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Decline_Reason", emailReason},
                 }
             };
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
             _communicationService.Setup(
                 mocked =>
