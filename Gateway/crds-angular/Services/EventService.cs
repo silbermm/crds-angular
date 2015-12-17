@@ -85,8 +85,6 @@ namespace crds_angular.Services
                     }
 
                     // validate that there is not a participant record before creating
-
-                    //does this work if I'm already registered?
                     var retVal =
                         Functions.IntegerReturnValue(
                             () =>

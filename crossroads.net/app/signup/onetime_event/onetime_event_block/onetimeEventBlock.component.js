@@ -3,9 +3,9 @@
 
   module.exports = OnetimeEventBlock;
 
-  OnetimeEventBlock.$inject = ['$rootScope', 'EventService', '$sce'];
+  OnetimeEventBlock.$inject = ['$rootScope', 'EventService'];
 
-  function OnetimeEventBlock($rootScope, EventService, $sce) {
+  function OnetimeEventBlock($rootScope, EventService) {
     return {
       restrict: 'E',
       replace: true,
@@ -53,15 +53,11 @@
         var participants = _.chain(vm.thisFamily).filter(function(member) {
           return member.selected;
         }).map(function(member) {
-          // return member.participantId;
-
           return {
             participantId: member.participantId,
             childcareRequested: (vm.childcareRequested) && (member.age >= 18)
           };
         }).value();
-
-        console.log('participants: ' + participants);
 
         var dto = {
           eventId: vm.event.eventId,
@@ -97,8 +93,6 @@
           return;
         }
 
-        console.log(vm.event.eventId);
-        console.log(toSave);
         EventService.event.save(toSave, function(saved) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpOneTimeEventSuccess);
           vm.saving = false;
