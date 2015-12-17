@@ -30,7 +30,7 @@ describe('Onetime Signup Component', function() {
     scope = $rootScope.$new();
     scope.cmsInfo = helpers.cmsInfo.pages[0];
     scope.group = helpers.group;
-    element = '<onetime-event cms-info=\'cmsInfo\' group=\'group\' family=\'family\'></onetime-event>';
+    element = '<onetime-event cms-info=\'cmsInfo\' group=\'group\'></onetime-event>';
     element = $compile(element)(scope);
 
     scope.$digest();
@@ -44,5 +44,4 @@ describe('Onetime Signup Component', function() {
   it('should get the group', function() {
     expect(isolated.onetimeEvent.group).toEqual(helpers.group);
   });
-
 });
