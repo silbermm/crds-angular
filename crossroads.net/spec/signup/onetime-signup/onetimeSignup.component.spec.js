@@ -30,8 +30,6 @@ describe('Onetime Signup Component', function() {
     scope = $rootScope.$new();
     scope.cmsInfo = helpers.cmsInfo.pages[0];
     scope.group = helpers.group;
-    scope.family = helpers.family;
-    console.log('before: ' + scope.family);
     element = '<onetime-event cms-info=\'cmsInfo\' group=\'group\' family=\'family\'></onetime-event>';
     element = $compile(element)(scope);
 
@@ -47,9 +45,4 @@ describe('Onetime Signup Component', function() {
     expect(isolated.onetimeEvent.group).toEqual(helpers.group);
   });
 
-  it('should filter out people under minimum age', function() {
-    console.log(isolated.onetimeEvent);
-    console.log('in spec ' + isolated.onetimeEvent.family);
-    expect(isolated.onetimeEvent.family.length).toEqual(1);
-  });
 });

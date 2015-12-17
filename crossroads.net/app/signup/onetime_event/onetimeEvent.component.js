@@ -22,9 +22,7 @@
     function OnetimeEventController() {
       var vm = this;
       vm.pageInfo = vm.cmsInfo.pages[0];
-      console.log('family: ' + vm.family);
       vm.family = _.filter(vm.family, function(f) {
-        console.log('Looking at ' + f);
         return f.age >= vm.group.minAge;
       });
 
@@ -33,7 +31,6 @@
         var now = moment();
         return start.isAfter(now);
       });
-      console.log('family after: ' + vm.family);
     }
   }
 
