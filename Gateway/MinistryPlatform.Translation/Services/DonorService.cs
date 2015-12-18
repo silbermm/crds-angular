@@ -544,7 +544,7 @@ namespace MinistryPlatform.Translation.Services
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
-            var communicationTemplateId = program.CommunicationTemplateId ?? AppSetting("DefaultGiveConfirmationEmailTemplate");
+            var communicationTemplateId = program.CommunicationTemplateId != 0 ? Convert.ToInt32(program.CommunicationTemplateId) : AppSetting("DefaultGiveConfirmationEmailTemplate");
 
             SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EmailReason);
         }
