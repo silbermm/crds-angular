@@ -302,7 +302,7 @@ namespace crds_angular.Controllers.API
                                                                   () =>
                                                                       _donorService.GetContactDonorForAuthenticatedUser(token))
                         : _donorService.GetContactDonorForAuthenticatedUser(token);
-                    var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, recurringGiftDto.StripeTokenId, DateTime.Now);
+                    var donor = _donorService.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty);
                     var recurringGift = !string.IsNullOrWhiteSpace(impersonateUserId)
                         ? _impersonationService.WithImpersonation(token,
                                                                   impersonateUserId,

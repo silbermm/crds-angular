@@ -567,7 +567,7 @@ namespace crds_angular.test.controllers
             };
 
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(_authType + " " + _authToken)).Returns(contactDonor);
-            _donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, stripeToken, It.IsAny<DateTime>())).Returns(contactDonorUpdated);
+            _donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, null, null)).Returns(contactDonorUpdated);
             _donorService.Setup(mocked => mocked.CreateRecurringGift(_authType + " " + _authToken, recurringGiftDto, contactDonorUpdated)).Returns(123);
 
             var response = _fixture.CreateRecurringGift(recurringGiftDto);
@@ -601,7 +601,7 @@ namespace crds_angular.test.controllers
                                                                 new ContentBlock());
 
             _donorService.Setup(mocked => mocked.GetContactDonorForAuthenticatedUser(_authType + " " + _authToken)).Returns(contactDonor);
-            _donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, stripeToken, It.IsAny<DateTime>())).Returns(contactDonorUpdated);
+            _donorService.Setup(mocked => mocked.CreateOrUpdateContactDonor(contactDonor, string.Empty, string.Empty, null, null)).Returns(contactDonorUpdated);
             _donorService.Setup(mocked => mocked.CreateRecurringGift(_authType + " " + _authToken, recurringGiftDto, contactDonorUpdated)).Throws(stripeException);
 
             var response = _fixture.CreateRecurringGift(recurringGiftDto);
