@@ -98,8 +98,8 @@
 
       });
 
+      vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
       underThirteen();
-
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 
