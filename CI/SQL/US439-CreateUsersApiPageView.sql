@@ -23,6 +23,8 @@ INSERT INTO [dbo].[dp_Page_Views] (
 , Contact_ID_Table.[Contact_ID]
 , dp_Users.[Can_Impersonate]
 , dp_Users.[User_GUID]
+, dp_Users.[User_Email]
+, dp_Users.[PasswordResetToken]
 '
     ,'1 = 1'
 	,NULL
