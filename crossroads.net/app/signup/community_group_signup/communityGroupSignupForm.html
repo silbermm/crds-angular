@@ -71,15 +71,15 @@
       <script type="text/ng-template" id="editProfile.html">
         <div class="modal-header">
           <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
-          <h4 class="modal-title">Edit Profilexxxx</h4>
+          <h4 class="modal-title">Edit Profile</h4>
         </div>
         <div class="modal-body">
-          <pre>{{ groupsignup.response[0] }}</pre>
-          <pre>{{ groupsignup.contactId }}</pre>
           <profile-personal
             contact-id="groupsignup.contactId"
             modal-instance="groupsignup.modalInstance"
+            attribute-types="groupsignup.anthony"
             for-trips="true"
+            locations='groupsignup.locations'
             allow-password-change="false"/>
         </div>
       </script>

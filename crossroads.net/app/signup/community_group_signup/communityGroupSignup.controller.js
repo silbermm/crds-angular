@@ -38,7 +38,7 @@
     vm.editProfile = editProfile;
     vm.formValid = true;
     vm.hasParticipantID = hasParticipantID;
-    // vm.locations = vm.signupPage.locations;
+    vm.locations = vm.locations;
     vm.modalInstance = {};
     vm.person = {};
     vm.response = {};

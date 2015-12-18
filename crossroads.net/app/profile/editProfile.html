@@ -1,20 +1,7 @@
 <div class="modal-header">
     <a type="button" class="close" ng-click="modal.cancel()">x</a>
-    <h4 class="modal-title">Edit Profiledddddd</h4>
+    <h4 class="modal-title">Edit Profile</h4>
 </div>
-<div class="modal-body"><pre>{{ modal.person }}</pre>sdfgsdfg
+<div class="modal-body">
     <profile-personal contact-id="modal.person.contactId" modal-instance="modal.modalInstance"/>
-
-    <!-- <profile-personal
-       contact-id="tripsSignup.signupService.contactId"
-       allow-password-change="false"
-       require-mobile-phone="true"
-       allow-save="false"
-       submit-form-callback='tripsSignup.validateProfile(profile, household)'
-       button-text='tripsSignup.buttonText'
-       button-css='pull-right'
-       profile-data='tripsSignup.profileData'
-       enforce-age-restriction='tripsSignup.enforceAgeRestriction()'
-       for-trips='true'
-       locations='signupStep.locations' > -->
 </div>

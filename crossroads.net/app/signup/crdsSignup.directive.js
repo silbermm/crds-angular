@@ -5,9 +5,9 @@
 
   module.exports = crdsSignup;
 
-  crdsSignup.$inject = ['SignupService'];
+  crdsSignup.$inject = ['SignupService', 'Lookup'];
 
-  function crdsSignup(SignupService) {
+  function crdsSignup(SignupService, Lookup) {
     return {
       restrict: 'E',
       scope: {},
@@ -20,6 +20,7 @@
     function crdsSignupController() {
       /*jshint validthis: true */
       var vm = this;
+      vm.locations = locations();
       vm.cmsInfo = SignupService.cmsInfo;
       vm.family = SignupService.family;
       vm.group = SignupService.group;
@@ -34,6 +35,22 @@
       function showOnetimeEvent() {
         return vm.signupService.cmsInfo.pages[0].className === constants.CMS.PAGENAMES.ONETIMEEVENTS;
       }
+
+      function locations() {
+        return Lookup.query({
+          table: 'crossroadslocations'
+        }, function(data) {
+          return data;
+        });
+      }
+
+      // Locations: function(Lookup) {
+      //   return Lookup.query({
+      //     table: 'crossroadslocations'
+      //   }, function(data) {
+      //     return data;
+      //   });
+      // }
     }
   }
 })();
