@@ -24,7 +24,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
+	SELECT DISTINCT
 			c.Contact_ID,
 			c.Last_Name,
 			c.First_Name, 
