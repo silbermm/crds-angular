@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IPersonService = crds_angular.Services.Interfaces.IPersonService;
@@ -12,11 +13,20 @@ namespace crds_angular.Services
     {
         private readonly ICommunicationService _communicationService;
         private readonly IPersonService _personService;
+        private readonly IContactService _contactService;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly int DefaultContactEmailId;
 
-        public EmailCommunication(ICommunicationService communicationService, IPersonService personService)
+        public EmailCommunication(ICommunicationService communicationService, 
+            IPersonService personService, 
+            IContactService contactService,
+            IConfigurationWrapper configurationWrapper)
         {
             _communicationService = communicationService;
             _personService = personService;
+            _contactService = contactService;
+            _configurationWrapper = configurationWrapper;
+            DefaultContactEmailId = _configurationWrapper.GetConfigIntValue("DefaultContactEmailId");
         }
 
         public void SendEmail(EmailCommunicationDTO email, string token)
@@ -31,7 +41,7 @@ namespace crds_angular.Services
 
             communication.AuthorUserId = email.FromUserId ?? _communicationService.GetUserIdFromContactId(token, email.FromContactId);
 
-            var sender = _personService.GetPerson(email.FromContactId);
+            var sender = _personService.GetPerson(DefaultContactEmailId);
             var from = new Contact { ContactId = sender.ContactId, EmailAddress = sender.EmailAddress };
             communication.FromContact = from;
             communication.ReplyToContact = from;
@@ -52,7 +62,8 @@ namespace crds_angular.Services
 
         public void SendEmail(CommunicationDTO emailData)
         {
-            var from = new Contact {ContactId = emailData.FromContactId, EmailAddress = _communicationService.GetEmailFromContactId(emailData.FromContactId)};
+            var sender = _personService.GetPerson(DefaultContactEmailId);
+            var from = new Contact {ContactId = DefaultContactEmailId, EmailAddress = sender.EmailAddress};
             var comm = new Communication
             {
                 AuthorUserId = 1,

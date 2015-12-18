@@ -590,17 +590,18 @@ namespace MinistryPlatform.Translation.Services
         public void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
-
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultGivingContactEmailId"));
             var contact = GetEmailViaDonorId(donorId);
 
             var comm = new Communication
             {
+                
                 AuthorUserId = 5,
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContact =  new Contact { ContactId = 5, EmailAddress = "giving@crossroads.net" },
-                ReplyToContact = new Contact { ContactId = 5, EmailAddress = "giving@crossroads.net" },
+                FromContact =  new Contact { ContactId = defaultContact.Contact_ID, EmailAddress = defaultContact.Email_Address },
+                ReplyToContact = new Contact { ContactId = defaultContact.Contact_ID, EmailAddress = defaultContact.Email_Address },
                 ToContacts = new List<Contact> {new Contact{ContactId = contact.ContactId, EmailAddress = contact.Email}},
                 MergeData = new Dictionary<string, object>
                 {

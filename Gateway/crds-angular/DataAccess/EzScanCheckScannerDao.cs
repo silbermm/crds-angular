@@ -10,17 +10,15 @@ namespace crds_angular.DataAccess
     public class EzScanCheckScannerDao : ICheckScannerDao
     {
         private readonly IDbConnection _dbConnection;
-        private readonly ICryptoProvider _crypto;
 
         /// <summary>
         /// This must match the length of the check_scanner.itemsStatus.ErrorMessage column.
         /// </summary>
-        private const int ErrorMessageMaxLength = 2048;
+        private const int ErrorMessageMaxLength = 4000;
 
-        public EzScanCheckScannerDao(IDbConnection dbConnection, ICryptoProvider crypto)
+        public EzScanCheckScannerDao(IDbConnection dbConnection)
         {
             _dbConnection = dbConnection;
-            _crypto = crypto;
         }
 
         public List<CheckScannerBatch> GetBatches(bool onlyOpenBatches = true)
@@ -29,12 +27,12 @@ namespace crds_angular.DataAccess
             IDataReader reader = null;
             try
             {
-                var whereClause = onlyOpenBatches ? "WHERE COALESCE(BatchStatus, 0) <> 1" : string.Empty;
+                var whereClause = onlyOpenBatches ? "WHERE COALESCE(Exported, 0) <> 1" : string.Empty;
 
                 batches = WithDbCommand(dbCommand =>
                 {
                     dbCommand.CommandType = CommandType.Text;
-                    dbCommand.CommandText = string.Format("SELECT ID, IDBatch, DateProcess, BatchStatus FROM batches {0} ORDER BY DateProcess DESC", whereClause);
+                    dbCommand.CommandText = string.Format("SELECT ID, IDBatch, DateProcess, Exported FROM Batches {0} ORDER BY DateProcess DESC", whereClause);
 
                     var b = new List<CheckScannerBatch>();
                     reader = dbCommand.ExecuteReader();
@@ -46,7 +44,7 @@ namespace crds_angular.DataAccess
                             Id = reader[i++] as int? ?? 0,
                             Name = reader[i++] as string,
                             ScanDate = reader[i++] as DateTime? ?? DateTime.Now,
-                            Status = reader.IsDBNull(i) || reader.GetInt32(i) == 0 ? BatchStatus.NotExported : BatchStatus.Exported
+                            Status = reader.IsDBNull(i) || reader.GetInt16(i) == 0 ? BatchStatus.NotExported : BatchStatus.Exported
                         });
                     }
                     return (b);
@@ -71,11 +69,12 @@ namespace crds_angular.DataAccess
                 checks = WithDbCommand(dbCommand =>
                 {
                     dbCommand.CommandType = CommandType.Text;
-                    dbCommand.CommandText = "SELECT ID, COALESCE(Exported, 0), ErrorMessage, Account, Amount, CheckNo, DateScan, Route, Payor, DateCheck, Payor2, Address, Address2, City, State, Zip FROM items LEFT JOIN itemsStatus ON items.ID = itemsStatus.ItemID WHERE IDBatch = @IDBatch";
+                    dbCommand.CommandText = "SELECT ID, COALESCE(Exported, 0), ErrorMessage, EncryptAccount, Amount, CheckNo, DateScan, EncryptRoute, Payor, DateCheck, Payor2, Address, Address2, City, State, Zip FROM Items WHERE IDBatch = @IDBatch";
                     var idBatchParam = dbCommand.CreateParameter();
                     idBatchParam.ParameterName = "IDBatch";
                     idBatchParam.DbType = DbType.String;
                     idBatchParam.Value = batchName;
+                    idBatchParam.Size = batchName.Length;
                     dbCommand.Parameters.Add(idBatchParam);
                     dbCommand.Prepare();
 
@@ -87,13 +86,13 @@ namespace crds_angular.DataAccess
                         c.Add(new CheckScannerCheck
                         {
                             Id = reader[i++] as int? ?? 0,
-                            Exported = (reader[i++] as long? ?? 0) > 0,
+                            Exported = (reader[i++] as int? ?? 0) > 0,
                             Error = reader[i++] as string,
-                            AccountNumber = _crypto.EncryptValueToString(reader[i++] as string),
+                            AccountNumber = reader[i++] as string,
                             Amount = (decimal)(reader[i++] as double? ?? 0.0),
                             CheckNumber = reader[i++] as string,
                             ScanDate = reader[i++] as DateTime?,
-                            RoutingNumber = _crypto.EncryptValueToString(reader[i++] as string),
+                            RoutingNumber = reader[i++] as string,
                             Name1 = reader[i++] as string,
                             CheckDate = reader[i++] as DateTime?,
                             Name2 = reader[i++] as string,
@@ -126,7 +125,7 @@ namespace crds_angular.DataAccess
             WithDbCommand(dbCommand =>
             {
                 dbCommand.CommandType = CommandType.Text;
-                dbCommand.CommandText = "UPDATE batches SET BatchStatus = @BatchStatus WHERE IDBatch = @IDBatch";
+                dbCommand.CommandText = "UPDATE Batches SET Exported = @BatchStatus WHERE IDBatch = @IDBatch";
 
                 var batchStatusParam = dbCommand.CreateParameter();
                 batchStatusParam.ParameterName = "BatchStatus";
@@ -138,6 +137,7 @@ namespace crds_angular.DataAccess
                 idBatchParam.ParameterName = "IDBatch";
                 idBatchParam.DbType = DbType.String;
                 idBatchParam.Value = batchName;
+                idBatchParam.Size = batchName.Length;
                 dbCommand.Parameters.Add(idBatchParam);
 
                 dbCommand.Prepare();
@@ -157,31 +157,10 @@ namespace crds_angular.DataAccess
         {
             WithDbCommand(dbCommand =>
             {
+                dbCommand.CommandText = "UPDATE Items SET Exported = @Exported, ErrorMessage = @ErrorMessage WHERE ID = @ItemID";
                 dbCommand.CommandType = CommandType.Text;
-                dbCommand.CommandText = "SELECT COUNT(*) FROM itemsStatus WHERE ItemID = @ItemID";
 
                 var itemIdParam = dbCommand.CreateParameter();
-                itemIdParam.ParameterName = "ItemID";
-                itemIdParam.DbType = DbType.Int16;
-                itemIdParam.Value = checkId;
-                dbCommand.Parameters.Add(itemIdParam);
-
-                dbCommand.Prepare();
-
-                var x = dbCommand.ExecuteScalar() as long?;
-                if (x.HasValue && x > 0)
-                {
-                    dbCommand.CommandText = "UPDATE itemsStatus SET Exported = @Exported, ErrorMessage = @ErrorMessage WHERE ItemID = @ItemID";
-                }
-                else
-                {
-                    dbCommand.CommandText = "INSERT INTO itemsStatus (ItemID, Exported, ErrorMessage) VALUES (@ItemID, @Exported, @ErrorMessage)";
-                }
-
-                dbCommand.CommandType = CommandType.Text;
-                dbCommand.Parameters.Clear();
-
-                itemIdParam = dbCommand.CreateParameter();
                 itemIdParam.ParameterName = "ItemID";
                 itemIdParam.DbType = DbType.Int16;
                 itemIdParam.Value = checkId;
@@ -196,7 +175,15 @@ namespace crds_angular.DataAccess
                 var errorMessageParam = dbCommand.CreateParameter();
                 errorMessageParam.ParameterName = "ErrorMessage";
                 errorMessageParam.DbType = DbType.String;
-                errorMessageParam.Value = errorMessage != null && errorMessage.Length > ErrorMessageMaxLength ? errorMessage.Substring(ErrorMessageMaxLength) : errorMessage;
+                if (errorMessage == null)
+                {
+                    errorMessageParam.Value = DBNull.Value;
+                }
+                else
+                {
+                    errorMessageParam.Value = errorMessage.Length > ErrorMessageMaxLength ? errorMessage.Substring(ErrorMessageMaxLength) : errorMessage;
+                }
+                errorMessageParam.Size = ErrorMessageMaxLength;
                 dbCommand.Parameters.Add(errorMessageParam);
 
                 dbCommand.Prepare();
