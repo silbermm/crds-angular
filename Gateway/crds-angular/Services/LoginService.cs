@@ -94,14 +94,11 @@ namespace crds_angular.Services
         {
             var user = _userService.GetUserByResetToken(token);
 
-            //_authenticationService.ChangePassword()
-
-            // THIS IS DISABLED FOR TESTING THE FRONT END --> we actually need to move the reset stuff to the actual
-            // code section that is resetting the password
-            //Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
-            //userUpdateValues["User_ID"] = user.UserRecordId;
-            //userUpdateValues["PasswordResetToken"] = null; 
-            //_userService.UpdateUser(userUpdateValues);
+            Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
+            userUpdateValues["User_ID"] = user.UserRecordId;
+            userUpdateValues["PasswordResetToken"] = null;
+            userUpdateValues["Password"] = password;
+            _userService.UpdateUser(userUpdateValues);
 
             return true;
         }
@@ -118,12 +115,16 @@ namespace crds_angular.Services
             return true;
         }
 
-        public string VerifyResetToken(string token)
+        public bool VerifyResetToken(string token)
         {
-            // TODO: Ask Jim about adding fields to the MinistryPlatformUser to get id and email in one call
             var user = _userService.GetUserByResetToken(token);
 
-            return user.UserEmail;
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

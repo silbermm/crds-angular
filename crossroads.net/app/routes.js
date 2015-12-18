@@ -146,9 +146,9 @@
           resolve: {
             PasswordService: 'PasswordService',
             $stateParams: '$stateParams',
-            Email: function(PasswordService, $stateParams) {
+            TokenStatus: function(PasswordService, $stateParams) {
               var token = { token: $stateParams.token };
-              return PasswordService.VerifyResetToken.save(token).$promise;
+              return PasswordService.VerifyResetToken.get(token).$promise;
             }
           }
       })

@@ -6,6 +6,6 @@ namespace crds_angular.Services.Interfaces
         bool PasswordResetRequest(string email);
         bool ResetPassword(string password, string token);
         bool ClearResetToken(string email);
-        string VerifyResetToken(string token);
+        bool VerifyResetToken(string token);
     }
 }

@@ -40,14 +40,15 @@ namespace crds_angular.Controllers.API
             }
         }
 
-        [HttpPost]
-        [Route("api/verifyresettoken/")]
-        public IHttpActionResult VerifyResetTokenRequest(PasswordResetVerification request)
+        [HttpGet]
+        [Route("api/verifyresettoken/{token}")]
+        public IHttpActionResult VerifyResetTokenRequest(string token)
         {
             try
             {
-                var userEmail = _loginService.VerifyResetToken(request.token);
-                return Ok(userEmail);
+                ResetTokenStatus status = new ResetTokenStatus();
+                status.TokenValid = _loginService.VerifyResetToken(token);
+                return Ok(status);
             }
             catch (Exception ex)
             {

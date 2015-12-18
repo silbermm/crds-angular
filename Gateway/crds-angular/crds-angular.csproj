@@ -276,13 +276,13 @@
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
     <Compile Include="Models\Json\PasswordReset.cs" />
+    <Compile Include="Models\Json\ResetTokenStatus.cs" />
     <Compile Include="Models\MailChimp\BulkEmailSubscriberOptDTO.cs" />
     <Compile Include="Services\BulkEmailSyncService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\Interfaces\IBulkEmailSyncService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Models\Json\PasswordResetRequest.cs" />
-    <Compile Include="Models\Json\PasswordResetVerification.cs" />
     <Compile Include="Services\DonorStatementService.cs" />
     <Compile Include="Services\Interfaces\IDonorStatementService.cs" />
     <Compile Include="Services\Interfaces\ILoginService.cs" />
