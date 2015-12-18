@@ -87,6 +87,7 @@ describe('GroupSignupController', function() {
 
   beforeEach(angular.mock.module(function($provide) {
     $provide.value('$state', { get: function() {} });
+    $provide.value('$stateParams', { link: 'test' });
   }));
 
   beforeEach(
@@ -110,7 +111,7 @@ describe('GroupSignupController', function() {
         $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/profile')
           .respond(userGetResponse);
 
-        $httpBackend.when('GET', window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test')
+        $httpBackend.when('GET', window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test%2F')
           .respond(pageGetResponse);
 
         $httpBackend.when('GET', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1')
@@ -286,7 +287,7 @@ describe('GroupSignupController', function() {
 
   function verifyExpectations() {
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile');
-    $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test');
+    $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test%2F');
 
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1');
     $httpBackend.flush();

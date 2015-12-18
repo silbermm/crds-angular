@@ -9,6 +9,8 @@
 
   function TripRoutes($stateProvider, $urlMatcherFactory, $locationProvider) {
 
+    $urlMatcherFactory.strictMode(false)
+
     $stateProvider
       .state('tripsearch', {
         parent: 'noSideBar',
@@ -19,7 +21,7 @@
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
             return Page.get({
-              url: '/tripgiving/'
+              url: '/trips/search/'
             }).$promise;
           }
         },

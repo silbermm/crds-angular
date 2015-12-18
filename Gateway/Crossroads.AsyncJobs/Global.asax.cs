@@ -3,6 +3,7 @@ using System.IO;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using Crossroads.Utilities.Services;
 using log4net.Config;
 
 namespace Crossroads.AsyncJobs
@@ -17,6 +18,7 @@ namespace Crossroads.AsyncJobs
             UnityConfig.RegisterComponents();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             ApplicationPreload.StartJobProcessor();
+            TlsHelper.AllowTls12();
             XmlConfigurator.Configure(new FileInfo(Server.MapPath("~/Web.config")));
         }
 

@@ -16,10 +16,12 @@ namespace crds_angular.Controllers.API
     public class ChildcareController : MPAuth
     {
         private readonly IChildcareService _childcareService;
+        private readonly IEventService _eventService;
 
-        public ChildcareController(IChildcareService childcareService)
+        public ChildcareController(IChildcareService childcareService, IEventService eventService)
         {
             _childcareService = childcareService;
+            _eventService = eventService;
         }
 
         [Route("api/childcare/rsvp")]
@@ -57,7 +59,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    return Ok(_childcareService.GetMyChildcareEvent(eventid, token));
+                    return Ok(_eventService.GetMyChildcareEvent(eventid, token));
                 }
                 catch (Exception e)
                 {

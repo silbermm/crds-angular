@@ -25,6 +25,9 @@ namespace crds_angular.Models.Crossroads.Groups
         [JsonProperty(PropertyName = "childCareInd")]
         public bool ChildCareAvailable { get; set; }
 
+        [JsonProperty(PropertyName = "minAge")]
+        public int OnlineRsvpMinimumAge { get; set; }
+
         public List<SignUpFamilyMembers> SignUpFamilyMembers { get; set; }
 
         [JsonProperty(PropertyName = "events")]

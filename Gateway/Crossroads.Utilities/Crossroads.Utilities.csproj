@@ -84,6 +84,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\ContentBlock.cs" />
     <Compile Include="Serializers\RestSharpJsonNetSerializer.cs" />
+    <Compile Include="Services\TlsHelper.cs" />
     <Compile Include="Services\ContentBlockService.cs" />
     <Compile Include="Services\DbConnectionStringTypeConverter.cs" />
     <Compile Include="Services\EnumMemberSerializationUtils.cs" />

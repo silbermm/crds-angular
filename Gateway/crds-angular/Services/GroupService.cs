@@ -104,7 +104,7 @@ namespace crds_angular.Services
         {
             var eventTypes = _mpGroupService.GetEventTypesForGroup(groupId, token);
             var events = new List<MinistryPlatform.Models.Event>();
-            foreach (var eventType in eventTypes.Where(eventType => eventType != String.Empty))
+            foreach (var eventType in eventTypes.Where(eventType => !string.IsNullOrEmpty(eventType)))
             {
                 events.AddRange(_eventService.GetEvents(eventType, token));
             }
@@ -168,6 +168,7 @@ namespace crds_angular.Services
                 detail.WaitListInd = g.WaitList;
                 detail.ChildCareAvailable = g.ChildCareAvailable;
                 detail.WaitListGroupId = g.WaitListGroupId;
+                detail.OnlineRsvpMinimumAge = g.MinimumAge;
                 if (events != null)
                 {
                     detail.Events = Enumerable.ToList<Event>(events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>));

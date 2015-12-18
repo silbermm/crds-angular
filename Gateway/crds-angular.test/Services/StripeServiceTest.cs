@@ -541,7 +541,7 @@ namespace crds_angular.test.Services
             _restClient.Verify(mocked => mocked.Execute<StripePlan>(It.Is<IRestRequest>(o =>
                 o.Method == Method.POST
                 && o.Resource.Equals("plans")
-                && o.Parameters.Matches("amount", recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue)
+                && o.Parameters.Matches("amount", (int)(recurringGiftDto.PlanAmount * Constants.StripeDecimalConversionValue))
                 && o.Parameters.Matches("interval", interval)
                 && o.Parameters.Matches("name", "Donor ID #" + contactDonor.DonorId + " " + interval + "ly")
                 && o.Parameters.Matches("currency", "usd")
