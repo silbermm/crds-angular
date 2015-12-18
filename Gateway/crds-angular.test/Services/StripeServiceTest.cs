@@ -699,7 +699,7 @@ namespace crds_angular.test.Services
             const string customer = "cus_123";
             const string plan = "plan_123";
 
-            var response = _fixture.UpdateSubscriptionPlan(customer, sub, plan, null);
+            var response = _fixture.UpdateSubscriptionPlan(customer, sub, plan);
             _restClient.Verify(
                 mocked =>
                     mocked.Execute<StripeSubscription>(

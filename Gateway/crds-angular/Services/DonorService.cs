@@ -420,9 +420,7 @@ namespace crds_angular.Services
                         stripeSubscription = _paymentService.UpdateSubscriptionPlan(existingGift.StripeCustomerId,
                                                                                     stripeSubscription.Id,
                                                                                     plan.Id,
-                                                                                    oldSubscription.TrialEnd != null && oldSubscription.TrialEnd > DateTime.Now
-                                                                                        ? oldSubscription.TrialEnd
-                                                                                        : null);
+                                                                                    oldSubscription.TrialEnd);
                     }
                     else
                     {
