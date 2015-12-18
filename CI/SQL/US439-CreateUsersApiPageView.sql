@@ -32,7 +32,6 @@ ELSE
 BEGIN
 
 SET IDENTITY_INSERT [dbo].[dp_Page_Views] ON
-GO
 
 INSERT INTO [dbo].[dp_Page_Views] (
      [Page_View_ID]
