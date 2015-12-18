@@ -80,7 +80,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int GetContactIdByUserId(int userId)
         {
-            var records = _ministryPlatformService.GetPageViewRecords(2194, ApiLogin(), (""+userId+","));
+            var records = _ministryPlatformService.GetPageViewRecords(2194, ApiLogin(), ("\"+userId+\","));
             if (records.Count != 1)
             {
                 throw new Exception("User ID did not return exactly one user record");
