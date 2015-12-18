@@ -31,10 +31,10 @@ BEGIN
 			c.Nickname,
 			c.Date_of_Birth,
 			c.HS_Graduation_Year
-		FROM dbo.Contacts c 
-			INNER JOIN dbo.Contact_Relationships cr ON c.Contact_ID = cr.Contact_ID
-		WHERE cr.Relationship_ID IN (40, 45)
-    
+		FROM dbo.Contacts c
+			INNER JOIN dbo.vw_crds_Active_Echeck_Contact_Relationships cr 
+				ON c.Contact_ID = cr.Contact_ID
+			    
 END
 
 GO
