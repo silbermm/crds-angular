@@ -15,7 +15,7 @@ END
 GO
 
 -- =============================================
--- Author:      Charlie Retzler / Dan Rye
+-- Author:      Charlie Retzler / Dan Rye / Darryl Woods
 -- Create date: 12/17/2015
 -- Description: Runs the ETL (extract/transform/load) process for the echeck tblRelationship table
 -- =============================================
@@ -24,41 +24,23 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	---- Using DBA's script that doesn't account for inactive members
-
-	--SELECT Contact_ID,
-	----       Person_House_TX,
-	--	   DENSE_RANK() OVER (ORDER BY Person_House_TX) as Person_House_ID
-	--  FROM (SELECT t1.Contact_ID,
-	--  -- TODO: Switch to using view
-	--			   ( SELECT cast(t2.Related_Contact_ID as varchar) + '-'
-	--							  FROM [MinistryPlatform].[dbo].Contact_Relationships t2
-	--				  WHERE t1.Contact_ID = t2.Contact_ID
-	--					AND t2.Relationship_ID = 45
-	--				  ORDER BY t2.Related_Contact_ID
-	--					FOR XML PATH('') ) AS Person_House_TX 
-	--		  FROM [MinistryPlatform].[dbo].Contact_Relationships t1
-	--		 WHERE t1.Relationship_ID = 45
-	--		 GROUP BY t1.Contact_ID
-	--	   ) c
-
-	-- Using View
-
 	SELECT Contact_ID,
 	       Person_House_TX,
 		   DENSE_RANK() OVER (ORDER BY Person_House_TX) as Person_House_ID
-	  FROM (SELECT t1.Contact_ID,
-				   ( SELECT cast(t2.Related_Contact_ID as varchar) + '-'				   
-						FROM dbo.vw_crds_Active_Echeck_Contact_Relationships t2
-					  WHERE t1.Contact_ID = t2.Contact_ID
-						AND t2.Relationship_ID = 45
-					  ORDER BY t2.Related_Contact_ID
-						FOR XML PATH('') ) AS Person_House_TX 
-			  FROM dbo.vw_crds_Active_Echeck_Contact_Relationships t1
-			 WHERE t1.Relationship_ID = 45
-			 GROUP BY t1.Contact_ID
-		   ) c
-		   			    
+	  FROM 
+		(SELECT t1.Contact_ID,
+				(SELECT cast(t2.Related_Contact_ID as varchar) + '-'				   
+					FROM dbo.vw_crds_Active_Echeck_Contact_Relationships t2
+					WHERE 
+						t1.Contact_ID = t2.Contact_ID AND
+						t2.Relationship_ID = 45
+					ORDER BY t2.Related_Contact_ID
+					FOR XML PATH('') 
+				) AS Person_House_TX 
+			FROM dbo.vw_crds_Active_Echeck_Contact_Relationships t1
+			WHERE t1.Relationship_ID = 45
+			GROUP BY t1.Contact_ID
+		) c		    
 END
 
 GO
