@@ -68,56 +68,63 @@ namespace crds_angular.Controllers.API
         {
             return Authorized(token =>
             {
-                // does the logged in user have permission to view this contact?
-                //TODO: Move this security logic to MP, if for some reason we absulutly can't then centerlize all security logic that exists in the gateway
-                var family = _serveService.GetImmediateFamilyParticipants(token);
-                Person person = null;
-                if (family.Where(f => f.ContactId == contactId).ToList().Count > 0)
+                try
                 {
-                    person = _personService.GetPerson(contactId);
+                    // does the logged in user have permission to view this contact?
+                    //TODO: Move this security logic to MP, if for some reason we absulutly can't then centerlize all security logic that exists in the gateway
+                    var family = _serveService.GetImmediateFamilyParticipants(token);
+                    Person person = null;
+                    if (family.Where(f => f.ContactId == contactId).ToList().Count > 0)
+                    {
+
+                        person = _personService.GetPerson(contactId);
+                    }
+                    if (person == null)
+                    {
+                        return Unauthorized();
+                    }
+                    return this.Ok(person);
                 }
-                if (person == null)
+                catch (Exception e)
                 {
-                    return Unauthorized();
+                    var apiError = new ApiErrorDto("Get Profile Failed", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
-                return this.Ok(person);
             });
         }
 
         [Route("api/profile")]
         public IHttpActionResult Post([FromBody] Person person)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
-                var dataError = new ApiErrorDto("Save Trip Application Data Invalid", new InvalidOperationException("Invalid Save Data" + errors));
-                throw new HttpResponseException(dataError.HttpResponseMessage);
+                return Authorized(t =>
+                {
+                    // does the logged in user have permission to view this contact?
+                    var family = _serveService.GetImmediateFamilyParticipants(t);
+
+                    if (family.Where(f => f.ContactId == person.ContactId).ToList().Count > 0)
+                    {
+                        try
+                        {
+                            _personService.SetProfile(t, person);
+                            return this.Ok();
+                        }
+                        catch (Exception ex)
+                        {
+                            var apiError = new ApiErrorDto("Profile update Failed", ex);
+                            throw new HttpResponseException(apiError.HttpResponseMessage);
+                        }
+                    }
+                    else
+                    {
+                        return this.Unauthorized();
+                    }
+                });
             }
-
-            return Authorized(t =>
-            {
-                // does the logged in user have permission to view this contact?
-                var family = _serveService.GetImmediateFamilyParticipants(t);
-
-                if (family.Where(f => f.ContactId == person.ContactId).ToList().Count > 0)
-                {
-                    try
-                    {
-                        _personService.SetProfile(t, person);
-                        return this.Ok();
-                    }
-                    catch(Exception ex)
-                    {
-                        var apiError = new ApiErrorDto("Profile update Failed", ex);
-                        throw new HttpResponseException(apiError.HttpResponseMessage);   
-                    }
-                }
-                else
-                {
-                    return this.Unauthorized();
-                }
-               
-            });
+            var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+            var dataError = new ApiErrorDto("Save Trip Application Data Invalid", new InvalidOperationException("Invalid Save Data" + errors));
+            throw new HttpResponseException(dataError.HttpResponseMessage);
         }
     }
 }
