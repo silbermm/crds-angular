@@ -113,13 +113,14 @@ namespace crds_angular.Services
         /// <param name="contactDonor">An existing ContactDonor, looked up from either GetDonorForEmail or GetDonorForAuthenticatedUser.  This may be null, indicating there is no existing contact or donor.</param>
         ///  <param name="encryptedKey"> The encrypted routing and account number</param>
         /// <param name="emailAddress">An email address to use when creating a Contact (#1 above).</param>
-        /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor.</param>
-        /// <param name="setupDate">The date when the Donor is marked as setup - normally would be today's date.</param>
+        /// <param name="paymentProcessorToken">The one-time-use token given by the payment processor - if not set, a donor will still be potentially created or updated, but will not be setup in Stripe.</param>
+        /// <param name="setupDate">The date when the Donor is marked as setup, defaults to today's date.</param>
         /// <returns></returns>
-        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken, DateTime setupDate)
+        public ContactDonor CreateOrUpdateContactDonor(ContactDonor contactDonor, string encryptedKey, string emailAddress, string paymentProcessorToken = null, DateTime? setupDate = null)
         {
+            setupDate = setupDate ?? DateTime.Now;
+
             var contactDonorResponse = new ContactDonor();
-            StripeCustomer stripeCustomer;
             if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 var statementMethod = _statementMethodNone;
@@ -135,17 +136,20 @@ namespace crds_angular.Services
                     contactDonorResponse.ContactId = _mpContactService.CreateContactForGuestGiver(emailAddress, _guestGiverDisplayName);
                 }
 
-                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
-
                 var donorAccount = contactDonor != null ? contactDonor.Account : null;
-                if (donorAccount != null)
+                if (!string.IsNullOrWhiteSpace(paymentProcessorToken))
                 {
-                    donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
-                }
+                    var stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
 
-                contactDonorResponse.ProcessorId = stripeCustomer.id;
+                    if (donorAccount != null)
+                    {
+                        donorAccount.ProcessorAccountId = stripeCustomer.sources.data[0].id;
+                    }
+
+                    contactDonorResponse.ProcessorId = stripeCustomer.id;
+                }
            
-                contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate, 
+                contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonorResponse.ContactId, contactDonorResponse.ProcessorId, setupDate.Value, 
                     statementFrequency, _statementTypeIndividual, statementMethod, donorAccount);
                 contactDonorResponse.Email = emailAddress;
 
@@ -154,8 +158,11 @@ namespace crds_angular.Services
             else if (!contactDonor.HasPaymentProcessorRecord)
             {
                 contactDonorResponse.ContactId = contactDonor.ContactId;
-                stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
-                contactDonorResponse.ProcessorId = stripeCustomer.id;
+                if (!string.IsNullOrWhiteSpace(paymentProcessorToken))
+                {
+                    var stripeCustomer = _paymentService.CreateCustomer(paymentProcessorToken);
+                    contactDonorResponse.ProcessorId = stripeCustomer.id;
+                }
 
                 if (contactDonor.ExistingDonor)
                 {
@@ -165,13 +172,13 @@ namespace crds_angular.Services
                 {
                     if (contactDonor.RegisteredUser)
                     {
-                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate);
+                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate.Value);
                         var contact = _mpDonorService.GetEmailViaDonorId(contactDonorResponse.DonorId);
                         contactDonorResponse.Email = contact.Email;
                     }
                     else
                     {
-                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate,
+                        contactDonorResponse.DonorId = _mpDonorService.CreateDonorRecord(contactDonor.ContactId, contactDonorResponse.ProcessorId, setupDate.Value,
                             _statementFrequencyNever, _statementTypeIndividual, _statementMethodNone);
                     }
                 }
