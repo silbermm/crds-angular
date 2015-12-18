@@ -89,16 +89,18 @@
         if (!vm.profileData) {
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
+            underThirteen();
             vm.viewReady = true;
           });
         } else {
           configurePerson();
+          underThirteen();
           vm.viewReady = true;
         }
 
       });
 
-      underThirteen();
+      //underThirteen();
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }

@@ -22,6 +22,7 @@
       },
       resolve: {
         loggedin: crds_utilities.checkLoggedin,
+        AttributeTypeService: 'AttributeTypeService',
         $stateParams: '$stateParams',
         Page: 'Page',
         SignupService: 'SignupService',
@@ -59,7 +60,11 @@
           });
 
           return deferred.promise;
-        }
+        },
+
+        AttributeTypes: function(AttributeTypeService) {
+          return AttributeTypeService.AttributeTypes().query().$promise;
+        },
       }
     });
   }

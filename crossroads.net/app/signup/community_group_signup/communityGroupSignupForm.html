@@ -71,12 +71,32 @@
       <script type="text/ng-template" id="editProfile.html">
         <div class="modal-header">
           <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
-          <h4 class="modal-title">Edit Profile</h4>
+          <h4 class="modal-title">Edit Profilexxxx</h4>
         </div>
         <div class="modal-body">
-          <profile-personal updated-person="groupsignup.response[0]" modal-instance="groupsignup.modalInstance"/>
+          <pre>{{ groupsignup.response[0] }}</pre>
+          <pre>{{ groupsignup.contactId }}</pre>
+          <profile-personal
+            contact-id="groupsignup.contactId"
+            modal-instance="groupsignup.modalInstance"
+            for-trips="true"
+            allow-password-change="false"/>
         </div>
       </script>
+
+      <!-- <profile-personal
+         contact-id="tripsSignup.signupService.contactId"
+         allow-password-change="false"
+         require-mobile-phone="true"
+         allow-save="false"
+         submit-form-callback='tripsSignup.validateProfile(profile, household)'
+         button-text='tripsSignup.buttonText'
+         button-css='pull-right'
+         profile-data='tripsSignup.profileData'
+         enforce-age-restriction='tripsSignup.enforceAgeRestriction()'
+         for-trips='true'
+         locations='signupStep.locations' > -->
+
     </div>
   </div>
 </div>

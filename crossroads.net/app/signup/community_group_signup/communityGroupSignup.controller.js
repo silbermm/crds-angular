@@ -12,7 +12,8 @@
     '$stateParams',
     'Page',
     '$modal',
-    'ChildCare'
+    'ChildCare',
+    'Session'
   ];
 
   function CommunityGroupsController(
@@ -24,7 +25,8 @@
     $stateParams,
     Page,
     $modal,
-    ChildCare) {
+    ChildCare,
+    Session) {
 
     var vm = this;
     vm.allSignedUp = allSignedUp;
@@ -32,9 +34,11 @@
     vm.atLeastOneParticipant = false;
     vm.childCareAvailable = false;
     vm.childCareChange = childCareChange;
+    vm.contactId = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
     vm.editProfile = editProfile;
     vm.formValid = true;
     vm.hasParticipantID = hasParticipantID;
+    // vm.locations = vm.signupPage.locations;
     vm.modalInstance = {};
     vm.person = {};
     vm.response = {};
@@ -115,6 +119,11 @@
                 vm.viewReady = true;
               });
 
+              vm.locations = Lookup.query({
+                table: 'crossroadslocations'
+              }, function(data) {
+                return data;
+              });
 
               //this is the case where the group is full and there is NO waitlist and at least one of your family IS a participant
             } else if (response.groupFullInd && !response.waitListInd && vm.atLeastOneParticipant) {
