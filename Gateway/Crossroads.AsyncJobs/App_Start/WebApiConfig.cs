@@ -8,7 +8,8 @@ namespace Crossroads.AsyncJobs
     {
         public static void Register(HttpConfiguration config)
         {
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute("http://localhost:8080,http://localhost:3000,https://int.crossroads.net,https://demo.crossroads.net,https://www.crossroads.net,https://prod.crossroads.net", "*", "*");
+            cors.SupportsCredentials = true;
             config.EnableCors(cors);
 
             // Web API configuration and services
