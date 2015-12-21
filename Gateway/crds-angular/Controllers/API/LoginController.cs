@@ -26,8 +26,8 @@ namespace crds_angular.Controllers.API
         }
 
         [HttpPost]
-        [Route("api/resetpasswordrequest/")]
-        public IHttpActionResult ResetPassword(PasswordResetRequest request)
+        [Route("api/requestpasswordreset/")]
+        public IHttpActionResult RequestPasswordReset(PasswordResetRequest request)
         {
             try
             {
@@ -40,12 +40,35 @@ namespace crds_angular.Controllers.API
             }
         }
 
-        [HttpPost]
-        [Route("api/resetpasswordverify/")]
-        public IHttpActionResult AcceptResetRequest(PasswordResetVerification request)
+        [HttpGet]
+        [Route("api/verifyresettoken/{token}")]
+        public IHttpActionResult VerifyResetTokenRequest(string token)
         {
-            // Worked in successor story
-            throw new NotImplementedException();
+            try
+            {
+                ResetTokenStatus status = new ResetTokenStatus();
+                status.TokenValid = _loginService.VerifyResetToken(token);
+                return Ok(status);
+            }
+            catch (Exception ex)
+            {
+                return this.InternalServerError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/resetpassword/")]
+        public IHttpActionResult ResetPassword(PasswordReset request)
+        {
+            try
+            {
+                var userEmail = _loginService.ResetPassword(request.Password, request.Token);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return this.InternalServerError();
+            }
         }
 
         [ResponseType(typeof(LoginReturn))]
