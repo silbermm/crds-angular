@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Configuration;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -8,7 +9,7 @@ namespace crds_angular
     {
         public static void Register(HttpConfiguration config)
         {
-            var cors = new EnableCorsAttribute("http://localhost:8080,http://localhost:3000,https://int.crossroads.net,https://demo.crossroads.net,https://www.crossroads.net,https://prod.crossroads.net", "*", "*");
+            var cors = new EnableCorsAttribute(ConfigurationManager.AppSettings["CORS"], "*", "*");
             cors.SupportsCredentials = true;
             config.EnableCors(cors);
 
