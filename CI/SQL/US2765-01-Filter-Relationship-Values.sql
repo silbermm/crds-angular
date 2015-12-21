@@ -33,24 +33,7 @@ INSERT INTO dbo.dp_Page_Views
 		, Reciprocal_Relationship_ID_Table.[Male_Label] AS [Male Label]
 		, Reciprocal_Relationship_ID_Table.[Female_Label] AS [Female Label]
 		',
-		'Relationships.[Relationship_ID] = 8 OR 
-		Relationships.[Relationship_ID] = 7 OR
-		Relationships.[Relationship_ID] = 5 OR 
-		Relationships.[Relationship_ID] = 42 OR
-		Relationships.[Relationship_ID] = 41 OR 
-		Relationships.[Relationship_ID] = 27 OR
-		Relationships.[Relationship_ID] = 14 OR 
-		Relationships.[Relationship_ID] = 36 OR
-		Relationships.[Relationship_ID] = 40 OR
-		 Relationships.[Relationship_ID] = 45 OR
-		Relationships.[Relationship_ID] = 29 OR
-		 Relationships.[Relationship_ID] = 30 OR
-		Relationships.[Relationship_ID] = 1 OR
-		 Relationships.[Relationship_ID] = 6 OR
-		Relationships.[Relationship_ID] = 37 OR 
-		Relationships.[Relationship_ID] = 28 OR
-		Relationships.[Relationship_ID] = 43 OR
-		 Relationships.[Relationship_ID] = 44',
+		'Relationships.[Relationship_ID] IN (8,7,5,42,41,27,14,36,40,45,29,30,1,6,37,28,43,44)',
 		NULL
 	)
 
