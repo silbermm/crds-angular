@@ -117,6 +117,9 @@ namespace crds_angular.Models.Crossroads.Profile
         [JsonProperty(PropertyName = "singleAttributes")]
         public Dictionary<int, ContactSingleAttributeDTO> SingleAttributes { get; set; }
 
+        [JsonProperty(PropertyName = "participantStartDate")]
+        public DateTime? ParticipantStartDate { get; set; }
+
         public MyContact GetContact()
         {
             return new MyContact
@@ -134,7 +137,6 @@ namespace crds_angular.Models.Crossroads.Profile
                 Marital_Status_ID = MaritalStatusId,
                 Gender_ID = GenderId,
                 Employer_Name = EmployerName,
-                Anniversary_Date = AnniversaryDate,
                 Address_ID = AddressId,
                 Address_Line_1 = AddressLine1,
                 Address_Line_2 = AddressLine2,
