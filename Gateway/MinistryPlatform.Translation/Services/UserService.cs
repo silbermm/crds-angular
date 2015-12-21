@@ -72,7 +72,7 @@ namespace MinistryPlatform.Translation.Services
 
         public int GetContactIdByUserId(int userId)
         {
-            var records = _ministryPlatformService.GetPageViewRecords(2194, ApiLogin(), (""+userId+","));//  GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), ApiLogin(), ("," + email));
+            var records = _ministryPlatformService.GetPageViewRecords(2194, ApiLogin(), ("\"" + userId+ "\","));//  GetRecordsDict(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), ApiLogin(), ("," + email));
             if (records.Count != 1)
             {
                 throw new Exception("User ID did not return exactly one user record");
