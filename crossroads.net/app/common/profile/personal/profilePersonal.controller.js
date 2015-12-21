@@ -144,7 +144,7 @@
         vm.updatedPerson.lastName = vm.profileData.person.lastName;
       }
 
-      vm.modalInstance.close();
+      vm.modalInstance.close(vm.updatedPerson);
     }
 
     function convertPhone() {

@@ -20,10 +20,10 @@
     function crdsSignupController() {
       /*jshint validthis: true */
       var vm = this;
-      vm.locations = locations();
       vm.cmsInfo = SignupService.cmsInfo;
       vm.family = SignupService.family;
       vm.group = SignupService.group;
+      vm.locations = locations();
       vm.signupService = SignupService;
       vm.showCommunityGroups = showCommunityGroups;
       vm.showOnetimeEvent = showOnetimeEvent;
