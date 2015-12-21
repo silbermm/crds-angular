@@ -415,6 +415,16 @@ namespace MinistryPlatform.Translation.Services
                 {"DonorMessage", body}
             };
             var toEmail = _donorService.GetEmailViaDonorId(donorId);
+
+            var to = new List<Contact>()
+            {
+                new Contact()
+                {
+                     ContactId = toEmail.ContactId,
+                    EmailAddress = toEmail.Email
+                }
+            };
+
             var authorId = _communicationService.GetUserIdFromContactId(fromContactId);
             var fromEmail = _communicationService.GetEmailFromContactId(fromContactId);
 
@@ -422,9 +432,9 @@ namespace MinistryPlatform.Translation.Services
             {
                 AuthorUserId = authorId,
                 DomainId = 1,
-                ToContacts = {new Contact{ContactId = toEmail.ContactId, EmailAddress = toEmail.Email}},
-                FromContact = {ContactId = defaultContactId, EmailAddress = defaultContactEmail},
-                ReplyToContact = {ContactId = fromContactId, EmailAddress = fromEmail},
+                ToContacts = to,
+                FromContact = new Contact(){ContactId = defaultContactId, EmailAddress = defaultContactEmail},
+                ReplyToContact = new Contact(){ContactId = fromContactId, EmailAddress = fromEmail},
                 EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
                 EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
                 MergeData = messageData
