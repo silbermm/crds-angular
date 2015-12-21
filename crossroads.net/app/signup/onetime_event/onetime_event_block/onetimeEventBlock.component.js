@@ -87,7 +87,7 @@
         vm.saving = true;
         var toSave = getDataToSave();
 
-        if (_.isEmpty(toSave)) {
+        if (_.isEmpty(toSave.participants)) {
           vm.saving = false;
           $rootScope.$emit('notify', $rootScope.MESSAGES.chooseOne);
           return;
