@@ -38,7 +38,6 @@
     vm.editProfile = editProfile;
     vm.formValid = true;
     vm.hasParticipantID = hasParticipantID;
-    // vm.locations = vm.locations;
     vm.modalInstance = {};
     vm.person = {};
     vm.response = {};
@@ -109,12 +108,6 @@
 
                 vm.viewReady = true;
               });
-
-              // vm.locations = Lookup.query({
-              //   table: 'crossroadslocations'
-              // }, function(data) {
-              //   return data;
-              // });
 
               // this is the case where the group is full and
               // there is NO waitlist and at least one of your family IS a participant
