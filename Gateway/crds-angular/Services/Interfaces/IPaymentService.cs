@@ -24,7 +24,7 @@ namespace crds_angular.Services.Interfaces
         StripeCharge GetCharge(string chargeId);
         StripePlan CreatePlan(RecurringGiftDto recurringGiftDto, ContactDonor contactDonor);
         StripeSubscription CreateSubscription(string planName, string customer, DateTime trialEndDate);
-        StripeSubscription UpdateSubscriptionPlan(string customerId, string subscriptionId, string planId);
+        StripeSubscription UpdateSubscriptionPlan(string customerId, string subscriptionId, string planId, DateTime? trialEndDate = null);
         StripeSubscription GetSubscription(string customerId, string subscriptionId);
         StripeCustomer AddSourceToCustomer(string customerToken, string cardToken);
         StripeSubscription CancelSubscription(string customerId, string subscriptionId);

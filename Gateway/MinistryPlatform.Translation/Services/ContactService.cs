@@ -162,8 +162,7 @@ namespace MinistryPlatform.Translation.Services
                 City = recordsDict.ToString("City"),
                 State = recordsDict.ToString("State"),
                 County = recordsDict.ToString("County"),
-                Postal_Code = recordsDict.ToString("Postal_Code"),
-                Anniversary_Date = ParseAnniversaryDate(recordsDict.ToNullableDate("Anniversary_Date")),
+                Postal_Code = recordsDict.ToString("Postal_Code"),                
                 Contact_ID = recordsDict.ToInt("Contact_ID"),
                 Date_Of_Birth = recordsDict.ToDateAsString("Date_of_Birth"),
                 Email_Address = recordsDict.ToString("Email_Address"),
@@ -185,8 +184,13 @@ namespace MinistryPlatform.Translation.Services
                 Passport_Expiration = ParseExpirationDate(recordsDict.ToNullableDate("Passport_Expiration")),
                 Passport_Firstname = recordsDict.ToString("Passport_Firstname"),
                 Passport_Lastname = recordsDict.ToString("Passport_Lastname"),
-                Passport_Middlename = recordsDict.ToString("Passport_Middlename")              
+                Passport_Middlename = recordsDict.ToString("Passport_Middlename")                
             };
+            if (recordsDict.ContainsKey("Participant_Start_Date"))
+            {
+                contact.Participant_Start_Date = recordsDict.ToDate("Participant_Start_Date");
+            }
+
             if (recordsDict.ContainsKey("ID_Card"))
             {
                 contact.ID_Number = recordsDict.ToString("ID_Card");

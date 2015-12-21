@@ -1,4 +1,6 @@
-﻿namespace MinistryPlatform.Models
+﻿using System;
+
+namespace MinistryPlatform.Models
 {
     public class Participant
     {
@@ -8,5 +10,6 @@
         public string PreferredName { get; set; }
         public string DisplayName { get; set; }
         public int Age { get; set; }
+        public DateTime? ParticipantStart { get; set; }
     }
 }

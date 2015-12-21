@@ -40,6 +40,7 @@ namespace MinistryPlatform.Translation.Test.Services
             {
                 new Dictionary<string, object>
                 {
+                    {"Contact ID", 99999},
                     {"dp_RecordID", 100},
                     {"Email Address", "email-address"},
                     {"Nickname", "nick-name"},
