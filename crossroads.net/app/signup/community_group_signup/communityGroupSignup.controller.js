@@ -165,7 +165,6 @@
           } else {
             result = true;
             vm.atLeastOneParticipant = true;
-            vm.childCareAvailable = false;
           }
         }
       } else {
@@ -173,7 +172,6 @@
           result = false;
         } else {
           result = true;
-          vm.childCareAvailable = false;
         }
       }
 

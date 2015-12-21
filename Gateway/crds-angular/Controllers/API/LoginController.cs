@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
@@ -12,22 +11,21 @@ using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Controllers.API
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LoginController : MPAuth
     {
 
-        private readonly crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly IPersonService _personService;
         private readonly ILoginService _loginService;
 
-        public LoginController(ILoginService loginService, crds_angular.Services.Interfaces.IPersonService personService)
+        public LoginController(ILoginService loginService, IPersonService personService)
         {
             _loginService = loginService;
             _personService = personService;
         }
 
         [HttpPost]
-        [Route("api/resetpasswordrequest/")]
-        public IHttpActionResult ResetPassword(PasswordResetRequest request)
+        [Route("api/requestpasswordreset/")]
+        public IHttpActionResult RequestPasswordReset(PasswordResetRequest request)
         {
             try
             {
@@ -40,12 +38,35 @@ namespace crds_angular.Controllers.API
             }
         }
 
-        [HttpPost]
-        [Route("api/resetpasswordverify/")]
-        public IHttpActionResult AcceptResetRequest(PasswordResetVerification request)
+        [HttpGet]
+        [Route("api/verifyresettoken/{token}")]
+        public IHttpActionResult VerifyResetTokenRequest(string token)
         {
-            // Worked in successor story
-            throw new NotImplementedException();
+            try
+            {
+                ResetTokenStatus status = new ResetTokenStatus();
+                status.TokenValid = _loginService.VerifyResetToken(token);
+                return Ok(status);
+            }
+            catch (Exception ex)
+            {
+                return this.InternalServerError();
+            }
+        }
+
+        [HttpPost]
+        [Route("api/resetpassword/")]
+        public IHttpActionResult ResetPassword(PasswordReset request)
+        {
+            try
+            {
+                var userEmail = _loginService.ResetPassword(request.Password, request.Token);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return this.InternalServerError();
+            }
         }
 
         [ResponseType(typeof(LoginReturn))]

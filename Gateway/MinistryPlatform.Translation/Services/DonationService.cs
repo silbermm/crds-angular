@@ -406,6 +406,9 @@ namespace MinistryPlatform.Translation.Services
         public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName )
         {
             var template = _communicationService.GetTemplate(_donorMessageTemplateId);
+            var defaultContactId = AppSetting("DefaultGivingContactEmailId");
+            var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
+
             var messageData = new Dictionary<string, object>
             {
                 {"TripName", tripName},
@@ -420,7 +423,7 @@ namespace MinistryPlatform.Translation.Services
                 AuthorUserId = authorId,
                 DomainId = 1,
                 ToContacts = {new Contact{ContactId = toEmail.ContactId, EmailAddress = toEmail.Email}},
-                FromContact = {ContactId = fromContactId, EmailAddress = fromEmail},
+                FromContact = {ContactId = defaultContactId, EmailAddress = defaultContactEmail},
                 ReplyToContact = {ContactId = fromContactId, EmailAddress = fromEmail},
                 EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
                 EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
@@ -444,13 +447,15 @@ namespace MinistryPlatform.Translation.Services
             var toDonor = _pledgeService.GetDonorForPledge(pledgeId);
             var donorContact = _donorService.GetEmailViaDonorId(toDonor);
             var template = _communicationService.GetTemplate(_tripDonationMessageTemplateId);
+            var defaultContactId = AppSetting("DefaulContactEmailId");
+            var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
             var comm = new Communication
             {
                 AuthorUserId = 5,
                 DomainId = 1,
                 EmailBody = message,
                 EmailSubject = template.Subject,
-                FromContact = {ContactId = 5, EmailAddress = "updates@crossroads.net"},
+                FromContact = {ContactId = defaultContactId, EmailAddress = defaultContactEmail},
                 ReplyToContact = { ContactId = 5, EmailAddress = "updates@crossroads.net" },
                 ToContacts = {new Contact{ContactId = donorContact.ContactId, EmailAddress = donorContact.Email}},
                 MergeData = new Dictionary<string, object>()

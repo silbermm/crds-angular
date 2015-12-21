@@ -18,6 +18,7 @@ namespace MinistryPlatform.Models
         public int EventTypeId { get; set; }
         public bool ChildCareAvailable { get; set; }
         public string Congregation { get; set; }
+        public int MinimumAge { get; set; }
 
         public Group()
         {

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Web.Helpers;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Security;
@@ -11,7 +10,6 @@ using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Controllers.API
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LookupController : MPAuth
     {
         private IConfigurationWrapper _configurationWrapper;

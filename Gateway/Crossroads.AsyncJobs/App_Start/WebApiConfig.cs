@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Configuration;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
 
@@ -8,7 +9,8 @@ namespace Crossroads.AsyncJobs
     {
         public static void Register(HttpConfiguration config)
         {
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute(ConfigurationManager.AppSettings["CORS"], "*", "*");
+            cors.SupportsCredentials = true;
             config.EnableCors(cors);
 
             // Web API configuration and services

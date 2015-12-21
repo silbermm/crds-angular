@@ -62,6 +62,7 @@
     vm.savePersonal = savePersonal;
     vm.showMobilePhoneError = showMobilePhoneError;
     vm.submitted = false;
+    vm.today = moment();
     vm.underThirteen = underThirteen;
     vm.validation = Validation;
     vm.viewReady = false;
@@ -98,8 +99,8 @@
 
       });
 
+      vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
       underThirteen();
-
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 

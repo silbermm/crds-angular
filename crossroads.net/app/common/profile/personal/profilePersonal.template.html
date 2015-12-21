@@ -188,15 +188,14 @@
                  datepicker-popup="MM/yyyy"
                  datepicker-options="{minMode: 'month'}"
                  datepicker-mode="'month'"
-                 ng-model='profile.profileData.person.anniversaryDate'
+                 ng-model='profile.profileData.person.participantStartDate'
                  is-open='profile.startAttendingOpen'
                  close-text="Close"
                  min-date={{profile.crossroadsStartDate}}
                  max-date={{profile.today}}
                  ng-model-options="{updateOn:'blur'}"
-                 datepicker-validator
-                 ng-required="true"
-                 required>
+                 required
+                 datepicker-validator>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="profile.openStartAttendingDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>

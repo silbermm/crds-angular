@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using crds_angular.App_Start;
 using crds_angular.Models.Crossroads.Profile;
@@ -16,10 +17,13 @@ namespace crds_angular.test.Services
         private Mock<MPInterfaces.IContactService> _contactService;
         private Mock<MPInterfaces.IAuthenticationService> _authenticationService;
         private Mock<MPInterfaces.IApiUserService> _apiUserService;
+        private Mock<MPInterfaces.IParticipantService> _participantService;
 
         private PersonService _fixture;
         private MyContact _myContact;
-        private List<HouseholdMember> _householdMembers;            
+        private List<HouseholdMember> _householdMembers;
+
+        private readonly DateTime startDate = new DateTime(2015, 2, 21);
 
         [SetUp]
         public void SetUp()
@@ -29,6 +33,7 @@ namespace crds_angular.test.Services
             _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<string>(), It.IsAny<int>())).Returns(contactAllAttributesDto);            
             _contactService = new Mock<MPInterfaces.IContactService>();            
             _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();
+            _participantService = new Mock<MPInterfaces.IParticipantService>();
 
             _apiUserService = new Mock<MPInterfaces.IApiUserService>();
             _apiUserService.Setup(m => m.GetToken()).Returns("something");       
@@ -54,17 +59,17 @@ namespace crds_angular.test.Services
                 City = "city",
                 State = "state",
                 Postal_Code = "postal-code",
-                Anniversary_Date = "anniversary-date",
                 Foreign_Country = "foreign-country",
                 Home_Phone = "home-phone",
                 Congregation_ID = 8,
                 Household_ID = 7,
                 Household_Name = "hh name",
-                Address_ID = 6
+                Address_ID = 6,
+                Participant_Start_Date = startDate
             };
             _householdMembers = new List<HouseholdMember>();
 
-            _fixture = new PersonService(_contactService.Object, _contactAttributeService.Object, _apiUserService.Object);
+            _fixture = new PersonService(_contactService.Object, _contactAttributeService.Object, _apiUserService.Object, _participantService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -101,7 +106,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual("anniversary-date", person.AnniversaryDate);
+            Assert.AreEqual(startDate, person.ParticipantStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
@@ -142,7 +147,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual("anniversary-date", person.AnniversaryDate);
+            Assert.AreEqual(startDate, person.ParticipantStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
