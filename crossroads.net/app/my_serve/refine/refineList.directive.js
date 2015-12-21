@@ -59,6 +59,7 @@
         filter(data, false);
         $rootScope.$emit('filterDone', scope.servingDays);
       });
+
       //////////////////////////////////
 
       function activate() {
