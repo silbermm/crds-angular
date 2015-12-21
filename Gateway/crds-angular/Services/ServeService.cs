@@ -213,7 +213,7 @@ namespace crds_angular.Services
             return servingDays;
         }
 
-        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token)
+        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded)
         {               
             var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, _apiUserService.GetToken());
             var min = minNeeded;

@@ -11,7 +11,7 @@ namespace crds_angular.Services.Interfaces
         DateTime GetLastServingDate(int opportunityId, string token);
         List<QualifiedServerDto> GetQualifiedServers(int groupId, string token);
         List<ServingDay> GetServingDays(string token, int contactId, long from, long to);
-        Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token);
+        Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded);
         List<int> SaveServeRsvp(string token, SaveRsvpDto dto);
     }
 }
