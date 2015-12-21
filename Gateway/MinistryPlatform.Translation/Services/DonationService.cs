@@ -448,8 +448,7 @@ namespace MinistryPlatform.Translation.Services
             var donorContact = _donorService.GetEmailViaDonorId(toDonor);
             var template = _communicationService.GetTemplate(_tripDonationMessageTemplateId);
 
-            var toContacts = new List<Contact>();
-            toContacts.Add(new Contact { ContactId = donorContact.ContactId, EmailAddress = donorContact.Email });
+            var toContacts = new List<Contact> {new Contact {ContactId = donorContact.ContactId, EmailAddress = donorContact.Email}};
 
             var from = new Contact()
             {
@@ -457,7 +456,7 @@ namespace MinistryPlatform.Translation.Services
                 EmailAddress = "updates@crossroads.net"
             };
 
-            var defaultContactId = AppSetting("DefaulContactEmailId");
+            var defaultContactId = AppSetting("DefaultContactEmailId");
             var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
 
             var comm = new Communication
