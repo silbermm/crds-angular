@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using System.Web.Http.Cors;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Json;
@@ -12,14 +11,13 @@ using MinistryPlatform.Models.DTO;
 
 namespace crds_angular.Controllers.API
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*", SupportsCredentials = true)]
     public class LoginController : MPAuth
     {
 
-        private readonly crds_angular.Services.Interfaces.IPersonService _personService;
+        private readonly IPersonService _personService;
         private readonly ILoginService _loginService;
 
-        public LoginController(ILoginService loginService, crds_angular.Services.Interfaces.IPersonService personService)
+        public LoginController(ILoginService loginService, IPersonService personService)
         {
             _loginService = loginService;
             _personService = personService;
