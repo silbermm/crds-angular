@@ -33,6 +33,7 @@ namespace crds_angular.test.Services
         private Mock<IGroupService> _groupService;
         private Mock<ICommunicationService> _communicationService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
+        private Mock<IApiUserService> _apiUserService;
 
         private ServeService _fixture;
 
@@ -86,6 +87,7 @@ namespace crds_angular.test.Services
             _groupService = new Mock<IGroupService>();
             _communicationService = new Mock<ICommunicationService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
+            _apiUserService = new Mock<IApiUserService>();
 
             fakeOpportunity.EventTypeId = 3;
             fakeOpportunity.GroupContactId = 23;
@@ -151,7 +153,7 @@ namespace crds_angular.test.Services
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object, _groupService.Object,
-                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object);
+                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object, _apiUserService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -335,7 +337,7 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.GetOpportunityResponses(opportunityId, It.IsAny<string>()))
                 .Returns(opportunity.Responses);
 
-            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, min, max, It.IsAny<string>());
+            var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, min, max);
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Available, expectedCapacity.Available);
@@ -433,7 +435,7 @@ namespace crds_angular.test.Services
                 .Returns(opportunity.Responses);
 
             var capacity = _fixture.OpportunityCapacity(opportunityId, eventId, opportunity.MinimumNeeded,
-                opportunity.MaximumNeeded, It.IsAny<string>());
+                opportunity.MaximumNeeded);
 
             Assert.IsNotNull(capacity);
             Assert.AreEqual(capacity.Display, false);

@@ -141,7 +141,7 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var oppCapacity = _serveService.OpportunityCapacity(oppCap.Id, oppCap.EventId, oppCap.Min, oppCap.Max, token);
+                    var oppCapacity = _serveService.OpportunityCapacity(oppCap.Id, oppCap.EventId, oppCap.Min, oppCap.Max);
                     if (oppCapacity == null)
                     {
                         return Unauthorized();
