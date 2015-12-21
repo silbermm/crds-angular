@@ -21,6 +21,7 @@ namespace MinistryPlatform.Translation.Services
         private readonly int GroupsParticipantsSubPageId = Convert.ToInt32(AppSettings("GroupsParticipantsSubPage"));
         private readonly int GroupsPageId = Convert.ToInt32(AppSettings("Groups"));
         private readonly int GroupsSubgroupsPageId = Convert.ToInt32(AppSettings("GroupsSubgroups"));
+        private readonly int DefaultEmailContactId = Convert.ToInt32(AppSettings("DefaultContactEmailId"));
         private readonly int GroupSignupRelationsPageId = Convert.ToInt32((AppSettings("GroupSignUpRelations")));
         private readonly int CommunityGroupConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupConfirmationTemplateId"));
         private readonly int CommunityGroupWaitListConfirmationTemplateId = Convert.ToInt32(AppSettings("CommunityGroupWaitListConfirmationTemplateId"));
@@ -60,7 +61,7 @@ namespace MinistryPlatform.Translation.Services
                 {"Child_Care_Requested", childCareNeeded}
             };
 
-            int groupParticipantId =
+            var groupParticipantId =
                 WithApiLogin<int>(
                     apiToken =>
                     {
@@ -88,7 +89,7 @@ namespace MinistryPlatform.Translation.Services
                     logger.Debug("No group found for group id " + groupId);
                     return (null);
                 }
-                Group g = new Group();
+                var g = new Group();
 
                 object gid = null;
                 groupDetails.TryGetValue("Group_ID", out gid);
@@ -307,20 +308,10 @@ namespace MinistryPlatform.Translation.Services
 
         public void SendCommunityGroupConfirmationEmail(int participantId, int groupId, bool waitlist, bool childcareNeeded)
         {
-            MessageTemplate emailTemplate;
-            if (waitlist)
-            {
-                emailTemplate = _communicationService.GetTemplate(CommunityGroupWaitListConfirmationTemplateId);
-            }
-            else
-            {
-                emailTemplate = _communicationService.GetTemplate(CommunityGroupConfirmationTemplateId);
-            }            
-            var fromAddress = _communicationService.GetEmailFromContactId(7);
+            var emailTemplate = _communicationService.GetTemplate(waitlist ? CommunityGroupWaitListConfirmationTemplateId : CommunityGroupConfirmationTemplateId);
             var toContact = _contactService.GetContactIdByParticipantId(participantId);
             var toContactInfo = _contactService.GetContactById(toContact);
             var groupInfo = getGroupDetails(groupId);
-            var churchAdminContactId = Convert.ToInt32(AppSettings("ChurchAdminContact"));
 
             var mergeData = new Dictionary<string, object>
             {
@@ -333,11 +324,11 @@ namespace MinistryPlatform.Translation.Services
             var domainId = Convert.ToInt32(AppSettings("DomainId"));
             var from = new Contact()
             {
-                ContactId = churchAdminContactId,
-                EmailAddress = fromAddress
+                ContactId = DefaultEmailContactId,
+                EmailAddress = _communicationService.GetEmailFromContactId(DefaultEmailContactId)
             };
 
-            List<Contact> to = new List<Contact>
+            var to = new List<Contact>
             {
                 new Contact {
                     ContactId = toContact,
@@ -349,7 +340,7 @@ namespace MinistryPlatform.Translation.Services
             { 
                 EmailBody = emailTemplate.Body, 
                 EmailSubject = emailTemplate.Subject,
-                AuthorUserId = churchAdminContactId,
+                AuthorUserId = 5,
                 DomainId = domainId,
                 FromContact = from,
                 MergeData = mergeData,

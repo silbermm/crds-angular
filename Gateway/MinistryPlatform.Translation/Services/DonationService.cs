@@ -406,6 +406,9 @@ namespace MinistryPlatform.Translation.Services
         public void SendMessageToDonor(int donorId, int donationDistributionId, int fromContactId, string body, string tripName )
         {
             var template = _communicationService.GetTemplate(_donorMessageTemplateId);
+            var defaultContactId = AppSetting("DefaultGivingContactEmailId");
+            var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
+
             var messageData = new Dictionary<string, object>
             {
                 {"TripName", tripName},
@@ -420,7 +423,7 @@ namespace MinistryPlatform.Translation.Services
                 AuthorUserId = authorId,
                 DomainId = 1,
                 ToContacts = {new Contact{ContactId = toEmail.ContactId, EmailAddress = toEmail.Email}},
-                FromContact = {ContactId = fromContactId, EmailAddress = fromEmail},
+                FromContact = {ContactId = defaultContactId, EmailAddress = defaultContactEmail},
                 ReplyToContact = {ContactId = fromContactId, EmailAddress = fromEmail},
                 EmailSubject = _communicationService.ParseTemplateBody(template.Subject, messageData),
                 EmailBody = _communicationService.ParseTemplateBody(template.Body, messageData),
@@ -453,6 +456,9 @@ namespace MinistryPlatform.Translation.Services
                 ContactId = 5,
                 EmailAddress = "updates@crossroads.net"
             };
+
+            var defaultContactId = AppSetting("DefaulContactEmailId");
+            var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
 
             var comm = new Communication
             {

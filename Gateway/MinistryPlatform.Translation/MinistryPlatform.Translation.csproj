@@ -97,6 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\People\MpParticipant.cs" />
     <Compile Include="Models\People\Participant.cs" />
     <Compile Include="Services\BulkEmailRepository.cs" />
     <Compile Include="Enum\NumericDayOfWeek.cs" />

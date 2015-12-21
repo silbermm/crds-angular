@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using crds_angular.Models.Json;
+using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Stewardship
 {
@@ -28,5 +30,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("ended_at")]
         public string EndedAt { get; set; }
 
+        [JsonProperty("trial_end")]
+        [JsonConverter(typeof(StripeDateTimeConverter))]
+        public DateTime? TrialEnd { get; set; }
     }
 }

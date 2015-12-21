@@ -98,9 +98,9 @@ namespace crds_angular.Services
         private void SendConfirmation(int childcareEventId, Participant participant, IEnumerable<int> kids )
         {
             var templateId = _configurationWrapper.GetConfigIntValue("ChildcareConfirmationTemplate");
-            var authorUserId = _configurationWrapper.GetConfigIntValue("EmailAuthorId");
+            var authorUserId = _configurationWrapper.GetConfigIntValue("DefaultUserAuthorId");
             var template = _communicationService.GetTemplate(templateId);
-            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             const int domainId = 1;
 
             var childEvent = _eventService.GetEvent(childcareEventId);
@@ -171,9 +171,9 @@ namespace crds_angular.Services
         {
             var daysBeforeEvent = _configurationWrapper.GetConfigIntValue("NumberOfDaysBeforeEventToSend");
             var templateId = _configurationWrapper.GetConfigIntValue("ChildcareRequestTemplate");
-            var authorUserId = _configurationWrapper.GetConfigIntValue("EmailAuthorId");
+            var authorUserId = _configurationWrapper.GetConfigIntValue("DefaultUserAuthorId"); ;
             var template = _communicationService.GetTemplate(templateId);
-            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             const int domainId = 1;
             var token = _apiUserService.GetToken();
 

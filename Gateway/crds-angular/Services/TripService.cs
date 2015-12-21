@@ -547,7 +547,7 @@ namespace crds_angular.Services
         private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData = null)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
-            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
+            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultContactEmailId");
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,
