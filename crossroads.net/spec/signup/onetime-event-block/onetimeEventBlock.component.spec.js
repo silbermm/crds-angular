@@ -24,9 +24,22 @@ describe('Onetime Signup Event Block', function() {
     $provide.value('$state', { get: function() {} });
   }));
 
+  beforeEach(inject(function(_$rootScope_) {
+    $rootScope = _$rootScope_;
+
+    $rootScope.MESSAGES = {
+      rsvpSaved: 'rsvpSaved',
+      rsvpFailed: 'rsvpFailed',
+      chooseOne: 'chooseOne',
+      oneTimeEventChildcarePopup: {content: 'hi'}
+    };
+
+    spyOn($rootScope, '$emit').and.callThrough();
+
+  }));
+
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector) {
     $compile = _$compile_;
-    $rootScope = _$rootScope_;
 
     EventService = $injector.get('EventService');
     $httpBackend = $injector.get('$httpBackend');
@@ -41,14 +54,6 @@ describe('Onetime Signup Event Block', function() {
 
     scope.$digest();
     isolated = element.isolateScope();
-
-    spyOn($rootScope, '$emit').and.callThrough();
-
-    $rootScope.MESSAGES = {
-      rsvpSaved: 'rsvpSaved',
-      rsvpFailed: 'rsvpFailed',
-      chooseOne: 'chooseOne'
-    };
 
   }));
 
