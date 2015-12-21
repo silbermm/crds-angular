@@ -146,6 +146,7 @@
                          class="form-group col-sm-6"
                          ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'crLocation')}">
                       <label for="provider" class="required">Crossroads Location</label>
+                      <pre>{{ household.locations }}</pre>
                       <select class="form-control col-sm-12"
                               name="crLocation"
                               required

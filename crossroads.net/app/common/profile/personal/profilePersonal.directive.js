@@ -22,7 +22,7 @@
         profileData: '=?',
         updatedPerson: '=?',
         enforceAgeRestriction: '=?',
-        locations: '=',
+        locations: '=?',
         profileParentForm: '=?'
       },
       templateUrl: 'personal/profilePersonal.template.html',
