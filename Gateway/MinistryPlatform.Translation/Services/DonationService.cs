@@ -447,17 +447,27 @@ namespace MinistryPlatform.Translation.Services
             var toDonor = _pledgeService.GetDonorForPledge(pledgeId);
             var donorContact = _donorService.GetEmailViaDonorId(toDonor);
             var template = _communicationService.GetTemplate(_tripDonationMessageTemplateId);
-            var defaultContactId = AppSetting("DefaulContactEmailId");
+
+            var toContacts = new List<Contact> {new Contact {ContactId = donorContact.ContactId, EmailAddress = donorContact.Email}};
+
+            var from = new Contact()
+            {
+                ContactId = 5,
+                EmailAddress = "updates@crossroads.net"
+            };
+
+            var defaultContactId = AppSetting("DefaultContactEmailId");
             var defaultContactEmail = _communicationService.GetEmailFromContactId(defaultContactId);
+
             var comm = new Communication
             {
                 AuthorUserId = 5,
                 DomainId = 1,
                 EmailBody = message,
                 EmailSubject = template.Subject,
-                FromContact = {ContactId = defaultContactId, EmailAddress = defaultContactEmail},
-                ReplyToContact = { ContactId = 5, EmailAddress = "updates@crossroads.net" },
-                ToContacts = {new Contact{ContactId = donorContact.ContactId, EmailAddress = donorContact.Email}},
+                FromContact = from,
+                ReplyToContact = from,
+                ToContacts = toContacts,
                 MergeData = new Dictionary<string, object>()
             };
             _communicationService.SendMessage(comm);

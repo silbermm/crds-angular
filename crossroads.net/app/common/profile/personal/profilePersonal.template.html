@@ -194,7 +194,8 @@
                  min-date={{profile.crossroadsStartDate}}
                  max-date={{profile.today}}
                  ng-model-options="{updateOn:'blur'}"
-                 required>
+                 required
+                 datepicker-validator>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="profile.openStartAttendingDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>

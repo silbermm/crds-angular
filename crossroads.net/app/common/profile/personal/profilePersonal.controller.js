@@ -62,6 +62,7 @@
     vm.savePersonal = savePersonal;
     vm.showMobilePhoneError = showMobilePhoneError;
     vm.submitted = false;
+    vm.today = moment();
     vm.underThirteen = underThirteen;
     vm.validation = Validation;
     vm.viewReady = false;
