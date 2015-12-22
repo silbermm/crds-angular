@@ -68,7 +68,7 @@
       }
 
       if (!locationName) {
-        return 'Select Crossroads Site...';
+        return 'Select Crossroads Location...';
       }
 
       return locationName;

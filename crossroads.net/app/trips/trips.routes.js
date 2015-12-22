@@ -86,7 +86,7 @@
         data: {
           isProtected: true,
           meta: {
-            title: 'My Trips',
+            title: 'Trip Progress',
             description: ''
           }
         },
