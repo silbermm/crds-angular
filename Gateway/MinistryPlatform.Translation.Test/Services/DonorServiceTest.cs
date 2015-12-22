@@ -1463,7 +1463,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["User_Email"], result[0].EmailAddress);
             Assert.AreEqual(records[0]["Frequency"], result[0].Frequency);
             Assert.AreEqual(records[0]["Recurrence"], result[0].Recurrence);
-            Assert.AreEqual(records[0]["Start_Date"], result[0].StartDate);
+            Assert.AreEqual(((DateTime)records[0]["Start_Date"]).ToUniversalTime().Date, result[0].StartDate);
             Assert.AreEqual(records[0]["End_Date"], result[0].EndDate);
             Assert.AreEqual(records[0]["Amount"], result[0].Amount);
             Assert.AreEqual(records[0]["Program_ID"], result[0].ProgramID);
@@ -1481,7 +1481,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["User_Email"], result[1].EmailAddress);
             Assert.AreEqual(records[1]["Frequency"], result[1].Frequency);
             Assert.AreEqual(records[1]["Recurrence"], result[1].Recurrence);
-            Assert.AreEqual(records[1]["Start_Date"], result[1].StartDate);
+            Assert.AreEqual(((DateTime)records[1]["Start_Date"]).ToUniversalTime().Date, result[1].StartDate);
             Assert.AreEqual(records[1]["End_Date"], result[1].EndDate);
             Assert.AreEqual(records[1]["Amount"], result[1].Amount);
             Assert.AreEqual(records[1]["Program_ID"], result[1].ProgramID);
@@ -1499,7 +1499,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[2]["User_Email"], result[2].EmailAddress);
             Assert.AreEqual(records[2]["Frequency"], result[2].Frequency);
             Assert.AreEqual(records[2]["Recurrence"], result[2].Recurrence);
-            Assert.AreEqual(records[2]["Start_Date"], result[2].StartDate);
+            Assert.AreEqual(((DateTime)records[2]["Start_Date"]).ToUniversalTime().Date, result[2].StartDate);
             Assert.AreEqual(records[2]["End_Date"], result[2].EndDate);
             Assert.AreEqual(records[2]["Amount"], result[2].Amount);
             Assert.AreEqual(records[2]["Program_ID"], result[2].ProgramID);

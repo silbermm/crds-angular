@@ -244,6 +244,11 @@
     }
 
     function apiRecurringGift(apiMethod, def, recurringGiftRequest = null, recurringGiftId = null, impersonateDonorId = null) {
+      if (recurringGiftRequest && recurringGiftRequest.start_date) {
+        // Convert the start_date to UTC so we don't accidentally change the date on the community member
+        recurringGiftRequest.start_date = moment(recurringGiftRequest.start_date).utc().format();
+      }
+
       $http({
         method: apiMethod === 'QUERY' ? 'GET' : apiMethod,
         isArray: (apiMethod === 'QUERY'),
