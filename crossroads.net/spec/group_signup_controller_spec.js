@@ -127,26 +127,6 @@ describe('GroupSignupController', function() {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  // it('should get logged-in person when instantiated', function() {
-  //   console.log('successResponse');
-  //   console.log(successResponse);
-  //   $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
-  //     .respond(successResponse);
-  //
-  //   var controller = groupSignupController();
-  //   console.log('controller:');
-  //   console.log(controller);
-  //   verifyExpectations();
-  //   var person = controller.person;
-  //   console.log('person:');
-  //   console.log(person['First_Name']);
-  //   expect(person).toBeDefined();
-  //   expect(person['First_Name']).toEqual('Shankar');
-  //   expect(person['Last_Name']).toEqual('Poncelet');
-  //   expect(person['Email_Address']).toEqual('test@test.com');
-  //
-  // });
-
   it('should signup a person for a community group', function() {
     $httpBackend.when('POST', window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1/participants')
       .respond(successResponse);
@@ -295,10 +275,9 @@ describe('GroupSignupController', function() {
   });
 
   function verifyExpectations() {
-    // $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile');
-    // $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test%2F');
+    $httpBackend.expectGET(window.__env__['CRDS_CMS_ENDPOINT'] + '/api/Page/?link=test%2F');
 
-    // $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1');
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/group/1');
     $httpBackend.flush();
   }
 });
