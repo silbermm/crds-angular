@@ -453,6 +453,7 @@
           if (!isFormDirty()) {
             scope.teamForm.$setPristine();
           }
+
           return true;
         }, function(err) {
 

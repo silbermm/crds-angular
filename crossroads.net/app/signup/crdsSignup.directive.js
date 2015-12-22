@@ -23,6 +23,7 @@
       vm.cmsInfo = SignupService.cmsInfo;
       vm.family = SignupService.family;
       vm.group = SignupService.group;
+      vm.locations = SignupService.locations;
       vm.signupService = SignupService;
       vm.showCommunityGroups = showCommunityGroups;
       vm.showOnetimeEvent = showOnetimeEvent;
@@ -34,6 +35,7 @@
       function showOnetimeEvent() {
         return vm.signupService.cmsInfo.pages[0].className === constants.CMS.PAGENAMES.ONETIMEEVENTS;
       }
+
     }
   }
 })();

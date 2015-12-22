@@ -105,23 +105,24 @@ describe('AdminRecurringGift', function() {
   }));
 
   beforeEach(inject(function($injector, _$controller_) {
-      scope = $rootScope.$new();
-      $httpBackend = $injector.get('$httpBackend');
-      $log = $injector.get('$log');
-      rootScope = $injector.get('$rootScope');
-      DonationService = $injector.get('DonationService');
-      GiveTransferService = $injector.get('GiveTransferService');
+    var $rootScope = $injector.get('$rootScope');
+    scope = $rootScope.$new();
+    $httpBackend = $injector.get('$httpBackend');
+    $log = $injector.get('$log');
+    rootScope = $injector.get('$rootScope');
+    DonationService = $injector.get('DonationService');
+    GiveTransferService = $injector.get('GiveTransferService');
 
-      scope = rootScope.$new();
-      GiveTransferService.impersonateDonorId = 12;
+    scope = rootScope.$new();
+    GiveTransferService.impersonateDonorId = 12;
 
-      vm = _$controller_('AdminRecurringGiftController',
-                             {$log: $log,
-                               $modal: $modal,
-                               $rootScope: rootScope,
-                               DonationService: DonationService,
-                               GiveTransferService: GiveTransferService});
-    })
+    vm = _$controller_('AdminRecurringGiftController',
+                           {$log: $log,
+                             $modal: $modal,
+                             $rootScope: rootScope,
+                             DonationService: DonationService,
+                             GiveTransferService: GiveTransferService});
+  })
   );
 
   afterEach(function() {
@@ -132,7 +133,8 @@ describe('AdminRecurringGift', function() {
   describe('On initialization', function() {
     it('should set impersonation error when user not allowed to impersonate', function() {
       var error = {};
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(403, error);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
+        .respond(403, error);
       $httpBackend.flush();
 
       expect(vm.impersonationError).toBeTruthy();
@@ -141,7 +143,8 @@ describe('AdminRecurringGift', function() {
 
     it('should set impersonation error when user to impersonate is not found', function() {
       var error = {};
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(409, error);
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
+        .respond(409, error);
       $httpBackend.flush();
 
       expect(vm.impersonationError).toBeTruthy();
@@ -164,7 +167,8 @@ describe('AdminRecurringGift', function() {
     });
 
     it('should not have recurring gifts if there are no recurring gifts', function() {
-      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12').respond(404, {});
+      $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/donor/recurrence?impersonateDonorId=12')
+        .respond(404, {});
       $httpBackend.flush();
 
       expect(vm.impersonateDonorId).toBe(12);
