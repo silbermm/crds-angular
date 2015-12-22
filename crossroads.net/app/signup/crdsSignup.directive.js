@@ -19,6 +19,7 @@
 
     function crdsSignupController() {
       /*jshint validthis: true */
+      console.log('zzzzzzz');
       var vm = this;
       vm.cmsInfo = SignupService.cmsInfo;
       vm.family = SignupService.family;

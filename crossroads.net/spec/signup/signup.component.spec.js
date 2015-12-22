@@ -33,8 +33,19 @@ describe('Signup Component', function() {
     scope = $rootScope.$new();
     element = '<crds-signup></crds-signup>';
     element = $compile(element)(scope);
+    console.log('aaaaa');
+    console.log(element);
+    console.log('aaaaa');
     scope.$digest();
+
+    console.log('bbbbb');
+    console.log(element);
+    console.log('bbbbb');
     isolated = element.isolateScope();
+
+    console.log('ccccc');
+    console.log(isolated);
+    console.log('ccccc');
   }));
 
   it('should show the onetimesignup component', function() {
