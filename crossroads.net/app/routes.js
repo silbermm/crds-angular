@@ -257,8 +257,9 @@
           loggedin: crds_utilities.checkLoggedin,
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
+            var link = addTrailingSlashIfNecessary($stateParams.link);
             return Page.get({
-              url: $stateParams.link
+              url: link
             }).$promise;
           }
         }
@@ -418,7 +419,7 @@
       })
       .state('tools.volunteerContact', {
         url: '/volunteer-contact',
-        template: '<volunteer-contact></volunteer-contact>', 
+        template: '<volunteer-contact></volunteer-contact>',
         resolve: {
           MPTools: 'MPTools'
         }
