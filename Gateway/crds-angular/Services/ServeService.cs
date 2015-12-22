@@ -36,6 +36,7 @@ namespace crds_angular.Services
         private readonly ICommunicationService _communicationService;
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IApiUserService _apiUserService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -56,7 +57,8 @@ namespace crds_angular.Services
                             IGroupService groupService,
                             ICommunicationService communicationService,
                             IAuthenticationService authenticationService,
-                            IConfigurationWrapper configurationWrapper)
+                            IConfigurationWrapper configurationWrapper,
+                            IApiUserService apiUserService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -68,6 +70,7 @@ namespace crds_angular.Services
             _communicationService = communicationService;
             _authenticationService = authenticationService;
             _configurationWrapper = configurationWrapper;
+            _apiUserService = apiUserService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(string token)
@@ -210,9 +213,9 @@ namespace crds_angular.Services
             return servingDays;
         }
 
-        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token)
-        {
-            var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, token);
+        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded)
+        {               
+            var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, _apiUserService.GetToken());
             var min = minNeeded;
             var max = maxNeeded;
             var signedUp = opportunity.Count(r => r.Event_ID == eventId);

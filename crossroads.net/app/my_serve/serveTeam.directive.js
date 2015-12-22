@@ -40,6 +40,8 @@
       scope.buttonDisabled = false;
       scope.buttonState = buttonState;
       scope.cancel = cancel;
+      scope.changeFromDate = changeFromDate;
+      scope.changeToDate = changeToDate;
       scope.currentActiveTab = null;
       scope.currentMember = null;
       scope.datesDisabled = true;
