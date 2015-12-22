@@ -45,6 +45,7 @@
     vm.householdForm = {};
     vm.householdInfo = {};
     vm.householdPhoneFocus = householdPhoneFocus;
+    vm.isCrossroadsAttendee = isCrossroadsAttendee;
     vm.isHouseholdCollapsed = true;
     vm.hstep = 1;
     vm.isDobError = isDobError;
@@ -244,6 +245,13 @@
       } else {
         vm.requireEmail = true;
       }
+    }
+
+    function isCrossroadsAttendee() {
+      var nonCrossroadsLocations = require('crds-constants').NON_CROSSROADS_LOCATIONS;
+      return vm.profileData.person.congregationId
+        && vm.profileData.person.congregationId != nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS
+        && vm.profileData.person.congregationId != nonCrossroadsLocations.NOT_SITE_SPECIFIC;
     }
 
   }

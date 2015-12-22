@@ -50,6 +50,10 @@
       VICTIM_OF_ABUSE: 3973,
       START_ATTEND_REASON: 59
     },
+    NON_CROSSROADS_LOCATIONS: {
+      I_DO_NOT_ATTEND_CROSSROADS: 2,
+      NOT_SITE_SPECIFIC: 5
+    },
     CMS: {
       PAGENAMES: {
         COMMUNITYGROUPS: 'CommunityGroupSignupPage',
