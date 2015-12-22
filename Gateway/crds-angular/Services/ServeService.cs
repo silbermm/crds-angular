@@ -107,7 +107,7 @@ namespace crds_angular.Services
 
             relationships.AddRange(family);
 
-            return relationships;
+            return relationships.OrderByDescending(s => s.Age).ToList();
         }
 
         public DateTime GetLastServingDate(int opportunityId, string token)

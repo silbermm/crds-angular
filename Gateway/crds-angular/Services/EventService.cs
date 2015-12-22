@@ -66,36 +66,38 @@ namespace crds_angular.Services
             return _eventService.GetEvent(eventId);
         }
 
-        public void RegisterForEvent(List<EventRsvpDTO> eventDto, String token)
+        public void RegisterForEvent(EventRsvpDto eventDto, string token)
         {
+            var defaultGroupRoleId = AppSetting("Group_Role_Default_ID");
+            var today = DateTime.Today;
             try
             {
-                var saved = eventDto.Select(dto =>
+                var saved = eventDto.Participants.Select(participant =>
                 {
-                    var groupParticipantId = _groupParticipantService.Get(dto.GroupId, dto.ParticipantId);
+                    var groupParticipantId = _groupParticipantService.Get(eventDto.GroupId, participant.ParticipantId);
                     if (groupParticipantId == 0)
                     {
-                        groupParticipantId = _groupService.addParticipantToGroup(dto.ParticipantId,
-                                                                                 dto.GroupId,
-                                                                                 AppSetting("Group_Role_Default_ID"),
-                                                                                 dto.ChildCareNeeded,
-                                                                                 DateTime.Today);
+                        groupParticipantId = _groupService.addParticipantToGroup(participant.ParticipantId,
+                                                                                 eventDto.GroupId,
+                                                                                 defaultGroupRoleId,
+                                                                                 participant.ChildcareRequested,
+                                                                                 today);
                     }
 
                     // validate that there is not a participant record before creating
                     var retVal =
                         Functions.IntegerReturnValue(
                             () =>
-                                !_eventService.EventHasParticipant(dto.EventId, dto.ParticipantId)
-                                    ? _eventService.RegisterParticipantForEvent(dto.ParticipantId, dto.EventId, dto.GroupId, groupParticipantId)
+                                !_eventService.EventHasParticipant(eventDto.EventId, participant.ParticipantId)
+                                    ? _eventService.RegisterParticipantForEvent(participant.ParticipantId, eventDto.EventId, eventDto.GroupId, groupParticipantId)
                                     : 1);
 
                     return new RegisterEventObj()
                     {
-                        EventId = dto.EventId,
-                        ParticipantId = dto.ParticipantId,
+                        EventId = eventDto.EventId,
+                        ParticipantId = participant.ParticipantId,
                         RegisterResult = retVal,
-                        ChildcareRequested = dto.ChildCareNeeded
+                        ChildcareRequested = participant.ChildcareRequested
                     };
                 }).ToList();
 

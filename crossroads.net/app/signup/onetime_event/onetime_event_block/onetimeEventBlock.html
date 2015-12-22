@@ -13,21 +13,30 @@
         <form ng-submit='onetimeEventBlock.submit()'>
           <div class="row">
             <div class="col-md-12">
-              <h5> Please indicate who is coming </h5>
+              <h5> Please indicate who will attend the event </h5>
               <div ng-repeat="member in onetimeEventBlock.thisFamily">
-                <div class="checkbox" > 
-                  <label> 
-                    <input type='checkbox' ng-model="member.selected" >
+                <div class="checkbox" >
+                  <label>
+                    <input type='checkbox' ng-model="member.selected" />
                     <span> {{member.preferredName}} </span>
                     <span> {{member.emailAddress}} </span>
                   </label>
                 </div>
-                <div  ng-show="onetimeEventBlock.showChildcare(member)"> 
-                  <child-care-need
-                        participant-id='member.participantId'
-                        on-change='onetimeEventBlock.childCareChange'>
-                  </child-care-need>
-                </div>
+              </div>
+            </div>
+            <div class="col-md-12" style="border-top: solid 1px #ddd; padding-top: 13px; padding-bottom: 13px;" ng-show="onetimeEventBlock.group.childCareInd">
+              <div class="checkbox">
+                <label>
+                  <input type='checkbox' ng-model="onetimeEventBlock.childcareRequested" />
+                  <span> Will you need childcare? </span>
+                </label>
+                <span class="hidden-xs visible-sm-inline visible-md-inline visible-lg-inline"
+                  popover="{{ onetimeEventBlock.popoverText }}"
+                  popover-placement="right">
+                  <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#question-circle"></use>
+                  </svg>
+                </span>
               </div>
             </div>
             <div class="col-sm-12 serve-save soft-half-top">

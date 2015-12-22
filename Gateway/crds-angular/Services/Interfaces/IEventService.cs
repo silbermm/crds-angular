@@ -8,7 +8,7 @@ namespace crds_angular.Services.Interfaces
     public interface IEventService
     {
         Event GetEvent(int eventId);
-        void RegisterForEvent(List<EventRsvpDTO> eventDto, string token);
+        void RegisterForEvent(EventRsvpDto eventDto, string token);
         IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token);
         IList<Participant> EventParticpants(int eventId, string token);
         void SendReminderEmails();
