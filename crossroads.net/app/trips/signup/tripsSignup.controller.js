@@ -472,6 +472,17 @@ var attributeTypes = require('crds-constants').ATTRIBUTE_TYPE_IDS;
         vm.signupService.reset(vm.campaign);
         return;
       }
+
+      if (!toState.name.startsWith('tripsignup.application.')) {
+        if (vm.tpForm) {
+          if (vm.tpForm.$dirty) {
+            if (!$window.confirm('Are you sure you want to leave this page?')) {
+              event.preventDefault();
+              return;
+            }
+          }
+        }
+      }
     }
 
     function stateChangeSuccess(event) {
