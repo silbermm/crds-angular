@@ -59,7 +59,7 @@ namespace crds_angular.Services
 
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;
-            userUpdateValues["ResetToken"] = cleanToken; // swap out for real implementation
+            userUpdateValues["PasswordResetToken"] = cleanToken; // swap out for real implementation
             _userService.UpdateUser(userUpdateValues);
 
             string baseURL = _configurationWrapper.GetConfigValue("BaseURL");
