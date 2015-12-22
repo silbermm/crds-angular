@@ -14,7 +14,7 @@
         householdInfo: '=',
         householdForm: '=',
         isCollapsed: '=?',
-        locations: '=?'
+        locations: '='
       },
       templateUrl: 'household/profileHousehold.template.html',
       controller: 'ProfileHouseholdController as household',
