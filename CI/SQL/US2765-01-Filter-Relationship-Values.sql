@@ -23,15 +23,9 @@ INSERT INTO dbo.dp_Page_Views
 		379,
 		'Filtered view of relationship types.',
 		'Relationships.[Relationship_Name] AS [Relationship Name]
-		, Relationships.[Relationship_ID] AS [Relationship ID]
-		, Relationships.[Description] AS [Description]
 		, Relationships.[Male_Label] AS [Male Label]
 		, Relationships.[Female_Label] AS [Female Label]
-		, Reciprocal_Relationship_ID_Table.[Relationship_ID] AS [Relationship ID]
-		, Reciprocal_Relationship_ID_Table.[Relationship_Name] AS [Relationship Name]
-		, Reciprocal_Relationship_ID_Table.[Description] AS [Description]
-		, Reciprocal_Relationship_ID_Table.[Male_Label] AS [Male Label]
-		, Reciprocal_Relationship_ID_Table.[Female_Label] AS [Female Label]
+		, Reciprocal_Relationship_ID_Table.[Relationship_ID] AS [Reciprocal Relationship ID]
 		',
 		'Relationships.[Relationship_ID] IN (8,7,5,42,41,27,14,36,40,45,29,30,1,6,37,28,43,44)',
 		NULL
