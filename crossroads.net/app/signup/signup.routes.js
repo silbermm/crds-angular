@@ -34,6 +34,14 @@
           }).$promise;
         },
 
+        Locations: function(SignupService, Lookup) {
+          return Lookup.query({
+            table: 'crossroadslocations'
+          }, function(data) {
+            SignupService.locations = data;
+          }).promise;
+        },
+
         CmsInfo: function($q, Page, SignupService, Group, $stateParams) {
           var deferred = $q.defer();
           var link = addTrailingSlashIfNecessary($stateParams.link);
