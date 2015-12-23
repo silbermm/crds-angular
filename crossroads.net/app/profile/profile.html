@@ -6,7 +6,7 @@
       <h3 class="profile-name">{{profile.profileData.person.nickName}} {{profile.profileData.person.lastName}}</h3>
       <!-- Handle a null church site here with something like "Please select your site" currently it's just blank when null-->
       <p class="lead site-name">
-        <a href="#Site" ng-click="profile.locationFocus()" data-toggle="tab" class="edit-church-site">{{profile.displayLocation()}}
+        <a href="#Site" ng-click="profile.locationFocus()" data-toggle="tab" class="edit-church-site" ng-class="profile.showLocationButton()">{{profile.displayLocation()}}
           <svg viewBox="0 0 32 32" class="icon icon-pencil4">
             <use xlink:href="#pencil4"></use>
           </svg>
