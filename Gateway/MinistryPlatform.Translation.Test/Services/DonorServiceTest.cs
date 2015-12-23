@@ -731,6 +731,100 @@ namespace MinistryPlatform.Translation.Test.Services
         }
 
         [Test]
+        public void TestSetupConfirmationEmailWithTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+
+            var program = new Program
+            {
+                CommunicationTemplateId = 9000,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(program.CommunicationTemplateId.Value, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestSetupConfirmationEmailWithNullTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+            const int templateId = 987;
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate")).Returns(templateId);
+
+            var program = new Program
+            {
+                CommunicationTemplateId = null,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(templateId, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestSetupConfirmationEmailWithZeroTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+            const int templateId = 987;
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate")).Returns(templateId);
+
+            var program = new Program
+            {
+                CommunicationTemplateId = 0,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(templateId, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
+        }
+
+        [Test]
         public void TestGetContactDonorForDonorAccount()
         {
             const int donorId = 1234567;

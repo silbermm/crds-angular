@@ -544,7 +544,9 @@ namespace MinistryPlatform.Translation.Services
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
-            var communicationTemplateId = program.CommunicationTemplateId != 0 ? Convert.ToInt32(program.CommunicationTemplateId) : AppSetting("DefaultGiveConfirmationEmailTemplate");
+            var communicationTemplateId = program.CommunicationTemplateId != null && program.CommunicationTemplateId != 0
+                ? program.CommunicationTemplateId.Value
+                : _configurationWrapper.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate");
 
             SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EmailReason);
         }
@@ -587,7 +589,8 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
+        // TODO Made this virtual so could mock in a unit test.  Probably ought to refactor to a separate class - shouldn't have to mock the class we're testing...
+        public virtual void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
             var defaultContact = _contactService.GetContactById(AppSetting("DefaultGivingContactEmailId"));
