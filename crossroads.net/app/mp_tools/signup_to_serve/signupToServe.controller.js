@@ -104,6 +104,7 @@
         var saveRsvp = new ServeOpportunities.SaveRsvp();
         saveRsvp.contactId = participant.contactId;
         saveRsvp.opportunityId = vm.params.recordId;
+        saveRsvp.opportunityIds = [ vm.params.recordId ];
         saveRsvp.eventTypeId = vm.group.eventTypeId;
         if (vm.selectedFrequency.value === 0) {
           saveRsvp.endDate = parseDate(vm.selectedEvent);
