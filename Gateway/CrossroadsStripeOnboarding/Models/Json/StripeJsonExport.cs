@@ -18,10 +18,13 @@ namespace CrossroadsStripeOnboarding.Models.Json
         [JsonProperty("id")]
         public string NewCustomerId { get; set; }
 
+        [JsonProperty("consumerid")]
+        public string OldCustomerId { get; set; }
+
         [JsonProperty("cards")]
         public Dictionary<string, StripeJsonCard> CardsMap;
 
-        [JsonProperty("banks")]
+        [JsonProperty("bank_accounts")]
         public Dictionary<string, StripeJsonBank> BanksMap;
     }
 

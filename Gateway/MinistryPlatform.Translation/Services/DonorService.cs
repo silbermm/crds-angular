@@ -544,7 +544,9 @@ namespace MinistryPlatform.Translation.Services
         {
             var program = _programService.GetProgramById(programId);
             //If the communcations admin does not link a message to the program, the default template will be used.
-            var communicationTemplateId = program.CommunicationTemplateId != 0 ? Convert.ToInt32(program.CommunicationTemplateId) : AppSetting("DefaultGiveConfirmationEmailTemplate");
+            var communicationTemplateId = program.CommunicationTemplateId != null && program.CommunicationTemplateId != 0
+                ? program.CommunicationTemplateId.Value
+                : _configurationWrapper.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate");
 
             SendEmail(communicationTemplateId, donorId, donationAmount, pymtType, setupDate, program.Name, EmailReason);
         }
@@ -587,7 +589,8 @@ namespace MinistryPlatform.Translation.Services
             return donor;
         }
 
-        public void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
+        // TODO Made this virtual so could mock in a unit test.  Probably ought to refactor to a separate class - shouldn't have to mock the class we're testing...
+        public virtual void SendEmail(int communicationTemplateId, int donorId, decimal donationAmount, string paymentType, DateTime setupDate, string program, string emailReason, string frequency = null)
         {
             var template = _communicationService.GetTemplate(communicationTemplateId);
             var defaultContact = _contactService.GetContactById(AppSetting("DefaultGivingContactEmailId"));
@@ -750,6 +753,9 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateRecurringGiftRecord(string authorizedUserToken, int donorId, int donorAccountId, string planInterval, decimal planAmount, DateTime startDate, string program, string subscriptionId, int congregationId)
         {
+            // Make sure we're talking in UTC consistently
+            startDate = startDate.ToUniversalTime().Date;
+
             int? dayOfWeek = null;
             int? dayOfMonth = null;
             int frequencyId;
@@ -808,7 +814,7 @@ namespace MinistryPlatform.Translation.Services
                         Frequency = record.ToInt("Frequency_ID"),
                         DayOfWeek = record.ToInt("Day_Of_Week_ID"),
                         DayOfMonth = record.ToInt("Day_Of_Month"),
-                        StartDate = record.ToDate("Start_Date"),
+                        StartDate = record.ToDate("Start_Date").ToUniversalTime().Date,
                         Amount = (int)((record["Amount"] as decimal? ?? 0.00M) * Constants.StripeDecimalConversionValue),
                         ProgramId = record.ToString("Program_ID"),
                         CongregationId = record.ToInt("Congregation_ID"),
@@ -915,7 +921,7 @@ namespace MinistryPlatform.Translation.Services
                 EmailAddress = record["User_Email"] as string,
                 Frequency = (record["Frequency"] as string ?? string.Empty).Trim(),
                 Recurrence = record["Recurrence"] as string,
-                StartDate = record["Start_Date"] as DateTime? ?? DateTime.Now,
+                StartDate = (record["Start_Date"] as DateTime? ?? DateTime.Now).ToUniversalTime().Date,
                 EndDate = record["End_Date"] as DateTime?,
                 Amount = record["Amount"] as decimal? ?? 0,
                 ProgramID = record["Program_ID"] as int? ?? 0,

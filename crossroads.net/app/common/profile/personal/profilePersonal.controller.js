@@ -214,6 +214,7 @@
           vm.submitFormCallback({profile: vm.profileData });
         } else {
           vm.profileData.person.$save(function() {
+            vm.submitted = false;
             $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
             $log.debug('person save successful');
             if (vm.profileParentForm) {
