@@ -46,7 +46,7 @@
       }
 
       function endTime() {
-        return vm.endDateTime.format('h:mm A');
+        return vm.endDateTime.format('h:mma');
       }
 
       function getDataToSave() {
@@ -68,7 +68,7 @@
       }
 
       function getDate() {
-        return vm.startDateTime.format('MM/DD/YYYY');
+        return vm.startDateTime.format('dddd, MMMM D, YYYY');
       }
 
       function htmlToPlaintext(text) {
@@ -80,7 +80,7 @@
       }
 
       function startTime() {
-        return vm.startDateTime.format('h:mm A');
+        return vm.startDateTime.format('h:mma');
       }
 
       function submit() {
