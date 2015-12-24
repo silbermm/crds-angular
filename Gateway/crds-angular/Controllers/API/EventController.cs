@@ -25,8 +25,8 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("POST")]
-        [Route("api/event/{eventId}")]
-        public IHttpActionResult RsvpToEvent(int eventId, [FromBody] List<EventRsvpDTO> rsvpDtos)
+        [Route("api/event")]
+        public IHttpActionResult RsvpToEvent([FromBody] EventRsvpDto eventRsvp)
         {
             if (ModelState.IsValid)
             {
@@ -34,7 +34,7 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        _eventService.RegisterForEvent(rsvpDtos, token);
+                        _eventService.RegisterForEvent(eventRsvp, token);
                         return Ok();
                     }
                     catch (Exception e)

@@ -33,6 +33,7 @@ describe('Signup To Serve Tool', function(){
   var expectedSingleRSVP = {
     'contactId':768379,
     'opportunityId':'2923',
+    'opportunityIds': ['2923'],
     'eventTypeId':142,
     'endDate':'1430452800',
     'startDate':'1430452800',
@@ -63,6 +64,7 @@ describe('Signup To Serve Tool', function(){
     'endDate':'1430452800',
     'eventTypeId':142,
     'opportunityId':'2923',
+    'opportunityIds': ['2923'],
     'signUp':true,
     'startDate':'1430452800'
   };
@@ -73,6 +75,7 @@ describe('Signup To Serve Tool', function(){
     'endDate':'1430452800',
     'eventTypeId':142,
     'opportunityId':'2923',
+    'opportunityIds': ['2923'],
     'signUp':true,
     'startDate':'1430452800'
   };

@@ -91,17 +91,19 @@
         if (!vm.profileData) {
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
+            vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
+            underThirteen();
             vm.viewReady = true;
           });
         } else {
           configurePerson();
+          vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
+          underThirteen();
           vm.viewReady = true;
         }
 
       });
 
-      vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
-      underThirteen();
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 
@@ -212,6 +214,7 @@
           vm.submitFormCallback({profile: vm.profileData });
         } else {
           vm.profileData.person.$save(function() {
+            vm.submitted = false;
             $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
             $log.debug('person save successful');
             if (vm.profileParentForm) {

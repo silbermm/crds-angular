@@ -35,7 +35,10 @@ WHERE CONTACT_ID = @contactID;
 DECLARE @communicationID as int
 set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
 
-DELETE from dp_Contact_Publications 
+DELETE from [dbo].dp_commands 
+WHERE communication_id = @communicationID;
+
+DELETE from [dbo].dp_Contact_Publications 
 WHERE contact_id = @contactID;
 
 DELETE from [dbo].dp_communication_messages 
@@ -136,7 +139,10 @@ WHERE USER_ID = @userAccount;
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
 
-DELETE from dp_Contact_Publications 
+DELETE from [dbo].dp_commands 
+WHERE communication_id = @communicationID;
+
+DELETE from [dbo].dp_Contact_Publications 
 WHERE contact_id = @contactID;
 
 DECLARE @communicationID as int
@@ -223,7 +229,10 @@ WHERE USER_ID = @userAccount;
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
 
-DELETE from dp_Contact_Publications 
+DELETE from [dbo].dp_commands 
+WHERE communication_id = @communicationID;
+
+DELETE from [dbo].dp_Contact_Publications 
 WHERE contact_id = @contactID;
 
 DECLARE @communicationID as int

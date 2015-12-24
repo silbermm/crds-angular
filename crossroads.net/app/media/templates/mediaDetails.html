@@ -20,7 +20,7 @@
             </sn-addthis-toolbox>
             <hr>
           </header>
-          <div class="message-body" dynamic-content="singleMedia.media.description" >
+          <div class="message-body" dynamic-content="singleMedia.media.description | html" >
           </div><!--/message-body-->
           <div class="message-tags">
             <div class="row push-top">
@@ -37,9 +37,6 @@
                 <a ng-repeat="tag in singleMedia.mediaTags" ui-sref="search({type:'media',q:'tags: \''+tag.title+'\''})" class="label label-standard-dark">{{ tag.title }}</a>
               </div>
             </div><!--/row-->
-          </div>
-          <div ng-if="singleMedia.media.audioUrl">
-            <small>Uploaded by <a href="{{singleMedia.media.audioUrl}}">crdschurch</a> on <a href="{{singleMedia.media.audioUrl}}">Soundcloud</a></small>
           </div>
         </div><!--/message-info-->
 

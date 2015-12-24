@@ -47,7 +47,7 @@
               <span ng-if="household.displayLocation(household.householdInfo.congregationId)">
               {{household.displayLocation(household.householdInfo.congregationId)}}
               </span>
-              <span ng-if="!household.displayLocation(household.householdInfo.congregationId)">Set Crossroads Location...</span>
+              <span ng-if="!household.displayLocation(household.householdInfo.congregationId)">Set Crossroads Site...</span>
             </div>
           </div>
           <!--/row-->
@@ -145,7 +145,7 @@
                     <div id="Site"
                          class="form-group col-sm-6"
                          ng-class="{'has-error': household.validation.showErrors(household.householdForm, 'crLocation')}">
-                      <label for="provider" class="required">Crossroads Location</label>
+                      <label for="provider" class="required">Crossroads Site</label>
                       <select class="form-control col-sm-12"
                               name="crLocation"
                               required

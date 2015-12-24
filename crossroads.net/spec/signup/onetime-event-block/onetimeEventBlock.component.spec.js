@@ -24,9 +24,22 @@ describe('Onetime Signup Event Block', function() {
     $provide.value('$state', { get: function() {} });
   }));
 
+  beforeEach(inject(function(_$rootScope_) {
+    $rootScope = _$rootScope_;
+
+    $rootScope.MESSAGES = {
+      rsvpOneTimeEventSuccess: 'rsvpOneTimeEventSuccess',
+      rsvpFailed: 'rsvpFailed',
+      chooseOne: 'chooseOne',
+      oneTimeEventChildcarePopup: {content: 'hi'}
+    };
+
+    spyOn($rootScope, '$emit').and.callThrough();
+
+  }));
+
   beforeEach(inject(function(_$compile_, _$rootScope_, $injector) {
     $compile = _$compile_;
-    $rootScope = _$rootScope_;
 
     EventService = $injector.get('EventService');
     $httpBackend = $injector.get('$httpBackend');
@@ -41,14 +54,6 @@ describe('Onetime Signup Event Block', function() {
 
     scope.$digest();
     isolated = element.isolateScope();
-
-    spyOn($rootScope, '$emit').and.callThrough();
-
-    $rootScope.MESSAGES = {
-      rsvpSaved: 'rsvpSaved',
-      rsvpFailed: 'rsvpFailed',
-      chooseOne: 'chooseOne'
-    };
 
   }));
 
@@ -87,18 +92,15 @@ describe('Onetime Signup Event Block', function() {
   it('should show an error when server responds with an error', function() {
 
     isolated.onetimeEventBlock.thisFamily[0].selected = true;
-    var toPost = [
-      {
+    var toPost = {
         eventId: isolated.onetimeEventBlock.event.eventId,
         groupId: isolated.onetimeEventBlock.group.groupId,
-        participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
-        childCareNeeded: false
-      }
-    ];
-    $httpBackend.expectPOST(
-      window.__env__['CRDS_API_ENDPOINT'] + 'api/event/' + isolated.onetimeEventBlock.event.eventId,
-      toPost)
-      .respond(500);
+        participants: [
+          {participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
+            childcareRequested: false}]
+      };
+
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/event', toPost).respond(500);
     isolated.onetimeEventBlock.submit();
     $httpBackend.flush();
     expect($rootScope.$emit).toHaveBeenCalledWith('notify', 'rsvpFailed');
@@ -107,22 +109,20 @@ describe('Onetime Signup Event Block', function() {
   it('should save the event data', function() {
     isolated.onetimeEventBlock.thisFamily[0].selected = true;
 
-    var toPost = [
-      {
+    var toPost = {
         eventId: isolated.onetimeEventBlock.event.eventId,
         groupId: isolated.onetimeEventBlock.group.groupId,
-        participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
-        childCareNeeded: false
-      }
-    ];
+        participants: [
+          {participantId: isolated.onetimeEventBlock.thisFamily[0].participantId,
+            childcareRequested: false}]
+      };
 
-    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/event/' +
-                            isolated.onetimeEventBlock.event.eventId, toPost)
+    $httpBackend.expectPOST(window.__env__['CRDS_API_ENDPOINT'] + 'api/event', toPost)
       .respond(200);
 
     isolated.onetimeEventBlock.submit();
     $httpBackend.flush();
-    expect($rootScope.$emit).toHaveBeenCalledWith('notify', 'rsvpSaved');
+    expect($rootScope.$emit).toHaveBeenCalledWith('notify', 'rsvpOneTimeEventSuccess');
   });
 
 });

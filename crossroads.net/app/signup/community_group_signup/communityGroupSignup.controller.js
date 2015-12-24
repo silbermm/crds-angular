@@ -1,4 +1,4 @@
-(function(){
+(function() {
   'use strict';
 
   module.exports = CommunityGroupsController;
@@ -12,7 +12,8 @@
     '$stateParams',
     'Page',
     '$modal',
-    'ChildCare'
+    'ChildCare',
+    'Session'
   ];
 
   function CommunityGroupsController(
@@ -24,7 +25,8 @@
     $stateParams,
     Page,
     $modal,
-    ChildCare) {
+    ChildCare,
+    Session) {
 
     var vm = this;
     vm.allSignedUp = allSignedUp;
@@ -32,6 +34,7 @@
     vm.atLeastOneParticipant = false;
     vm.childCareAvailable = false;
     vm.childCareChange = childCareChange;
+    vm.contactId = Session.exists('userId') !== undefined ? Session.exists('userId') : 0;
     vm.editProfile = editProfile;
     vm.formValid = true;
     vm.hasParticipantID = hasParticipantID;
@@ -54,15 +57,6 @@
     ///////////////////////////
 
     function activate() {
-      // Initialize Person data for logged-in user
-      Profile.Personal.get(function(response) {
-        vm.person = response;
-      },
-
-      function(err) {
-        console.log('Can\'t get your profile! ' + err);
-      });
-
       var link = (_.endsWith($stateParams.link, '/') === false) ? $stateParams.link + '/' : $stateParams.link;
       var pageRequest = Page.get({url: link}, function() {
         if (pageRequest.pages.length > 0) {
@@ -115,9 +109,11 @@
                 vm.viewReady = true;
               });
 
-
-              //this is the case where the group is full and there is NO waitlist and at least one of your family IS a participant
-            } else if (response.groupFullInd && !response.waitListInd && vm.atLeastOneParticipant) {
+              // this is the case where the group is full and
+              // there is NO waitlist and at least one of your family IS a participant
+            } else if (response.groupFullInd &&
+                      !response.waitListInd &&
+                      vm.atLeastOneParticipant) {
               vm.waitListCase = false;
               vm.showFull = true;
               vm.showContent = true;
@@ -228,6 +224,7 @@
           break;
         }
       }
+
       if (vm.response.length === 1) {
         flag = true;
       }

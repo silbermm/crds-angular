@@ -8,7 +8,7 @@
   function CommunityGroups() {
     return {
       restrict: 'E',
-      scope: {},
+      scope: {locations: '='},
       templateUrl: 'community_group_signup/communityGroupSignupForm.html',
       controller: 'CommunityGroupSignupController as groupsignup',
       bindToController: true

@@ -39,30 +39,7 @@ namespace CrossroadsStripeOnboarding.Services
 
         private static KeyValuePair<Messages, StripeJsonExport> LoadFileToJson(string file)
         {
-            var jsonReader = new JsonTextReader(new StringReader(File.ReadAllText(@file)));
-            var json = new Dictionary<string, StripeJsonCustomer>();
-            jsonReader.Read();
-            string propertyName = string.Empty;
-            while (jsonReader.Read())
-            {
-                switch (jsonReader.TokenType)
-                {
-                    case JsonToken.PropertyName:
-                        propertyName = (string)jsonReader.Value + "|" + Random.Next();
-                        continue;
-                    case JsonToken.StartObject:
-                        var o = JObject.Load(jsonReader);
-                        var customer = o.ToObject<StripeJsonCustomer>();
-                        json.Add(propertyName, customer);
-                        continue;
-                    case JsonToken.EndObject:
-                        propertyName = string.Empty;
-                        break;
-                    default:
-                        continue;
-                }
-            }
-
+            var json = JsonConvert.DeserializeObject<Dictionary<string, StripeJsonCustomer>>(File.ReadAllText(@file));
             return new KeyValuePair<Messages, StripeJsonExport>(Messages.ReadFileSuccess, new StripeJsonExport(json)); 
         }
 
@@ -86,18 +63,18 @@ namespace CrossroadsStripeOnboarding.Services
         {
             foreach (var customerDetails in customersMap)
             {
-                var customer = ImportCustomer(db, customerDetails.Key, customerDetails.Value);
-                ImportAccounts(db, customerDetails.Value, customer);
+                var customer = ImportCustomer(db, customerDetails.Value);
+                ImportAccounts(customerDetails.Value, customer);
                 db.SaveChanges();
             }
         }
 
-        private static StripeCustomer ImportCustomer(StripeOnboardingContext db, string oldCustomerId, StripeJsonCustomer customerDetails)
+        private static StripeCustomer ImportCustomer(StripeOnboardingContext db, StripeJsonCustomer customerDetails)
         {
             var customer = new StripeCustomer
             {
                 CustomerId = customerDetails.NewCustomerId,
-                ExternalPersonId = oldCustomerId.Split('|')[0],
+                ExternalPersonId = customerDetails.OldCustomerId,
                 Imported = false,
             };
 
@@ -106,13 +83,13 @@ namespace CrossroadsStripeOnboarding.Services
             return customer;
         }
 
-        private static void ImportAccounts(StripeOnboardingContext db, StripeJsonCustomer customerDetails, StripeCustomer customer)
+        private static void ImportAccounts(StripeJsonCustomer customerDetails, StripeCustomer customer)
         {
             if (customerDetails.BanksMap != null)
             {
                 foreach (var bankDetails in customerDetails.BanksMap)
                 {
-                    ImportAccount(db, bankDetails.Key, bankDetails.Value, customer);
+                    ImportAccount(bankDetails.Key, bankDetails.Value, customer);
                 }
             }
 
@@ -120,12 +97,12 @@ namespace CrossroadsStripeOnboarding.Services
             {
                 foreach (var cardDetails in customerDetails.CardsMap)
                 {
-                    ImportAccount(db, cardDetails.Key, cardDetails.Value, customer);
+                    ImportAccount(cardDetails.Key, cardDetails.Value, customer);
                 }
             }
         }
 
-        private static void ImportAccount(StripeOnboardingContext db, string oldAccountId, StripeJsonAccount accountDetails, StripeCustomer customer)
+        private static void ImportAccount(string oldAccountId, StripeJsonAccount accountDetails, StripeCustomer customer)
         {
             var account = new StripeAccount
             {

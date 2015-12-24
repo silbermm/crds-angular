@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Services.Interfaces;
 using MinistryPlatform.Models;
-using MinistryPlatform.Translation.Services;
 using Attribute = MinistryPlatform.Models.Attribute;
 using MPInterfaces = MinistryPlatform.Translation.Services.Interfaces;
 
@@ -19,8 +17,8 @@ namespace crds_angular.Services
         private readonly MPInterfaces.IAttributeService _mpAttributeService;
 
         public ContactAttributeService(
-            MPInterfaces.IContactAttributeService mpContactAttributeService, 
-            IAttributeService attributeService, 
+            MPInterfaces.IContactAttributeService mpContactAttributeService,
+            IAttributeService attributeService,
             MPInterfaces.IApiUserService apiUserService,
             MPInterfaces.IAttributeService mpAttributeService)
         {
@@ -58,7 +56,6 @@ namespace crds_angular.Services
                                   Name = mpAttributeType.AttributeTypeName,
                               });
 
-            
 
             foreach (var mpAttribute in mpFilteredAttributes)
             {
@@ -68,7 +65,7 @@ namespace crds_angular.Services
                     Name = mpAttribute.Name,
                     SortOrder = mpAttribute.SortOrder,
                     Selected = false,
-                    Category = mpAttribute.Category,                    
+                    Category = mpAttribute.Category,
                     CategoryDescription = mpAttribute.CategoryDescription
                 };
 
@@ -76,7 +73,7 @@ namespace crds_angular.Services
             }
 
             foreach (var mpContactAttribute in mpContactAttributes)
-            {                
+            {
                 if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
                 {
                     continue;
@@ -94,18 +91,19 @@ namespace crds_angular.Services
         }
 
         private Dictionary<int, ContactSingleAttributeDTO> TranslateToSingleAttributeTypeDtos(
-            List<ContactAttribute> mpContactAttributes, List<Attribute> mpAttributes)
+            List<ContactAttribute> mpContactAttributes,
+            List<Attribute> mpAttributes)
         {
             var mpFilteredAttributes = mpAttributes.Where(x => x.PreventMultipleSelection == true).ToList();
 
             var attributeTypesDictionary = mpFilteredAttributes
-                .Select(x => new { x.AttributeTypeId, x.AttributeTypeName })
+                .Select(x => new {x.AttributeTypeId, x.AttributeTypeName})
                 .Distinct()
                 .ToDictionary(mpAttributeType => mpAttributeType.AttributeTypeId,
                               mpAttributeType => new ContactSingleAttributeDTO());
 
             foreach (var mpContactAttribute in mpContactAttributes)
-            {                
+            {
                 if (!attributeTypesDictionary.ContainsKey(mpContactAttribute.AttributeTypeId))
                 {
                     continue;
@@ -123,18 +121,22 @@ namespace crds_angular.Services
             return attributeTypesDictionary;
         }
 
-        public void SaveContactAttributes(int contactId, Dictionary<int, ContactAttributeTypeDTO> contactAttributes, Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
+        public void SaveContactAttributes(int contactId,
+                                          Dictionary<int, ContactAttributeTypeDTO> contactAttributes,
+                                          Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
         {
             var currentAttributes = TranslateMultiToMPAttributes(contactAttributes);
             currentAttributes.AddRange(TranslateSingleToMPAttribute(contactSingleAttributes));
 
+            if (contactAttributes == null)
+            {
+                return;
+            }
+
             var apiUserToken = _apiUserService.GetToken();
-
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(apiUserToken, contactId, false);
-
             var attributesToSave = GetDataToSave(currentAttributes, persistedAttributes);
 
-            
             foreach (var attribute in attributesToSave)
             {
                 SaveAttribute(contactId, attribute, apiUserToken, false);
@@ -142,7 +144,7 @@ namespace crds_angular.Services
         }
 
         public void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute)
-        {          
+        {
             var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, true, contactAttribute.AttributeId);
 
@@ -156,11 +158,11 @@ namespace crds_angular.Services
         }
 
         private void SaveAttribute(int contactId, ContactAttribute attribute, string token, bool useMyProfile)
-        {            
+        {
             if (attribute.ContactAttributeId == 0)
             {
                 // These are new so add them
-                _mpContactAttributeService.CreateAttribute(token, contactId, attribute, useMyProfile);                
+                _mpContactAttributeService.CreateAttribute(token, contactId, attribute, useMyProfile);
             }
             else
             {
@@ -173,34 +175,30 @@ namespace crds_angular.Services
         {
             var results = new List<ContactAttribute>();
 
-            foreach (var contactAttributeType in contactAttributesTypes.Values)
+            if (contactAttributesTypes == null)
             {
-                foreach (var contactAttribute in contactAttributeType.Attributes)
-                {
-                    if (!contactAttribute.Selected)
-                    {
-                        continue;
-                    }
-
-                    var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, contactAttributeType);
-
-                    results.Add(mpContactAttribute);
-                }
+                return results;
             }
+            results.AddRange(from contactAttributeType in contactAttributesTypes.Values
+                from contactAttribute in contactAttributeType.Attributes
+                where contactAttribute.Selected
+                select TranslateMultiToMPAttribute(contactAttribute, contactAttributeType));
             return results;
         }
 
         private static ContactAttribute TranslateMultiToMPAttribute(ContactAttributeDTO contactAttribute, ContactAttributeTypeDTO contactAttributeType)
-        {            
-            var mpContactAttribute = new ContactAttribute()
+        {
+            var mpContactAttribute = new ContactAttribute();
+            if (contactAttribute == null)
             {
-                AttributeId = contactAttribute.AttributeId,                
-                AttributeTypeId = contactAttributeType != null ? contactAttributeType.AttributeTypeId : 0,
-                AttributeTypeName = contactAttributeType != null ? contactAttributeType.Name : String.Empty,
-                StartDate = contactAttribute.StartDate,
-                EndDate = contactAttribute.EndDate,
-                Notes = contactAttribute.Notes
-            };
+                return mpContactAttribute;
+            }
+            mpContactAttribute.AttributeId = contactAttribute.AttributeId;
+            mpContactAttribute.AttributeTypeId = contactAttributeType != null ? contactAttributeType.AttributeTypeId : 0;
+            mpContactAttribute.AttributeTypeName = contactAttributeType != null ? contactAttributeType.Name : string.Empty;
+            mpContactAttribute.StartDate = contactAttribute.StartDate;
+            mpContactAttribute.EndDate = contactAttribute.EndDate;
+            mpContactAttribute.Notes = contactAttribute.Notes;
 
             return mpContactAttribute;
         }
@@ -208,6 +206,11 @@ namespace crds_angular.Services
         private List<ContactAttribute> TranslateSingleToMPAttribute(Dictionary<int, ContactSingleAttributeDTO> contactSingleAttributes)
         {
             var results = new List<ContactAttribute>();
+
+            if (contactSingleAttributes == null)
+            {
+                return results;
+            }
 
             foreach (var contactSingleAttribute in contactSingleAttributes)
             {
@@ -262,9 +265,9 @@ namespace crds_angular.Services
                         }
                         else
                         {
-                            currentAttributes.RemoveAt(index);    
-                        }                                                
-                        break;    
+                            currentAttributes.RemoveAt(index);
+                        }
+                        break;
                     }
                 }
 

@@ -31,6 +31,7 @@
     vm.attributeTypes = AttributeTypes;
     vm.buttonText = 'Save';
     vm.displayLocation = displayLocation;
+    vm.showLocationButton = showLocationButton;
     vm.enforceAgeRestriction = enforceAgeRestriction;
     vm.goToTab = goToTab;
     vm.locations = Locations;
@@ -56,6 +57,14 @@
 
     }
 
+    function showLocationButton() {
+     if (vm.profileData.person.congregationId === 2) {
+       return 'btn btn-standard';
+     }
+
+     return '';
+   }
+
     function displayLocation() {
       var locationName;
       if (vm.profileData.person.congregationId !== 2) {
@@ -68,7 +77,7 @@
       }
 
       if (!locationName) {
-        return 'Select Crossroads Site...';
+        return 'Select Crossroads Site';
       }
 
       return locationName;

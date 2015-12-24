@@ -385,9 +385,9 @@ namespace crds_angular.Services
         {
             var request = new RestRequest("customers/" + customer +"/subscriptions", Method.POST);
             request.AddParameter("plan", planName);
-            if (trialEndDate.Date > DateTime.Today)
+            if (trialEndDate.ToUniversalTime().Date > DateTime.UtcNow.Date)
             {
-                request.AddParameter("trial_end", trialEndDate.Date.ConvertDateTimeToEpoch());
+                request.AddParameter("trial_end", trialEndDate.ToUniversalTime().Date.ConvertDateTimeToEpoch());
             }
 
             var response = _stripeRestClient.Execute<StripeSubscription>(request);
@@ -411,9 +411,9 @@ namespace crds_angular.Services
             var request = new RestRequest(string.Format("customers/{0}/subscriptions/{1}", customerId, subscriptionId), Method.POST);
             request.AddParameter("prorate", false);
             request.AddParameter("plan", planId);
-            if (trialEndDate != null && trialEndDate.Value.Date > DateTime.Today.Date)
+            if (trialEndDate != null && trialEndDate.Value.ToUniversalTime().Date > DateTime.UtcNow.Date)
             {
-                request.AddParameter("trial_end", trialEndDate.Value.Date.ConvertDateTimeToEpoch());
+                request.AddParameter("trial_end", trialEndDate.Value.ToUniversalTime().Date.ConvertDateTimeToEpoch());
             }
 
             var response = _stripeRestClient.Execute<StripeSubscription>(request);
