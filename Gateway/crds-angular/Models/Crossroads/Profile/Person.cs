@@ -120,6 +120,9 @@ namespace crds_angular.Models.Crossroads.Profile
         [JsonProperty(PropertyName = "participantStartDate")]
         public DateTime? ParticipantStartDate { get; set; }
 
+        [JsonProperty(PropertyName = "attendanceStartDate")]
+        public DateTime? AttendanceStartDate { get; set; }
+
         public MyContact GetContact()
         {
             return new MyContact

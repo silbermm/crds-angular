@@ -11,5 +11,6 @@ namespace MinistryPlatform.Models
         public string DisplayName { get; set; }
         public int Age { get; set; }
         public DateTime? ParticipantStart { get; set; }
+        public DateTime? AttendanceStart { get; set; }
     }
 }
