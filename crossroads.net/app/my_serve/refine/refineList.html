@@ -1,17 +1,18 @@
 <div class="col-sm-3 col-sm-push-9 clearfix serve-filter mobile-hard-left mobile-hard-right">
 
   <div ng-click="toggleFilterCollapse()">
-    <div class="filter-clear" ng-show='$root.mobile'>
-      <svg viewBox="0 0 25 32" class="icon icon-plus" ng-show="isFilterCollapsed">
-        <use xlink:href="#plus"></use>
-      </svg>
-      <svg viewBox="0 0 25 32" class="icon icon-minus" ng-show="!isFilterCollapsed">
-        <use xlink:href="#minus"></use>
-      </svg>
+
+    <div class="btn-mobile-filter btn block">Filter Opportunities
+      <div class="filter-clear" ng-show='$root.mobile'>
+        <svg viewBox="0 0 25 32" class="icon icon-arrow-right9 icon-large" ng-show="isFilterCollapsed">
+          <use xlink:href="#arrow-right9"></use>
+        </svg>
+        <svg viewBox="0 0 25 32" class="icon icon-arrow-down9 icon-large" ng-show="!isFilterCollapsed">
+          <use xlink:href="#arrow-down9"></use>
+        </svg>
+      </div>
+      <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
     </div>
-    <h5>Filter Opportunities
-        <a href="" data-ng-click="clearFilters()" class="filter-reset" ng-show="isFilterSet()" stop-event> Clear</a>
-      </h5>
   </div>
 
   <div collapse="isFilterCollapsed">
