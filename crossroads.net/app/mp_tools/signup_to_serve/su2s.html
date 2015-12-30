@@ -2,18 +2,22 @@
   <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
 </div>
 
-<form name="su2sForm">
-  <div ng-show="su2sForm.$invalid && su2sForm.$submitted" class="alert alert-danger" role="alert">
-    <div ng-messages="su2sForm.signup.$error">
+<form name="su2s.su2sForm">
+  <div ng-show="su2s.su2sForm.$invalid && su2s.su2sForm.$submitted" class="alert alert-danger" role="alert">
+    <div ng-messages="su2s.su2sForm.signup.$error">
       <div ng-message="required"> You must choose a signup option </div>
     </div>
 
-    <div ng-messages="su2sForm.participants.$error">
+    <div ng-messages="su2s.su2sForm.participants.$error">
       <div ng-message="required"> You must choose at least one participant </div>
     </div>
 
-    <div ng-messages="su2sForm.selectedFrequency.$error">
+    <div ng-messages="su2s.su2sForm.selectedFrequency.$error">
       <div ng-message="required"> You must choose a frequency </div>
+    </div>
+
+    <div ng-messages="su2s.su2sForm.fromDate.$error">
+      <div ng-message="date"> You choose an invalid date </div>
     </div>
   </div>
 
@@ -46,44 +50,76 @@
 
       <div class="form-group">
         <label>Frequency</label>
-        <select class="form-control" ng-model="su2s.selectedFrequency" ng-options="f.text for f in su2s.frequencies track by f.value" name="selectedFrequency" ng-required='true'>
+        <select class="form-control"
+                ng-model="su2s.selectedFrequency"
+                ng-options="f.text for f in su2s.frequencies track by f.value"
+                name="selectedFrequency"
+                ng-required='true'>
           <option value="">Select a Frequency</option>
         </select>
       </div>
-      <div ng-show="su2s.isFrequencyOnce()">
+
+      <div ng-if="su2s.isFrequencyOnce()">
         <div class="form-group">
           <label>Date:</label>
           <div class="input-group">
-            <select class="form-control" ng-model="su2s.selectedEvent" ng-options="d for d in su2s.eventDates" ng-required='su2s.isFrequencyOnce()'>
+            <select class="form-control" ng-model="su2s.selectedEvent" ng-options="d for d in su2s.eventDates" ng-required='su2s.isFrequencyOnce()' name="eventDate">
               <option value="">Select an Event Date</option>
             </select>
           </div>
         </div>
       </div>
-      <div ng-show="su2s.isFrequencyMoreThanOnce()">
+
+      <div ng-if="su2s.isFrequencyMoreThanOnce()">
+        
         <div class="form-group">
           <label>From:</label>
           <div class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{su2s.format}}" ng-model="su2s.fromDt" is-open="su2s.fromOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-required="su2s.isFrequencyMoreThanOnce()" />
+            <input type="text"
+                   class="form-control"
+                   datepicker-popup="{{su2s.format}}"
+                   ng-model="su2s.fromDt"
+                   is-open="su2s.fromOpened"
+                   close-text="Close"
+                   ng-required="su2s.isFrequencyMoreThanOnce()"
+                   name="fromDate" />
             <span class="input-group-btn">
-              <button type="button" class="btn btn-standard" ng-click="su2s.open($event, 'fromOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
+              <button type="button"
+                      class="btn btn-standard" 
+                      ng-click="su2s.open($event, 'fromOpened')">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button>
             </span>
           </div>
         </div>
+
         <div class="form-group">
           <label>To:</label>
           <div class="input-group">
-            <input type="text" class="form-control" datepicker-popup="{{su2s.format}}" ng-model="su2s.toDt" is-open="su2s.toOpened" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" ng-required="su2s.isFrequencyMoreThanOnce()" />
+            <input type="text"
+                   class="form-control"
+                   datepicker-popup="{{su2s.format}}"
+                   ng-model="su2s.toDt"
+                   is-open="su2s.toOpened"
+                   min-date="minDate"
+                   datepicker-options="dateOptions"
+                   date-disabled="disabled(date, mode)"
+                   close-text="Close"
+                   ng-required="su2s.isFrequencyMoreThanOnce()"
+                   name="toDate" />
             <span class="input-group-btn">
               <button type="button" class="btn btn-standard" ng-click="su2s.open($event, 'toOpened')"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
           </div>
         </div>
+        
       </div>
+      
       <div class="form-group">
         <button class="btn btn-primary btn-sm" ng-click="su2s.cancel()">Cancel</button>
-        <input type="submit" value="Submit" class="btn btn-primary btn-sm" ng-click="su2s.saveRsvp(su2sForm.$valid)" ng-enabled="su2sForm.$valid" />
+        <input type="submit" value="Submit" class="btn btn-primary btn-sm" ng-click="su2s.saveRsvp(su2s.su2sForm.$valid)" ng-enabled="su2s.su2sForm.$valid" />
       </div>
     </div>
+
   </div>
 </form>
