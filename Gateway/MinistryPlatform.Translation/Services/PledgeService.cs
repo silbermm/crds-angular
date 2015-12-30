@@ -71,6 +71,9 @@ namespace MinistryPlatform.Translation.Services
                     pledge.PledgeCampaignId = record.ToInt("Pledge_Campaign_ID");
                     pledge.PledgeId = record.ToInt("Pledge_ID");
                     pledge.PledgeStatusId = record.ToInt("Pledge_Status_ID");
+                    pledge.PledgeTotal = record["Total_Pledge"] as decimal? ?? 0;
+                    pledge.CampaignStartDate = record.ToDate("Start_Date");
+                    pledge.CampaignEndDate = record.ToDate("End_Date");
                     return pledge;
                 case 0:
                     return null;
