@@ -1,22 +1,36 @@
-'use strict()';
 (function() {
 
-  angular.module('crossroads.mptools').controller('SignupToServeController', SignupToServeController);
+  'use strict()';
 
-  SignupToServeController.$inject = ['$log', '$location', '$window', 'MPTools', 'Su2sData', 'ServeOpportunities'];
+  module.exports = SignupToServeController;
 
-  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities) {
+  SignupToServeController.$inject = [
+    '$log',
+    '$location',
+    '$window',
+    'MPTools',
+    'Su2sData',
+    'ServeOpportunities',
+    '$rootScope'
+  ];
+
+  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities, $rootScope) {
     var vm = this;
 
     vm.allParticipants = [];
     vm.cancel = cancel;
     vm.eventDates = [];
     vm.format = 'MM/dd/yyyy';
-    vm.frequencies = [{ value: 0, text: 'Once' }, { value: 1, text: 'Every Week' }, { value: 2, text: 'Every Other Week' }];
+    vm.frequencies = [
+      { value: 0, text: 'Once' },
+      { value: 1, text: 'Every Week' },
+      { value: 2, text: 'Every Other Week' }
+    ];
+    vm.fromOpened = false;
     vm.group = {};
     vm.isFrequencyOnce = isFrequencyOnce;
     vm.isFrequencyMoreThanOnce = isFrequencyMoreThanOnce;
-    vm.open = open;
+    vm.open = openDatePicker;
     vm.params = MPTools.getParams();
     vm.populateDates = populateDates;
     vm.saveRsvp = saveRsvp;
@@ -44,19 +58,19 @@
 
     function isFrequencyOnce() {
       if (vm.selectedFrequency) {
-        return (vm.selectedFrequency.value === 0)
+        return (vm.selectedFrequency.value === 0);
       }
       return false;
     }
 
     function isFrequencyMoreThanOnce() {
       if (vm.selectedFrequency) {
-        return (vm.selectedFrequency.value > 0)
+        return (vm.selectedFrequency.value > 0);
       }
       return false;
     }
 
-    function open($event, opened) {
+    function openDatePicker($event, opened) {
       $event.preventDefault();
       $event.stopPropagation();
       vm[opened] = true;
@@ -66,15 +80,15 @@
       var m = moment(stringDate);
 
       if (!m.isValid()) {
-        var dateArr = stringDate.split("/");
-        var dateStr = dateArr[2] + " " + dateArr[0] + " " + dateArr[1];
+        var dateArr = stringDate.split('/');
+        var dateStr = dateArr[2] + ' ' + dateArr[0] + ' ' + dateArr[1];
         // https://github.com/moment/moment/issues/1407
         // moment("2014 04 25", "YYYY MM DD"); // string with format
-        m = moment(dateStr, "YYYY MM DD");
+        m = moment(dateStr, 'YYYY MM DD');
 
         if (!m.isValid()) {
           //throw error
-          throw new Error("Parse Date Failed Moment Validation");
+          throw new Error('Parse Date Failed Moment Validation');
         }
       }
       $log.debug('date: ' + m.format('X'));
@@ -82,21 +96,20 @@
     }
 
     function populateDates() {
-      ServeOpportunities.AllOpportunityDates.query({
-        "id": vm.params.recordId
-      }, function(retVal) {
+      ServeOpportunities.AllOpportunityDates.query(
+        { 'id': vm.params.recordId }, function(retVal) {
         _.each(retVal, function(d) {
           var dateNum = Number(d * 1000);
-          var dateObj = new Date(dateNum);
-          vm.eventDates.push((dateObj.getMonth() + 1) + "/" + dateObj.getDate() + "/" + dateObj.getFullYear());
+          var m = moment(dateNum);
+          vm.eventDates.push(m.format('MM/DD/YYYY'));
         });
         vm.fromDt = _.first(vm.eventDates);
         vm.toDt = _.last(vm.eventDates);
       });
     }
 
-    function saveRsvp(isValid) {
-      if (!isValid) {
+    function saveRsvp(validForm) {
+      if (!validForm) {
         return;
       }
 
@@ -124,7 +137,7 @@
     }
 
     function showError() {
-      return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === "-1";
+      return vm.params.selectedCount > 1 || vm.params.recordDescription === undefined || vm.params.recordId === '-1';
     }
   }
 

@@ -148,14 +148,16 @@ describe('Signup To Serve Tool', function(){
       it('should save RSVP for one participant', function(){
 
         $httpBackend.flush();
-        $httpBackend.expectPOST( window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedSingleRSVP).respond(201, '');
+        $httpBackend.expectPOST(
+          window.__env__['CRDS_API_ENDPOINT'] + 'api/serve/save-rsvp', expectedSingleRSVP
+        ).respond(201, '');
         controller.group.eventTypeId = 142;
         controller.participants = singleParticipant;
         controller.selectedFrequency = {'value':0,'text':'Once'};
         controller.selectedEvent = '5/1/2015';
         controller.attending = true;
         controller.saveRsvp(true);
-        $httpBackend.flush();
+        $httpBackend.flush(true);
       });
 
       it('should save RSVP for multiple participants', function(){
