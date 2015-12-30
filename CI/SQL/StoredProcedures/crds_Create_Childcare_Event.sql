@@ -60,7 +60,7 @@ BEGIN
 					JOIN [dbo].[Congregations] con on con.Congregation_ID = e.Congregation_ID
 					JOIN [dbo].[Contacts] c on c.Contact_ID = con.Childcare_Contact
 					WHERE e.Event_ID = @PARENT_EVENT_ID
-					
+
 					-- Insert new childcare event
 					INSERT INTO [dbo].[Events](
 						[Domain_ID]
