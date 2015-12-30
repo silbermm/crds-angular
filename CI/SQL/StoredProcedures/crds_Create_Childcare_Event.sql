@@ -48,17 +48,20 @@ BEGIN
 					DECLARE @P_PROGRAM int;
 					DECLARE @P_START DateTime;
 					DECLARE @P_END DateTime;
+					DECLARE @C_CONTACT int = 5;
 
-					SELECT @P_EVENT_TITLE = Event_Title, 
-						   @P_CONGREGATION = Congregation_ID,
-						   @P_Program = Program_ID,
-						   @P_Start = Event_Start_Date,
-						   @P_End = Event_End_Date
-				    FROM [dbo].[Events] 
-					WHERE Event_ID = @PARENT_EVENT_ID
+					SELECT @P_EVENT_TITLE = e.Event_Title, 
+						   @P_CONGREGATION = e.Congregation_ID,
+						   @P_Program = e.Program_ID,
+						   @P_Start = e.Event_Start_Date,
+						   @P_End = e.Event_End_Date,
+						   @C_Contact = c.Contact_ID
+				    FROM [dbo].[Events] e
+					JOIN [dbo].[Congregations] con on con.Congregation_ID = e.Congregation_ID
+					JOIN [dbo].[Contacts] c on c.Contact_ID = con.Childcare_Contact
+					WHERE e.Event_ID = @PARENT_EVENT_ID
 					
 					-- Insert new childcare event
-					Print N'Insert a new childcare event'
 					INSERT INTO [dbo].[Events](
 						[Domain_ID]
 					   ,[Event_Title]
@@ -79,7 +82,7 @@ BEGIN
 						,@CHILDCARE_EVENT_TYPE
 						,@P_CONGREGATION
 						,@P_PROGRAM
-						,5
+						,@C_Contact
 						,0
 						,@P_START
 						,@P_END
@@ -90,8 +93,7 @@ BEGIN
 					RETURN 1;											
 				END
 			ELSE
-				BEGIN
-					Print N'No need to add a new childcare event, one already exists'
+				BEGIN					
 					RETURN 0;
 				END
 		END 
