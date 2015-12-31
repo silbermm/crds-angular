@@ -442,7 +442,7 @@ namespace crds_angular.Services
         {
             var templateId = _configurationWrapper.GetConfigIntValue("PrivateInviteTemplate");
             var template = _communicationService.GetTemplate(templateId);
-            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             var mergeData = SetMergeData(invite.PledgeCampaignIdText, invite.PledgeCampaignId, invite.InvitationGuid, invite.RecipientName);
 
             return new Communication
