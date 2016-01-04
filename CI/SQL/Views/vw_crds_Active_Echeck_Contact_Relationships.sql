@@ -20,6 +20,13 @@ AS
 -- Description: View to limit the echeck relationships to active contacts that have end dates in the future 
 --              Addressed issue with relationships where end_date is only applied to one of the 2 relationship records
 -- =============================================
+--
+-- **************************
+-- Change History
+-- **************************
+-- Story    Date	    Author            Description	
+-- ------   --------    ----------------  -----------
+-- US1984   01/04/2016  Charlie Retzler   Fixed bug with c2 joins checking status on c rather than c2
 
 	SELECT
 			cr.*
@@ -30,7 +37,7 @@ AS
 					cr._Triggered_By = cr2.Contact_Relationship_ID 
 			-- Only Active Contacts
 			INNER JOIN Contacts c ON c.Contact_ID = cr.Contact_ID AND c.Contact_Status_ID = 1
-			INNER JOIN Contacts c2 ON c2.Contact_ID = cr.Related_Contact_ID AND c.Contact_Status_ID = 1
+			INNER JOIN Contacts c2 ON c2.Contact_ID = cr.Related_Contact_ID AND c2.Contact_Status_ID = 1
 		WHERE
 			cr.Relationship_ID IN (40, 45) 
 			AND						
@@ -53,7 +60,7 @@ AS
 					cr.Contact_Relationship_Id = cr2._Triggered_By
 			-- Only Active Contacts
 			INNER JOIN Contacts c ON c.Contact_ID = cr.Contact_ID AND c.Contact_Status_ID = 1
-			INNER JOIN Contacts c2 ON c2.Contact_ID = cr.Related_Contact_ID AND c.Contact_Status_ID = 1
+			INNER JOIN Contacts c2 ON c2.Contact_ID = cr.Related_Contact_ID AND c2.Contact_Status_ID = 1
 		WHERE
 			cr.Relationship_ID IN (40, 45) 
 			AND						
