@@ -39,7 +39,9 @@
           source.viewBox = '0 0 32 32';
           if (source.last4 == undefined){             
              source.icon = '';
-          }         
+          }  else {
+            source.name = 'ending in ' + source.last4;
+          }       
           break;
         case 'CreditCard':
           source.icon = getCardIcon(source.brand);
