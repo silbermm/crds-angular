@@ -200,6 +200,7 @@
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.isHouseholdCollapsed = false;
+          vm.submitted = false;
           return;
         }
 
