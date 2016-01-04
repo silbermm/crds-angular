@@ -59,12 +59,11 @@ describe('Check Batch Processor Tool', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
-  var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
+  var CRDS_TOOLS_CONSTANTS = { SECURITY_ROLES: { FinanceTools: 123 } };
   var GIVE_PROGRAM_TYPES = { Fuel: 999, NonFinancial: 888 };
 
   beforeEach(function() {
     angular.mock.module('crossroads', function($provide) {
-      $provide.constant('GIVE_ROLES', GIVE_ROLES);
       $provide.constant('GIVE_PROGRAM_TYPES', GIVE_PROGRAM_TYPES);
       $provide.value('$state', { get: function() {} });
     });
@@ -85,12 +84,13 @@ describe('Check Batch Processor Tool', function() {
   var MPTools;
   var Programs;
 
-  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _Programs_, $injector) {
+  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _Programs_, $injector, _CRDS_TOOLS_CONSTANTS_) {
     $controller = _$controller_;
     $log = _$log_;
     Programs = _Programs_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
+    _CRDS_TOOLS_CONSTANTS_.SECURITY_ROLES = CRDS_TOOLS_CONSTANTS.SECURITY_ROLES;
   }));
 
   describe('Check Batch Processor Controller', function() {
@@ -122,7 +122,7 @@ describe('Check Batch Processor Tool', function() {
         expect(controller.allowAccess()).toBeFalsy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
-        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools);
       });
 
       it('Should not allow access if user is authenticated but not authorized', function() {
@@ -132,7 +132,7 @@ describe('Check Batch Processor Tool', function() {
         expect(controller.allowAccess()).toBeTruthy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
-        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools);
       });
     });
 

@@ -3,13 +3,14 @@
 
   module.exports = TripPrivateInviteController;
 
-  TripPrivateInviteController.$inject = ['$rootScope', '$scope', '$window', '$log', 'MPTools', 'Trip'];
+  TripPrivateInviteController.$inject = ['$rootScope', '$scope', '$window', '$log', 'MPTools', 'Trip', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function TripPrivateInviteController($rootScope, $scope, $window, $log, MPTools, Trip) {
+  function TripPrivateInviteController($rootScope, $scope, $window, $log, MPTools, Trip, AuthService, CRDS_TOOLS_CONSTANTS) {
 
     $log.debug('TripPrivateInviteController');
     var vm = this;
 
+    vm.allowAccess = allowAccess;
     vm.cancel = cancel;
     vm.emailPrefix = 'privateInvite';
     vm.fieldError = fieldError;
@@ -28,6 +29,10 @@
       vm.pledgeCampaignId = vm.params.recordId;
       vm.multipleRecordsSelected = showError();
       vm.viewReady = true;
+    }
+
+    function allowAccess() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.TripTools));
     }
 
     function fieldError(form, field) {
