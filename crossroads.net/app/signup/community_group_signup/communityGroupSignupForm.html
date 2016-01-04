@@ -67,14 +67,18 @@
             </p>
           </form>
         </div>
-
       <script type="text/ng-template" id="editProfile.html">
         <div class="modal-header">
           <a type="button" class="close" ng-click="groupsignup.modalInstance.close()">x</a>
           <h4 class="modal-title">Edit Profile</h4>
         </div>
         <div class="modal-body">
-          <profile-personal updated-person="groupsignup.response[0]" modal-instance="groupsignup.modalInstance"/>
+          <profile-personal
+            updated-person='groupsignup.response[0]'
+            modal-instance="groupsignup.modalInstance"
+            for-trips="true"
+            locations='groupsignup.locations'
+            allow-password-change="false"/>
         </div>
       </script>
     </div>

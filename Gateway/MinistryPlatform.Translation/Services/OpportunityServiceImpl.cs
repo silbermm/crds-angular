@@ -199,6 +199,11 @@ namespace MinistryPlatform.Translation.Services
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
             var eventType = opp["Event_Type_ID_Text"];
 
+            if (eventType == null)
+            {
+                throw new ApplicationException("Invalid Event Type, Opportunity Id: " + opportunityId);
+            }
+
             //Now get all the events for this type
             var searchString = ",," + eventType;
             var events = _ministryPlatformService.GetRecordsDict(_eventPage, token, searchString);

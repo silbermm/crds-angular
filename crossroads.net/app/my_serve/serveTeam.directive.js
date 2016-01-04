@@ -40,6 +40,8 @@
       scope.buttonDisabled = false;
       scope.buttonState = buttonState;
       scope.cancel = cancel;
+      scope.changeFromDate = changeFromDate;
+      scope.changeToDate = changeToDate;
       scope.currentActiveTab = null;
       scope.currentMember = null;
       scope.datesDisabled = true;
@@ -445,18 +447,19 @@
           $rootScope.$emit('updateAfterSave',
               {member: scope.currentMember, groupId: scope.team.groupId, eventIds: updatedEvents.EventIds});
 
-          determineSaveButtonState(); 
-          
+          determineSaveButtonState();
+
           // should we reset the form to pristine
           if (!isFormDirty()) {
             scope.teamForm.$setPristine();
           }
+
           return true;
         }, function(err) {
 
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           scope.processing = false;
-          determineSaveButtonState(); 
+          determineSaveButtonState();
           return false;
         });
       }

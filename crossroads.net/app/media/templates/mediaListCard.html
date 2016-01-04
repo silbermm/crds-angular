@@ -1,12 +1,12 @@
 <ul class="media-list">
     <li class="col-sm-2 col-xs-6" ng-repeat="item in items | orderBy: '-created' | limitTo: limit">
-        <a ui-sref="mediaSingle({ id: {{item.id}}, title: '{{item.title | replaceNonAlphaNumeric }}' })">
+        <a ui-sref="mediaSingle({ id: {{item.id}}, title: '{{item.title | replaceNonAlphaNumeric }}' })" title="{{item.title}}">
           <div class="sixteen-nine overflow-hidden">
             <div class="aspect-content">
               <img data-src="{{item.still.filename}}" class="img-responsive imgix-fluid img-full-width">
             </div><!--/aspect-content-->
           </div><!--/sixteen-nine overflow-hidden-->
-          <h4 class="flush-bottom">{{item.title}}</h4>
+          <h5 class="flush-bottom ellipsis">{{item.title}}</h5>
           <p class="text-muted">{{item.created | date: "MM.dd.yyyy"}}</p>
         </a>
     </li>

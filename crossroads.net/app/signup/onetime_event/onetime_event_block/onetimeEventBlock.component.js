@@ -23,10 +23,12 @@
     function OnetimeEventBlockController() {
       var vm = this;
       vm.childCareChange = childCareChange;
+      vm.childcareRequested = false;
       vm.endDateTime = moment(vm.event.endDate);
       vm.endTime = endTime;
       vm.getDate = getDate;
       vm.isCollapsed = true;
+      vm.popoverText = htmlToPlaintext($rootScope.MESSAGES.oneTimeEventChildcarePopup.content);
       vm.saving = false;
       vm.showChildcare = showChildcare;
       vm.startDateTime = moment(vm.event.startDate);
@@ -44,24 +46,33 @@
       }
 
       function endTime() {
-        return vm.endDateTime.format('h:mm A');
+        return vm.endDateTime.format('h:mma');
       }
 
       function getDataToSave() {
-        return _.chain(vm.thisFamily).filter(function(member) {
+        var participants = _.chain(vm.thisFamily).filter(function(member) {
           return member.selected;
         }).map(function(member) {
           return {
-            eventId: vm.event.eventId,
             participantId: member.participantId,
-            groupId: vm.group.groupId,
-            childCareNeeded: (member.childCareNeeded === undefined) ? false : member.childCareNeeded
+            childcareRequested: (vm.childcareRequested) && (member.age >= 18)
           };
         }).value();
+
+        var dto = {
+          eventId: vm.event.eventId,
+          groupId: vm.group.groupId,
+          participants: participants
+        };
+        return dto;
       }
 
       function getDate() {
-        return vm.startDateTime.format('MM/DD/YYYY');
+        return vm.startDateTime.format('dddd, MMMM D, YYYY');
+      }
+
+      function htmlToPlaintext(text) {
+        return text ? String(text).replace(/<[^>]+>/gm, '') : '';
       }
 
       function showChildcare(member) {
@@ -69,25 +80,21 @@
       }
 
       function startTime() {
-        return vm.startDateTime.format('h:mm A');
+        return vm.startDateTime.format('h:mma');
       }
 
       function submit() {
         vm.saving = true;
         var toSave = getDataToSave();
 
-        if (_.isEmpty(toSave)) {
+        if (_.isEmpty(toSave.participants)) {
           vm.saving = false;
           $rootScope.$emit('notify', $rootScope.MESSAGES.chooseOne);
           return;
         }
 
-        console.log(vm.event.eventId);
-
-        console.log(toSave);
-
-        EventService.event.save({eventId: vm.event.eventId}, toSave, function(saved) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpSaved);
+        EventService.event.save(toSave, function(saved) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.rsvpOneTimeEventSuccess);
           vm.saving = false;
         },
 

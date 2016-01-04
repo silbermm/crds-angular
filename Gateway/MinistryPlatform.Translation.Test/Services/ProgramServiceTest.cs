@@ -109,5 +109,30 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.IsNotNull(program);
             Assert.AreEqual(1234, program.CommunicationTemplateId);
         }
+
+        [Test]
+        public void TestGetProgramWithNullEmailTemplate()
+        {
+            var getRecordResponse = new Dictionary<string, object>()
+            {
+                {"Communication_ID", null},
+                {"Program_Type_ID", 4},
+                {"Program_ID", 3},
+                {"Program_Name", "TEst Name"},
+                {"Allow_Recurring_Giving", false}
+            };
+
+            const int programId = 3;
+
+            _ministryPlatformService.Setup(
+                mocked => mocked.GetRecordDict(ProgramsPageId, programId, It.IsAny<string>(), false)).Returns(getRecordResponse);
+
+            var program = _fixture.GetProgramById(programId);
+
+            _ministryPlatformService.VerifyAll();
+            Assert.IsNotNull(program);
+            Assert.AreEqual(null, program.CommunicationTemplateId);
+        }
+
     }
 }

@@ -89,8 +89,6 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        [Ignore]
-        //TODO:: Remove ignore after fixing EZSCAN testing hardcoding of account and routing number to stripe
         public void TestCreateDonationsForBatch()
         {
             var checks = new List<CheckScannerCheck>
@@ -159,7 +157,7 @@ namespace crds_angular.test.Services
             
             _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(checks[0].AccountNumber, checks[0].RoutingNumber)).Returns(contactDonorExisting);
            
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, (int) (checks[0].Amount *Constants.StripeDecimalConversionValue), contactDonorExisting.DonorId)).Returns(new StripeCharge
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorExisting.ProcessorId, contactDonorExisting.Account.ProcessorAccountId, checks[0].Amount, contactDonorExisting.DonorId)).Returns(new StripeCharge
             {
                 Id = "1020304",
                 Source = new StripeSource()
@@ -234,7 +232,7 @@ namespace crds_angular.test.Services
                         "tok123",
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
-            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, (int)(checks[1].Amount * Constants.StripeDecimalConversionValue), contactDonorNew.DonorId)).Returns(mockCharge);
+            _paymentService.Setup(mocked => mocked.ChargeCustomer(contactDonorNew.ProcessorId, contactDonorNew.Account.ProcessorAccountId, checks[1].Amount, contactDonorNew.DonorId)).Returns(mockCharge);
 
             _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, mockCharge.Source.id, contactDonorNew.ProcessorId)).Returns(donorAcctId);
@@ -366,8 +364,6 @@ namespace crds_angular.test.Services
         }
 
         [Test]
-        [Ignore]
-        //TODO:: Remove ignore after fixing EZSCAN testing hardcoding of account and routing number to stripe
         public void TestCreateForCreateDonor()
         {
             var check = new CheckScannerCheck

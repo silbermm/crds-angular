@@ -3,9 +3,8 @@
 
   <!-- Card Header -->
   <div class="card-header card-background-dark clearfix">
-    <p class="flush-bottom">{{ cardName(trip.eventParticipantFirstName, trip.eventParticipantLastName) }}</p>
-    <h2 class="card-row flush-bottom">{{trip.tripName}}</h2>
-    <p class="text-muted trip-date">{{trip.tripStartDate}} - {{trip.tripEnd}}</p>
+    <h3 class="card-row flush-bottom">{{trip.tripName}}</h3>
+    <span class="text-muted">{{ cardName(trip.eventParticipantFirstName, trip.eventParticipantLastName) }}</span> <span class="hidden-xs">&middot;</span> <br class="visible-xs" /> <span class="text-muted trip-date">{{trip.tripStartDate}} - {{trip.tripEnd}}</span>
   </div><!-- /card-heading -->
 
   <!-- Fund Progress Bar -->
@@ -16,7 +15,7 @@
   </div><!-- /fund-progress -->
 
   <!-- Goal Status -->
-  <div ng-if="goalMet(trip.totalRaised, trip.fundraisingGoal)" class="col-xs-12 push-bottom goal-status">
+  <div ng-if="goalMet(trip.totalRaised, trip.fundraisingGoal)" class="col-xs-12 goal-status">
     <div class="card-row days-left">Goal Reached!</div>
     <p class="text-muted">{{trip.fundraisingDays}} days remaining for raising funds</p>
   </div><!-- /goal-status -->

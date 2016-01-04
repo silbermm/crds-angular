@@ -41,8 +41,10 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Can_Impersonate", true},
                     {"User_GUID", Guid.NewGuid()},
-                    {"User_Name", "me@here.com"}
-                        
+                    {"User_Name", "me@here.com"},
+                    {"User_Email", "me@here.com"},
+                    {"dp_RecordID", 1 }
+
                 }
             };
             _ministryPlatformService.Setup(mocked => mocked.GetPageViewRecords(102030, "ABC", "\"me@here.com\",", string.Empty, 0)).Returns(mpResult);
@@ -65,7 +67,9 @@ namespace MinistryPlatform.Translation.Test.Services
                 {
                     {"Can_Impersonate", true},
                     {"User_GUID", Guid.NewGuid()},
-                    {"User_Name", "me@here.com"}
+                    {"User_Name", "me@here.com"},
+                    {"User_Email", "me@here.com"},
+                    {"dp_RecordID", 1 }
                         
                 }
             };

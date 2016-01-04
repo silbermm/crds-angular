@@ -62,7 +62,7 @@ namespace Crossroads.AsyncJobs
                 .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ToInt("Program_ID", false)))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.ToString("Program_Name")))
                 .ForMember(dest => dest.ProgramType, opts => opts.MapFrom(src => src.ToInt("Program_Type_ID", false)))
-                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.ContainsKey("Communication_ID") ? src.ToInt("Communication_ID", false) : (int?)null))
+                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.ContainsKey("Communication_ID") ? src.ToNullableInt("Communication_ID", false) : (int?)null))
                 .ForMember(dest => dest.AllowRecurringGiving, opts => opts.MapFrom(src => src.ToBool("Allow_Recurring_Giving", false)));
 
             Mapper.CreateMap<Program, ProgramDTO>()
@@ -142,8 +142,8 @@ namespace Crossroads.AsyncJobs
                 .ForMember(dest => dest.AddressLine2, opts => opts.MapFrom(src => src.Address_Line_2))
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City))
                 .ForMember(dest => dest.State, opts => opts.MapFrom(src => src.State))
-                .ForMember(dest => dest.PostalCode, opts => opts.MapFrom(src => src.Postal_Code))
-                .ForMember(dest => dest.AnniversaryDate, opts => opts.MapFrom(src => src.Anniversary_Date))
+                .ForMember(dest => dest.PostalCode, opts => opts.MapFrom(src => src.Postal_Code))                
+                .ForMember(dest => dest.ParticipantStartDate, opts => opts.MapFrom(src => src.Participant_Start_Date))
                 .ForMember(dest => dest.ForeignCountry, opts => opts.MapFrom(src => src.Foreign_Country))
                 .ForMember(dest => dest.HomePhone, opts => opts.MapFrom(src => src.Home_Phone))
                 .ForMember(dest => dest.CongregationId, opts => opts.MapFrom(src => src.Congregation_ID))

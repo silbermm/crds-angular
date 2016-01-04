@@ -45,7 +45,7 @@ namespace crds_angular.test.controllers
         {
             PasswordResetRequest resetRequest = new PasswordResetRequest();
             resetRequest.Email = "test_email";
-            var result = loginController.ResetPassword(resetRequest);
+            var result = loginController.RequestPasswordReset(resetRequest);
             Assert.AreEqual(typeof(OkResult), result.GetType());
         }
     }

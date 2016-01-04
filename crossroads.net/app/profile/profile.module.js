@@ -6,6 +6,7 @@
   angular.module(MODULES.PROFILE, [MODULES.CORE, MODULES.COMMON])
     .config(require('./profile.routes'))
     .controller('ProfileController', require('./profile.controller'))
+    .controller('ProfileModalController', require('./profileModalController'))
     ;
 
   require('./communications');
@@ -14,5 +15,6 @@
   require('./giving');
 
   require('./profile.html');
+  require('./editProfile.html');
   require('./personal/profilePersonal.html');
 })();

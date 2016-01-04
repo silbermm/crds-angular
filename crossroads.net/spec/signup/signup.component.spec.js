@@ -3,7 +3,6 @@ require('../../app/common/common.module');
 require('../../app/signup');
 
 describe('Signup Component', function() {
-  
   var CONSTANTS = require('crds-constants');
   var MODULE = CONSTANTS.MODULES.SIGNUP;
   var helpers = require('./signup.helpers');
@@ -30,14 +29,14 @@ describe('Signup Component', function() {
 
     SignupService = $injector.get('SignupService');
     SignupService.cmsInfo = helpers.cmsInfo;
-    
+
     scope = $rootScope.$new();
     element = '<crds-signup></crds-signup>';
     element = $compile(element)(scope);
     scope.$digest();
     isolated = element.isolateScope();
   }));
-  
+
   it('should show the onetimesignup component', function() {
     expect(isolated.signup.showOnetimeEvent()).toBe(true);
   });

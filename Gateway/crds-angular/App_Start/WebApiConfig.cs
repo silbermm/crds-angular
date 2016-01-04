@@ -1,7 +1,4 @@
-﻿using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Configuration;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -12,7 +9,8 @@ namespace crds_angular
     {
         public static void Register(HttpConfiguration config)
         {
-            var cors = new EnableCorsAttribute("*", "*", "*");
+            var cors = new EnableCorsAttribute(ConfigurationManager.AppSettings["CORS"], "*", "*");
+            cors.SupportsCredentials = true;
             config.EnableCors(cors);
 
             // Web API configuration and services

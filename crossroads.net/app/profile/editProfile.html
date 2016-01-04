@@ -3,5 +3,11 @@
     <h4 class="modal-title">Edit Profile</h4>
 </div>
 <div class="modal-body">
-    <profile-personal updated-person="modal.person" modal-instance="modal.modalInstance"/>
+    <profile-personal
+      contact-id='modal.person.contactId'
+      updated-person='modal.person'
+      modal-instance='modal.modalInstance'
+      locations='modal.locations'
+      for-trips='true'
+      allow-password-change='false'>
 </div>

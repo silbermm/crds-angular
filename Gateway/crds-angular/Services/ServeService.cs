@@ -6,6 +6,7 @@ using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
+using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using log4net;
 using MinistryPlatform.Models;
@@ -34,6 +35,8 @@ namespace crds_angular.Services
         private readonly IParticipantService _participantService;
         private readonly ICommunicationService _communicationService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly IApiUserService _apiUserService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -53,7 +56,9 @@ namespace crds_angular.Services
                             IGroupParticipantService groupParticipantService,
                             IGroupService groupService,
                             ICommunicationService communicationService,
-                            IAuthenticationService authenticationService)
+                            IAuthenticationService authenticationService,
+                            IConfigurationWrapper configurationWrapper,
+                            IApiUserService apiUserService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -64,6 +69,8 @@ namespace crds_angular.Services
             _groupService = groupService;
             _communicationService = communicationService;
             _authenticationService = authenticationService;
+            _configurationWrapper = configurationWrapper;
+            _apiUserService = apiUserService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(string token)
@@ -100,7 +107,7 @@ namespace crds_angular.Services
 
             relationships.AddRange(family);
 
-            return relationships;
+            return relationships.OrderByDescending(s => s.Age).ToList();
         }
 
         public DateTime GetLastServingDate(int opportunityId, string token)
@@ -206,9 +213,9 @@ namespace crds_angular.Services
             return servingDays;
         }
 
-        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded, string token)
-        {
-            var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, token);
+        public Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded)
+        {               
+            var opportunity = _opportunityService.GetOpportunityResponses(opportunityId, _apiUserService.GetToken());
             var min = minNeeded;
             var max = maxNeeded;
             var signedUp = opportunity.Count(r => r.Event_ID == eventId);
@@ -536,13 +543,14 @@ namespace crds_angular.Services
         private Communication SetupCommunication(int templateId, MyContact groupContact, MyContact toContact, Dictionary<string, object> mergeData)
         {
             var template = _communicationService.GetTemplate(templateId);
+            var defaultContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             return new Communication
             {
                 AuthorUserId = 5,
                 DomainId = 1,
                 EmailBody = template.Body,
                 EmailSubject = template.Subject,
-                FromContact = new Contact {ContactId = groupContact.Contact_ID, EmailAddress = groupContact.Email_Address},
+                FromContact = new Contact {ContactId = defaultContact.Contact_ID, EmailAddress = defaultContact.Email_Address},
                 ReplyToContact = new Contact {ContactId = groupContact.Contact_ID, EmailAddress = groupContact.Email_Address},
                 ToContacts = new List<Contact> {new Contact {ContactId = toContact.Contact_ID, EmailAddress = toContact.Email_Address}},
                 MergeData = mergeData

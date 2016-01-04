@@ -171,6 +171,12 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donationStatus = 4;
             const string itemNumber = "98766";
 
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
+
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
               It.IsAny<string>(), true)).Returns(expectedDonationId);
@@ -180,7 +186,7 @@ namespace MinistryPlatform.Translation.Test.Services
                 It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
 
             _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             var expectedDonationValues = new Dictionary<string, object>
             {
                 {"Donor_ID", donorId},
@@ -295,6 +301,12 @@ namespace MinistryPlatform.Translation.Test.Services
             var searchString = ",\"" + donorId + "\"";
             var donationPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Donations"]);
             var donationDistPageId = Convert.ToInt32(ConfigurationManager.AppSettings["Distributions"]);
+            
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
 
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
               donationPageId, It.IsAny<Dictionary<string, object>>(),
@@ -303,7 +315,7 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.Setup(mocked => mocked.CreateRecord(
                 donationDistPageId, It.IsAny<Dictionary<string, object>>(),
                 It.IsAny<string>(), true)).Returns(expectedDonationDistributionId);
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.SendMessage(It.IsAny<Communication>()));
 
             var expectedDonationValues = new Dictionary<string, object>
@@ -599,6 +611,12 @@ namespace MinistryPlatform.Translation.Test.Services
                 }
             };
 
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
             _communicationService.Setup(
                 mocked =>
@@ -633,6 +651,12 @@ namespace MinistryPlatform.Translation.Test.Services
             const int donorId = 9876;
             const int donationAmt = 4343;
             const string paymentType = "Bank";
+
+            var defaultContact = new MyContact()
+            {
+                Contact_ID = 1234556,
+                Email_Address = "giving@crossroads.net"
+            };
 
             var getTemplateResponse = new MessageTemplate()
             {
@@ -681,7 +705,7 @@ namespace MinistryPlatform.Translation.Test.Services
                     {"Decline_Reason", emailReason},
                 }
             };
-
+            _contactService.Setup(mocked => mocked.GetContactById(Convert.ToInt32(ConfigurationManager.AppSettings["DefaultGivingContactEmailId"]))).Returns(defaultContact);
             _communicationService.Setup(mocked => mocked.GetTemplate(declineEmailTemplate)).Returns(getTemplateResponse);
             _communicationService.Setup(
                 mocked =>
@@ -704,6 +728,100 @@ namespace MinistryPlatform.Translation.Test.Services
             _ministryPlatformService.VerifyAll();
             _communicationService.VerifyAll();
 
+        }
+
+        [Test]
+        public void TestSetupConfirmationEmailWithTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+
+            var program = new Program
+            {
+                CommunicationTemplateId = 9000,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(program.CommunicationTemplateId.Value, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestSetupConfirmationEmailWithNullTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+            const int templateId = 987;
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate")).Returns(templateId);
+
+            var program = new Program
+            {
+                CommunicationTemplateId = null,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(templateId, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
+        }
+
+        [Test]
+        public void TestSetupConfirmationEmailWithZeroTemplate()
+        {
+            const int programId = 123;
+            const int donorId = 456;
+            const decimal amount = 789.10M;
+            var setupDate = DateTime.Now.AddDays(2);
+            const string accountType = "bank";
+
+            const int templateId = 987;
+            _configuration.Setup(mocked => mocked.GetConfigIntValue("DefaultGiveConfirmationEmailTemplate")).Returns(templateId);
+
+            var program = new Program
+            {
+                CommunicationTemplateId = 0,
+                Name = "program name"
+            };
+
+            // TODO Mocking the test fixture in order to mock SendEmail.  Probably ought to refactor SendEmail to a separate class - shouldn't have to mock the class we're testing...
+            var donorService = new Mock<DonorService>(_ministryPlatformService.Object, _programService.Object, _communicationService.Object, _authService.Object, _contactService.Object, _configuration.Object, _crypto.Object)
+            {
+                CallBase = true
+            };
+            donorService.Setup(mocked => mocked.SendEmail(templateId, donorId, amount, accountType, setupDate, program.Name, "None", null));
+
+            _programService.Setup(mocked => mocked.GetProgramById(programId)).Returns(program);
+
+            donorService.Object.SetupConfirmationEmail(programId, donorId, amount, setupDate, accountType);
+            _programService.VerifyAll();
+            donorService.VerifyAll();
         }
 
         [Test]
@@ -1439,7 +1557,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[0]["User_Email"], result[0].EmailAddress);
             Assert.AreEqual(records[0]["Frequency"], result[0].Frequency);
             Assert.AreEqual(records[0]["Recurrence"], result[0].Recurrence);
-            Assert.AreEqual(records[0]["Start_Date"], result[0].StartDate);
+            Assert.AreEqual(((DateTime)records[0]["Start_Date"]).ToUniversalTime().Date, result[0].StartDate);
             Assert.AreEqual(records[0]["End_Date"], result[0].EndDate);
             Assert.AreEqual(records[0]["Amount"], result[0].Amount);
             Assert.AreEqual(records[0]["Program_ID"], result[0].ProgramID);
@@ -1457,7 +1575,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[1]["User_Email"], result[1].EmailAddress);
             Assert.AreEqual(records[1]["Frequency"], result[1].Frequency);
             Assert.AreEqual(records[1]["Recurrence"], result[1].Recurrence);
-            Assert.AreEqual(records[1]["Start_Date"], result[1].StartDate);
+            Assert.AreEqual(((DateTime)records[1]["Start_Date"]).ToUniversalTime().Date, result[1].StartDate);
             Assert.AreEqual(records[1]["End_Date"], result[1].EndDate);
             Assert.AreEqual(records[1]["Amount"], result[1].Amount);
             Assert.AreEqual(records[1]["Program_ID"], result[1].ProgramID);
@@ -1475,7 +1593,7 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual(records[2]["User_Email"], result[2].EmailAddress);
             Assert.AreEqual(records[2]["Frequency"], result[2].Frequency);
             Assert.AreEqual(records[2]["Recurrence"], result[2].Recurrence);
-            Assert.AreEqual(records[2]["Start_Date"], result[2].StartDate);
+            Assert.AreEqual(((DateTime)records[2]["Start_Date"]).ToUniversalTime().Date, result[2].StartDate);
             Assert.AreEqual(records[2]["End_Date"], result[2].EndDate);
             Assert.AreEqual(records[2]["Amount"], result[2].Amount);
             Assert.AreEqual(records[2]["Program_ID"], result[2].ProgramID);

@@ -5,6 +5,7 @@ using AutoMapper;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.Crossroads.Events;
 using crds_angular.Models.Crossroads.Opportunity;
+using crds_angular.Models.Crossroads.Participants;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.MailChimp;
@@ -21,6 +22,7 @@ namespace crds_angular.App_Start
         public static void RegisterMappings()
         {
             Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
+            Mapper.Initialize(cfg => cfg.AddProfile<ParticipantProfile>());
 
             Mapper.CreateMap<Dictionary<string, object>, AccountInfo>()
                 .ForMember(dest => dest.EmailNotifications,
@@ -66,7 +68,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.ProgramId, opts => opts.MapFrom(src => src.ToInt("Program_ID", false)))
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.ToString("Program_Name")))
                 .ForMember(dest => dest.ProgramType, opts => opts.MapFrom(src => src.ToInt("Program_Type_ID", false)))
-                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.ContainsKey("Communication_ID") ? src.ToInt("Communication_ID", false) : (int?)null))
+                .ForMember(dest => dest.CommunicationTemplateId, opts => opts.MapFrom(src => src.ContainsKey("Communication_ID") ? src.ToNullableInt("Communication_ID", false) : (int?)null))
                 .ForMember(dest => dest.AllowRecurringGiving, opts => opts.MapFrom(src => src.ToBool("Allow_Recurring_Giving", false)));
 
             Mapper.CreateMap<Program, ProgramDTO>()
@@ -153,7 +155,7 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.City, opts => opts.MapFrom(src => src.City))
                 .ForMember(dest => dest.State, opts => opts.MapFrom(src => src.State))
                 .ForMember(dest => dest.PostalCode, opts => opts.MapFrom(src => src.Postal_Code))
-                .ForMember(dest => dest.AnniversaryDate, opts => opts.MapFrom(src => src.Anniversary_Date))
+                .ForMember(dest => dest.ParticipantStartDate, opts => opts.MapFrom(src => src.Participant_Start_Date))                
                 .ForMember(dest => dest.ForeignCountry, opts => opts.MapFrom(src => src.Foreign_Country))
                 .ForMember(dest => dest.HomePhone, opts => opts.MapFrom(src => src.Home_Phone))
                 .ForMember(dest => dest.CongregationId, opts => opts.MapFrom(src => src.Congregation_ID))
@@ -210,7 +212,9 @@ namespace crds_angular.App_Start
                 .ForMember(dest => dest.name, opts => opts.MapFrom(src => src.EventTitle))
                 .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
                 .ForMember(dest => dest.time, opts => opts.MapFrom(src => src.EventStartDate.ToString("h:mm")))
-                .ForMember(dest => dest.meridian, opts => opts.MapFrom(src => src.EventStartDate.ToString("tt")));
+                .ForMember(dest => dest.meridian, opts => opts.MapFrom(src => src.EventStartDate.ToString("tt")))
+                .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.EventStartDate))
+                .ForMember(dest => dest.EndDate, opts => opts.MapFrom(src => src.EventEndDate));
 
             Mapper.CreateMap<BulkEmailSubscriberOptDTO, BulkEmailSubscriberOpt>();
             Mapper.CreateMap<BulkEmailSubscriberOpt, BulkEmailSubscriberOptDTO>();

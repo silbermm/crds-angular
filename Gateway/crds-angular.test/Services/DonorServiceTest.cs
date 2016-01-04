@@ -865,13 +865,15 @@ namespace crds_angular.test.Services
 
             const int newDonorAccountId = 987;
 
+            DateTime? trialEndDate = DateTime.Now.AddDays(3);
             var oldSubscription = new StripeSubscription
             {
                 Id = "sub_123",
                 Plan = new StripePlan
                 {
                     Id = "plan_123"
-                }
+                },
+                TrialEnd = trialEndDate
             };
 
             var newPlan = new StripePlan
@@ -910,7 +912,7 @@ namespace crds_angular.test.Services
             _paymentService.Setup(mocked => mocked.UpdateCustomerSource(existingGift.StripeCustomerId, editGift.StripeTokenId)).Returns(stripeSource);
             _mpDonorService.Setup(mocked => mocked.CreateDonorAccount(stripeSource.brand, "0", stripeSource.last4, null, existingGift.DonorId, stripeSource.id, existingGift.StripeCustomerId)).Returns(newDonorAccountId);
             _paymentService.Setup(mocked => mocked.GetSubscription(existingGift.StripeCustomerId, existingGift.SubscriptionId)).Returns(oldSubscription);
-            _paymentService.Setup(mocked => mocked.UpdateSubscriptionPlan(existingGift.StripeCustomerId, existingGift.SubscriptionId, newPlan.Id)).Returns(oldSubscription);
+            _paymentService.Setup(mocked => mocked.UpdateSubscriptionPlan(existingGift.StripeCustomerId, existingGift.SubscriptionId, newPlan.Id, trialEndDate)).Returns(oldSubscription);
             _paymentService.Setup(mocked => mocked.CancelPlan(oldSubscription.Plan.Id)).Returns(oldSubscription.Plan);
             _paymentService.Setup(mocked => mocked.CreatePlan(editGift, donor)).Returns(newPlan);
             _mpDonorService.Setup(mocked => mocked.CancelRecurringGift(authUserToken, existingGift.RecurringGiftId.Value));

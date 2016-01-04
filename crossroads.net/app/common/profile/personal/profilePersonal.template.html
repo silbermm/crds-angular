@@ -178,7 +178,7 @@
 
     <div class="row">
       <div class="form-group col-sm-6" ng-class="{'has-error': profile.validation.showErrors(profile.pform, 'startAttendDate')}" >
-        <label for="startAttendDate" class="required">When did you start attending Crossroads?</label>
+        <label for="startAttendDate">When did you start attending Crossroads?</label>
         <span class="input-group datepicker">
           <input type="text"
                  class="form-control"
@@ -188,15 +188,13 @@
                  datepicker-popup="MM/yyyy"
                  datepicker-options="{minMode: 'month'}"
                  datepicker-mode="'month'"
-                 ng-model='profile.profileData.person.anniversaryDate'
+                 ng-model='profile.profileData.person.participantStartDate'
                  is-open='profile.startAttendingOpen'
                  close-text="Close"
                  min-date={{profile.crossroadsStartDate}}
                  max-date={{profile.today}}
                  ng-model-options="{updateOn:'blur'}"
-                 datepicker-validator
-                 ng-required="true"
-                 required>
+                 datepicker-validator>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" ng-click="profile.openStartAttendingDatePicker($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
@@ -278,9 +276,16 @@
       <profile-household household-info='profile.profileData.person' household-form='profile.householdForm' locations='profile.locations' is-collapsed='profile.isHouseholdCollapsed'/>
     </div>
 
-    <button id="save-personal" class="btn btn-primary" data-style="expand-left" ng-class='profile.buttonCss'  ng-click='profile.savePersonal()' >
-      {{profile.buttonText}}
-    </button>
+    <loading-button
+       loading-text='Saving...'
+       normal-text='{{ profile.buttonText }}'
+       input-type='button'
+       input-classes='btn btn-primary'
+       ng-class='profile.buttonCss'
+       loading-class='disabled'
+       ng-click='profile.savePersonal()'
+       loading='profile.submitted' >
+    </loading-button>
   </ng-form>
 
 </section>

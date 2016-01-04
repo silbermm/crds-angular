@@ -20,6 +20,6 @@ INSERT INTO [dbo].[dp_Role_Pages]
            ,[Quick_Add])
 SELECT @AllPlatformUsersRoleID, Page_ID, 3,0,0,1,1,1,0,1,0
 FROM dp_Pages 
-WHERE Display_Name IN ('My Tasks','My Messages','My Selections')
+WHERE Display_Name IN ('My Tasks','My Messages','My Selections', 'My Communications')
  AND NOT EXISTS (SELECT 1 FROM dp_Role_Pages RP WHERE RP.Page_ID = dp_Pages.Page_ID AND RP.Role_ID = @AllPlatformUsersRoleID)
 GO

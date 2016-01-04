@@ -137,12 +137,20 @@
       })
       .state('resetPassword', {
         parent: 'noSideBar',
-        url: '/reset-password',
+        url: '/reset-password?token',
         templateUrl: 'login/reset_password.html',
-        controller: 'LoginController',
+        controller: 'ResetPasswordController as resetPwController',
         data: {
           isProtected: false
-        }
+        },
+          resolve: {
+            PasswordService: 'PasswordService',
+            $stateParams: '$stateParams',
+            TokenStatus: function(PasswordService, $stateParams) {
+              var token = { token: $stateParams.token };
+              return PasswordService.VerifyResetToken.get(token).$promise;
+            }
+          }
       })
       .state('myprofile', {
         parent: 'noSideBar',
@@ -249,8 +257,9 @@
           loggedin: crds_utilities.checkLoggedin,
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
+            var link = addTrailingSlashIfNecessary($stateParams.link);
             return Page.get({
-              url: $stateParams.link
+              url: link
             }).$promise;
           }
         }
@@ -410,7 +419,7 @@
       })
       .state('tools.volunteerContact', {
         url: '/volunteer-contact',
-        template: '<volunteer-contact></volunteer-contact>', 
+        template: '<volunteer-contact></volunteer-contact>',
         resolve: {
           MPTools: 'MPTools'
         }

@@ -9,7 +9,7 @@
 
   function TripRoutes($stateProvider, $urlMatcherFactory, $locationProvider) {
 
-    $urlMatcherFactory.strictMode(false)
+    $urlMatcherFactory.strictMode(false);
 
     $stateProvider
       .state('tripsearch', {
@@ -86,7 +86,7 @@
         data: {
           isProtected: true,
           meta: {
-            title: 'My Trips',
+            title: 'Trip Progress',
             description: ''
           }
         },

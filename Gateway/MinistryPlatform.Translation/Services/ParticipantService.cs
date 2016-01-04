@@ -11,6 +11,7 @@ using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Exceptions;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using Newtonsoft.Json.Bson;
 
 namespace MinistryPlatform.Translation.Services
 {
@@ -72,6 +73,7 @@ namespace MinistryPlatform.Translation.Services
                 var record = records.Single();
                 participant = new Participant
                 {
+                    ContactId = record.ToInt("Contact ID"),
                     ParticipantId = record.ToInt("dp_RecordID"),
                     EmailAddress = record.ToString("Email Address"),
                     PreferredName = record.ToString("Nickname"), 
@@ -87,6 +89,21 @@ namespace MinistryPlatform.Translation.Services
 
 
             return participant;
+        }
+
+        public void UpdateParticipant(Dictionary<string, object> participant)
+        {
+            var apiToken = ApiLogin();
+            try
+            {
+                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Participants"), participant, apiToken);
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException(
+                   string.Format("Unable to update the participant.  Participant Id: {0}", participant["Participant_ID"]), e);
+            }
+
         }
 
         public List<Response> GetParticipantResponses(int participantId)

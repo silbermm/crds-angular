@@ -295,7 +295,10 @@ namespace crds_angular.Services
 
         private MyTripsDto TripForContact(int contactId)
         {
-            var trips = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
+            var searchString = ",,,,,,,,,,,,," + contactId;
+            var trips = _eventParticipantService.TripParticipants(searchString);
+
+            var distributions = _donationService.GetMyTripDistributions(contactId).OrderBy(t => t.EventStartDate);
             var myTrips = new MyTripsDto();
 
             var events = new List<Trip>();
@@ -309,14 +312,16 @@ namespace crds_angular.Services
                 }
                 eventIds.Add(trip.EventId);
 
+                var campaign = _mpPledgeService.GetPledgeByCampaignAndDonor(trip.CampaignId, trip.DonorId);
+
                 var t = new Trip();
                 t.EventId = trip.EventId;
                 t.EventEndDate = trip.EventEndDate.ToString("MMM dd, yyyy");
                 t.EventStartDate = trip.EventStartDate.ToString("MMM dd, yyyy");
                 t.EventTitle = trip.EventTitle;
-                t.EventType = trip.EventTypeId.ToString();
-                t.FundraisingDaysLeft = Math.Max(0, (trip.CampaignEndDate - DateTime.Today).Days);
-                t.FundraisingGoal = trip.TotalPledge;
+                t.EventType = trip.EventType;
+                t.FundraisingDaysLeft = Math.Max(0, (campaign.CampaignEndDate - DateTime.Today).Days);
+                t.FundraisingGoal = Convert.ToInt32(campaign.PledgeTotal);
                 t.EventParticipantId = tripParticipant.EventParticipantId;
                 t.EventParticipantFirstName = tripParticipant.Nickname;
                 t.EventParticipantLastName = tripParticipant.Lastname;
@@ -326,7 +331,7 @@ namespace crds_angular.Services
 
             foreach (var e in events)
             {
-                var donations = trips.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
+                var donations = distributions.Where(d => d.EventId == e.EventId).OrderByDescending(d => d.DonationDate).ToList();
                 foreach (var donation in donations)
                 {
                     var gift = new TripGift();
@@ -442,7 +447,7 @@ namespace crds_angular.Services
         {
             var templateId = _configurationWrapper.GetConfigIntValue("PrivateInviteTemplate");
             var template = _communicationService.GetTemplate(templateId);
-            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("UnassignedContact"));
+            var fromContact = _contactService.GetContactById(_configurationWrapper.GetConfigIntValue("DefaultContactEmailId"));
             var mergeData = SetMergeData(invite.PledgeCampaignIdText, invite.PledgeCampaignId, invite.InvitationGuid, invite.RecipientName);
 
             return new Communication
@@ -547,7 +552,7 @@ namespace crds_angular.Services
         private void SendMessage(string templateKey, int toContactId, Dictionary<string, object> mergeData = null)
         {
             var templateId = _configurationWrapper.GetConfigIntValue(templateKey);
-            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultEmailFromContact");
+            var fromContactId = _configurationWrapper.GetConfigIntValue("DefaultContactEmailId");
             var fromContact = _contactService.GetContactById(fromContactId);
             var toContact = _contactService.GetContactById(toContactId);
             var template = _communicationService.GetTemplateAsCommunication(templateId,

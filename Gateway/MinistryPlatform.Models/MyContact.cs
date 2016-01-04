@@ -8,7 +8,6 @@ namespace MinistryPlatform.Models
         public string Address_Line_1 { get; set; }
         public string Address_Line_2 { get; set; }
         public int Age { get; set; }
-        public string Anniversary_Date { get; set; }
         public string City { get; set; }
         public int? Congregation_ID { get; set; }
         public int Contact_ID { get; set; }
@@ -38,5 +37,6 @@ namespace MinistryPlatform.Models
         public string Passport_Country { get; set; }
         public string Passport_Number { get; set; }
         public string Passport_Expiration { get; set; }
+        public DateTime Participant_Start_Date { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
 using log4net;
+using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Newtonsoft.Json;
 //using WebMatrix.WebData;
@@ -21,13 +22,15 @@ namespace crds_angular.Services
         private readonly IContactService _contactService;
         private readonly IEmailCommunication _emailCommunication;
         private readonly IUserService _userService;
+        private readonly IAuthenticationService _authenticationService;
 
-        public LoginService(IConfigurationWrapper configurationWrapper, IContactService contactService, IEmailCommunication emailCommunication, IUserService userService)
+        public LoginService(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IContactService contactService, IEmailCommunication emailCommunication, IUserService userService)
         {
             _configurationWrapper = configurationWrapper;
             _contactService = contactService;
             _emailCommunication = emailCommunication;
             _userService = userService;
+            _authenticationService = authenticationService;
         }
 
         public bool PasswordResetRequest(string username)
@@ -56,7 +59,7 @@ namespace crds_angular.Services
 
             Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
             userUpdateValues["User_ID"] = user_ID;
-            userUpdateValues["ResetToken"] = cleanToken; // swap out for real implementation
+            userUpdateValues["PasswordResetToken"] = cleanToken; // swap out for real implementation
             _userService.UpdateUser(userUpdateValues);
 
             string baseURL = _configurationWrapper.GetConfigValue("BaseURL");
@@ -87,10 +90,17 @@ namespace crds_angular.Services
             }
         }
 
-        public bool AcceptPasswordResetRequest(string email, string token, string password)
+        public bool ResetPassword(string password, string token)
         {
-            // Worked in successor story
-            throw new NotImplementedException();
+            var user = _userService.GetUserByResetToken(token);
+
+            Dictionary<string, object> userUpdateValues = new Dictionary<string, object>();
+            userUpdateValues["User_ID"] = user.UserRecordId;
+            userUpdateValues["PasswordResetToken"] = null;
+            userUpdateValues["Password"] = password;
+            _userService.UpdateUser(userUpdateValues);
+
+            return true;
         }
 
         public bool ClearResetToken(string username)
@@ -103,6 +113,18 @@ namespace crds_angular.Services
             _userService.UpdateUser(userUpdateValues);
 
             return true;
+        }
+
+        public bool VerifyResetToken(string token)
+        {
+            var user = _userService.GetUserByResetToken(token);
+
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
