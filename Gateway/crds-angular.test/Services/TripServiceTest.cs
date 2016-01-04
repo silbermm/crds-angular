@@ -11,8 +11,8 @@ using Moq;
 using NUnit.Framework;
 using IDonationService = MinistryPlatform.Translation.Services.Interfaces.IDonationService;
 using IDonorService = MinistryPlatform.Translation.Services.Interfaces.IDonorService;
-using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 using IEventService = MinistryPlatform.Translation.Services.Interfaces.IEventService;
+using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.test.Services
 {
@@ -32,7 +32,7 @@ namespace crds_angular.test.Services
         private Mock<IContactService> _contactService;
         private Mock<IContactRelationshipService> _contactRelationshipService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
-        private Mock<crds_angular.Services.Interfaces.IPersonService> _personService;
+        private Mock<IPersonService> _personService;
         private Mock<IServeService> _serveService;
         private Mock<IDestinationService> _destinationService;
         private TripService _fixture;
@@ -53,7 +53,7 @@ namespace crds_angular.test.Services
             _contactService = new Mock<IContactService>();
             _contactRelationshipService = new Mock<IContactRelationshipService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
-            _personService = new Mock<crds_angular.Services.Interfaces.IPersonService>();
+            _personService = new Mock<IPersonService>();
             _serveService = new Mock<IServeService>();
             _destinationService = new Mock<IDestinationService>();
 
@@ -130,6 +130,7 @@ namespace crds_angular.test.Services
 
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
+            _pledgeService.Setup(m => m.GetPledgeByCampaignAndDonor(It.IsAny<int>(), It.IsAny<int>())).Returns(mockPledgeCampaign());
             var myTrips = _fixture.GetMyTrips(token);
 
             _serveService.VerifyAll();
@@ -150,10 +151,30 @@ namespace crds_angular.test.Services
 
             _donationService.Setup(m => m.GetMyTripDistributions(It.IsAny<int>())).Returns(MockFundingPastTripDonationsResponse());
             _eventParticipantService.Setup(m => m.TripParticipants(It.IsAny<string>())).Returns(mockTripParticipants());
+            _pledgeService.Setup(m => m.GetPledgeByCampaignAndDonor(It.IsAny<int>(), It.IsAny<int>())).Returns(mockPledgeCampaign());
             var myTrips = _fixture.GetMyTrips(token);
 
             Assert.IsNotNull(myTrips);
             Assert.AreEqual(0, myTrips.MyTrips[0].FundraisingDaysLeft);
+        }
+
+        private Pledge mockPledgeCampaign()
+        {
+            return new Pledge
+            {
+                CampaignName = "",
+                CampaignStartDate = DateTime.Now,
+                CampaignEndDate = DateTime.Now,
+                CampaignTypeId = 1,
+                CampaignTypeName = "test",
+                DonorId = 3,
+                PledgeCampaignId = 1,
+                PledgeDonations = 1,
+                PledgeId = 1,
+                PledgeStatus = "active",
+                PledgeStatusId = 1,
+                PledgeTotal = 100
+            };
         }
 
         private List<TripDistribution> MockFundingPastTripDonationsResponse()
@@ -190,7 +211,7 @@ namespace crds_angular.test.Services
                     EmailAddress = "myEmail@Address.com",
                     EventStartDate = new DateTime(2015, 10, 08),
                     EventEndDate = new DateTime(2015, 10, 23),
-                    EventId = 20,
+                    EventId = 8,
                     EventParticipantId = 21,
                     EventTitle = "Go Someplace",
                     EventType = "MissionTrip",
@@ -198,7 +219,9 @@ namespace crds_angular.test.Services
                     Nickname = "Funny",
                     ParticipantId = 213,
                     ProgramId = 2,
-                    ProgramName = "Go Someplace"
+                    ProgramName = "Go Someplace",
+                    CampaignId = 1,
+                    DonorId = 3
                 }
             };
         }
