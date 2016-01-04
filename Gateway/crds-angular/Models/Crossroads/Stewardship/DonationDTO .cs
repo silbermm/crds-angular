@@ -32,6 +32,9 @@ namespace crds_angular.Models.Crossroads.Stewardship
         [JsonProperty("date")]
         public DateTime DonationDate { get; set; }
 
+        [JsonProperty("fee")]
+        public decimal Fee { get; set; }
+
         [JsonProperty(PropertyName = "source", NullValueHandling = NullValueHandling.Ignore)]
         public DonationSourceDTO Source { get; set; }
 
