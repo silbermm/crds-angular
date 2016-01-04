@@ -31,12 +31,17 @@
           source.viewBox = '0 0 34 32';
           break;
         case 'Bank':
+         if (source.last4 == undefined){
+             source.icon = '';
+          } 
         case 'Check':
           source.icon = 'library';
           source.viewBox = '0 0 32 32';
-          if (source.last4 != undefined){
-             source.name = 'ending in ' + source.last4;
-          }         
+          if (source.last4 == undefined){             
+             source.icon = '';
+          }  else {
+            source.name = 'ending in ' + source.last4;
+          }       
           break;
         case 'CreditCard':
           source.icon = getCardIcon(source.brand);
