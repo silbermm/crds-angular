@@ -83,10 +83,9 @@ BEGIN
 						   @P_Program = e.Program_ID,
 						   @P_Start = e.Event_Start_Date,
 						   @P_End = e.Event_End_Date,
-						   @C_Contact = c.Contact_ID
+						   @C_Contact = con.Childcare_Contact
 				    FROM [dbo].[Events] e
 					JOIN [dbo].[Congregations] con on con.Congregation_ID = e.Congregation_ID
-					JOIN [dbo].[Contacts] c on c.Contact_ID = con.Childcare_Contact
 					WHERE e.Event_ID = @PARENT_EVENT_ID
 
 					-- Insert new childcare event
