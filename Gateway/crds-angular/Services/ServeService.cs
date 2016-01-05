@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -12,6 +13,7 @@ using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using WebGrease.Css.Extensions;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.Services
@@ -37,6 +39,7 @@ namespace crds_angular.Services
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IApiUserService _apiUserService;
+        private readonly IMinistryPlatformService _ministryPlatformService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -58,7 +61,8 @@ namespace crds_angular.Services
                             ICommunicationService communicationService,
                             IAuthenticationService authenticationService,
                             IConfigurationWrapper configurationWrapper,
-                            IApiUserService apiUserService)
+                            IApiUserService apiUserService,
+                            IMinistryPlatformService ministryPlatformService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -71,6 +75,7 @@ namespace crds_angular.Services
             _authenticationService = authenticationService;
             _configurationWrapper = configurationWrapper;
             _apiUserService = apiUserService;
+            _ministryPlatformService = ministryPlatformService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(string token)
@@ -357,6 +362,45 @@ namespace crds_angular.Services
                 _communicationService.SendMessage(communication);
                 return new List<int>();
             }
+        }
+
+        public void SendReminderEmails()
+        {
+            var token = _apiUserService.GetToken();
+            var pageId = AppSetting("SignupToServeReminders");
+            var dict = _ministryPlatformService.GetPageViewRecords(pageId, token, "", "", 0);
+            var serveReminders = dict.Select(Mapper.Map<ServeReminder>);
+
+            
+            var fromId = AppSetting("DefaultContactEmailId");
+            var fromEmail = _contactService.GetContactById(fromId).Email_Address;
+
+            serveReminders.ForEach(reminder =>
+            {
+                var contact = _contactService.GetContactById(reminder.SignedupContactId);
+
+                // is there a template set?
+                var templateId = reminder.TemplateId ?? AppSetting("DefaultServeReminderTemplate");
+                var mergeData = new Dictionary<string, object>(){
+                    {"Opportunity_Title", reminder.OpportunityTitle},
+                    {"Nickname", contact.Nickname},
+                    {"Event_Start_Date", reminder.EventStartDate.ToShortDateString()},
+                    {"Event_End_Date", reminder.EventEndDate.ToShortDateString()},
+                    {"Shift_Start", reminder.ShiftStart.FormatAsString()},
+                    {"Shift_End", reminder.ShiftEnd.FormatAsString()}
+                 };
+                var communication = _communicationService.GetTemplateAsCommunication(templateId,
+                                                                                     fromId,
+                                                                                     fromEmail,
+                                                                                     reminder.OpportunityContactId,
+                                                                                     reminder.OpportunityEmailAddress,
+                                                                                     reminder.SignedupContactId,
+                                                                                     reminder.SignedupEmailAddress,
+                                                                                     mergeData);
+                _communicationService.SendMessage(communication);
+
+            });
+
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)

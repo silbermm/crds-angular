@@ -13,5 +13,6 @@ namespace crds_angular.Services.Interfaces
         List<ServingDay> GetServingDays(string token, int contactId, long from, long to);
         Capacity OpportunityCapacity(int opportunityId, int eventId, int? minNeeded, int? maxNeeded);
         List<int> SaveServeRsvp(string token, SaveRsvpDto dto);
+        void SendReminderEmails();
     }
 }
