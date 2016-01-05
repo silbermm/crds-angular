@@ -116,7 +116,7 @@ namespace crds_angular.Services
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
 
-        public List<QualifiedServerDto> GetQualifiedServers(int groupId, string token)
+        public List<QualifiedServerDto> GetQualifiedServers(int groupId, int opportunityId, string token)
         {
             var qualifiedServers = new List<QualifiedServerDto>();
             var immediateFamilyParticipants = GetImmediateFamilyParticipants(token);
@@ -124,6 +124,7 @@ namespace crds_angular.Services
             foreach (var participant in immediateFamilyParticipants)
             {
                 var membership = _groupService.ParticipantQualifiedServerGroupMember(groupId, participant.ParticipantId);
+                
                 var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,
                                                                                         opportunityId);
                 var qualifiedServer = new QualifiedServerDto();

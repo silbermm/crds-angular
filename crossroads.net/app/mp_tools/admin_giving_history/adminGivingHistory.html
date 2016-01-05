@@ -2,12 +2,16 @@
  -- This is largely a copy of giving_history/history.html, with the controllerAs name changed.  This was done explicitly,
  -- to allow changes to one view or the other without having to impact both.
  -->
+<div ng-if="!admin_giving_history_controller.allowAdminAccess()" class="alert alert-danger" role="alert">
+    <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
+</div>
+
 <div ng-if="admin_giving_history_controller.impersonation_error" class="alert alert-danger" role="alert">
     Sorry, you are not able to view Giving History for other MinistryPlatform Users. Please contact an administrator to request access.<br/><br/>
     Error: {{admin_giving_history_controller.impersonation_error_message}}
 </div>
 
-<div ng-if="!admin_giving_history_controller.impersonation_error" class="row giving-history">
+<div ng-if="!admin_giving_history_controller.impersonation_error && admin_giving_history_controller.allowAdminAccess()" class="row giving-history">
     <div class="col-sm-10 col-sm-offset-1">
         <h1 class="hidden-print page-header">Giving History</h1>
         <h1 class="visible-print-block page-header">Giving Statement</h1>

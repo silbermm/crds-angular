@@ -31,7 +31,7 @@
     function activate() {
       ServeOpportunities.QualifiedServers.query({
           groupId: vm.pageInfo.group,
-          contactId: Session.exists('userId')
+          opportunityId: vm.pageInfo.opportunity
         }, function(response) {
           vm.participants = response;
           allSignedUp();
