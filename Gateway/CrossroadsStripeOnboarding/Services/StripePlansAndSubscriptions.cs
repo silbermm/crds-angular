@@ -54,7 +54,7 @@ namespace CrossroadsStripeOnboarding.Services
             return
                 (from a in db.StripeAccounts
                     where a.StripeCustomer.ExternalPersonId == personId.ToString() && a.Last4 == last4 && a.StripeCustomer.Imported == false
-                    select a).SingleOrDefault();
+                    select a).FirstOrDefault();
         }
 
         private void CreatePlanAndSubscription(RecurringGift gift, StripeAccount account, MinistryPlatformContext mpDB, StripeOnboardingContext stripeDB)
