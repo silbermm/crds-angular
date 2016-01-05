@@ -19,7 +19,7 @@ EXEC @ReturnCode = msdb.dbo.sp_delete_job @job_id = @jobId
 -- Create new job
 SET @jobId = null
 EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Load_eCheckIn_from_Ministry_Platform', 
--- TODO: Should we disable so we don't run in PROD before it's really PROD
+-- TODO: Should we disable so we don't run in PROD before it's really PROD, and make that a seperate step of implementation plan?
 		@enabled=1, 
 		@notify_level_eventlog=0, 
 		@notify_level_email=0, 
@@ -42,17 +42,16 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'crds_Ech
 		@retry_interval=0, 
 		@os_run_priority=0, @subsystem=N'TSQL', 
 		@command=N'crds_Echeck_ETL_Load', 
-
--- TODO: Need to configure for proper environment INT, DEMO, PROD
-		@database_name=N'eCheckIn_Integration', 
+		@database_name=N'eCheckIn', 
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 
--- Notify via email on failures
-EXEC msdb.dbo.sp_update_job @job_id=@jobId, 
-		@notify_level_email=2,
--- TODO: Determine who should get the email
-		@notify_email_operator_name=N'Alison Feinauer'
+---- Notify via email on failures
+---- TODO: Should we disable on INT / DEMO, or only run on PROD?
+--EXEC msdb.dbo.sp_update_job @job_id=@jobId, 
+--		@notify_level_email=2,
+---- TODO: Determine who should get the email
+--		@notify_email_operator_name=N'Alison Feinauer'
 
 -- Add Schedules
 DECLARE @schedule_id INT

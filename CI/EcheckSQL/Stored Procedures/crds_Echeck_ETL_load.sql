@@ -1,5 +1,4 @@
--- TODO: Change to specific named server
-USE [eCheckIn_Integration]
+USE [eCheckIn]
 GO
 
 /****** Object:  StoredProcedure [dbo].[crds_Echeck_ETL_Load]    Script Date: 12/17/2015 3:43:35 PM ******/
@@ -32,14 +31,12 @@ BEGIN
 	INSERT INTO dbo.tblPerson
 		(Person_ID, Person_LName, Person_FName, Person_Nick_Name, Person_Birth_Date, Person_ClassOf, Person_House_ID)	
 		SELECT Contact_Id, Last_Name, First_Name, Nickname, Date_of_Birth, HS_Graduation_Year, Person_House_ID 
-			-- TODO: Need to correctly point to Int, Demo, Prod instead of MPInt
-			FROM OPENQUERY([MPInt], 'EXECUTE MinistryPlatform.dbo.crds_Echeck_ETL_tblPerson')
+			FROM OPENQUERY([MinistryPlatformServer], 'EXECUTE MinistryPlatform.dbo.crds_Echeck_ETL_tblPerson')
 
 	INSERT INTO dbo.tblRelationship 
 		(Party1ID, Party2ID)
 		SELECT Parent_Contact_ID, Child_Contact_ID 
-			-- TODO: Need to correctly point to Int, Demo, Prod instead of MPInt
-			FROM OPENQUERY([MPInt], 'EXECUTE MinistryPlatform.dbo.crds_Echeck_ETL_tblRelationship')
+			FROM OPENQUERY([MinistryPlatformServer], 'EXECUTE MinistryPlatform.dbo.crds_Echeck_ETL_tblRelationship')
 
 	INSERT INTO dbo.tblAdditionalGuardians 
 		(Child_ID, Guardian_ID)
