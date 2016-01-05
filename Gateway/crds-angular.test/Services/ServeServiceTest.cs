@@ -9,6 +9,7 @@ using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -34,6 +35,7 @@ namespace crds_angular.test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IApiUserService> _apiUserService;
+        private Mock<IResponseService> _responseService;
 
         private ServeService _fixture;
 
@@ -88,6 +90,7 @@ namespace crds_angular.test.Services
             _communicationService = new Mock<ICommunicationService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _apiUserService = new Mock<IApiUserService>();
+            _responseService = new Mock<IResponseService>();
 
             fakeOpportunity.EventTypeId = 3;
             fakeOpportunity.GroupContactId = 23;
@@ -153,10 +156,102 @@ namespace crds_angular.test.Services
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object, _groupService.Object,
-                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object, _apiUserService.Object);
+                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object, _apiUserService.Object, _responseService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
+        }
+
+        [Test]
+        public void ShouldSendReminderEmails()
+        {
+            const int pageId = 2203;
+            const string apiToken = "1234";
+            const int defaultEmailTemplate = 14567;
+
+            var now = DateTime.Now;
+
+            var fakeServeReminder = new ServeReminder()
+            {
+                OpportunityTitle = "Some Title",
+                EventEndDate = now,
+                EventStartDate = now,
+                EventTitle = "Whatever",
+                OpportunityContactId = fakeGroupContact.Contact_ID,
+                OpportunityEmailAddress = fakeGroupContact.Email_Address,
+                ShiftEnd = new TimeSpan(0, 7, 0, 0),
+                ShiftStart = new TimeSpan(0, 9, 0, 0),
+                SignedupContactId = fakeMyContact.Contact_ID,
+                SignedupEmailAddress = fakeMyContact.Email_Address
+            };
+
+            var fakePageView = new MPServeReminders()
+            {
+                Opportunity_Title = fakeServeReminder.OpportunityTitle,               
+                Opportunity_Contact_Id = fakeServeReminder.OpportunityContactId,
+                Opportunity_Email_Address = fakeServeReminder.OpportunityEmailAddress,
+                Event_End_Date = now,
+                Event_Start_Date = now,
+                Event_Title = fakeServeReminder.EventTitle,
+                Signedup_Contact_Id = fakeMyContact.Contact_ID,
+                Signedup_Email_Address = fakeMyContact.Email_Address,
+                Template_Id = null,
+                Shift_Start = fakeServeReminder.ShiftStart,
+                Shift_End = fakeServeReminder.ShiftEnd
+            };
+
+            var fakeList = new List<MPServeReminders> ()
+            {
+                fakePageView
+            };
+
+            const int defaultContactEmailId = 1519180;
+            
+
+            var token = _apiUserService.Setup(m => m.GetToken()).Returns(apiToken);
+            _responseService.Setup(m => m.GetServeReminders(apiToken)).Returns(fakeList);
+            _contactService.Setup(m => m.GetContactById(defaultContactEmailId)).Returns(fakeGroupContact);
+
+            fakeList.ForEach(f =>
+            {
+                var mergeData = new Dictionary<string, object>(){
+                    {"Opportunity_Title", fakeServeReminder.OpportunityTitle},
+                    {"Nickname", fakeMyContact.Nickname},
+                    {"Event_Start_Date", fakeServeReminder.EventStartDate.ToShortDateString()},
+                    {"Event_End_Date", fakeServeReminder.EventEndDate.ToShortDateString()},
+                    {"Shift_Start", fakeServeReminder.ShiftStart},
+                    {"Shift_End", fakeServeReminder.ShiftEnd}
+                 };
+
+                var contact = new Contact() {ContactId = fakeGroupContact.Contact_ID, EmailAddress = fakeGroupContact.Email_Address};
+                var toContact = new Contact() {ContactId = fakeMyContact.Contact_ID, EmailAddress = fakeMyContact.Email_Address};
+                var fakeCommunication = new Communication()
+                {
+                    AuthorUserId = fakeGroupContact.Contact_ID,
+                    DomainId = 1,
+                    EmailBody = "Some Email Body",
+                    EmailSubject = "Whatever",
+                    FromContact = contact,
+                    MergeData = mergeData,
+                    ReplyToContact = contact,
+                    TemplateId = defaultEmailTemplate,
+                    ToContacts = new List<Contact>() {toContact}
+                };
+
+                _contactService.Setup(m => m.GetContactById(fakeServeReminder.SignedupContactId)).Returns(fakeMyContact);
+                _communicationService.Setup(m => m.GetTemplateAsCommunication(defaultEmailTemplate,
+                                                                              fakeGroupContact.Contact_ID,
+                                                                              fakeGroupContact.Email_Address,
+                                                                              fakeServeReminder.OpportunityContactId,
+                                                                              fakeServeReminder.OpportunityEmailAddress,
+                                                                              fakeMyContact.Contact_ID,
+                                                                              fakeMyContact.Email_Address,
+                                                                              mergeData)).Returns(fakeCommunication);
+                _communicationService.Setup(m => m.SendMessage(fakeCommunication));
+                _communicationService.Verify();
+
+            });
+            _responseService.Verify();
         }
 
         [Test]

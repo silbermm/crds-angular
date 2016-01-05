@@ -7,6 +7,7 @@ using crds_angular.Models.Crossroads.Events;
 using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Participants;
 using crds_angular.Models.Crossroads.Profile;
+using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Models.MailChimp;
 using MinistryPlatform.Models;
@@ -23,6 +24,7 @@ namespace crds_angular.App_Start
         {
             Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
             Mapper.Initialize(cfg => cfg.AddProfile<ParticipantProfile>());
+            Mapper.Initialize(cfg => cfg.AddProfile<ServeProfile>());
 
             Mapper.CreateMap<Dictionary<string, object>, AccountInfo>()
                 .ForMember(dest => dest.EmailNotifications,

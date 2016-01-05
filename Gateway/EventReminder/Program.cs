@@ -2,6 +2,8 @@
 using System.Configuration;
 using System.Reflection;
 using crds_angular.App_Start;
+using crds_angular.Services;
+using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Services;
 using log4net;
 using Microsoft.Practices.Unity;
@@ -16,6 +18,7 @@ namespace EventReminder
     {
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static IEventService _eventService;
+        private static IServeService _serveService;
 
         static void Main(string[] args)
         {
@@ -30,7 +33,9 @@ namespace EventReminder
             {
                 // Dependency Injection
                 _eventService = container.Resolve<EventService>();
-                _eventService.SendReminderEmails();         
+                _serveService = container.Resolve<ServeService>();
+                _eventService.SendReminderEmails();   
+                _serveService.SendReminderEmails();
                 Log.Info("all done");
                 Environment.Exit(0);
             }
