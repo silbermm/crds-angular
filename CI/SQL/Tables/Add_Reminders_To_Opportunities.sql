@@ -22,5 +22,5 @@ IF NOT EXISTS (SELECT * FROM sys.foreign_keys
 			   WHERE object_id = OBJECT_ID(N'[dbo].[FK_Opportunities_Messages]') 
 			   AND parent_object_id = OBJECT_ID(N'[dbo].[Opportunities]'))
 BEGIN
-	ALTER TABLE [dbo].[Opportunities] ADD CONSTAINT fK_Opportunties_Messages FOREIGN KEY ( Reminder_Template ) references dp_Communications(Communication_ID);
+	ALTER TABLE [dbo].[Opportunities] ADD CONSTRAINT FK_Opportunties_Messages FOREIGN KEY ( Reminder_Template ) references dp_Communications(Communication_ID);
 END
