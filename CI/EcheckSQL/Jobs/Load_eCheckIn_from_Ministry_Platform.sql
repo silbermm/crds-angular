@@ -19,6 +19,7 @@ EXEC @ReturnCode = msdb.dbo.sp_delete_job @job_id = @jobId
 -- Create new job
 SET @jobId = null
 EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Load_eCheckIn_from_Ministry_Platform', 
+-- TODO: Should we disable so we don't run in PROD before it's really PROD
 		@enabled=1, 
 		@notify_level_eventlog=0, 
 		@notify_level_email=0, 
@@ -47,11 +48,11 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'crds_Ech
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 
--- TODO: Review if we need this or not
+-- Notify via email on failures
 EXEC msdb.dbo.sp_update_job @job_id=@jobId, 
-		@notify_level_email=2, 
-		@notify_level_netsend=2, 
-		@notify_level_page=2
+		@notify_level_email=2,
+-- TODO: Determine who should get the email
+		@notify_email_operator_name=N'Alison Feinauer'
 
 -- Add Schedules
 DECLARE @schedule_id INT
