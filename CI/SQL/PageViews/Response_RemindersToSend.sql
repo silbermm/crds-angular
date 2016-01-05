@@ -20,7 +20,7 @@ BEGIN
 		,@VIEW_TITLE
 		,@RESPONSE_PAGE_ID
 		,N'What Reminders need to be sent out for SU2S'
-		,N'Opportunity_ID_Table.[Opportunity_Title] AS [Opportunity Title]
+		,N'Opportunity_ID_Table.[Opportunity_Title]
 , Participant_ID_Table_Contact_ID_Table.[Contact_ID]
 , Participant_ID_Table_Contact_ID_Table.[Email_Address]
 , Participant_ID_Table_Contact_ID_Table.[Display_Name]
@@ -44,7 +44,7 @@ END
 ELSE
 BEGIN
 	UPDATE [dbo].[dp_Page_Views] 
-		SET [Field_List] = N'Opportunity_ID_Table.[Opportunity_Title] AS [Opportunity Title]
+		SET [Field_List] = N'Opportunity_ID_Table.[Opportunity_Title]
 , Participant_ID_Table_Contact_ID_Table.[Contact_ID]
 , Participant_ID_Table_Contact_ID_Table.[Email_Address]
 , Participant_ID_Table_Contact_ID_Table.[Display_Name]

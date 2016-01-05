@@ -9,6 +9,7 @@ using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Translation.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -34,7 +35,7 @@ namespace crds_angular.test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IApiUserService> _apiUserService;
-        private Mock<IMinistryPlatformService> _ministryPlatformService;
+        private Mock<IResponseService> _responseService;
 
         private ServeService _fixture;
 
@@ -89,7 +90,7 @@ namespace crds_angular.test.Services
             _communicationService = new Mock<ICommunicationService>();
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _apiUserService = new Mock<IApiUserService>();
-            _ministryPlatformService = new Mock<IMinistryPlatformService>();
+            _responseService = new Mock<IResponseService>();
 
             fakeOpportunity.EventTypeId = 3;
             fakeOpportunity.GroupContactId = 23;
@@ -155,7 +156,7 @@ namespace crds_angular.test.Services
             _fixture = new ServeService(_contactService.Object, _contactRelationshipService.Object,
                 _opportunityService.Object, _eventService.Object,
                 _participantService.Object, _groupParticipantService.Object, _groupService.Object,
-                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object, _apiUserService.Object, _ministryPlatformService.Object);
+                _communicationService.Object, _authenticationService.Object, _configurationWrapper.Object, _apiUserService.Object, _responseService.Object);
 
             //force AutoMapper to register
             AutoMapperConfig.RegisterMappings();
@@ -184,22 +185,22 @@ namespace crds_angular.test.Services
                 SignedupEmailAddress = fakeMyContact.Email_Address
             };
 
-            var fakePageView = new Dictionary<string, object>()
+            var fakePageView = new MPServeReminders()
             {
-                {"Opportunity_Title", fakeServeReminder.OpportunityTitle},
-                {"Opportunity_Contact_ID", fakeServeReminder.OpportunityContactId},
-                {"Opportunity_Email_Address", fakeServeReminder.OpportunityEmailAddress},
-                {"Event_End_Date", now},
-                {"Event_Start_Date", now},
-                {"Event_Title", fakeServeReminder.EventTitle},
-                {"Contact_ID", fakeMyContact.Contact_ID},
-                {"Email_Address", fakeMyContact.Email_Address},
-                {"Communication_ID", null},
-                {"Shift_Start", fakeServeReminder.ShiftStart},
-                {"Shift_End", fakeServeReminder.ShiftEnd}
+                Opportunity_Title = fakeServeReminder.OpportunityTitle,               
+                Opportunity_Contact_Id = fakeServeReminder.OpportunityContactId,
+                Opportunity_Email_Address = fakeServeReminder.OpportunityEmailAddress,
+                Event_End_Date = now,
+                Event_Start_Date = now,
+                Event_Title = fakeServeReminder.EventTitle,
+                Signedup_Contact_Id = fakeMyContact.Contact_ID,
+                Signedup_Email_Address = fakeMyContact.Email_Address,
+                Template_Id = null,
+                Shift_Start = fakeServeReminder.ShiftStart,
+                Shift_End = fakeServeReminder.ShiftEnd
             };
 
-            var fakeList = new List<Dictionary<string, object>> ()
+            var fakeList = new List<MPServeReminders> ()
             {
                 fakePageView
             };
@@ -208,7 +209,7 @@ namespace crds_angular.test.Services
             
 
             var token = _apiUserService.Setup(m => m.GetToken()).Returns(apiToken);
-            _ministryPlatformService.Setup(m => m.GetPageViewRecords(pageId, apiToken, "", "", 0)).Returns(fakeList);
+            _responseService.Setup(m => m.GetServeReminders(apiToken)).Returns(fakeList);
             _contactService.Setup(m => m.GetContactById(defaultContactEmailId)).Returns(fakeGroupContact);
 
             fakeList.ForEach(f =>
@@ -250,7 +251,7 @@ namespace crds_angular.test.Services
                 _communicationService.Verify();
 
             });
-            _ministryPlatformService.Verify();
+            _responseService.Verify();
         }
 
         [Test]

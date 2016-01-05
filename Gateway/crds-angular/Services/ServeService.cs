@@ -39,7 +39,7 @@ namespace crds_angular.Services
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IApiUserService _apiUserService;
-        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly IResponseService _responseService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -62,7 +62,7 @@ namespace crds_angular.Services
                             IAuthenticationService authenticationService,
                             IConfigurationWrapper configurationWrapper,
                             IApiUserService apiUserService,
-                            IMinistryPlatformService ministryPlatformService)
+                            IResponseService responseService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -75,7 +75,7 @@ namespace crds_angular.Services
             _authenticationService = authenticationService;
             _configurationWrapper = configurationWrapper;
             _apiUserService = apiUserService;
-            _ministryPlatformService = ministryPlatformService;
+            _responseService = responseService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(string token)
@@ -367,10 +367,9 @@ namespace crds_angular.Services
         public void SendReminderEmails()
         {
             var token = _apiUserService.GetToken();
-            var pageId = AppSetting("SignupToServeReminders");
-            var dict = _ministryPlatformService.GetPageViewRecords(pageId, token, "", "", 0);
-            var serveReminders = dict.Select(Mapper.Map<ServeReminder>);
 
+            var reminders = _responseService.GetServeReminders(token);
+            var serveReminders = reminders.Select(Mapper.Map<ServeReminder>);
             
             var fromId = AppSetting("DefaultContactEmailId");
             var fromEmail = _contactService.GetContactById(fromId).Email_Address;
