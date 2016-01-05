@@ -18,9 +18,8 @@ EXEC @ReturnCode = msdb.dbo.sp_delete_job @job_id = @jobId
 
 -- Create new job
 SET @jobId = null
-EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Load_eCheckIn_from_Ministry_Platform', 
--- TODO: Should we disable so we don't run in PROD before it's really PROD, and make that a seperate step of implementation plan?
-		@enabled=1, 
+EXEC @ReturnCode =  msdb.dbo.sp_add_job @job_name=N'Load_eCheckIn_from_Ministry_Platform', 		
+		@enabled=0, -- Job will be disable on creation, and need to be manually enabled. Added to go-live plan
 		@notify_level_eventlog=0, 
 		@notify_level_email=0, 
 		@notify_level_netsend=0, 
