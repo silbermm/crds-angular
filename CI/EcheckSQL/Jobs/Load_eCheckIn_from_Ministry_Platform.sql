@@ -46,12 +46,10 @@ EXEC @ReturnCode = msdb.dbo.sp_add_jobstep @job_id=@jobId, @step_name=N'crds_Ech
 		@flags=0
 IF (@@ERROR <> 0 OR @ReturnCode <> 0) GOTO QuitWithRollback
 
----- Notify via email on failures
----- TODO: Should we disable on INT / DEMO, or only run on PROD?
---EXEC msdb.dbo.sp_update_job @job_id=@jobId, 
---		@notify_level_email=2,
----- TODO: Determine who should get the email
---		@notify_email_operator_name=N'Alison Feinauer'
+-- Notify via email on failures
+EXEC msdb.dbo.sp_update_job @job_id=@jobId, 
+		@notify_level_email=2,
+		@notify_email_operator_name=N'Server Alerts'
 
 -- Add Schedules
 DECLARE @schedule_id INT
