@@ -3,9 +3,9 @@
 
   module.exports = VolunteerContact;
 
-  VolunteerContact.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Group'];
+  VolunteerContact.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Group', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function VolunteerContact($rootScope, $window, $log, MPTools, Group) {
+  function VolunteerContact($rootScope, $window, $log, MPTools, Group, AuthService, CRDS_TOOLS_CONSTANTS) {
 
     return {
       restrict: 'E',
@@ -19,6 +19,7 @@
     function VolunteerContactController() {
 
       var vm = this;
+      vm.allowAccess = allowAccess;
       vm.errorMessage = $rootScope.MESSAGES.toolsError;
       vm.group = {};
       vm.multipleRecordsSelected = true;
@@ -39,6 +40,10 @@
             vm.viewReady = true;
           });
         });
+      }
+
+      function allowAccess() {
+        return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.VolunteerContactTool));
       }
 
       function showError() {

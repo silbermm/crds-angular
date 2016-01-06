@@ -47,7 +47,7 @@
           source.icon = getCardIcon(source.brand);
           source.viewBox = '0 0 160 100';
           if (source.last4 != undefined){
-             source.name = 'ending in ' + source.last4;
+            source.name = 'ending in ' + source.last4;
           } 
           break;
       }

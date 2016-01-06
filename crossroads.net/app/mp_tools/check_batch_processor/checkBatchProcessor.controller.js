@@ -3,9 +3,9 @@
 
   module.exports = CheckBatchProcessor;
 
-  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'Programs', 'AuthService', 'GIVE_PROGRAM_TYPES', 'GIVE_ROLES'];
+  CheckBatchProcessor.$inject = ['$rootScope', '$log', 'MPTools', 'CheckScannerBatches', 'Programs', 'AuthService', 'GIVE_PROGRAM_TYPES', 'CRDS_TOOLS_CONSTANTS'];
 
-  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms, AuthService, GIVE_PROGRAM_TYPES, GIVE_ROLES) {
+  function CheckBatchProcessor($rootScope, $log, MPTools, CheckScannerBatches, getPrograms, AuthService, GIVE_PROGRAM_TYPES, CRDS_TOOLS_CONSTANTS) {
     var vm = this;
 
     vm.allBatches = [];
@@ -20,10 +20,11 @@
     vm.showClosedBatches = false;
 
     activate();
+
     //////////////////////
 
     function activate() {
-      CheckScannerBatches.batches.query({'onlyOpen': false}, function(data) {
+      CheckScannerBatches.batches.query({onlyOpen: false}, function(data) {
         vm.allBatches = data;
       });
 
@@ -38,7 +39,7 @@
     }
 
     vm.allowAccess = function() {
-      return(AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools));
     }
 
     vm.filterBatches = function() {
@@ -46,32 +47,32 @@
     }
 
     vm.processBatch = function(target) {
-      if(target.checkBatchProcessorForm.$invalid) {
+      if (target.checkBatchProcessorForm.$invalid) {
         $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         return;
       }
       vm.processing = true;
 
-      CheckScannerBatches.checks.query({'batchName': vm.batch.name}).$promise.then(function(data) {
+      CheckScannerBatches.checks.query({batchName: vm.batch.name}).$promise.then(function(data) {
         var counts = _.countBy(data, 'exported');
         vm.checkCounts = {
           total: data.length,
-          notExported: counts['false'] ? counts['false'] : 0,
-          exported: counts['true'] ? counts['true'] : 0
+          notExported: counts.false ? counts.false : 0,
+          exported: counts.true ? counts.true : 0
         };
 
         CheckScannerBatches.batches.save({name: vm.batch.name, programId: vm.program.ProgramId}).$promise.then(function(){
           vm.success = true;
           vm.error = false;
-        }, function(){
+        }, function() {
           vm.success = false;
-          vm.error=true;
-        }).finally(function(){
+          vm.error = true;
+        }).finally(function() {
           vm.processing = false;
         });
       }, function() {
         vm.success = false;
-        vm.error=true;
+        vm.error = true;
       });
     };
   }

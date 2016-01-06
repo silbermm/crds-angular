@@ -3,9 +3,9 @@
 
   module.exports = GPExportController;
 
-  GPExportController.$inject = ['$rootScope', '$log', 'MPTools', 'GPExport', 'AuthService', 'GIVE_ROLES'];
+  GPExportController.$inject = ['$rootScope', '$log', 'MPTools', 'GPExport', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function GPExportController($rootScope, $log, MPTools, GPExport, AuthService, GIVE_ROLES) {
+  function GPExportController($rootScope, $log, MPTools, GPExport, AuthService, CRDS_TOOLS_CONSTANTS) {
     var vm = this;
 
     vm.selectedDeposits = [];
@@ -22,7 +22,7 @@
     };
 
     vm.allowAccess = function() {
-      return(AuthService.isAuthenticated() && AuthService.isAuthorized(GIVE_ROLES.StewardshipDonationProcessor));
+      return(AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools));
     };
 
     vm.generateGPExportFile = function(deposit) {

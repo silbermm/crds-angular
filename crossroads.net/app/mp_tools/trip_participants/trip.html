@@ -1,39 +1,45 @@
-<div ng-if='trip.hasError()' class='alert alert-danger' role='alert'>
-  <div ng-repeat="error in trip.errorMessages" dynamic-content='error | html'></div>
+<div ng-if="!trip.allowAccess()" class="alert alert-danger" role="alert">
+	<div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
 </div>
 
-<preloader full-screen='true' ng-show="!trip.viewReady"> </preloader>
+<div ng-if="trip.allowAccess()">
+	<div ng-if='trip.hasError()' class='alert alert-danger' role='alert'>
+	  <div ng-repeat="error in trip.errorMessages" dynamic-content='error | html'></div>
+	</div>
 
-<div class='col-sm-10 col-sm-offset-1'
-			style="overflow-y: scroll; height:40em;"
-			ng-if='trip.viewReady && !trip.hasError()'>
-  <div>
-    <h2 class='header noPspace'> Trip Participants </h2>
+	<preloader full-screen='true' ng-show="!trip.viewReady"> </preloader>
 
-    <div>{{ trip.selectionMessage }}</div>
+	<div class='col-sm-10 col-sm-offset-1'
+				style="overflow-y: scroll; height:40em;"
+				ng-if='trip.viewReady && !trip.hasError()'>
+	  <div>
+		<h2 class='header noPspace'> Trip Participants </h2>
 
-		<form name="tripForm">
-    	<div class="form-group">
-	      <label>Which Group would you like to add to?</label>
-	      <select class="form-control"
-	      	ng-model="trip.group"
-	      	ng-options="g.groupName for g in trip.pageInfo.groups track by g.groupId"
-	      	name="selectedGroup"
-	      	ng-required='true'>
-	        <option value="">Select a Group</option>
-	      </select>
-	    </div>
+		<div>{{ trip.selectionMessage }}</div>
 
-	    <div class="form-group">
-	      <button class="btn btn-primary btn-sm" ng-click="trip.cancel()">Cancel</button>
-				<button class="btn btn-primary btn-sm"
-						ng-class="{disabled: trip.processing}"
-						ng-disabled="!tripForm.$valid"
-						ng-click="trip.save()">
-					<span ng-if="trip.processing">Saving...</span>
-					<span ng-if="!trip.processing">Save</span>
-				</button>
-	    </div>
-    </form>
-  </div>
+			<form name="tripForm">
+			<div class="form-group">
+			  <label>Which Group would you like to add to?</label>
+			  <select class="form-control"
+				ng-model="trip.group"
+				ng-options="g.groupName for g in trip.pageInfo.groups track by g.groupId"
+				name="selectedGroup"
+				ng-required='true'>
+				<option value="">Select a Group</option>
+			  </select>
+			</div>
+
+			<div class="form-group">
+			  <button class="btn btn-primary btn-sm" ng-click="trip.cancel()">Cancel</button>
+					<button class="btn btn-primary btn-sm"
+							ng-class="{disabled: trip.processing}"
+							ng-disabled="!tripForm.$valid"
+							ng-click="trip.save()">
+						<span ng-if="trip.processing">Saving...</span>
+						<span ng-if="!trip.processing">Save</span>
+					</button>
+			</div>
+		</form>
+	  </div>
+	</div>
 </div>

@@ -1,0 +1,29 @@
+-- This should be run against the MinistryPlatform DB that eCheck connects to
+
+-- TODO: Replace the following with real values
+-- REPLACE_ME_WITH_ECHECK_AGENT_PASSWORD
+
+-- Uncomment the following lines to run
+/*
+USE [master]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = N'EcheckAgent')
+CREATE LOGIN [EcheckAgent] WITH PASSWORD=N'REPLACE_ME_WITH_ECHECK_AGENT_PASSWORD', DEFAULT_DATABASE=[master], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+GO
+
+USE [MinistryPlatform]
+GO
+
+IF  EXISTS (SELECT * FROM sys.database_principals WHERE name = N'EcheckAgent')
+DROP USER [EcheckAgent]
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = N'EcheckAgent')
+CREATE USER [EcheckAgent] FOR LOGIN [EcheckAgent] WITH DEFAULT_SCHEMA=[dbo]
+GO
+
+GRANT EXECUTE TO [EcheckAgent]
+GO
+
+*/
