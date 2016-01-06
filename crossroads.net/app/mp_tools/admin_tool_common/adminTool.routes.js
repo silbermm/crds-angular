@@ -25,10 +25,10 @@
         templateUrl: 'admin_tool_common/adminTool.html',
         resolve: {
           $state: '$state',
-          GIVE_ROLES: 'GIVE_ROLES',
+          CRDS_TOOLS_CONSTANTS: 'CRDS_TOOLS_CONSTANTS',
           GivingHistoryService: 'GivingHistoryService',
-          role: function(GIVE_ROLES) {
-            return GIVE_ROLES.StewardshipDonationProcessor;
+          role: function(CRDS_TOOLS_CONSTANTS) {
+            return CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools;
           },
 
           goToFunction: function(GivingHistoryService, $state) {
@@ -59,10 +59,10 @@
         templateUrl: 'admin_tool_common/adminTool.html',
         resolve: {
           $state: '$state',
-          GIVE_ROLES: 'GIVE_ROLES',
+          CRDS_TOOLS_CONSTANTS: 'CRDS_TOOLS_CONSTANTS',
           GivingHistoryService: 'GiveTransferService',
-          role: function(GIVE_ROLES) {
-            return GIVE_ROLES.StewardshipDonationProcessor;
+          role: function(CRDS_TOOLS_CONSTANTS) {
+            return CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools;
           },
 
           goToFunction: function(GiveTransferService, $state) {
