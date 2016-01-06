@@ -15,13 +15,15 @@ var connectHistory = require('connect-history-api-fallback');
 var fallbackOptions = {
   index: '/index.html',
   verbose: true,
-  rewrites: [
-    {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
-    {from: /\/corkboard\/assets\/main.css/, to: '/corkboard/assets/main.css'},
-    {from: /\/corkboard\/assets\/core.js/, to: '/corkboard/assets/core.js'},
-    {from: /\/corkboard\/assets\/core.css/, to: '/corkboard/assets/core.css'},
-    {from: /\/corkboard/, to: '/corkboard/index.html'}
-  ]
+
+  // Commented out for US2924, will be added back after Corkboard go-live
+  //rewrites: [
+  //  {from: /\/corkboard\/assets\/main.js/, to: '/corkboard/assets/main.js'},
+  //  {from: /\/corkboard\/assets\/main.css/, to: '/corkboard/assets/main.css'},
+  //  {from: /\/corkboard\/assets\/core.js/, to: '/corkboard/assets/core.js'},
+  //  {from: /\/corkboard\/assets\/core.css/, to: '/corkboard/assets/core.css'},
+  //  {from: /\/corkboard/, to: '/corkboard/index.html'}
+  //]
 };
 
 function htmlReplace() {
