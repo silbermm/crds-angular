@@ -12,7 +12,7 @@ END
 DECLARE @jobId BINARY(16)
 
 -- Cleanup existing job
-select @jobId = job_id from msdb.dbo.sysjobs where (name = N'Load_eCheckIn_from_Ministry_Platform')
+SELECT @jobId = job_id FROM msdb.dbo.sysjobs WHERE (name = N'Load_eCheckIn_from_Ministry_Platform')
 IF @jobID IS NOT NULL
 EXEC @ReturnCode = msdb.dbo.sp_delete_job @job_id = @jobId
 
