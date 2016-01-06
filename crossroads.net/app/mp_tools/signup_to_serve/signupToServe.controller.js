@@ -11,12 +11,15 @@
     'MPTools',
     'Su2sData',
     'ServeOpportunities',
-    '$rootScope'
+    '$rootScope',
+    'AuthService',
+    'CRDS_TOOLS_CONSTANTS'
   ];
 
-  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities, $rootScope) {
+  function SignupToServeController($log, $location, $window, MPTools, Su2sData, ServeOpportunities, $rootScope, AuthService, CRDS_TOOLS_CONSTANTS) {
     var vm = this;
 
+    vm.allowAccess = allowAccess;
     vm.allParticipants = [];
     vm.cancel = cancel;
     vm.eventDates = [];
@@ -50,6 +53,10 @@
         vm.ready = true;
       });
       populateDates();
+    }
+
+    function allowAccess() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.ServeSignupTool));
     }
 
     function cancel() {
