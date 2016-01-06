@@ -9,17 +9,24 @@ DECLARE @fatherDOB DATE
 DECLARE @motherContactId AS INT
 DECLARE @child18ContactId AS INT
 DECLARE @child4ContactId AS INT
+DECLARE @childFosterContactId AS INT
+DECLARE @legalWardContactId AS INT
 
 DECLARE @currentContactId AS INT
 
 DECLARE @motherDOB DATE
 DECLARE @child18DOB DATE
 DECLARE @child4DOB DATE
+DECLARE @childfosterDOB DATE
+DECLARE @legalWardDOB DATE
+
 
 DECLARE @fatherParticipantId AS INT
 DECLARE @motherParticipantId AS INT
 DECLARE @child18ParticipantId AS INT
 DECLARE @child4ParticipantId AS INT
+DECLARE @childfParticipantId AS INT
+DECLARE @legalWardParticipantId AS INT
 
 DECLARE @currentParticipantId AS INT
 
@@ -81,6 +88,18 @@ INSERT INTO Contacts
 (Contact_ID      ,Company,Company_Name,Display_Name,Prefix_ID,First_Name  ,Middle_Name,Last_Name ,Suffix_ID,Nickname     ,Date_of_Birth   ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                   ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
 (@child4ContactId,0      ,null        ,'SU2SChild4',2        ,'SU2SChild4',null       ,'Minor '  ,null     ,'SU2SChild4' ,@child4DOB      ,1        ,1                ,1                ,@householdId,3                    ,null              ,null        ,'mpcrds+SU2SChild4@gmail.com'   ,null          ,0                 ,0               ,'513-410-3540',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
 
+SET @childFosterContactId = ((SELECT MAX(Contact_ID) FROM Contacts)+1);
+SET @childFosterDOB = DATEADD(year, -9, GETDATE());
+INSERT INTO Contacts 
+(Contact_ID           ,Company,Company_Name,Display_Name     ,Prefix_ID,First_Name       ,Middle_Name,Last_Name ,Suffix_ID,Nickname          ,Date_of_Birth        ,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                     ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
+(@childFosterContactId,0      ,null        ,'SU2SFosterChild',2        ,'SU2SFosterChild',null       ,'Foster'  ,null     ,'SU2SFosterChild' ,@childFosterDOB      ,1        ,1                ,1                ,@householdId,3                    ,null              ,null        ,'mpcrds+SU2SFosterChild@gmail.com',null          ,0                 ,0               ,'513-410-3540',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+
+SET @legalWardContactId = ((SELECT MAX(Contact_ID) FROM Contacts)+1);
+SET @legalWardDOB = DATEADD(year, -60, GETDATE());
+INSERT INTO Contacts 
+(Contact_ID         ,Company,Company_Name,Display_Name    ,Prefix_ID,First_Name     ,Middle_Name,Last_Name    ,Suffix_ID,Nickname        ,Date_of_Birth,Gender_ID,Marital_Status_ID,Contact_Status_ID,Household_ID,Household_Position_ID,Participant_Record,Donor_Record,Email_Address                   ,Email_Unlisted,Bulk_Email_Opt_Out,Bulk_SMS_Opt_Out,Mobile_Phone  ,Mobile_Carrier,Mobile_Phone_Unlisted,Company_Phone,Pager_Phone,Fax_Phone,User_Account,Web_Page,Remove_From_Directory,Industry_ID,Occupation_ID,Employer_Name,[SSN/EIN],Anniversary_Date,HS_Graduation_Year,Current_School,Contact_GUID,ID_Card,Domain_ID,__ShelbyID,__ExternalHouseholdID,__ExternalPersonID,__ExternalUserID,__ExternalBusinessID,Maiden_Name,__LastLegacyLogin,__LegacyUserName,__LegacyUserID,__LegacyEmailAddress) VALUES
+(@legalWardContactId,0      ,null        ,'SU2SLeagalWard',2        ,'SU2SLegalWard',null       ,'GrandFather',null     ,'SU2SLegalWard' ,@legalWardDOB,1        ,1                ,1                ,@householdId,3                    ,null              ,null        ,'mpcrds+SU2SLegalWard@gmail.com',null          ,0                 ,0               ,'513-410-3540',null          ,null                 ,null         ,null       ,null     ,null        ,null    ,null                 ,null       ,null         ,null         ,null     ,null            ,null              ,null          ,NEWID()     ,null   ,1        ,null      ,null                 ,null              ,null            ,null                ,null       ,null             ,null            ,null          ,null                );
+
 SET IDENTITY_INSERT [dbo].[Contacts] OFF;
 DBCC CHECKIDENT (Contacts, reseed, @currentContactId);
 
@@ -105,6 +124,16 @@ INSERT INTO Participants
 ( Participant_ID         , Contact_ID      , Participant_Type_ID, Participant_Start_Date, Participant_End_Date, Notes, Domain_ID, __ExternalPersonID, _First_Attendance_Ever, _Second_Attendance_Ever, _Third_Attendance_Ever, _Last_Attendance_Ever) VALUES
 ( @child4ParticipantId   , @child4ContactId, 1                  , '01/01/2015'          , null                , null , 1        , null              , null                  ,  null                  ,  null                 ,null                  );
 
+SET @childfParticipantId = ((SELECT MAX(Participant_ID) FROM Participants) +1);
+INSERT INTO Participants 
+( Participant_ID      , Contact_ID           , Participant_Type_ID, Participant_Start_Date, Participant_End_Date, Notes, Domain_ID, __ExternalPersonID, _First_Attendance_Ever, _Second_Attendance_Ever, _Third_Attendance_Ever, _Last_Attendance_Ever) VALUES
+( @childfParticipantId, @childFosterContactId, 1                  , '01/01/2015'          , null                , null , 1        , null              , null                  ,  null                  ,  null                 ,null                  );
+
+SET @legalWardParticipantId = ((SELECT MAX(Participant_ID) FROM Participants) +1);
+INSERT INTO Participants 
+( Participant_ID         , Contact_ID      , Participant_Type_ID, Participant_Start_Date, Participant_End_Date, Notes, Domain_ID, __ExternalPersonID, _First_Attendance_Ever, _Second_Attendance_Ever, _Third_Attendance_Ever, _Last_Attendance_Ever) VALUES
+( @legalWardParticipantId, @legalWardContactId, 1                  , '01/01/2015'          , null                , null , 1        , null              , null                  ,  null                  ,  null                 ,null                  );
+
 SET IDENTITY_INSERT [dbo].[Participants] OFF;
 DBCC CHECKIDENT (Participants, reseed, @currentParticipantId);
 
@@ -124,6 +153,14 @@ UPDATE [dbo].Contacts
 SET Participant_Record = @child4ParticipantId
 WHERE Contact_ID = @child4ContactId;
 
+UPDATE [dbo].Contacts 
+SET Participant_Record = @childfParticipantId
+WHERE Contact_ID = @childFosterContactId;
+
+UPDATE [dbo].Contacts 
+SET Participant_Record = @legalWardParticipantId
+WHERE Contact_ID = @legalWardContactId;
+
 
 
 SET IDENTITY_INSERT [dbo].[Contact_Relationships] OFF;
@@ -132,6 +169,13 @@ INSERT INTO [dbo].Contact_Relationships
 (Contact_ID      ,Relationship_ID,Related_Contact_ID,Start_Date  ,End_Date,Domain_ID,Notes                       ,_Triggered_By) VALUES
 (@fatherContactId,1              ,@motherContactId  ,null        ,null    ,1        ,'Created by Add Family Tool',null      );
 
+INSERT INTO [dbo].Contact_Relationships 
+(Contact_ID      ,Relationship_ID,Related_Contact_ID   ,Start_Date  ,End_Date,Domain_ID,Notes                       ,_Triggered_By) VALUES
+(@fatherContactId,21             ,@childFosterContactId,null        ,null    ,1        ,'Created by Add Family Tool',null      );
+
+INSERT INTO [dbo].Contact_Relationships 
+(Contact_ID      ,Relationship_ID,Related_Contact_ID   ,Start_Date  ,End_Date,Domain_ID,Notes                       ,_Triggered_By) VALUES
+(@fatherContactId,29             ,@legalWardContactId  ,null        ,null    ,1        ,'Created by Add Family Tool',null      );
 
 INSERT INTO [dbo].Contact_Relationships 
 (Contact_ID      ,Relationship_ID,Related_Contact_ID,Start_Date,End_Date,Domain_ID,Notes,_Triggered_By) VALUES

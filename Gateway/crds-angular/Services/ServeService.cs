@@ -131,8 +131,7 @@ namespace crds_angular.Services
                 var membership = _groupService.ParticipantQualifiedServerGroupMember(groupId, participant.ParticipantId);
                 
                 var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,
-                                                                                        opportunityId,
-                                                                                        token);
+                                                                                        opportunityId);
                 var qualifiedServer = new QualifiedServerDto();
                 qualifiedServer.ContactId = participant.ContactId;
                 qualifiedServer.Email = participant.Email;
