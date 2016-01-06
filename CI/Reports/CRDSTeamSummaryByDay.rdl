@@ -74,7 +74,9 @@
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <CommandText>SELECT Group_ID, Group_Name FROM Groups
-WHERE Group_Type_ID = 9 AND Group_ID IN (select Add_To_Group from Opportunities)
+WHERE Group_Type_ID = 9 
+AND Group_ID IN (select Add_To_Group from Opportunities)
+AND (End_Date IS NULL OR End_Date &gt; GETDATE())
 ORDER BY Group_Name</CommandText>
       </Query>
       <Fields>
