@@ -371,15 +371,7 @@
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
-          Profile: 'Profile',
           MPTools: 'MPTools',
-          Contact: function(Profile, MPTools) {
-            var params = MPTools.getParams();
-            return Profile.Person.get({
-              contactId: params.recordId
-            }).$promise;
-          },
-
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {
             return Page.get({

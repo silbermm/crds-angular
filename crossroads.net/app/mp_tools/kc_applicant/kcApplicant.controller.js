@@ -3,15 +3,14 @@
 
   module.exports = KCApplicantController;
 
-  KCApplicantController.$inject = ['$rootScope', '$log', 'VolunteerApplication', 'MPTools', 'Contact', 'CmsInfo', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
+  KCApplicantController.$inject = ['$rootScope', '$log', 'VolunteerApplication', 'MPTools', 'Profile', 'CmsInfo', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function KCApplicantController($rootScope, $log, VolunteerApplication, MPTools, Contact, CmsInfo, AuthService, CRDS_TOOLS_CONSTANTS) {
+  function KCApplicantController($rootScope, $log, VolunteerApplication, MPTools, Profile, CmsInfo, AuthService, CRDS_TOOLS_CONSTANTS) {
 
     var vm = this;
     vm.allowAccess = allowAccess;
     vm.errorMessage = $rootScope.MESSAGES.toolsError;
     vm.params = MPTools.getParams();
-    vm.person = Contact;
     vm.showAdult = showAdult;
     vm.showAgeError = showAgeError;
     vm.showError = showError;
@@ -24,24 +23,38 @@
     //////////////////////
 
     function activate(){
-      vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
-      vm.pageInfo = (CmsInfo.pages !== undefined && CmsInfo.pages.length > 0) ? CmsInfo.pages[0] : null;
-
-      if(vm.pageInfo !== null){
-        var response = VolunteerApplication.getResponse(vm.pageInfo.opportunity, vm.params.recordId)
-          .then(function(response){
-          if(response !== null && response.responseId !== undefined){
-            vm.responseId = response.responseId;
-            vm.viewReady = true;
-          } else {
-            vm.error = true;
-            vm.errorMessage = $rootScope.MESSAGES.noResponse;
-            vm.viewReady = true;
-          }
-        });
-      } else {
+      if ( vm.params.recordId === '-1' ) {
+        vm.viewReady = true;
         vm.error = true;
-        vm.errorMessage = $rootScope.MESSAGES.generalError;
+        vm.errorMessage = $rootScope.MESSAGES.mptool_invalid_access_content;
+      } else {
+        Profile.Person.get({ contactId: vm.params.recordId }, function(data){
+          vm.person = data;
+          vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
+          vm.pageInfo = (CmsInfo.pages !== undefined && CmsInfo.pages.length > 0) ? CmsInfo.pages[0] : null;
+          if(vm.pageInfo !== null){
+            var response = VolunteerApplication.getResponse(vm.pageInfo.opportunity, vm.params.recordId)
+              .then(function(response){
+              if(response !== null && response.responseId !== undefined){
+                vm.responseId = response.responseId;
+                vm.viewReady = true;
+              } else {
+                vm.error = true;
+                vm.errorMessage = $rootScope.MESSAGES.noResponse;
+                vm.viewReady = true;
+              }
+            });
+          } else {
+            vm.viewReady = true;
+            vm.error = true;
+            vm.errorMessage = $rootScope.MESSAGES.generalError;
+          }
+                 
+        }, function(err){
+            vm.viewReady = true;
+            vm.error = true;
+            vm.errorMessage = $rootScope.MESSAGES.generalError;
+        });
       }
     }
 
