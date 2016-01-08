@@ -106,6 +106,7 @@
     "angular-match-media": "./lib/angular-match-media.js",
     "angular-mailchimp": "./lib/angular-mailchimp.js",
     "angular-image-crop": "./lib/ng-img-crop.js",
-    "angulartics-gtm": "./node_modules/angulartics/src/angulartics-gtm.js"
+    "angulartics-gtm": "./node_modules/angulartics/src/angulartics-gtm.js",
+    "angular-payments": "./lib/angular.payments.js"
   }
 }

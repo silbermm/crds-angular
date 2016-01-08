@@ -49,13 +49,13 @@ function htmlReplace() {
         ang2js: assets.ang2.js,
         corejs: {src: assets.core.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
         corecss: assets.core.css,
-        commonjs: {src: '/assets/common.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        profilejs: {src: '/assets/profile.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        tripsjs: {src: '/assets/trips.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        searchjs: {src: '/assets/search.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        mediajs: {src: '/assets/media.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        givejs: {src: '/assets/give.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'},
-        js: {src: '/assets/main.js', tpl: '<script src="%s" type="text/javascript"  defer></script>'}
+        commonjs: {src: assets.common.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        profilejs: {src: assets.profile.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        tripsjs: {src: assets.trips.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        searchjs: {src: assets.search.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        mediajs: {src: assets.media.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        givejs: {src: assets.give.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
+        js: {src: assets.main.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'}
       }))
       .pipe(gulp.dest('./'));
 
