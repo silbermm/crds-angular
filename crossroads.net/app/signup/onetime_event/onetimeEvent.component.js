@@ -26,11 +26,11 @@
         return f.age >= vm.group.minAge;
       });
 
-      vm.events = _.filter(vm.group.events, function(event) {
+      vm.events = _.chain(vm.group.events).filter(function(event) {
         var start = moment(event.startDate);
         var now = moment();
         return start.isAfter(now);
-      });
+      }).sortBy('startDate').value();
     }
   }
 
