@@ -7,7 +7,7 @@
         <strong>{{give.dto.program['Name']}}</strong><span ng-if="give.dto.mockPledge">
             <!-- TEMPORARY - if this is towards a specific commitment, we want to put the commitment owner's full name here to make it clear who it's going to -->
             towards <strong>First Last's</strong> commitment
-        </span> on the <strong>{{give.dto.recurringStartDate | date:'MM/dd/yyyy' }}</strong>.
+        </span> on <strong>{{give.service.frequencyCalculation()}}</strong>.
         Your statement will be sent to <strong>{{give.dto.email}}</strong>.
       </p>
   </div>
