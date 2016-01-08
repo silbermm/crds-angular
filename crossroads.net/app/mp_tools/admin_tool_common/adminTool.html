@@ -1,6 +1,6 @@
 <div ng-init="AdminToolController.activate()">
   <div ng-if="!AdminToolController.allowAccess" class="alert alert-danger" role="alert">
-    Sorry, you must have the "Stewardship Donation Processor" role to run this tool.  Please contact an administrator.
+    <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
   </div>
 
   <div ng-if="AdminToolController.allowAccess">

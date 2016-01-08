@@ -1,9 +1,13 @@
+<div ng-if="!recurringGift.allowAdminAccess()" class="alert alert-danger" role="alert">
+  <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
+</div>
+
 <div ng-if="recurringGift.impersonationError" class="alert alert-danger" role="alert">
   Sorry, you are not able to Manage Recurring Gifts for other MinistryPlatform Users. Please contact an administrator to request access.<br/><br/>
   Error: {{recurringGift.impersonationErrorMessage}}
 </div>
 
-<div ng-if="!recurringGift.impersonationError" class="form-group col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+<div ng-if="!recurringGift.impersonationError && recurringGift.allowAdminAccess()" class="form-group col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
   <h1 class="page-header">Manage Recurring Gift</h1>
   <div class="push-top">
     <!--Recurring Giving-->

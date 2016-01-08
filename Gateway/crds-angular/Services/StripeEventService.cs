@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.Controllers.API;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services.Interfaces;
@@ -200,7 +201,7 @@ namespace crds_angular.Services
                     response.SuccessfulUpdates.Add(charge.Id);
                     batch.ItemCount++;
                     batch.BatchTotalAmount += (charge.Amount /Constants.StripeDecimalConversionValue);
-                    batch.Donations.Add(new DonationDTO { Id = "" + donationId, Amount = charge.Amount });
+                    batch.Donations.Add(new DonationDTO { Id = "" + donationId, Amount = charge.Amount, Fee = charge.Fee });
                 }
                 catch (Exception e)
                 {
@@ -214,6 +215,8 @@ namespace crds_angular.Services
                 response.Exception = new ApplicationException("Could not update all charges to 'deposited' status, see message for details");
             }
 
+            var stripeTotalFees = batch.Donations.Sum(f => f.Fee);
+            
             // Create the deposit
             var deposit = new DepositDTO
             {
@@ -223,8 +226,8 @@ namespace crds_angular.Services
                 DepositDateTime = now,
                 DepositName = batchName,
                 // This is the amount from Stripe - will show out of balance if does not match batch total above
-                DepositTotalAmount = ((transfer.Amount /Constants.StripeDecimalConversionValue) + (transfer.Fee / Constants.StripeDecimalConversionValue)),
-                ProcessorFeeTotal = transfer.Fee /Constants.StripeDecimalConversionValue,
+                DepositTotalAmount = ((transfer.Amount / Constants.StripeDecimalConversionValue) + (stripeTotalFees / Constants.StripeDecimalConversionValue)),
+                ProcessorFeeTotal = stripeTotalFees / Constants.StripeDecimalConversionValue,
                 DepositAmount = transfer.Amount /Constants.StripeDecimalConversionValue,
                 Exported = false,
                 Notes = null,

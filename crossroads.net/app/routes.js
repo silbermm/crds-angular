@@ -19,7 +19,9 @@
 
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'contentRouteType', /^\/.*/);
     crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'volunteerRouteType', /\/volunteer-sign-up\/.*$/);
-    crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
+
+    // Commented out for US2924, will be added back after Corkboard go-live
+    //crds_utilities.preventRouteTypeUrlEncoding($urlMatcherFactory, 'corkboardRouteType', /\/corkboard\/?.*$/);
 
     $stateProvider
       .state('root', {
@@ -315,22 +317,25 @@
           }
         }
       })
-      .state('corkboard', {
-        url: '{link:corkboardRouteType}',
-        resolve: {
-          RedirectToSubSite: function($window, $location) {
-            // Force browser to do a full reload to load corkboard's index.html
-            $window.location.href = $location.path();
-          }
-        },
-        data: {
-          preventRouteAuthentication: true,
-          meta: {
-            title: 'Corkboard',
-            description: ''
-          }
-        }
-      })
+
+      // Commented out for US2924, will be added back after Corkboard go-live
+      //
+      //.state('corkboard', {
+      //  url: '{link:corkboardRouteType}',
+      //  resolve: {
+      //    RedirectToSubSite: function($window, $location) {
+      //      // Force browser to do a full reload to load corkboard's index.html
+      //      $window.location.href = $location.path();
+      //    }
+      //  },
+      //  data: {
+      //    preventRouteAuthentication: true,
+      //    meta: {
+      //      title: 'Corkboard',
+      //      description: ''
+      //    }
+      //  }
+      //})
       .state('tools', {
         parent: 'noHeaderOrFooter',
         abstract: true,
@@ -506,6 +511,8 @@
                     return $templateFactory.fromUrl('templates/rightSideBar.html');
                   case 'ScreenWidth':
                     return $templateFactory.fromUrl('templates/screenWidth.html');
+                  case 'HomePage':
+                    return $templateFactory.fromUrl('templates/homePage.html');
                   default:
                     return $templateFactory.fromUrl('templates/noSideBar.html');
                 }

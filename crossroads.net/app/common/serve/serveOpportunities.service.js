@@ -10,7 +10,7 @@
     	ServeDays: $resource(__API_ENDPOINT__ + 'api/serve/family-serve-days/:id'),
       SaveRsvp: $resource(__API_ENDPOINT__ + 'api/serve/save-rsvp'),
       Family: $resource(__API_ENDPOINT__ + 'api/serve/family/:id'),
-      QualifiedServers: $resource(__API_ENDPOINT__ + 'api/serve/qualifiedservers/:groupId/:contactId'),
+      QualifiedServers: $resource(__API_ENDPOINT__ + 'api/serve/qualifiedservers/:groupId/:opportunityId'),
       SaveQualifiedServers: $resource(__API_ENDPOINT__ + 'api/opportunity/save-qualified-server')
     }
   }

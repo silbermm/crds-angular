@@ -3,11 +3,12 @@
 
   module.exports = KCApplicantController;
 
-  KCApplicantController.$inject = ['$rootScope', '$log', 'VolunteerApplication', 'MPTools', 'Contact', 'CmsInfo' ];
+  KCApplicantController.$inject = ['$rootScope', '$log', 'VolunteerApplication', 'MPTools', 'Contact', 'CmsInfo', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function KCApplicantController($rootScope, $log, VolunteerApplication, MPTools, Contact, CmsInfo) {
+  function KCApplicantController($rootScope, $log, VolunteerApplication, MPTools, Contact, CmsInfo, AuthService, CRDS_TOOLS_CONSTANTS) {
 
     var vm = this;
+    vm.allowAccess = allowAccess;
     vm.errorMessage = $rootScope.MESSAGES.toolsError;
     vm.params = MPTools.getParams();
     vm.person = Contact;
@@ -42,6 +43,10 @@
         vm.error = true;
         vm.errorMessage = $rootScope.MESSAGES.generalError;
       }
+    }
+
+    function allowAccess() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.KidsClubTools));
     }
 
     function showAdult(){

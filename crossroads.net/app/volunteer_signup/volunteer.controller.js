@@ -11,6 +11,7 @@
     var vm = this;
 
     vm.allSignedUp = allSignedUp;
+    vm.cmsInfo = CmsInfo;
     vm.disableCheckbox = disableCheckbox;
     vm.displayEmail = displayEmail;
     vm.displayPendingFlag = displayPendingFlag;
@@ -29,16 +30,20 @@
     ///////////////////////////////////////////
 
     function activate() {
-      ServeOpportunities.QualifiedServers.query({
-          groupId: vm.pageInfo.group,
-          contactId: Session.exists('userId')
-        }, function(response) {
-          vm.participants = response;
-          allSignedUp();
-          vm.viewReady = true;
-        }, function(err){
-          $state.go('content', {link:'/server-error/'});
-        });
+      if (CmsInfo.pages.length > 0) {   
+        ServeOpportunities.QualifiedServers.query({
+            groupId: vm.pageInfo.group,
+            opportunityId: vm.pageInfo.opportunity
+          }, function(response) {
+            vm.participants = response;
+            allSignedUp();
+            vm.viewReady = true;
+          }, function(err){
+            $state.go('content', {link:'/server-error/'});
+          });
+      } else {
+        $state.go('content', {link:'/server-error/'});
+      }
     }
 
     function allSignedUp() {

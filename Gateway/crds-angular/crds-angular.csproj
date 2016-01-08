@@ -266,6 +266,8 @@
     <Compile Include="Models\Crossroads\Groups\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\Participants\ParticipantProfile.cs" />
     <Compile Include="Models\Crossroads\Profile\Participant.cs" />
+    <Compile Include="Models\Crossroads\Serve\ServeProfile.cs" />
+    <Compile Include="Models\Crossroads\Serve\ServeReminder.cs" />
     <Compile Include="Models\Crossroads\SponsoredChild.cs" />
     <Compile Include="Models\Crossroads\Stewardship\PledgeDto.cs" />
     <Compile Include="Models\Json\PasswordReset.cs" />

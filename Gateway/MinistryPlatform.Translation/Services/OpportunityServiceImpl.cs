@@ -34,12 +34,12 @@ namespace MinistryPlatform.Translation.Services
             _apiUserService = apiUserService;
         }
 
-        public Response GetMyOpportunityResponses(int contactId, int opportunityId, string token)
+        public Response GetMyOpportunityResponses(int contactId, int opportunityId)
         {
             var searchString = ",,,," + contactId;
             var subpageViewRecords = MinistryPlatformService.GetSubpageViewRecords(_contactOpportunityResponses,
                                                                                    opportunityId,
-                                                                                   token,
+                                                                                   ApiLogin(),
                                                                                    searchString);
             var list = subpageViewRecords.ToList();
             var s = list.SingleOrDefault();

@@ -1,0 +1,51 @@
+-- TODO: Replace the following with real values
+-- REPLACE_ME_WITH_REMOTE_SERVER_NAME
+-- REPLACE_ME_WITH_REMOTE_USER_NAME
+-- REPLACE_ME_WITH_REMOTE_USER_PASSWORD
+-- REPLACE_ME_WITH_LINKED_SERVER_NAME
+
+-- TODO: Uncomment the following lines to create linked server
+/* 
+
+EXEC master.dbo.sp_addlinkedserver @server = N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @srvproduct=N'', @provider=N'SQLNCLI', @datasrc=N'REPLACE_ME_WITH_REMOTE_SERVER_NAME', @catalog=N'MinistryPlatform'
+
+EXEC master.dbo.sp_addlinkedsrvlogin @rmtsrvname=N'REPLACE_ME_WITH_LINKED_SERVER_NAME',@useself=N'False',@locallogin=NULL,@rmtuser=N'REPLACE_ME_WITH_REMOTE_USER_NAME',@rmtpassword='REPLACE_ME_WITH_REMOTE_USER_PASSWORD'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'collation compatible', @optvalue=N'false'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'data access', @optvalue=N'true'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'dist', @optvalue=N'false'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'pub', @optvalue=N'false'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'rpc', @optvalue=N'true'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'rpc out', @optvalue=N'true'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'sub', @optvalue=N'false'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'connect timeout', @optvalue=N'0'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'collation name', @optvalue=null
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'lazy schema validation', @optvalue=N'false'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'query timeout', @optvalue=N'0'
+GO
+
+EXEC master.dbo.sp_serveroption @server=N'REPLACE_ME_WITH_LINKED_SERVER_NAME', @optname=N'use remote collation', @optvalue=N'true'
+GO
+
+*/

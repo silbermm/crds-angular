@@ -3,13 +3,14 @@
 
   module.exports = TripParticipantController;
 
-  TripParticipantController.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Trip', 'PageInfo'];
+  TripParticipantController.$inject = ['$rootScope', '$window', '$log', 'MPTools', 'Trip', 'PageInfo', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function TripParticipantController($rootScope, $window, $log, MPTools, Trip, PageInfo) {
+  function TripParticipantController($rootScope, $window, $log, MPTools, Trip, PageInfo, AuthService, CRDS_TOOLS_CONSTANTS) {
 
     $log.debug('TripParticipantController');
     var vm = this;
 
+    vm.allowAccess = allowAccess;
     vm.cancel = cancel;
     vm.hasError = hasError;
     vm.groups = [];
@@ -23,6 +24,10 @@
     activate();
 
     //////////////////////
+
+    function allowAccess() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.TripTools));
+    }
 
     function selectionMessage() {
       if (vm.params.recordId === '-1') {

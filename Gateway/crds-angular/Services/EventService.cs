@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Web.Management;
 using crds_angular.Models.Crossroads.Events;
-using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
@@ -112,9 +113,18 @@ namespace crds_angular.Services
         public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
         {
             var pageId = AppSetting("EventsReadyForReminder");
-            var events = _eventService.EventsByPageId(token, pageId);
-            var eventList = AutoMapper.Mapper.Map<List<crds_angular.Models.Crossroads.Events.Event>>(events);
-
+            var events = _eventService.EventsByPageId(token, pageId);            
+            var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
+            {
+                name = evt.EventTitle,
+                EventId = evt.EventId,
+                EndDate = evt.EventEndDate,
+                StartDate = evt.EventStartDate,
+                EventType = evt.EventType,
+                location = evt.EventLocation,
+                PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
+                PrimaryContactId = evt.PrimaryContact.ContactId
+            });           
             // Childcare will be included in the email for event, so don't send a duplicate.
             return eventList.Where(evt => evt.EventType != "Childcare").ToList();
         }
