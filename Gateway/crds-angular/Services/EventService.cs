@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Web.Management;
 using crds_angular.Models.Crossroads.Events;
 using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
@@ -115,6 +116,7 @@ namespace crds_angular.Services
             var events = _eventService.EventsByPageId(token, pageId);            
             var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
             {
+                name = evt.EventTitle,
                 EventId = evt.EventId,
                 EndDate = evt.EventEndDate,
                 StartDate = evt.EventStartDate,
