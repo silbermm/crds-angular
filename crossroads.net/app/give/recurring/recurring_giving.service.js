@@ -3,6 +3,8 @@
 
   module.exports = RecurringGiving;
 
+  var moment = require('moment');
+
   RecurringGiving.$inject = ['GiveTransferService',
     'DonationService',
     'GiveFlow',
@@ -35,6 +37,7 @@
       loadDonationInformation: loadDonationInformation,
       updateGift: updateGift,
       createGift: createGift,
+      frequencyCalculation: frequencyCalculation,
     };
 
     function initDefaultState() {
@@ -233,6 +236,16 @@
       }
 
       return true;
+    }
+
+    function frequencyCalculation() {
+      var startDate = moment(GiveTransferService.recurringStartDate);
+
+      if (GiveTransferService.givingType == 'month') {
+        return  'the ' + startDate.format('Do') + ' of the Month';
+      }
+
+      return 'Every ' + startDate.format('dddd');
     }
 
     return service;

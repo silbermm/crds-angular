@@ -143,4 +143,24 @@ describe('RecurringGiving Service', function() {
     });
 
   });
+
+  describe('Function frequencyCalculation', function() {
+    it('should show the right frequency period', function() {
+      GiveTransferService.givingType = 'week'
+      GiveTransferService.recurringStartDate = '1/5/2016'
+      expect(fixture.frequencyCalculation()).toBe('Every Tuesday');
+      GiveTransferService.recurringStartDate = '1/8/2016'
+      expect(fixture.frequencyCalculation()).toBe('Every Friday');
+
+      GiveTransferService.givingType = 'month'
+      GiveTransferService.recurringStartDate = '1/5/2015'
+      expect(fixture.frequencyCalculation()).toBe('the 5th of the Month');
+      GiveTransferService.recurringStartDate = '1/3/2015'
+      expect(fixture.frequencyCalculation()).toBe('the 3rd of the Month');
+      GiveTransferService.recurringStartDate = '1/1/2015'
+      expect(fixture.frequencyCalculation()).toBe('the 1st of the Month');
+      GiveTransferService.recurringStartDate = '1/22/2015'
+      expect(fixture.frequencyCalculation()).toBe('the 22nd of the Month');
+    });
+  });
 });
