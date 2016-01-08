@@ -41,7 +41,7 @@ BEGIN
 	INSERT INTO dbo.tblAdditionalGuardians 
 		(Child_ID, Guardian_ID)
 		SELECT Party2ID, Party1ID 
-			FROM echeckIn_Integration.dbo.tblRelationship 		
+			FROM dbo.tblRelationship 		
 END
 
 GO

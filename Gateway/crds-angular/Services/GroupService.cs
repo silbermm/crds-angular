@@ -171,7 +171,7 @@ namespace crds_angular.Services
                 detail.OnlineRsvpMinimumAge = g.MinimumAge;
                 if (events != null)
                 {
-                    detail.Events = Enumerable.ToList<Event>(events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>));
+                    detail.Events = events.Select(Mapper.Map<MinistryPlatform.Models.Event, crds_angular.Models.Crossroads.Events.Event>).ToList();
                 }
                 //the first instance of family must always be the logged in user
                 var fam = new SignUpFamilyMembers
