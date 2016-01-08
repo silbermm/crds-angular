@@ -30,13 +30,13 @@ namespace crds_angular.test.Services
         {
             _contactAttributeService = new Mock<IContactAttributeService>();
             var contactAllAttributesDto = new ContactAllAttributesDTO();
-            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<string>(), It.IsAny<int>())).Returns(contactAllAttributesDto);            
-            _contactService = new Mock<MPInterfaces.IContactService>();            
+            _contactAttributeService.Setup(mocked => mocked.GetContactAttributes(It.IsAny<string>(), It.IsAny<int>())).Returns(contactAllAttributesDto);
+            _contactService = new Mock<MPInterfaces.IContactService>();
             _authenticationService = new Mock<MPInterfaces.IAuthenticationService>();
             _participantService = new Mock<MPInterfaces.IParticipantService>();
 
             _apiUserService = new Mock<MPInterfaces.IApiUserService>();
-            _apiUserService.Setup(m => m.GetToken()).Returns("something");       
+            _apiUserService.Setup(m => m.GetToken()).Returns("something");
 
             _authenticationService.Setup(mocked => mocked.GetContactId(It.IsAny<string>())).Returns(123456);
             _myContact = new MyContact
@@ -65,7 +65,7 @@ namespace crds_angular.test.Services
                 Household_ID = 7,
                 Household_Name = "hh name",
                 Address_ID = 6,
-                Participant_Start_Date = startDate
+                Attendance_Start_Date = startDate
             };
             _householdMembers = new List<HouseholdMember>();
 
@@ -106,7 +106,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual(startDate, person.ParticipantStartDate);
+            Assert.AreEqual(startDate, person.AttendanceStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
@@ -147,7 +147,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual(startDate, person.ParticipantStartDate);
+            Assert.AreEqual(startDate, person.AttendanceStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
