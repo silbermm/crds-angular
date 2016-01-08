@@ -6,6 +6,7 @@
 
   angular.module(MODULE, ['crossroads.core', 'crossroads.common', 'crossroads.give', 'ui.select']);
   angular.module(MODULE).config(require('./mpTools.config'));
+  angular.module(MODULE).constant('CRDS_TOOLS_CONSTANTS', require('./mpTools.constants'));
   angular.module(MODULE).factory('MPTools', require('./mpTools.service'));
   angular.module(MODULE).run(require('./mpTools.run'));
 

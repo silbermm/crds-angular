@@ -8,7 +8,7 @@
         </span>&nbsp;
       <a href="" ng-click="give.service.goToChange()" tabindex="-1" class="text-secondary">Change</a>
   </div>
-      <button ng-click="give.service.confirmDonation(give.programsInput)" ng-class="{disabled: give.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button" autofocus>
+      <button ng-click="give.service.confirmDonation(give.programsInput)" ng-disabled="give.dto.processing" class="btn btn-primary btn-lg btn-block-mobile give-button" autofocus>
         <span ng-if="give.dto.processing">Giving...</span>
         <span ng-if="!give.dto.processing">Give {{give.dto.amount | currency}}</span>
         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">

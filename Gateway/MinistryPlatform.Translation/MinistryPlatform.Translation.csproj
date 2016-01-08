@@ -97,6 +97,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\MPServeReminders.cs" />
     <Compile Include="Models\People\MpParticipant.cs" />
     <Compile Include="Models\People\Participant.cs" />
     <Compile Include="Services\BulkEmailRepository.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="Services\Interfaces\IProgramService.cs" />
     <Compile Include="Services\Interfaces\ISelectionService.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
+    <Compile Include="Services\Interfaces\IResponseService.cs" />
     <Compile Include="Services\LookupService.cs" />
     <Compile Include="Services\MessageInfo.cs" />
     <Compile Include="Services\MinistryPlatformService.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Services\PledgeService.cs" />
     <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
+    <Compile Include="Services\ResponseService.cs" />
     <Compile Include="Services\SelectionService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />

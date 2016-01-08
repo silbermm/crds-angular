@@ -19,6 +19,10 @@
           <QueryParameter Name="GroupID">
             <Value>=Parameters!GroupID.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="Opportunities">
+            <Value>=join(Parameters!OpportunityId.Value,",")</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
         <CommandText>report_CRDS_TeamSummaryByDay</CommandText>
@@ -30,6 +34,14 @@
         </Field>
         <Field Name="Nickname">
           <DataField>Nickname</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Opportunity_ID">
+          <DataField>Opportunity_ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Role_Title">
+          <DataField>Role_Title</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Last_Name">
@@ -62,7 +74,9 @@
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <CommandText>SELECT Group_ID, Group_Name FROM Groups
-WHERE Group_Type_ID = 9
+WHERE Group_Type_ID = 9 
+AND Group_ID IN (select Add_To_Group from Opportunities)
+AND (End_Date IS NULL OR End_Date &gt; GETDATE())
 ORDER BY Group_Name</CommandText>
       </Query>
       <Fields>
@@ -106,6 +120,46 @@ ORDER BY Group_Name</CommandText>
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="Opportunities">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="GroupId">
+            <Value>=Parameters!GroupID.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT Opportunity_ID, Opportunity_Title, Add_To_Group, CONCAT(Opportunity_Title, ' ', LTRIM(RIGHT(CONVERT(VARCHAR(25), [Shift_Start], 100), 7)), '-', LTRIM(RIGHT(CONVERT(VARCHAR(25), [Shift_End], 100), 7))) OpportunityLabel
+FROM Opportunities</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="Opportunity_ID">
+          <DataField>Opportunity_ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Opportunity_Title">
+          <DataField>Opportunity_Title</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Add_To_Group">
+          <DataField>Add_To_Group</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="OpportunityLabel">
+          <DataField>OpportunityLabel</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Filters>
+        <Filter>
+          <FilterExpression>=Fields!Add_To_Group.Value</FilterExpression>
+          <Operator>Equal</Operator>
+          <FilterValues>
+            <FilterValue>=Parameters!GroupID.Value</FilterValue>
+          </FilterValues>
+        </Filter>
+      </Filters>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -146,7 +200,7 @@ ORDER BY Group_Name</CommandText>
             <rd:WatermarkTextbox>Title</rd:WatermarkTextbox>
             <rd:DefaultName>ReportTitle</rd:DefaultName>
             <Height>0.4in</Height>
-            <Width>7.925in</Width>
+            <Width>9.39458in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -385,7 +439,7 @@ ORDER BY Group_Name</CommandText>
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>Room</Value>
+                                        <Value>Role</Value>
                                         <Style />
                                       </TextRun>
                                     </TextRuns>
@@ -418,7 +472,7 @@ ORDER BY Group_Name</CommandText>
                 <TablixMember>
                   <Group Name="Opportunity_Title">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!Opportunity_Title.Value</GroupExpression>
+                      <GroupExpression>=Fields!Opportunity_ID.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <SortExpressions>
@@ -539,21 +593,21 @@ ORDER BY Group_Name</CommandText>
                           <TablixHeader>
                             <Size>1.04167in</Size>
                             <CellContents>
-                              <Textbox Name="Room">
+                              <Textbox Name="Role_Title">
                                 <CanGrow>true</CanGrow>
                                 <KeepTogether>true</KeepTogether>
                                 <Paragraphs>
                                   <Paragraph>
                                     <TextRuns>
                                       <TextRun>
-                                        <Value>=Fields!Room.Value</Value>
+                                        <Value>=Fields!Role_Title.Value</Value>
                                         <Style />
                                       </TextRun>
                                     </TextRuns>
                                     <Style />
                                   </Paragraph>
                                 </Paragraphs>
-                                <rd:DefaultName>Room</rd:DefaultName>
+                                <rd:DefaultName>Role_Title</rd:DefaultName>
                                 <Style>
                                   <Border>
                                     <Color>LightGrey</Color>
@@ -640,7 +694,7 @@ ORDER BY Group_Name</CommandText>
             <Top>0.6625in</Top>
             <Left>0.23833in</Left>
             <Height>0.25in</Height>
-            <Width>2.88833in</Width>
+            <Width>4.64583in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -672,10 +726,10 @@ ORDER BY Group_Name</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox28</rd:DefaultName>
-            <Top>0.95417in</Top>
+            <Top>0.96806in</Top>
             <Left>0.23833in</Left>
             <Height>0.25in</Height>
-            <Width>1.66667in</Width>
+            <Width>4.64583in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -718,10 +772,6 @@ ORDER BY Group_Name</CommandText>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
-    <ReportParameter Name="Day">
-      <DataType>DateTime</DataType>
-      <Prompt>Day</Prompt>
-    </ReportParameter>
     <ReportParameter Name="GroupID">
       <DataType>Integer</DataType>
       <Prompt>Group</Prompt>
@@ -733,23 +783,54 @@ ORDER BY Group_Name</CommandText>
         </DataSetReference>
       </ValidValues>
     </ReportParameter>
+    <ReportParameter Name="OpportunityId">
+      <DataType>Integer</DataType>
+      <Prompt>Opportunity</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>Opportunities</DataSetName>
+          <ValueField>Opportunity_ID</ValueField>
+          <LabelField>OpportunityLabel</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <MultiValue>true</MultiValue>
+    </ReportParameter>
+    <ReportParameter Name="Day">
+      <DataType>DateTime</DataType>
+      <Prompt>Day</Prompt>
+    </ReportParameter>
     <ReportParameter Name="PageID">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>0</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>PageID</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="DomainID">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>0</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>DomainID</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
     <ReportParameter Name="UserID">
       <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>0</Value>
+        </Values>
+      </DefaultValue>
       <Prompt>UserID</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
   </ReportParameters>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportServerUrl>http://localhost/ReportServer</rd:ReportServerUrl>
+  <rd:ReportServerUrl>http://gatewayint.crossroads.net/ReportServer</rd:ReportServerUrl>
   <rd:ReportID>7ab631f5-de07-480e-82a4-e9d8888e3b96</rd:ReportID>
 </Report>

@@ -34,6 +34,8 @@ delete from households where household_name = '1TimeHousehold';
 
 delete from Contact_Households where household_id in (select household_id from households where household_name = '1TimeHousehold');
 
+delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+1TimeFather@gmail.com');
+
 delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+1TimeMother@gmail.com');
 
 delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+1TimeChild19@gmail.com');

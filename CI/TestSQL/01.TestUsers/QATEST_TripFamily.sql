@@ -136,6 +136,9 @@ SET Contact_ID = 1
 WHERE USER_ID = @userAccount;
 
 --Just get rid of this so we can delete Tifa's old contact record
+DECLARE @communicationID as int
+set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
+
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
 
@@ -144,9 +147,6 @@ WHERE communication_id = @communicationID;
 
 DELETE from [dbo].dp_Contact_Publications 
 WHERE contact_id = @contactID;
-
-DECLARE @communicationID as int
-set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
 
 DELETE from [dbo].dp_communication_messages 
 WHERE Communication_ID = @communicationID;
@@ -226,6 +226,9 @@ SET Contact_ID = 1
 WHERE USER_ID = @userAccount;
 
 --Just get rid of this so we can delete Marlene's old contact record
+DECLARE @communicationID as int
+set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
+
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
 
@@ -234,9 +237,6 @@ WHERE communication_id = @communicationID;
 
 DELETE from [dbo].dp_Contact_Publications 
 WHERE contact_id = @contactID;
-
-DECLARE @communicationID as int
-set @communicationID = (Select Communication_ID from dp_Communications where TO_CONTACT = @contactID);
 
 DELETE from [dbo].dp_communication_messages 
 WHERE Communication_ID = @communicationID;

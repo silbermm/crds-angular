@@ -1,3 +1,4 @@
+<div ng-if="onetimeEvent.events.length>0">
 <div class="row">
   <div class="col-sm-10 col-sm-offset-1">
     <div dynamic-content="onetimeEvent.pageInfo.content | html"> </div>
@@ -14,3 +15,12 @@
     </onetime-event-block>
   </div>
 </form>
+</div>
+
+<div ng-if="onetimeEvent.events.length===0">
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+      <div dynamic-content="$root.MESSAGES.missingEvents.content | html"></div>
+    </div>
+  </div>
+</div>

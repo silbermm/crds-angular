@@ -2,9 +2,9 @@
   'use strict';
   module.exports = GivingHistoryController;
 
-  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile'];
+  GivingHistoryController.$inject = ['$log', 'GivingHistoryService', 'Profile', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function GivingHistoryController($log, GivingHistoryService, Profile) {
+  function GivingHistoryController($log, GivingHistoryService, Profile, AuthService, CRDS_TOOLS_CONSTANTS) {
     var vm = this;
 
     vm.overall_view_ready = false;
@@ -76,6 +76,10 @@
         setErrorState(error);
       });
     }
+
+    vm.allowAdminAccess = function() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools));
+    };
 
     function setErrorState(error) {
       if (vm.impersonate_donor_id === undefined || error === undefined || error.status === undefined) {

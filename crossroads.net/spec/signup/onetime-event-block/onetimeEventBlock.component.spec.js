@@ -63,11 +63,11 @@ describe('Onetime Signup Event Block', function() {
   });
 
   it('should get just the time for an endtime', function() {
-    expect(isolated.onetimeEventBlock.endTime()).toEqual('9:00 PM');
+    expect(isolated.onetimeEventBlock.endTime()).toEqual('9:00pm');
   });
 
   it('should get just the time for a start time', function() {
-    expect(isolated.onetimeEventBlock.startTime()).toEqual('7:00 PM');
+    expect(isolated.onetimeEventBlock.startTime()).toEqual('7:00pm');
   });
 
   it('should show childcare button if I am over 17', function() {

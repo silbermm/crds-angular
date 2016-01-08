@@ -91,13 +91,13 @@
         if (!vm.profileData) {
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
-            vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
+            vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
             underThirteen();
             vm.viewReady = true;
           });
         } else {
           configurePerson();
-          vm.profileData.person.participantStartDate = new Date(vm.profileData.person.participantStartDate);
+          vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
           underThirteen();
           vm.viewReady = true;
         }
@@ -109,23 +109,27 @@
 
     function configurePerson() {
 
-      if ((vm.profileData.person.dateOfBirth !== undefined) && (vm.profileData.person.dateOfBirth !== '')) {
-        if (typeof vm.profileData.person.dateOfBirth === 'string' ||
-            vm.profileData.person.dateOfBirth instanceof String) {
-          var newBirthDate = vm.profileData.person.dateOfBirth.replace(vm.dateFormat, '$3 $1 $2');
-          var mBdate = moment(newBirthDate, 'YYYY MM DD');
-          vm.profileData.person.dateOfBirth = mBdate.format('MM/DD/YYYY');
-        } else {
-          var formatedDate = moment(vm.profileData.person.dateOfBirth);
-          vm.profileData.person.dateOfBirth = formatedDate.format('MM/DD/YYYY');
-        }
-      }
+      vm.profileData.person.dateOfBirth = convertDate(vm.profileData.person.dateOfBirth);
 
       vm.ethnicities = vm.profileData.person.attributeTypes[attributeTypeIds.ETHNICITY].attributes;
       vm.startAttendReason = vm.profileData.person.singleAttributes[attributeTypeIds.START_ATTEND_REASON];
       vm.startAttendReasons = _.find(vm.attributeTypes, function(attributeType) {
         return attributeType.attributeTypeId === attributeTypeIds.START_ATTEND_REASON;
       });
+    }
+
+    function convertDate(date) {
+      if ((date !== undefined) && (date !== '')) {
+        if (typeof date === 'string' ||
+            date instanceof String) {
+          var newDate = date.replace(vm.dateFormat, '$3 $1 $2');
+          var mDate = moment(newDate, 'YYYY MM DD');
+          return mDate.format('MM/DD/YYYY');
+        } else {
+          var formatedDate = moment(date);
+          return formatedDate.format('MM/DD/YYYY');
+        }
+      }
     }
 
     function convertHomePhone() {
@@ -200,6 +204,7 @@
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.isHouseholdCollapsed = false;
+          vm.submitted = false;
           return;
         }
 

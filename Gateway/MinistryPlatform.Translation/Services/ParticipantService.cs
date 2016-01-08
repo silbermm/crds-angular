@@ -91,11 +91,12 @@ namespace MinistryPlatform.Translation.Services
             return participant;
         }
 
-        public void UpdateParticipant(Dictionary<string, object> participant, string token)
+        public void UpdateParticipant(Dictionary<string, object> participant)
         {
+            var apiToken = ApiLogin();
             try
             {
-                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Participants"), participant, token);
+                _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Participants"), participant, apiToken);
             }
             catch (Exception e)
             {
