@@ -371,7 +371,6 @@
         },
         resolve: {
           loggedin: crds_utilities.checkLoggedin,
-          Profile: 'Profile',
           MPTools: 'MPTools',
           Page: 'Page',
           CmsInfo: function(Page, $stateParams) {

@@ -33,7 +33,6 @@
           vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
           vm.pageInfo = (CmsInfo.pages !== undefined && CmsInfo.pages.length > 0) ? CmsInfo.pages[0] : null;
           if(vm.pageInfo !== null){
-            console.log("Querying for a response - " + vm.pageInfo.opportunity + " " + vm.params.recordId);
             var response = VolunteerApplication.getResponse(vm.pageInfo.opportunity, vm.params.recordId)
               .then(function(response){
               if(response !== null && response.responseId !== undefined){
