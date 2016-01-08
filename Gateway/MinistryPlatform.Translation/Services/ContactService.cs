@@ -192,7 +192,7 @@ namespace MinistryPlatform.Translation.Services
             }
             if (recordsDict.ContainsKey("Attendance_Start_Date"))
             {
-                contact.Participant_Start_Date = recordsDict.ToDate("Attendance_Start_Date");
+                contact.Attendance_Start_Date = recordsDict.ToNullableDate("Attendance_Start_Date");
             }
 
             if (recordsDict.ContainsKey("ID_Card"))

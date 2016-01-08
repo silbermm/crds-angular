@@ -106,7 +106,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual(startDate, person.attendanceStartDate);
+            Assert.AreEqual(startDate, person.AttendanceStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
@@ -147,7 +147,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual("city", person.City);
             Assert.AreEqual("state", person.State);
             Assert.AreEqual("postal-code", person.PostalCode);
-            Assert.AreEqual(startDate, person.attendanceStartDate);
+            Assert.AreEqual(startDate, person.AttendanceStartDate);
             Assert.AreEqual("foreign-country", person.ForeignCountry);
             Assert.AreEqual("home-phone", person.HomePhone);
             Assert.AreEqual(8, person.CongregationId);
