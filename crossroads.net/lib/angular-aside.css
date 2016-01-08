@@ -1,7 +1,7 @@
 /*!
- * angular-aside - v1.1.2
+ * angular-aside - v1.3.2
  * https://github.com/dbtek/angular-aside
- * 2015-03-04
+ * 2015-11-17
  * Copyright (c) 2015 İsmail Demirbilek
  * License: MIT
  */
@@ -161,7 +161,7 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(-100%, 0, 0);
-            transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
@@ -173,13 +173,13 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(-100%, 0, 0);
-            transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
   }
 }
 
 .fadeOutLeft {
   -webkit-animation-name: fadeOutLeft;
-          animation-name: fadeOutLeft;
+  animation-name: fadeOutLeft;
 }
 
 @-webkit-keyframes fadeOutRight {
@@ -190,7 +190,7 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(100%, 0, 0);
-            transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
   }
 }
 
@@ -202,13 +202,13 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(100%, 0, 0);
-            transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
   }
 }
 
 .fadeOutRight {
   -webkit-animation-name: fadeOutRight;
-          animation-name: fadeOutRight;
+  animation-name: fadeOutRight;
 }
 
 @-webkit-keyframes fadeOutUp {
@@ -219,7 +219,7 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(0, -100%, 0);
-            transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
   }
 }
 
@@ -231,13 +231,13 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(0, -100%, 0);
-            transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
   }
 }
 
 .fadeOutUp {
   -webkit-animation-name: fadeOutUp;
-          animation-name: fadeOutUp;
+  animation-name: fadeOutUp;
 }
 
 
@@ -249,7 +249,7 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
-            transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
   }
 }
 
@@ -261,13 +261,13 @@ Copyright (c) 2014 Daniel Eden
   100% {
     opacity: 0;
     -webkit-transform: translate3d(0, 100%, 0);
-            transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
   }
 }
 
 .fadeOutDown {
   -webkit-animation-name: fadeOutDown;
-          animation-name: fadeOutDown;
+  animation-name: fadeOutDown;
 }
 /* Common */
 

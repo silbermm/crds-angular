@@ -70,6 +70,8 @@
   "dependencies": {
     "angular": "^1.4.3",
     "angular-bootstrap-npm": "^0.13.1",
+    "angular-animate": "^1.4.3",
+    "angular-touch": "^1.4.3",
     "angular-cookies": "^1.4.3",
     "angular-growl": "^0.1.0",
     "angular-messages": "^1.4.3",
@@ -103,6 +105,7 @@
     "angular-aside": "./lib/angular-aside.js",
     "angular-match-media": "./lib/angular-match-media.js",
     "angular-mailchimp": "./lib/angular-mailchimp.js",
-    "angular-image-crop": "./lib/ng-img-crop.js"
+    "angular-image-crop": "./lib/ng-img-crop.js",
+    "angulartics-gtm": "./node_modules/angulartics/src/angulartics-gtm.js"
   }
 }
