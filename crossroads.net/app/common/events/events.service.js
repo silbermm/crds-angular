@@ -17,7 +17,7 @@
   function EventService($resource, $log) {
     var eventsService = {
       res: $resource(__API_ENDPOINT__ + 'api/events/:site'),
-      event: $resource(__API_ENDPOINT__ + 'api/event'),
+      event: $resource(__API_ENDPOINT__ + 'api/event/:eventId'),
       getDailyEvents: function(site) {
         var events = this.res.query({site:site});
         return events;
