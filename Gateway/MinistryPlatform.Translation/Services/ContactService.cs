@@ -190,6 +190,10 @@ namespace MinistryPlatform.Translation.Services
             {
                 contact.Participant_Start_Date = recordsDict.ToDate("Participant_Start_Date");
             }
+            if (recordsDict.ContainsKey("Attendance_Start_Date"))
+            {
+                contact.Participant_Start_Date = recordsDict.ToDate("Attendance_Start_Date");
+            }
 
             if (recordsDict.ContainsKey("ID_Card"))
             {

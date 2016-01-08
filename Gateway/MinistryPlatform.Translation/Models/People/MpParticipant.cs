@@ -13,5 +13,6 @@ namespace MinistryPlatform.Translation.Models.People
         public string Display_Name { get; set; }
         public string Email_Address { get; set; }
         public DateTime? Participant_Start_Date { get; set; }
+        public DateTime? Attendance_Start_Date { get; set; }
     }
 }
