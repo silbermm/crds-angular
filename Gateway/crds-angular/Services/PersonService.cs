@@ -43,9 +43,10 @@ namespace crds_angular.Services
             {
                 Participant participant = _participantService.GetParticipant(person.ContactId);
                 participant.ParticipantStart = person.ParticipantStartDate;
+                participant.AttendanceStart = person.AttendanceStartDate;
                 // convert to the object with underscores
                 var p = Mapper.Map <MpParticipant>(participant);
-                _participantService.UpdateParticipant(getDictionary(p), token);
+                _participantService.UpdateParticipant(getDictionary(p));
             }
         }
 

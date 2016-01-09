@@ -1,4 +1,7 @@
 require('crds-core');
+require('../../../app/ang');
+require('../../../app/ang2');
+
 require('../../../app/app');
 
 describe('KC Applicant Tool', function(){
@@ -12,7 +15,6 @@ describe('KC Applicant Tool', function(){
 
   beforeEach(angular.mock.module(function($provide){
     $provide.value('CmsInfo', mockPageInfo);
-    $provide.value('Contact', mockVolunteer);
     $provide.value('$state', { get: function() {} });
   }));
 
@@ -21,7 +23,7 @@ describe('KC Applicant Tool', function(){
     spyOn($location, 'search').and.returnValue(pageParams);
   }));
 
-  var controller, $log, $httpBackend, MPTools, $window, $scope, Contact, CmsInfo;
+  var controller, $log, $httpBackend, MPTools, $window, $scope, Profile, CmsInfo;
 
   beforeEach(inject(function(_$controller_, _$log_, _MPTools_, _$window_, $injector){
     $scope = {};
@@ -29,37 +31,39 @@ describe('KC Applicant Tool', function(){
     $log = _$log_;
     $window = _$window_;
     MPTools = _MPTools_;
-    Contact = $injector.get('Contact');
+    Profile = $injector.get('Profile');
     CmsInfo = $injector.get('CmsInfo');
     $httpBackend = $injector.get('$httpBackend');
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile/' + controller.params.recordId)
+      .respond(200, mockVolunteer);
   }));
 
   it('should get the correct query parameters', function(){
+    $httpBackend.flush();
     expect(controller.params.userGuid).toBe(pageParams.ug);
   });
 
   it('should have a null middle initial', function(){
+    $httpBackend.flush();
     expect(controller.person.middleInitial).toBeNull();
   });
 
   it('should get the have the correct page info', function(){
+    $httpBackend.flush();
     expect(controller.pageInfo).toBe(mockPageInfo.pages[0]);
   });
 
   it('should query for a response', function(){
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
-        '/' + controller.params.recordId)
+        'api/opportunity/getResponseForOpportunity/' + 115 + '/' + 12345678)
       .respond(200, mockResponse);
-
     $httpBackend.flush();
     expect(controller.responseId).toBe(mockResponse.responseId);
   });
 
   it('should show error when no response if available', function(){
     $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] +
-        'api/opportunity/getResponseForOpportunity/' + controller.pageInfo.opportunity +
-        '/' + controller.params.recordId)
+        'api/opportunity/getResponseForOpportunity/' + 115 + '/' + 12345678)
       .respond(200, null);
 
     $httpBackend.flush();

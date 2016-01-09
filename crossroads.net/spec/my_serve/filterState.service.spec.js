@@ -1,4 +1,7 @@
 require('crds-core');
+require('../../app/ang');
+require('../../app/ang2');
+
 require('../../app/app');
 
 describe('Filter State Service', function() {

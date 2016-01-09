@@ -3,9 +3,9 @@
 
   module.exports = AdminRecurringGiftController;
 
-  AdminRecurringGiftController.$inject = ['$log', '$filter', '$modal', '$rootScope', 'DonationService', 'GiveTransferService'];
+  AdminRecurringGiftController.$inject = ['$log', '$filter', '$modal', '$rootScope', 'DonationService', 'GiveTransferService', 'AuthService', 'CRDS_TOOLS_CONSTANTS'];
 
-  function AdminRecurringGiftController($log, $filter, $modal, $rootScope, DonationService, GiveTransferService) {
+  function AdminRecurringGiftController($log, $filter, $modal, $rootScope, DonationService, GiveTransferService, AuthService, CRDS_TOOLS_CONSTANTS) {
     var vm = this;
     vm.recurring_gifts = [];
     vm.recurring_giving = false;
@@ -32,6 +32,10 @@
         setErrorState(error);
       });
     }
+
+    vm.allowAdminAccess = function() {
+      return (AuthService.isAuthenticated() && AuthService.isAuthorized(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools));
+    };
 
     function setErrorState(error) {
       if (vm.impersonateDonorId === undefined || error === undefined || error.httpStatusCode === undefined) {

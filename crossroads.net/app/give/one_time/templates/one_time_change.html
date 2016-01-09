@@ -15,7 +15,7 @@
         set-valid-cvc='setValidCvc' 
         account-state-name='give.account'>
   </bank-credit-card-details>
-	<button ng-click="give.service.submitChangedBankInfo(give.giveForm, give.programsInput)" ng-class="{disabled: give.dto.processing}" class="btn btn-primary btn-lg btn-block-mobile give-button">
+	<button ng-click="give.service.submitChangedBankInfo(give.giveForm, give.programsInput)" ng-disabled="give.dto.processing" class="btn btn-primary btn-lg btn-block-mobile give-button">
 		<span ng-if="give.dto.processing">Giving...</span>
 		<span ng-if="!give.dto.processing">Give {{give.dto.amount | currency}}</span>
         <svg viewBox="0 0 32 32" class="icon-medium icon-arrow-right9">

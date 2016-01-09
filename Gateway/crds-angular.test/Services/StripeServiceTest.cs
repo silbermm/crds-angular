@@ -585,9 +585,9 @@ namespace crds_angular.test.Services
 
             const string plan = "Take over the world.";
             const string customer = "cus_123";
-            var trialEndDate = DateTime.Today.AddDays(1);
+            var trialEndDate = DateTime.Now.AddDays(1);
 
-            var expectedEpochTime = trialEndDate.ConvertDateTimeToEpoch();
+            var expectedEpochTime = trialEndDate.ToUniversalTime().Date.ConvertDateTimeToEpoch();
 
             var response = _fixture.CreateSubscription(plan, customer, trialEndDate);
             _restClient.Verify(
@@ -669,7 +669,7 @@ namespace crds_angular.test.Services
             const string customer = "cus_123";
             const string plan = "plan_123";
             var trialDateTime = DateTime.Now.AddDays(2);
-            var expectedTrialEndDate = trialDateTime.Date.ConvertDateTimeToEpoch();
+            var expectedTrialEndDate = trialDateTime.ToUniversalTime().Date.ConvertDateTimeToEpoch();
 
             var response = _fixture.UpdateSubscriptionPlan(customer, sub, plan, trialDateTime);
             _restClient.Verify(

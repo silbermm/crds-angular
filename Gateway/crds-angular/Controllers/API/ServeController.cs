@@ -78,15 +78,14 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (List<QualifiedServerDto>))]
-        [Route("api/serve/qualifiedservers/{groupId}/{contactId}")]
-        public IHttpActionResult GetQualifiedServers(int groupId, int contactId)
+        [Route("api/serve/qualifiedservers/{groupId}/{opportunityId}")]
+        public IHttpActionResult GetQualifiedServers(int groupId, int opportunityId)
         {
-            //TODO: I don't think you need to pass in contactId, use the token instead
             return Authorized(token =>
             {
                 try
                 {
-                    var list = _serveService.GetQualifiedServers(groupId, token);
+                    var list = _serveService.GetQualifiedServers(groupId, opportunityId, token);
                     return Ok(list);
                 }
                 catch (Exception ex)

@@ -34,6 +34,8 @@ delete from households where household_name = 'SU2SHousehold';
 
 delete from Contact_Households where household_id in (select household_id from households where household_name = 'SU2SHousehold');
 
+delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SFather@gmail.com');
+
 delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SMother@gmail.com');
 
 delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild19@gmail.com');

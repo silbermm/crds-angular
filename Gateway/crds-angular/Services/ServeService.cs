@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using AutoMapper;
 using crds_angular.Enum;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
@@ -12,6 +13,7 @@ using log4net;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
+using WebGrease.Css.Extensions;
 using IGroupService = MinistryPlatform.Translation.Services.Interfaces.IGroupService;
 
 namespace crds_angular.Services
@@ -37,6 +39,7 @@ namespace crds_angular.Services
         private readonly IAuthenticationService _authenticationService;
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly IApiUserService _apiUserService;
+        private readonly IResponseService _responseService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -58,7 +61,8 @@ namespace crds_angular.Services
                             ICommunicationService communicationService,
                             IAuthenticationService authenticationService,
                             IConfigurationWrapper configurationWrapper,
-                            IApiUserService apiUserService)
+                            IApiUserService apiUserService,
+                            IResponseService responseService)
         {
             _contactService = contactService;
             _contactRelationshipService = contactRelationshipService;
@@ -71,6 +75,7 @@ namespace crds_angular.Services
             _authenticationService = authenticationService;
             _configurationWrapper = configurationWrapper;
             _apiUserService = apiUserService;
+            _responseService = responseService;
         }
 
         public List<FamilyMember> GetImmediateFamilyParticipants(string token)
@@ -116,7 +121,7 @@ namespace crds_angular.Services
             return _opportunityService.GetLastOpportunityDate(opportunityId, token);
         }
 
-        public List<QualifiedServerDto> GetQualifiedServers(int groupId, string token)
+        public List<QualifiedServerDto> GetQualifiedServers(int groupId, int opportunityId, string token)
         {
             var qualifiedServers = new List<QualifiedServerDto>();
             var immediateFamilyParticipants = GetImmediateFamilyParticipants(token);
@@ -124,9 +129,9 @@ namespace crds_angular.Services
             foreach (var participant in immediateFamilyParticipants)
             {
                 var membership = _groupService.ParticipantQualifiedServerGroupMember(groupId, participant.ParticipantId);
+                
                 var opportunityResponse = _opportunityService.GetMyOpportunityResponses(participant.ContactId,
-                                                                                        115,
-                                                                                        token);
+                                                                                        opportunityId);
                 var qualifiedServer = new QualifiedServerDto();
                 qualifiedServer.ContactId = participant.ContactId;
                 qualifiedServer.Email = participant.Email;
@@ -357,6 +362,44 @@ namespace crds_angular.Services
                 _communicationService.SendMessage(communication);
                 return new List<int>();
             }
+        }
+
+        public void SendReminderEmails()
+        {
+            var token = _apiUserService.GetToken();
+
+            var reminders = _responseService.GetServeReminders(token);
+            var serveReminders = reminders.Select(Mapper.Map<ServeReminder>);
+            
+            var fromId = AppSetting("DefaultContactEmailId");
+            var fromEmail = _contactService.GetContactById(fromId).Email_Address;
+
+            serveReminders.ForEach(reminder =>
+            {
+                var contact = _contactService.GetContactById(reminder.SignedupContactId);
+
+                // is there a template set?
+                var templateId = reminder.TemplateId ?? AppSetting("DefaultServeReminderTemplate");
+                var mergeData = new Dictionary<string, object>(){
+                    {"Opportunity_Title", reminder.OpportunityTitle},
+                    {"Nickname", contact.Nickname},
+                    {"Event_Start_Date", reminder.EventStartDate.ToShortDateString()},
+                    {"Event_End_Date", reminder.EventEndDate.ToShortDateString()},
+                    {"Shift_Start", reminder.ShiftStart.FormatAsString()},
+                    {"Shift_End", reminder.ShiftEnd.FormatAsString()}
+                 };
+                var communication = _communicationService.GetTemplateAsCommunication(templateId,
+                                                                                     fromId,
+                                                                                     fromEmail,
+                                                                                     reminder.OpportunityContactId,
+                                                                                     reminder.OpportunityEmailAddress,
+                                                                                     reminder.SignedupContactId,
+                                                                                     reminder.SignedupEmailAddress,
+                                                                                     mergeData);
+                _communicationService.SendMessage(communication);
+
+            });
+
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)

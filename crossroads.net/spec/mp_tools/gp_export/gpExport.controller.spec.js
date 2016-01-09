@@ -1,4 +1,7 @@
 require('crds-core');
+require('../../../app/ang');
+require('../../../app/ang2');
+
 require('../../../app/common/common.module');
 require('../../../app/app');
 
@@ -44,13 +47,7 @@ describe('GP Export Tool', function() {
 
   beforeEach(angular.mock.module('crossroads'));
 
-  var GIVE_ROLES = { StewardshipDonationProcessor: 123 };
-
-  beforeEach(function() {
-    angular.mock.module('crossroads.give', function($provide) {
-      $provide.constant('GIVE_ROLES', GIVE_ROLES);
-    });
-  });
+  var CRDS_TOOLS_CONSTANTS = { SECURITY_ROLES: { FinanceTools: 123 } };
 
   var AuthService;
 
@@ -66,11 +63,12 @@ describe('GP Export Tool', function() {
   var $httpBackend;
   var MPTools;
 
-  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, $injector) {
+  beforeEach(inject(function(_$controller_, _$log_, _MPTools_, $injector, _CRDS_TOOLS_CONSTANTS_) {
     $controller = _$controller_;
     $log = _$log_;
     MPTools = _MPTools_;
     $httpBackend = $injector.get('$httpBackend');
+    _CRDS_TOOLS_CONSTANTS_.SECURITY_ROLES = CRDS_TOOLS_CONSTANTS.SECURITY_ROLES;
   }));
 
   describe('GP Export Controller', function() {
@@ -100,7 +98,7 @@ describe('GP Export Tool', function() {
         expect(controller.allowAccess()).toBeFalsy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
-        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools);
       });
 
       it('Should not allow access if user is authenticated but not authorized', function() {
@@ -110,7 +108,7 @@ describe('GP Export Tool', function() {
         expect(controller.allowAccess()).toBeTruthy();
 
         expect(AuthService.isAuthenticated).toHaveBeenCalled();
-        expect(AuthService.isAuthorized).toHaveBeenCalledWith(GIVE_ROLES.StewardshipDonationProcessor);
+        expect(AuthService.isAuthorized).toHaveBeenCalledWith(CRDS_TOOLS_CONSTANTS.SECURITY_ROLES.FinanceTools);
       });
     });
 
