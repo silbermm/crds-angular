@@ -585,7 +585,7 @@ namespace crds_angular.test.Services
 
             const string plan = "Take over the world.";
             const string customer = "cus_123";
-            var trialEndDate = DateTime.Today.AddDays(1);
+            var trialEndDate = DateTime.Now.AddDays(1);
 
             var expectedEpochTime = trialEndDate.ToUniversalTime().Date.ConvertDateTimeToEpoch();
 
