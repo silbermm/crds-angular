@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using crds_angular.App_Start;
 using crds_angular.Models;
+using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services;
@@ -10,6 +12,7 @@ using Crossroads.Utilities.Extensions;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Models;
+using MinistryPlatform.Translation.Models.Opportunities;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -682,6 +685,132 @@ namespace crds_angular.test.Services
             _opportunityService.Setup(m => m.GetOpportunityById(opportunityId, It.IsAny<string>())).Returns(o);
         }
 
+        [Test]
+        public void ShouldGetAListOfPotientialVolunteers()
+        {
+            var saturday = new DateTime(2016, 1, 2);
+            var sunday = new DateTime(2016, 1, 3);
+            var eventId = 09876;
+            var groupId = 00000;
+            
+            var groupParticipants = SetupGroupParticipants();
+                        
+            var evt = new crds_angular.Models.Crossroads.Events.Event()
+            {
+                EventId = eventId,
+                StartDate = saturday,
+                location = "anywhere",
+                EndDate = saturday,
+                name = "Something",
+                EventType = "Serve Signup",
+                PrimaryContactEmailAddress = "something@gmail.com",
+                PrimaryContactId = 11111                
+            };
+
+            var otherResponses = new List<MPResponse>
+            {
+                new MPResponse()
+                {
+                    Contact_ID = groupParticipants.First().ContactId,
+                    Event_ID = eventId,
+                    Group_ID = groupId,
+                    Participant_ID = groupParticipants.First().ParticipantId,
+                    Response_Date = DateTime.Now,
+                    Response_Result_ID = 2
+                }
+            };
+
+            // no responses for Saturday...
+            _opportunityService.Setup(m => m.GetContactsOpportunityResponseByGroupAndEvent(groupId, eventId)).Returns(new List<MPResponse>());
+            
+            // there is a response for the first participant for Sunday...
+            _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants.First().ParticipantId, sunday.ToMinistryPlatformSearchFormat())
+            )).Returns(otherResponses);
+
+            // there is not a response for the second participant for Sunday
+            _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants[1].ParticipantId, sunday.ToMinistryPlatformSearchFormat())
+            )).Returns(new List<MPResponse>());
+            
+            var potentialVolunteers = _fixture.PotentialVolunteers(groupId, evt, groupParticipants);
+            Assert.AreEqual(potentialVolunteers.Count, 1);
+        }
+
+        [Test]
+        public void ShouldGetAnEmptyListOfPotientialVolunteers()
+        {
+            var saturday = new DateTime(2016, 1, 2);
+            var sunday = new DateTime(2016, 1, 3);
+            var eventId = 09876;
+            var groupId = 00000;
+
+            var groupParticipants = SetupGroupParticipants();
+
+            var evt = new crds_angular.Models.Crossroads.Events.Event()
+            {
+                EventId = eventId,
+                StartDate = saturday,
+                location = "anywhere",
+                EndDate = saturday,
+                name = "Something",
+                EventType = "Serve Signup",
+                PrimaryContactEmailAddress = "something@gmail.com",
+                PrimaryContactId = 11111
+            };
+
+            var responses = new List<MPResponse>
+            {
+                new MPResponse()
+                {
+                    Contact_ID = groupParticipants[0].ContactId,
+                    Event_ID = eventId,
+                    Group_ID = groupId,
+                    Participant_ID = groupParticipants.First().ParticipantId,
+                    Response_Date = DateTime.Now,
+                    Response_Result_ID = 2
+                },
+                new MPResponse()
+                {
+                    Contact_ID = groupParticipants[1].ContactId,
+                    Event_ID = eventId,
+                    Group_ID = groupId,
+                    Participant_ID = groupParticipants.First().ParticipantId,
+                    Response_Date = DateTime.Now,
+                    Response_Result_ID = 2
+                }
+            };
+
+            var otherResponses = new List<MPResponse>
+            {
+                new MPResponse()
+                {
+                    Contact_ID = groupParticipants.First().ContactId,
+                    Event_ID = eventId,
+                    Group_ID = groupId,
+                    Participant_ID = groupParticipants.First().ParticipantId,
+                    Response_Date = DateTime.Now,
+                    Response_Result_ID = 2
+                }
+            };
+
+            // no responses for Saturday...
+            _opportunityService.Setup(m => m.GetContactsOpportunityResponseByGroupAndEvent(groupId, eventId)).Returns(responses);
+
+            // there is a response for the first participant for Sunday...
+            _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants.First().ParticipantId, sunday.ToMinistryPlatformSearchFormat())
+            )).Returns(otherResponses);
+
+            // there is not a response for the second participant for Sunday
+            _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants[1].ParticipantId, sunday.ToMinistryPlatformSearchFormat())
+            )).Returns(new List<MPResponse>());
+
+            var potentialVolunteers = _fixture.PotentialVolunteers(groupId, evt, groupParticipants);
+            Assert.AreEqual(potentialVolunteers.Count, 0);
+        }
+
         [Test, TestCaseSource("AllMockEvents")]
         public void RespondToServeOpportunityYesForEveryOtherWeek(List<Event> mockEvents)
         {
@@ -783,6 +912,31 @@ namespace crds_angular.test.Services
                 {
                     EventId = 5,
                     EventStartDate = new DateTime(2015, 1, 29)
+                }
+            };
+        }
+
+        private static List<GroupParticipant> SetupGroupParticipants()
+        {
+            return new List<GroupParticipant>
+            {
+                new GroupParticipant()
+                {
+                    ContactId = 1234,
+                    GroupRoleId = 1,
+                    GroupRoleTitle = "Member",
+                    LastName = "Silbernagel",
+                    NickName = "Matt",
+                    ParticipantId = 4321
+                },
+                new GroupParticipant()
+                {
+                    ContactId = 2345,
+                    GroupRoleId = 1,
+                    GroupRoleTitle = "Member",
+                    LastName = "Maddox",
+                    NickName = "Martha",
+                    ParticipantId = 5432
                 }
             };
         }
