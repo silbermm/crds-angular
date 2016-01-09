@@ -247,9 +247,13 @@
     function underThirteen() {
       if (vm.profileData.person.dateOfBirth !== '') {
         var birthdate = crds_utilities.convertStringToDate(vm.profileData.person.dateOfBirth);
-        var thirteen = new Date();
-        thirteen.setFullYear(thirteen.getFullYear() - 13);
-        vm.requireEmail = birthdate.getTime() < thirteen.getTime();
+        if (birthdate) {
+          var thirteen = new Date();
+          thirteen.setFullYear(thirteen.getFullYear() - 13);
+          vm.requireEmail = birthdate.getTime() < thirteen.getTime();
+        } else {
+          vm.requireEmail = true;
+        }
       } else {
         vm.requireEmail = true;
       }
