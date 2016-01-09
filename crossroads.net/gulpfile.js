@@ -25,8 +25,25 @@ var fallbackOptions = {
   //]
 };
 
-function htmlReplace() {
-  var assets = require('./webpack-assets.json');
+function htmlReplace(devBuild) {
+  var assets;
+  if (devBuild) {
+    assets = {
+      ang: { js: '/assets/ang.js' },
+      ang2: { js: '/assets/ang2.js' },
+      core: { js: '/assets/core.js', css: '/assets/core.css' },
+      common: { js: '/assets/common.js' },
+      profile: { js: '/assets/profile.js' },
+      trips: { js: '/assets/trips.js' },
+      search: { js: '/assets/search.js' },
+      media: { js: '/assets/media.js' },
+      give: { js: '/assets/give.js' },
+      main: { js: '/assets/main.js', css: '/assets/main.css' }
+    };
+  } else {
+    assets = require('./webpack-assets.json');
+  }
+
   gulp.src('app/atriumevents.html')
       .pipe(htmlreplace({
         angjs: assets.ang.js,
@@ -67,8 +84,7 @@ var browserSyncCompiles = 0;
 var browserSync = require('browser-sync').create();
 
 var webPackConfigs = [Object.create(webpackConfig)];
-//var webPackDevConfigs = [Object.create(webPackDevConfig)];
-var webPackDevConfigs = [Object.create(webpackConfig)];
+var webPackDevConfigs = [Object.create(webPackDevConfig)];
 
 // Start the development server
 gulp.task('default', ['webpack-dev-server']);
@@ -103,7 +119,7 @@ gulp.task('build-browser-sync', ['icons'], function() {
         .pipe(gulpWebpack(element))
         .pipe(gulp.dest('./assets'));
   });
-  htmlReplace();
+  htmlReplace(true);
 
   gulp.src('./lib/load-image.all.min.js') .pipe(gulp.dest('./assets'));
 
@@ -173,7 +189,7 @@ gulp.task('webpack-dev-server', ['icons-watch'], function(callback) {
         gutil.log('[start]', 'https://localhost:8080/webpack-dev-server/index.html');
       });
 
-  htmlReplace();
+  htmlReplace(true);
 
   gulp.src('./lib/load-image.all.min.js')
       .pipe(gulp.dest('./assets'));
@@ -207,7 +223,7 @@ gulp.task('webpack:build', ['icons', 'robots', 'apache-site-config'], function(c
       colors: true
     }));
     callback();
-    htmlReplace();
+    htmlReplace(false);
   });
 });
 
@@ -223,7 +239,7 @@ gulp.task('webpack:build-dev', ['icons'], function(callback) {
     }));
     callback();
 
-    htmlReplace();
+    htmlReplace(true);
 
     gulp.src('./lib/load-image.all.min.js')
         .pipe(gulp.dest('./assets'));
