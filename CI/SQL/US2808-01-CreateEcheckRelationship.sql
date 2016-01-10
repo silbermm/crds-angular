@@ -24,16 +24,16 @@ BEGIN
 			BEGIN
 
 				-- this will get all contacts in a household besides the contact we're looking at, that are children in that household with no relationship record to the contact
-				INSERT INTO @household_contacts SELECT c.Contact_ID FROM Contact_Relationships cr RIGHT JOIN 
+				INSERT INTO @household_contacts SELECT DISTINCT c.Contact_ID FROM Contact_Relationships cr RIGHT OUTER JOIN 
 					(SELECT Contact_ID FROM Contacts WHERE Household_ID = @Household_ID AND Contact_ID != @Contact_ID AND Household_Position_ID IN (2, 5)) AS c 
-					ON cr.Contact_ID = c.Contact_ID WHERE cr.Related_Contact_ID IS NULL
+					ON cr.Contact_ID = c.Contact_ID
 			END
 			ELSE IF (@Contact_Household_Pos IN (2, 5))
 			BEGIN
 				-- this will get all contacts in a household besides the contact we're looking at, that are adults in that household with no relationship record to the contact
-				INSERT INTO @household_contacts SELECT c.Contact_ID FROM Contact_Relationships cr RIGHT JOIN 
+				INSERT INTO @household_contacts SELECT DISTINCT c.Contact_ID FROM Contact_Relationships cr RIGHT OUTER JOIN 
 					(SELECT Contact_ID FROM Contacts WHERE Household_ID = @Household_ID AND Contact_ID != @Contact_ID AND Household_Position_ID IN (1, 7)) AS c 
-					ON cr.Contact_ID = c.Contact_ID WHERE cr.Related_Contact_ID IS NULL
+					ON cr.Contact_ID = c.Contact_ID
 			END
 
 			DECLARE @household_contact_id AS INT
@@ -49,9 +49,9 @@ BEGIN
 					INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
 					VALUES (@Contact_ID, 45, @household_contact_id, GETDATE(), 1)
 
-					-- create the child to adult mapping here - 40 is e-check adult
-					INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
-					VALUES (@household_contact_id, 40, @Contact_ID, GETDATE(), 1)
+					-- create the child to adult mapping here - 40 is e-check adult is handled by the other trigger
+					--INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
+					--VALUES (@household_contact_id, 40, @Contact_ID, GETDATE(), 1)
 				END
 				ELSE IF (@Contact_Household_Pos IN (2, 5))
 				BEGIN 
@@ -59,9 +59,9 @@ BEGIN
 					INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
 					VALUES (@Contact_ID, 40, @household_contact_id, GETDATE(), 1)
 
-					-- create the child to adult mapping here - 40 is e-check adult
-					INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
-					VALUES (@household_contact_id, 45, @Contact_ID, GETDATE(), 1)
+					-- create the child to adult mapping here - 40 is e-check adult is handled by the other trigger
+					-- INSERT INTO Contact_Relationships(Contact_ID, Relationship_ID, Related_Contact_ID, Start_Date, Domain_ID)
+					-- VALUES (@household_contact_id, 45, @Contact_ID, GETDATE(), 1)
 				END
 			FETCH NEXT FROM contacts_curs INTO @household_contact_id
 			END
