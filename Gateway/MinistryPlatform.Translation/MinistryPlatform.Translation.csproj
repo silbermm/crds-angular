@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\MPServeReminders.cs" />
+    <Compile Include="Models\Opportunities\MPResponse.cs" />
     <Compile Include="Models\People\MpParticipant.cs" />
     <Compile Include="Models\People\Participant.cs" />
     <Compile Include="Services\BulkEmailRepository.cs" />

@@ -13,7 +13,7 @@ Dad,KidsClubAppFam,kidsclubdad@gmail.com,Kids Club App family Dad
 Mom,KidsClubAppFam,kidsclubmom@gmail.com,Kids Club App family Mom
 KidsClubKid14,KidsClubAppFam,kidsclubkid14@gmail.com,Kids club app family 14yr old
 KidsClubKid17,KidsClubAppFam,kidsclubkid17@gmail.com,Kids club app family 17yr old
-Cloud,Strife,mpcrds+cloudstrife@gmail.com,Trip and Giving History Family
+Cloud,Strife,kcradduck+testing@crossroads.net,Trip and Giving History Family
 Tifa,Lockhart,mpcrds+tifalockhart@gmail.com,Trip and Giving History Family
 Marlene,Wallace,mpcrds+marlenewallace@gmail.com,Trip and Giving History Family
 Kathryn,Cradduck-Test,kcradduck+testing@crossroads.net,Kathryn's test account
@@ -26,3 +26,5 @@ SU2SFather,Head1,mpcrds+SU2SFather@gmail.com,Automation user for SU2S
 1TimeFather,Head1,mpcrds+1TimeFather@gmail.com,Automation user for 1Time_CC
 PCHead1,HeadofHousehold1,mpcrds+PCHead1@gmail.com,Automation user for Pledge Campaign
 PCHead2,HeadofHousehold2,mpcrds+PCHead2@gmail.com,Automation user for Pledge Campaign
+husband,ECheckIn,mpcrds+echeckinhus@gmail.com,Echeckin ETL
+wife,ECheckIn,mpcrds+echeckinwif@gmail.com,ECheckin ETL

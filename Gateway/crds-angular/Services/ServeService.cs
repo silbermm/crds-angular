@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using crds_angular.Enum;
+using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Opportunity;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Extensions;
@@ -400,6 +402,73 @@ namespace crds_angular.Services
 
             });
 
+        }
+
+        public List<GroupContactDTO> PotentialVolunteers(int groupId, Models.Crossroads.Events.Event evnt, List<GroupParticipant> groupMembers)
+        {
+            var responses = _opportunityService.GetContactsOpportunityResponseByGroupAndEvent(groupId, evnt.EventId).Select(res =>
+            {
+                var r = new OpportunityResponseDto()
+                {
+                    EventId = res.Event_ID,
+                    OpportunityEvent = evnt,
+                    ParticipantId = res.Participant_ID,
+                    ResponseResultId = res.Response_Result_ID,
+                    OpportunityId = -1,
+                    ResponseId = -1,
+                    Closed = false,
+                    ResponseDate = res.Response_Date,
+                    ContactId = res.Contact_ID
+                };
+                return r;
+            }).ToList();
+
+            //var filteredGroupMembers = new List<GroupContactDTO>();
+            return groupMembers.Where(gm =>
+            {
+                // did this person respond?
+                //var responded = responses.All(r => r.ContactId == gm.ContactId);
+                var responded = false;
+                responses.ForEach(r =>
+                {
+                    if (r.ContactId == gm.ContactId)
+                    {
+                        responded = true;
+                    }
+                });
+                if(responded)
+                {
+                    return false;
+                }
+                var respondedOnWeekend = RespondedOnWeekend(evnt, gm);
+                return !respondedOnWeekend;
+            }).ToList().Select( m => new GroupContactDTO()
+            {
+                ContactId = m.ContactId,
+                DisplayName = String.Format("{0}, {1}", m.LastName, m.NickName)
+            }).ToList();
+
+        }
+
+        private bool RespondedOnWeekend(Models.Crossroads.Events.Event evnt, GroupParticipant gm)
+        {
+
+            // this person did not respond, they are a potential contact so far
+            // now determine if this event is a weekend event...
+            if (evnt.StartDate.IsWeekend())
+            {
+                // this is a weekend... make sure that the person did not respond 
+                return SearchForResponsesByParticipantAndDate(gm.ParticipantId, evnt.StartDate.DayOfWeek == DayOfWeek.Saturday ? evnt.StartDate.AddDays(1).ToMinistryPlatformSearchFormat() : evnt.StartDate.AddDays(-1).ToMinistryPlatformSearchFormat());
+            }
+            return false;
+        }
+
+        private bool SearchForResponsesByParticipantAndDate(int participantId, string dateToSearch)
+        {
+            // any response at all on Sunday?
+            var search = string.Format(",,{0},,,,{1}", participantId, dateToSearch);
+            var otherResponses = _opportunityService.SearchResponseByGroupAndEvent(search);
+            return otherResponses.Any();
         }
 
         private static DateTime IncrementSequenceDate(Event @event, DateTime sequenceDate, int increment)

@@ -22,9 +22,12 @@ namespace crds_angular.App_Start
     {
         public static void RegisterMappings()
         {
-            Mapper.Initialize(cfg => cfg.AddProfile<EventProfile>());
-            Mapper.Initialize(cfg => cfg.AddProfile<ParticipantProfile>());
-            Mapper.Initialize(cfg => cfg.AddProfile<ServeProfile>());
+            Mapper.Initialize(cfg =>
+            {
+                cfg.AddProfile<EventProfile>();
+                cfg.AddProfile<ParticipantProfile>();
+                cfg.AddProfile<ServeProfile>();
+            });
 
             Mapper.CreateMap<Dictionary<string, object>, AccountInfo>()
                 .ForMember(dest => dest.EmailNotifications,

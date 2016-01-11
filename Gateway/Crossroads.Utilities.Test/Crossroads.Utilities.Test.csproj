@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DateTimeExtensionTest.cs" />
     <Compile Include="Messaging\MessageFactoryTest.cs" />
     <Compile Include="Messaging\MessageQueueFactoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

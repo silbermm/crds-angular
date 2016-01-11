@@ -1,4 +1,5 @@
 ﻿using System;
+using crds_angular.Models.Crossroads.Events;
 using Newtonsoft.Json;
 
 namespace crds_angular.Models.Crossroads.Opportunity
@@ -10,6 +11,9 @@ namespace crds_angular.Models.Crossroads.Opportunity
 
         [JsonProperty(PropertyName = "comments")]
         public string Comments { get; set; }
+
+        [JsonProperty(PropertyName = "contactId")]
+        public int ContactId { get; set; }
 
         [JsonProperty(PropertyName = "eventId")]
         public int EventId { get; set; }
@@ -28,5 +32,8 @@ namespace crds_angular.Models.Crossroads.Opportunity
 
         [JsonProperty(PropertyName = "responseResultId")]
         public int? ResponseResultId { get; set; }
+
+        [JsonProperty(PropertyName = "event")]
+        public Event OpportunityEvent { get; set; }
     }
 }

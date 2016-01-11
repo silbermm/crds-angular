@@ -6,6 +6,7 @@ using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.Models.Opportunities;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -155,13 +156,33 @@ namespace MinistryPlatform.Translation.Services
             return response;
         }
 
-        public List<int> GetContactsOpportunityResponseByGroupAndEvent(int groupId, int eventId)
+        public List<MPResponse> SearchResponseByGroupAndEvent(String searchString)
         {
-            var search = string.Format(",{0}, {1}", groupId, eventId);
             var token = _apiUserService.GetToken();
-            var records = _ministryPlatformService.GetPageViewRecords("OpportunityResponsesByGroupAndEvent", token, search);
+            var records = _ministryPlatformService.GetPageViewRecords("ResponsesByEventAndGroup", token, searchString);
+            return ConvertToMPResponse(records);
+        } 
 
-            return records.Select(r => r.ToInt("Contact_ID")).ToList();
+        public List<MPResponse> GetContactsOpportunityResponseByGroupAndEvent(int groupId, int eventId)
+        {
+            var search = string.Format("{0}, {1}", groupId, eventId);
+            var token = _apiUserService.GetToken();
+            var records = _ministryPlatformService.GetPageViewRecords("ResponsesByEventAndGroup", token, search);
+            return ConvertToMPResponse(records);
+
+        }
+
+        private List<MPResponse> ConvertToMPResponse(List<Dictionary<string, object>> response)
+        {
+            return response.Select(r => new MPResponse()
+            {
+                Contact_ID = r.ToInt("Contact_ID"),
+                Event_ID = r.ToInt("Event_ID"),
+                Group_ID = r.ToInt("Group_ID"),
+                Participant_ID = r.ToInt("Participant_ID"),
+                Response_Result_ID = r.ToInt("Response_Result_ID"),
+                Response_Date = r.ToDate("Response_Date")
+            }).ToList();
         }
 
         public List<Response> GetOpportunityResponses(int opportunityId, string token)
