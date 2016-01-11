@@ -8,13 +8,15 @@
     <div class="form-group">
       <label>Event Type</label>
       <select class="form-control">
-        <option>ng-repeat</option>
+        <option value=''>-- Choose an EventType -- </option>
+        <option ng-value="type.dp_RecordID" ng-repeat="type in evt.eventTypes"> {{type.dp_RecordName}} </option>
       </select>
     </div>
     <div class="form-group">
       <label>Congregation</label>
       <select class="form-control">
-        <option>ng-repeat</option>
+        <option value=''>-- Choose a Congregation --</option>
+        <option ng-value="congregation.dp_RecordID" ng-repeat="congregation in evt.crossroadsLocations"> {{congregation.dp_RecordName}} </option>
       </select>
     </div>
     <div class="form-group">
@@ -28,7 +30,8 @@
     <div class="form-group">
       <label>Program</label>
       <select class="form-control">
-        <option>ng-repeat</option>
+        <option>-- Choose a Program --</option>
+        <option ng-value="program.ProgramId" ng-repeat="program in evt.programs"> {{program.Name}} </option>
       </select>
     </div>
     <div class="form-group">

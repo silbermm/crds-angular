@@ -3,7 +3,7 @@
 
   module.exports = AddEventComponent;
 
-  AddEventComponent.$inject = [];
+  AddEventComponent.$inject = ['Lookup', 'Programs'];
 
   function AddEventComponent() {
     return {
@@ -18,12 +18,22 @@
     };
   }
 
-  function AddEventController() {
+  function AddEventController(Lookup, Programs) {
     var vm = this;
 
+    vm.crossroadsLocations = Lookup.query({ table: 'crossroadslocations' });
+    vm.eventTypes = Lookup.query({ table: 'eventtypes' });
     vm.next = next;
+    vm.programs = Programs.Programs.query();
+    vm.reminderDays = Lookup.query({ table: 'reminderdays' });
+
+    activate();
 
     ///////
+    function activate() {
+    
+    }
+    
     function next() {
       // validate the form, then pass all the data back up
       // TODO: validate
