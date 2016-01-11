@@ -21,6 +21,19 @@ namespace MinistryPlatform.Translation.Services
             _programsPageId = configurationWrapper.GetConfigIntValue("Programs");
         }
 
+        public List<Program> GetAllPrograms(string token)
+        {
+            var records = _ministryPlatformService.GetPageViewRecords("AllProgramsList", token);
+            var programs = new List<Program>();
+            if (records == null || records.Count == 0)
+            {
+                return programs;
+            }
+            programs.AddRange(records.Select(Mapper.Map<Program>));
+
+            return programs;
+        }
+
         public List<Program> GetOnlineGivingPrograms(int? programType)
         {
             var searchString = programType == null ? null : string.Format(",,,{0}", programType);
