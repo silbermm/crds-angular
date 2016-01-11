@@ -90,31 +90,16 @@ namespace MinistryPlatform.Translation.Services
 
         private Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
         {
-            var startDate = ConvertToMPDate(attribute.StartDate);
-            var endDate = attribute.EndDate != null ? ConvertToMPDate(attribute.EndDate.Value) : (DateTime?)null;
-
             var attributeDictionary = new Dictionary<string, object>
             {
                 {"Attribute_Type_ID", attribute.AttributeTypeId},
                 {"Attribute_ID", attribute.AttributeId},
                 {"Contact_Attribute_ID", attribute.ContactAttributeId},
-                {"Start_Date", startDate},
-                {"End_Date", endDate},
+                {"Start_Date", attribute.StartDate},
+                {"End_Date", attribute.EndDate},
                 {"Notes", attribute.Notes}
             };
             return attributeDictionary;
-        }
-
-        private DateTime ConvertToMPDate(DateTime source)
-        {
-            if (source.Kind != DateTimeKind.Utc)
-            {
-                return source.Date;
-            }
-
-            var result = source.ToLocalTime().Date;
-            result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
-            return result;
         }
     }
 }
