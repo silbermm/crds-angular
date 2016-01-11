@@ -116,6 +116,14 @@ namespace MinistryPlatform.Translation.Services
             return contact;
         }
 
+        public List<Dictionary<string, object>> GetContactsByRole(string userRole, string token)
+        {
+            //var token = ApiLogin();
+            var userRoleStaff = _configurationWrapper.GetConfigIntValue("StaffUserRoleId");
+            var records = _ministryPlatformService.GetSubpageViewRecords("RolesUsersStaffOnlyView", userRoleStaff, token);
+            return records;
+        }
+
         public List<HouseholdMember> GetHouseholdFamilyMembers(int householdId)
         {
             var token = ApiLogin();

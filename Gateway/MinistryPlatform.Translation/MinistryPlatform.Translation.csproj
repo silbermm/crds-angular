@@ -113,6 +113,7 @@
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CampaignService.cs" />
+    <Compile Include="Services\CongregationService.cs" />
     <Compile Include="Services\ContactAttributeService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />

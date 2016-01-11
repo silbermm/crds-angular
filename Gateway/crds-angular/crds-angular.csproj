@@ -253,6 +253,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\API\AccountController.cs" />
     <Compile Include="Controllers\API\ChildcareController.cs" />
+    <Compile Include="Controllers\API\CongregationController.cs" />
+    <Compile Include="Controllers\API\StaffContactController.cs" />
     <Compile Include="Controllers\API\DonorStatementController.cs" />
     <Compile Include="Models\Crossroads\CommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
@@ -274,8 +276,11 @@
     <Compile Include="Models\Json\ResetTokenStatus.cs" />
     <Compile Include="Models\MailChimp\BulkEmailSubscriberOptDTO.cs" />
     <Compile Include="Services\BulkEmailSyncService.cs" />
+    <Compile Include="Services\CongregationService.cs" />
+    <Compile Include="Services\StaffContactService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\Interfaces\IBulkEmailSyncService.cs" />
+    <Compile Include="Services\Interfaces\IContactService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Models\Json\PasswordResetRequest.cs" />
     <Compile Include="Services\DonorStatementService.cs" />
