@@ -88,10 +88,10 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private static Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
+        private Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
         {
-            var startDate = DateTime.SpecifyKind(attribute.StartDate.ToLocalTime().Date, DateTimeKind.Utc);
-            var endDate = attribute.EndDate != null ? DateTime.SpecifyKind(attribute.EndDate.GetValueOrDefault().ToLocalTime().Date, DateTimeKind.Utc) : (DateTime?)null;
+            var startDate = ConvertToMPDate(attribute.StartDate);
+            var endDate = attribute.EndDate != null ? ConvertToMPDate(attribute.EndDate.Value) : (DateTime?)null;
 
             var attributeDictionary = new Dictionary<string, object>
             {
@@ -103,6 +103,18 @@ namespace MinistryPlatform.Translation.Services
                 {"Notes", attribute.Notes}
             };
             return attributeDictionary;
+        }
+
+        private DateTime ConvertToMPDate(DateTime source)
+        {
+            if (source.Kind != DateTimeKind.Utc)
+            {
+                return source.Date;
+            }
+
+            var result = source.ToLocalTime().Date;
+            result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
+            return result;
         }
     }
 }
