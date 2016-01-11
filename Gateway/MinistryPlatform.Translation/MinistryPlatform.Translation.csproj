@@ -97,10 +97,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Congregation.cs" />
     <Compile Include="Models\MPServeReminders.cs" />
     <Compile Include="Models\Opportunities\MPResponse.cs" />
     <Compile Include="Models\People\MpParticipant.cs" />
     <Compile Include="Models\People\Participant.cs" />
+    <Compile Include="Models\Room.cs" />
     <Compile Include="Services\BulkEmailRepository.cs" />
     <Compile Include="Enum\NumericDayOfWeek.cs" />
     <Compile Include="Enum\PaymentType.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IBulkEmailRepository.cs" />
     <Compile Include="Services\Interfaces\IApiUserService.cs" />
+    <Compile Include="Services\Interfaces\ICongregationService.cs" />
     <Compile Include="Services\Interfaces\IContactAttributeService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
     <Compile Include="Services\Interfaces\ICampaignService.cs" />
@@ -152,6 +155,7 @@
     <Compile Include="Services\Interfaces\IPledgeService.cs" />
     <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
+    <Compile Include="Services\Interfaces\IRoomService.cs" />
     <Compile Include="Services\Interfaces\ISelectionService.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\Interfaces\IResponseService.cs" />
@@ -165,6 +169,7 @@
     <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ResponseService.cs" />
+    <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\SelectionService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />

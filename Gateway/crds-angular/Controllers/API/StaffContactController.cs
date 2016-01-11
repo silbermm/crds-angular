@@ -18,20 +18,20 @@ namespace crds_angular.Controllers.API
         }
 
         [ResponseType(typeof (List<Dictionary<string, object>>))]
-        [Route("api/contact/{userRole}")]
-        public IHttpActionResult GetByUserRole(string userRole)
+        [Route("api/staffcontacts")]
+        public IHttpActionResult Get()
         {
             return Authorized(t =>
             {
                 try
             {
-                var users = _contactService.GetContactsByRole(userRole, t);
+                var users = _contactService.GetStaffContacts(t);
 
                 return Ok(users);
             }
                 catch (Exception e)
                 {
-                    var msg = "Error getting users by role " + userRole;
+                    var msg = "Error getting staff users ";
                     logger.Error(msg, e);
                     var apiError = new ApiErrorDto(msg, e);
                     throw new HttpResponseException(apiError.HttpResponseMessage);

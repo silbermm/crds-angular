@@ -1,13 +1,10 @@
 ﻿using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public interface ICongregationService
-    {
-        void GetCongregationById(int id);
-    }
-
     public class CongregationService : BaseService, ICongregationService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
@@ -18,11 +15,16 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public void GetCongregationById(int id)
+        public Congregation GetCongregationById(int id)
         {
             var token = ApiLogin();
             var pageId = 466;
-            var tmp = _ministryPlatformService.GetRecord(pageId, id, token);
+            var recordDict = _ministryPlatformService.GetRecordDict(pageId, id, token);
+            var c = new Congregation();
+            c.CongregationId = recordDict.ToInt("Congregation_ID");
+            c.Name = recordDict.ToString("Congregation_Name");
+            c.LocationId = recordDict.ToInt("Location_ID");
+            return c;
         }
     }
 }
