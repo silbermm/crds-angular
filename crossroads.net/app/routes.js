@@ -413,9 +413,8 @@
           }
         })
         .state('tools.createEvent', {
-          url: '/createEvent',
-          controller: 'EventsRoomsEquipmentController as roomsEquipment',
-          templaterUrl: 'event_room_equipment/events_rooms_equipment.html',
+          url: '/create-event',
+          template: '<add-event-tool></add-event-tool>',
           resolve: {
             MPTools: 'MPTools'
           }
