@@ -22,4 +22,6 @@
 
   require('./serve');
 
+  require('./services');
+
 })();

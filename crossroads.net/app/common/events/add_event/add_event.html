@@ -37,7 +37,8 @@
     <div class="form-group">
       <label>Primary Contact</label>
       <select class="form-control">
-        <option>ng-repeat</option>
+        <option value="">-- Choose a Primary Contact</option>
+        <option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>
       </select>
     </div>
     <div class="form-group">
@@ -49,13 +50,58 @@
       <input type="tel" class="form-control" placeholder="0">
     </div>
     <div class="form-group">
+      <span class="col-sm-6"> 
       <label>Event Start Time and Date</label>
-      <h4>DATE AND TIME PICKER</h4>
+      <p class="input-group">
+        <input type="text" 
+               class="form-control" 
+               datepicker-popup="MM/dd/yyyy" 
+               ng-model="evt.formData.startDate" 
+               is-open="evt.startDateOpened" 
+               ng-required="true" 
+               close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" 
+                    class="btn btn-default" 
+                    ng-click="evt.startDateOpen($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button> 
+          </span>
+      </p> 
+      </span>
+      <span class="col-sm-6">
+      <timepicker ng-model="evt.formData.startTime" 
+                  ng-change="evt.startTimeChanged()" 
+                  show-meridian="true">
+      </timepicker>
+      </span>
     </div>
     <div class="form-group">
+      <span class="col-sm-6"> 
       <label>Event End Time and Date</label>
-      <h4>DATE AND TIME PICKER</h4>
-    </div>
+      <p class="input-group">
+        <input type="text" 
+               class="form-control" 
+               datepicker-popup="MM/dd/yyyy" 
+               ng-model="evt.formData.endDate" 
+               is-open="evt.endDateOpened" 
+               ng-required="true" 
+               close-text="Close" />
+          <span class="input-group-btn">
+            <button type="button" 
+                    class="btn btn-default" 
+                    ng-click="evt.endDateOpen($event)">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button> 
+          </span>
+      </p> 
+      </span>
+      <span class="col-sm-6">
+      <timepicker ng-model="evt.formData.endTime" 
+                  ng-change="evt.endTimeChanged()" 
+                  show-meridian="true">
+      </timepicker>
+      </span>    </div>
     <div class="form-group">
       <label>Donation Batch Tool Needed?
         <input type="checkbox">
@@ -69,7 +115,8 @@
     <div class="form-group ">
       <label>Reminder Days</label>
       <select class="form-control">
-        <option>ng-repeat</option>
+        <option>-- Choose days out to remind --</option>
+        <option ng-value="days.dp_RecordID" ng-repeat="days in evt.reminderDays"> {{days.dp_RecordName}} </option>
       </select>
     </div>
   </form>
