@@ -1,0 +1,23 @@
+<div ng-if="!roomsEquipment.allowAccess()" class="alert alert-danger" role="alert">
+  <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
+</div>
+
+<div ng-if="roomsEquipment.allowAccess()">
+  <preloader full-screen='true' ng-show="!roomsEquipment.viewReady"> </preloader>
+
+  <div ng-if="roomsEquipment.viewReady && roomsEquipment.multipleRecordsSelected" class="alert alert-danger" role="alert">
+    <div dynamic-content="$root.MESSAGES.mptool_access_error.content | html"></div>
+  </div>
+
+  <div class='col-sm-10 col-sm-offset-1'
+              style="overflow-y: scroll; height:40em;"
+              ng-if='roomsEquipment.viewReady && !roomsEquipment.multipleRecordsSelected'>
+    <div>
+      
+      <add-event> </add-event>
+      <edit-event> </edit-event>
+
+    </div>
+  </div>
+
+</div>

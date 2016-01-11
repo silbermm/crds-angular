@@ -412,6 +412,14 @@
             Trip: 'Trip'
           }
         })
+        .state('tools.createEvent', {
+          url: '/createEvent',
+          controller: 'EventsRoomsEquipmentController as roomsEquipment',
+          templaterUrl: 'event_room_equipment/events_rooms_equipment.html',
+          resolve: {
+            MPTools: 'MPTools'
+          }
+        })
         .state('tools.volunteerContact', {
           url: '/volunteer-contact',
           template: '<volunteer-contact></volunteer-contact>',
