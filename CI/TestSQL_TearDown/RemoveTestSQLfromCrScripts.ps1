@@ -14,7 +14,7 @@ $exitCode = 0
 $SQLCommonParams = @("-U", $DBUser, "-P", $DBPassword, "-S", $DBServer, "-b")
 
 #Hardcoded values for the TestSQL directories. 
-$fileNames = (Get-ChildItem ..\TestSQL\01.TestUsers\, ..\TestSQL\02.TestData\, ..\TestSQL\03.TestConfigData\, ..\TestSQL\TestSQL_TearDown\, .\ -filter *.sql -recurse) -join "','"
+$fileNames = (Get-ChildItem ..\TestSQL\01.TestUsers\, ..\TestSQL\02.TestData\, ..\TestSQL\03.TestConfigData\, .\ -filter *.sql -recurse) -join "','"
 
 $output = & $SQLcmd @SQLCommonParams -Q "Delete from cr_scripts where name in ('$fileNames')"
 
