@@ -90,14 +90,15 @@ namespace MinistryPlatform.Translation.Services
 
         private static Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
         {
-            var endDate = attribute.EndDate != null ? attribute.EndDate.GetValueOrDefault().Date : (DateTime?)null;
+            var startDate = DateTime.SpecifyKind(attribute.StartDate.ToLocalTime().Date, DateTimeKind.Utc);
+            var endDate = attribute.EndDate != null ? DateTime.SpecifyKind(attribute.EndDate.GetValueOrDefault().ToLocalTime().Date, DateTimeKind.Utc) : (DateTime?)null;
 
             var attributeDictionary = new Dictionary<string, object>
             {
                 {"Attribute_Type_ID", attribute.AttributeTypeId},
                 {"Attribute_ID", attribute.AttributeId},
                 {"Contact_Attribute_ID", attribute.ContactAttributeId},
-                {"Start_Date", attribute.StartDate.Date},
+                {"Start_Date", startDate},
                 {"End_Date", endDate},
                 {"Notes", attribute.Notes}
             };
