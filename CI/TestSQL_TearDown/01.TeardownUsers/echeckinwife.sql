@@ -72,6 +72,18 @@ delete from [dbo].contact_relationships where contact_id = @contactID;
 
 delete from [dbo].contact_relationships where related_contact_id = @contactID;
 
+--Delete all donations for EcheckinWife's trip pledge program.
+DECLARE @donationsTable table
+(
+	donation_id int
+)
+
+insert into @donationsTable (donation_id) (select donation_id from donation_distributions where program_id = (select program_id from programs where program_name like '(t) GO Midgar%'));
+
+delete from donation_distributions where donation_id in (select donation_id from @donationsTable);
+
+delete from donations where donation_id in (select donation_id from @donationsTable);
+
 --Delete all of EcheckInWife's donations.
 delete from @donationsTable;
 
