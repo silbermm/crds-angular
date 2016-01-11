@@ -7,6 +7,10 @@
   require('./add_event_tool.html');
 
   angular.module(MODULE)
-    .directive('addEventTool', require('./addEventTool.component'));
+    .directive('addEventTool', require('./addEventTool.component'))
+    .factory('AddEvent', require('./addEvent.service'));
 
+
+  // the addRoom component
+  require('./add_room');
 })();
