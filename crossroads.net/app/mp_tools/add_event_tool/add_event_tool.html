@@ -5,11 +5,7 @@
 <div ng-if="addEvent.allowAccess()">
   <preloader full-screen='true' ng-show="!addEvent.viewReady"> </preloader>
 
-  <div class='col-sm-10 col-sm-offset-1'
-              style="overflow-y: scroll; height:40em;"
-              ng-if='addEvent.viewReady && !addEvent.multipleRecordsSelected'>
-      <h2 class='header noPspace'> Add an Event </h2>
-
-  </div>
-
+  <add-event ng-show="addEvent.currentPage() == 1" on-next="addEvent.next(data)"> </add-event> 
+  
+  <add-room ng-show="addEvent.currentPage() == 2"> </add-room>
 </div>
