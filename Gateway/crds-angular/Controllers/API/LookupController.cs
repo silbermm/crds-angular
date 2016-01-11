@@ -52,6 +52,12 @@ namespace crds_angular.Controllers.API
                     case "workteams":
                         ret = _lookupService.WorkTeams(t);
                         break;
+                    case "eventtypes":
+                        ret = _lookupService.EventTypes(t);
+                        break;
+                    case "reminderdays":
+                        ret = _lookupService.ReminderDays(t);
+                        break;
                     default:
                         break;
                 }
