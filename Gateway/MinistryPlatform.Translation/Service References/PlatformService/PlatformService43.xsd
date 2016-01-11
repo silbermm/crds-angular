@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" elementFormDefault="qualified" targetNamespace="http://www.thinkministry.com/dataplatform/2012/10/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="https://adminint.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import schemaLocation="https://adminint.crossroads.net/ministryplatformapi/PlatformService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
@@ -371,7 +371,7 @@
           </xs:appinfo>
         </xs:annotation>
       </xs:enumeration>
-      <xs:enumeration value="Guid">
+      <xs:enumeration value="GulocationId">
         <xs:annotation>
           <xs:appinfo>
             <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">17</EnumerationValue>
@@ -774,7 +774,7 @@
               </xs:appinfo>
             </xs:annotation>
           </xs:enumeration>
-          <xs:enumeration value="Grid">
+          <xs:enumeration value="GrlocationId">
             <xs:annotation>
               <xs:appinfo>
                 <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
@@ -1496,12 +1496,12 @@
       <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FileSize" type="xs:int" />
       <xs:element minOccurs="0" name="ImageHeight" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="ImageWidth" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ImageWlocationIdth" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsDefaultImage" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastUpdated" type="xs:dateTime" />
       <xs:element minOccurs="0" name="RecordId" type="xs:int" />
       <xs:element minOccurs="0" name="TableName" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="UniqueFileId" type="ser:guid" />
+      <xs:element minOccurs="0" name="UniqueFileId" type="ser:gulocationId" />
     </xs:sequence>
   </xs:complexType>
   <xs:element xmlns:q121="http://www.thinkministry.com/dataplatform/2012/10/" name="FileDescription" nillable="true" type="q121:FileDescription" />
@@ -1579,7 +1579,7 @@
   <xs:element name="GetFileDescriptionByUniqueId">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="uniqueFileId" type="ser:guid" />
+        <xs:element minOccurs="0" name="uniqueFileId" type="ser:gulocationId" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1757,33 +1757,33 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
-  <xs:element name="ValidateCommunication">
+  <xs:element name="VallocationIdateCommunication">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q139="http://www.thinkministry.com/dataplatform/2012/10/" minOccurs="0" name="communication" nillable="true" type="q139:Communication" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ValidateCommunicationResponse">
+  <xs:element name="VallocationIdateCommunicationResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q140="http://www.thinkministry.com/dataplatform/2012/10/" minOccurs="0" name="ValidateCommunicationResult" nillable="true" type="q140:ArrayOfValidationErrorInfo" />
+        <xs:element xmlns:q140="http://www.thinkministry.com/dataplatform/2012/10/" minOccurs="0" name="VallocationIdateCommunicationResult" nillable="true" type="q140:ArrayOfVallocationIdationErrorInfo" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfValidationErrorInfo">
+  <xs:complexType name="ArrayOfVallocationIdationErrorInfo">
     <xs:sequence>
-      <xs:element xmlns:q141="http://www.thinkministry.com/dataplatform/2012/10/" minOccurs="0" maxOccurs="unbounded" name="ValidationErrorInfo" nillable="true" type="q141:ValidationErrorInfo" />
+      <xs:element xmlns:q141="http://www.thinkministry.com/dataplatform/2012/10/" minOccurs="0" maxOccurs="unbounded" name="VallocationIdationErrorInfo" nillable="true" type="q141:VallocationIdationErrorInfo" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q142="http://www.thinkministry.com/dataplatform/2012/10/" name="ArrayOfValidationErrorInfo" nillable="true" type="q142:ArrayOfValidationErrorInfo" />
-  <xs:complexType name="ValidationErrorInfo">
+  <xs:element xmlns:q142="http://www.thinkministry.com/dataplatform/2012/10/" name="ArrayOfVallocationIdationErrorInfo" nillable="true" type="q142:ArrayOfVallocationIdationErrorInfo" />
+  <xs:complexType name="VallocationIdationErrorInfo">
     <xs:sequence>
       <xs:element minOccurs="0" name="IsWarning" type="xs:boolean" />
       <xs:element minOccurs="0" name="Message" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element xmlns:q143="http://www.thinkministry.com/dataplatform/2012/10/" name="ValidationErrorInfo" nillable="true" type="q143:ValidationErrorInfo" />
+  <xs:element xmlns:q143="http://www.thinkministry.com/dataplatform/2012/10/" name="VallocationIdationErrorInfo" nillable="true" type="q143:VallocationIdationErrorInfo" />
   <xs:element name="PreviewCommunication">
     <xs:complexType>
       <xs:sequence>
@@ -2059,7 +2059,7 @@
     <xs:restriction base="xs:string">
       <xs:enumeration value="ReadWrite" />
       <xs:enumeration value="ReadOnly" />
-      <xs:enumeration value="Hidden" />
+      <xs:enumeration value="HlocationIdden" />
     </xs:restriction>
   </xs:simpleType>
   <xs:element xmlns:q175="http://www.thinkministry.com/dataplatform/2012/10/" name="ColumnAccessLevel" nillable="true" type="q175:ColumnAccessLevel" />
@@ -2172,7 +2172,7 @@
       <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Locale" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MaritalStatusId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="MiddleName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MlocationIddleName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MobilePhone" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NewPassword" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Nickname" nillable="true" type="xs:string" />

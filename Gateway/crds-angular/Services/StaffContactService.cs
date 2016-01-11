@@ -13,9 +13,9 @@ namespace crds_angular.Services
             _contactService = contactService;
         }
 
-        public List<Dictionary<string, object>> GetContactsByRole(string userRole, string token)
+        public List<Dictionary<string, object>> GetStaffContacts(string token)
         {
-            var records = _contactService.GetContactsByRole(userRole, token);
+            var records = _contactService.StaffContacts(token);
             return records;
         }
     }

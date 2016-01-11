@@ -1,1 +1,96 @@
-<h1> Add Room </h1>
+<div class="col-xs-12">
+  <h2>Rooms</h2>
+  <div class="form-group">
+    <label>Site</label>
+    <p>SITE NAME</p>
+  </div>
+  <div class="row">
+    <form>
+      <div class="form-group col-xs-4">
+        <label>Room</label>
+        <div class="input-group">
+          <select class="form-control">
+            <option>select2</option>
+          </select>
+          <span class="input-group-btn">
+            <button class="btn btn-standard">Add Room</button>
+          </span>
+        </div>
+      </div>
+  </div>
+  <div class="form-group">
+    <table class="table table-bordered">
+      <thead>
+        <th>Room</th>
+        <th>Layout</th>
+        <th>Notes</th>
+        <th>Hidden</th>
+        <th>Equipment</th>
+        <th>Delete</th>
+      </thead>
+      <tbody>
+        <tr>
+          <!-- Room -->
+          <td>Fireplace Room</td>
+          <!-- Layout -->
+          <td>
+            <select class="form-control">
+              <option>ng-repeat</option>
+            </select>
+          </td>
+          <!-- Notes -->
+          <td>
+            <textarea class="form-control"></textarea>
+          </td>
+          <!-- Hidden -->
+          <td>
+            <input type="checkbox">
+          </td>
+          <!-- Equipment -->
+          <td>
+            <table class="table table-responsive">
+              <thead>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Available</th>
+                <th>Remove</th>
+              </thead>
+              <tbody>
+                <td>
+                  <select class="form-control">
+                    <option>ng-repeat</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="tel" class="form-control">
+                </td>
+                <td>
+                  10
+                </td>
+                <td>
+                  <button class="btn btn-standard">
+                    <svg viewBox="0 0 32 32" class="icon icon-trash">
+                      <use xlink:href="#trash"></use>
+                    </svg>
+                  </button>
+                </td>
+              </tbody>
+            </table>
+            <button class="btn btn-standard">Add Equipment</button>
+          </td>
+          <td>
+            <button class="btn btn-standard">
+              <svg viewBox="0 0 25 32" class="icon icon-trash-o">
+                <use xlink:href="#trash-o"></use>
+              </svg>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </form>
+  <button class="btn btn-primary pull-right">Save</button>
+  <button class="btn btn-standard pull-right">Cancel</button>
+  <button class="btn btn-standard pull-right">Back</button>
+</div>

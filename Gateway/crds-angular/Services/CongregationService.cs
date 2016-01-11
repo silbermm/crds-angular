@@ -1,35 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using MinistryPlatform.Translation.Services;
+﻿using crds_angular.Models;
+using crds_angular.Models.Crossroads;
+using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public interface ICongregationService
-    {
-        void GetCongregationById(int id);
-    }
-
     public class CongregationService : ICongregationService
     {
-        private readonly ICongregationService _congregationService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.ICongregationService _congregationService;
 
-        public CongregationService(ICongregationService congregationService)
+        public CongregationService(MinistryPlatform.Translation.Services.Interfaces.ICongregationService congregationService)
         {
             _congregationService = congregationService;
         }
 
-        public void GetCongregationById(int id)
+        public Congregation GetCongregationById(int id)
         {
-            _congregationService.GetCongregationById(id);
-        }
-    }
+            var tmp = _congregationService.GetCongregationById(id);
+            var c = new Congregation();
+            c.CongregationId = tmp.CongregationId;
+            c.LocationId = tmp.LocationId;
+            c.Name = tmp.Name;
 
-    public class Congregation
-    {
-        int CongregationId { get; set; }
-        string Name { get; set; }
-        int LocationId { get; set; }
+            return c;
+        }
     }
 }
