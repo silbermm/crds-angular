@@ -5,6 +5,7 @@
 
 param (
     [string]$DBServer = "mp-int-db.cloudapp.net",
+    [string]$path = $(throw "-path is required."),
     [string]$SQLcmd = "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\sqlcmd.exe",
     [string]$DBUser = $(Get-ChildItem Env:MP_SOURCE_DB_USER).Value, # Default to environment variable
     [string]$DBPassword = $(Get-ChildItem Env:MP_SOURCE_DB_PASSWORD).Value # Default to environment variable
@@ -14,7 +15,7 @@ $exitCode = 0
 $SQLCommonParams = @("-U", $DBUser, "-P", $DBPassword, "-S", $DBServer, "-b")
 
 #Hardcoded values for the TestSQL directories. 
-$fileNames = (Get-ChildItem ..\TestSQL\01.TestUsers\, ..\TestSQL\02.TestData\, ..\TestSQL\03.TestConfigData\ -filter *.sql -recurse) -join "','"
+$fileNames = (Get-ChildItem ..\TestSQL\01.TestUsers\, ..\TestSQL\02.TestData\, ..\TestSQL\03.TestConfigData\, ..\TestSQL\TestSQL_TearDown\, .\ -filter *.sql -recurse) -join "','"
 
 $output = & $SQLcmd @SQLCommonParams -Q "Delete from cr_scripts where name in ('$fileNames')"
 
