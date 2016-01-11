@@ -166,8 +166,6 @@ INSERT INTO [dbo].Contact_Relationships
 INSERT INTO [dbo].Contact_Relationships 
 (Contact_ID   ,Relationship_ID,Related_Contact_ID,Start_Date,End_Date,Domain_ID,Notes,_Triggered_By) VALUES
 (@kid14Contact,2              ,@kid17Contact     ,null      ,null    ,1        ,null ,null      );
-
-SET IDENTITY_INSERT [dbo].[Contact_Relationships] OFF;
 GO
 
 --Some Groups for the family so sign up to serve is functional
