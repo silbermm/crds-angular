@@ -1,3 +1,6 @@
+USE [MinistryPlatform]
+GO
+
 CREATE TRIGGER [dbo].[crds_Create_Echeck_Relationship]
 ON [dbo].[Contacts]
 AFTER INSERT, UPDATE

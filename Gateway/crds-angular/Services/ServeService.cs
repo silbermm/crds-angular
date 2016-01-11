@@ -456,9 +456,13 @@ namespace crds_angular.Services
             // this person did not respond, they are a potential contact so far
             // now determine if this event is a weekend event...
             if (evnt.StartDate.IsWeekend())
-            {
-                // this is a weekend... make sure that the person did not respond 
-                return SearchForResponsesByParticipantAndDate(gm.ParticipantId, evnt.StartDate.DayOfWeek == DayOfWeek.Saturday ? evnt.StartDate.AddDays(1).ToMinistryPlatformSearchFormat() : evnt.StartDate.AddDays(-1).ToMinistryPlatformSearchFormat());
+            {   
+                // first look for other responses on the same day...
+                if (!SearchForResponsesByParticipantAndDate(gm.ParticipantId, evnt.StartDate.ToMinistryPlatformSearchFormat()))
+                {
+                    return SearchForResponsesByParticipantAndDate(gm.ParticipantId, evnt.StartDate.DayOfWeek == DayOfWeek.Saturday ? evnt.StartDate.AddDays(1).ToMinistryPlatformSearchFormat() : evnt.StartDate.AddDays(-1).ToMinistryPlatformSearchFormat());
+                }
+                return true;
             }
             return false;
         }
