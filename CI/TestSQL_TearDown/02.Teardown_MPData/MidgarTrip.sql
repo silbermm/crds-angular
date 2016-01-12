@@ -16,6 +16,8 @@ set @groupID = (select group_id from groups where group_name = @tripName);
 
 delete from [dbo].event_participants where event_id = @eventID;
 
+update [dbo].Pledge_Campaigns set EVENT_ID = null, Program_id = null where Campaign_Name = @tripName;
+
 delete FROM [dbo].events where event_id = @eventID;
 
 --Delete all donations for Midgar's program.
@@ -29,8 +31,6 @@ insert into @donationsTable (donation_id) (select donation_id from donation_dist
 delete from donation_distributions where donation_id in (select donation_id from @donationsTable);
 
 delete from donations where donation_id in (select donation_id from @donationsTable);
-
-delete from [dbo].programs where program_name = @tripName;
 
 --Delete all donations associated to any pledges for this pledge campaign.
 delete from @donationsTable;
@@ -46,6 +46,10 @@ delete from [dbo].pledges where pledge_campaign_id = @pledgeCampaignId;
 
 delete from [dbo].Group_Participants where group_id = @groupID;
 
-delete from [dbo].Groups where group_id = @groupID;
+delete from [dbo].Program_groups where program_id = (Select program_id from programs where program_name = @tripName);
+
+delete from [dbo].Groups where Group_id = @groupID;
+
+delete from [dbo].programs where program_name = @tripName;
 
 delete from [dbo].pledge_campaigns where pledge_campaign_id = @pledgeCampaignId;
