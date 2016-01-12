@@ -1,0 +1,242 @@
+<div class="col-md-6 col-md-offset-3">
+  <h1>Create Event</h1>
+  <form name="evt.eventForm" ng-submit="evt.next()" novalidate>
+
+    <!-- Event Title -->
+    <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'eventTitle')}">
+      <label class="required" >Event Title</label>
+      <input type="text"
+             name="eventTitle"
+             class="form-control" 
+             ng-model="evt.formData.eventTitle"
+             required>
+      <ng-messages for="evt.eventForm.eventTitle.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'eventTitle')">
+        <span ng-message="required">
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
+    </div>
+
+    <div class="row">
+
+      <!-- Event Tupe -->
+      <div class="col-md-6">
+        <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'eventType')}">
+          <label class="required">Event Type</label>
+          <select class="form-control" 
+                  name="eventType"
+                  required 
+                  ng-model="evt.formData.eventType">
+            <option value=''>-- Choose an EventType -- </option>
+            <option ng-value="type.dp_RecordID" ng-repeat="type in evt.eventTypes"> {{type.dp_RecordName}} </option>
+          </select>
+          <ng-messages for="evt.eventForm.eventType.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'eventType')">
+            <span ng-message="required">
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
+        </div>
+      </div>
+
+      <!-- Congregation -->
+      <div class="col-md-6">
+        <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'congregation')}">
+          <label class="required">Congregation</label>
+          <select class="form-control"
+                  name="congregation"
+                  required
+                  ng-model="evt.formData.congregation">
+            <option value=''>-- Choose a Congregation --</option>
+            <option ng-value="congregation.dp_RecordID" ng-repeat="congregation in evt.crossroadsLocations"> {{congregation.dp_RecordName}} </option>
+          </select>
+          <ng-messages for="evt.eventForm.congregation.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'congregation')">
+            <span ng-message="required">
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+          </ng-messages>
+        </div>
+      </div>
+
+    </div>
+    <div class="form-group">
+      <label>Meeting Instructions</label>
+      <textarea class="form-control" name="meetingInstructions" ng-model="evt.formData.meetingInstructions"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea class="form-control" name="description" ng-model="evt.formData.description"></textarea>
+    </div>
+    <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'program')}">
+      <label class="required">Program</label>
+      <select class="form-control"
+              name="program"
+              ng-model="evt.formData.program"
+              required>
+        <option>-- Choose a Program --</option>
+        <option ng-value="program.ProgramId" ng-repeat="program in evt.programs"> {{program.Name}} </option>
+      </select>
+      <ng-messages for="evt.eventForm.program.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'program')">
+        <span ng-message="required">
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
+    </div>
+    <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'primaryContact')}">
+      <label class="required">Primary Contact</label>
+      <select class="form-control"
+              name="primaryContact"
+              ng-model="evt.formData.primaryContact"
+              required >
+        <option value="">-- Choose a Primary Contact</option>
+        <option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>
+      </select>
+      <ng-messages for="evt.eventForm.primaryContact.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'primaryContact')">
+        <span ng-message="required">
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'minutesSetup')}">
+          <label class="required">Minutes for Setup</label>
+          <input type="number" 
+                 class="form-control" 
+                 name="minutesSetup"
+                 ng-model="evt.formData.minutesSetup"
+                 required
+                 >
+        <ng-messages for="evt.eventForm.minutesSetup.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'minutesSetup')">
+          <span ng-message="required">
+            <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+          </span>
+          <span ng-message="num">
+            <span dynamic-content="$root.MESSAGES.invalidNumber.content | html"></span>
+          </span>
+        </ng-messages>
+
+        </div>
+      </div>
+      <div class="col-md-6" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'minutesCleanup')}">
+        <div class="form-group">
+          <label class="required">Minutes for Cleanup</label>
+          <input type="number" 
+                 class="form-control" 
+                 name="minutesCleanup"
+                 ng-model="evt.formData.minutesCleanup"
+                 required>
+          <ng-messages for="evt.eventForm.minutesCleanup.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'minutesCleanup')">
+            <span ng-message="required">
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+            <span ng-message="naturalNumber">
+              <span dynamic-content="$root.MESSAGES.invalidNumber.content | html"></span>
+            </span>
+          </ng-messages>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group well" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'startDate')}">
+          <label class="required">Start Date and Time</label>
+          <p class="input-group">
+            <input type="text" 
+                   class="form-control" 
+                   name="startDate"
+                   datepicker-popup="MM/dd/yyyy" 
+                   ng-model="evt.formData.startDate" 
+                   is-open="evt.startDateOpened" 
+                   ng-required="true" 
+                   close-text="Close" />
+            <span class="input-group-btn">
+              <button type="button" 
+                      class="btn btn-default" 
+                      ng-click="evt.startDateOpen($event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button> 
+            </span>
+          </p>
+          <ng-messages for="evt.eventForm.startDate.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'startDate')">
+            <span ng-message="required">
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+            <span ng-message="date">
+              <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
+            </span>
+          </ng-messages>
+          <timepicker ng-model="evt.formData.startTime" show-meridian="true">
+          </timepicker>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group well" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'endDate')}">
+          <label class="required">End Date and Time</label>
+          <p class="input-group">
+            <input type="text"
+                   class="form-control" 
+                   name="endDate"
+                   datepicker-popup="MM/dd/yyyy"
+                   ng-model="evt.formData.endDate"
+                   is-open="evt.endDateOpened"
+                   ng-required="true"
+                   close-text="Close" />
+            <span class="input-group-btn">
+              <button type="button" 
+                      class="btn btn-default" 
+                      ng-click="evt.endDateOpen($event)">
+                <i class="glyphicon glyphicon-calendar"></i>
+              </button> 
+            </span>
+          </p>
+          <ng-messages for="evt.eventForm.endDate.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'endDate')">
+            <span ng-message="required">
+              <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+            </span>
+            <span ng-message="date">
+              <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
+            </span>
+          </ng-messages>
+          <timepicker ng-model="evt.formData.endTime" show-meridian="true">
+          </timepicker>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label >
+        <input type="checkbox" name="donationBatch" ng-model="evt.formData.donationBatch"> Donation Batch Tool Needed
+        <label>
+    </div>
+    <div class="form-group">
+      <label>
+        <input type="checkbox" name="sendReminder" ng-model="evt.formData.sendReminder"> Send Reminder
+      </label>
+    </div>
+    <div class="form-group " ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'reminderDays')}">
+      <label ng-class="{'required': evt.formData.sendReminder == 1}" >Reminder Days</label>
+      <select class="form-control" 
+              name="reminderDays"
+              ng-model="evt.formData.reminderDays"
+              ng-required="evt.formData.sendReminder == 1">
+        <option>-- Choose days out to remind --</option>
+        <option ng-value="days.dp_RecordID" ng-repeat="days in evt.reminderDays"> {{days.dp_RecordName}} </option>
+      </select>
+      <ng-messages for="evt.eventForm.reminderDays.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'reminderDays')">
+        <span ng-message="required">
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
+    </div>
+
+    <button type="submit" class="btn btn-primary pull-right">
+      Next
+      <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
+        <use xlink:href="#arrow-right9"></use>
+      </svg>
+    </button>
+    <button class="btn btn-standard pull-right">Cancel</button>
+
+  </form>
+  </div>

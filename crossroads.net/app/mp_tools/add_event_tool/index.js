@@ -10,6 +10,7 @@
     .directive('addEventTool', require('./addEventTool.component'))
     .factory('AddEvent', require('./addEvent.service'));
 
+  require('./add_event');
 
   // the addRoom component
   require('./add_room');

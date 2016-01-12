@@ -5,7 +5,7 @@
 <div ng-if="addEvent.allowAccess()">
   <preloader full-screen='true' ng-show="!addEvent.viewReady"> </preloader>
 
-  <add-event ng-show="addEvent.currentPage() == 1" on-next="addEvent.next(data)"> </add-event> 
+  <add-event ng-show="addEvent.currentPage() == 1" on-next="addEvent.next(data)" event-data="addEvent.eventData"> </add-event> 
   
   <add-room ng-show="addEvent.currentPage() == 2"> </add-room>
 </div>

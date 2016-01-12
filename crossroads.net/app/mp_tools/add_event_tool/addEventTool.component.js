@@ -29,6 +29,7 @@
 
       vm.allowAccess = allowAccess;
       vm.currentPage = currentPage;
+      vm.eventData = AddEvent.eventData;
       vm.next = next;
       vm.params = MPTools.getParams();
       vm.processing = false;
@@ -54,7 +55,7 @@
       }
 
       function next(data) {
-        // eventually save form data to the service
+        AddEvent.eventData = data;
         AddEvent.currentPage = 2;
       }
 

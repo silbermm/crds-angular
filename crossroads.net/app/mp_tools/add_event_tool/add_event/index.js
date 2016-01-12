@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  var MODULE = require('crds-constants').MODULES.COMMON;
+  var MODULE = require('crds-constants').MODULES.MPTOOLS;
 
   require('./add_event.html');
 

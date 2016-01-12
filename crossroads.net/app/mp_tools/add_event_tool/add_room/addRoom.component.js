@@ -3,9 +3,9 @@
 
   module.exports = AddRoom;
 
-  AddRoom.$inject = [];
+  AddRoom.$inject = ['AddEvent'];
 
-  function AddRoom() {
+  function AddRoom(AddEvent) {
     return {
       restrict: 'E',
       scope: {
@@ -19,7 +19,11 @@
 
     function AddRoomController() {
       var vm = this;
+      vm.back = back;
 
+      function back() {
+        AddEvent.currentPage = 1;
+      }
     }
   }
 

@@ -7,5 +7,4 @@
     .factory('EventService', require('./events.service'))
     ;
 
-  require('./add_event');
 })();

@@ -7,7 +7,8 @@
 
   function AddEventToolService() {
     return {
-      currentPage: 1
+      currentPage: 1,
+      eventData: {}
     };
   }
 
