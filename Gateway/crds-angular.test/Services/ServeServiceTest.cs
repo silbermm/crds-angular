@@ -723,10 +723,20 @@ namespace crds_angular.test.Services
             // no responses for Saturday...
             _opportunityService.Setup(m => m.GetContactsOpportunityResponseByGroupAndEvent(groupId, eventId)).Returns(new List<MPResponse>());
             
+            // there is no response for the first participant for Saturday
+            _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants.First().ParticipantId, saturday.ToMinistryPlatformSearchFormat())
+            )).Returns(new List<MPResponse>());
+
             // there is a response for the first participant for Sunday...
             _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
                 String.Format(",,{0},,,,{1}", groupParticipants.First().ParticipantId, sunday.ToMinistryPlatformSearchFormat())
             )).Returns(otherResponses);
+
+            // there is not a response for the second participant for Saturday
+             _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(
+                String.Format(",,{0},,,,{1}", groupParticipants[1].ParticipantId, saturday.ToMinistryPlatformSearchFormat())
+            )).Returns(new List<MPResponse>());
 
             // there is not a response for the second participant for Sunday
             _opportunityService.Setup(m => m.SearchResponseByGroupAndEvent(

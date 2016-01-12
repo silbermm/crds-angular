@@ -1,3 +1,6 @@
+USE [MinistryPlatform]
+GO
+
 --Trip Name
 DECLARE @tripName AS VARCHAR(18)
 set @tripName = '(t) GO Midgar '+CONVERT(VARCHAR(4), datepart(year, getdate()));
