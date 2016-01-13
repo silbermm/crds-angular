@@ -1,4 +1,5 @@
-﻿using crds_angular.Models;
+﻿using System;
+using System.Collections.Generic;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 
@@ -7,21 +8,53 @@ namespace crds_angular.Services
     public class CongregationService : ICongregationService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.ICongregationService _congregationService;
+        private readonly IRoomService _roomService;
+        private readonly IEquipmentService _equipmentService;
 
-        public CongregationService(MinistryPlatform.Translation.Services.Interfaces.ICongregationService congregationService)
+        public CongregationService(MinistryPlatform.Translation.Services.Interfaces.ICongregationService congregationService,
+                                   IRoomService roomService,
+                                   IEquipmentService equipmentService)
         {
             _congregationService = congregationService;
+            _roomService = roomService;
+            _equipmentService = equipmentService;
         }
 
         public Congregation GetCongregationById(int id)
         {
-            var tmp = _congregationService.GetCongregationById(id);
+            var congregation = _congregationService.GetCongregationById(id);
+            if (congregation == null)
+            {
+                return null;
+            }
             var c = new Congregation();
-            c.CongregationId = tmp.CongregationId;
-            c.LocationId = tmp.LocationId;
-            c.Name = tmp.Name;
+            c.CongregationId = congregation.CongregationId;
+            c.LocationId = congregation.LocationId;
+            c.Name = congregation.Name;
 
             return c;
+        }
+
+        public List<Room> GetRooms(int congregationId)
+        {
+            var congregation = _congregationService.GetCongregationById(congregationId);
+            if (congregation == null)
+            {
+                throw new ApplicationException("Congregation Not Found");
+            }
+            var rooms = _roomService.GetRoomsByLocationId(congregation.LocationId);
+            return rooms;
+        }
+
+        public List<RoomEquipment> GetEquipments(int congregationId)
+        {
+            var congregation = _congregationService.GetCongregationById(congregationId);
+            if (congregation == null)
+            {
+                throw new ApplicationException("Congregation Not Found");
+            }
+            var equipments = _equipmentService.GetEquipmentByLocationId(congregation.LocationId);
+            return equipments;
         }
     }
 }

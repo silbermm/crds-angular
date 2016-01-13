@@ -4,6 +4,30 @@ using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Services
 {
+    public class EquipmentService : IEquipmentService
+    {
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEquipmentService _mpEquipmentService;
+
+        public EquipmentService(MinistryPlatform.Translation.Services.Interfaces.IEquipmentService equipmentService)
+        {
+            _mpEquipmentService = equipmentService;
+        }
+
+        public List<RoomEquipment> GetEquipmentByLocationId(int locationId)
+        {
+            //return new List<RoomEquipment>();
+
+            var records = _mpEquipmentService.GetEquipmentByLocationId(locationId);
+
+            return records.Select(record => new RoomEquipment
+            {
+                Id = record.EquipmentId,
+                Name = record.EquipmentName,
+                Quantity = record.QuantityOnHand
+            }).ToList();
+        }
+    }
+
     public class RoomService : IRoomService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.IRoomService _roomService;
@@ -13,9 +37,9 @@ namespace crds_angular.Services
             _roomService = roomService;
         }
 
-        public List<Room> GetRoomsByLocationId(int id, string token)
+        public List<Room> GetRoomsByLocationId(int id)
         {
-            var records = _roomService.GetRoomsByLocationId(id, token);
+            var records = _roomService.GetRoomsByLocationId(id);
 
             return records.Select(record => new Room
             {
@@ -25,24 +49,37 @@ namespace crds_angular.Services
                 Name = record.RoomName
             }).ToList();
         }
+
+        public List<RoomLayout> GetRoomLayouts()
+        {
+            var records = _roomService.GetRoomLayouts();
+
+            return records.Select(record => new RoomLayout
+            {
+                Id = record.LayoutId,
+                LayoutName = record.LayoutName
+            }).ToList();
+        }
     }
 
     public class Room
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        //public string Number { get; set; }
-        //public Building Building { get; set; }
         public int BuildingId { get; set; }
-        //public string BuildingName { get; set; }
         public int LocationId { get; set; }
-        //public string LocationName { get; set; }
     }
 
-    //public class Building
-    //{
-    //    public int Id { get; set; }
-    //    public string Name { get; set; }
-    //    public int LocationId { get; set; }
-    //}
+    public class RoomLayout
+    {
+        public int Id { get; set; }
+        public string LayoutName { get; set; }
+    }
+
+    public class RoomEquipment
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Quantity { get; set; }
+    }
 }

@@ -4,6 +4,7 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IRoomService
     {
-        List<Room> GetRoomsByLocationId(int id, string token);
+        List<Room> GetRoomsByLocationId(int id);
+        List<RoomLayout> GetRoomLayouts();
     }
 }

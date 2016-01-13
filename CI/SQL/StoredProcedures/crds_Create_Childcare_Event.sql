@@ -60,14 +60,14 @@ BEGIN
 	SET NOCOUNT ON;
 	-- Does the inserted event have an associated group with childcare enabled?
 	IF EXISTS (
-		SELECT * FROM [dbo].[Event_Groups] e
+		SELECT 1 FROM [dbo].[Event_Groups] e
 		JOIN [dbo].[Groups] g ON e.Group_ID = g.Group_ID
 		WHERE e.EVENT_ID = @PARENT_EVENT_ID and g.Child_Care_Available = 1
 	)
 		BEGIN
 			-- Does a childcare event for this event already exist?
 			IF NOT EXISTS (
-				SELECT * FROM [dbo].[Events] 
+				SELECT 1 FROM [dbo].[Events] 
 				WHERE Parent_Event_ID = @PARENT_EVENT_ID and Event_Type_ID = @CHILDCARE_EVENT_TYPE
 			)
 				BEGIN

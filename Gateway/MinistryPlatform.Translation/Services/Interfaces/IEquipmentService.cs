@@ -3,9 +3,8 @@ using MinistryPlatform.Translation.Models;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
-    public interface IRoomService
+    public interface IEquipmentService
     {
-        List<Room> GetRoomsByLocationId(int locationId);
-        List<RoomLayout> GetRoomLayouts();
+        List<Equipment> GetEquipmentByLocationId(int locationId);
     }
 }

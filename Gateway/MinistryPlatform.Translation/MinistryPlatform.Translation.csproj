@@ -123,6 +123,7 @@
     <Compile Include="Services\DestinationService.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\EquipmentService.cs" />
     <Compile Include="Services\EventParticipantService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Services\Interfaces\IDestinationService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IEquipmentService.cs" />
     <Compile Include="Services\Interfaces\IEventParticipantService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Services\Interfaces\IFormSubmissionService.cs" />

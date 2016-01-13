@@ -8,4 +8,17 @@
         public int BuildingId { get; set; }
         public int LocationId { get; set; }
     }
+
+    public class RoomLayout
+    {
+        public int LayoutId { get; set; }
+        public string LayoutName { get; set; }
+    }
+
+    public class Equipment
+    {
+        public int EquipmentId { get; set; }
+        public string EquipmentName { get; set; }
+        public int QuantityOnHand { get; set; }
+    }
 }

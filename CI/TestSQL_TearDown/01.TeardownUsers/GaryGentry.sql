@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+16@gmail.com' and last_name = 'GaryGentry');
+Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+16@gmail.com' and last_name = 'Gentry');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -20,7 +20,7 @@ set @donorID = (select donor_record from contacts where contact_id = @contactID)
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
 SET Household_ID = null, Participant_Record = null, User_Account = null, Donor_record = null
-WHERE email_address = 'mpcrds+16@gmail.com' and last_name = 'GaryGentry';
+WHERE email_address = 'mpcrds+16@gmail.com' and last_name = 'Gentry';
 
 --Delete the address if it exists.
 IF  (select address_id from households where Household_ID = @houseHoldID) is not Null
@@ -72,6 +72,18 @@ delete from [dbo].contact_relationships where contact_id = @contactID;
 
 delete from [dbo].contact_relationships where related_contact_id = @contactID;
 
+--Delete all donations for Gary's trip pledge program.
+DECLARE @donationsTable table
+(
+	donation_id int
+)
+
+insert into @donationsTable (donation_id) (select donation_id from donation_distributions where program_id = (select program_id from programs where program_name like '(t) GO Midgar%'));
+
+delete from donation_distributions where donation_id in (select donation_id from @donationsTable);
+
+delete from donations where donation_id in (select donation_id from @donationsTable);
+
 --Delete all of Gary's donations.
 delete from @donationsTable;
 
@@ -108,5 +120,5 @@ delete from dp_user_roles where user_id = (select user_id from dp_users where us
 delete from dp_users where user_email = 'mpcrds+16@gmail.com';
 
 --Delete Gary's old contact record
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+16@gmail.com' and last_name = 'GaryGentry';
+DELETE FROM [dbo].Contacts where email_address = 'mpcrds+16@gmail.com' and last_name = 'Gentry';
 GO
