@@ -15,25 +15,46 @@ namespace crds_angular.Controllers.API
             _roomService = roomService;
         }
 
-        [Route("api/room/location/{locationId}")]
-        public IHttpActionResult GetRoomByLocationId(int locationId)
+        [Route("api/room/layouts")]
+        public IHttpActionResult GetLayouts()
         {
             return Authorized(t =>
             {
                 try
                 {
-                    var rooms = _roomService.GetRoomsByLocationId(locationId);
+                    var rooms = _roomService.GetRoomLayouts();
 
                     return Ok(rooms);
                 }
                 catch (Exception e)
                 {
-                    var msg = "Error getting Rooms by Location " + locationId;
+                    var msg = "Error getting Layouts ";
                     logger.Error(msg, e);
                     var apiError = new ApiErrorDto(msg, e);
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
         }
+
+        //[Route("api/room/location/{locationId}")]
+        //public IHttpActionResult GetRoomByLocationId(int locationId)
+        //{
+        //    return Authorized(t =>
+        //    {
+        //        try
+        //        {
+        //            var rooms = _roomService.GetRoomsByLocationId(locationId);
+
+        //            return Ok(rooms);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            var msg = "Error getting Rooms by Location " + locationId;
+        //            logger.Error(msg, e);
+        //            var apiError = new ApiErrorDto(msg, e);
+        //            throw new HttpResponseException(apiError.HttpResponseMessage);
+        //        }
+        //    });
+        //}
     }
 }

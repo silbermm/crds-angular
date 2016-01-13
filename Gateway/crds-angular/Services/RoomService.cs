@@ -25,6 +25,17 @@ namespace crds_angular.Services
                 Name = record.RoomName
             }).ToList();
         }
+
+        public List<RoomLayout> GetRoomLayouts()
+        {
+            var records = _roomService.GetRoomLayouts();
+
+            return records.Select(record => new RoomLayout
+            {
+                Id = record.LayoutId,
+                LayoutName = record.LayoutName
+            }).ToList();
+        }
     }
 
     public class Room
@@ -33,5 +44,11 @@ namespace crds_angular.Services
         public string Name { get; set; }
         public int BuildingId { get; set; }
         public int LocationId { get; set; }
+    }
+
+    public class RoomLayout
+    {
+        public int Id { get; set; }
+        public string LayoutName { get; set; }
     }
 }

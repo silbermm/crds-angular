@@ -33,6 +33,20 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
+        public List<RoomLayout> GetRoomLayouts()
+        {
+            var t = ApiLogin();
+            var records = _ministryPlatformService.GetPageViewRecords("RoomLayoutsById", t);
+
+            return records.Select(record => new RoomLayout
+            {
+                LayoutId = record.ToInt("Room_Layout_ID"),
+                LayoutName = record.ToString("Layout_Name")
+            }).ToList();
+        }
+
+
+
         //public List<Room> GetRoomsByCongregationId(int congregationId)
         //{
         //    var token = ApiLogin();

@@ -1,4 +1,5 @@
-﻿using Crossroads.Utilities.Interfaces;
+﻿using System.Collections.Generic;
+using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
@@ -18,9 +19,22 @@ namespace MinistryPlatform.Translation.Services
         public Congregation GetCongregationById(int id)
         {
             var token = ApiLogin();
-            var pageId = 466;
-            var recordDict = _ministryPlatformService.GetRecordDict(pageId, id, token);
-            //var tmp = _ministryPlatformService.get
+            var pageId = 466; //move to config   **************Andy will catch this!!!!! ************************
+            Dictionary<string, object> recordDict;
+            try
+            {
+                recordDict = _ministryPlatformService.GetRecordDict(pageId, id, token);
+            }
+            catch (System.ServiceModel.FaultException fault)
+            {
+                // this is terrible, but can't find another way to handle!!!!
+                if (fault.Message.StartsWith("Record is not found"))
+                {
+                    return null;
+                }
+                throw;
+            }
+
             var c = new Congregation();
             c.CongregationId = recordDict.ToInt("Congregation_ID");
             c.Name = recordDict.ToString("Congregation_Name");
