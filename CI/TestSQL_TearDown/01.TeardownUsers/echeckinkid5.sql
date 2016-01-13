@@ -67,6 +67,20 @@ WHERE houseHold_ID = @houseHoldID;
 
 Delete from [dbo].Households where houseHold_ID = @houseHoldID;
 
+delete from Form_Response_Answers where form_response_id = (select form_response_id from form_responses where contact_id = @contactID);
+
+delete from form_responses where contact_id = @contactID;
+
+delete from response_attributes where response_id in (select response_id from responses where participant_id = @participantID);
+
+delete from responses where participant_id = @participantID;
+
+delete from event_participants where participant_id = @participantID;
+
+delete from group_participants where participant_id = @participantID;
+
+delete from participants where participant_id = @participantID;
+
 --delete relationships
 delete from [dbo].contact_relationships where contact_id = @contactID;
 
