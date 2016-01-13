@@ -4,12 +4,6 @@ GO
 --SignUp to Serve Family
 
 DECLARE @fatherContactId AS INT
-USE [MinistryPlatform]
-GO
-
---SignUp to Serve Family
-
-DECLARE @fatherContactId AS INT
 DECLARE @fatherDOB DATE
 
 DECLARE @motherContactId AS INT
