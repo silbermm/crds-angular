@@ -25,8 +25,9 @@ namespace MinistryPlatform.Translation.Services
 
             return records.Select(record => new Equipment
             {
-                EquipmentId = DictionaryExtensions.ToInt(record, "Equipment_ID"),
-                EquipmentName = DictionaryExtensions.ToString(record, "Equipment_Name")
+                EquipmentId = record.ToInt("Equipment_ID"),
+                EquipmentName = record.ToString("Equipment_Name"),
+                QuantityOnHand = record.ToInt("Quantity_On_Hand")
             }).ToList();
         }
 

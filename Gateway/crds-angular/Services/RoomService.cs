@@ -22,7 +22,8 @@ namespace crds_angular.Services
             return records.Select(record => new RoomEquipment
             {
                 Id = record.EquipmentId,
-                Name = record.EquipmentName
+                Name = record.EquipmentName,
+                Quantity = record.QuantityOnHand
             }).ToList();
         }
     }
@@ -78,6 +79,7 @@ namespace crds_angular.Services
     public class RoomEquipment
     {
         public int Id { get; set; }
-        public string Name { get; set; }   
+        public string Name { get; set; }
+        public int Quantity { get; set; }
     }
 }

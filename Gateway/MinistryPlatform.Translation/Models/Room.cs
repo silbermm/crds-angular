@@ -19,5 +19,6 @@
     {
         public int EquipmentId { get; set; }
         public string EquipmentName { get; set; }
+        public int QuantityOnHand { get; set; }
     }
 }
