@@ -9,7 +9,7 @@
     return {
       restrict: 'E',
       scope: {
-      
+        roomData: '='
       },
       templateUrl: 'add_room/add_room.html',
       controller: AddRoomController,
@@ -19,12 +19,9 @@
 
     function AddRoomController() {
       var vm = this;
-      vm.onAdd = onAdd;
-      vm.back = back;
       vm.choosenSite = choosenSite;
-      vm.formData = { 
-        rooms: [] 
-      };
+      vm.layouts = Room.Layouts.query(); 
+      vm.onAdd = onAdd;
       vm.viewReady = false;
 
       activate();
@@ -32,12 +29,11 @@
       //////////////////
 
       function activate() {
-        if (AddEvent.eventData.congregation !== undefined) {
-          Room.ByLocation.query({congregationId: AddEvent.eventData.congregation.dp_RecordID}, function(data) {
+        if (AddEvent.eventData.event.congregation !== undefined) {
+          Room.ByCongregation.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data) {
             vm.rooms = data;
             vm.viewReady = true;
           });
-
           return;
         }
 
@@ -45,18 +41,14 @@
         return;
       }
 
-      function onAdd() {
-        // add the currently choosen room to the list of rooms...  
-        vm.formData.rooms.push(vm.choosenRoom);
-      }
-
-      function back() {
-        AddEvent.currentPage = 1;
-      }
-
       function choosenSite() {
         // make sure it doesn't already exist first...
-        return AddEvent.eventData.congregation.dp_RecordName;  
+        return AddEvent.eventData.event.congregation.dp_RecordName;
+      }
+
+      function onAdd() {
+        // add the currently choosen room to the list of rooms...
+        vm.roomData.push(vm.choosenRoom);
       }
     }
   }

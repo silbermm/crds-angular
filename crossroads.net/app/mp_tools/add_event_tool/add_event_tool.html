@@ -5,7 +5,29 @@
 <div ng-if="addEvent.allowAccess()">
   <preloader full-screen='true' ng-show="!addEvent.viewReady"> </preloader>
 
-  <add-event ng-if="addEvent.currentPage() == 1" on-next="addEvent.next(data)" event-data="addEvent.eventData"> </add-event> 
-  
-  <add-room ng-if="addEvent.currentPage() == 2" location-id="addEvent.eventData.congregation"> </add-room>
+  <div class="col-md-6 col-md-offset-3">
+    <h1>Create Event</h1>
+    <form name="addEvent.allData" ng-submit="addEvent.submit()" novalidate>
+
+      <add-event ng-if="addEvent.currentPage() == 1" event-data='addEvent.event'> </add-event> 
+      <add-room ng-if="addEvent.currentPage() == 2"  room-data='addEvent.rooms'> </add-room>
+
+      <button class="btn btn-standard pull-right" ng-click="addEvent.next()" ng-show="addEvent.currentPage() == 1">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
+          <use xlink:href="#arrow-right9"></use>
+        </svg> 
+        Next 
+      </button>
+
+      <button class="btn btn-standard pull-right" ng-click="addEvent.back()" ng-show="addEvent.currentPage() == 2">
+        <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
+          <use xlink:href="#arrow-left9"></use>
+        </svg> 
+        Back
+      </button>
+
+      <button type="input" class="btn btn-primary pull-right" ng-show="addEvent.currentPage() == 2">Save</button>
+
+    </form>
+  </div>
 </div>

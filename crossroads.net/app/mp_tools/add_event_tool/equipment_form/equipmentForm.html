@@ -1,0 +1,41 @@
+<h3>Equipment</h3>
+      
+    <div class="form-group">
+      <table class="table table-responsive">
+        <thead>
+          <th>Room Name</th>
+          <th>Quantity</th>
+          <th>Available</th>
+          <th>Remove</th>
+        </thead>
+        <tbody> 
+          <tr ng-repeat="equip in equipment.currentEquipment">
+            <td>
+              <select class="form-control">
+                <option>ng-repeat</option>
+              </select>
+            </td>
+            <td>
+              <input type="tel" class="form-control">
+            </td>
+            <td>
+              10
+            </td>
+            <td>
+              <button class="btn btn-standard">
+                <svg viewBox="0 0 32 32" class="icon icon-trash">
+                  <use xlink:href="#trash"></use>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-standard push-bottom" ng-click="equipment.addEquipment()">
+        <svg viewBox="0 0 25 32" class="icon icon-plus">
+          <use xlink:href="#plus"></use>
+        </svg> 
+        Add Equipment
+      </button>
+    </div>
+

@@ -8,7 +8,10 @@
   function AddEventToolService() {
     return {
       currentPage: 1,
-      eventData: {}
+      eventData: {
+        event: {},
+        rooms: []
+      }
     };
   }
 

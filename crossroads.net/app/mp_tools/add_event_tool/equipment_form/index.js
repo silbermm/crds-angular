@@ -4,7 +4,8 @@
   var MODULE = require('crds-constants').MODULES.MPTOOLS;
 
   angular.module(MODULE)
-    .directive('room', require('./room.component'));
+    .directive('equipmentForm', require('./equipmentForm.component'))
+  ;
 
-  require('./room.html');
+  require('./equipmentForm.html');
 })();
