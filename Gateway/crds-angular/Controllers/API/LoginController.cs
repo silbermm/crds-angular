@@ -109,6 +109,7 @@ namespace crds_angular.Controllers.API
                 var authData = TranslationService.Login(cred.username, cred.password);
                 var token = authData["token"].ToString();
                 var exp = authData["exp"].ToString();
+                var refreshToken = authData["refreshToken"].ToString();
 
                 if (token == "")
                 {
@@ -121,6 +122,7 @@ namespace crds_angular.Controllers.API
                 {
                     userToken = token,
                     userTokenExp = exp,
+                    refreshToken = refreshToken,
                     userId = p.ContactId,
                     username = p.FirstName,
                     userEmail = p.EmailAddress,
@@ -153,6 +155,7 @@ namespace crds_angular.Controllers.API
         }
         public string userToken { get; set; }
         public string userTokenExp { get; set; }
+        public string refreshToken { get; set; }
         public int userId { get; set; }
         public string username { get; set; }
         public string userEmail { get; set;  }
