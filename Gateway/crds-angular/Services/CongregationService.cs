@@ -1,4 +1,4 @@
-﻿using crds_angular.Models;
+﻿using System.Collections.Generic;
 using crds_angular.Models.Crossroads;
 using crds_angular.Services.Interfaces;
 
@@ -7,21 +7,30 @@ namespace crds_angular.Services
     public class CongregationService : ICongregationService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.ICongregationService _congregationService;
+        private readonly IRoomService _roomService;
 
-        public CongregationService(MinistryPlatform.Translation.Services.Interfaces.ICongregationService congregationService)
+        public CongregationService(MinistryPlatform.Translation.Services.Interfaces.ICongregationService congregationService, IRoomService roomService)
         {
             _congregationService = congregationService;
+            _roomService = roomService;
         }
 
         public Congregation GetCongregationById(int id)
         {
-            var tmp = _congregationService.GetCongregationById(id);
+            var congregation = _congregationService.GetCongregationById(id);
             var c = new Congregation();
-            c.CongregationId = tmp.CongregationId;
-            c.LocationId = tmp.LocationId;
-            c.Name = tmp.Name;
+            c.CongregationId = congregation.CongregationId;
+            c.LocationId = congregation.LocationId;
+            c.Name = congregation.Name;
 
             return c;
+        }
+
+        public List<Room> GetRooms(int congregationId)
+        {
+            var congregation = _congregationService.GetCongregationById(congregationId);
+            var rooms = _roomService.GetRoomsByLocationId(congregation.LocationId);
+            return rooms;
         }
     }
 }

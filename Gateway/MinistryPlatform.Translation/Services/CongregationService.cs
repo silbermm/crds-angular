@@ -20,6 +20,7 @@ namespace MinistryPlatform.Translation.Services
             var token = ApiLogin();
             var pageId = 466;
             var recordDict = _ministryPlatformService.GetRecordDict(pageId, id, token);
+            //var tmp = _ministryPlatformService.get
             var c = new Congregation();
             c.CongregationId = recordDict.ToInt("Congregation_ID");
             c.Name = recordDict.ToString("Congregation_Name");

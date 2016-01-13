@@ -17,10 +17,11 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public List<Room> GetRoomsByLocationId(int locationId, string token)
+        public List<Room> GetRoomsByLocationId(int locationId)
         {
+            var t = ApiLogin();
             var search = string.Format(",,,,{0}", locationId);
-            var records = _ministryPlatformService.GetPageViewRecords("RoomsByLocationId", token, search);
+            var records = _ministryPlatformService.GetPageViewRecords("RoomsByLocationId", t, search);
 
             return records.Select(record => new Room
             {
@@ -31,5 +32,21 @@ namespace MinistryPlatform.Translation.Services
                 RoomNumber = record.ToString("Room_Number")
             }).ToList();
         }
+
+        //public List<Room> GetRoomsByCongregationId(int congregationId)
+        //{
+        //    var token = ApiLogin();
+        //    var search = string.Format(",,,,{0}", congregationId);
+        //    var records = _ministryPlatformService.GetPageViewRecords("RoomsByCongregationId", token, search);
+
+        //    return records.Select(record => new Room
+        //    {
+        //        BuildingId = record.ToInt("Building_ID"),
+        //        LocationId = record.ToInt("Location_ID"),
+        //        RoomId = record.ToInt("Room_ID"),
+        //        RoomName = record.ToString("Room_Name"),
+        //        RoomNumber = record.ToString("Room_Number")
+        //    }).ToList();
+        //}
     }
 }

@@ -40,5 +40,27 @@ namespace crds_angular.Controllers.API
                 }
             });
         }
+
+        [ResponseType(typeof(Congregation))]
+        [Route("api/congregation/{id}/rooms")]
+        public IHttpActionResult GetRooms(int id)
+        {
+            return Authorized(t =>
+            {
+                try
+                {
+                    var congregation = _congregationService.GetRooms(id);
+
+                    return Ok(congregation);
+                }
+                catch (Exception e)
+                {
+                    var msg = "Error getting Congregation by id " + id;
+                    logger.Error(msg, e);
+                    var apiError = new ApiErrorDto(msg, e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
     }
 }

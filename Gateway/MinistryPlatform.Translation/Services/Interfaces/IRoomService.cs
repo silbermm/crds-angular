@@ -5,6 +5,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IRoomService
     {
-        List<Room> GetRoomsByLocationId(int locationId, string token);
+        List<Room> GetRoomsByLocationId(int locationId);
     }
 }
