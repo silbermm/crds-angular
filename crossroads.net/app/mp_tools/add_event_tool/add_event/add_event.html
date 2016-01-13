@@ -41,13 +41,13 @@
       <!-- Congregation -->
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(evt.eventForm, 'congregation')}">
-          <label class="required">Congregation</label>
+          <label class="required">Site</label>
           <select class="form-control"
                   name="congregation"
                   required
-                  ng-model="evt.formData.congregation">
+                  ng-model="evt.formData.congregation"
+                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations">
             <option value=''>-- Choose a Congregation --</option>
-            <option ng-value="congregation.dp_RecordID" ng-repeat="congregation in evt.crossroadsLocations"> {{congregation.dp_RecordName}} </option>
           </select>
           <ng-messages for="evt.eventForm.congregation.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'congregation')">
             <span ng-message="required">
@@ -72,7 +72,7 @@
               name="program"
               ng-model="evt.formData.program"
               required>
-        <option>-- Choose a Program --</option>
+        <option value="">-- Choose a Program --</option>
         <option ng-value="program.ProgramId" ng-repeat="program in evt.programs"> {{program.Name}} </option>
       </select>
       <ng-messages for="evt.eventForm.program.$error" ng-if="evt.validation.showErrors(evt.eventForm, 'program')">
@@ -166,7 +166,7 @@
               <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
             </span>
           </ng-messages>
-          <timepicker ng-model="evt.formData.startTime" show-meridian="true">
+          <timepicker ng-model="evt.formData.startTime" show-meridian="true" >
           </timepicker>
         </div>
       </div>

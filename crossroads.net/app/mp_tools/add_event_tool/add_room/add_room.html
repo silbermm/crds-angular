@@ -1,143 +1,33 @@
 <div class="col-md-6 col-md-offset-3">
   <h1>Create Event</h1>
-  <form name="addRoom.roomForm">
+  <preloader full-screen ng-if="!addRoom.viewReady"> </preloader>
+  <form name="addRoom.roomForm" ng-if="addRoom.viewReady">
     <div class="form-group">
-      <label>Rooms for {site}</label>
-      <pre> {{ addRoom.rooms }} </pre>
+      <label>Rooms for {{addRoom.choosenSite() }}</label>
       <div class="input-group">
-        <ui-select multiple ng-model="addRoom.formData.rooms" name="rooms">
-          <ui-select-match placeholder="Choose a room..."> {{$item.dp_RecordName}} </ui-select-match>
-          <ui-select-choices repeat="room in addRoom.rooms | filter: $select.search track by room.dp_RecordID">
-            <span ng-bind="room.dp_RecordName | highlight: $select.search"></span>
-            <span ng-bind=""></span>
+        <ui-select ng-model="addRoom.choosenRoom" name="rooms"> 
+          <ui-select-match > {{ $select.selected.Name}} </ui-select-match>
+          <ui-select-choices repeat="room in addRoom.rooms | filter: {Name: $select.search} track by room.Id">
+            <span ng-bind="room.Name | highlight: $select.search"></span>
           </ui-select-choices>
         </ui-select>
         <span class="input-group-btn">
-          <button class="btn btn-standard">Add Room(s)</button>
+          <button class="btn btn-standard" ng-click="addRoom.onAdd()">Add Room(s)</button>
         </span>
       </div>
     </div>
-    <div class="event-room push-ends" class="push-bottom" style="border-bottom: 1px solid #DDD">
-      <h2>Fireplace Room 
-      <button class="btn btn-standard">
-                      <svg viewBox="0 0 32 32" class="icon icon-trash">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </button>
-    </h2>
-      <div class="form-group">
-        <label>Layout</label>
-        <select class="form-control">
-          <option>ng-repeat</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <label>
-          <input type="checkbox"> Make Hidden</label>
-      </div>
-      <h3>Equipment</h3>
-      <div class="form-group">
-        <table class="table table-responsive">
-          <thead>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Available</th>
-            <th>Remove</th>
-          </thead>
-          <tbody>
-            <td>
-              <select class="form-control">
-                <option>ng-repeat</option>
-              </select>
-            </td>
-            <td>
-              <input type="tel" class="form-control">
-            </td>
-            <td>
-              10
-            </td>
-            <td>
-              <button class="btn btn-standard">
-                <svg viewBox="0 0 32 32" class="icon icon-trash">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </button>
-            </td>
-          </tbody>
-        </table>
-      </div>
-      <button class="btn btn-standard push-bottom">
-        <svg viewBox="0 0 25 32" class="icon icon-plus">
-          <use xlink:href="#plus"></use>
-        </svg> Add Equipment</button>
-    </div>
-    <div class="event-room push-ends" style="border-bottom: 1px solid #DDD">
-      <h2>KC 401 
-      <button class="btn btn-standard">
-                      <svg viewBox="0 0 32 32" class="icon icon-trash">
-                        <use xlink:href="#trash"></use>
-                      </svg>
-                    </button>
-    </h2>
-      <div class="form-group">
-        <label>Layout</label>
-        <select class="form-control">
-          <option>ng-repeat</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Description</label>
-        <textarea class="form-control"></textarea>
-      </div>
-      <div class="form-group">
-        <label>
-          <input type="checkbox"> Make Hidden</label>
-      </div>
-      <h3>Equipment</h3>
-      <div class="form-group">
-        <table class="table table-responsive">
-          <thead>
-            <th>Name</th>
-            <th>Quantity</th>
-            <th>Available</th>
-            <th>Remove</th>
-          </thead>
-          <tbody>
-            <td>
-              <select class="form-control">
-                <option>ng-repeat</option>
-              </select>
-            </td>
-            <td>
-              <input type="tel" class="form-control">
-            </td>
-            <td>
-              10
-            </td>
-            <td>
-              <button class="btn btn-standard">
-                <svg viewBox="0 0 32 32" class="icon icon-trash">
-                  <use xlink:href="#trash"></use>
-                </svg>
-              </button>
-            </td>
-          </tbody>
-        </table>
-      </div>
-      <button class="btn btn-standard push-bottom">
-        <svg viewBox="0 0 25 32" class="icon icon-plus">
-          <use xlink:href="#plus"></use>
-        </svg> Add Equipment</button>
-    </div>
+    
+    <span ng-repeat="currentRoom in addRoom.formData.rooms">
+      <room room-obj="currentRoom"> </room>
+    </span>
+    
+    <button class="btn btn-primary pull-right">Save</button>
+    <button class="btn btn-standard pull-right">Cancel</button>
+    <button class="btn btn-standard pull-right" ng-click="addRoom.back()">
+      <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
+        <use xlink:href="#arrow-left9"></use>
+      </svg> 
+      Back
+    </button>
   </form>
-  <button class="btn btn-primary pull-right">Save</button>
-  <button class="btn btn-standard pull-right">Cancel</button>
-  <button class="btn btn-standard pull-right" ng-click="addRoom.back()">
-    <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
-      <use xlink:href="#arrow-left9"></use>
-    </svg> Back</button>
-</div>
+  </div>

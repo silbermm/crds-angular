@@ -48,11 +48,14 @@
       if (vm.eventData !== undefined && Object.keys(vm.eventData).length > 0) {
         vm.formData = angular.copy(vm.eventData);
       } else {
+        // set defaults...
         vm.formData = {
           donationBatch: 0,
           sendReminder: 0,
           minutesSetup: 0,
-          minutesCleanup: 0
+          minutesCleanup: 0,
+          startTime: new Date(),
+          endTime: new Date()
         };
       }
     }
