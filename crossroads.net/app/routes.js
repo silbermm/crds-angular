@@ -153,18 +153,6 @@
             }
           }
         })
-        .state('myprofile', {
-          parent: 'noSideBar',
-          url: '/myprofile',
-          controller: 'MyProfileCtrl as myProfile',
-          templateUrl: 'myprofile/myprofile.html',
-          data: {
-            meta: {
-              title: 'Profile',
-              description: ''
-            }, resolve:true
-          }
-        })
         .state('explore', {
           parent: 'noHeaderOrFooter',
           url: '/explore',
