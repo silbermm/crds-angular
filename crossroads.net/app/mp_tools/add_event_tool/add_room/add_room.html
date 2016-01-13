@@ -1,12 +1,17 @@
 <div class="col-md-6 col-md-offset-3">
   <h1>Create Event</h1>
-  <form>
+  <form name="addRoom.roomForm">
     <div class="form-group">
       <label>Rooms for {site}</label>
+      <pre> {{ addRoom.rooms }} </pre>
       <div class="input-group">
-        <select class="form-control">
-          <option>select2</option>
-        </select>
+        <ui-select multiple ng-model="addRoom.formData.rooms" name="rooms">
+          <ui-select-match placeholder="Choose a room..."> {{$item.dp_RecordName}} </ui-select-match>
+          <ui-select-choices repeat="room in addRoom.rooms | filter: $select.search track by room.dp_RecordID">
+            <span ng-bind="room.dp_RecordName | highlight: $select.search"></span>
+            <span ng-bind=""></span>
+          </ui-select-choices>
+        </ui-select>
         <span class="input-group-btn">
           <button class="btn btn-standard">Add Room(s)</button>
         </span>
