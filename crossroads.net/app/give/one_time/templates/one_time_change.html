@@ -1,10 +1,11 @@
 <div class="form-group">
-	<donation-details amount="give.dto.amount" 
+	<donation-details amount="give.dto.amount"
                     program="give.dto.program"
-                    amount-submitted="give.dto.amountSubmitted" 
+                    show-frequency-option='false'
+                    amount-submitted="give.dto.amountSubmitted"
                     programs-in="give.programsInput">
 	</donation-details>
-	<bank-credit-card-details 
+	<bank-credit-card-details
         dto='give.dto'
         bank-info-submitted='give.dto.bankinfoSubmitted'
         show-check-class='give.showCheckClass'
@@ -12,7 +13,7 @@
         donor='give.dto.donor'
         email='give.dto.email'
         set-valid-card='setValidCard'
-        set-valid-cvc='setValidCvc' 
+        set-valid-cvc='setValidCvc'
         account-state-name='give.account'>
   </bank-credit-card-details>
 	<button ng-click="give.service.submitChangedBankInfo(give.giveForm, give.programsInput)" ng-disabled="give.dto.processing" class="btn btn-primary btn-lg btn-block-mobile give-button">

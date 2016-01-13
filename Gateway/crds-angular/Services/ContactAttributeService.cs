@@ -145,6 +145,12 @@ namespace crds_angular.Services
 
         public void SaveContactMultiAttribute(string token, int contactId, ContactAttributeDTO contactAttribute)
         {
+            contactAttribute.StartDate = ConvertToServerDate(contactAttribute.StartDate);
+            if (contactAttribute.EndDate != null)
+            {
+                contactAttribute.EndDate = ConvertToServerDate(contactAttribute.EndDate.Value);
+            }
+
             var mpContactAttribute = TranslateMultiToMPAttribute(contactAttribute, null);
             var persistedAttributes = _mpContactAttributeService.GetCurrentContactAttributes(token, contactId, true, contactAttribute.AttributeId);
 
@@ -155,6 +161,21 @@ namespace crds_angular.Services
 
 
             SaveAttribute(contactId, mpContactAttribute, token, true);
+        }
+
+        private DateTime ConvertToServerDate(DateTime source)
+        {
+            if (source.Kind != DateTimeKind.Utc)
+            {
+                return source.Date;
+            }
+
+            // Client side for Skills sends up UTC date/times. 
+            // These need to be converted from UTC timestamp to local servers date
+            // and then put back in UTC timezone so MP does mess with the time portion          
+            var result = source.ToLocalTime().Date;
+            result = DateTime.SpecifyKind(result, DateTimeKind.Utc);
+            return result;
         }
 
         private void SaveAttribute(int contactId, ContactAttribute attribute, string token, bool useMyProfile)
