@@ -7,5 +7,6 @@ namespace crds_angular.Services.Interfaces
     {
         Congregation GetCongregationById(int id);
         List<Room> GetRooms(int congregationId);
+        List<RoomEquipment> GetEquipments(int congregationId);
     }
 }

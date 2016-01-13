@@ -4,6 +4,29 @@ using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Services
 {
+    public class EquipmentService : IEquipmentService
+    {
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEquipmentService _mpEquipmentService;
+
+        public EquipmentService(MinistryPlatform.Translation.Services.Interfaces.IEquipmentService equipmentService)
+        {
+            _mpEquipmentService = equipmentService;
+        }
+
+        public List<RoomEquipment> GetEquipmentByLocationId(int locationId)
+        {
+            //return new List<RoomEquipment>();
+
+            var records = _mpEquipmentService.GetEquipmentByLocationId(locationId);
+
+            return records.Select(record => new RoomEquipment
+            {
+                Id = record.EquipmentId,
+                Name = record.EquipmentName
+            }).ToList();
+        }
+    }
+
     public class RoomService : IRoomService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.IRoomService _roomService;
@@ -50,5 +73,11 @@ namespace crds_angular.Services
     {
         public int Id { get; set; }
         public string LayoutName { get; set; }
+    }
+
+    public class RoomEquipment
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }   
     }
 }

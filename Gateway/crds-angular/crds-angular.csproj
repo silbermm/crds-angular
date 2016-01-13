@@ -280,6 +280,7 @@
     <Compile Include="Services\BulkEmailSyncService.cs" />
     <Compile Include="Services\CongregationService.cs" />
     <Compile Include="Services\Interfaces\ICongregationService.cs" />
+    <Compile Include="Services\Interfaces\IEquipmentService.cs" />
     <Compile Include="Services\Interfaces\IRoomService.cs" />
     <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\StaffContactService.cs" />

@@ -14,4 +14,10 @@
         public int LayoutId { get; set; }
         public string LayoutName { get; set; }
     }
+
+    public class Equipment
+    {
+        public int EquipmentId { get; set; }
+        public string EquipmentName { get; set; }
+    }
 }
