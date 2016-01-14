@@ -11,7 +11,10 @@ DECLARE @FieldList VARCHAR(1000) = 'Rooms.[Room_ID]
     , Rooms.[Room_Name]
     , Rooms.[Room_Number]
     , Building_ID_Table.[Building_ID]
-    , Building_ID_Table_Location_ID_Table.[Location_ID]';
+    , Building_ID_Table_Location_ID_Table.[Location_ID]
+    , Rooms.[Description]
+    , Rooms.[Theater_Capacity]
+    , Rooms.[Banquet_Capacity]';
 DECLARE @ViewClause VARCHAR(1000) = 'Rooms.[Room_ID] IS NOT NULL';
 DECLARE @Description VARCHAR(1000) = 'API View';
 
