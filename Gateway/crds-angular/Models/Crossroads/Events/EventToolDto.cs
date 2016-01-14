@@ -67,7 +67,7 @@ namespace crds_angular.Models.Crossroads.Events
     {
         [JsonProperty(PropertyName = "equipmentId")]
         public int EquipmentId { get; set; }
-        [JsonProperty(PropertyName = "q")]
+        [JsonProperty(PropertyName = "quantityRequested")]
         public int QuantityRequested { get; set; }
     }
 }
