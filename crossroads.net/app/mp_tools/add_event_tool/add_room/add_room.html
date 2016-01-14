@@ -1,33 +1,23 @@
-<div class="col-md-6 col-md-offset-3">
-  <h1>Create Event</h1>
-  <preloader full-screen ng-if="!addRoom.viewReady"> </preloader>
-  <form name="addRoom.roomForm" ng-if="addRoom.viewReady">
-    <div class="form-group">
-      <label>Rooms for {{addRoom.choosenSite() }}</label>
-      <div class="input-group">
-        <ui-select ng-model="addRoom.choosenRoom" name="rooms"> 
-          <ui-select-match > {{ $select.selected.Name}} </ui-select-match>
-          <ui-select-choices repeat="room in addRoom.rooms | filter: {Name: $select.search} track by room.Id">
-            <span ng-bind="room.Name | highlight: $select.search"></span>
-          </ui-select-choices>
-        </ui-select>
-        <span class="input-group-btn">
-          <button class="btn btn-standard" ng-click="addRoom.onAdd()">Add Room(s)</button>
-        </span>
-      </div>
+<preloader full-screen ng-if="!addRoom.viewReady"> </preloader>
+<ng-form name="roomForm" ng-if="addRoom.viewReady" >
+  <div class="form-group">
+    <label>Rooms for {{addRoom.choosenSite() }}</label>
+    <div class="input-group">
+      <ui-select ng-model="addRoom.choosenRoom" name="rooms"> 
+        <ui-select-match > {{ $select.selected.Name}} </ui-select-match>
+        <ui-select-choices repeat="room in addRoom.rooms | filter: {Name: $select.search} track by room.Id">
+          <span ng-bind="room.Name | highlight: $select.search"></span>
+        </ui-select-choices>
+      </ui-select>
+      <span class="input-group-btn">
+        <button class="btn btn-standard" ng-click="addRoom.onAdd()">Add Room(s)</button>
+      </span>
     </div>
-    
-    <span ng-repeat="currentRoom in addRoom.formData.rooms">
-      <room room-obj="currentRoom"> </room>
-    </span>
-    
-    <button class="btn btn-primary pull-right">Save</button>
-    <button class="btn btn-standard pull-right">Cancel</button>
-    <button class="btn btn-standard pull-right" ng-click="addRoom.back()">
-      <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
-        <use xlink:href="#arrow-left9"></use>
-      </svg> 
-      Back
-    </button>
-  </form>
   </div>
+
+  <!-- The rooms choosen --> 
+  <span ng-repeat="currentRoom in addRoom.roomData">
+    <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList"> </room-form>
+  </span>
+  
+</ng-form>

@@ -15,6 +15,4 @@
   // the addRoom component
   require('./add_room');
 
-  // the room component
-  require('./room_component');
 })();

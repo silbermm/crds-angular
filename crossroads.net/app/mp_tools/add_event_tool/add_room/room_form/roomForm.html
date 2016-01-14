@@ -1,0 +1,35 @@
+<div class="event-room push-ends" class="push-bottom" style="border-bottom: 1px solid #DDD">
+  <h2> {{ room.currentRoom.Name }}  
+    <button class="btn btn-standard" ng-click="">
+      <svg viewBox="0 0 32 32" class="icon icon-trash">
+        <use xlink:href="#trash"></use>
+      </svg>
+    </button>
+  </h2>
+  <ng-form name="room.roomForm"> 
+
+    <div class="form-group">
+      <label>Layout</label>
+      <select class="form-control" name="layout" ng-model="room.currentRoom.layout">
+        <option value="">-- Choose a Layout --</option>
+        <option value="layout.Id" ng-repeat="layout in room.layouts"> {{ layout.LayoutName }} </option> 
+      </select>
+    </div>
+
+    <div class="form-group" name="description" ng-model="room.currentRoom.description">
+      <label>Description</label>
+      <textarea class="form-control" name="description" ng-model="room.currentRoom.description"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden"> Make Hidden </label>
+    </div>
+   
+    <equipment-form ng-show="room.equipmentLookup.length > 0" 
+                    current-equipment="room.currentRoom.equipment" 
+                    equipment-lookup="room.equipmentLookup"> 
+    </equipment-form>
+  
+  </ng-form>
+</div>
+

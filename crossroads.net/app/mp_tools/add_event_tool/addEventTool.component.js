@@ -28,11 +28,14 @@
       var vm = this;
 
       vm.allowAccess = allowAccess;
+      vm.back = back;
       vm.currentPage = currentPage;
-      vm.eventData = AddEvent.eventData;
+      vm.event = AddEvent.eventData.event;
       vm.next = next;
       vm.params = MPTools.getParams();
       vm.processing = false;
+      vm.rooms = AddEvent.eventData.rooms;
+      vm.submit = submit;
       vm.viewReady = false;
 
       activate();
@@ -50,13 +53,35 @@
         return (authenticated && authorized);
       }
 
+      function back() {
+        AddEvent.currentPage = 1;
+      }
+
       function currentPage() {
         return AddEvent.currentPage;
       }
 
-      function next(data) {
-        AddEvent.eventData = data;
-        AddEvent.currentPage = 2;
+      function next() {
+        vm.allData.eventForm.$setSubmitted();
+        
+        // I shouldn't have to do this, but I don't have time to debug it!
+        AddEvent.eventData.event = vm.event;
+
+        if (vm.allData.eventForm.$valid) {
+          AddEvent.currentPage = 2;
+        } else {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+        }
+      }
+
+      function submit() {
+        AddEvent.eventData.rooms = vm.rooms;
+        if (vm.allData.$valid) {
+          console.log('submit form');
+          return;
+        }
+
+        console.log('form errors');
       }
 
     }

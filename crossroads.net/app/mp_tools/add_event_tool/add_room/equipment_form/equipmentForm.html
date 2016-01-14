@@ -1,0 +1,44 @@
+<h3>Equipment</h3>
+      
+    <div class="form-group">
+      <table class="table table-responsive">
+        <thead>
+          <th>Room Name</th>
+          <th>Quantity</th>
+          <th>Available</th>
+          <th>Remove</th>
+        </thead>
+        <tbody> 
+          <tr ng-repeat="equip in equipment.currentEquipment">
+            <td>
+              <select class="form-control" 
+                      name="equipmentChooser" 
+                      ng-model="equip.equipment"
+                      ng-options="e.Name for e in equipment.equipmentLookup track by e.Id" 
+                      >
+              </select>
+            </td>
+            <td>
+              <input type="number" class="form-control" name="equip.quantity">
+            </td>
+            <td>
+              {{ equip.equipment.Quantity }} 
+            </td>
+            <td>
+              <button class="btn btn-standard">
+                <svg viewBox="0 0 32 32" class="icon icon-trash">
+                  <use xlink:href="#trash"></use>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-standard push-bottom" ng-click="equipment.addEquipment()">
+        <svg viewBox="0 0 25 32" class="icon icon-plus">
+          <use xlink:href="#plus"></use>
+        </svg> 
+        Add Equipment
+      </button>
+    </div>
+

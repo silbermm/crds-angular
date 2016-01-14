@@ -9,4 +9,10 @@
   angular.module(MODULE)
     .directive('addRoom', require('./addRoom.component'));
 
+  // the room form
+  require('./room_form');
+
+  // the equipment form
+  require('./equipment_form');
+
 })();

@@ -5,6 +5,7 @@
 
   AddEventComponent.$inject = [
     '$rootScope',
+    'AddEvent',
     'Lookup',
     'Programs',
     'StaffContact',
@@ -15,7 +16,6 @@
     return {
       restrict: 'E',
       scope: {
-        onNext: '&onNext',
         eventData: '='
       },
       templateUrl: 'add_event/add_event.html',
@@ -25,7 +25,7 @@
     };
   }
 
-  function AddEventController($rootScope, Lookup, Programs, StaffContact, Validation) {
+  function AddEventController($rootScope, AddEvent, Lookup, Programs, StaffContact, Validation) {
     var vm = this;
 
     vm.crossroadsLocations = Lookup.query({ table: 'crossroadslocations' });
@@ -33,7 +33,6 @@
     vm.endDateOpened = false;
     vm.eventTypes = Lookup.query({ table: 'eventtypes' });
     vm.formatContact = formatContact;
-    vm.next = next;
     vm.programs = Programs.AllPrograms.query();
     vm.reminderDays = Lookup.query({ table: 'reminderdays' });
     vm.staffContacts = StaffContact.query();
@@ -45,11 +44,8 @@
 
     ///////
     function activate() {
-      if (vm.eventData !== undefined && Object.keys(vm.eventData).length > 0) {
-        vm.formData = angular.copy(vm.eventData);
-      } else {
-        // set defaults...
-        vm.formData = {
+      if (_.isEmpty(vm.eventData)) {
+        vm.eventData = {
           donationBatch: 0,
           sendReminder: 0,
           minutesSetup: 0,
@@ -70,15 +66,6 @@
       var displayName = contact['Display Name'];
       var email = contact.dp_RecordName;
       return displayName + ' - ' + email;
-    }
-
-    function next() {
-      // validate the form, then pass all the data back up
-      if (vm.eventForm.$valid) {
-        vm.onNext({data: vm.formData});
-      } else {
-        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-      }
     }
 
     function startDateOpen($event) {
