@@ -21,8 +21,8 @@ namespace crds_angular.Services
             var mpContacts = _contactService.StaffContacts(token);
             return mpContacts.Select(mpContact => new PrimaryContactDto
             {
-                ContactId = mpContact.ToInt("Contact ID"),
-                DisplayName = mpContact.ToString("Display Name"),
+                ContactId = mpContact.ToInt("Contact_ID"),
+                DisplayName = mpContact.ToString("Display_Name"),
                 Email = mpContact.ToString("dp_RecordName")
             }).ToList();
         }
