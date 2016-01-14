@@ -3,10 +3,6 @@ GO
 
 DECLARE @ToolId INT
 
-UPDATE [dbo].[dp_Tools]
-   SET [Launch_Page] = 'http://int.crossroads.net/mptools/tripPrivateInvite'
- WHERE Tool_ID = 369
-
 INSERT INTO [dbo].[dp_Tools]
            ([Tool_Name]
            ,[Description]
