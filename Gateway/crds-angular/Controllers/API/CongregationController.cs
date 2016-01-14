@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Security;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;

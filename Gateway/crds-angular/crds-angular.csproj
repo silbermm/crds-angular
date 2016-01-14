@@ -262,6 +262,10 @@
     <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
     <Compile Include="Controllers\API\SubscriptionsController .cs" />
     <Compile Include="Models\Crossroads\Childcare\ChildcareRsvpDto.cs" />
+    <Compile Include="Models\Crossroads\Events\EventToolDto.cs" />
+    <Compile Include="Models\Crossroads\Events\Room.cs" />
+    <Compile Include="Models\Crossroads\Events\RoomEquipment.cs" />
+    <Compile Include="Models\Crossroads\Events\RoomLayout.cs" />
     <Compile Include="Models\Crossroads\GroupContactDTO.cs" />
     <Compile Include="Models\Crossroads\Events\Event.cs" />
     <Compile Include="Models\Crossroads\Events\EventProfile.cs" />
@@ -269,6 +273,7 @@
     <Compile Include="Models\Crossroads\Groups\GroupDTO.cs" />
     <Compile Include="Models\Crossroads\Groups\SignUpFamilyMembers.cs" />
     <Compile Include="Models\Crossroads\Participants\ParticipantProfile.cs" />
+    <Compile Include="Models\Crossroads\PrimaryContactDto.cs" />
     <Compile Include="Models\Crossroads\Profile\Participant.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeProfile.cs" />
     <Compile Include="Models\Crossroads\Serve\ServeReminder.cs" />

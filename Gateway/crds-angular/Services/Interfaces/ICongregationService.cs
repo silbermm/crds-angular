@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using crds_angular.Models.Crossroads;
+using crds_angular.Models.Crossroads.Events;
 
 namespace crds_angular.Services.Interfaces
 {

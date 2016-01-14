@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Services
@@ -60,26 +61,5 @@ namespace crds_angular.Services
                 LayoutName = record.LayoutName
             }).ToList();
         }
-    }
-
-    public class Room
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int BuildingId { get; set; }
-        public int LocationId { get; set; }
-    }
-
-    public class RoomLayout
-    {
-        public int Id { get; set; }
-        public string LayoutName { get; set; }
-    }
-
-    public class RoomEquipment
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
     }
 }
