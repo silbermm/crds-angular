@@ -2,33 +2,10 @@
 using System.Linq;
 using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services.Interfaces;
+using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Services
 {
-    public class EquipmentService : IEquipmentService
-    {
-        private readonly MinistryPlatform.Translation.Services.Interfaces.IEquipmentService _mpEquipmentService;
-
-        public EquipmentService(MinistryPlatform.Translation.Services.Interfaces.IEquipmentService equipmentService)
-        {
-            _mpEquipmentService = equipmentService;
-        }
-
-        public List<RoomEquipment> GetEquipmentByLocationId(int locationId)
-        {
-            //return new List<RoomEquipment>();
-
-            var records = _mpEquipmentService.GetEquipmentByLocationId(locationId);
-
-            return records.Select(record => new RoomEquipment
-            {
-                Id = record.EquipmentId,
-                Name = record.EquipmentName,
-                Quantity = record.QuantityOnHand
-            }).ToList();
-        }
-    }
-
     public class RoomService : IRoomService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.IRoomService _roomService;
@@ -38,8 +15,23 @@ namespace crds_angular.Services
             _roomService = roomService;
         }
 
+        //public void CreateRoom()
+        //{
+            
+        //}
+
         public List<Room> GetRoomsByLocationId(int id)
         {
+            //var tmpResr = new RoomReservationDto();
+            //tmpResr.Approved = false;
+            //tmpResr.Cancelled = false;
+            //tmpResr.EventId = 3184060;
+            //tmpResr.Hidden = true;
+            //tmpResr.Notes = "testing api";
+            //tmpResr.RoomId = 208;
+            //tmpResr.RoomLayoutId = 2;
+            //_roomService.CreateRoomReservation(tmpResr);
+
             var records = _roomService.GetRoomsByLocationId(id);
 
             return records.Select(record => new Room

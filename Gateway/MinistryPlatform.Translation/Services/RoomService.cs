@@ -1,20 +1,60 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
+using log4net;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Models;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
+    public class RoomReservationDto
+    {
+        public int EventId { get; set; }
+        public int RoomId { get; set; }
+        public int RoomLayoutId { get; set; }
+        public string Notes { get; set; }
+        public bool Hidden { get; set; }
+        public bool Cancelled { get; set; }
+        public bool Approved { get; set; }
+    }
     public class RoomService : BaseService, IRoomService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly ILog _logger = LogManager.GetLogger(typeof(RoomService));
 
         public RoomService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configuration)
             : base(authenticationService, configuration)
         {
             _ministryPlatformService = ministryPlatformService;
+        }
+
+        public int CreateRoomReservation(RoomReservationDto roomReservation)
+        {
+            var token = ApiLogin();
+            var roomReservationPageId = 384;
+            var reservationDictionary = new Dictionary<string, object>
+            {
+                {"Event_ID", roomReservation.EventId},
+                {"Room_ID", roomReservation.RoomId},
+                {"Room_Layout_ID", roomReservation.RoomLayoutId},
+                {"Notes", roomReservation.Notes},
+                {"Hidden", roomReservation.Hidden},
+                {"Approved", roomReservation.Approved},
+                {"Cancelled", roomReservation.Cancelled}
+            };
+
+            try
+            {
+                return (_ministryPlatformService.CreateRecord(roomReservationPageId, reservationDictionary, token,true));
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error creating Room Reservation, roomReservation: {0}", roomReservation);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
         }
 
         public List<Room> GetRoomsByLocationId(int locationId)
