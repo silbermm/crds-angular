@@ -29,7 +29,10 @@ namespace MinistryPlatform.Translation.Services
                 LocationId = record.ToInt("Location_ID"),
                 RoomId = record.ToInt("Room_ID"),
                 RoomName = record.ToString("Room_Name"),
-                RoomNumber = record.ToString("Room_Number")
+                RoomNumber = record.ToString("Room_Number"),
+                BanquetCapacity = record.ToInt("Banquet_Capacity"),
+                Description = record.ToString("Description"),
+                TheaterCapacity = record.ToInt("Theater_Capacity")
             }).ToList();
         }
 

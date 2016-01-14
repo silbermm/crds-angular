@@ -47,7 +47,10 @@ namespace crds_angular.Services
                 BuildingId = record.BuildingId,
                 Id = record.RoomId,
                 LocationId = record.LocationId,
-                Name = record.RoomName
+                Name = record.RoomName,
+                BanquetCapacity = record.BanquetCapacity,
+                Description = record.Description,
+                TheaterCapacity = record.TheaterCapacity
             }).ToList();
         }
 
