@@ -23,7 +23,7 @@
       var vm = this;
       vm.pageInfo = vm.cmsInfo.pages[0];
       vm.family = _.filter(vm.family, function(f) {
-        return f.age >= vm.group.minAge;
+        return (f.age >= vm.group.minAge) || (f.age === 0);
       });
 
       vm.events = _.chain(vm.group.events).filter(function(event) {

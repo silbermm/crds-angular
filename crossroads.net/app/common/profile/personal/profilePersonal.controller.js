@@ -91,13 +91,13 @@
         if (!vm.profileData) {
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
-            vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
+            setDate();
             underThirteen();
             vm.viewReady = true;
           });
         } else {
           configurePerson();
-          vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
+          setDate();
           underThirteen();
           vm.viewReady = true;
         }
@@ -105,6 +105,12 @@
       });
 
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
+    }
+
+    function setDate() {
+      if (vm.profileData.person.attendanceStartDate) {
+        vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
+      }
     }
 
     function configurePerson() {

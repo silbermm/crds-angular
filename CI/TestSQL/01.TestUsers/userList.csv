@@ -26,3 +26,5 @@ SU2SFather,Head1,mpcrds+SU2SFather@gmail.com,Automation user for SU2S
 1TimeFather,Head1,mpcrds+1TimeFather@gmail.com,Automation user for 1Time_CC
 PCHead1,HeadofHousehold1,mpcrds+PCHead1@gmail.com,Automation user for Pledge Campaign
 PCHead2,HeadofHousehold2,mpcrds+PCHead2@gmail.com,Automation user for Pledge Campaign
+husband,ECheckIn,mpcrds+echeckinhus@gmail.com,Echeckin ETL
+wife,ECheckIn,mpcrds+echeckinwif@gmail.com,ECheckin ETL

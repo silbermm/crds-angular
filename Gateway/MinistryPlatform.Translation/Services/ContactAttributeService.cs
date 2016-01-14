@@ -88,17 +88,15 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        private static Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
+        private Dictionary<string, object> TranslateContactAttributeToDictionary(ContactAttribute attribute)
         {
-            var endDate = attribute.EndDate != null ? attribute.EndDate.GetValueOrDefault().Date : (DateTime?)null;
-
             var attributeDictionary = new Dictionary<string, object>
             {
                 {"Attribute_Type_ID", attribute.AttributeTypeId},
                 {"Attribute_ID", attribute.AttributeId},
                 {"Contact_Attribute_ID", attribute.ContactAttributeId},
-                {"Start_Date", attribute.StartDate.Date},
-                {"End_Date", endDate},
+                {"Start_Date", attribute.StartDate},
+                {"End_Date", attribute.EndDate},
                 {"Notes", attribute.Notes}
             };
             return attributeDictionary;
