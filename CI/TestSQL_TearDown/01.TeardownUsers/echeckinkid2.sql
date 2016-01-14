@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = display_name = 'ECheckIn, Kid2');
+Set @contactID = (select contact_id from contacts where display_name = 'ECheckIn, Kid2');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -20,7 +20,7 @@ set @donorID = (select donor_record from contacts where contact_id = @contactID)
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
 SET Household_ID = null, Participant_Record = null, User_Account = null, Donor_record = null
-WHERE email_address = display_name = 'ECheckIn, Kid2';
+WHERE display_name = 'ECheckIn, Kid2';
 
 --Delete the address if it exists.
 IF  (select address_id from households where Household_ID = @houseHoldID) is not Null
@@ -67,11 +67,26 @@ WHERE houseHold_ID = @houseHoldID;
 
 Delete from [dbo].Households where houseHold_ID = @houseHoldID;
 
+--Lets start getting rid of the participant record
+delete from Form_Response_Answers where form_response_id = (select form_response_id from form_responses where contact_id = @contactID);
+
+delete from form_responses where contact_id = @contactID;
+
+delete from response_attributes where response_id in (select response_id from responses where participant_id = @participantID);
+
+delete from responses where participant_id = @participantID;
+
+delete from event_participants where participant_id = @participantID;
+
+delete from group_participants where participant_id = @participantID;
+
+delete from participants where participant_id = @participantID;
 --delete relationships
 delete from [dbo].contact_relationships where contact_id = @contactID;
 
 delete from [dbo].contact_relationships where related_contact_id = @contactID;
+GO
 
 --Delete EcheckInHusband's old contact record
-DELETE FROM [dbo].Contacts where email_address = display_name = 'ECheckIn, Kid2';
+DELETE FROM [dbo].Contacts where display_name = 'ECheckIn, Kid2';
 GO
