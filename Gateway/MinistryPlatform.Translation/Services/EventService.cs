@@ -21,7 +21,7 @@ namespace MinistryPlatform.Translation.Services
         public int MinutesSetup { get; set; }
         public int MinutesTeardown { get; set; }
         public int ProgramId { get; set; }
-        public int ReminderDaysId { get; set; }
+        public int? ReminderDaysId { get; set; }
         public bool SendReminder { get; set; }
         public DateTime StartDateTime { get; set; }
         public string Title { get; set; }
