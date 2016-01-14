@@ -9,11 +9,12 @@
     '$log',
     'MPTools',
     'AuthService',
+    'EventService',
     'CRDS_TOOLS_CONSTANTS',
     'AddEvent'
   ];
 
-  function AddEventTool($rootScope, $window, $log, MPTools, AuthService, CRDS_TOOLS_CONSTANTS, AddEvent) {
+  function AddEventTool($rootScope, $window, $log, MPTools, AuthService, EventService, CRDS_TOOLS_CONSTANTS, AddEvent) {
 
     return {
       restrict: 'E',
@@ -63,7 +64,6 @@
 
       function next() {
         vm.allData.eventForm.$setSubmitted();
-        
         // I shouldn't have to do this, but I don't have time to debug it!
         AddEvent.eventData.event = vm.event;
 
@@ -75,15 +75,24 @@
       }
 
       function submit() {
+        vm.allData.roomForm.$setSubmitted();
+        vm.allData.roomForm.equipmentForm.$setSubmitted();
         AddEvent.eventData.rooms = vm.rooms;
         if (vm.allData.$valid) {
-          console.log('submit form');
+          // build the dto...
+          $log.debug('submit form');
+          var equipment = AddEvent.getEventDto(AddEvent.eventData);
+          EventService.create.save(equipment, function(result) {
+            $log.debug(result);
+          }, function(result) {
+            $log.error(result);                
+          });
           return;
         }
-
+        
+        $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
         console.log('form errors');
       }
-
     }
   }
 })();

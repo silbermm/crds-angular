@@ -85,7 +85,7 @@
               name="primaryContact"
               ng-model="evt.eventData.primaryContact"
               required 
-              ng-options="evt.formatContact(contact) for contact in evt.staffContacts track by contact['Contact ID']">
+              ng-options="evt.formatContact(contact) for contact in evt.staffContacts track by contact.contactId">
         <option value="">-- Choose a Primary Contact</option>
         <!--<option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>-->
       </select>

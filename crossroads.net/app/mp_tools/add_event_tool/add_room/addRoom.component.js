@@ -3,9 +3,9 @@
 
   module.exports = AddRoom;
 
-  AddRoom.$inject = ['$log', 'AddEvent', 'Room'];
+  AddRoom.$inject = ['$log', '$rootScope', 'AddEvent', 'Room'];
 
-  function AddRoom($log, AddEvent, Room) {
+  function AddRoom($log, $rootScope, AddEvent, Room) {
     return {
       restrict: 'E',
       scope: {
@@ -23,6 +23,8 @@
       vm.equipmentList = [];
       vm.layouts = Room.Layouts.query();
       vm.onAdd = onAdd;
+      vm.roomError = false;
+      vm.showNoRoomsMessage = showNoRoomsMessage;
       vm.viewReady = false;
 
       activate();
@@ -52,8 +54,26 @@
       }
 
       function onAdd() {
-        // add the currently choosen room to the list of rooms...
-        vm.roomData.push(vm.choosenRoom);
+        if (vm.choosenRoom) {
+          // is this room already added?
+          var alreadyAdded = _.find(vm.roomData, function(r) {
+            return r.id === vm.choosenRoom.id;
+          });
+
+          if (alreadyAdded) {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.allReadyAdded);
+            return;
+          }
+
+          vm.roomData.push(vm.choosenRoom);
+          return;
+        }
+
+        $rootScope.$emit('notify', $rootScope.MESSAGES.chooseARoom);
+      }
+
+      function showNoRoomsMessage() {
+        return (!vm.viewReady || vm.rooms === undefined || vm.rooms.length < 1);
       }
     }
   }

@@ -3,9 +3,9 @@
 
   module.exports = RoomForm;
 
-  RoomForm.$inject = ['AddEvent'];
+  RoomForm.$inject = ['AddEvent', 'Validation'];
 
-  function RoomForm(AddEvent) {
+  function RoomForm(AddEvent, Validation) {
     return {
       restrict: 'E',
       scope: {
@@ -21,6 +21,8 @@
 
     function RoomController() {
       var vm = this;
+      vm.validation = Validation;
+
       activate();
 
       ////////////////////

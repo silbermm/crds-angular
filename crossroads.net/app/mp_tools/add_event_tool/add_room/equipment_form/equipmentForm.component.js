@@ -3,9 +3,9 @@
 
   module.exports = EquipmentForm;
 
-  EquipmentForm.$inject = [];
+  EquipmentForm.$inject = ['Validation'];
 
-  function EquipmentForm() {
+  function EquipmentForm(Validation) {
     return {
       restrict: 'E',
       scope: {
@@ -21,11 +21,27 @@
     function EquipmentController() {
       var vm = this;
       vm.addEquipment = addEquipment;
+      vm.fieldName = fieldName;
+      vm.showError = showError;
+      vm.showFieldError = showFieldError;
+      vm.validation = Validation;
 
       function addEquipment() {
-        vm.currentEquipment.push({ }); 
+        vm.currentEquipment.push({equipment: {name: null, quantity: 0 }});
       }
 
+      function fieldName(name, idx) {
+        return name + '-' + idx;
+      }
+
+      function showError(form) {
+        return Validation.showErrors(form, 'equipmentChooser') ||
+          Validation.showErrors(form, 'equip.quantity');
+      }
+
+      function showFieldError(form, name) {
+        return Validation.showErrors(form, name);
+      }
     }
   }
 })();

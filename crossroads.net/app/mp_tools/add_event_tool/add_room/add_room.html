@@ -1,18 +1,20 @@
 <preloader full-screen ng-if="!addRoom.viewReady"> </preloader>
-<ng-form name="roomForm" ng-if="addRoom.viewReady" >
-  <div class="form-group">
-    <label>Rooms for {{addRoom.choosenSite() }}</label>
-    <div class="input-group">
-      <ui-select ng-model="addRoom.choosenRoom" name="rooms"> 
-        <ui-select-match > {{ $select.selected.Name}} </ui-select-match>
-        <ui-select-choices repeat="room in addRoom.rooms | filter: {Name: $select.search} track by room.Id">
-          <span ng-bind="room.Name | highlight: $select.search"></span>
-        </ui-select-choices>
-      </ui-select>
-      <span class="input-group-btn">
-        <button class="btn btn-standard" ng-click="addRoom.onAdd()">Add Room(s)</button>
-      </span>
-    </div>
+  <div class="form-group" ng-if="addRoom.viewReady" >
+    <span ng-show="addRoom.showNoRoomsMessage()"> There are no rooms for this site </span>
+    <span ng-hide="addRoom.showNoRoomsMessage()"> 
+      <label>Rooms for {{addRoom.choosenSite() }}</label>
+      <div class="input-group">
+        <ui-select ng-model="addRoom.choosenRoom" name="rooms" > 
+          <ui-select-match > {{ $select.selected.name}} </ui-select-match>
+          <ui-select-choices repeat="room in addRoom.rooms | filter: {name: $select.search} track by room.id">
+            <span ng-bind="room.name | highlight: $select.search"></span>
+          </ui-select-choices>
+        </ui-select>
+        <span class="input-group-btn">
+          <button class="btn btn-standard" ng-click="addRoom.onAdd()">Add Room(s)</button>
+        </span>
+      </div>
+    </span>
   </div>
 
   <!-- The rooms choosen --> 
@@ -20,4 +22,3 @@
     <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList"> </room-form>
   </span>
   
-</ng-form>

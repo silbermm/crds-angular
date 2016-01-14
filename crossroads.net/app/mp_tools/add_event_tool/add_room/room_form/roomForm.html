@@ -1,19 +1,27 @@
 <div class="event-room push-ends" class="push-bottom" style="border-bottom: 1px solid #DDD">
-  <h2> {{ room.currentRoom.Name }}  
+  <h2> {{ room.currentRoom.name }}  
     <button class="btn btn-standard" ng-click="">
       <svg viewBox="0 0 32 32" class="icon icon-trash">
         <use xlink:href="#trash"></use>
       </svg>
     </button>
   </h2>
-  <ng-form name="room.roomForm"> 
+  <ng-form name="roomForm"> 
 
-    <div class="form-group">
-      <label>Layout</label>
-      <select class="form-control" name="layout" ng-model="room.currentRoom.layout">
+    <div class="form-group" ng-class="{'has-error': room.validation.showErrors(roomForm, 'layout')}">
+      <label class="required"> Layout </label>
+      <select class="form-control"
+              name="layout" 
+              ng-model="room.currentRoom.layout" 
+              ng-options="layout.layoutName for layout in room.layouts track by layout.id"
+              required>
         <option value="">-- Choose a Layout --</option>
-        <option value="layout.Id" ng-repeat="layout in room.layouts"> {{ layout.LayoutName }} </option> 
       </select>
+      <ng-messages for="roomForm.layout.$error" ng-if="room.validation.showErrors(roomForm, 'layout')">
+        <span ng-message="required">
+          <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+        </span>
+      </ng-messages>
     </div>
 
     <div class="form-group" name="description" ng-model="room.currentRoom.description">
@@ -24,8 +32,8 @@
     <div class="form-group">
       <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden"> Make Hidden </label>
     </div>
-   
-    <equipment-form ng-show="room.equipmentLookup.length > 0" 
+
+    <equipment-form 
                     current-equipment="room.currentRoom.equipment" 
                     equipment-lookup="room.equipmentLookup"> 
     </equipment-form>

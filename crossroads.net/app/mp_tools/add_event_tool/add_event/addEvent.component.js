@@ -63,8 +63,8 @@
     }
 
     function formatContact(contact) {
-      var displayName = contact['Display Name'];
-      var email = contact.dp_RecordName;
+      var displayName = contact.displayName;
+      var email = contact.email;
       return displayName + ' - ' + email;
     }
 
