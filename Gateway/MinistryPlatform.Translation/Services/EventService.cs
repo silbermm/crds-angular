@@ -57,7 +57,7 @@ namespace MinistryPlatform.Translation.Services
         public int CreateEvent(EventReservationDto eventReservationReservation)
         {
             var token = ApiLogin();
-            var eventPageId = 308;
+            var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
 
             var eventDictionary = new Dictionary<string, object>
             {

@@ -33,7 +33,7 @@ namespace MinistryPlatform.Translation.Services
         public int CreateRoomReservation(RoomReservationDto roomReservation)
         {
             var token = ApiLogin();
-            var roomReservationPageId = 384;
+            var roomReservationPageId = _configurationWrapper.GetConfigIntValue("RoomReservationPageId");
             var reservationDictionary = new Dictionary<string, object>
             {
                 {"Event_ID", roomReservation.EventId},
@@ -87,23 +87,5 @@ namespace MinistryPlatform.Translation.Services
                 LayoutName = record.ToString("Layout_Name")
             }).ToList();
         }
-
-
-
-        //public List<Room> GetRoomsByCongregationId(int congregationId)
-        //{
-        //    var token = ApiLogin();
-        //    var search = string.Format(",,,,{0}", congregationId);
-        //    var records = _ministryPlatformService.GetPageViewRecords("RoomsByCongregationId", token, search);
-
-        //    return records.Select(record => new Room
-        //    {
-        //        BuildingId = record.ToInt("Building_ID"),
-        //        LocationId = record.ToInt("Location_ID"),
-        //        RoomId = record.ToInt("Room_ID"),
-        //        RoomName = record.ToString("Room_Name"),
-        //        RoomNumber = record.ToString("Room_Number")
-        //    }).ToList();
-        //}
     }
 }

@@ -16,8 +16,6 @@ namespace crds_angular.Services
 
         public List<RoomEquipment> GetEquipmentByLocationId(int locationId)
         {
-            //return new List<RoomEquipment>();
-
             var records = _mpEquipmentService.GetEquipmentByLocationId(locationId);
 
             return records.Select(record => new RoomEquipment
