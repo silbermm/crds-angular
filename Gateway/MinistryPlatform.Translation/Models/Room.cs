@@ -7,6 +7,9 @@
         public string RoomNumber { get; set; }
         public int BuildingId { get; set; }
         public int LocationId { get; set; }
+        public int BanquetCapacity { get; set; }
+        public string Description { get; set; }
+        public int TheaterCapacity { get; set; }
     }
 
     public class RoomLayout

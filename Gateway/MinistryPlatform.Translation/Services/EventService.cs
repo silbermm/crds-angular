@@ -9,6 +9,24 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
+    public class EventReservationDto
+    {
+        public int CongregationId { get; set; }
+        public int ContactId { get; set; }
+        public string Description { get; set; }
+        public bool DonationBatchTool { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public int EventTypeId { get; set; }
+        public string MeetingInstructions { get; set; }
+        public int MinutesSetup { get; set; }
+        public int MinutesTeardown { get; set; }
+        public int ProgramId { get; set; }
+        public int ReminderDaysId { get; set; }
+        public bool SendReminder { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public string Title { get; set; }
+    }
+
     public class EventService : BaseService, IEventService
     {
         private readonly log4net.ILog _logger =
@@ -34,6 +52,41 @@ namespace MinistryPlatform.Translation.Services
         {
             _ministryPlatformService = ministryPlatformService;
             _groupService = groupService;
+        }
+
+        public int CreateEvent(EventReservationDto eventReservationReservation)
+        {
+            var token = ApiLogin();
+            var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
+
+            var eventDictionary = new Dictionary<string, object>
+            {
+                {"Congregation_ID", eventReservationReservation.CongregationId},
+                {"Primary_Contact", eventReservationReservation.ContactId},
+                {"Description", eventReservationReservation.Description},
+                {"On_Donation_Batch_Tool", eventReservationReservation.DonationBatchTool},
+                {"Event_End_Date", eventReservationReservation.EndDateTime},
+                {"Event_Type_ID", eventReservationReservation.EventTypeId},
+                {"Meeting_Instructions", eventReservationReservation.MeetingInstructions},
+                {"Minutes_for_Setup", eventReservationReservation.MinutesSetup},
+                {"Minutes_for_Cleanup", eventReservationReservation.MinutesTeardown},
+                {"Program_ID", eventReservationReservation.ProgramId},
+                {"Reminder_Days_Prior_ID", eventReservationReservation.ReminderDaysId},
+                {"Send_Reminder", eventReservationReservation.SendReminder},
+                {"Event_Start_Date", eventReservationReservation.StartDateTime},
+                {"Event_Title", eventReservationReservation.Title}
+            };
+
+            try
+            {
+                return (_ministryPlatformService.CreateRecord(eventPageId, eventDictionary, token, true));
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error creating Event Reservation, eventReservationReservation: {0}", eventReservationReservation);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
         }
 
         public int SafeRegisterParticipant(int eventId, int participantId, int groupId = 0, int groupParticipantId = 0)

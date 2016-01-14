@@ -1,40 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using crds_angular.Models.Crossroads.Events;
 using crds_angular.Services.Interfaces;
 
 namespace crds_angular.Services
 {
-    public class EquipmentService : IEquipmentService
-    {
-        private readonly MinistryPlatform.Translation.Services.Interfaces.IEquipmentService _mpEquipmentService;
-
-        public EquipmentService(MinistryPlatform.Translation.Services.Interfaces.IEquipmentService equipmentService)
-        {
-            _mpEquipmentService = equipmentService;
-        }
-
-        public List<RoomEquipment> GetEquipmentByLocationId(int locationId)
-        {
-            //return new List<RoomEquipment>();
-
-            var records = _mpEquipmentService.GetEquipmentByLocationId(locationId);
-
-            return records.Select(record => new RoomEquipment
-            {
-                Id = record.EquipmentId,
-                Name = record.EquipmentName,
-                Quantity = record.QuantityOnHand
-            }).ToList();
-        }
-    }
-
     public class RoomService : IRoomService
     {
         private readonly MinistryPlatform.Translation.Services.Interfaces.IRoomService _roomService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEquipmentService _equipmentService;
+        private readonly MinistryPlatform.Translation.Services.Interfaces.IEventService _eventService;
 
-        public RoomService(MinistryPlatform.Translation.Services.Interfaces.IRoomService roomService)
+        public RoomService(MinistryPlatform.Translation.Services.Interfaces.IRoomService roomService,
+                           MinistryPlatform.Translation.Services.Interfaces.IEquipmentService equipmentService,
+                           MinistryPlatform.Translation.Services.Interfaces.IEventService eventService)
         {
             _roomService = roomService;
+            _equipmentService = equipmentService;
+            _eventService = eventService;
         }
 
         public List<Room> GetRoomsByLocationId(int id)
@@ -46,7 +29,10 @@ namespace crds_angular.Services
                 BuildingId = record.BuildingId,
                 Id = record.RoomId,
                 LocationId = record.LocationId,
-                Name = record.RoomName
+                Name = record.RoomName,
+                BanquetCapacity = record.BanquetCapacity,
+                Description = record.Description,
+                TheaterCapacity = record.TheaterCapacity
             }).ToList();
         }
 
@@ -60,26 +46,5 @@ namespace crds_angular.Services
                 LayoutName = record.LayoutName
             }).ToList();
         }
-    }
-
-    public class Room
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int BuildingId { get; set; }
-        public int LocationId { get; set; }
-    }
-
-    public class RoomLayout
-    {
-        public int Id { get; set; }
-        public string LayoutName { get; set; }
-    }
-
-    public class RoomEquipment
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Quantity { get; set; }
     }
 }
