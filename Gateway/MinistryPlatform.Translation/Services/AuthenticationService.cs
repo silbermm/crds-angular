@@ -43,6 +43,38 @@ namespace MinistryPlatform.Translation.Services
                 return null;
             }
         }
-
+        public static Dictionary<string, object> RefreshToken(string refreshToken)
+        {
+            var userCredentials =
+                new FormUrlEncodedContent(new Dictionary<string, string>
+                {
+                    {"refresh_token", refreshToken},
+                    {"client_id", "client"},
+                    {"client_secret", "secret"},
+                    {"grant_type", "refresh_token"}
+                });
+            var client = new HttpClient();
+            var tokenUrl = ConfigurationManager.AppSettings["TokenURL"];
+            var message = client.PostAsync(tokenUrl, userCredentials);
+            try
+            {
+                var result = message.Result.Content.ReadAsStringAsync().Result;
+                var obj = JObject.Parse(result);
+                var token = (string)obj["access_token"];
+                var exp = (string)obj["expires_in"];
+                var refreshTokenResponse = (string)obj["refresh_token"];
+                var authData = new Dictionary<string, object>
+                {
+                    {"token", token},
+                    {"exp", exp},
+                    {"refreshToken", refreshTokenResponse}
+                };
+                return authData;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
    }
 }
