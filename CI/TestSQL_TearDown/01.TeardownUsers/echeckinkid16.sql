@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where display_name = 'ECheckIn, Kid16');
+Set @contactID = (select top 1 contact_id from contacts where display_name = 'ECheckIn, Kid16');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);

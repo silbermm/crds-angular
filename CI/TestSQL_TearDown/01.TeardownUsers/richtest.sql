@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = 'rtheil+testing@crossroads.net' and last_name = 'Theil-Test');
+Set @contactID = (select top 1 contact_id from contacts where email_address = 'rtheil+testing@crossroads.net' and last_name = 'Theil-Test');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -120,5 +120,5 @@ delete from dp_user_roles where user_id = (select user_id from dp_users where us
 delete from dp_users where user_email = 'rtheil+testing@crossroads.net';
 
 --Delete Rich's old contact record
-DELETE FROM [dbo].Contacts where email_address = 'rtheil+testing@crossroads.net' and last_name = 'Theil-Test';
+DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where email_address = 'rtheil+testing@crossroads.net' and last_name = 'Theil-Test');
 GO

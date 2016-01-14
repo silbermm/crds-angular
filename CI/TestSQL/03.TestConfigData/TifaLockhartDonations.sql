@@ -1,3 +1,6 @@
+USE [MinistryPlatform]
+GO
+
 --Tifa Lockhart Donations
 --Note Donations need to be added  in order by Donation_Date
 --Add a donation from last year for Tifa
