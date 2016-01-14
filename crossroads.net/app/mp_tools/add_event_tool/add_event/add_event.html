@@ -24,9 +24,9 @@
           <select class="form-control" 
                   name="eventType"
                   required 
-                  ng-model="evt.eventData.eventType">
+                  ng-model="evt.eventData.eventType"
+                  ng-options="type.dp_RecordName for type in evt.eventTypes track by type.dp_RecordID">
             <option value=''>-- Choose an EventType -- </option>
-            <option ng-value="type.dp_RecordID" ng-repeat="type in evt.eventTypes"> {{type.dp_RecordName}} </option>
           </select>
           <ng-messages for="eventForm.eventType.$error" ng-if="evt.validation.showErrors(eventForm, 'eventType')">
             <span ng-message="required">
@@ -44,7 +44,7 @@
                   name="congregation"
                   required
                   ng-model="evt.eventData.congregation"
-                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations">
+                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID">
             <option value=''>-- Choose a Congregation --</option>
           </select>
           <ng-messages for="eventForm.congregation.$error" ng-if="evt.validation.showErrors(eventForm, 'congregation')">
@@ -69,9 +69,9 @@
       <select class="form-control"
               name="program"
               ng-model="evt.eventData.program"
-              required>
+              required
+              ng-options="program.Name for program in evt.programs track by program.ProgramId">
         <option value="">-- Choose a Program --</option>
-        <option ng-value="program.ProgramId" ng-repeat="program in evt.programs"> {{program.Name}} </option>
       </select>
       <ng-messages for="eventForm.program.$error" ng-if="evt.validation.showErrors(eventForm, 'program')">
         <span ng-message="required">
@@ -84,9 +84,10 @@
       <select class="form-control"
               name="primaryContact"
               ng-model="evt.eventData.primaryContact"
-              required >
+              required 
+              ng-options="evt.formatContact(contact) for contact in evt.staffContacts track by contact['Contact ID']">
         <option value="">-- Choose a Primary Contact</option>
-        <option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>
+        <!--<option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>-->
       </select>
       <ng-messages for="eventForm.primaryContact.$error" ng-if="evt.validation.showErrors(eventForm, 'primaryContact')">
         <span ng-message="required">

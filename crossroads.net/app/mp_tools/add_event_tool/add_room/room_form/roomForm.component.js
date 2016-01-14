@@ -10,7 +10,8 @@
       restrict: 'E',
       scope: {
         currentRoom: '=',
-        layouts: '='
+        layouts: '=',
+        equipmentLookup: '='
       },
       templateUrl: 'room_form/roomForm.html',
       bindToController: true,
@@ -25,13 +26,11 @@
       ////////////////////
 
       function activate() {
+
         if (vm.currentRoom.equipment === undefined) {
           vm.currentRoom.equipment = [];
         }
       }
-
-      
-
 
     }
   }

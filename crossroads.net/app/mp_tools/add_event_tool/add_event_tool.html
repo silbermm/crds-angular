@@ -7,7 +7,7 @@
 
   <div class="col-md-6 col-md-offset-3">
     <h1>Create Event</h1>
-    <form name="addEvent.allData" ng-submit="addEvent.submit()" novalidate>
+    <form name="addEvent.allData"  novalidate>
 
       <add-event ng-if="addEvent.currentPage() == 1" event-data='addEvent.event'> </add-event> 
       <add-room ng-if="addEvent.currentPage() == 2"  room-data='addEvent.rooms'> </add-room>
@@ -19,6 +19,8 @@
         Next 
       </button>
 
+      <button type="input" class="btn btn-primary pull-right" ng-click="addEvent.submit()" ng-show="addEvent.currentPage() == 2">Save</button>
+      
       <button class="btn btn-standard pull-right" ng-click="addEvent.back()" ng-show="addEvent.currentPage() == 2">
         <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
           <use xlink:href="#arrow-left9"></use>
@@ -26,7 +28,6 @@
         Back
       </button>
 
-      <button type="input" class="btn btn-primary pull-right" ng-show="addEvent.currentPage() == 2">Save</button>
 
     </form>
   </div>

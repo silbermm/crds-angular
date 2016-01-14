@@ -11,15 +11,18 @@
         <tbody> 
           <tr ng-repeat="equip in equipment.currentEquipment">
             <td>
-              <select class="form-control">
-                <option>ng-repeat</option>
+              <select class="form-control" 
+                      name="equipmentChooser" 
+                      ng-model="equip.equipment"
+                      ng-options="e.Name for e in equipment.equipmentLookup track by e.Id" 
+                      >
               </select>
             </td>
             <td>
-              <input type="tel" class="form-control">
+              <input type="number" class="form-control" name="equip.quantity">
             </td>
             <td>
-              10
+              {{ equip.equipment.Quantity }} 
             </td>
             <td>
               <button class="btn btn-standard">

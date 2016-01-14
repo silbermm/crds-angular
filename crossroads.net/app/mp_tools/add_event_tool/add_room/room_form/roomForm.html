@@ -25,7 +25,10 @@
       <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden"> Make Hidden </label>
     </div>
    
-    <equipment-form current-equipment="room.currentRoom.equipment"> </equipment-form>
+    <equipment-form ng-show="room.equipmentLookup.length > 0" 
+                    current-equipment="room.currentRoom.equipment" 
+                    equipment-lookup="room.equipmentLookup"> 
+    </equipment-form>
   
   </ng-form>
 </div>

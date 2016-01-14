@@ -15,10 +15,4 @@
   // the addRoom component
   require('./add_room');
 
-  // the room form 
-  require('./room_form');
-
-  // the equipment form
-  require('./equipment_form');
-
 })();

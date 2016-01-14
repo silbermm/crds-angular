@@ -9,7 +9,8 @@
     return {
       restrict: 'E',
       scope: {
-        currentEquipment: '='
+        currentEquipment: '=',
+        equipmentLookup: '='
       },
       controller: EquipmentController,
       controllerAs: 'equipment',

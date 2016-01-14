@@ -20,7 +20,8 @@
     function AddRoomController() {
       var vm = this;
       vm.choosenSite = choosenSite;
-      vm.layouts = Room.Layouts.query(); 
+      vm.equipmentList = [];
+      vm.layouts = Room.Layouts.query();
       vm.onAdd = onAdd;
       vm.viewReady = false;
 
@@ -30,10 +31,14 @@
 
       function activate() {
         if (AddEvent.eventData.event.congregation !== undefined) {
-          Room.ByCongregation.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data) {
+          Room.ByCongregation.query({
+            congregationId: AddEvent.eventData.event.congregation.dp_RecordID
+          }, function(data) {
             vm.rooms = data;
             vm.viewReady = true;
           });
+
+          vm.equipmentList = Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID});
           return;
         }
 
