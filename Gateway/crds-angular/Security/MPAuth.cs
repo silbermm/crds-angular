@@ -48,19 +48,19 @@ namespace crds_angular.Security
             try
             {
                 var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
-                var refreshToken = Request.Headers.GetValues("RefreshToken").FirstOrDefault();
+                //var refreshToken = Request.Headers.GetValues("RefreshToken").FirstOrDefault();
 
-                var authData = AuthenticationService.RefreshToken(refreshToken);
-                var sessionCookie = new CookieHeaderValue("sessionId", authData["token"].ToString());
-                var refreshCookie = new CookieHeaderValue("refreshToken", authData["refreshToken"].ToString());
-                var testCookie = new CookieHeaderValue("dan", "wins");
-                var cookies = new List<CookieHeaderValue>();
-                testCookie.Domain = "localhost";
-                testCookie.Expires = DateTimeOffset.Now.AddDays(1);
-                testCookie.Path = "/";
-                cookies.Add(sessionCookie);
-                cookies.Add(refreshCookie);
-                cookies.Add(testCookie);
+                //var authData = AuthenticationService.RefreshToken(refreshToken);
+                //var sessionCookie = new CookieHeaderValue("sessionId", authData["token"].ToString());
+                //var refreshCookie = new CookieHeaderValue("refreshToken", authData["refreshToken"].ToString());
+                //var testCookie = new CookieHeaderValue("dan", "wins");
+                //var cookies = new List<CookieHeaderValue>();
+                //testCookie.Domain = "localhost";
+                //testCookie.Expires = DateTimeOffset.Now.AddDays(1);
+                //testCookie.Path = "/";
+                //cookies.Add(sessionCookie);
+                //cookies.Add(refreshCookie);
+                //cookies.Add(testCookie);
                 //cookie.Expires = DateTimeOffset.Now.AddDays(1);
                 //cookie.Domain = Request.RequestUri.Host;
                 //cookie.Path = "/";
@@ -69,8 +69,10 @@ namespace crds_angular.Security
                 //var newrefreshToken = authData["refreshToken"].ToString();
                 if (authorized != null && (authorized != "null" || authorized != ""))
                 {
-                    var result = new CookieResult(cookies, actionWhenAuthorized(authorized));
-                    return result;
+                    //var result = new CookieResult(cookies, actionWhenAuthorized(authorized));
+                    //return result;
+
+                    return actionWhenAuthorized(authorized);
                 }
                 else
                 {
