@@ -5,24 +5,15 @@ using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Models;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class RoomReservationDto
-    {
-        public int EventId { get; set; }
-        public int RoomId { get; set; }
-        public int RoomLayoutId { get; set; }
-        public string Notes { get; set; }
-        public bool Hidden { get; set; }
-        public bool Cancelled { get; set; }
-        public bool Approved { get; set; }
-    }
     public class RoomService : BaseService, IRoomService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(RoomService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof (RoomService));
 
         public RoomService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configuration)
             : base(authenticationService, configuration)
@@ -47,7 +38,7 @@ namespace MinistryPlatform.Translation.Services
 
             try
             {
-                return (_ministryPlatformService.CreateRecord(roomReservationPageId, reservationDictionary, token,true));
+                return (_ministryPlatformService.CreateRecord(roomReservationPageId, reservationDictionary, token, true));
             }
             catch (Exception e)
             {

@@ -5,28 +5,11 @@ using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class EventReservationDto
-    {
-        public int CongregationId { get; set; }
-        public int ContactId { get; set; }
-        public string Description { get; set; }
-        public bool DonationBatchTool { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public int EventTypeId { get; set; }
-        public string MeetingInstructions { get; set; }
-        public int MinutesSetup { get; set; }
-        public int MinutesTeardown { get; set; }
-        public int ProgramId { get; set; }
-        public int? ReminderDaysId { get; set; }
-        public bool SendReminder { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public string Title { get; set; }
-    }
-
     public class EventService : BaseService, IEventService
     {
         private readonly log4net.ILog _logger =
@@ -289,10 +272,10 @@ namespace MinistryPlatform.Translation.Services
         {
             return _ministryPlatformService.GetRecordsDict(pageViewId, token).Select(record => new Event()
             {
-                EventId = (int)record["Event_ID"],
-                EventTitle = (string)record["Event_Title"],
-                EventStartDate = (DateTime)record["Event_Start_Date"],
-                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventId = (int) record["Event_ID"],
+                EventTitle = (string) record["Event_Title"],
+                EventStartDate = (DateTime) record["Event_Start_Date"],
+                EventEndDate = (DateTime) record["Event_End_Date"],
                 EventType = record.ToString("Event_Type"),
                 PrimaryContact = new Contact()
                 {
@@ -304,16 +287,17 @@ namespace MinistryPlatform.Translation.Services
 
         public IEnumerable<MinistryPlatform.Translation.Models.People.Participant> EventParticipants(string token, int eventId)
         {
-
-            return _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token).Select(person => new MinistryPlatform.Translation.Models.People.Participant()
-            {
-                ParticipantId = person.ToInt("Participant_ID"),
-                ContactId = person.ToInt("Contact_ID"),
-                EmailAddress = person.ToString("Email_Address"),
-                DisplayName = person.ToString("Display_Name"),
-                Nickname = person.ToString("Nickname"),
-                GroupName = person.ToString("Group_Name")           
-            });
+            return
+                _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token)
+                    .Select(person => new MinistryPlatform.Translation.Models.People.Participant()
+                    {
+                        ParticipantId = person.ToInt("Participant_ID"),
+                        ContactId = person.ToInt("Contact_ID"),
+                        EmailAddress = person.ToString("Email_Address"),
+                        DisplayName = person.ToString("Display_Name"),
+                        Nickname = person.ToString("Nickname"),
+                        GroupName = person.ToString("Group_Name")
+                    });
         }
 
         public void SetReminderFlag(int eventId, string token)

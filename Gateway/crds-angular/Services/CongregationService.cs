@@ -47,15 +47,15 @@ namespace crds_angular.Services
             return rooms;
         }
 
-        public List<RoomEquipment> GetEquipments(int congregationId)
+        public List<RoomEquipment> GetEquipment(int congregationId)
         {
             var congregation = _congregationService.GetCongregationById(congregationId);
             if (congregation == null)
             {
                 throw new ApplicationException("Congregation Not Found");
             }
-            var equipments = _equipmentService.GetEquipmentByLocationId(congregation.LocationId);
-            return equipments;
+            var equipment = _equipmentService.GetEquipmentByLocationId(congregation.LocationId);
+            return equipment;
         }
     }
 }

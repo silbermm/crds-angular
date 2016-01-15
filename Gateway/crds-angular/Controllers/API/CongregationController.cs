@@ -71,8 +71,8 @@ namespace crds_angular.Controllers.API
             {
                 try
                 {
-                    var equipments = _congregationService.GetEquipments(id);
-                    return Ok(equipments);
+                    var equipment = _congregationService.GetEquipment(id);
+                    return Ok(equipment);
                 }
                 catch (Exception e)
                 {

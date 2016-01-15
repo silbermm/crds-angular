@@ -7,6 +7,7 @@ using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
 using log4net;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Models.People;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
