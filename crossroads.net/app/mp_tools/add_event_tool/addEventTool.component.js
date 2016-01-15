@@ -85,8 +85,8 @@
 
         if (vm.allData.$valid) {
           // build the dto...
-          var equipment = AddEvent.getEventDto(AddEvent.eventData);
-          EventService.create.save(equipment, function(result) {
+          var event = AddEvent.getEventDto(AddEvent.eventData);
+          EventService.create.save(event, function(result) {
             $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
             AddEvent.currentPage = 1;
             AddEvent.eventData = {};

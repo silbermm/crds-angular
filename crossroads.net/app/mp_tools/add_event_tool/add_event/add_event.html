@@ -39,13 +39,13 @@
       <!-- Congregation -->
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'congregation')}">
-          <label class="required">Site</label>
+          <label class="required">Site (Congregation)</label>
           <select class="form-control"
                   name="congregation"
                   required
                   ng-model="evt.eventData.congregation"
                   ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID">
-            <option value=''>-- Choose a Congregation --</option>
+            <option value=''>-- Choose a Site --</option>
           </select>
           <ng-messages for="eventForm.congregation.$error" ng-if="evt.validation.showErrors(eventForm, 'congregation')">
             <span ng-message="required">
@@ -210,18 +210,18 @@
     </div>
     <div class="form-group">
       <label>
-        <input type="checkbox" name="sendReminder" ng-model="evt.eventData.sendReminder"> Send Reminder
+        <input type="checkbox" name="sendReminder" ng-model="evt.eventData.sendReminder"> Send Participants a Reminder
       </label>
     </div>
 
-    <div class="form-group " ng-class="{'has-error': evt.validation.showErrors(eventForm, 'reminderDays')}">
+    <div class="form-group " ng-class="{'has-error': evt.validation.showErrors(eventForm, 'reminderDays')}" ng-show="evt.eventData.sendReminder == 1" >
       <label ng-class="{'required': evt.eventData.sendReminder == 1}" >Reminder Days</label>
       <select class="form-control" 
               name="reminderDays"
               ng-model="evt.eventData.reminderDays"
-              ng-required="evt.eventData.sendReminder == 1">
-        <option>-- Choose days out to remind --</option>
-        <option ng-value="days.dp_RecordID" ng-repeat="days in evt.reminderDays"> {{days.dp_RecordName}} </option>
+              ng-required="evt.eventData.sendReminder == 1"
+              ng-options="days.dp_RecordName for days in evt.reminderDays track by days.dp_RecordID" >
+        <option value="">-- Choose days out to remind --</option>
       </select>
       <ng-messages for="eventForm.reminderDays.$error" ng-if="evt.validation.showErrors(eventForm, 'reminderDays')">
         <span ng-message="required">

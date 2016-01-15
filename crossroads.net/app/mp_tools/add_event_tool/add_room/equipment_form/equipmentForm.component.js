@@ -37,7 +37,7 @@
 
       function remove(idx) {
         if(vm.currentEquipment[idx] !== undefined) {
-          
+          vm.currentEquipment.splice(idx, 1);   
         }
       }
 

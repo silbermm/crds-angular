@@ -46,7 +46,7 @@
     function getEquipmentDto(equipment) {
       return {
         equipmentId: equipment.name.id,
-        quantityReserved: equipment.choosenQuantity
+        quantityRequested: equipment.choosenQuantity
       };
     }
 
