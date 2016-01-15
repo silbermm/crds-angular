@@ -75,7 +75,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
-                    participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
+                    participant.OpportunitySignUpDeadline = (SafeInt32(reader, "Sign_Up_Deadline") ?? 0);
                     participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? defaultDeadlinePassedMessage);
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
