@@ -78,7 +78,7 @@
 
       <div class="form-group col-sm-6" ng-if="profile.allowPasswordChange">
         <label for="password">Change Password</label>
-        <password-field passwd="fields.password"
+        <password-field passwd="profile.password"
                         submitted="profile.pform.$submitted"
                         prefix="change"
                         passwd-strength="true">

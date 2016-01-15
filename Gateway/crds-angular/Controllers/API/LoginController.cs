@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
+using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services;
@@ -69,7 +70,7 @@ namespace crds_angular.Controllers.API
             }
         }
 
-        [ResponseType(typeof(LoginReturn))]
+        [ResponseType(typeof (LoginReturn))]
         [HttpGet]
         [Route("api/authenticated")]
         public IHttpActionResult isAuthenticated()
@@ -92,16 +93,16 @@ namespace crds_angular.Controllers.API
                         return this.Ok(l);
                     }
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     return this.Unauthorized();
                 }
             });
         }
 
-        
-        [ResponseType(typeof(LoginReturn))]
-        public IHttpActionResult Post([FromBody]Credentials cred)
+
+        [ResponseType(typeof (LoginReturn))]
+        public IHttpActionResult Post([FromBody] Credentials cred)
         {
             try
             {
@@ -139,6 +140,35 @@ namespace crds_angular.Controllers.API
                 var apiError = new ApiErrorDto("Login Failed", e);
                 throw new HttpResponseException(apiError.HttpResponseMessage);
             }
+        }
+
+        [HttpPost]
+        [Route("api/verifycredentials")]
+        public IHttpActionResult VerifyCredentials([FromBody] Credentials cred)
+        {
+            return Authorized(token =>
+            {
+                try
+                {
+                    var authData = TranslationService.Login(cred.username, cred.password);
+
+                    // if the username or password is wrong, auth data will be null
+                    if (authData == null)
+                    {
+                        return this.Unauthorized();
+                    }
+                    else
+                    {
+                        return this.Ok();
+                    } 
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Verify Credentials Failed", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+
         }
     }
 
