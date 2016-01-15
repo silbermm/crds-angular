@@ -3,7 +3,7 @@ GO
 
 declare @toolids table (id int);
 declare @ToolName varchar(30) = 'Create Event';
-declare @LaunchPage varchar(100) = 'https://demo.crossroads.net/mptools/create-event';
+declare @LaunchPage varchar(100) = 'CRDStools/create-event';
 declare @Description varchar(50) = 'Create an Event and associate Rooms and Equipment';
 declare @ToolId int;
 
