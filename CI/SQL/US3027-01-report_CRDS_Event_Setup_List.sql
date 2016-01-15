@@ -21,8 +21,8 @@ GO
 
 ALTER PROCEDURE [dbo].[report_CRDS_Event_Setup_List]
 -- Add the parameters for the stored procedure here
-      --@DomainID             VARCHAR(40) = '0FDE7F32-37E3-4E0B-B020-622E0EBD6BF0'  -- = Domain 1
-@UserID              VARCHAR(40)
+      @DomainID             VARCHAR(40) = '0FDE7F32-37E3-4E0B-B020-622E0EBD6BF0'  -- = Domain 1
+,@UserID              VARCHAR(40)
 ,@PageID              INT
 ,@BeginDate           DATETIME 
 ,@EndDate             DATETIME 
