@@ -18,24 +18,8 @@
           contactId: eventData.event.primaryContact.contactId,
           description: eventData.event.description,
           donationBatchTool: (eventData.event.donationBatchTool) ? eventData.event.donationBatchTool : false,
-          endDateTime: new Date(
-            eventData.event.endDate.getFullYear(),
-            eventData.event.endDate.getMonth(),
-            eventData.event.endDate.getDay(),
-            eventData.event.endTime.getHours(),
-            eventData.event.endTime.getMinutes(),
-            eventData.event.endTime.getSeconds(),
-            eventData.event.endTime.getMilliseconds()
-          ),
-          startDateTime: new Date(
-            eventData.event.startDate.getFullYear(),
-            eventData.event.startDate.getMonth(),
-            eventData.event.startDate.getDay(),
-            eventData.event.startTime.getHours(),
-            eventData.event.startTime.getMinutes(),
-            eventData.event.startTime.getSeconds(),
-            eventData.event.startTime.getMilliseconds()
-          ),
+          endDateTime: dateTime(eventData.event.endDate, eventData.event.endTime),
+          startDateTime: dateTime(eventData.event.startDate, eventData.event.startTime),
           meetingInstructions: eventData.event.meetingInstructions,
           eventTypeId: eventData.event.eventType.dp_RecordID,
           minutesSetup: eventData.event.minutesSetup,
@@ -64,6 +48,17 @@
         equipmentId: equipment.name.id,
         quantityReserved: equipment.choosenQuantity
       };
+    }
+
+    function dateTime(dateForDate, dateForTime) {
+      return new Date(
+          dateForDate.getFullYear(),
+          dateForDate.getMonth(),
+          dateForDate.getDate(),
+          dateForTime.getHours(),
+          dateForTime.getMinutes(),
+          dateForTime.getSeconds(),
+          dateForTime.getMilliseconds());
     }
 
     return obj;
