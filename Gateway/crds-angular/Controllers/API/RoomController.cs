@@ -35,26 +35,5 @@ namespace crds_angular.Controllers.API
                 }
             });
         }
-
-        //[Route("api/room/location/{locationId}")]
-        //public IHttpActionResult GetRoomByLocationId(int locationId)
-        //{
-        //    return Authorized(t =>
-        //    {
-        //        try
-        //        {
-        //            var rooms = _roomService.GetRoomsByLocationId(locationId);
-
-        //            return Ok(rooms);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            var msg = "Error getting Rooms by Location " + locationId;
-        //            logger.Error(msg, e);
-        //            var apiError = new ApiErrorDto(msg, e);
-        //            throw new HttpResponseException(apiError.HttpResponseMessage);
-        //        }
-        //    });
-        //}
     }
 }

@@ -19,7 +19,7 @@ namespace MinistryPlatform.Translation.Services
         public Congregation GetCongregationById(int id)
         {
             var token = ApiLogin();
-            var pageId = 466; //move to config   **************Andy will catch this!!!!! ************************
+            var pageId = _configurationWrapper.GetConfigIntValue("CrossroadsLocations");
             Dictionary<string, object> recordDict;
             try
             {

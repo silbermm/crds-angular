@@ -4,7 +4,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
 using crds_angular.Models.Crossroads.Events;
-using crds_angular.Models.Crossroads.Groups;
 using crds_angular.Security;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IEventService = crds_angular.Services.Interfaces.IEventService;
@@ -24,7 +23,7 @@ namespace crds_angular.Controllers.API
 
         [AcceptVerbs("GET")]
         [Route("api/eventTool")]
-        [ResponseType(typeof(EventToolDto))]
+        [ResponseType(typeof (EventToolDto))]
         public IHttpActionResult Get()
         {
             var room = new EventRoomDto();
@@ -33,7 +32,6 @@ namespace crds_angular.Controllers.API
             room.Equipment.Add(equipment);
             retVal.Rooms.Add(room);
             return Ok(retVal);
-
         }
 
         [AcceptVerbs("POST")]
