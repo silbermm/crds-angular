@@ -51,7 +51,7 @@ namespace crds_angular.Models.Crossroads.Events
         public int ProgramId { get; set; }
 
         [JsonProperty(PropertyName = "reminderDaysId")]
-        public int ReminderDaysId { get; set; }
+        public int? ReminderDaysId { get; set; }
 
         [JsonProperty(PropertyName = "rooms")]
         public List<EventRoomDto> Rooms { get; set; }
@@ -60,9 +60,9 @@ namespace crds_angular.Models.Crossroads.Events
         [Required]
         public bool SendReminder { get; set; }
 
-        [JsonProperty(PropertyName = "statDateTime")]
+        [JsonProperty(PropertyName = "startDateTime")]
         [Required]
-        public DateTime StatDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
 
         [JsonProperty(PropertyName = "title")]
         [Required]
