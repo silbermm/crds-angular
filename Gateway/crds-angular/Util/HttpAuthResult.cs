@@ -29,6 +29,7 @@ namespace crds_angular.Util
             return Task.Run(() =>
             {
                 var response = _result.ExecuteAsync(cancellationToken).Result;
+                response.Headers.Add("Access-Control-Expose-Headers", "sessionId, refreshToken");
                 response.Headers.Add("sessionId", _token);
                 response.Headers.Add("refreshToken", _token);
                 return response;

@@ -53,10 +53,13 @@ namespace crds_angular.Security
                 if (Request.Headers.TryGetValues("RefreshToken", out refreshTokens))
                 {
                     var authData = AuthenticationService.RefreshToken(refreshTokens.FirstOrDefault());
-                    authorized = authData["token"].ToString();
-                    var refreshToken = authData["refreshToken"].ToString();
-                    var result = new HttpAuthResult(actionWhenAuthorized(authorized), authorized, refreshToken);
-                    return result;
+                    if (authData != null)
+                    {
+                        authorized = authData["token"].ToString();
+                        var refreshToken = authData["refreshToken"].ToString();
+                        var result = new HttpAuthResult(actionWhenAuthorized(authorized), authorized, refreshToken);
+                        return result;
+                    }
                 }
 
                 authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();   
