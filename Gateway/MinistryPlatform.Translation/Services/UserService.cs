@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -59,6 +60,20 @@ namespace MinistryPlatform.Translation.Services
             };
 
             return (user);
+        }
+
+        public List<RoleDto> GetUserRoles(int userId)
+        {
+            var records = _ministryPlatformService.GetSubpageViewRecords("User_Roles_With_ID", userId, ApiLogin());
+            if (records == null || !records.Any())
+            {
+                return (null);
+            }
+
+            return records.Select(record => new RoleDto
+            {
+                Id = record.ToInt("Role_ID"), Name = record.ToString("Role_Name")
+            }).ToList();
         }
 
         public void UpdateUser(Dictionary<string, object> userUpdateValues)
