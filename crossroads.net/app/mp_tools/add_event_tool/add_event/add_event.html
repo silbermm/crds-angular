@@ -5,7 +5,7 @@
       <label class="required" >Event Title</label>
       <input type="text"
              name="eventTitle"
-             class="form-control" 
+             class="form-control"
              ng-model="evt.eventData.eventTitle"
              required>
       <ng-messages for="eventForm.eventTitle.$error" ng-if="evt.validation.showErrors(eventForm, 'eventTitle')">
@@ -21,9 +21,9 @@
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'eventType')}">
           <label class="required">Event Type</label>
-          <select class="form-control" 
+          <select class="form-control"
                   name="eventType"
-                  required 
+                  required
                   ng-model="evt.eventData.eventType"
                   ng-options="type.dp_RecordName for type in evt.eventTypes track by type.dp_RecordID">
             <option value=''>-- Choose an EventType -- </option>
@@ -84,10 +84,9 @@
       <select class="form-control"
               name="primaryContact"
               ng-model="evt.eventData.primaryContact"
-              required 
+              required
               ng-options="evt.formatContact(contact) for contact in evt.staffContacts track by contact.contactId">
         <option value="">-- Choose a Primary Contact</option>
-        <!--<option ng-value="contact['Contact ID']" ng-repeat="contact in evt.staffContacts">{{ evt.formatContact(contact) }} </option>-->
       </select>
       <ng-messages for="eventForm.primaryContact.$error" ng-if="evt.validation.showErrors(eventForm, 'primaryContact')">
         <span ng-message="required">
@@ -99,8 +98,8 @@
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'minutesSetup')}">
           <label class="required">Minutes for Setup</label>
-          <input type="number" 
-                 class="form-control" 
+          <input type="number"
+                 class="form-control"
                  name="minutesSetup"
                  ng-model="evt.eventData.minutesSetup"
                  required
@@ -119,8 +118,8 @@
       <div class="col-md-6" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'minutesCleanup')}">
         <div class="form-group">
           <label class="required">Minutes for Cleanup</label>
-          <input type="number" 
-                 class="form-control" 
+          <input type="number"
+                 class="form-control"
                  name="minutesCleanup"
                  ng-model="evt.eventData.minutesCleanup"
                  required>
@@ -141,20 +140,20 @@
         <div class="form-group well" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'startDate')}">
           <label class="required">Start Date and Time</label>
           <p class="input-group">
-            <input type="text" 
-                   class="form-control" 
+            <input type="text"
+                   class="form-control"
                    name="startDate"
-                   datepicker-popup="MM/dd/yyyy" 
-                   ng-model="evt.eventData.startDate" 
-                   is-open="evt.startDateOpened" 
-                   ng-required="true" 
+                   datepicker-popup="MM/dd/yyyy"
+                   ng-model="evt.eventData.startDate"
+                   is-open="evt.startDateOpened"
+                   ng-required="true"
                    close-text="Close" />
             <span class="input-group-btn">
-              <button type="button" 
-                      class="btn btn-default" 
+              <button type="button"
+                      class="btn btn-default"
                       ng-click="evt.startDateOpen($event)">
                 <i class="glyphicon glyphicon-calendar"></i>
-              </button> 
+              </button>
             </span>
           </p>
           <ng-messages for="eventForm.startDate.$error" ng-if="evt.validation.showErrors(eventForm, 'startDate')">
@@ -175,7 +174,7 @@
           <label class="required">End Date and Time</label>
           <p class="input-group">
             <input type="text"
-                   class="form-control" 
+                   class="form-control"
                    name="endDate"
                    datepicker-popup="MM/dd/yyyy"
                    ng-model="evt.eventData.endDate"
@@ -183,11 +182,11 @@
                    ng-required="true"
                    close-text="Close" />
             <span class="input-group-btn">
-              <button type="button" 
-                      class="btn btn-default" 
+              <button type="button"
+                      class="btn btn-default"
                       ng-click="evt.endDateOpen($event)">
                 <i class="glyphicon glyphicon-calendar"></i>
-              </button> 
+              </button>
             </span>
           </p>
           <ng-messages for="eventForm.endDate.$error" ng-if="evt.validation.showErrors(eventForm, 'endDate')">
@@ -216,7 +215,7 @@
 
     <div class="form-group " ng-class="{'has-error': evt.validation.showErrors(eventForm, 'reminderDays')}">
       <label ng-class="{'required': evt.eventData.sendReminder == 1}" >Reminder Days</label>
-      <select class="form-control" 
+      <select class="form-control"
               name="reminderDays"
               ng-model="evt.eventData.reminderDays"
               ng-required="evt.eventData.sendReminder == 1">
