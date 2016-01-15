@@ -17,6 +17,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         Event GetEvent(int eventId);
         List<Event> GetEventsByParentEventId(int parentEventId);
         IEnumerable<Event> EventsByPageId(string token, int pageViewId);
+        IEnumerable<Event> EventsByPageViewId(string token, int pageViewId, string search);
         IEnumerable<Participant> EventParticipants(string token, int eventId);
         void SetReminderFlag(int eventId, string token);
     }

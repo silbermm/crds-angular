@@ -154,6 +154,7 @@ namespace MinistryPlatform.Translation.Services
                 FromContact = new Contact {ContactId = fromContactId, EmailAddress = fromEmailAddress},
                 ReplyToContact = new Contact {ContactId = replyContactId, EmailAddress = replyEmailAddress},
                 ToContacts = new List<Contact>{ new Contact{ContactId = toContactId, EmailAddress = toEmailAddress}},
+                TemplateId = templateId,
                 MergeData = mergeData
             };
         }

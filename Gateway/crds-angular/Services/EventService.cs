@@ -110,6 +110,26 @@ namespace crds_angular.Services
             }
         }
 
+        public IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token)
+        {
+            var pageViewId = AppSetting("EventsReadyForPrimaryContactReminder");
+            var search = ", sandi";
+            var events = _eventService.EventsByPageViewId(token, pageViewId, search);
+            var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
+            {
+                name = evt.EventTitle,
+                EventId = evt.EventId,
+                EndDate = evt.EventEndDate,
+                StartDate = evt.EventStartDate,
+                EventType = evt.EventType,
+                location = evt.EventLocation,
+                PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
+                PrimaryContactId = evt.PrimaryContact.ContactId
+            });
+            
+            return eventList.ToList();
+        }
+
         public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
         {
             var pageId = AppSetting("EventsReadyForReminder");
@@ -153,6 +173,18 @@ namespace crds_angular.Services
             });
         }
 
+        public void SendPrimaryContactReminderEmails()
+        {
+            var token = _apiUserService.GetToken();
+            var eventList = EventsReadyForPrimaryContactReminder(token);
+
+            eventList.ForEach(evt =>
+            {
+                SendPrimaryContactReminderEmail(evt, token);
+
+            });
+        }
+
         private void SendEventReminderEmail(Models.Crossroads.Events.Event evt, Participant participant, Event childcareEvent, IList<Participant> children, string token)
         {
             var mergeData = new Dictionary<string, object>
@@ -189,6 +221,29 @@ namespace crds_angular.Services
                participant.ContactId,
                participant.EmailAddress,
                mergeData );
+            _communicationService.SendMessage(comm);
+        }
+
+        private void SendPrimaryContactReminderEmail(Models.Crossroads.Events.Event evt, string token)
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Event_ID", evt.EventId},
+                {"Event_Title", evt.name},
+                {"Event_Start_Date", evt.StartDate.ToShortDateString()},
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()}               
+            };
+           
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
+            var comm = _communicationService.GetTemplateAsCommunication(
+               AppSetting("EventPrimaryContactReminderTemplateId"),
+               defaultContact.Contact_ID,
+               defaultContact.Email_Address,
+               evt.PrimaryContactId,
+               evt.PrimaryContactEmailAddress,
+               evt.PrimaryContactId,
+               evt.PrimaryContactEmailAddress,               
+               mergeData);
             _communicationService.SendMessage(comm);
         }
 
