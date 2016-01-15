@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = display_name = 'ECheckIn, Kid5');
+Set @contactID = (select contact_id from contacts where display_name = 'ECheckIn, Kid5');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -20,7 +20,7 @@ set @donorID = (select donor_record from contacts where contact_id = @contactID)
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
 SET Household_ID = null, Participant_Record = null, User_Account = null, Donor_record = null
-WHERE email_address = display_name = 'ECheckIn, Kid5';
+WHERE display_name = 'ECheckIn, Kid5';
 
 --Delete the address if it exists.
 IF  (select address_id from households where Household_ID = @houseHoldID) is not Null
@@ -87,5 +87,5 @@ delete from [dbo].contact_relationships where contact_id = @contactID;
 delete from [dbo].contact_relationships where related_contact_id = @contactID;
 
 --Delete EcheckInHusband's old contact record
-DELETE FROM [dbo].Contacts where email_address = display_name = 'ECheckIn, Kid5';
+DELETE FROM [dbo].Contacts where display_name = 'ECheckIn, Kid5';
 GO

@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where display_name = 'ECheckIn, Kid2');
+Set @contactID = (select top 1 contact_id from contacts where display_name = 'ECheckIn, Kid2');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -88,5 +88,5 @@ delete from [dbo].contact_relationships where related_contact_id = @contactID;
 GO
 
 --Delete EcheckInHusband's old contact record
-DELETE FROM [dbo].Contacts where display_name = 'ECheckIn, Kid2';
+DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where display_name = 'ECheckIn, Kid2');
 GO
