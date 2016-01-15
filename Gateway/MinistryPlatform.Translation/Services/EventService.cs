@@ -5,6 +5,7 @@ using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Models;
 using MinistryPlatform.Translation.Extensions;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
@@ -34,6 +35,41 @@ namespace MinistryPlatform.Translation.Services
         {
             _ministryPlatformService = ministryPlatformService;
             _groupService = groupService;
+        }
+
+        public int CreateEvent(EventReservationDto eventReservationReservation)
+        {
+            var token = ApiLogin();
+            var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
+
+            var eventDictionary = new Dictionary<string, object>
+            {
+                {"Congregation_ID", eventReservationReservation.CongregationId},
+                {"Primary_Contact", eventReservationReservation.ContactId},
+                {"Description", eventReservationReservation.Description},
+                {"On_Donation_Batch_Tool", eventReservationReservation.DonationBatchTool},
+                {"Event_End_Date", eventReservationReservation.EndDateTime},
+                {"Event_Type_ID", eventReservationReservation.EventTypeId},
+                {"Meeting_Instructions", eventReservationReservation.MeetingInstructions},
+                {"Minutes_for_Setup", eventReservationReservation.MinutesSetup},
+                {"Minutes_for_Cleanup", eventReservationReservation.MinutesTeardown},
+                {"Program_ID", eventReservationReservation.ProgramId},
+                {"Reminder_Days_Prior_ID", eventReservationReservation.ReminderDaysId},
+                {"Send_Reminder", eventReservationReservation.SendReminder},
+                {"Event_Start_Date", eventReservationReservation.StartDateTime},
+                {"Event_Title", eventReservationReservation.Title}
+            };
+
+            try
+            {
+                return (_ministryPlatformService.CreateRecord(eventPageId, eventDictionary, token, true));
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error creating Event Reservation, eventReservationReservation: {0}", eventReservationReservation);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
         }
 
         public int SafeRegisterParticipant(int eventId, int participantId, int groupId = 0, int groupParticipantId = 0)
@@ -236,10 +272,10 @@ namespace MinistryPlatform.Translation.Services
         {
             return _ministryPlatformService.GetRecordsDict(pageViewId, token).Select(record => new Event()
             {
-                EventId = (int)record["Event_ID"],
-                EventTitle = (string)record["Event_Title"],
-                EventStartDate = (DateTime)record["Event_Start_Date"],
-                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventId = (int) record["Event_ID"],
+                EventTitle = (string) record["Event_Title"],
+                EventStartDate = (DateTime) record["Event_Start_Date"],
+                EventEndDate = (DateTime) record["Event_End_Date"],
                 EventType = record.ToString("Event_Type"),
                 PrimaryContact = new Contact()
                 {
@@ -251,16 +287,17 @@ namespace MinistryPlatform.Translation.Services
 
         public IEnumerable<MinistryPlatform.Translation.Models.People.Participant> EventParticipants(string token, int eventId)
         {
-
-            return _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token).Select(person => new MinistryPlatform.Translation.Models.People.Participant()
-            {
-                ParticipantId = person.ToInt("Participant_ID"),
-                ContactId = person.ToInt("Contact_ID"),
-                EmailAddress = person.ToString("Email_Address"),
-                DisplayName = person.ToString("Display_Name"),
-                Nickname = person.ToString("Nickname"),
-                GroupName = person.ToString("Group_Name")           
-            });
+            return
+                _ministryPlatformService.GetSubpageViewRecords("EventParticipantSubpageRegisteredView", eventId, token)
+                    .Select(person => new MinistryPlatform.Translation.Models.People.Participant()
+                    {
+                        ParticipantId = person.ToInt("Participant_ID"),
+                        ContactId = person.ToInt("Contact_ID"),
+                        EmailAddress = person.ToString("Email_Address"),
+                        DisplayName = person.ToString("Display_Name"),
+                        Nickname = person.ToString("Nickname"),
+                        GroupName = person.ToString("Group_Name")
+                    });
         }
 
         public void SetReminderFlag(int eventId, string token)
