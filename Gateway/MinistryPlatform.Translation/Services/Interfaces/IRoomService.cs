@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MinistryPlatform.Translation.Models;
+using MinistryPlatform.Translation.Models.EventReservations;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
