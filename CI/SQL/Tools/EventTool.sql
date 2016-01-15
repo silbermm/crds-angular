@@ -2,8 +2,8 @@ USE [MinistryPlatform]
 GO
 
 declare @toolids table (id int);
-declare @ToolName varchar(30) = 'Create Event - Development';
-declare @LaunchPage varchar(100) = 'http://localhost:3000/mptools/create-event';
+declare @ToolName varchar(30) = 'Create Event';
+declare @LaunchPage varchar(100) = 'https://demo.crossroads.net/mptools/create-event';
 declare @Description varchar(50) = 'Create an Event and associate Rooms and Equipment';
 declare @ToolId int;
 
