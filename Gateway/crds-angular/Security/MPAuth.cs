@@ -14,6 +14,7 @@ using System.Reflection;
 using System.Threading;
 using crds_angular.Models.Crossroads;
 using crds_angular.Util;
+using Microsoft.Ajax.Utilities;
 using Microsoft.Owin;
 using MinistryPlatform.Translation.Services;
 
@@ -47,30 +48,21 @@ namespace crds_angular.Security
         {
             try
             {
-                var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
-                var refreshToken = Request.Headers.GetValues("RefreshToken").FirstOrDefault();
+                IEnumerable<string> refreshTokens;
+                var authorized = "";
+                if (Request.Headers.TryGetValues("RefreshToken", out refreshTokens))
+                {
+                    var authData = AuthenticationService.RefreshToken(refreshTokens.FirstOrDefault());
+                    authorized = authData["token"].ToString();
+                    var refreshToken = authData["refreshToken"].ToString();
+                    var result = new HttpAuthResult(actionWhenAuthorized(authorized), authorized, refreshToken);
+                    return result;
+                }
 
-                var authData = AuthenticationService.RefreshToken(refreshToken);
-                var sessionCookie = new CookieHeaderValue("sessionId", authData["token"].ToString());
-                var refreshCookie = new CookieHeaderValue("refreshToken", authData["refreshToken"].ToString());
-                var testCookie = new CookieHeaderValue("dan", "wins");
-                var cookies = new List<CookieHeaderValue>();
-                testCookie.Domain = "localhost";
-                testCookie.Expires = DateTimeOffset.Now.AddDays(1);
-                testCookie.Path = "/";
-                cookies.Add(sessionCookie);
-                cookies.Add(refreshCookie);
-                cookies.Add(testCookie);
-                //cookie.Expires = DateTimeOffset.Now.AddDays(1);
-                //cookie.Domain = Request.RequestUri.Host;
-                //cookie.Path = "/";
-                //var token = authData["token"].ToString();
-                //var exp = authData["exp"].ToString();
-                //var newrefreshToken = authData["refreshToken"].ToString();
+                authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();   
                 if (authorized != null && (authorized != "null" || authorized != ""))
                 {
-                    var result = new CookieResult(cookies, actionWhenAuthorized(authorized));
-                    return result;
+                    return actionWhenAuthorized(authorized);
                 }
                 else
                 {
@@ -82,22 +74,5 @@ namespace crds_angular.Security
                 return actionWhenNotAuthorized();
             }
         }
-
-        //protected IHttpActionResult AuthorizedWithCookie(Func<CookieInfo, IHttpActionResult> doIt)
-        //{
-        //    CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-        //    if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
-        //    {
-        //        var c = new CookieInfo
-        //        {
-        //            SessionId = cookie["sessionId"].Value,
-        //            UserId = Convert.ToInt32(cookie["userId"].Value),
-        //            UserName = cookie["username"].Value
-        //        };
-        //        return doIt(c);
-        //    }
-        //    return Unauthorized();
-        //}
-
     }
 }
