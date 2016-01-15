@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+32@gmail.com');
+Set @contactID = (select top 1 contact_id from contacts where email_address = 'mpcrds+32@gmail.com' and last_name = 'Fry');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -20,7 +20,7 @@ set @donorID = (select donor_record from contacts where contact_id = @contactID)
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
 SET Household_ID = null, Participant_Record = null, User_Account = null, Donor_record = null
-WHERE email_address = 'mpcrds+32@gmail.com';
+WHERE email_address = 'mpcrds+32@gmail.com' and last_name = 'Fry';
 
 --Delete the address if it exists.
 IF  (select address_id from households where Household_ID = @houseHoldID) is not Null
@@ -120,5 +120,5 @@ delete from dp_user_roles where user_id = (select user_id from dp_users where us
 delete from dp_users where user_email = 'mpcrds+32@gmail.com';
 
 --Delete Fry's old contact record
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+32@gmail.com';
+DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where email_address = 'mpcrds+32@gmail.com' and last_name = 'Fry');
 GO

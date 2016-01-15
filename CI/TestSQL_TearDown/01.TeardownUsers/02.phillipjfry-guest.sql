@@ -3,7 +3,7 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+20@gmail.com');
+Set @contactID = (select top 1 contact_id from contacts where email_address = 'mpcrds+32@gmail.com');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
@@ -20,7 +20,7 @@ set @donorID = (select donor_record from contacts where contact_id = @contactID)
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
 SET Household_ID = null, Participant_Record = null, User_Account = null, Donor_record = null
-WHERE email_address = 'mpcrds+20@gmail.com';
+WHERE email_address = 'mpcrds+32@gmail.com';
 
 --Delete the address if it exists.
 IF  (select address_id from households where Household_ID = @houseHoldID) is not Null
@@ -33,7 +33,7 @@ update households set address_id = null where houseHold_ID = @houseHoldID;
 Delete from addresses where address_id = @addressID;
 END
 
---Just get rid of this so we can delete Denise's old contact record
+--Just get rid of this so we can delete Fry's old contact record
 DELETE From [dbo].CONTACT_HOUSEHOLDS
 WHERE CONTACT_ID = @contactID;
 
@@ -72,7 +72,7 @@ delete from [dbo].contact_relationships where contact_id = @contactID;
 
 delete from [dbo].contact_relationships where related_contact_id = @contactID;
 
---Delete all donations for Denise's trip pledge program.
+--Delete all donations for Phillip's trip pledge program.
 DECLARE @donationsTable table
 (
 	donation_id int
@@ -84,7 +84,7 @@ delete from donation_distributions where donation_id in (select donation_id from
 
 delete from donations where donation_id in (select donation_id from @donationsTable);
 
---Delete all of Denise's donations.
+--Delete all of Fry's donations.
 delete from @donationsTable;
 
 insert into @donationsTable (donation_id) (select donation_id from donations where donor_id = @donorId);
@@ -115,10 +115,10 @@ delete from participants where participant_id = @participantID;
 GO
 
 --Delete userAccount
-delete from dp_user_roles where user_id = (select user_id from dp_users where user_email = 'mpcrds+20@gmail.com');
+delete from dp_user_roles where user_id = (select user_id from dp_users where user_email = 'mpcrds+32@gmail.com');
 
-delete from dp_users where user_email = 'mpcrds+20@gmail.com';
+delete from dp_users where user_email = 'mpcrds+32@gmail.com';
 
---Delete Denise's old contact record
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+20@gmail.com';
+--Delete Fry's old contact record
+DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where email_address = 'mpcrds+32@gmail.com');
 GO

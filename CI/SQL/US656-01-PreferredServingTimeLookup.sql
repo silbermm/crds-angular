@@ -65,7 +65,7 @@ INSERT INTO [dbo].[dp_Pages]
            'cr_Preferred_Serve_Time',
            'Preferred_Serving_Time_ID',
            NULL,
-           'cr_Preferred_Serve_Time.Preferred_Serve_Time, cr_Preferred_Serve_Time.Congregation_ID',
+           'cr_Preferred_Serve_Time.Preferred_Serve_Time, Congregation_ID_Table.[Congregation_Name]',
            'cr_Preferred_Serve_Time.Preferred_Serve_Time',
            0)
 
