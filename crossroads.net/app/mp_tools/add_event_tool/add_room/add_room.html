@@ -19,6 +19,6 @@
 
   <!-- The rooms choosen --> 
   <span ng-repeat="currentRoom in addRoom.roomData">
-    <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList"> </room-form>
+    <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList" remove-room="addRoom.removeRoom(currentRoom)"> </room-form>
   </span>
   

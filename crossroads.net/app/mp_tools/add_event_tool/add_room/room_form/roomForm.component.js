@@ -11,7 +11,8 @@
       scope: {
         currentRoom: '=',
         layouts: '=',
-        equipmentLookup: '='
+        equipmentLookup: '=',
+        removeRoom: '&'
       },
       templateUrl: 'room_form/roomForm.html',
       bindToController: true,
@@ -21,6 +22,7 @@
 
     function RoomController() {
       var vm = this;
+      vm.remove = remove;
       vm.validation = Validation;
 
       activate();
@@ -32,6 +34,10 @@
         if (vm.currentRoom.equipment === undefined) {
           vm.currentRoom.equipment = [];
         }
+      }
+
+      function remove() {
+        vm.removeRoom();
       }
 
     }

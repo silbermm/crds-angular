@@ -77,16 +77,21 @@
 
       function submit() {
         vm.processing = true;
+        AddEvent.eventData.rooms = vm.rooms;
         if (vm.allData.roomForm) {
           vm.allData.roomForm.$setSubmitted();
           vm.allData.roomForm.equipmentForm.$setSubmitted();
-          AddEvent.eventData.rooms = vm.rooms;
         }
 
         if (vm.allData.$valid) {
           // build the dto...
           var equipment = AddEvent.getEventDto(AddEvent.eventData);
           EventService.create.save(equipment, function(result) {
+            $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
+            AddEvent.currentPage = 1;
+            AddEvent.eventData = {};
+            vm.rooms = [];
+            vm.event = {};
             $window.close();
           },
 

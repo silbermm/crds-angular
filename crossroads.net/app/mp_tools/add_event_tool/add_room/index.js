@@ -6,8 +6,7 @@
   // the html file
   require('./add_room.html');
 
-  angular.module(MODULE)
-    .directive('addRoom', require('./addRoom.component'));
+  angular.module(MODULE).directive('addRoom', require('./addRoom.component'));
 
   // the room form
   require('./room_form');
