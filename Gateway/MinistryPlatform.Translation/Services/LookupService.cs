@@ -19,6 +19,11 @@ namespace MinistryPlatform.Translation.Services
             return _ministryPlatformServiceImpl.GetLookupRecord(AppSettings("Emails"), email, token);
         }
 
+        public List<Dictionary<string, object>> EventTypes(string token)
+        {
+            return _ministryPlatformServiceImpl.GetLookupRecords(AppSettings("EventTypesLookup"), token);
+        }
+
         public List<Dictionary<string, object>> Genders(string token)
         {
             return _ministryPlatformServiceImpl.GetLookupRecords(AppSettings("Genders"), token);
@@ -47,6 +52,11 @@ namespace MinistryPlatform.Translation.Services
         public List<Dictionary<string, object>> CrossroadsLocations(string token)
         {
             return _ministryPlatformServiceImpl.GetLookupRecords(AppSettings("CrossroadsLocations"), token);
+        }
+
+        public List<Dictionary<string, object>> ReminderDays(string token)
+        {
+            return _ministryPlatformServiceImpl.GetLookupRecords(AppSettings("ReminderDaysLookup"), token);
         }
 
         public List<Dictionary<string, object>> WorkTeams(string token)

@@ -21,7 +21,9 @@
       getDailyEvents: function(site) {
         var events = this.res.query({site:site});
         return events;
-      }
+      },
+
+      create: $resource(__API_ENDPOINT__ + 'api/eventTool')
     };
     return eventsService;
   }
