@@ -119,7 +119,7 @@ namespace MinistryPlatform.Translation.Services
         public List<Dictionary<string, object>> StaffContacts(string token)
         {
             var userRoleStaff = _configurationWrapper.GetConfigIntValue("StaffUserRoleId");
-            var records = _ministryPlatformService.GetSubpageViewRecords("RolesUsersStaffOnlyView", userRoleStaff, token);
+            var records = _ministryPlatformService.GetSubpageViewRecords("UserDetails", userRoleStaff, token);
             return records;
         }
 
