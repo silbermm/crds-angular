@@ -400,6 +400,13 @@
             Trip: 'Trip'
           }
         })
+        .state('tools.createEvent', {
+          url: '/create-event',
+          template: '<add-event-tool></add-event-tool>',
+          resolve: {
+            MPTools: 'MPTools'
+          }
+        })
         .state('tools.volunteerContact', {
           url: '/volunteer-contact',
           template: '<volunteer-contact></volunteer-contact>',
