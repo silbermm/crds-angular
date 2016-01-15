@@ -22,6 +22,7 @@
       var vm = this;
       vm.addEquipment = addEquipment;
       vm.fieldName = fieldName;
+      vm.remove = remove;
       vm.showError = showError;
       vm.showFieldError = showFieldError;
       vm.validation = Validation;
@@ -32,6 +33,12 @@
 
       function fieldName(name, idx) {
         return name + '-' + idx;
+      }
+
+      function remove(idx) {
+        if(vm.currentEquipment[idx] !== undefined) {
+          
+        }
       }
 
       function showError(form) {

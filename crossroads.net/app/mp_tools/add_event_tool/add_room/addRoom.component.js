@@ -3,9 +3,9 @@
 
   module.exports = AddRoom;
 
-  AddRoom.$inject = ['$log', '$rootScope', 'AddEvent', 'Room'];
+  AddRoom.$inject = ['$log', '$rootScope', '$modal', 'AddEvent', 'Room'];
 
-  function AddRoom($log, $rootScope, AddEvent, Room) {
+  function AddRoom($log, $rootScope, $modal, AddEvent, Room) {
     return {
       restrict: 'E',
       scope: {
@@ -23,6 +23,7 @@
       vm.equipmentList = [];
       vm.layouts = Room.Layouts.query();
       vm.onAdd = onAdd;
+      vm.removeRoom = removeRoom;
       vm.roomError = false;
       vm.showNoRoomsMessage = showNoRoomsMessage;
       vm.viewReady = false;
@@ -53,6 +54,19 @@
         return AddEvent.eventData.event.congregation.dp_RecordName;
       }
 
+			function removeRoomModal(room) {
+				 var modalInstance = $modal.open({
+					controller: 'RemoveRoomController as removeRoom',
+					templateUrl: 'remove_room/remove_room.html',
+					resolve: {
+						items: function () {
+							return room;
+						}
+					}
+				});
+				return modalInstance;
+			}
+
       function onAdd() {
         if (vm.choosenRoom) {
           // is this room already added?
@@ -71,6 +85,21 @@
 
         $rootScope.$emit('notify', $rootScope.MESSAGES.chooseARoom);
       }
+
+      function removeRoom(currentRoom) {
+        $log.debug("remove room: " + currentRoom);
+        // show a modal????
+      	var modalInstance = removeRoomModal(currentRoom);
+
+        modalInstance.result.then(function() {
+          vm.roomData = _.filter(vm.roomData, function(r) {
+            // only return elements that aren't currentRoom
+            return r.id !== currentRoom.id;
+          });
+        }, function() {
+          $log.info('user doesn\'t want to delete this room...');
+        });
+			}
 
       function showNoRoomsMessage() {
         return (!vm.viewReady || vm.rooms === undefined || vm.rooms.length < 1);

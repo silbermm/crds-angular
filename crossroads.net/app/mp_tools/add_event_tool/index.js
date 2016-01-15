@@ -15,4 +15,6 @@
   // the addRoom component
   require('./add_room');
 
+  // the removeRoom component
+  require('./remove_room');
 })();

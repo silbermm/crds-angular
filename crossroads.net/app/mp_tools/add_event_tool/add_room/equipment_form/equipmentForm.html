@@ -40,7 +40,7 @@
             {{ equip.equipment.name.quantity }} 
           </td>
           <td>
-            <button class="btn btn-standard">
+            <button class="btn btn-standard" ng-click="equipment.remove($index)" >
               <svg viewBox="0 0 32 32" class="icon icon-trash">
                 <use xlink:href="#trash"></use>
               </svg>
