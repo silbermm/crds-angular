@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Web.Management;
 using crds_angular.Models.Crossroads.Events;
 using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
