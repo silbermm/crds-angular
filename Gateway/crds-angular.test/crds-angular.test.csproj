@@ -194,7 +194,6 @@
     <Compile Include="Services\ServeServiceTest.cs" />
     <Compile Include="Services\StripeEventServiceTest.cs" />
     <Compile Include="Services\StripeServiceTest.cs" />
-    <Compile Include="Services\TranslationEventService.cs" />
     <Compile Include="Services\TripServiceTest.cs" />
     <Compile Include="Services\ContactAttributeServiceTest.cs" />
     <Compile Include="Services\UserImpersonationServiceTest.cs" />
