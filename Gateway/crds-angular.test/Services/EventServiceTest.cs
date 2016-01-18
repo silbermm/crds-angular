@@ -55,8 +55,7 @@ namespace crds_angular.test.Services
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("EventsReadyForPrimaryContactReminder")).Returns(2205);
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("EventPrimaryContactReminderTemplateId")).Returns(14909);
-            
-
+     
             _fixture = new EventService(_eventService.Object,
                                         _groupService.Object,
                                         _communicationService.Object,
@@ -67,18 +66,13 @@ namespace crds_angular.test.Services
                                         _contactRelationshipService.Object,
                                         _groupParticipantService.Object,
                                         _participantService.Object);
-        
         }
         
-
         [Test]
         public void ShouldSendPrimaryContactReminderEmails()
         {
-
-            const int pageViewId = 2205;
             const string search = "";
             const string apiToken = "qwerty1234";
-            const int defaultTemplateId = 14909;
             var defaultContact = new MyContact()
             {
                 Contact_ID = 321,
@@ -100,11 +94,10 @@ namespace crds_angular.test.Services
             var testEventList = new List<Event>()
             {
                testEvent
-               
             };
        
-            var token = _apiUserService.Setup(m => m.GetToken()).Returns(apiToken);
-            _eventService.Setup(m => m.EventsByPageViewId(apiToken, pageViewId, search)).Returns(testEventList);
+            _apiUserService.Setup(m => m.GetToken()).Returns(apiToken);
+            _eventService.Setup(m => m.EventsByPageViewId(apiToken, 2205, search)).Returns(testEventList);
             var eventList = testEventList.Select(evt => new crds_angular.Models.Crossroads.Events.Event() 
             {
                 name = evt.EventTitle,
@@ -132,12 +125,12 @@ namespace crds_angular.test.Services
                 {
                     AuthorUserId = defaultContact.Contact_ID,
                     DomainId = 1,
-                    EmailBody = "Some Email Body",
-                    EmailSubject = "Whatever",
+                    EmailBody = "Test event email stuff",
+                    EmailSubject = "Test Event Reminder",
                     FromContact = contact,
                     MergeData = mergeData,
                     ReplyToContact = contact,
-                    TemplateId = defaultTemplateId,
+                    TemplateId = 14909,
                     ToContacts = new List<Contact>() { contact }
                 };
 
@@ -148,7 +141,7 @@ namespace crds_angular.test.Services
 
                 };
               
-                _contactService.Setup(m => m.GetContactById(123456)).Returns(testContact);
+                _contactService.Setup(m => m.GetContactById(9876)).Returns(testContact);
                 _communicationService.Setup(m => m.GetTemplateAsCommunication(14909,
                                                                               testContact.Contact_ID,
                                                                               testContact.Email_Address,
@@ -161,7 +154,9 @@ namespace crds_angular.test.Services
                 _communicationService.Verify();
 
             });
+            _fixture.EventsReadyForPrimaryContactReminder(apiToken);
             _eventService.Verify();
+            
         }
         
     }
