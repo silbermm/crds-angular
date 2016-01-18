@@ -73,6 +73,24 @@ namespace MinistryPlatform.Translation.Extensions
             return result;
         }
 
+        public static TimeSpan? ToNullableTimeSpan(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
+        {
+            var dictVal = DictVal(input, key);
+            if (dictVal == null)
+            {
+                return null;
+            }
+
+            TimeSpan result;
+            var valid = TimeSpan.TryParse(dictVal.ToString(), out result);
+            if (valid) return result;
+            if (throwExceptionIfFailed)
+            {
+                throw new FormatException(string.Format("'{0}' cannot be converted to TimeSpan", key));
+            }
+            return result;
+        }
+
         public static DateTime ToDate(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
         {
             var dictVal = DictVal(input, key);

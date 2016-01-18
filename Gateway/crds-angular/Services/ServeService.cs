@@ -318,12 +318,14 @@ namespace crds_angular.Services
             Opportunity previousOpportunity = null;
             try
             {
+                var fromDate = AddTimeStamp(opportunity.ShiftStart);
+                var toDate = AddTimeStamp(opportunity.ShiftEnd);
                 var updatedEvents = GetUpdatedOpportunities(token,
                                                             dto,
                                                             (participant, e) =>
                                                             {
-                                                                DateTime from = DateTime.Today.Add(opportunity.ShiftStart);
-                                                                DateTime to = DateTime.Today.Add(opportunity.ShiftEnd);
+                                                                var from = fromDate;
+                                                                var to = toDate;
                                                                 mailRows.Add(new MailRow()
                                                                 {
                                                                     EventDate = e.EventStartDate.ToShortDateString(),
@@ -364,6 +366,18 @@ namespace crds_angular.Services
                 _communicationService.SendMessage(communication);
                 return new List<int>();
             }
+        }
+
+        private static DateTime AddTimeStamp(TimeSpan? shiftTime)
+        {
+            var date = DateTime.Today;
+            if (shiftTime == null)
+            {
+                return date;
+            }
+            var ts = (TimeSpan)shiftTime;
+            date = date.Add(ts);
+            return date;
         }
 
         public void SendReminderEmails()
