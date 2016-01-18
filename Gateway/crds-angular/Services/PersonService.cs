@@ -58,7 +58,7 @@ namespace crds_angular.Services
             // update the user values if the email and/or password has changed
             if (!(String.IsNullOrEmpty(person.NewPassword)) || (person.EmailAddress != person.OldEmail))
             {
-                var authData = TranslationService.Login(person.EmailAddress, person.OldPassword);
+                var authData = TranslationService.Login(person.OldEmail, person.OldPassword);
 
                 if (authData == null)
                 {
@@ -67,7 +67,7 @@ namespace crds_angular.Services
                 else
                 {
                     var userUpdateValues = person.GetUserUpdateValues();
-                    userUpdateValues["User_ID"] = _userService.GetUserIdByUsername(person.EmailAddress);
+                    userUpdateValues["User_ID"] = _userService.GetUserIdByUsername(person.OldEmail);
                     _userService.UpdateUser(userUpdateValues);
                 }
             }

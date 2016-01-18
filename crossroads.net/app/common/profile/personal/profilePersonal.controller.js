@@ -83,6 +83,10 @@
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
+    // variables for email and password reset
+    vm.emailSet = false;
+    vm.passwordSet = false;
+
     activate();
 
     ////////////////////////////////
@@ -90,8 +94,6 @@
     ////////////////////////////////
 
     function activate() {
-
-      //showPasswordConfirmModal();
 
       if (vm.enforceAgeRestriction) {
         vm.minBirthdate.setFullYear(vm.minBirthdate.getFullYear() - vm.enforceAgeRestriction);
@@ -218,22 +220,34 @@
 
     function savePersonal() {
 
-      // if either of these fields are dirty, we need to ask the user for password verification before continuing
-      if ((vm.pform['passwd.passwordForm'].$dirty) || (vm.pform[email].$dirty)) {
-        if (vm.resetCredentialsEntered === false) {
-          showPasswordConfirmModal();
-          return;
-        }
-      }
-
-      debugger;
-
       //force genders field to be dirty
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
 
       $timeout(function() {
         vm.submitted = true;
+
+        if (vm.pform['passwd.passwordForm'] !== undefined) {
+          if (vm.pform['passwd.passwordForm'].$dirty === true) {
+            vm.passwordSet = true;
+          }
+        }
+
+        if (vm.pform['email'] !== undefined) {
+          debugger;
+          if (vm.pform['email'].$dirty === true) {
+            vm.emailSet = true;
+          }
+        }
+
+        // if either of these fields are dirty, we need to ask the user for password verification before continuing
+        if (vm.emailSet || vm.passwordSet) {
+          if (vm.resetCredentialsEntered === false) {
+            showPasswordConfirmModal();
+            vm.submitted = true;
+            return;
+          }
+        }
 
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -248,11 +262,10 @@
           return;
         }
 
+        // set the fields before saving
         vm.profileData.person.oldPassword = vm.currentPassword;
         vm.profileData.person.newPassword = vm.password;
         vm.profileData.person.oldEmail = vm.oldEmail;
-
-        debugger;
 
         vm.profileData.person['State/Region'] = vm.profileData.person.State;
         if (vm.submitFormCallback !== undefined) {
@@ -280,6 +293,9 @@
           });
         }
       }, 550);
+
+      vm.emailSet = false;
+      vm.passwordSet = false;
     }
 
     function showMobilePhoneError() {
@@ -311,7 +327,6 @@
 
     // set the old email address
     function setOldEmail() {
-      debugger;
       vm.oldEmail = vm.profileData.person.emailAddress;
     }
 
@@ -321,9 +336,9 @@
 
       var modalType = '';
 
-      if (!(vm.pform['passwd.passwordForm'].$dirty) && (vm.pform[email].$dirty)) {
+      if (!(vm.emailSet === true) && (vm.passwordSet === false)) {
         modalType = 'emailOnly';
-      } else if (vm.pform['passwd.passwordForm'].$dirty) {
+      } else if (vm.passwordSet === true) {
         modalType = 'notEmailOnly';
       }
 
