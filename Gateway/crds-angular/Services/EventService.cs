@@ -80,7 +80,7 @@ namespace crds_angular.Services
 
                 var e = this.GetEvent(eventId);
                 dto.Title = e.EventTitle;
-                dto.CongregationId = 999;
+                dto.CongregationId = e.CongregationId;
                 var rooms = _roomService.GetRoomReservations(eventId);
                 var roomDto = new List<EventRoomDto>();
 
