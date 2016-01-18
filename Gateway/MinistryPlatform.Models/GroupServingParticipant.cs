@@ -19,8 +19,8 @@ namespace MinistryPlatform.Models
         public int? OpportunityMaximumNeeded { get; set; }
         public int? OpportunityMinimumNeeded { get; set; }
         public string OpportunityRoleTitle { get; set; }
-        public TimeSpan OpportunityShiftEnd { get; set; }
-        public TimeSpan OpportunityShiftStart { get; set; }
+        public TimeSpan? OpportunityShiftEnd { get; set; }
+        public TimeSpan? OpportunityShiftStart { get; set; }
         public int OpportunitySignUpDeadline { get; set; }
         public int DeadlinePassedMessage { get; set; }
         public string OpportunityTitle { get; set; }
