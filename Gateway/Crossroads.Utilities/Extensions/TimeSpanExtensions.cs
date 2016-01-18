@@ -13,10 +13,5 @@ namespace Crossroads.Utilities.Extensions
             var t = (TimeSpan) timeSpan;
             return DateTime.Today.Add(t).ToString("hh:mm tt");
         }
-
-        public static string FormatAsString(this TimeSpan timeSpan)
-        {
-            return DateTime.Today.Add(timeSpan).ToString("hh:mm tt");
-        }
     }
 }

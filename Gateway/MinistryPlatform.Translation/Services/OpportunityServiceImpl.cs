@@ -63,19 +63,6 @@ namespace MinistryPlatform.Translation.Services
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
             var shiftStart = opp.ToNullableTimeSpan("Shift_Start");
             var shiftEnd = opp.ToNullableTimeSpan("Shift_End"); 
-            //try
-            //{
-            //    //var span = TimeSpan.Parse(opp.ToString("Shift_Start"));
-            //    //TimeSpan r;
-            //    shiftStart = opp.ToNullableTimeSpan("Shift_Start");
-                
-            //    //var x = TimeSpan.TryParse(opp.ToString("Shift_Start"), out r);
-            //   // shiftStart = r;
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine(ex.Message);
-            //}
             var opportunity = new Opportunity
             {
                 OpportunityId = opportunityId,

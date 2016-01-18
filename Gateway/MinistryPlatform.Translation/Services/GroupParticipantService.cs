@@ -73,7 +73,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityMaximumNeeded = SafeInt(reader, "Maximum_Needed");
                     participant.OpportunityMinimumNeeded = SafeInt(reader, "Minimum_Needed");
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
-                    participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End"); 
+                    participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
                     participant.OpportunitySignUpDeadline = (SafeInt32(reader, "Sign_Up_Deadline") ?? 0);
                     participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? defaultDeadlinePassedMessage);
@@ -156,9 +156,7 @@ namespace MinistryPlatform.Translation.Services
                 throw new Exception("The DataReader is not a SqlDataReader");
             }
 
-            //var myTimeSpan = reader.GetTimeSpan(columnIndex);
             return !record.IsDBNull(columnIndex) ? reader.GetTimeSpan(columnIndex) : (TimeSpan?) null;
-            //return myTimeSpan;
         }
 
         private static string SafeString(IDataRecord record, string fieldName)
