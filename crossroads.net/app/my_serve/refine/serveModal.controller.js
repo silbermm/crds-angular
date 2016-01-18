@@ -26,7 +26,7 @@
     vm.isFromError = isFromError;
     vm.isToError = isToError;
     vm.toDate = formatDate(dates.toDate);
-    vm.toDateError = false;    
+    vm.toDateError = false;
     vm.openFromDate = openFromDate;
     vm.openToDate = openToDate;
     vm.readyFilterByDate = readyFilterByDate;
