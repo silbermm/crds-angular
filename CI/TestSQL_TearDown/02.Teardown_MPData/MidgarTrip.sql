@@ -16,6 +16,10 @@ set @groupID = (select group_id from groups where group_name = @tripName);
 
 delete from [dbo].event_participants where event_id = @eventID;
 
+delete from [dbo].event_groups where event_id = @eventID;
+
+delete from [dbo].event_groups where group_id = group_id;
+
 update [dbo].Pledge_Campaigns set EVENT_ID = null, Program_id = null where Campaign_Name = @tripName;
 
 delete FROM [dbo].events where event_id = @eventID;
