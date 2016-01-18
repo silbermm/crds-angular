@@ -190,6 +190,7 @@
     <Compile Include="Services\LoginServiceTest.cs" />
     <Compile Include="Services\PersonServiceTest.cs" />
     <Compile Include="Services\ProgramServiceTest.cs" />
+    <Compile Include="Services\EventServiceTest.cs" />
     <Compile Include="Services\ServeServiceTest.cs" />
     <Compile Include="Services\StripeEventServiceTest.cs" />
     <Compile Include="Services\StripeServiceTest.cs" />

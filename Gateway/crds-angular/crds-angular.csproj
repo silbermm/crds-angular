@@ -307,7 +307,7 @@
     <Compile Include="Models\MailChimp\SubscriberBatchDTO.cs" />
     <Compile Include="Services\SubscriptionsService.cs" />
     <Compile Include="Services\Interfaces\ISubscriptionsService.cs" />
-    <Compile Include="Util\CookieResult.cs" />
+    <Compile Include="Util\HttpAuthResult.cs" />
     <Compile Include="Util\FileResult.cs" />
     <Compile Include="Controllers\API\ImageController.cs" />
     <Compile Include="Controllers\API\EmailCommunicationController.cs" />

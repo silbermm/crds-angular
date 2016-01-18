@@ -10,9 +10,11 @@ namespace crds_angular.Services.Interfaces
         bool CreateEventReservation(EventToolDto eventTool);
         Event GetEvent(int eventId);
         void RegisterForEvent(EventRsvpDto eventDto, string token);
+        IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token);
         IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token);
         IList<Participant> EventParticpants(int eventId, string token);
         void SendReminderEmails();
+        void SendPrimaryContactReminderEmails();
         List<Participant> MyChildrenParticipants(int contactId, IList<Participant> children, string token);
         Event GetMyChildcareEvent(int parentEventId, string token);
         Event GetChildcareEvent(int parentEventId);

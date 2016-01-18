@@ -47,7 +47,7 @@ DELETE from [dbo].dp_Contact_Publications
 WHERE contact_id = @contactID;
 
 DELETE from [dbo].dp_communication_messages 
-WHERE Communication_ID = @communicationID;
+WHERE communication_id = @communicationID;
 
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;

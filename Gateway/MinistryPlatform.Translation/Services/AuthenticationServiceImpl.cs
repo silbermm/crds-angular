@@ -46,7 +46,7 @@ namespace MinistryPlatform.Translation.Services
                 var obj = JObject.Parse(result);
                 var token = (string) obj["access_token"];
                 var exp = (string) obj["expires_in"];
-                //ignorning refreshToken for now
+                //ignoring refreshToken for now
                 var refreshToken = (string) obj["refresh_token"];
                 var authData = new Dictionary<string, object>
                 {
