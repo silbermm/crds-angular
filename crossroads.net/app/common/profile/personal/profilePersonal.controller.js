@@ -64,7 +64,8 @@
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
     vm.openBirthdatePicker = openBirthdatePicker;
     vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
-    vm.passwd = '';
+    //vm.passwd = '';
+    vm.password = '';
     vm.passwordPrefix = 'account-page';
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.requireEmail = true;
@@ -247,6 +248,12 @@
           return;
         }
 
+        vm.profileData.person.oldPassword = vm.currentPassword;
+        vm.profileData.person.newPassword = vm.password;
+        vm.profileData.person.oldEmail = vm.oldEmail;
+
+        debugger;
+
         vm.profileData.person['State/Region'] = vm.profileData.person.State;
         if (vm.submitFormCallback !== undefined) {
           vm.submitFormCallback({profile: vm.profileData });
@@ -310,6 +317,8 @@
 
     function showPasswordConfirmModal() {
 
+      debugger;
+
       var modalType = '';
 
       if (!(vm.pform['passwd.passwordForm'].$dirty) && (vm.pform[email].$dirty)) {
@@ -323,7 +332,7 @@
         controller: 'ConfirmPasswordCtrl as pwModal',
         resolve: {
           modalTypeItem: function() {
-            return 'emailOnly';
+            return modalType;
           }
         }
       });

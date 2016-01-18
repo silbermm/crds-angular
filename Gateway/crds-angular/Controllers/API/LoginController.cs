@@ -168,8 +168,8 @@ namespace crds_angular.Controllers.API
                     throw new HttpResponseException(apiError.HttpResponseMessage);
                 }
             });
-
         }
+
     }
 
     public class LoginReturn
@@ -195,4 +195,5 @@ namespace crds_angular.Controllers.API
         public string username { get; set; }
         public string password { get; set; }
     }
+
 }
