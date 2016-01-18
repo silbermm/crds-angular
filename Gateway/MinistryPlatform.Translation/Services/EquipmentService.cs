@@ -83,6 +83,7 @@ namespace MinistryPlatform.Translation.Services
             var equipmentReservationPageId = _configurationWrapper.GetConfigIntValue("EquipmentReservationPageId");
             var equipmentDictionary = new Dictionary<string, object>
             {
+                {"Event_Equipment_ID", equipmentReservation.EventEquipmentId},
                 {"Event_ID", equipmentReservation.EventId},
                 {"Room_ID", equipmentReservation.RoomId},
                 {"Equipment_ID", equipmentReservation.EquipmentId},
