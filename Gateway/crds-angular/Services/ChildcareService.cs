@@ -61,6 +61,10 @@ namespace crds_angular.Services
                 var schoolGrade = SchoolGrade(member.HighSchoolGraduationYear);
                 var maxAgeWithoutGrade = _configurationWrapper.GetConfigIntValue("MaxAgeWithoutGrade");
                 var maxGradeForChildcare = _configurationWrapper.GetConfigIntValue("MaxGradeForChildcare");
+                if (member.Age == 0)
+                {
+                    continue;
+                }
                 if (schoolGrade == 0 && member.Age <= maxAgeWithoutGrade)
                 {
                     myChildren.Add(member);
