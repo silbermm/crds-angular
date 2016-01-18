@@ -318,20 +318,18 @@ namespace crds_angular.Services
             Opportunity previousOpportunity = null;
             try
             {
-                var fromDate = AddTimeStamp(opportunity.ShiftStart);
-                var toDate = AddTimeStamp(opportunity.ShiftEnd);
+                var fromDate = GetTimeStamp(opportunity.ShiftStart);
+                var toDate = GetTimeStamp(opportunity.ShiftEnd);
                 var updatedEvents = GetUpdatedOpportunities(token,
                                                             dto,
                                                             (participant, e) =>
                                                             {
-                                                                var from = fromDate;
-                                                                var to = toDate;
                                                                 mailRows.Add(new MailRow()
                                                                 {
                                                                     EventDate = e.EventStartDate.ToShortDateString(),
                                                                     Location = opportunity.Room,
                                                                     OpportunityName = opportunity.OpportunityName,
-                                                                    ShiftTime = from.ToString("hh:mm tt") + " - " + to.ToString("hh:mm tt")
+                                                                    ShiftTime = fromDate + " - " + toDate
                                                                 });
                                                                 var response = CreateRsvp(token, dto.OpportunityId, dto.OpportunityIds, dto.SignUp, participant, e, groupContact);
                                                                 previousOpportunity = PreviousOpportunity(response, previousOpportunity);
@@ -368,16 +366,15 @@ namespace crds_angular.Services
             }
         }
 
-        private static DateTime AddTimeStamp(TimeSpan? shiftTime)
+        private static string GetTimeStamp(TimeSpan? shiftTime)
         {
-            var date = DateTime.Today;
             if (shiftTime == null)
             {
-                return date;
+                return null;
             }
             var ts = (TimeSpan)shiftTime;
-            date = date.Add(ts);
-            return date;
+            var str = DateTime.Today.Add(ts).ToString("hh:mm tt");
+            return str;
         }
 
         public void SendReminderEmails()
