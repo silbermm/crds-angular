@@ -9,6 +9,9 @@ using crds_angular.Models;
 using crds_angular.Models.Crossroads.Profile;
 using crds_angular.Models.Crossroads.Serve;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models;
+using MinistryPlatform.Models.DTO;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
 using NUnit.Framework;
@@ -27,6 +30,8 @@ namespace crds_angular.test.controllers
         private Mock<crds_angular.Services.Interfaces.IDonorService> _donorService;
         private Mock<IUserImpersonationService> _impersonationService;
         private Mock<IAuthenticationService> _authenticationService;
+        private Mock<IUserService> _userService;
+        private Mock<IConfigurationWrapper> _config;
 
         private string _authType;
         private string _authToken;
@@ -41,8 +46,12 @@ namespace crds_angular.test.controllers
             _donorService = new Mock<IDonorService>();
             _impersonationService = new Mock<IUserImpersonationService>();
             _authenticationService = new Mock<IAuthenticationService>();
+            _userService = new Mock<IUserService>();
+            _config = new Mock<IConfigurationWrapper>();
 
-            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object, _impersonationService.Object, _donorService.Object, _authenticationService.Object);
+            _config.Setup(mocked => mocked.GetConfigValue("AdminGetProfileRoles")).Returns("123,456");
+
+            _fixture = new ProfileController(_personServiceMock.Object, _serveServiceMock.Object, _impersonationService.Object, _donorService.Object, _authenticationService.Object, _userService.Object, _config.Object);
             _authenticationServiceMock = new Mock<IAuthenticationService>();
 
             _authType = "auth_type";
@@ -53,6 +62,56 @@ namespace crds_angular.test.controllers
 
             _authenticationServiceMock.Setup(mocked => mocked.GetContactId(_authType + " " + _authToken)).Returns(myContactId);
 
+        }
+
+        [Test]
+        public void TestAdminGetProfileUnauthorized()
+        {
+            var user = new MinistryPlatformUser
+            {
+                UserRecordId = 987
+            };
+            _userService.Setup(mocked => mocked.GetByAuthenticationToken(_authType + " " + _authToken)).Returns(user);
+            _userService.Setup(mocked => mocked.GetUserRoles(987)).Returns((List<RoleDto>) null);
+
+            var result = _fixture.AdminGetProfile(13579);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<UnauthorizedResult>(result);
+            _userService.VerifyAll();
+            _personServiceMock.VerifyAll();
+        }
+
+        [Test]
+        public void TestAdminGetProfile()
+        {
+            var user = new MinistryPlatformUser
+            {
+                UserRecordId = 987
+            };
+            _userService.Setup(mocked => mocked.GetByAuthenticationToken(_authType + " " + _authToken)).Returns(user);
+            _userService.Setup(mocked => mocked.GetUserRoles(987)).Returns(new List<RoleDto>
+            {
+                new RoleDto
+                {
+                    Id = 765
+                },
+                new RoleDto
+                {
+                    Id = 456
+                }
+            });
+
+            var person = new Person();
+            _personServiceMock.Setup(mocked => mocked.GetPerson(13579)).Returns(person);
+
+            var result = _fixture.AdminGetProfile(13579);
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<Person>>(result);
+            var r = (OkNegotiatedContentResult<Person>)result;
+            Assert.IsNotNull(r.Content);
+            Assert.AreSame(person, r.Content);
+            _userService.VerifyAll();
+            _personServiceMock.VerifyAll();
         }
 
         [Test]

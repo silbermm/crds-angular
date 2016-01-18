@@ -28,7 +28,7 @@
         vm.error = true;
         vm.errorMessage = $rootScope.MESSAGES.mptool_invalid_access_content;
       } else {
-        Profile.Person.get({ contactId: vm.params.recordId }, function(data){
+        Profile.AdminPerson.get({ contactId: vm.params.recordId }, function(data){
           vm.person = data;
           vm.person.middleInitial = VolunteerApplication.middleInitial(vm.person);
           vm.pageInfo = (CmsInfo.pages !== undefined && CmsInfo.pages.length > 0) ? CmsInfo.pages[0] : null;

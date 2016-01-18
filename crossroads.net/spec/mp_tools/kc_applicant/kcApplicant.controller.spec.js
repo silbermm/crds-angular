@@ -34,7 +34,7 @@ describe('KC Applicant Tool', function(){
     Profile = $injector.get('Profile');
     CmsInfo = $injector.get('CmsInfo');
     $httpBackend = $injector.get('$httpBackend');
-    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile/' + controller.params.recordId)
+    $httpBackend.expectGET(window.__env__['CRDS_API_ENDPOINT'] + 'api/profile/' + controller.params.recordId + '/admin')
       .respond(200, mockVolunteer);
   }));
 

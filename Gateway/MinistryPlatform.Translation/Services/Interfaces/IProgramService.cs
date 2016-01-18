@@ -11,5 +11,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         List<Program> GetOnlineGivingPrograms(int? programType);
         Program GetProgramById(int programId);
+        List<Program> GetAllPrograms(string token);
     }
 }
