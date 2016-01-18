@@ -205,8 +205,8 @@ namespace crds_angular.Services
         private void UpdateEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
         {
             var equipmentReservation = new EquipmentReservationDto();
-            equipmentReservation.Approved = false;
-            equipmentReservation.Cancelled = false;
+            //equipmentReservation.Approved = false;
+            equipmentReservation.Cancelled = equipment.Cancelled;
             equipmentReservation.EquipmentId = equipment.EquipmentId;
             equipmentReservation.EventEquipmentId = equipment.EquipmentReservationId;
             equipmentReservation.EventId = eventId;
@@ -231,8 +231,8 @@ namespace crds_angular.Services
         private void UpdateRoom(int eventId, EventRoomDto room)
         {
             var roomReservation = new RoomReservationDto();
-            roomReservation.Approved = false;
-            roomReservation.Cancelled = false;
+            //roomReservation.Approved = false;
+            roomReservation.Cancelled = room.Cancelled;
             roomReservation.EventId = eventId;
             roomReservation.EventRoomId = room.RoomReservationId;
             roomReservation.Hidden = room.Hidden;
