@@ -31,6 +31,9 @@ namespace crds_angular.Models.Crossroads.Events
         [Required]
         public DateTime EndDateTime { get; set; }
 
+        [JsonProperty(PropertyName = "eventId")]
+        public int EventId { get; set; }
+
         [JsonProperty(PropertyName = "eventTypeId")]
         [Required]
         public int EventTypeId { get; set; }
@@ -67,6 +70,8 @@ namespace crds_angular.Models.Crossroads.Events
         [JsonProperty(PropertyName = "title")]
         [Required]
         public string Title { get; set; }
+
+        
     }
 
     public class EventRoomDto
@@ -75,6 +80,12 @@ namespace crds_angular.Models.Crossroads.Events
         {
             this.Equipment = new List<EventRoomEquipmentDto>();
         }
+        
+        //[JsonProperty(PropertyName = "approved")]
+        //public bool Approved { get; set; }
+
+        [JsonProperty(PropertyName = "cancelled")]
+        public bool Cancelled { get; set; }
 
         [JsonProperty(PropertyName = "equipment")]
         public List<EventRoomEquipmentDto> Equipment { get; set; }
@@ -90,14 +101,26 @@ namespace crds_angular.Models.Crossroads.Events
 
         [JsonProperty(PropertyName = "roomId")]
         public int RoomId { get; set; }
+
+        [JsonProperty(PropertyName = "roomReservationId")]
+        public int RoomReservationId { get; set; }
     }
 
     public class EventRoomEquipmentDto
     {
+        //[JsonProperty(PropertyName = "approved")]
+        //public bool Approved { get; set; }
+
+        [JsonProperty(PropertyName = "cancelled")]
+        public bool Cancelled { get; set; }
+
         [JsonProperty(PropertyName = "equipmentId")]
         public int EquipmentId { get; set; }
 
         [JsonProperty(PropertyName = "quantityRequested")]
         public int QuantityRequested { get; set; }
+
+        [JsonProperty(PropertyName = "equipmentReservationId")]
+        public int EquipmentReservationId { get; set; }
     }
 }

@@ -31,6 +31,9 @@ namespace crds_angular.test.Services
         private Mock<ICommunicationService> _communicationService;
         private Mock<IConfigurationWrapper> _configurationWrapper;
         private Mock<IApiUserService> _apiUserService;
+        private Mock<IRoomService> _roomService;
+        private Mock<IEquipmentService> _equipmentService;
+
         private EventService _fixture;
 
         [SetUp]
@@ -51,6 +54,9 @@ namespace crds_angular.test.Services
             _groupParticipantService = new Mock<IGroupParticipantService>(MockBehavior.Strict);
             _participantService = new Mock<IParticipantService>(MockBehavior.Strict);
             _eventService = new Mock<IEventService>();
+            _roomService = new Mock<IRoomService>();
+            _equipmentService= new Mock<IEquipmentService>();
+
 
             _configurationWrapper = new Mock<IConfigurationWrapper>();
             _configurationWrapper.Setup(mocked => mocked.GetConfigIntValue("EventsReadyForPrimaryContactReminder")).Returns(2205);
@@ -65,7 +71,7 @@ namespace crds_angular.test.Services
                                         _apiUserService.Object,
                                         _contactRelationshipService.Object,
                                         _groupParticipantService.Object,
-                                        _participantService.Object);
+                                        _participantService.Object, _roomService.Object, _equipmentService.Object);
         }
         
         [Test]

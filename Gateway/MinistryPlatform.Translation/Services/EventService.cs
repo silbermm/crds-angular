@@ -170,6 +170,7 @@ namespace MinistryPlatform.Translation.Services
                 var record = r[0];
                 var e = new Event
                 {
+                    CongregationId = record.ToInt("Congregation_ID"),
                     EventEndDate = record.ToDate("Event_End_Date"),
                     EventId = record.ToInt("Event_ID"),
                     EventStartDate = record.ToDate("Event_Start_Date"),
