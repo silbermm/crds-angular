@@ -147,7 +147,7 @@ namespace MinistryPlatform.Translation.Services
             return rsvp;
         }
 
-        private static TimeSpan GetTimeSpan(IDataRecord record, string columnName)
+        private static TimeSpan? GetTimeSpan(IDataRecord record, string columnName)
         {
             var columnIndex = record.GetOrdinal(columnName);
             var reader = record as SqlDataReader;
@@ -156,8 +156,7 @@ namespace MinistryPlatform.Translation.Services
                 throw new Exception("The DataReader is not a SqlDataReader");
             }
 
-            var myTimeSpan = reader.GetTimeSpan(columnIndex);
-            return myTimeSpan;
+            return !record.IsDBNull(columnIndex) ? reader.GetTimeSpan(columnIndex) : (TimeSpan?) null;
         }
 
         private static string SafeString(IDataRecord record, string fieldName)

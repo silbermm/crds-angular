@@ -20,7 +20,7 @@
       showWeeks: 'false'
     };
     vm.datePickers = { fromOpened: false, toOpened: false };
-    vm.format = 'MM/dd/yy';
+    vm.format = 'MM/dd/yyyy';
     vm.fromDate = formatDate(dates.fromDate);
     vm.fromDateError = false;
     vm.isFromError = isFromError;
@@ -58,7 +58,7 @@
         var iso = date.toISOString();
         return moment(iso);
       } else {
-        return moment(date, 'MM/DD/YY');
+        return moment(date, 'MM/DD/YYYY');
 
       }
     }

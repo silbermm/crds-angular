@@ -25,8 +25,8 @@ namespace crds_angular.Models.Crossroads.Serve
 
         public string OpportunityEmailAddress { get; set; }
 
-        public TimeSpan ShiftStart { get; set; }
+        public TimeSpan? ShiftStart { get; set; }
 
-        public TimeSpan ShiftEnd { get; set; }
+        public TimeSpan? ShiftEnd { get; set; }
     }
 }
