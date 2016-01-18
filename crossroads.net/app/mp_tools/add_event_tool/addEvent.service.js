@@ -30,6 +30,37 @@
           sendReminder: eventData.event.sendReminder,
           rooms: _.map(eventData.rooms, function(r) { return getRoomDto(r); })
         };
+      },
+      fromEventDto: function(event) {
+        return {
+          event: {
+            congregation: {
+              dp_RecordID: event.congregationId
+            },
+            primaryContact: {
+              contactId: event.contactId
+            },
+            eventType: {
+              dp_RecordID: event.eventTypeId
+            },
+            description: event.description,
+            donationBatchTool: event.donationBatchTool,
+            endDate: new Date(),
+            startDate: new Date(),
+            meetingInstructions: event.meetingInstructions,
+            minutesSetup: event.minutesSetup,
+            mintesCleanup: event.minutesTeardown,
+            program: {
+              programId: event.programId
+            },
+            reminderDays: event.reminderDays,
+            sendReminder: event.sendReminder,
+            startDateTime: new Date(),
+            endDateTime: new Date(),
+            eventTitle: event.title
+          },
+          rooms: _.map(event.rooms, function(r) { return fromRoomDto(r); })
+        };
       }
     };
 
@@ -49,6 +80,36 @@
         quantityRequested: equipment.choosenQuantity
       };
     }
+
+    function fromRoomDto(roomDto) {
+      return {
+        hidden: roomDto.hidden,
+        id: roomDto.roomId,
+        layout: {
+          id: roomDto.layoutId
+        },
+        notes: roomDto.notes,
+        roomReservationId: roomDto.roomReservationId,
+        cancelled: false,
+        equipment: _.map(roomDto.equipment, function(e) { 
+          return fromEquipmentDto(e);
+        })
+      };
+    }
+
+    function fromEquipmentDto(equipmentDto) {
+      return {
+        equipment: {
+          name: {
+            id: equipmentDto.equipmentId
+          },
+          choosenQuantity: equipmentDto.quantityRequested,
+          equipmentReservationId: equipmentDto.equipmentReservationId,
+          cancelled: false
+        }
+      };
+    }
+
 
     function dateTime(dateForDate, dateForTime) {
       return new Date(

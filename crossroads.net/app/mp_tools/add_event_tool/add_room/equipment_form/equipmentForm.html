@@ -12,7 +12,7 @@
         <th>Remove</th>
       </thead>
       <tbody> 
-
+        <pre> {{ equipment.currentEquipment }} </pre>
         <tr ng-repeat="equip in equipment.currentEquipment">
           <td>
             <div class="form-group" ng-class="{'has-error': equipment.showFieldError(equipmentForm, equipment.fieldName( 'equipmentChooser', $index) )}">

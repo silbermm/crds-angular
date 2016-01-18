@@ -38,6 +38,14 @@
             congregationId: AddEvent.eventData.event.congregation.dp_RecordID
           }, function(data) {
             vm.rooms = data;
+            _.forEach(vm.roomData, function(r) {
+              if(r.name === undefined) {
+                var tempRoom = _.find(data, function(roo){
+                  return roo.id === r.id;
+                });
+                r.name = tempRoom.name;
+              }
+            });
             vm.viewReady = true;
           });
 
@@ -45,7 +53,7 @@
           return;
         }
 
-        $log.error('Unable to get the list of rooms... handle the error somehow!');
+        $log.error('The congregation was not passed in so we can\'t get the list of rooms or equipment');
         return;
       }
 

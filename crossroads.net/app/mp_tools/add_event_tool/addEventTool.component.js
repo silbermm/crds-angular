@@ -44,8 +44,24 @@
       ////////////////////////////
 
       function activate() {
-        vm.currentEventSelected = vm.params.recordId;
-        vm.viewReady = true;
+        vm.currentEventSelected = Number(vm.params.recordId);
+        if (vm.currentEventSelected !== -1) {
+          // tool was launched from the details view...
+          EventService.eventTool.get({eventId: vm.currentEventSelected}, function(evt) {
+            AddEvent.eventData = AddEvent.fromEventDto(evt);
+            vm.rooms = AddEvent.eventData.rooms;
+            AddEvent.currentPage = 2;
+            vm.viewReady = true;
+          },
+
+          function(err) {
+            console.error('failed to get event ' + vm.currentEventSelected + ' + with error ' + err);
+            vm.viewReady = true;
+          });
+        } else {
+          vm.viewReady = true;
+        }
+
       }
 
       function allowAccess() {

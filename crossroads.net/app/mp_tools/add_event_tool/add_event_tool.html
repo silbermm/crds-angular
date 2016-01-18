@@ -9,9 +9,13 @@
     <h1>Manage Event</h1>
     <form name="addEvent.allData"  novalidate>
 
-      <add-event ng-if="addEvent.currentPage() == 1" event-data='addEvent.event'> </add-event> 
-      <add-room ng-if="addEvent.currentPage() == 2"  room-data='addEvent.rooms'> </add-room>
-
+     <!-- <div ng-if="addEvent.currentEventSelected > -1 && addEvent.viewReady">-->
+        <!--<edit-rooms current-event="addEvent.currentEvent"> </edit-rooms>-->
+      <!--</div>-->
+      
+      <add-event ng-if="addEvent.currentPage() == 1 && addEvent.viewReady" event-data='addEvent.event'> </add-event> 
+      <add-room ng-if="addEvent.currentPage() == 2 && addEvent.viewReady"  room-data='addEvent.rooms'> </add-room>
+      
       <button class="btn btn-standard pull-right" ng-click="addEvent.next()" ng-show="addEvent.currentPage() == 1">
         <svg viewBox="0 0 32 32" class="icon icon-arrow-right9">
           <use xlink:href="#arrow-right9"></use>

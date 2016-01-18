@@ -12,7 +12,8 @@
         currentRoom: '=',
         layouts: '=',
         equipmentLookup: '=',
-        removeRoom: '&'
+        removeRoom: '&',
+        editMode: '='
       },
       templateUrl: 'room_form/roomForm.html',
       bindToController: true,
