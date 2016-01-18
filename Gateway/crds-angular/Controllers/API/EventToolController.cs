@@ -26,14 +26,21 @@ namespace crds_angular.Controllers.API
         [ResponseType(typeof (EventToolDto))]
         public IHttpActionResult Get(int eventId)
         {
-            var x = _eventService.GetEventReservation(eventId);
-            return Ok(x);
-            //var room = new EventRoomDto();
-            //var equipment = new EventRoomEquipmentDto();
-            //var retVal = new EventToolDto();
-            //room.Equipment.Add(equipment);
-            //retVal.Rooms.Add(room);
-            //return Ok(retVal);
+            return Authorized(token =>
+            {
+                try
+                {
+                    var eventReservation = _eventService.GetEventReservation(eventId);
+                    return Ok(eventReservation);
+                }
+                catch (Exception e)
+                {
+                    var msg = "EventToolController: GET " + eventId;
+                    logger.Error(msg, e);
+                    var apiError = new ApiErrorDto(msg, e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
         }
 
         [AcceptVerbs("POST")]
@@ -52,6 +59,33 @@ namespace crds_angular.Controllers.API
                     catch (Exception e)
                     {
                         var msg = "EventToolController: POST " + eventReservation.Title;
+                        logger.Error(msg, e);
+                        var apiError = new ApiErrorDto(msg, e);
+                        throw new HttpResponseException(apiError.HttpResponseMessage);
+                    }
+                });
+            }
+            var errors = ModelState.Values.SelectMany(val => val.Errors).Aggregate("", (current, err) => current + err.Exception.Message);
+            var dataError = new ApiErrorDto("Event Data Invalid", new InvalidOperationException("Invalid Event Data" + errors));
+            throw new HttpResponseException(dataError.HttpResponseMessage);
+        }
+
+        [AcceptVerbs("PUT")]
+        [Route("api/eventTool")]
+        public IHttpActionResult Put([FromBody] EventToolDto eventReservation)
+        {
+            if (ModelState.IsValid)
+            {
+                return Authorized(token =>
+                {
+                    try
+                    {
+                        _eventService.UpdateEventReservation(eventReservation);
+                        return Ok();
+                    }
+                    catch (Exception e)
+                    {
+                        var msg = "EventToolController: PUT " + eventReservation.Title;
                         logger.Error(msg, e);
                         var apiError = new ApiErrorDto(msg, e);
                         throw new HttpResponseException(apiError.HttpResponseMessage);

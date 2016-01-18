@@ -81,6 +81,8 @@ namespace crds_angular.Services
                 var e = this.GetEvent(eventId);
                 dto.Title = e.EventTitle;
                 dto.CongregationId = e.CongregationId;
+                dto.EndDateTime = e.EventEndDate;
+                dto.StartDateTime = e.EventStartDate;
                 var rooms = _roomService.GetRoomReservations(eventId);
                 var roomDto = new List<EventRoomDto>();
 
@@ -99,6 +101,7 @@ namespace crds_angular.Services
                     }
 
                     var r = new EventRoomDto();
+                    r.Cancelled = room.Cancelled;
                     r.Equipment = equipmentDto;
                     r.Hidden = room.Hidden;
                     r.LayoutId = room.RoomLayoutId;
@@ -118,6 +121,48 @@ namespace crds_angular.Services
                 _logger.Error(msg, ex);
                 throw new Exception(msg, ex);   
             }
+        }
+
+        public bool UpdateEventReservation(EventToolDto eventReservation)
+        {
+            //throw new NotImplementedException();
+
+            try
+            {
+                // do i need to do this?
+                var e = this.GetEventReservation(eventReservation.EventId);
+
+                foreach (var room in eventReservation.Rooms)
+                {
+                    if (room.RoomReservationId == 0)
+                    {
+                        AddRoom(eventReservation.EventId, room);
+                    }
+                    else
+                    {
+                        UpdateRoom(eventReservation.EventId, room);
+                    }
+
+                    foreach (var equipment in room.Equipment)
+                    {
+                        if (equipment.EquipmentReservationId == 0)
+                        {
+                            AddEquipment(equipment, eventReservation.EventId, room);
+                        }
+                        else
+                        {
+                            UpdateEquipment(equipment, eventReservation.EventId, room);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);
+            }
+            return true;
         }
 
         public bool CreateEventReservation(EventToolDto eventTool)
@@ -157,6 +202,19 @@ namespace crds_angular.Services
             var equipmentReservationId = _equipmentService.CreateEquipmentReservation(equipmentReservation);
         }
 
+        private void UpdateEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
+        {
+            var equipmentReservation = new EquipmentReservationDto();
+            equipmentReservation.Approved = false;
+            equipmentReservation.Cancelled = false;
+            equipmentReservation.EquipmentId = equipment.EquipmentId;
+            equipmentReservation.EventEquipmentId = equipment.EquipmentReservationId;
+            equipmentReservation.EventId = eventId;
+            equipmentReservation.QuantityRequested = equipment.QuantityRequested;
+            equipmentReservation.RoomId = room.RoomId;
+            _equipmentService.UpdateEquipmentReservation(equipmentReservation);
+        }
+
         private void AddRoom(int eventId, EventRoomDto room)
         {
             var roomReservation = new RoomReservationDto();
@@ -168,6 +226,20 @@ namespace crds_angular.Services
             roomReservation.RoomId = room.RoomId;
             roomReservation.RoomLayoutId = room.LayoutId;
             var roomReservationId = _roomService.CreateRoomReservation(roomReservation);
+        }
+
+        private void UpdateRoom(int eventId, EventRoomDto room)
+        {
+            var roomReservation = new RoomReservationDto();
+            roomReservation.Approved = false;
+            roomReservation.Cancelled = false;
+            roomReservation.EventId = eventId;
+            roomReservation.EventRoomId = room.RoomReservationId;
+            roomReservation.Hidden = room.Hidden;
+            roomReservation.Notes = room.Notes;
+            roomReservation.RoomId = room.RoomId;
+            roomReservation.RoomLayoutId = room.LayoutId;
+            _roomService.UpdateRoomReservation(roomReservation);
         }
 
         private int AddEvent(EventToolDto eventTool)

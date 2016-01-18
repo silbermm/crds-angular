@@ -31,6 +31,9 @@ namespace crds_angular.Models.Crossroads.Events
         [Required]
         public DateTime EndDateTime { get; set; }
 
+        [JsonProperty(PropertyName = "eventId")]
+        public int EventId { get; set; }
+
         [JsonProperty(PropertyName = "eventTypeId")]
         [Required]
         public int EventTypeId { get; set; }
@@ -67,6 +70,8 @@ namespace crds_angular.Models.Crossroads.Events
         [JsonProperty(PropertyName = "title")]
         [Required]
         public string Title { get; set; }
+
+        
     }
 
     public class EventRoomDto
@@ -78,6 +83,9 @@ namespace crds_angular.Models.Crossroads.Events
         
         //[JsonProperty(PropertyName = "approved")]
         //public bool Approved { get; set; }
+
+        [JsonProperty(PropertyName = "cancelled")]
+        public bool Cancelled { get; set; }
 
         [JsonProperty(PropertyName = "equipment")]
         public List<EventRoomEquipmentDto> Equipment { get; set; }

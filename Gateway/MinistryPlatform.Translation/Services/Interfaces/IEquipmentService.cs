@@ -8,5 +8,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation);
         List<Equipment> GetEquipmentByLocationId(int locationId);
         List<EquipmentService.EquipmentReservation> GetEquipmentReservations(int eventId, int roomId);
+        void UpdateEquipmentReservation(EquipmentReservationDto equipmentReservation);
     }
 }
