@@ -111,7 +111,7 @@ namespace crds_angular.Services
         public IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token)
         {
             var pageViewId = AppSetting("EventsReadyForPrimaryContactReminder");
-            var search = ", sandi";
+            var search = "";
             var events = _eventService.EventsByPageViewId(token, pageViewId, search);
             var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
             {
@@ -229,7 +229,9 @@ namespace crds_angular.Services
                 {"Event_ID", evt.EventId},
                 {"Event_Title", evt.name},
                 {"Event_Start_Date", evt.StartDate.ToShortDateString()},
-                {"Event_Start_Time", evt.StartDate.ToShortTimeString()}               
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
+                {"Base_Url", _configurationWrapper.GetConfigValue("BaseUrl")}
+              
             };
            
             var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
