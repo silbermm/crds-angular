@@ -89,6 +89,8 @@ delete from @donationsTable;
 
 insert into @donationsTable (donation_id) (select donation_id from donations where donor_id = @donorId);
 
+insert into @donationsTable (donation_id) (select donation_id from donation_distributions where soft_credit_donor = @donorId);
+
 delete from donation_distributions where donation_id in (select donation_id from @donationsTable);
 
 delete from donations where donation_id in (select donation_id from @donationsTable);
