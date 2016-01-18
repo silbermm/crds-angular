@@ -81,7 +81,7 @@ describe('Serve Modal Controller', function() {
     }
     var d = moment(date);
     d.add(days, 'd');
-    return d.format('MM/DD/YY');
+    return d.format('MM/DD/YYYY');
   }
 
 });
