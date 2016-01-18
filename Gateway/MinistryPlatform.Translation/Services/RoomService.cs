@@ -21,6 +21,23 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
+        public List<RoomReservation> GetRoomReservations(int eventId)
+        {
+            var t = ApiLogin();
+            var search = string.Format(",{0}", eventId);
+            var records = _ministryPlatformService.GetPageViewRecords("GetRoomReservations", t, search);
+
+            return records.Select(record => new RoomReservation
+            {
+                Cancelled = record.ToBool("Cancelled"),
+                EventRoomId = record.ToInt("Event_Room_ID"),
+                Hidden = record.ToBool("Hidden"),
+                Notes = record.ToString("Notes"),
+                RoomId = record.ToInt("Room_ID"),
+                RoomLayoutId = record.ToInt("Room_Layout_ID")
+            }).ToList();
+        }
+
         public int CreateRoomReservation(RoomReservationDto roomReservation)
         {
             var token = ApiLogin();
@@ -78,5 +95,16 @@ namespace MinistryPlatform.Translation.Services
                 LayoutName = record.ToString("Layout_Name")
             }).ToList();
         }
+    }
+
+    public class RoomReservation
+    {
+        public bool Cancelled { get; set; }
+        public int EventId { get; set; }
+        public int EventRoomId { get; set; }
+        public bool Hidden { get; set; }
+        public string Notes { get; set; }
+        public int RoomId { get; set; }
+        public int RoomLayoutId { get; set; }
     }
 }

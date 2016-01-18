@@ -31,6 +31,24 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
+        public List<EquipmentReservation> GetEquipmentReservations(int eventId, int roomId)
+        {
+            var t = ApiLogin();
+            var search = string.Format(",{0},{1}", eventId, roomId);
+            var records = _ministryPlatformService.GetPageViewRecords("GetEquipmentReservations", t, search);
+
+            return records.Select(record => new EquipmentReservation
+            {
+                Cancelled = record.ToBool("Cancelled"),
+                EquipmentId = record.ToInt("Equipment_ID"),
+                EventEquipmentId = record.ToInt("Event_Equipment_ID"),
+                EventId = record.ToInt("Event_ID"),
+                Notes = record.ToString("Notes"),
+                QuantityRequested = record.ToInt("Quantity_Requested"),
+                RoomId = record.ToInt("Room_ID")
+            }).ToList();
+        }
+
         public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation)
         {
             var token = ApiLogin();
@@ -72,6 +90,16 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-
+        public class EquipmentReservation
+        {
+            public int EventEquipmentId { get; set; }
+            public int EventId { get; set; }
+            public int RoomId { get; set; }
+            public int EquipmentId { get; set; }
+            public string Notes { get; set; }
+            public int EventRoomId { get; set; }
+            public bool Cancelled { get; set; }
+            public int QuantityRequested { get; set; }
+        }
     }
 }

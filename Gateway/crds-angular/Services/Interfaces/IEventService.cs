@@ -8,6 +8,7 @@ namespace crds_angular.Services.Interfaces
     public interface IEventService
     {
         bool CreateEventReservation(EventToolDto eventTool);
+        EventToolDto GetEventReservation(int eventId);
         Event GetEvent(int eventId);
         void RegisterForEvent(EventRsvpDto eventDto, string token);
         IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token);

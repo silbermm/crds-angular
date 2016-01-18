@@ -72,6 +72,54 @@ namespace crds_angular.Services
             _equipmentService = equipmentService;
         }
 
+        public EventToolDto GetEventReservation(int eventId)
+        {
+            try
+            {
+                var dto = new EventToolDto();
+
+                var e = this.GetEvent(eventId);
+                dto.Title = e.EventTitle;
+                dto.CongregationId = 999;
+                var rooms = _roomService.GetRoomReservations(eventId);
+                var roomDto = new List<EventRoomDto>();
+
+                foreach (var room in rooms){
+                
+                    var equipmentDto = new List<EventRoomEquipmentDto>();
+                    var equipment = _equipmentService.GetEquipmentReservations(eventId, room.RoomId);
+                    foreach (var equipmentReservation in equipment)
+                    {
+                        var eq = new EventRoomEquipmentDto();
+                        eq.Cancelled = equipmentReservation.Cancelled;
+                        eq.EquipmentId = equipmentReservation.EquipmentId;
+                        eq.QuantityRequested = equipmentReservation.QuantityRequested;
+                        eq.EquipmentReservationId = equipmentReservation.EventEquipmentId;
+                        equipmentDto.Add(eq);
+                    }
+
+                    var r = new EventRoomDto();
+                    r.Equipment = equipmentDto;
+                    r.Hidden = room.Hidden;
+                    r.LayoutId = room.RoomLayoutId;
+                    r.Notes = room.Notes;
+                    r.RoomId = room.RoomId;
+                    r.RoomReservationId = room.EventRoomId;
+
+                    roomDto.Add(r);
+                }
+                dto.Rooms = roomDto;
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);   
+            }
+        }
+
         public bool CreateEventReservation(EventToolDto eventTool)
         {
             try

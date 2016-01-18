@@ -22,16 +22,18 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("GET")]
-        [Route("api/eventTool")]
+        [Route("api/eventTool/{eventId}")]
         [ResponseType(typeof (EventToolDto))]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(int eventId)
         {
-            var room = new EventRoomDto();
-            var equipment = new EventRoomEquipmentDto();
-            var retVal = new EventToolDto();
-            room.Equipment.Add(equipment);
-            retVal.Rooms.Add(room);
-            return Ok(retVal);
+            var x = _eventService.GetEventReservation(eventId);
+            return Ok(x);
+            //var room = new EventRoomDto();
+            //var equipment = new EventRoomEquipmentDto();
+            //var retVal = new EventToolDto();
+            //room.Equipment.Add(equipment);
+            //retVal.Rooms.Add(room);
+            //return Ok(retVal);
         }
 
         [AcceptVerbs("POST")]
