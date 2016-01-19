@@ -148,12 +148,15 @@
           },
 
           Meta: function(SingleMedia, $state) {
+            var message = SingleMedia.message;
+            var image = _.get(message, 'messageVideo.still') || _.get(message, 'messageAudio.still');
+
             $state.next.data.meta = {
-              title: SingleMedia.message.title,
-              description: SingleMedia.message.description,
+              title: message.title,
+              description: message.description,
               type: 'article',
               card: 'summary',
-              image: SingleMedia.message.messageVideo.still
+              image: image
             };
             return $state.next.data.meta;
           },
@@ -172,8 +175,8 @@
             return parent;
           },
 
-          ImageURL: function(SingleMedia) {
-            return _.get(SingleMedia.message, 'messageVideo.still.filename');
+          ImageURL: function(Meta) {
+            return _.get(Meta, 'image.filename');
           }
         }
       })
