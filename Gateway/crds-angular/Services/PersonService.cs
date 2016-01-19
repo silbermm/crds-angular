@@ -18,16 +18,22 @@ namespace crds_angular.Services
         private readonly IContactAttributeService _contactAttributeService;
         private readonly MPServices.IApiUserService _apiUserService;
         private readonly MPServices.IParticipantService _participantService;
+        private readonly MPServices.IUserService _userService;
+        private readonly MPServices.IAuthenticationService _authenticationService;
 
         public PersonService(MPServices.IContactService contactService, 
             IContactAttributeService contactAttributeService, 
             MPServices.IApiUserService apiUserService,
-            MPServices.IParticipantService participantService)
+            MPServices.IParticipantService participantService,
+            MPServices.IUserService userService,
+            MPServices.IAuthenticationService authenticationService)
         {
             _contactService = contactService;
             _contactAttributeService = contactAttributeService;
             _apiUserService = apiUserService;
             _participantService = participantService;
+            _userService = userService;
+            _authenticationService = authenticationService;
         }
 
         public void SetProfile(String token, Person person)
@@ -47,6 +53,23 @@ namespace crds_angular.Services
                 // convert to the object with underscores
                 var p = Mapper.Map <MpParticipant>(participant);
                 _participantService.UpdateParticipant(getDictionary(p));
+            }
+
+            // update the user values if the email and/or password has changed
+            if (!(String.IsNullOrEmpty(person.NewPassword)) || (person.EmailAddress != person.OldEmail))
+            {
+                var authData = TranslationService.Login(person.OldEmail, person.OldPassword);
+
+                if (authData == null)
+                {
+                    throw new Exception("Old password did not match profile");
+                }
+                else
+                {
+                    var userUpdateValues = person.GetUserUpdateValues();
+                    userUpdateValues["User_ID"] = _userService.GetUserIdByUsername(person.OldEmail);
+                    _userService.UpdateUser(userUpdateValues);
+                }
             }
         }
 
