@@ -64,7 +64,6 @@
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
     vm.openBirthdatePicker = openBirthdatePicker;
     vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
-    //vm.passwd = '';
     vm.password = '';
     vm.passwordPrefix = 'account-page';
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
@@ -228,7 +227,6 @@
         vm.submitted = true;
 
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          //if (vm.pform['passwd.passwordForm'].$dirty === true) {
           if (vm.pform['passwd.passwordForm'].password.$touched === true) {
             var something1 = vm.pform['passwd.passwordForm'];
             debugger;
