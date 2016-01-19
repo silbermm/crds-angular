@@ -57,7 +57,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Reminder_Days_Prior_ID", eventReservationReservation.ReminderDaysId},
                 {"Send_Reminder", eventReservationReservation.SendReminder},
                 {"Event_Start_Date", eventReservationReservation.StartDateTime},
-                {"Event_Title", eventReservationReservation.Title}
+                {"Event_Title", eventReservationReservation.Title},
+                {"Visibility_Level_ID", "4"}
             };
 
             try
