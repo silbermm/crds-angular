@@ -12,15 +12,15 @@
         <th>Remove</th>
       </thead>
       <tbody> 
-        <pre> {{ equipment.currentEquipment }} </pre>
-        <tr ng-repeat="equip in equipment.currentEquipment">
+        <tr ng-repeat="equip in equipment.currentEquipment" ng-hide="equipment.isCancelled(equip)" >
           <td>
             <div class="form-group" ng-class="{'has-error': equipment.showFieldError(equipmentForm, equipment.fieldName( 'equipmentChooser', $index) )}">
               <select class="form-control" 
                       name="{{ equipment.fieldName('equipmentChooser', $index) }}" 
                       ng-model="equip.equipment.name"
                       ng-options="e.name for e in equipment.equipmentLookup track by e.id" 
-                      required >
+                      required 
+                      ng-disabled="equipment.existing(equip.equipment)">
                       <option value="">-- Choose your equipment --</option>
               </select>
             </div>
@@ -33,7 +33,8 @@
                      ng-model="equip.equipment.choosenQuantity" 
                      ng-max="equip.equipment.name.quantity"
                      ng-min="0"
-                     required>
+                     required
+                     ng-disabled="equipment.existing(equip.equipment)">
             </div>
           </td>
           <td>

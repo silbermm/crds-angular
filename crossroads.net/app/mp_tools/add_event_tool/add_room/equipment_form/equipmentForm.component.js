@@ -3,9 +3,9 @@
 
   module.exports = EquipmentForm;
 
-  EquipmentForm.$inject = ['Validation'];
+  EquipmentForm.$inject = ['AddEvent', 'Validation'];
 
-  function EquipmentForm(Validation) {
+  function EquipmentForm(AddEvent, Validation) {
     return {
       restrict: 'E',
       scope: {
@@ -21,7 +21,9 @@
     function EquipmentController() {
       var vm = this;
       vm.addEquipment = addEquipment;
+      vm.existing = existing;
       vm.fieldName = fieldName;
+      vm.isCancelled = isCancelled;
       vm.remove = remove;
       vm.showError = showError;
       vm.showFieldError = showFieldError;
@@ -31,13 +33,26 @@
         vm.currentEquipment.push({equipment: {name: null, quantity: 0 }});
       }
 
+      function existing(equipment) {
+        return _.has(equipment, 'cancelled');
+      }
+
       function fieldName(name, idx) {
         return name + '-' + idx;
       }
 
+      function isCancelled(equipment) {
+        return existing(equipment) && equipment.cancelled;
+      }
+
       function remove(idx) {
         if (vm.currentEquipment[idx] !== undefined) {
-          vm.currentEquipment.splice(idx, 1);
+          if (existing(vm.currentEquipment[idx].equipment)) {
+            console.log('updating a piece of equipment');
+            vm.currentEquipment[idx].cancelled = true;
+          } else {
+            vm.currentEquipment.splice(idx, 1);
+          }
         }
       }
 

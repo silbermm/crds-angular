@@ -21,6 +21,7 @@
       var vm = this;
       vm.choosenSite = choosenSite;
       vm.equipmentList = [];
+      vm.isCancelled = isCancelled;
       vm.layouts = Room.Layouts.query();
       vm.onAdd = onAdd;
       vm.removeRoom = removeRoom;
@@ -40,26 +41,29 @@
             });
           });
         }
-     
+
         if (AddEvent.eventData.event.congregation !== undefined) {
           Room.ByCongregation.query({
             congregationId: AddEvent.eventData.event.congregation.dp_RecordID
           }, function(data) {
             vm.rooms = data;
             vm.roomData = _.map(vm.roomData, function(r) {
-              if(r.name === undefined) {
-                r.name = _.find(data, function(roo){
+              if (r.name === undefined) {
+                r.name = _.find(data, function(roo) {
                   return roo.id === r.id;
                 }).name;
               }
+
               return r;
             });
-            Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data){
-              vm.equipmentList = data;                    
+
+            Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data) {
+              vm.equipmentList = data;
               _.forEach(vm.roomData, function(roomD) {
-                roomD.equipment = mapEquipment(data, roomD.equipment);     
+                roomD.equipment = mapEquipment(data, roomD.equipment);
               });
-              vm.viewReady = true;     
+
+              vm.viewReady = true;
             });
           });
 
@@ -74,32 +78,38 @@
         return AddEvent.eventData.event.congregation.dp_RecordName;
       }
 
-	    function mapEquipment(equipmentLookup, currentEquipmentList) {
+      function isCancelled(currentRoom) {
+        return _.has(currentRoom, 'cancelled') && currentRoom.cancelled;
+      }
+
+      function mapEquipment(equipmentLookup, currentEquipmentList) {
         return _.map(currentEquipmentList, function(current) {
           if (current.equipment.name.quantity === undefined) {
             var found = _.find(equipmentLookup, function(e) {
               return e.id === current.equipment.name.id;
             });
+
             if (found) {
               current.equipment.name.quantity = found.quantity;
             }
+
             return current;
           }
         });
       }
 
       function removeRoomModal(room) {
-				 var modalInstance = $modal.open({
-					controller: 'RemoveRoomController as removeRoom',
-					templateUrl: 'remove_room/remove_room.html',
-					resolve: {
-						items: function () {
-							return room;
-						}
-					}
-				});
-				return modalInstance;
-			}
+        var modalInstance = $modal.open({
+          controller: 'RemoveRoomController as removeRoom',
+          templateUrl: 'remove_room/remove_room.html',
+          resolve: {
+            items: function() {
+              return room;
+            }
+          }
+        });
+        return modalInstance;
+      }
 
       function onAdd() {
         if (vm.choosenRoom) {
@@ -121,19 +131,27 @@
       }
 
       function removeRoom(currentRoom) {
-        $log.debug("remove room: " + currentRoom);
-        // show a modal????
-      	var modalInstance = removeRoomModal(currentRoom);
+        $log.debug('remove room: ' + currentRoom);
+        var modalInstance = removeRoomModal(currentRoom);
 
         modalInstance.result.then(function() {
-          vm.roomData = _.filter(vm.roomData, function(r) {
-            // only return elements that aren't currentRoom
-            return r.id !== currentRoom.id;
-          });
-        }, function() {
-          $log.info('user doesn\'t want to delete this room...');
+          if (!_.has(currentRoom, 'cancelled')) {
+            vm.roomData = _.filter(vm.roomData, function(r) {
+              // only return elements that aren't currentRoom
+              return r.id !== currentRoom.id;
+            });
+          } else {
+            currentRoom.cancelled = true;
+          }
+        },
+
+        function() {
+          if (!_.has(currentRoom, 'cancelled') && currentRoom.cancelled) {
+            $log.info('user doesn\'t want to delete this room...');
+            currentRoom.cancelled = false;
+          }
         });
-			}
+      }
 
       function showNoRoomsMessage() {
         return (!vm.viewReady || vm.rooms === undefined || vm.rooms.length < 1);

@@ -1,5 +1,4 @@
 <preloader full-screen ng-if="!addRoom.viewReady"> </preloader>
-
 <div class="form-group" ng-if="addRoom.viewReady" >
   <span ng-show="addRoom.showNoRoomsMessage()"> There are no rooms for this site </span>
   <span ng-hide="addRoom.showNoRoomsMessage()"> 
@@ -27,7 +26,12 @@
 
 <!-- The rooms choosen --> 
   <span ng-repeat="currentRoom in addRoom.roomData">
-    <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList" remove-room="addRoom.removeRoom(currentRoom)"> </room-form>
+    <room-form current-room="currentRoom" 
+               layouts="addRoom.layouts" 
+               equipment-lookup="addRoom.equipmentList" 
+               ng-hide="addRoom.isCancelled(currentRoom)"
+               remove-room="addRoom.removeRoom(currentRoom)">
+    </room-form>
   </span>
   
 </div>

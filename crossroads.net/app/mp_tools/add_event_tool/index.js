@@ -13,6 +13,5 @@
   require('./add_event');
   require('./add_room');
   require('./remove_room');
-  require('./edit_rooms');
 
 })();

@@ -23,6 +23,8 @@
 
     function RoomController() {
       var vm = this;
+      vm.existing = existing;
+      vm.isCancelled = isCancelled;
       vm.remove = remove;
       vm.validation = Validation;
 
@@ -35,6 +37,14 @@
         if (vm.currentRoom.equipment === undefined) {
           vm.currentRoom.equipment = [];
         }
+      }
+
+      function existing() {
+        return _.has(vm.currentRoom, 'cancelled');
+      }
+
+      function isCancelled() {
+        return existing() && vm.currentRoom.cancelled;
       }
 
       function remove() {

@@ -31,7 +31,7 @@
         Save
       </button>
       
-      <button class="btn btn-standard pull-right" ng-click="addEvent.back()" ng-show="addEvent.currentPage() == 2">
+      <button class="btn btn-standard pull-right" ng-click="addEvent.back()" ng-show="addEvent.currentPage() == 2 && !addEvent.isEditMode()">
         <svg viewBox="0 0 32 32" class="icon icon-arrow-left9">
           <use xlink:href="#arrow-left9"></use>
         </svg> 

@@ -32,6 +32,7 @@
       vm.back = back;
       vm.currentPage = currentPage;
       vm.event = AddEvent.eventData.event;
+      vm.isEditMode = isEditMode;
       vm.next = next;
       vm.params = MPTools.getParams();
       vm.processing = false;
@@ -77,6 +78,10 @@
 
       function currentPage() {
         return AddEvent.currentPage;
+      }
+
+      function isEditMode() {
+        return AddEvent.editMode;
       }
 
       function next() {
