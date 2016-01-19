@@ -92,7 +92,7 @@
           }
         })
         .state('login', {
-          parent: 'noSideBar',
+          parent: 'noHeaderOrFooter',
           url: '/signin',
           templateUrl: 'login/login_page.html',
           controller: 'LoginController',
@@ -116,7 +116,7 @@
           }
         })
         .state('register', {
-          parent: 'noSideBar',
+          parent: 'noHeaderOrFooter',
           url: '/register',
           templateUrl: 'register/register_page.html',
           controller: 'RegisterCtrl',
@@ -398,6 +398,13 @@
           resolve: {
             MPTools: 'MPTools',
             Trip: 'Trip'
+          }
+        })
+        .state('tools.createEvent', {
+          url: '/create-event',
+          template: '<add-event-tool></add-event-tool>',
+          resolve: {
+            MPTools: 'MPTools'
           }
         })
         .state('tools.volunteerContact', {

@@ -10,13 +10,13 @@ GO
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_CATALOG = 'MinistryPlatform' AND TABLE_SCHEMA = 'dbo' AND  TABLE_NAME = 'cr_Preferred_Serve_Time')
 BEGIN 
 	CREATE TABLE [dbo].[cr_Preferred_Serve_Time](
-		[Serve_Time_ID] INT IDENTITY(1,1) NOT NULL,
+		[Preferred_Serving_Time_ID] INT IDENTITY(1,1) NOT NULL,
 		[Preferred_Serve_Time] NVARCHAR(50) NOT NULL,
 		[Congregation_ID] INT NOT NULL,
 		[Domain_ID] INT NOT NULL DEFAULT (1)
 	CONSTRAINT [PK_Preferred_Serve_Time] PRIMARY KEY CLUSTERED 
 	(
-		[Serve_Time_ID]ASC
+		[Preferred_Serving_Time_ID] ASC
 	)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 	) ON [PRIMARY]
 END
@@ -63,9 +63,9 @@ INSERT INTO [dbo].[dp_Pages]
            'Preferred Serving Time',
            295,
            'cr_Preferred_Serve_Time',
-           'Serve_Time_ID',
+           'Preferred_Serving_Time_ID',
            NULL,
-           'cr_Preferred_Serve_Time.Preferred_Serve_Time, cr_Preferred_Serve_Time.Congregation_ID',
+           'cr_Preferred_Serve_Time.Preferred_Serve_Time, Congregation_ID_Table.[Congregation_Name]',
            'cr_Preferred_Serve_Time.Preferred_Serve_Time',
            0)
 

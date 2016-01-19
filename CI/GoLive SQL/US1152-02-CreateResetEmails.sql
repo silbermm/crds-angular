@@ -14,14 +14,31 @@ GO
 -- Uncomment the update line in order to fully run the script. This is commented out on purpose
 -- to avoid accidentally running this script.
 --
+-- **************************
+-- Change History
+-- **************************
+-- Story    Date	    Author           Description	
+-- ------   --------    ---------------  -----------
+-- US3075   01/18/2016  Charlie Retzler  Updated to add order to send to staff before community
+--
+-- =========================================================================
 -- DO NOT RUN THIS SCRIPT AFTER GO-LIVE NIGHT.
 -- =========================================================================
 
-DECLARE @users_temp TABLE(user_id INT, contact_id INT, user_name VARCHAR(MAX), passwordresettoken VARCHAR(MAX))
+DECLARE @users_temp TABLE(user_id INT, contact_id INT, user_name VARCHAR(MAX), passwordresettoken VARCHAR(MAX), staff BIT)
 
 -- This block is here for testing. Substitute your user id in the appropriate spot and run. This will insert a communication and send an email.
 INSERT INTO @users_temp
-SELECT TOP(1) u.User_ID, u.Contact_ID, u.User_Name, u.PasswordResetToken FROM dp_Users u inner join contacts c ON u.Contact_ID = c.Contact_ID 
+SELECT 
+	TOP(1) 
+		u.User_ID, u.Contact_ID, u.User_Name, u.PasswordResetToken, CASE WHEN ur.Role_Count > 0 THEN 1 ELSE 0 END AS staff
+FROM dp_Users u 
+	INNER JOIN contacts c ON u.Contact_ID = c.Contact_ID 
+	LEFT JOIN (
+		SELECT User_ID, COUNT(*) as Role_Count 
+			FROM dp_User_Roles WHERE Role_ID <> 39 --Exclude All Platform Users
+			GROUP BY User_ID
+		) ur on ur.User_ID = u.User_ID
 WHERE c.Contact_Status_ID = 1 
 AND (u.User_Name = u.User_Email)
 AND (u.User_Name = c.Email_Address)
@@ -33,7 +50,16 @@ AND u.PasswordResetToken IS NOT NULL
 -- This is the "live" code and is commented out, along with the TOP(0) line in order to avoid accidentally running this code. 
 -- DO NOT UNCOMMENT THIS CODE AND RUN THIS QUERY EXCEPT AT GO-LIVE NIGHT
 --INSERT INTO @users_temp
---SELECT TOP(0) u.User_ID, u.Contact_ID, u.User_Name, u.PasswordResetToken FROM dp_Users u inner join contacts c ON u.Contact_ID = c.Contact_ID 
+--SELECT    
+--	TOP(0) 
+--		u.User_ID, u.Contact_ID, u.User_Name, u.PasswordResetToken, CASE WHEN ur.Role_Count > 0 THEN 1 ELSE 0 END AS staff
+--FROM dp_Users u 
+--	INNER JOIN contacts c ON u.Contact_ID = c.Contact_ID 
+--	LEFT JOIN (
+--		SELECT User_ID, COUNT(*) as Role_Count 
+--			FROM dp_User_Roles WHERE Role_ID <> 39 --Exclude All Platform Users
+--			GROUP BY User_ID
+--		) ur on ur.User_ID = u.User_ID
 --WHERE c.Contact_Status_ID = 1 
 --AND (u.User_Name = u.User_Email)
 --AND (u.User_Name = c.Email_Address)
@@ -41,17 +67,18 @@ AND u.PasswordResetToken IS NOT NULL
 --AND u.User_Email LIKE '%_@__%.__%'
 --AND u.PasswordResetToken IS NOT NULL
 
-SELECT * FROM @users_temp
+SELECT * FROM @users_temp ORDER BY staff DESC
 
 DECLARE @contact_id AS INT
 DECLARE @user_name AS VARCHAR(MAX)
 DECLARE @passwordresettoken AS VARCHAR(MAX)
+DECLARE @staff AS BIT
 
-DECLARE users_curs CURSOR FOR SELECT contact_id, user_name, passwordresettoken FROM @users_temp
+DECLARE users_curs CURSOR FOR SELECT contact_id, user_name, passwordresettoken, staff FROM @users_temp ORDER BY staff DESC
 
 OPEN users_curs
 
-FETCH NEXT FROM users_curs into @contact_id, @user_name, @passwordresettoken
+FETCH NEXT FROM users_curs into @contact_id, @user_name, @passwordresettoken, @staff
 
 WHILE @@FETCH_STATUS = 0 BEGIN
 
@@ -78,9 +105,10 @@ WHILE @@FETCH_STATUS = 0 BEGIN
 
 	 END
 
-FETCH NEXT FROM users_curs into @contact_id, @user_name, @passwordresettoken
+	FETCH NEXT FROM users_curs into @contact_id, @user_name, @passwordresettoken, @staff
 
 END
+
 CLOSE users_curs
 DEALLOCATE users_curs
 GO

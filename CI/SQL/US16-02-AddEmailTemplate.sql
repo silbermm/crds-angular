@@ -9,7 +9,7 @@ SET
 
    [Author_User_ID] = 1,
    [Subject] = 'Password Reset Link',
-   [Body] = '<p>Someone requeted that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>To reset your password, visit the following address: [resetlink]</p></div>',
+   [Body] = '<p>Someone requested that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>Use this <a href="[resetlink]">link</a> to reset your password</p></div>',
    [Domain_ID] = 1,
    [Start_Date] = '2015-11-03 00:00:00.000',
    [Expire_Date] = NULL,
@@ -45,7 +45,7 @@ INSERT INTO [dbo].[dp_Communications]
            (13356,
 		   1,
 		   'Password Reset Link',
-		   '<p>Someone requested that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>To reset your password, visit the following address: http://www.crossroads.net/lostpassword?[resetlink]</p></div>',
+		   '<p>Someone requested that the password be reset for the user with this email address on crossroads.net.</p><div><p>If this was a mistake, just ignore this email and nothing will happen.</p></div><div><p>Use this <a href="[resetlink]">link</a> to reset your password.</p></div>',
 		   1,
 		   '2015-11-03 00:00:00.000',
 		   NULL,

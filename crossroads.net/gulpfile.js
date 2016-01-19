@@ -30,7 +30,6 @@ function htmlReplace(devBuild) {
   if (devBuild) {
     assets = {
       ang: { js: '/assets/ang.js' },
-      ang2: { js: '/assets/ang2.js' },
       core: { js: '/assets/core.js', css: '/assets/core.css' },
       common: { js: '/assets/common.js' },
       profile: { js: '/assets/profile.js' },
@@ -47,7 +46,6 @@ function htmlReplace(devBuild) {
   gulp.src('app/atriumevents.html')
       .pipe(htmlreplace({
         angjs: assets.ang.js,
-        ang2js: assets.ang2.js,
         corejs: {src: assets.core.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
         corecss: assets.core.css,
         commonjs: assets.common.js,
@@ -63,7 +61,6 @@ function htmlReplace(devBuild) {
   gulp.src('app/index.html')
       .pipe(htmlreplace({
         angjs: assets.ang.js,
-        ang2js: assets.ang2.js,
         corejs: {src: assets.core.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},
         corecss: assets.core.css,
         commonjs: {src: assets.common.js, tpl: '<script src="%s" type="text/javascript"  defer></script>'},

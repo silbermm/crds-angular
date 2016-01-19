@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crossroads.Utilities.Interfaces;
+using MinistryPlatform.Models.DTO;
+using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using Moq;
@@ -56,6 +58,34 @@ namespace MinistryPlatform.Translation.Test.Services
             Assert.AreEqual("me@here.com", user.UserId);
             Assert.AreEqual(mpResult[0]["User_GUID"].ToString(), user.Guid);
             Assert.IsTrue(user.CanImpersonate);
+        }
+
+        [Test]
+        public void TestGetUserRoles()
+        {
+            var mpResult = new List<Dictionary<string, object>>
+            {
+                new Dictionary<string, object>
+                {
+                    {"Role_ID", 123},
+                    {"Role_Name", "Role 123"}
+                },
+                new Dictionary<string, object>
+                {
+                    {"Role_ID", 456},
+                    {"Role_Name", "Role 456"}
+                }
+            };
+
+            _ministryPlatformService.Setup(mocked => mocked.GetSubpageViewRecords("User_Roles_With_ID", 987, "ABC", string.Empty, string.Empty, 0)).Returns(mpResult);
+
+            var roles = _fixture.GetUserRoles(987);
+            Assert.IsNotNull(roles);
+            Assert.AreEqual(mpResult.Count, roles.Count);
+            foreach (var result in mpResult)
+            {
+                Assert.IsTrue(roles.Exists(role => role.Id == result.ToInt("Role_ID") && role.Name.Equals(result.ToString("Role_Name"))));
+            }
         }
 
         [Test]

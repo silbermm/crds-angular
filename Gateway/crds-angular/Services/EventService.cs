@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using System.Web.Management;
 using crds_angular.Models.Crossroads.Events;
 using Crossroads.Utilities.Functions;
 using Crossroads.Utilities.Interfaces;
 using Crossroads.Utilities.Services;
+using log4net;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Models.People;
+using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 using WebGrease.Css.Extensions;
 using Event = MinistryPlatform.Models.Event;
@@ -19,6 +20,8 @@ namespace crds_angular.Services
 {
     public class EventService : MinistryPlatformBaseService, IEventService
     {
+        private readonly ILog _logger = LogManager.GetLogger(typeof(EventService));
+
         private readonly IConfigurationWrapper _configurationWrapper;
         private readonly TranslationEventService _eventService;
         private readonly IGroupService _groupService;
@@ -29,6 +32,8 @@ namespace crds_angular.Services
         private readonly IContactRelationshipService _contactRelationshipService;
         private readonly IGroupParticipantService _groupParticipantService;
         private readonly IParticipantService _participantService;
+        private readonly IRoomService _roomService;
+        private readonly IEquipmentService _equipmentService;
 
         private readonly List<string> TABLE_HEADERS = new List<string>()
         {
@@ -48,7 +53,10 @@ namespace crds_angular.Services
                             IConfigurationWrapper configurationWrapper,
                             IApiUserService apiUserService,
                             IContactRelationshipService contactRelationshipService,
-                            IGroupParticipantService groupParticipantService, IParticipantService participantService)
+                            IGroupParticipantService groupParticipantService,
+                            IParticipantService participantService,
+                            IRoomService roomService,
+                            IEquipmentService equipmentService)
         {
             _eventService = eventService;
             _groupService = groupService;
@@ -60,6 +68,82 @@ namespace crds_angular.Services
             _contactRelationshipService = contactRelationshipService;
             _groupParticipantService = groupParticipantService;
             _participantService = participantService;
+            _roomService = roomService;
+            _equipmentService = equipmentService;
+        }
+
+        public bool CreateEventReservation(EventToolDto eventTool)
+        {
+            try
+            {
+                var eventId = AddEvent(eventTool);
+
+                foreach (var room in eventTool.Rooms)
+                {
+                    AddRoom(eventId, room);
+
+                    foreach (var equipment in room.Equipment)
+                    {
+                        AddEquipment(equipment, eventId, room);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);
+            }
+            return true;
+        }
+
+        private void AddEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
+        {
+            var equipmentReservation = new EquipmentReservationDto();
+            equipmentReservation.Approved = false;
+            equipmentReservation.Cancelled = false;
+            equipmentReservation.EquipmentId = equipment.EquipmentId;
+            equipmentReservation.EventId = eventId;
+            equipmentReservation.QuantityRequested = equipment.QuantityRequested;
+            equipmentReservation.RoomId = room.RoomId;
+            var equipmentReservationId = _equipmentService.CreateEquipmentReservation(equipmentReservation);
+        }
+
+        private void AddRoom(int eventId, EventRoomDto room)
+        {
+            var roomReservation = new RoomReservationDto();
+            roomReservation.Approved = false;
+            roomReservation.Cancelled = false;
+            roomReservation.EventId = eventId;
+            roomReservation.Hidden = room.Hidden;
+            roomReservation.Notes = room.Notes;
+            roomReservation.RoomId = room.RoomId;
+            roomReservation.RoomLayoutId = room.LayoutId;
+            var roomReservationId = _roomService.CreateRoomReservation(roomReservation);
+        }
+
+        private int AddEvent(EventToolDto eventTool)
+        {
+            var eventDto = new EventReservationDto();
+            eventDto.CongregationId = eventTool.CongregationId;
+            eventDto.ContactId = eventTool.ContactId;
+            eventDto.Description = eventTool.Description;
+            eventDto.DonationBatchTool = eventTool.DonationBatchTool;
+            eventDto.EndDateTime = eventTool.EndDateTime;
+            eventDto.EventTypeId = eventTool.EventTypeId;
+            eventDto.MeetingInstructions = eventTool.MeetingInstructions;
+            eventDto.MinutesSetup = eventTool.MinutesSetup;
+            eventDto.MinutesTeardown = eventTool.MinutesTeardown;
+            eventDto.ProgramId = eventTool.ProgramId;
+            if (eventTool.ReminderDaysId > 0)
+            {
+                eventDto.ReminderDaysId = eventTool.ReminderDaysId;
+            }
+            eventDto.SendReminder = eventTool.SendReminder;
+            eventDto.StartDateTime = eventTool.StartDateTime;
+            eventDto.Title = eventTool.Title;
+            var eventId = _eventService.CreateEvent(eventDto);
+            return eventId;
         }
 
         public Event GetEvent(int eventId)
@@ -110,10 +194,11 @@ namespace crds_angular.Services
             }
         }
 
-        public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
+        public IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token)
         {
-            var pageId = AppSetting("EventsReadyForReminder");
-            var events = _eventService.EventsByPageId(token, pageId);            
+            var pageViewId = AppSetting("EventsReadyForPrimaryContactReminder");
+            var search = "";
+            var events = _eventService.EventsByPageViewId(token, pageViewId, search);
             var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
             {
                 name = evt.EventTitle,
@@ -124,7 +209,26 @@ namespace crds_angular.Services
                 location = evt.EventLocation,
                 PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
                 PrimaryContactId = evt.PrimaryContact.ContactId
-            });           
+            });
+            
+            return eventList.ToList();
+        }
+
+        public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
+        {
+            var pageId = AppSetting("EventsReadyForReminder");
+            var events = _eventService.EventsByPageId(token, pageId);
+            var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
+            {
+                name = evt.EventTitle,
+                EventId = evt.EventId,
+                EndDate = evt.EventEndDate,
+                StartDate = evt.EventStartDate,
+                EventType = evt.EventType,
+                location = evt.EventLocation,
+                PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
+                PrimaryContactId = evt.PrimaryContact.ContactId
+            });
             // Childcare will be included in the email for event, so don't send a duplicate.
             return eventList.Where(evt => evt.EventType != "Childcare").ToList();
         }
@@ -150,6 +254,18 @@ namespace crds_angular.Services
 
                 participants.ForEach(participant => SendEventReminderEmail(evt, participant, childcare, childcareParticipants, token));
                 _eventService.SetReminderFlag(evt.EventId, token);
+            });
+        }
+
+        public void SendPrimaryContactReminderEmails()
+        {
+            var token = _apiUserService.GetToken();
+            var eventList = EventsReadyForPrimaryContactReminder(token);
+
+            eventList.ForEach(evt =>
+            {
+                SendPrimaryContactReminderEmail(evt, token);
+
             });
         }
 
@@ -181,14 +297,39 @@ namespace crds_angular.Services
             }
             var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
             var comm = _communicationService.GetTemplateAsCommunication(
-               AppSetting("EventReminderTemplateId"),
-               defaultContact.Contact_ID,               
+                AppSetting("EventReminderTemplateId"),
+                defaultContact.Contact_ID,
+                defaultContact.Email_Address,
+                evt.PrimaryContactId,
+                evt.PrimaryContactEmailAddress,
+                participant.ContactId,
+                participant.EmailAddress,
+                mergeData);
+            _communicationService.SendMessage(comm);
+        }
+
+        private void SendPrimaryContactReminderEmail(Models.Crossroads.Events.Event evt, string token)
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Event_ID", evt.EventId},
+                {"Event_Title", evt.name},
+                {"Event_Start_Date", evt.StartDate.ToShortDateString()},
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
+                {"Base_Url", _configurationWrapper.GetConfigValue("BaseUrl")}
+              
+            };
+           
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
+            var comm = _communicationService.GetTemplateAsCommunication(
+               AppSetting("EventPrimaryContactReminderTemplateId"),
+               defaultContact.Contact_ID,
                defaultContact.Email_Address,
                evt.PrimaryContactId,
                evt.PrimaryContactEmailAddress,
-               participant.ContactId,
-               participant.EmailAddress,
-               mergeData );
+               evt.PrimaryContactId,
+               evt.PrimaryContactEmailAddress,               
+               mergeData);
             _communicationService.SendMessage(comm);
         }
 

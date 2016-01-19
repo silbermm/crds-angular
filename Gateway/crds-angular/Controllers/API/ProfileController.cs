@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Reflection;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions;
 using crds_angular.Exceptions.Models;
-using crds_angular.Models;
 using crds_angular.Models.Crossroads.Profile;
-using crds_angular.Models.Json;
 using crds_angular.Security;
 using crds_angular.Services.Interfaces;
+using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Services.Interfaces;
 using IPersonService = crds_angular.Services.Interfaces.IPersonService;
@@ -27,18 +25,23 @@ namespace crds_angular.Controllers.API
         private readonly IDonorService _donorService;
         private readonly IUserImpersonationService _impersonationService;
         private readonly IAuthenticationService _authenticationService ;
+        private readonly IUserService _userService;
+        private readonly List<int> _allowedAdminGetProfileRoles;
 
-        public ProfileController(IPersonService personService, IServeService serveService, IUserImpersonationService impersonationService, IDonorService donorService, IAuthenticationService authenticationService)
+        public ProfileController(IPersonService personService, IServeService serveService, IUserImpersonationService impersonationService, IDonorService donorService, IAuthenticationService authenticationService, IUserService userService, IConfigurationWrapper config)
         {
             _personService = personService;
             _serveService = serveService;
             _impersonationService = impersonationService;
             _donorService = donorService;
             _authenticationService = authenticationService;
+            _userService = userService;
+            _allowedAdminGetProfileRoles = config.GetConfigValue("AdminGetProfileRoles").Split(',').Select(int.Parse).ToList();
         }
 
         [ResponseType(typeof (Person))]
         [Route("api/profile")]
+        [HttpGet]
         public IHttpActionResult GetProfile([FromUri(Name = "impersonateDonorId")]int? impersonateDonorId = null)
         {
             return Authorized(token =>
@@ -64,6 +67,7 @@ namespace crds_angular.Controllers.API
 
         [ResponseType(typeof(Person))]
         [Route("api/profile/{contactId}")]
+        [HttpGet]
         public IHttpActionResult GetProfile(int contactId)
         {
             return Authorized(token =>
@@ -83,7 +87,39 @@ namespace crds_angular.Controllers.API
                     {
                         return Unauthorized();
                     }
-                    return this.Ok(person);
+                    return Ok(person);
+                }
+                catch (Exception e)
+                {
+                    var apiError = new ApiErrorDto("Get Profile Failed", e);
+                    throw new HttpResponseException(apiError.HttpResponseMessage);
+                }
+            });
+        }
+
+        [ResponseType(typeof(Person))]
+        [Route("api/profile/{contactId}/admin")]
+        [HttpGet]
+        public IHttpActionResult AdminGetProfile(int contactId)
+        {
+            return Authorized(token =>
+            {
+                var user = _userService.GetByAuthenticationToken(token);
+                var roles = _userService.GetUserRoles(user.UserRecordId);
+                if (roles == null || !roles.Exists(r => _allowedAdminGetProfileRoles.Contains(r.Id)))
+                {
+                    return Unauthorized();
+                }
+
+                try
+                {
+                    var person = _personService.GetPerson(contactId);
+
+                    if (person == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(person);
                 }
                 catch (Exception e)
                 {
