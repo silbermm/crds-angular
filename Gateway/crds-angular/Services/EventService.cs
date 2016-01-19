@@ -126,14 +126,8 @@ namespace crds_angular.Services
 
         public bool UpdateEventReservation(EventToolDto eventReservation, int eventId)
         {
-            //throw new NotImplementedException();
-
             try
             {
-                // do i need to do this?
-
-                //var e = this.GetEventReservation(eventId);
-
                 foreach (var room in eventReservation.Rooms)
                 {
                     if (room.RoomReservationId == 0)
@@ -207,7 +201,6 @@ namespace crds_angular.Services
         private void UpdateEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
         {
             var equipmentReservation = new EquipmentReservationDto();
-            //equipmentReservation.Approved = false;
             equipmentReservation.Cancelled = equipment.Cancelled;
             equipmentReservation.EquipmentId = equipment.EquipmentId;
             equipmentReservation.EventEquipmentId = equipment.EquipmentReservationId;
