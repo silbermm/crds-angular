@@ -19,6 +19,7 @@
           Series: function(Media) {
             return Media.Series().get().$promise;
           },
+
           SingleMedia: function(Media) {
             return Media.SingleMedia().get().$promise;
           }
@@ -35,6 +36,9 @@
       .state('media.all', {
         url: '/media',
         templateUrl: 'templates/viewAll.html',
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
+        }
       })
       .state('media.music', {
         url: '/music',
@@ -46,6 +50,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.series', {
@@ -58,6 +65,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.videos', {
@@ -70,6 +80,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.seriesSingle', {
@@ -115,7 +128,10 @@
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'templates/mediaSingle.html'
+        templateUrl: 'templates/mediaSingle.html',
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
+        }
       })
       .state('messageSingle', {
         parent: 'screenWidth',
