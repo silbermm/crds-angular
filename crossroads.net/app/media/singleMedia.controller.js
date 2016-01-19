@@ -62,7 +62,7 @@
     vm.mediaTags = vm.media.tags;
 
     if (vm.isMessage) {
-      vm.videoSectionIsOpen = true;
+      vm.videoSectionIsOpen = !_.isEmpty(vm.media.messageVideo);
       vm.audio = vm.media.messageAudio;
       vm.video = vm.media.messageVideo;
       vm.programDownloadLink = _.get(vm.media, 'program.filename');
