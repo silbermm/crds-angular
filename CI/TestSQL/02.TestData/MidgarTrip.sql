@@ -59,4 +59,9 @@ set @tripName = '(t) GO Midgar '+CONVERT(VARCHAR(4), datepart(year, getdate()));
 update [dbo].Pledge_Campaigns set program_id = (select program_id from programs where program_name = @tripName) where campaign_name = @tripName;
 update [dbo].programs set pledge_campaign_id = (select pledge_campaign_id from pledge_campaigns where campaign_name = @tripName) where program_name = @tripName;
 update [dbo].Pledge_Campaigns set Event_ID = (select Event_ID from Events where Event_Title = @tripName) where campaign_name = @tripName;
+
+--link the group to the event. We should probably have more than one group 
+INSERT INTO [dbo].EVENT_GROUPS
+(EVENT_ID                                                   ,GROUP_ID                                                   ,Room_ID, Domain_ID) VALUES
+((select event_id from events where event_title = @tripName), (select GROUP_ID from groups where group_name = @tripName),null   , 1        );
 GO

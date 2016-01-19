@@ -9,13 +9,13 @@ Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
 
 Declare @participantID as int
-set @participantID = (select participant_record from contacts where contact_id = @contactID);
+set @participantID = (select participant_id from participants where contact_id = @contactID);
 
 Declare @userAccount as int
-set @userAccount = (select user_account from contacts where contact_id = @contactID);
+set @userAccount = (select user_id from dp_users where contact_id = @contactID);
 
 Declare @donorID as int
-set @donorID = (select donor_record from contacts where contact_id = @contactID);
+set @donorID = (select donor_id from donors where contact_id = @contactID);
 
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
