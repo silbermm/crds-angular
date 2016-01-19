@@ -12,7 +12,10 @@ GO
 -- =============================================
 -- Author:      Kriz, Jim
 -- Create date: 01/19/2016
--- Description: Add User Role for a given Legacy Person ID
+-- Description: Add User Role for a given Legacy Person ID.  This procedure
+--              is only needed during cutover from Legacy to MinistryPlatform.
+--              It can be safely deleted once we have migrated users and roles.
+--              There is a story in Rally to remove this, US3083 (https://rally1.rallydev.com/#/27593764268d/detail/userstory/49993426884).
 -- =============================================
 ALTER PROCEDURE [dbo].[CRDS_Add_User_Role]
          @LegacyPersonID Int
