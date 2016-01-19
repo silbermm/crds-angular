@@ -228,14 +228,19 @@
         vm.submitted = true;
 
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          if (vm.pform['passwd.passwordForm'].$dirty === true) {
+          //if (vm.pform['passwd.passwordForm'].$dirty === true) {
+          if (vm.pform['passwd.passwordForm'].password.$touched === true) {
+            var something1 = vm.pform['passwd.passwordForm'];
+            debugger;
             vm.passwordSet = true;
           }
         }
 
         if (vm.pform['email'] !== undefined) {
           debugger;
-          if (vm.pform['email'].$dirty === true) {
+          if (vm.pform['email'].$touched === true) {
+            var something2 = vm.pform['email'];
+            debugger;
             vm.emailSet = true;
           }
         }
@@ -332,8 +337,6 @@
 
     function showPasswordConfirmModal() {
 
-      debugger;
-
       var modalType = '';
 
       if (!(vm.emailSet === true) && (vm.passwordSet === false)) {
@@ -354,9 +357,7 @@
 
       modalInstance.result.then(function(currentPassword) {
 
-        debugger;
         vm.currentPassword = currentPassword;
-
         var credentials = { username: vm.oldEmail, password: currentPassword };
 
         PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
