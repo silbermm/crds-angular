@@ -226,7 +226,6 @@ namespace crds_angular.Services
         private void UpdateRoom(int eventId, EventRoomDto room)
         {
             var roomReservation = new RoomReservationDto();
-            //roomReservation.Approved = false;
             roomReservation.Cancelled = room.Cancelled;
             roomReservation.EventId = eventId;
             roomReservation.EventRoomId = room.RoomReservationId;
