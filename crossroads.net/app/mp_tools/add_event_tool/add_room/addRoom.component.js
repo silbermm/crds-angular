@@ -47,14 +47,21 @@
             congregationId: AddEvent.eventData.event.congregation.dp_RecordID
           }, function(data) {
             vm.rooms = data;
-            vm.roomData = _.map(vm.roomData, function(r) {
+            vm.roomData = _.filter(vm.roomData, function(r) {
               if (r.name === undefined) {
-                r.name = _.find(data, function(roo) {
+                var tempRoom = _.find(data, function(roo) {
                   return roo.id === r.id;
-                }).name;
+                });
+
+                if (tempRoom) {
+                  r.name = tempRoom.name;
+                  return true;
+                }
+
+                return false;
               }
 
-              return r;
+              return true;
             });
 
             Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data) {

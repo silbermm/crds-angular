@@ -27,6 +27,7 @@
       vm.remove = remove;
       vm.showError = showError;
       vm.showFieldError = showFieldError;
+      vm.undo = undo;
       vm.validation = Validation;
 
       function addEquipment() {
@@ -48,7 +49,6 @@
       function remove(idx) {
         if (vm.currentEquipment[idx] !== undefined) {
           if (existing(vm.currentEquipment[idx].equipment)) {
-            console.log('updating a piece of equipment');
             vm.currentEquipment[idx].equipment.cancelled = true;
           } else {
             vm.currentEquipment.splice(idx, 1);
@@ -63,6 +63,14 @@
 
       function showFieldError(form, name) {
         return Validation.showErrors(form, name);
+      }
+
+      function undo(idx) {
+        if (vm.currentEquipment[idx] !== undefined) {
+          if (existing(vm.currentEquipment[idx].equipment)) {
+            vm.currentEquipment[idx].equipment.cancelled = false;
+          }
+        }
       }
     }
   }
