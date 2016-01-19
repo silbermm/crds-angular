@@ -9,8 +9,6 @@
     <h1>Manage Event</h1>
     <form name="addEvent.allData"  novalidate>
 
-      <pre>{{addEvent.rooms}}</pre>
-
       <add-event ng-if="addEvent.currentPage() == 1" event-data='addEvent.event'> </add-event>
       <add-room ng-if="addEvent.currentPage() == 2"  room-data='addEvent.rooms'> </add-room>
 
