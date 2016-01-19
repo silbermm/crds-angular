@@ -43,7 +43,8 @@
                   name="congregation"
                   required
                   ng-model="evt.eventData.congregation"
-                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID">
+                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID"
+                  ng-change="evt.resetRooms()">
             <option value=''>-- Choose a Site --</option>
           </select>
           <ng-messages for="eventForm.congregation.$error" ng-if="evt.validation.showErrors(eventForm, 'congregation')">
