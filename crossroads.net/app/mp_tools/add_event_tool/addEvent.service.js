@@ -8,6 +8,7 @@
   function AddEventToolService() {
     var obj = {
       currentPage: 1,
+      editMode: false,
       eventData: {
         event: {},
         rooms: []

@@ -3,9 +3,9 @@
 
   module.exports = AddRoom;
 
-  AddRoom.$inject = ['$log', '$rootScope', '$modal', 'AddEvent', 'Room'];
+  AddRoom.$inject = ['$log', '$rootScope', '$modal', 'AddEvent', 'Lookup', 'Room'];
 
-  function AddRoom($log, $rootScope, $modal, AddEvent, Room) {
+  function AddRoom($log, $rootScope, $modal, AddEvent, Lookup, Room) {
     return {
       restrict: 'E',
       scope: {
@@ -33,23 +33,36 @@
       //////////////////
 
       function activate() {
+        if (AddEvent.editMode) {
+          Lookup.query({ table: 'crossroadslocations' }, function(locations) {
+            AddEvent.eventData.event.congregation = _.find(locations, function(l) {
+              return l.dp_RecordID === AddEvent.eventData.event.congregation.dp_RecordID;
+            });
+          });
+        }
+     
         if (AddEvent.eventData.event.congregation !== undefined) {
           Room.ByCongregation.query({
             congregationId: AddEvent.eventData.event.congregation.dp_RecordID
           }, function(data) {
             vm.rooms = data;
-            _.forEach(vm.roomData, function(r) {
+            vm.roomData = _.map(vm.roomData, function(r) {
               if(r.name === undefined) {
-                var tempRoom = _.find(data, function(roo){
+                r.name = _.find(data, function(roo){
                   return roo.id === r.id;
-                });
-                r.name = tempRoom.name;
+                }).name;
               }
+              return r;
             });
-            vm.viewReady = true;
+            Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID}, function(data){
+              vm.equipmentList = data;                    
+              _.forEach(vm.roomData, function(roomD) {
+                roomD.equipment = mapEquipment(data, roomD.equipment);     
+              });
+              vm.viewReady = true;     
+            });
           });
 
-          vm.equipmentList = Room.Equipment.query({congregationId: AddEvent.eventData.event.congregation.dp_RecordID});
           return;
         }
 
@@ -58,11 +71,24 @@
       }
 
       function choosenSite() {
-        // make sure it doesn't already exist first...
         return AddEvent.eventData.event.congregation.dp_RecordName;
       }
 
-			function removeRoomModal(room) {
+	    function mapEquipment(equipmentLookup, currentEquipmentList) {
+        return _.map(currentEquipmentList, function(current) {
+          if (current.equipment.name.quantity === undefined) {
+            var found = _.find(equipmentLookup, function(e) {
+              return e.id === current.equipment.name.id;
+            });
+            if (found) {
+              current.equipment.name.quantity = found.quantity;
+            }
+            return current;
+          }
+        });
+      }
+
+      function removeRoomModal(room) {
 				 var modalInstance = $modal.open({
 					controller: 'RemoveRoomController as removeRoom',
 					templateUrl: 'remove_room/remove_room.html',

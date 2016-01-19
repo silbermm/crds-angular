@@ -24,11 +24,12 @@
       </span>
     </div>
   </span>
-</div>
 
-  <!-- The rooms choosen --> 
+<!-- The rooms choosen --> 
   <span ng-repeat="currentRoom in addRoom.roomData">
-    {{ currentRoom }}
     <room-form current-room="currentRoom" layouts="addRoom.layouts" equipment-lookup="addRoom.equipmentList" remove-room="addRoom.removeRoom(currentRoom)"> </room-form>
   </span>
+  
+</div>
+
   

@@ -47,6 +47,7 @@
         vm.currentEventSelected = Number(vm.params.recordId);
         if (vm.currentEventSelected !== -1) {
           // tool was launched from the details view...
+          AddEvent.editMode = true;
           EventService.eventTool.get({eventId: vm.currentEventSelected}, function(evt) {
             AddEvent.eventData = AddEvent.fromEventDto(evt);
             vm.rooms = AddEvent.eventData.rooms;
@@ -81,7 +82,6 @@
       function next() {
         vm.allData.eventForm.$setSubmitted();
 
-        // I shouldn't have to do this, but I don't have time to debug it!
         AddEvent.eventData.event = vm.event;
 
         if (vm.allData.eventForm.$valid) {

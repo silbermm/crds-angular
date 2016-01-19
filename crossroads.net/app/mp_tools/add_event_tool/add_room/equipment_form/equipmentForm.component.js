@@ -36,8 +36,8 @@
       }
 
       function remove(idx) {
-        if(vm.currentEquipment[idx] !== undefined) {
-          vm.currentEquipment.splice(idx, 1);   
+        if (vm.currentEquipment[idx] !== undefined) {
+          vm.currentEquipment.splice(idx, 1);
         }
       }
 
