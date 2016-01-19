@@ -49,7 +49,7 @@
         if (vm.currentEquipment[idx] !== undefined) {
           if (existing(vm.currentEquipment[idx].equipment)) {
             console.log('updating a piece of equipment');
-            vm.currentEquipment[idx].cancelled = true;
+            vm.currentEquipment[idx].equipment.cancelled = true;
           } else {
             vm.currentEquipment.splice(idx, 1);
           }

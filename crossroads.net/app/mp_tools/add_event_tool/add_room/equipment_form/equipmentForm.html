@@ -12,7 +12,7 @@
         <th>Remove</th>
       </thead>
       <tbody> 
-        <tr ng-repeat="equip in equipment.currentEquipment" ng-hide="equipment.isCancelled(equip)" >
+        <tr ng-repeat="equip in equipment.currentEquipment" ng-class="{'cancelled': equipment.isCancelled(equip.equipment)}" >
           <td>
             <div class="form-group" ng-class="{'has-error': equipment.showFieldError(equipmentForm, equipment.fieldName( 'equipmentChooser', $index) )}">
               <select class="form-control" 

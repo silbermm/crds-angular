@@ -18,7 +18,7 @@
     var eventsService = {
       res: $resource(__API_ENDPOINT__ + 'api/events/:site'),
       event: $resource(__API_ENDPOINT__ + 'api/event/:eventId'),
-      eventTool: $resource(__API_ENDPOINT__ + 'api/eventTool/:eventId'),
+      eventTool: $resource(__API_ENDPOINT__ + 'api/eventTool/:eventId', null, { update: { method:'PUT' } }),
       getDailyEvents: function(site) {
         var events = this.res.query({site:site});
         return events;

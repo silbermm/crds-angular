@@ -6,7 +6,7 @@
   <preloader full-screen='true' ng-show="!addEvent.viewReady"> </preloader>
 
   <div class="col-md-6 col-md-offset-3">
-    <h1>Manage Event</h1>
+    <h1>Manage Event <small ng-show="addEvent.currentPage() == 2"> {{addEvent.event.eventTitle}} <small> </h1>
     <form name="addEvent.allData"  novalidate>
 
      <!-- <div ng-if="addEvent.currentEventSelected > -1 && addEvent.viewReady">-->

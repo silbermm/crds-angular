@@ -32,6 +32,7 @@
           rooms: _.map(eventData.rooms, function(r) { return getRoomDto(r); })
         };
       },
+
       fromEventDto: function(event) {
         return {
           event: {
@@ -46,18 +47,18 @@
             },
             description: event.description,
             donationBatchTool: event.donationBatchTool,
-            endDate: new Date(),
-            startDate: new Date(),
+            endDate: new Date(event.endDateTime),
+            startDate: new Date(event.startDateTime),
             meetingInstructions: event.meetingInstructions,
             minutesSetup: event.minutesSetup,
-            mintesCleanup: event.minutesTeardown,
+            minutesCleanup: event.minutesTeardown,
             program: {
-              programId: event.programId
+              ProgramId: event.programId
             },
             reminderDays: event.reminderDays,
             sendReminder: event.sendReminder,
-            startDateTime: new Date(),
-            endDateTime: new Date(),
+            startTime: new Date(event.startDateTime),
+            endTime: new Date(event.endDateTime),
             eventTitle: event.title
           },
           rooms: _.map(event.rooms, function(r) { return fromRoomDto(r); })
@@ -66,20 +67,38 @@
     };
 
     function getRoomDto(room) {
-      return {
+      var roomDto = {
         hidden: room.hidden,
         roomId: room.id,
         notes: room.description,
         layoutId: room.layout.id,
         equipment: _.map(room.equipment, function(e) { return getEquipmentDto(e.equipment); })
       };
+      if (_.has(room, 'cancelled')) {
+        roomDto.cancelled = room.cancelled;
+      }
+
+      if (_.has(room, 'roomReservationId')) {
+        roomDto.roomReservationId = room.roomReservationId;
+      }
+
+      return roomDto;
     }
 
     function getEquipmentDto(equipment) {
-      return {
+      var equipmentDto = {
         equipmentId: equipment.name.id,
         quantityRequested: equipment.choosenQuantity
       };
+      if (_.has(equipment, 'cancelled')) {
+        equipmentDto.cancelled = equipment.cancelled;
+      }
+
+      if (_.has(equipment, 'equipmentReservationId')) {
+        equipmentDto.equipmentReservationId = equipment.equipmentReservationId;
+      }
+
+      return equipmentDto;
     }
 
     function fromRoomDto(roomDto) {
@@ -91,8 +110,8 @@
         },
         notes: roomDto.notes,
         roomReservationId: roomDto.roomReservationId,
-        cancelled: false,
-        equipment: _.map(roomDto.equipment, function(e) { 
+        cancelled: roomDto.cancelled,
+        equipment: _.map(roomDto.equipment, function(e) {
           return fromEquipmentDto(e);
         })
       };
@@ -106,11 +125,10 @@
           },
           choosenQuantity: equipmentDto.quantityRequested,
           equipmentReservationId: equipmentDto.equipmentReservationId,
-          cancelled: false
+          cancelled: equipmentDto.cancelled 
         }
       };
     }
-
 
     function dateTime(dateForDate, dateForTime) {
       return new Date(

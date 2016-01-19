@@ -51,6 +51,7 @@
           AddEvent.editMode = true;
           EventService.eventTool.get({eventId: vm.currentEventSelected}, function(evt) {
             AddEvent.eventData = AddEvent.fromEventDto(evt);
+            vm.event = AddEvent.eventData.event;
             vm.rooms = AddEvent.eventData.rooms;
             AddEvent.currentPage = 2;
             vm.viewReady = true;
@@ -107,22 +108,37 @@
         if (vm.allData.$valid) {
           // build the dto...
           var event = AddEvent.getEventDto(AddEvent.eventData);
-          EventService.create.save(event, function(result) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
-            AddEvent.currentPage = 1;
-            AddEvent.eventData = {};
-            vm.rooms = [];
-            vm.event = {};
-            $window.close();
-          },
 
-          function(result) {
-            $log.error(result);
-            $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+          if (AddEvent.editMode) {
+            EventService.eventTool.update({eventId: vm.currentEventSelected}, event, function(result) {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventUpdateSuccess);
+              AddEvent.eventData = {};
+              vm.processing = false;
+              $window.close();
+            },
+
+            function(err) {
+              $log.error(err);
+              vm.processing = false;
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+            });
+          } else {
+            EventService.create.save(event, function(result) {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
+              AddEvent.currentPage = 1;
+              AddEvent.eventData = {};
+              vm.rooms = [];
+              vm.event = {};
+              vm.processing = false;
+              $window.close();
+            },
+
+            function(result) {
+              $log.error(result);
+              vm.processing = false;
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+            });
           }
-
-          );
-          vm.processing = false;
           return;
         }
 
