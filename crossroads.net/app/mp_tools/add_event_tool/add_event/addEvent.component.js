@@ -28,6 +28,7 @@
   function AddEventController($rootScope, AddEvent, Lookup, Programs, StaffContact, Validation) {
     var vm = this;
 
+    vm.addEvent = AddEvent;
     vm.crossroadsLocations = Lookup.query({ table: 'crossroadslocations' });
     vm.endDateOpen = endDateOpen;
     vm.endDateOpened = false;
@@ -35,6 +36,7 @@
     vm.formatContact = formatContact;
     vm.programs = Programs.AllPrograms.query();
     vm.reminderDays = Lookup.query({ table: 'reminderdays' });
+    vm.resetRooms = resetRooms;
     vm.staffContacts = StaffContact.query();
     vm.startDateOpen = startDateOpen;
     vm.startDateOpened = false;
@@ -66,6 +68,10 @@
       var displayName = contact.displayName;
       var email = contact.email;
       return displayName + ' - ' + email;
+    }
+
+    function resetRooms() {
+      vm.addEvent.eventData.rooms.length = 0;
     }
 
     function startDateOpen($event) {
