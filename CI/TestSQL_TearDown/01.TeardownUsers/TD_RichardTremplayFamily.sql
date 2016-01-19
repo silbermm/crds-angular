@@ -77,11 +77,13 @@ DELETE FROM dp_commands WHERE communication_id in (SELECT communication_id FROM 
 ---delete publications
 DELETE FROM dp_contact_publications WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
 
----delete communication
-DELETE FROM dp_communications WHERE To_Contact in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
-
 ---delete communication messages
 DELETE FROM dp_Communication_Messages WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address='mpcrds+tremplay%');
+
+DELETE FROM [dbo].dp_communication_messages where communication_id in (select communication_id from dp_communications where TO_Contact in (select contact_id from contacts where email_address like 'mpcrds+tremplay%'));
+
+---delete communication
+DELETE FROM dp_communications WHERE To_Contact in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
 
 ---delete households
 DELETE FROM households WHERE household_name = 'Tremplay';

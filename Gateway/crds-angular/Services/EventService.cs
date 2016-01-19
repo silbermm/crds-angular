@@ -83,6 +83,7 @@ namespace crds_angular.Services
                 dto.CongregationId = e.CongregationId;
                 dto.EndDateTime = e.EventEndDate;
                 dto.StartDateTime = e.EventStartDate;
+
                 var rooms = _roomService.GetRoomReservations(eventId);
                 var roomDto = new List<EventRoomDto>();
 
@@ -123,35 +124,36 @@ namespace crds_angular.Services
             }
         }
 
-        public bool UpdateEventReservation(EventToolDto eventReservation)
+        public bool UpdateEventReservation(EventToolDto eventReservation, int eventId)
         {
             //throw new NotImplementedException();
 
             try
             {
                 // do i need to do this?
-                var e = this.GetEventReservation(eventReservation.EventId);
+
+                //var e = this.GetEventReservation(eventId);
 
                 foreach (var room in eventReservation.Rooms)
                 {
                     if (room.RoomReservationId == 0)
                     {
-                        AddRoom(eventReservation.EventId, room);
+                        AddRoom(eventId, room);
                     }
                     else
                     {
-                        UpdateRoom(eventReservation.EventId, room);
+                        UpdateRoom(eventId, room);
                     }
 
                     foreach (var equipment in room.Equipment)
                     {
                         if (equipment.EquipmentReservationId == 0)
                         {
-                            AddEquipment(equipment, eventReservation.EventId, room);
+                            AddEquipment(equipment, eventId, room);
                         }
                         else
                         {
-                            UpdateEquipment(equipment, eventReservation.EventId, room);
+                            UpdateEquipment(equipment, eventId, room);
                         }
                     }
                 }

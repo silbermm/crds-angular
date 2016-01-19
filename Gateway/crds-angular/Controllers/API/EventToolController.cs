@@ -71,8 +71,8 @@ namespace crds_angular.Controllers.API
         }
 
         [AcceptVerbs("PUT")]
-        [Route("api/eventTool")]
-        public IHttpActionResult Put([FromBody] EventToolDto eventReservation)
+        [Route("api/eventTool/{eventId}")]
+        public IHttpActionResult Put([FromBody] EventToolDto eventReservation, int eventId)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,11 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        _eventService.UpdateEventReservation(eventReservation);
+                        if (eventId == 0)
+                        {
+                            throw  new ApplicationException("Invalid Event Id");
+                        }
+                        _eventService.UpdateEventReservation(eventReservation, eventId);
                         return Ok();
                     }
                     catch (Exception e)

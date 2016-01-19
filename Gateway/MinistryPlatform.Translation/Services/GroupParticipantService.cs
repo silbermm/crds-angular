@@ -64,7 +64,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.DomainId = reader.GetInt32(reader.GetOrdinal("Domain_ID"));
                     participant.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
                     participant.EventStartDateTime = (DateTime) reader["Event_Start_Date"];
-                    participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));
+                    participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));                   
                     participant.Room = SafeString(reader, "Room");
                     participant.GroupId = reader.GetInt32(reader.GetOrdinal("Group_ID"));
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
@@ -161,8 +161,15 @@ namespace MinistryPlatform.Translation.Services
 
         private static string SafeString(IDataRecord record, string fieldName)
         {
-            var ordinal = record.GetOrdinal(fieldName);
-            return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+            try
+            {
+                var ordinal = record.GetOrdinal(fieldName);
+                return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         private static int? SafeInt(IDataRecord record, string fieldName)

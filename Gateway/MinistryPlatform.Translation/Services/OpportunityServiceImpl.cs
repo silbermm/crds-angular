@@ -90,7 +90,7 @@ namespace MinistryPlatform.Translation.Services
                                                                                     opportunityId,
                                                                                     ApiLogin(),
                                                                                     searchString);
-            var record = subpageViewRecords.ToList().SingleOrDefault();
+            var record = subpageViewRecords.ToList().FirstOrDefault();
             if (record == null)
             {
                 return null;
