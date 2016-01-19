@@ -11,7 +11,7 @@ set @cloudDonorId = (select donor_record from Contacts where Email_Address = 'mp
 --Add Cloud Strife to the GO Midgar GROUP
 INSERT INTO [dbo].Group_Participants 
 (Group_ID                                                            ,Participant_ID,Group_Role_ID,Domain_ID,[Start_Date]              ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id from groups where group_name like '(t) GO Midgar%'),@cloudPartId  ,58           ,1        ,{ts '2015-09-09 15:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
+((select group_id from groups where group_name like '(t) GO Midgar%'),@cloudPartId  ,16           ,1        ,{ts '2015-09-09 15:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
 
 --Add Cloud Strife to Event_Participant list
 INSERT INTO [dbo].Event_Participants 

@@ -64,7 +64,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.DomainId = reader.GetInt32(reader.GetOrdinal("Domain_ID"));
                     participant.EventId = reader.GetInt32(reader.GetOrdinal("Event_ID"));
                     participant.EventStartDateTime = (DateTime) reader["Event_Start_Date"];
-                    participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));
+                    participant.EventTitle = reader.GetString(reader.GetOrdinal("Event_Title"));                   
                     participant.Room = SafeString(reader, "Room");
                     participant.GroupId = reader.GetInt32(reader.GetOrdinal("Group_ID"));
                     participant.GroupName = reader.GetString(reader.GetOrdinal("Group_Name"));
@@ -75,7 +75,7 @@ namespace MinistryPlatform.Translation.Services
                     participant.OpportunityRoleTitle = reader.GetString(reader.GetOrdinal("Role_Title"));
                     participant.OpportunityShiftEnd = GetTimeSpan(reader, "Shift_End");
                     participant.OpportunityShiftStart = GetTimeSpan(reader, "Shift_Start");
-                    participant.OpportunitySignUpDeadline = reader.GetInt32(reader.GetOrdinal("Sign_Up_Deadline"));
+                    participant.OpportunitySignUpDeadline = (SafeInt32(reader, "Sign_Up_Deadline") ?? 0);
                     participant.DeadlinePassedMessage = (SafeInt32(reader, "Deadline_Passed_Message_ID") ?? defaultDeadlinePassedMessage);
                     participant.OpportunityTitle = reader.GetString(reader.GetOrdinal("Opportunity_Title"));
                     participant.ParticipantNickname = reader.GetString(reader.GetOrdinal("Nickname"));
@@ -147,7 +147,7 @@ namespace MinistryPlatform.Translation.Services
             return rsvp;
         }
 
-        private static TimeSpan GetTimeSpan(IDataRecord record, string columnName)
+        private static TimeSpan? GetTimeSpan(IDataRecord record, string columnName)
         {
             var columnIndex = record.GetOrdinal(columnName);
             var reader = record as SqlDataReader;
@@ -156,14 +156,20 @@ namespace MinistryPlatform.Translation.Services
                 throw new Exception("The DataReader is not a SqlDataReader");
             }
 
-            var myTimeSpan = reader.GetTimeSpan(columnIndex);
-            return myTimeSpan;
+            return !record.IsDBNull(columnIndex) ? reader.GetTimeSpan(columnIndex) : (TimeSpan?) null;
         }
 
         private static string SafeString(IDataRecord record, string fieldName)
         {
-            var ordinal = record.GetOrdinal(fieldName);
-            return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+            try
+            {
+                var ordinal = record.GetOrdinal(fieldName);
+                return !record.IsDBNull(ordinal) ? record.GetString(ordinal) : null;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
         private static int? SafeInt(IDataRecord record, string fieldName)

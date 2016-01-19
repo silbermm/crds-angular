@@ -97,10 +97,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Congregation.cs" />
+    <Compile Include="Models\EventReservations\EventReservationDto.cs" />
+    <Compile Include="Models\EventReservations\RoomReservationDto.cs" />
     <Compile Include="Models\MPServeReminders.cs" />
     <Compile Include="Models\Opportunities\MPResponse.cs" />
     <Compile Include="Models\People\MpParticipant.cs" />
     <Compile Include="Models\People\Participant.cs" />
+    <Compile Include="Models\Room.cs" />
     <Compile Include="Services\BulkEmailRepository.cs" />
     <Compile Include="Enum\NumericDayOfWeek.cs" />
     <Compile Include="Enum\PaymentType.cs" />
@@ -113,6 +117,7 @@
     <Compile Include="Services\AuthenticationServiceImpl.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\CampaignService.cs" />
+    <Compile Include="Services\CongregationService.cs" />
     <Compile Include="Services\ContactAttributeService.cs" />
     <Compile Include="Services\ContactRelationshipService.cs" />
     <Compile Include="Services\ContactService.cs" />
@@ -120,6 +125,7 @@
     <Compile Include="Services\DestinationService.cs" />
     <Compile Include="Services\DonationService.cs" />
     <Compile Include="Services\DonorService.cs" />
+    <Compile Include="Services\EquipmentService.cs" />
     <Compile Include="Services\EventParticipantService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\CommunicationService.cs" />
@@ -130,6 +136,7 @@
     <Compile Include="Services\GroupService.cs" />
     <Compile Include="Services\Interfaces\IBulkEmailRepository.cs" />
     <Compile Include="Services\Interfaces\IApiUserService.cs" />
+    <Compile Include="Services\Interfaces\ICongregationService.cs" />
     <Compile Include="Services\Interfaces\IContactAttributeService.cs" />
     <Compile Include="Services\Interfaces\IAttributeService.cs" />
     <Compile Include="Services\Interfaces\ICampaignService.cs" />
@@ -140,6 +147,7 @@
     <Compile Include="Services\Interfaces\IDestinationService.cs" />
     <Compile Include="Services\Interfaces\IDonationService.cs" />
     <Compile Include="Services\Interfaces\IDonorService.cs" />
+    <Compile Include="Services\Interfaces\IEquipmentService.cs" />
     <Compile Include="Services\Interfaces\IEventParticipantService.cs" />
     <Compile Include="Services\Interfaces\IEventService.cs" />
     <Compile Include="Services\Interfaces\IFormSubmissionService.cs" />
@@ -151,6 +159,7 @@
     <Compile Include="Services\Interfaces\IPledgeService.cs" />
     <Compile Include="Services\Interfaces\IPrivateInviteService.cs" />
     <Compile Include="Services\Interfaces\IProgramService.cs" />
+    <Compile Include="Services\Interfaces\IRoomService.cs" />
     <Compile Include="Services\Interfaces\ISelectionService.cs" />
     <Compile Include="Services\Interfaces\IUserService.cs" />
     <Compile Include="Services\Interfaces\IResponseService.cs" />
@@ -164,6 +173,7 @@
     <Compile Include="Services\PrivateInviteService.cs" />
     <Compile Include="Services\ProgramService.cs" />
     <Compile Include="Services\ResponseService.cs" />
+    <Compile Include="Services\RoomService.cs" />
     <Compile Include="Services\SelectionService.cs" />
     <Compile Include="Services\UserService.cs" />
     <Compile Include="Utils\DbConnectionNameTypeConverter.cs" />

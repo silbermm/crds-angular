@@ -45,6 +45,17 @@ namespace EventReminder
 
             try
             {
+                _eventService = container.Resolve<EventService>();
+                _eventService.SendPrimaryContactReminderEmails();
+            }
+            catch (Exception ex)
+            {
+                exitCode = 1;
+                Log.Error("Event Primary Contact Reminder Process failed.", ex);
+            }
+
+            try
+            {
                 _serveService = container.Resolve<ServeService>();
                 _serveService.SendReminderEmails();
             }

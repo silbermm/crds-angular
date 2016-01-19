@@ -61,6 +61,8 @@ namespace MinistryPlatform.Translation.Services
         public Opportunity GetOpportunityById(int opportunityId, string token)
         {
             var opp = _ministryPlatformService.GetRecordDict(_opportunityPage, opportunityId, token);
+            var shiftStart = opp.ToNullableTimeSpan("Shift_Start");
+            var shiftEnd = opp.ToNullableTimeSpan("Shift_End"); 
             var opportunity = new Opportunity
             {
                 OpportunityId = opportunityId,
@@ -74,8 +76,8 @@ namespace MinistryPlatform.Translation.Services
                 GroupContactName = opp.ToString("Contact_Person_Text"),
                 GroupName = opp.ToString("Add_to_Group_Text"),
                 GroupId = opp.ToInt("Add_to_Group"),
-                ShiftStart = TimeSpan.Parse(opp.ToString("Shift_Start")),
-                ShiftEnd = TimeSpan.Parse(opp.ToString("Shift_End")),
+                ShiftStart = shiftStart,
+                ShiftEnd = shiftEnd,
                 Room = opp.ToString("Room")
             };
             return opportunity;
@@ -88,7 +90,7 @@ namespace MinistryPlatform.Translation.Services
                                                                                     opportunityId,
                                                                                     ApiLogin(),
                                                                                     searchString);
-            var record = subpageViewRecords.ToList().SingleOrDefault();
+            var record = subpageViewRecords.ToList().FirstOrDefault();
             if (record == null)
             {
                 return null;

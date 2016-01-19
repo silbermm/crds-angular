@@ -43,4 +43,7 @@
   // The Contact a volunteer group
   require('./volunteer_contact');
 
+  // The Add Events Tool
+  require('./add_event_tool');
+
 })();
