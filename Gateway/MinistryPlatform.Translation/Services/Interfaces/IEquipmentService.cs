@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MinistryPlatform.Translation.Models;
+using MinistryPlatform.Translation.Models.EventReservations;
 
 namespace MinistryPlatform.Translation.Services.Interfaces
 {
@@ -7,7 +8,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
     {
         int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation);
         List<Equipment> GetEquipmentByLocationId(int locationId);
-        List<EquipmentService.EquipmentReservation> GetEquipmentReservations(int eventId, int roomId);
+        List<EquipmentReservationDto> GetEquipmentReservations(int eventId, int roomId);
         void UpdateEquipmentReservation(EquipmentReservationDto equipmentReservation);
     }
 }

@@ -22,13 +22,13 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public List<RoomReservation> GetRoomReservations(int eventId)
+        public List<RoomReservationDto> GetRoomReservations(int eventId)
         {
-            var t = ApiLogin();
+            var token = ApiLogin();
             var search = string.Format(",{0}", eventId);
-            var records = _ministryPlatformService.GetPageViewRecords("GetRoomReservations", t, search);
+            var records = _ministryPlatformService.GetPageViewRecords("GetRoomReservations", token, search);
 
-            return records.Select(record => new RoomReservation
+            return records.Select(record => new RoomReservationDto
             {
                 Cancelled = record.ToBool("Cancelled"),
                 EventRoomId = record.ToInt("Event_Room_ID"),
@@ -123,16 +123,5 @@ namespace MinistryPlatform.Translation.Services
                 LayoutName = record.ToString("Layout_Name")
             }).ToList();
         }
-    }
-
-    public class RoomReservation
-    {
-        public bool Cancelled { get; set; }
-        public int EventId { get; set; }
-        public int EventRoomId { get; set; }
-        public bool Hidden { get; set; }
-        public string Notes { get; set; }
-        public int RoomId { get; set; }
-        public int RoomLayoutId { get; set; }
     }
 }

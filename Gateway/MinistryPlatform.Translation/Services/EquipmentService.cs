@@ -5,22 +5,11 @@ using Crossroads.Utilities.Interfaces;
 using log4net;
 using MinistryPlatform.Translation.Extensions;
 using MinistryPlatform.Translation.Models;
+using MinistryPlatform.Translation.Models.EventReservations;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class EquipmentReservationDto
-    {
-        public int EventEquipmentId { get; set; }
-        public int EventId { get; set; }
-        public int EquipmentId { get; set; }
-        public int RoomId { get; set; }
-        public string Notes { get; set; }
-        public bool Cancelled { get; set; }
-        public bool Approved { get; set; }
-        public int QuantityRequested { get; set; }
-    }
-
     public class EquipmentService : BaseService, IEquipmentService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
@@ -32,13 +21,13 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public List<EquipmentReservation> GetEquipmentReservations(int eventId, int roomId)
+        public List<EquipmentReservationDto> GetEquipmentReservations(int eventId, int roomId)
         {
-            var t = ApiLogin();
+            var token = ApiLogin();
             var search = string.Format(",{0},{1}", eventId, roomId);
-            var records = _ministryPlatformService.GetPageViewRecords("GetEquipmentReservations", t, search);
+            var records = _ministryPlatformService.GetPageViewRecords("GetEquipmentReservations", token, search);
 
-            return records.Select(record => new EquipmentReservation
+            return records.Select(record => new EquipmentReservationDto
             {
                 Cancelled = record.ToBool("Cancelled"),
                 EquipmentId = record.ToInt("Equipment_ID"),
@@ -117,18 +106,6 @@ namespace MinistryPlatform.Translation.Services
                 EquipmentName = record.ToString("Equipment_Name"),
                 QuantityOnHand = record.ToInt("Quantity_On_Hand")
             }).ToList();
-        }
-
-        public class EquipmentReservation
-        {
-            public int EventEquipmentId { get; set; }
-            public int EventId { get; set; }
-            public int RoomId { get; set; }
-            public int EquipmentId { get; set; }
-            public string Notes { get; set; }
-            public int EventRoomId { get; set; }
-            public bool Cancelled { get; set; }
-            public int QuantityRequested { get; set; }
         }
     }
 }
