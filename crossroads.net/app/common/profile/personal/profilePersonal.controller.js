@@ -223,6 +223,8 @@
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
 
+      debugger;
+
       $timeout(function() {
         vm.submitted = true;
 
@@ -346,6 +348,7 @@
       var modalInstance = $modal.open({
         templateUrl: 'personal/confirmPassword.html',
         controller: 'ConfirmPasswordCtrl as pwModal',
+        backdrop : 'static',
         resolve: {
           modalTypeItem: function() {
             return modalType;
