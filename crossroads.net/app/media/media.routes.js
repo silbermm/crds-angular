@@ -19,6 +19,7 @@
           Series: function(Media) {
             return Media.Series().get().$promise;
           },
+
           SingleMedia: function(Media) {
             return Media.SingleMedia().get().$promise;
           }
@@ -35,6 +36,9 @@
       .state('media.all', {
         url: '/media',
         templateUrl: 'templates/viewAll.html',
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
+        }
       })
       .state('media.music', {
         url: '/music',
@@ -46,6 +50,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.series', {
@@ -58,6 +65,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.videos', {
@@ -70,6 +80,9 @@
             type: 'website',
             card: 'summary'
           }
+        },
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
         }
       })
       .state('media.seriesSingle', {
@@ -115,7 +128,10 @@
         parent: 'screenWidth',
         url: '/media/single',
         controller: 'MediaController as media',
-        templateUrl: 'templates/mediaSingle.html'
+        templateUrl: 'templates/mediaSingle.html',
+        resolve: {
+          //Empty Resolve to ensure loading spinner works
+        }
       })
       .state('messageSingle', {
         parent: 'screenWidth',
@@ -148,12 +164,15 @@
           },
 
           Meta: function(SingleMedia, $state) {
+            var message = SingleMedia.message;
+            var image = _.get(message, 'messageVideo.still') || _.get(message, 'messageAudio.still');
+
             $state.next.data.meta = {
-              title: SingleMedia.message.title,
-              description: SingleMedia.message.description,
+              title: message.title,
+              description: message.description,
               type: 'article',
               card: 'summary',
-              image: SingleMedia.message.messageVideo.still
+              image: image
             };
             return $state.next.data.meta;
           },
@@ -172,8 +191,8 @@
             return parent;
           },
 
-          ImageURL: function(SingleMedia) {
-            return _.get(SingleMedia.message, 'messageVideo.still.filename');
+          ImageURL: function(Meta) {
+            return _.get(Meta, 'image.filename');
           }
         }
       })
