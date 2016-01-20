@@ -151,6 +151,7 @@ namespace crds_angular.Controllers.API
             this.userId = userId;
             this.userToken = userToken;
             this.username = username;
+            this.userEmail = userEmail;
             this.roles = roles;
         }
         public string userToken { get; set; }
