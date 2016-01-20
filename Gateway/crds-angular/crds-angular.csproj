@@ -258,6 +258,7 @@
     <Compile Include="Controllers\API\RoomController.cs" />
     <Compile Include="Controllers\API\StaffContactController.cs" />
     <Compile Include="Controllers\API\DonorStatementController.cs" />
+    <Compile Include="Exceptions\DuplicateUserException.cs" />
     <Compile Include="Models\Crossroads\CommunicationDTO.cs" />
     <Compile Include="Models\Crossroads\Congregation.cs" />
     <Compile Include="Models\Crossroads\DonorStatementDTO.cs" />
