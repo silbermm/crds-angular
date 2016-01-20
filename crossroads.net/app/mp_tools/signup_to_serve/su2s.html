@@ -35,8 +35,8 @@
         <ui-select multiple ng-model="su2s.participants" require-multiple name="participants">
           <ui-select-match placeholder="Click here to choose group members...">{{$item.nickname}} {{$item.lastname}}</ui-select-match>
           <ui-select-choices repeat="person in su2s.allParticipants | filter: $select.search track by person.participantId">
-            <span ng-bind="person.nickname | highlight: $select.search"></span>
-            <span ng-bind="person.lastname | highlight: $select.search"></span>
+            <span ng-bind="person.nickname"></span>
+            <span ng-bind="person.lastname"></span>
           </ui-select-choices>
         </ui-select>
       </div>
