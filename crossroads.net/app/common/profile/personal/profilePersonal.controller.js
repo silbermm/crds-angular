@@ -223,24 +223,25 @@
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
 
-      debugger;
-
       $timeout(function() {
         vm.submitted = true;
 
+        if (vm.pform.$invalid) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.submitted = false;
+          return;
+        }
+
+        // length 0 check supports if a user starts to change their pw, then decides not to
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          if (vm.pform['passwd.passwordForm'].password.$touched === true) {
-            var something1 = vm.pform['passwd.passwordForm'];
-            debugger;
+          var length = _.size(vm.pform['passwd.passwordForm'].password);
+          if (vm.pform['passwd.passwordForm'].password.$touched === true && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
             vm.passwordSet = true;
           }
         }
 
         if (vm.pform['email'] !== undefined) {
-          debugger;
           if (vm.pform['email'].$touched === true) {
-            var something2 = vm.pform['email'];
-            debugger;
             vm.emailSet = true;
           }
         }
@@ -257,12 +258,6 @@
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.isHouseholdCollapsed = false;
-          vm.submitted = false;
-          return;
-        }
-
-        if (vm.pform.$invalid) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.submitted = false;
           return;
         }
@@ -352,23 +347,22 @@
         resolve: {
           modalTypeItem: function() {
             return modalType;
+          },
+          email: function() {
+            return vm.oldEmail;
           }
         }
       });
 
       modalInstance.result.then(function(currentPassword) {
 
-        vm.currentPassword = currentPassword;
-        var credentials = { username: vm.oldEmail, password: currentPassword };
-
-        PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
+        if (currentPassword !== undefined) {
+          vm.currentPassword = currentPassword;
           vm.resetCredentialsEntered = true;
           vm.savePersonal();
-        }, function(error) {
-
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          vm.saving = false;
-        });
+        } else {
+          vm.submitted = false;
+        }
 
       });
     }

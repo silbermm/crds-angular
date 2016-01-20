@@ -4,27 +4,52 @@
   module.exports = ConfirmPasswordController;
 
   ConfirmPasswordController.$inject = [
-    '$modalInstance',
-    'modalTypeItem'
+      '$rootScope',
+      '$modalInstance',
+      'modalTypeItem',
+      'email',
+      'PasswordService'
   ];
 
   function ConfirmPasswordController(
+      $rootScope,
       $modalInstance,
-      modalTypeItem) {
+      modalTypeItem,
+      email,
+      PasswordService) {
 
-      var vm = this;
-      vm.ok = ok;
-      vm.cancel = cancel;
-      vm.passwd = '';
-      vm.modalTypeItem = modalTypeItem;
+    var vm = this;
+    vm.ok = ok;
+    vm.cancel = cancel;
+    vm.passwd = '';
+    vm.modalTypeItem = modalTypeItem;
+    vm.email = email;
+    vm.saving = false;
 
-      function ok() {
+    function ok() {
+
+      vm.saving = true;
+
+      debugger;
+
+      var credentials = { username: vm.email, password: vm.passwd };
+
+      PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
         $modalInstance.close(vm.passwd);
-      }
+      }, function(error) {
 
-      function cancel() {
-        $modalInstance.dismiss('cancel');
-      }
+        $rootScope.$emit('notify', $rootScope.MESSAGES.passwordNotVerified);
 
+        //showPasswordConfirmModal();
+        vm.saving = false;
+      });
     }
+
+    function cancel() {
+        debugger;
+      //$modalInstance.dismiss();
+        $modalInstance.close();
+    }
+
+  }
 })();
