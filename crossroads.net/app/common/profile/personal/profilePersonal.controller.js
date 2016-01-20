@@ -296,6 +296,7 @@
 
       vm.emailSet = false;
       vm.passwordSet = false;
+      vm.password = '';
       vm.currentPassword = '';
       vm.profileData.person.oldPassword = '';
       vm.profileData.person.newPassword = '';
