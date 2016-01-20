@@ -498,7 +498,7 @@
                       return $templateFactory.fromUrl('templates/screenWidth.html');
                     case 'HomePage':
                       return $templateFactory.fromUrl('templates/homePage.html');
-                    case 'CenteredContent':
+                    case 'CenteredContentPage':
                       return $templateFactory.fromUrl('templates/centeredContentPage.html');
                     default:
                       return $templateFactory.fromUrl('templates/noSideBar.html');
