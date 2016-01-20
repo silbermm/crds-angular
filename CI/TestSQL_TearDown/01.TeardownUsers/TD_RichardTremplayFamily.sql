@@ -93,8 +93,8 @@ DELETE FROM Activity_Log where Household_ID = @householdID;
 
 DELETE FROM households WHERE household_name = 'Tremplay';
 
----delete addresses
-DELETE FROM Addresses WHERE Address_ID IN (SELECT Address_ID FROM households WHERE household_id = @householdID);
+---delete address since we hard coded the id in the setup script
+DELETE FROM Addresses WHERE Address_ID =100000020;
 
 ---delete contact households
 DELETE FROM Contact_Households WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
