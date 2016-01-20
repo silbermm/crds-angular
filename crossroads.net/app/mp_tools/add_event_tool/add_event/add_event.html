@@ -94,7 +94,9 @@
         </span>
       </ng-messages>
     </div>
-    <div class="row">
+
+    <!-- hiding the minutes for setup/teardown for now... but may bring back at a later date -->
+    <div class="row" ng-show="false">
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'minutesSetup')}">
           <label class="required">Minutes for Setup</label>
