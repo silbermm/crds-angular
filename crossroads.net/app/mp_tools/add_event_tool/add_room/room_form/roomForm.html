@@ -36,13 +36,14 @@
     <div class="form-group">
       <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden"> 
         Hide from Atrium Monitors 
-      
-        <span popover="Only 1 primary room per event will show on atrium monitors." popover-placement="right"> 
-          <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer"> 
-            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#question-circle"></use> 
-          </svg> 
-        </span> 
       </label>
+      <span popover="Only 1 primary room per event will show on atrium monitors."
+            popover-placement="right">
+        <svg viewBox="0 0 32 32" class="icon icon-question-circle icon-subtle pointer">
+          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#question-circle"></use>
+        </svg>
+      </span>
+
     </div>
 
     <equipment-form current-equipment="room.currentRoom.equipment" 
