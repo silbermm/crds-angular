@@ -58,7 +58,8 @@
     vm.isDobError = isDobError;
     vm.isMeridian = true;
     vm.loading = true;
-    vm.minBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.maxBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.initDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     vm.mstep = 15;
     vm.oldEmail = '';
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
@@ -95,7 +96,8 @@
     function activate() {
 
       if (vm.enforceAgeRestriction) {
-        vm.minBirthdate.setFullYear(vm.minBirthdate.getFullYear() - vm.enforceAgeRestriction);
+        vm.maxBirthdate.setFullYear(vm.maxBirthdate.getFullYear() - vm.enforceAgeRestriction);
+        vm.initDate.setFullYear(vm.initDate.getFullYear() - vm.enforceAgeRestriction);
       }
 
       ProfileReferenceData.getInstance().then(function(response) {
@@ -323,9 +325,9 @@
 
     function isCrossroadsAttendee() {
       var nonCrossroadsLocations = require('crds-constants').NON_CROSSROADS_LOCATIONS;
-      return vm.profileData.person.congregationId
-        && vm.profileData.person.congregationId != nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS
-        && vm.profileData.person.congregationId != nonCrossroadsLocations.NOT_SITE_SPECIFIC;
+      return vm.profileData.person.congregationId &&
+        vm.profileData.person.congregationId !== nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS &&
+        vm.profileData.person.congregationId !== nonCrossroadsLocations.NOT_SITE_SPECIFIC;
     }
 
     // set the old email address
