@@ -29,9 +29,6 @@
     function ok() {
 
       vm.saving = true;
-
-      debugger;
-
       var credentials = { username: vm.email, password: vm.passwd };
 
       PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
@@ -40,15 +37,12 @@
 
         $rootScope.$emit('notify', $rootScope.MESSAGES.passwordNotVerified);
 
-        //showPasswordConfirmModal();
         vm.saving = false;
       });
     }
 
     function cancel() {
-        debugger;
-      //$modalInstance.dismiss();
-        $modalInstance.close();
+      $modalInstance.close();
     }
 
   }
