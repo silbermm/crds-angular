@@ -182,6 +182,7 @@
                    ng-model="evt.eventData.endDate"
                    is-open="evt.endDateOpened"
                    ng-required="true"
+                   end-date
                    close-text="Close" />
             <span class="input-group-btn">
               <button type="button"
@@ -197,6 +198,9 @@
             </span>
             <span ng-message="date">
               <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
+            </span>
+             <span ng-message="endDate">
+              <span dynamic-content="$root.MESSAGES.endDateTooSmall.content | html"></span>
             </span>
           </ng-messages>
           <timepicker ng-model="evt.eventData.endTime" show-meridian="true">

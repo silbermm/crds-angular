@@ -65,6 +65,8 @@
           sendReminder: 0,
           minutesSetup: 0,
           minutesCleanup: 0,
+          startDate: new Date(),
+          endDate: new Date(),
           startTime: new Date(),
           endTime: new Date()
         };
