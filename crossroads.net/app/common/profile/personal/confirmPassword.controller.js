@@ -36,7 +36,6 @@
       }, function(error) {
 
         $rootScope.$emit('notify', $rootScope.MESSAGES.passwordNotVerified);
-
         vm.saving = false;
       });
 
@@ -44,6 +43,7 @@
     }
 
     function cancel() {
+      vm.passwd = '';
       $modalInstance.close();
     }
 
