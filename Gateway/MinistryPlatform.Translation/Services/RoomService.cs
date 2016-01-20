@@ -32,7 +32,6 @@ namespace MinistryPlatform.Translation.Services
                 {"Room_Layout_ID", roomReservation.RoomLayoutId},
                 {"Notes", roomReservation.Notes},
                 {"Hidden", roomReservation.Hidden},
-                {"Approved", roomReservation.Approved},
                 {"Cancelled", roomReservation.Cancelled}
             };
 

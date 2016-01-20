@@ -16,7 +16,6 @@ namespace MinistryPlatform.Translation.Services
         public int RoomId { get; set; }
         public string Notes { get; set; }
         public bool Cancelled { get; set; }
-        public bool Approved { get; set; }
         public int QuantityRequested { get; set; }
     }
 
@@ -42,7 +41,6 @@ namespace MinistryPlatform.Translation.Services
                 {"Equipment_ID", equipmentReservation.EquipmentId},
                 {"Notes", equipmentReservation.Notes},
                 {"Quantity_Requested", equipmentReservation.QuantityRequested},
-                {"Approved", equipmentReservation.Approved},
                 {"Cancelled", equipmentReservation.Cancelled}
             };
 
