@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using crds_angular.Models.Crossroads.Events;
 using Crossroads.Utilities.Functions;
@@ -73,6 +72,95 @@ namespace crds_angular.Services
             _equipmentService = equipmentService;
         }
 
+        public EventToolDto GetEventReservation(int eventId)
+        {
+            try
+            {
+                var dto = new EventToolDto();
+
+                var e = this.GetEvent(eventId);
+                dto.Title = e.EventTitle;
+                dto.CongregationId = e.CongregationId;
+                dto.EndDateTime = e.EventEndDate;
+                dto.StartDateTime = e.EventStartDate;
+
+                var rooms = _roomService.GetRoomReservations(eventId);
+                var roomDto = new List<EventRoomDto>();
+
+                foreach (var room in rooms){
+                
+                    var equipmentDto = new List<EventRoomEquipmentDto>();
+                    var equipment = _equipmentService.GetEquipmentReservations(eventId, room.RoomId);
+                    foreach (var equipmentReservation in equipment)
+                    {
+                        var eq = new EventRoomEquipmentDto();
+                        eq.Cancelled = equipmentReservation.Cancelled;
+                        eq.EquipmentId = equipmentReservation.EquipmentId;
+                        eq.QuantityRequested = equipmentReservation.QuantityRequested;
+                        eq.EquipmentReservationId = equipmentReservation.EventEquipmentId;
+                        equipmentDto.Add(eq);
+                    }
+
+                    var r = new EventRoomDto();
+                    r.Cancelled = room.Cancelled;
+                    r.Equipment = equipmentDto;
+                    r.Hidden = room.Hidden;
+                    r.LayoutId = room.RoomLayoutId;
+                    r.Notes = room.Notes;
+                    r.RoomId = room.RoomId;
+                    r.RoomReservationId = room.EventRoomId;
+
+                    roomDto.Add(r);
+                }
+                dto.Rooms = roomDto;
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);   
+            }
+        }
+
+        public bool UpdateEventReservation(EventToolDto eventReservation, int eventId)
+        {
+            try
+            {
+                foreach (var room in eventReservation.Rooms)
+                {
+                    if (room.RoomReservationId == 0)
+                    {
+                        AddRoom(eventId, room);
+                    }
+                    else
+                    {
+                        UpdateRoom(eventId, room);
+                    }
+
+                    foreach (var equipment in room.Equipment)
+                    {
+                        if (equipment.EquipmentReservationId == 0)
+                        {
+                            AddEquipment(equipment, eventId, room);
+                        }
+                        else
+                        {
+                            UpdateEquipment(equipment, eventId, room);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);
+            }
+            return true;
+        }
+
         public bool CreateEventReservation(EventToolDto eventTool)
         {
             try
@@ -109,6 +197,18 @@ namespace crds_angular.Services
             var equipmentReservationId = _equipmentService.CreateEquipmentReservation(equipmentReservation);
         }
 
+        private void UpdateEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
+        {
+            var equipmentReservation = new EquipmentReservationDto();
+            equipmentReservation.Cancelled = equipment.Cancelled;
+            equipmentReservation.EquipmentId = equipment.EquipmentId;
+            equipmentReservation.EventEquipmentId = equipment.EquipmentReservationId;
+            equipmentReservation.EventId = eventId;
+            equipmentReservation.QuantityRequested = equipment.QuantityRequested;
+            equipmentReservation.RoomId = room.RoomId;
+            _equipmentService.UpdateEquipmentReservation(equipmentReservation);
+        }
+
         private void AddRoom(int eventId, EventRoomDto room)
         {
             var roomReservation = new RoomReservationDto();
@@ -119,6 +219,19 @@ namespace crds_angular.Services
             roomReservation.RoomId = room.RoomId;
             roomReservation.RoomLayoutId = room.LayoutId;
             var roomReservationId = _roomService.CreateRoomReservation(roomReservation);
+        }
+
+        private void UpdateRoom(int eventId, EventRoomDto room)
+        {
+            var roomReservation = new RoomReservationDto();
+            roomReservation.Cancelled = room.Cancelled;
+            roomReservation.EventId = eventId;
+            roomReservation.EventRoomId = room.RoomReservationId;
+            roomReservation.Hidden = room.Hidden;
+            roomReservation.Notes = room.Notes;
+            roomReservation.RoomId = room.RoomId;
+            roomReservation.RoomLayoutId = room.LayoutId;
+            _roomService.UpdateRoomReservation(roomReservation);
         }
 
         private int AddEvent(EventToolDto eventTool)
@@ -193,6 +306,26 @@ namespace crds_angular.Services
             }
         }
 
+        public IList<Models.Crossroads.Events.Event> EventsReadyForPrimaryContactReminder(string token)
+        {
+            var pageViewId = AppSetting("EventsReadyForPrimaryContactReminder");
+            var search = "";
+            var events = _eventService.EventsByPageViewId(token, pageViewId, search);
+            var eventList = events.Select(evt => new Models.Crossroads.Events.Event()
+            {
+                name = evt.EventTitle,
+                EventId = evt.EventId,
+                EndDate = evt.EventEndDate,
+                StartDate = evt.EventStartDate,
+                EventType = evt.EventType,
+                location = evt.EventLocation,
+                PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
+                PrimaryContactId = evt.PrimaryContact.ContactId
+            });
+            
+            return eventList.ToList();
+        }
+
         public IList<Models.Crossroads.Events.Event> EventsReadyForReminder(string token)
         {
             var pageId = AppSetting("EventsReadyForReminder");
@@ -236,6 +369,18 @@ namespace crds_angular.Services
             });
         }
 
+        public void SendPrimaryContactReminderEmails()
+        {
+            var token = _apiUserService.GetToken();
+            var eventList = EventsReadyForPrimaryContactReminder(token);
+
+            eventList.ForEach(evt =>
+            {
+                SendPrimaryContactReminderEmail(evt, token);
+
+            });
+        }
+
         private void SendEventReminderEmail(Models.Crossroads.Events.Event evt, Participant participant, Event childcareEvent, IList<Participant> children, string token)
         {
             var mergeData = new Dictionary<string, object>
@@ -272,6 +417,31 @@ namespace crds_angular.Services
                 participant.ContactId,
                 participant.EmailAddress,
                 mergeData);
+            _communicationService.SendMessage(comm);
+        }
+
+        private void SendPrimaryContactReminderEmail(Models.Crossroads.Events.Event evt, string token)
+        {
+            var mergeData = new Dictionary<string, object>
+            {
+                {"Event_ID", evt.EventId},
+                {"Event_Title", evt.name},
+                {"Event_Start_Date", evt.StartDate.ToShortDateString()},
+                {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
+                {"Base_Url", _configurationWrapper.GetConfigValue("BaseUrl")}
+              
+            };
+           
+            var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
+            var comm = _communicationService.GetTemplateAsCommunication(
+               AppSetting("EventPrimaryContactReminderTemplateId"),
+               defaultContact.Contact_ID,
+               defaultContact.Email_Address,
+               evt.PrimaryContactId,
+               evt.PrimaryContactEmailAddress,
+               evt.PrimaryContactId,
+               evt.PrimaryContactEmailAddress,               
+               mergeData);
             _communicationService.SendMessage(comm);
         }
 

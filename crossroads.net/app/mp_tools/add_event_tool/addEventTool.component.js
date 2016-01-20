@@ -32,6 +32,7 @@
       vm.back = back;
       vm.currentPage = currentPage;
       vm.event = AddEvent.eventData.event;
+      vm.isEditMode = isEditMode;
       vm.next = next;
       vm.params = MPTools.getParams();
       vm.processing = false;
@@ -44,8 +45,26 @@
       ////////////////////////////
 
       function activate() {
-        vm.currentEventSelected = vm.params.recordId;
-        vm.viewReady = true;
+        vm.currentEventSelected = Number(vm.params.recordId);
+        if (vm.currentEventSelected !== -1) {
+          // tool was launched from the details view...
+          AddEvent.editMode = true;
+          EventService.eventTool.get({eventId: vm.currentEventSelected}, function(evt) {
+            AddEvent.eventData = AddEvent.fromEventDto(evt);
+            vm.event = AddEvent.eventData.event;
+            vm.rooms = AddEvent.eventData.rooms;
+            AddEvent.currentPage = 2;
+            vm.viewReady = true;
+          },
+
+          function(err) {
+            console.error('failed to get event ' + vm.currentEventSelected + ' + with error ' + err);
+            vm.viewReady = true;
+          });
+        } else {
+          vm.viewReady = true;
+        }
+
       }
 
       function allowAccess() {
@@ -62,10 +81,13 @@
         return AddEvent.currentPage;
       }
 
+      function isEditMode() {
+        return AddEvent.editMode;
+      }
+
       function next() {
         vm.allData.eventForm.$setSubmitted();
 
-        // I shouldn't have to do this, but I don't have time to debug it!
         AddEvent.eventData.event = vm.event;
 
         if (vm.allData.eventForm.$valid) {
@@ -86,22 +108,37 @@
         if (vm.allData.$valid) {
           // build the dto...
           var event = AddEvent.getEventDto(AddEvent.eventData);
-          EventService.create.save(event, function(result) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
-            AddEvent.currentPage = 1;
-            AddEvent.eventData = {};
-            vm.rooms = [];
-            vm.event = {};
-            $window.close();
-          },
 
-          function(result) {
-            $log.error(result);
-            $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+          if (AddEvent.editMode) {
+            EventService.eventTool.update({eventId: vm.currentEventSelected}, event, function(result) {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventUpdateSuccess);
+              AddEvent.eventData = {};
+              vm.processing = false;
+              $window.close();
+            },
+
+            function(err) {
+              $log.error(err);
+              vm.processing = false;
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+            });
+          } else {
+            EventService.create.save(event, function(result) {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventSuccess);
+              AddEvent.currentPage = 1;
+              AddEvent.eventData = {};
+              vm.rooms = [];
+              vm.event = {};
+              vm.processing = false;
+              $window.close();
+            },
+
+            function(result) {
+              $log.error(result);
+              vm.processing = false;
+              $rootScope.$emit('notify', $rootScope.MESSAGES.eventToolProblemSaving);
+            });
           }
-
-          );
-          vm.processing = false;
           return;
         }
 

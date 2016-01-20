@@ -29,7 +29,7 @@
       scope.clearFilters = clearFilters;
       scope.filterAll = filterAll;
       scope.filterFromDate = formatDate(new Date());
-      scope.format = 'MM/dd/yy';
+      scope.format = 'MM/dd/yyyy';
       scope.getUniqueMembers = getUniqueMembers;
       scope.getUniqueSignUps = getUniqueSignUps;
       scope.getUniqueTeams = getUniqueTeams;

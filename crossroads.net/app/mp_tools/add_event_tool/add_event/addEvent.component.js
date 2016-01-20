@@ -28,13 +28,15 @@
   function AddEventController($rootScope, AddEvent, Lookup, Programs, StaffContact, Validation) {
     var vm = this;
 
-    vm.crossroadsLocations = Lookup.query({ table: 'crossroadslocations' });
+    vm.crossroadsLocations = [];
+    vm.addEvent = AddEvent;
     vm.endDateOpen = endDateOpen;
     vm.endDateOpened = false;
     vm.eventTypes = Lookup.query({ table: 'eventtypes' });
     vm.formatContact = formatContact;
     vm.programs = Programs.AllPrograms.query();
     vm.reminderDays = Lookup.query({ table: 'reminderdays' });
+    vm.resetRooms = resetRooms;
     vm.staffContacts = StaffContact.query();
     vm.startDateOpen = startDateOpen;
     vm.startDateOpened = false;
@@ -44,6 +46,19 @@
 
     ///////
     function activate() {
+
+      // Get the congregations
+      Lookup.query({ table: 'crossroadslocations' }, function(locations) {
+        vm.crossroadsLocations = locations;
+
+        // does the current location need to be updated with the name?
+        if (AddEvent.editMode) {
+          vm.eventData.event.congregation = _.find(locations, function(l) {
+            return l.dp_RecordID === vm.eventData.event.congregation.dp_RecordID;
+          });
+        }
+      });
+
       if (_.isEmpty(vm.eventData)) {
         vm.eventData = {
           donationBatch: 0,
@@ -66,6 +81,10 @@
       var displayName = contact.displayName;
       var email = contact.email;
       return displayName + ' - ' + email;
+    }
+
+    function resetRooms() {
+      vm.addEvent.eventData.rooms.length = 0;
     }
 
     function startDateOpen($event) {

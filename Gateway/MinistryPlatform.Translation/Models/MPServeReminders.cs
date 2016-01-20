@@ -13,7 +13,7 @@ namespace MinistryPlatform.Translation.Models
         public int? Template_Id { get; set; }
         public int Opportunity_Contact_Id { get; set; }
         public string Opportunity_Email_Address { get; set; }
-        public TimeSpan Shift_Start { get; set; }
-        public TimeSpan Shift_End { get; set; }
+        public TimeSpan? Shift_Start { get; set; }
+        public TimeSpan? Shift_End { get; set; }
     }
 }

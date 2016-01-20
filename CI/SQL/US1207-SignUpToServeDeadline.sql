@@ -25,13 +25,22 @@ FROM            dbo.Group_Participants AS gp INNER JOIN
                          dbo.Opportunities AS o ON o.Add_to_Group = g.Group_ID AND o.Group_Role_ID = gp.Group_Role_ID INNER JOIN
                          dbo.Event_Types AS et ON et.Event_Type_ID = o.Event_Type_ID INNER JOIN
                          dbo.Events AS e ON e.Event_Type_ID = et.Event_Type_ID INNER JOIN
-                         dbo.Group_Roles AS gr ON gr.Group_Role_ID = o.Group_Role_ID INNER JOIN
+                         dbo.Group_Roles AS gr ON gr.Group_Role_ID = o.Group_Role_ID LEFT OUTER JOIN
 						 dbo.cr_Sign_Up_Deadline AS sud ON o.Sign_Up_Deadline_ID = sud.Sign_Up_Deadline_ID
 
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Sign_Up_To_Serve' AND Object_ID = Object_ID(N'dbo.Groups'))
+BEGIN
 ALTER TABLE dbo.Groups
 ADD
-	Sign_Up_To_Serve dp_Separator NULL,
+	Sign_Up_To_Serve dp_Separator NULL
+END
+
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Deadline_Passed_Message_ID' AND Object_ID = Object_ID(N'dbo.Groups'))
+BEGIN
+ALTER TABLE dbo.Groups
+ADD
 	Deadline_Passed_Message_ID int NULL
-GO
+END
+

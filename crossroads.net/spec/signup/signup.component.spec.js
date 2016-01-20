@@ -1,6 +1,5 @@
 require('crds-core');
 require('../../app/ang');
-require('../../app/ang2');
 
 require('../../app/common/common.module');
 require('../../app/signup');

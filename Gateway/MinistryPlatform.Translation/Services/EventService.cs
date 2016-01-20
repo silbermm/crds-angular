@@ -57,7 +57,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Reminder_Days_Prior_ID", eventReservationReservation.ReminderDaysId},
                 {"Send_Reminder", eventReservationReservation.SendReminder},
                 {"Event_Start_Date", eventReservationReservation.StartDateTime},
-                {"Event_Title", eventReservationReservation.Title}
+                {"Event_Title", eventReservationReservation.Title},
+                {"Visibility_Level_ID", _configurationWrapper.GetConfigIntValue("EventVisibilityLevel")}
             };
 
             try
@@ -170,6 +171,7 @@ namespace MinistryPlatform.Translation.Services
                 var record = r[0];
                 var e = new Event
                 {
+                    CongregationId = record.ToInt("Congregation_ID"),
                     EventEndDate = record.ToDate("Event_End_Date"),
                     EventId = record.ToInt("Event_ID"),
                     EventStartDate = record.ToDate("Event_Start_Date"),
@@ -276,6 +278,23 @@ namespace MinistryPlatform.Translation.Services
                 EventTitle = (string) record["Event_Title"],
                 EventStartDate = (DateTime) record["Event_Start_Date"],
                 EventEndDate = (DateTime) record["Event_End_Date"],
+                EventType = record.ToString("Event_Type"),
+                PrimaryContact = new Contact()
+                {
+                    ContactId = record.ToInt("Primary_Contact_ID"),
+                    EmailAddress = record.ToString("Primary_Contact_Email_Address")
+                }
+            }).ToList();
+        }
+
+        public IEnumerable<Event> EventsByPageViewId(string token, int pageViewId, string searchString)
+        {
+            return _ministryPlatformService.GetPageViewRecords(pageViewId, token, searchString).Select(record => new Event()
+            {
+                EventId = (int)record["Event_ID"],
+                EventTitle = (string)record["Event_Title"],
+                EventStartDate = (DateTime)record["Event_Start_Date"],
+                EventEndDate = (DateTime)record["Event_End_Date"],
                 EventType = record.ToString("Event_Type"),
                 PrimaryContact = new Contact()
                 {

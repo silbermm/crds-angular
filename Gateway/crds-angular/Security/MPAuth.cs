@@ -11,7 +11,12 @@ using System.Diagnostics;
 using log4net;
 using log4net.Config;
 using System.Reflection;
+using System.Threading;
 using crds_angular.Models.Crossroads;
+using crds_angular.Util;
+using Microsoft.Ajax.Utilities;
+using Microsoft.Owin;
+using MinistryPlatform.Translation.Services;
 
 namespace crds_angular.Security
 {
@@ -43,37 +48,31 @@ namespace crds_angular.Security
         {
             try
             {
-                var authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();
+                IEnumerable<string> refreshTokens;
+                var authorized = "";
+                if (Request.Headers.TryGetValues("RefreshToken", out refreshTokens))
+                {
+                    var authData = AuthenticationService.RefreshToken(refreshTokens.FirstOrDefault());
+                    if (authData != null)
+                    {
+                        authorized = authData["token"].ToString();
+                        var refreshToken = authData["refreshToken"].ToString();
+                        var result = new HttpAuthResult(actionWhenAuthorized(authorized), authorized, refreshToken);
+                        return result;
+                    }
+                }
+
+                authorized = Request.Headers.GetValues("Authorization").FirstOrDefault();   
                 if (authorized != null && (authorized != "null" || authorized != ""))
                 {
                     return actionWhenAuthorized(authorized);
                 }
-                else
-                {
-                    return actionWhenNotAuthorized();
-                }
+                return actionWhenNotAuthorized();
             }
             catch (System.InvalidOperationException)
             {
                 return actionWhenNotAuthorized();
             }
         }
-
-        //protected IHttpActionResult AuthorizedWithCookie(Func<CookieInfo, IHttpActionResult> doIt)
-        //{
-        //    CookieHeaderValue cookie = Request.Headers.GetCookies("sessionId").FirstOrDefault();
-        //    if (cookie != null && (cookie["sessionId"].Value != "null" || cookie["sessionId"].Value != null))
-        //    {
-        //        var c = new CookieInfo
-        //        {
-        //            SessionId = cookie["sessionId"].Value,
-        //            UserId = Convert.ToInt32(cookie["userId"].Value),
-        //            UserName = cookie["username"].Value
-        //        };
-        //        return doIt(c);
-        //    }
-        //    return Unauthorized();
-        //}
-
     }
 }

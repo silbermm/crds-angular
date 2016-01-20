@@ -20,36 +20,27 @@ delete from dp_commands where communication_id in (select communication_id from 
 
 delete from dp_contact_publications where contact_id in (select contact_id from contacts where email_address like 'mpcrds+SU2S%');
 
-delete from dp_Communication_Messages where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SMother@gmail.com');
+delete from dp_Communication_Messages where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2S%');
 
-delete from dp_Communication_Messages where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SFather@gmail.com');
-
-delete from dp_Communication_Messages where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild19@gmail.com');
-
-delete from dp_Communication_Messages where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild4@gmail.com');
+delete from dp_communication_messages where communication_id in (select Communication_ID from dp_communications where To_Contact in (select Contact_id from contacts where email_address like 'mpcrds+SU2S%'));
 
 delete from dp_communications where To_Contact in (select contact_id from contacts where email_address like 'mpcrds+SU2S%');
 
-delete from households where household_name = 'SU2SHousehold';
-
 delete from Contact_Households where household_id in (select household_id from households where household_name = 'SU2SHousehold');
 
-delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SFather@gmail.com');
+delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2S%');
 
-delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SMother@gmail.com');
-
-delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild19@gmail.com');
-
-delete from Contact_Households where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild4@gmail.com');
-
-delete from contact_relationships where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SMother@gmail.com');
-
-delete from contact_relationships where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild19@gmail.com');
-
-delete from contact_relationships where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SFather@gmail.com');
-
-delete from contact_relationships where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2SChild4@gmail.com');
+delete from contact_relationships where contact_id in (select contact_id from contacts where email_address='mpcrds+SU2S%');
 
 delete from Activity_Log where contact_id in (select contact_id from contacts where email_address like 'mpcrds+SU2S%');
 
+delete from Activity_log where household_id in (select household_id from households where household_name = 'SU2SHousehold');
+
+update contacts set household_id = null where contact_id in (select contact_id from contacts where email_address like 'mpcrds+SU2S%');
+
+delete from contact_households where contact_id in (select contact_id from contacts where email_address like 'mpcrds+SU2S%');
+
 delete from contacts where email_address like 'mpcrds+SU2S%';
+
+delete from households where household_name = 'SU2SHousehold';
+GO

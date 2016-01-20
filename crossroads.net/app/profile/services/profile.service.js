@@ -5,6 +5,7 @@
     return {
       Personal: $resource(__API_ENDPOINT__ + 'api/profile'),
       Person: $resource(__API_ENDPOINT__ +  'api/profile/:contactId'),
+      AdminPerson: $resource(__API_ENDPOINT__ +  'api/profile/:contactId/admin'),
       Account: $resource(__API_ENDPOINT__ + 'api/account'),
       Password: $resource(__API_ENDPOINT__ + 'api/account/password'),
       Subscriptions: $resource(__API_ENDPOINT__ + 'api/subscriptions'),

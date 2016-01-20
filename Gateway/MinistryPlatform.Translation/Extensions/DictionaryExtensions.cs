@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MinistryPlatform.Models;
 
 namespace MinistryPlatform.Translation.Extensions
 {
@@ -26,19 +25,27 @@ namespace MinistryPlatform.Translation.Extensions
 
             int result;
             var valid = int.TryParse(dictVal.ToString(), out result);
-            if (valid) return result;
+            if (valid)
+            {
+                return result;
+            }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as int", key));
+            }
             return result;
         }
 
-        public static T ToNullableObject<T>(this Dictionary<string, object> input, string key,
-            bool throwExceptionIfFailed = false) where T:class 
+        public static T ToNullableObject<T>(this Dictionary<string, object> input,
+                                            string key,
+                                            bool throwExceptionIfFailed = false) where T : class
         {
             var dictVal = DictVal(input, key);
             if (dictVal == null)
+            {
                 return null;
+            }
 
             var val = dictVal as T;
             if (val != null)
@@ -53,7 +60,6 @@ namespace MinistryPlatform.Translation.Extensions
                 }
             }
             return null;
-
         }
 
         public static int? ToNullableInt(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
@@ -66,10 +72,36 @@ namespace MinistryPlatform.Translation.Extensions
 
             int result;
             var valid = int.TryParse(dictVal.ToString(), out result);
-            if (valid) return result;
+            if (valid)
+            {
+                return result;
+            }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as int", key));
+            }
+            return result;
+        }
+
+        public static TimeSpan? ToNullableTimeSpan(this Dictionary<string, object> input, string key, bool throwExceptionIfFailed = false)
+        {
+            var dictVal = DictVal(input, key);
+            if (dictVal == null)
+            {
+                return null;
+            }
+
+            TimeSpan result;
+            var valid = TimeSpan.TryParse(dictVal.ToString(), out result);
+            if (valid)
+            {
+                return result;
+            }
+            if (throwExceptionIfFailed)
+            {
+                throw new FormatException(string.Format("'{0}' cannot be converted to TimeSpan", key));
+            }
             return result;
         }
 
@@ -93,7 +125,9 @@ namespace MinistryPlatform.Translation.Extensions
             }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as DateTime", key));
+            }
             return result;
         }
 
@@ -113,7 +147,9 @@ namespace MinistryPlatform.Translation.Extensions
             }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as DateTime", key));
+            }
             return result;
         }
 
@@ -137,7 +173,9 @@ namespace MinistryPlatform.Translation.Extensions
             }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as DateTime", key));
+            }
             return string.Empty;
         }
 
@@ -155,10 +193,15 @@ namespace MinistryPlatform.Translation.Extensions
 
             bool result;
             var valid = bool.TryParse(dictVal.ToString(), out result);
-            if (valid) return result;
+            if (valid)
+            {
+                return result;
+            }
 
             if (throwExceptionIfFailed)
+            {
                 throw new FormatException(string.Format("'{0}' cannot be converted as bool", key));
+            }
             return result;
         }
 
@@ -175,6 +218,5 @@ namespace MinistryPlatform.Translation.Extensions
             }
             return dictVal;
         }
-
     }
 }
