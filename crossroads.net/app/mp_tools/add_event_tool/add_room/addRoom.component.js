@@ -126,7 +126,7 @@
           });
 
           if (alreadyAdded) {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.allReadyAdded);
+            alreadyAdded.cancelled = false;
             return;
           }
 
