@@ -189,7 +189,6 @@ namespace crds_angular.Services
         private void AddEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
         {
             var equipmentReservation = new EquipmentReservationDto();
-            equipmentReservation.Approved = false;
             equipmentReservation.Cancelled = false;
             equipmentReservation.EquipmentId = equipment.EquipmentId;
             equipmentReservation.EventId = eventId;
@@ -213,7 +212,6 @@ namespace crds_angular.Services
         private void AddRoom(int eventId, EventRoomDto room)
         {
             var roomReservation = new RoomReservationDto();
-            roomReservation.Approved = false;
             roomReservation.Cancelled = false;
             roomReservation.EventId = eventId;
             roomReservation.Hidden = room.Hidden;
