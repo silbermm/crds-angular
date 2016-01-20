@@ -11,10 +11,7 @@
     .factory('AddEvent', require('./addEvent.service'));
 
   require('./add_event');
-
-  // the addRoom component
   require('./add_room');
-
-  // the removeRoom component
   require('./remove_room');
+
 })();

@@ -28,8 +28,8 @@
   function AddEventController($rootScope, AddEvent, Lookup, Programs, StaffContact, Validation) {
     var vm = this;
 
+    vm.crossroadsLocations = [];
     vm.addEvent = AddEvent;
-    vm.crossroadsLocations = Lookup.query({ table: 'crossroadslocations' });
     vm.endDateOpen = endDateOpen;
     vm.endDateOpened = false;
     vm.eventTypes = Lookup.query({ table: 'eventtypes' });
@@ -46,6 +46,19 @@
 
     ///////
     function activate() {
+
+      // Get the congregations
+      Lookup.query({ table: 'crossroadslocations' }, function(locations) {
+        vm.crossroadsLocations = locations;
+
+        // does the current location need to be updated with the name?
+        if (AddEvent.editMode) {
+          vm.eventData.event.congregation = _.find(locations, function(l) {
+            return l.dp_RecordID === vm.eventData.event.congregation.dp_RecordID;
+          });
+        }
+      });
+
       if (_.isEmpty(vm.eventData)) {
         vm.eventData = {
           donationBatch: 0,
