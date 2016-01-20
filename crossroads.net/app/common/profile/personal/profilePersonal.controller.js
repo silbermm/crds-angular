@@ -236,8 +236,7 @@
 
         // length 0 check supports if a user starts to change their pw, then decides not to
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          var length = _.size(vm.pform['passwd.passwordForm'].password);
-          if (vm.pform['passwd.passwordForm'].password.$touched === true && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
+          if (vm.pform['passwd.passwordForm'].password.$touched && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
             vm.passwordSet = true;
           }
         }
@@ -287,21 +286,24 @@
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
+
+            vm.password = '';
+            vm.currentPassword = '';
+            vm.profileData.person.oldPassword = '';
+            vm.profileData.person.newPassword = '';
           },
 
           function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             $log.debug('person save unsuccessful');
+            vm.submitted = false;
           });
         }
       }, 550);
 
       vm.emailSet = false;
       vm.passwordSet = false;
-      vm.password = '';
-      vm.currentPassword = '';
-      vm.profileData.person.oldPassword = '';
-      vm.profileData.person.newPassword = '';
+
     }
 
     function showMobilePhoneError() {
@@ -349,11 +351,12 @@
       var modalInstance = $modal.open({
         templateUrl: 'personal/confirmPassword.html',
         controller: 'ConfirmPasswordCtrl as pwModal',
-        backdrop : 'static',
+        backdrop: 'static',
         resolve: {
           modalTypeItem: function() {
             return modalType;
           },
+
           email: function() {
             return vm.oldEmail;
           }
