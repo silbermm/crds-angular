@@ -32,14 +32,13 @@
       var credentials = { username: vm.email, password: vm.passwd };
 
       PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
-        $modalInstance.close(vm.passwd);
+        vm.passwd = '';
+        $modalInstance.close(credentials.password);
       }, function(error) {
 
         $rootScope.$emit('notify', $rootScope.MESSAGES.passwordNotVerified);
         vm.saving = false;
       });
-
-      vm.passwd = '';
     }
 
     function cancel() {
