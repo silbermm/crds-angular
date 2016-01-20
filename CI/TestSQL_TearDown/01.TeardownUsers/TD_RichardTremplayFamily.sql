@@ -46,6 +46,9 @@ DELETE FROM Form_Response_Answers WHERE Form_Response_ID = @formResponseId;
 DELETE FROM Form_Responses WHERE Form_Response_ID = @formResponseId;
 END
 
+DECLARE @householdID as int
+set @householdID = (select top 1 household_id from contacts where email_address = 'mpcrds+tremplay.richard@gmail.com');
+
 ---Update contact records 
 UPDATE Contacts SET Household_ID = null, Participant_Record = null, Donor_Record = null, user_account = null
 WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address like 'mpcrds+tremplay%');
@@ -86,10 +89,12 @@ DELETE FROM [dbo].dp_communication_messages where communication_id in (select co
 DELETE FROM dp_communications WHERE To_Contact in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
 
 ---delete households
+DELETE FROM Activity_Log where Household_ID = @householdID;
+
 DELETE FROM households WHERE household_name = 'Tremplay';
 
 ---delete addresses
-DELETE FROM Addresses WHERE Address_ID IN (SELECT Address_ID FROM Addresses WHERE Address_Line_1 = '123 Towne Commons Way' AND Postal_Code =45067);
+DELETE FROM Addresses WHERE Address_ID IN (SELECT Address_ID FROM households WHERE household_id = @householdID);
 
 ---delete contact households
 DELETE FROM Contact_Households WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
@@ -115,3 +120,4 @@ DELETE FROM Activity_Log WHERE Contact_ID in (SELECT Contact_ID FROM contacts WH
 
 ---delete contacts
 DELETE FROM contacts WHERE email_address like 'mpcrds+tremplay%';
+GO
