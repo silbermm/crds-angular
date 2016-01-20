@@ -32,31 +32,29 @@ GO
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('Oakley Equipment', @Oakley_Building , 1, 1, 1, 0, 0, 0);
+			('Oakley Equipment', @Oakley_Building , 1, 1, 0, 0, 0, 0);
 
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('Mason Equipment', @Mason_Building, 1, 1, 1, 0, 0, 0)
+			('Mason Equipment', @Mason_Building, 1, 1, 0, 0, 0, 0)
 
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('Florence Equipment', @Florence_Building, 1, 1, 1, 0, 0, 0);
+			('Florence Equipment', @Florence_Building, 1, 1, 0, 0, 0, 0);
 
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('Uptown Equipment', @Uptown_Building, 1, 1, 1, 0, 0, 0);
+			('Uptown Equipment', @Uptown_Building, 1, 1, 0, 0, 0, 0);
 
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('West Side Equipment', @West_Side_Building, 1, 1, 1, 0, 0, 0)
+			('West Side Equipment', @West_Side_Building, 1, 1, 0, 0, 0, 0)
 
 	INSERT INTO dbo.Rooms
 			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
 			VALUES
-			('Uptown Equipment', @Uptown_Building, 1, 1, 1, 0, 0, 0)
-
---GO
+			('Uptown Equipment', @Uptown_Building, 1, 1, 0, 0, 0, 0)
