@@ -45,7 +45,7 @@ namespace CrossroadsStripeOnboarding.Services
         {
             return
                 (from r in db.RecurringGifts
-                    where r.End_Date == null && r.DonorAccount.Processor_Account_ID == null
+                    where r.End_Date == new DateTime(2000, 01, 01) && r.DonorAccount.Processor_Account_ID == null
                     select r).ToList();
         }
 

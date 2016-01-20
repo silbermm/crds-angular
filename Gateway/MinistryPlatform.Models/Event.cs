@@ -20,5 +20,7 @@ namespace MinistryPlatform.Models
         {
             get { return (participants); }
         }
+
+        public int CongregationId { get; set; }
     }
 }

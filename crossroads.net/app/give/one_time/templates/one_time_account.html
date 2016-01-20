@@ -1,11 +1,11 @@
 <div class="push-top">
     <div class="form-group">
         <div class="btn-group btn-group-justified" role="group" ng-show="!give.activeSession()">
-            <a type="button" class="btn btn-default" role="button" ng-click="give.service.goToLogin()">Login</a>
+            <a type="button" class="btn btn-default" role="button" ng-click="give.service.goToLogin()">Sign In</a>
             <a type="button" class="btn btn-default active" role="button">Give as Guest</a>
         </div>
     </div>
-  
+
     <hr>
       <p>You are giving <strong>{{give.dto.amount | currency}}</strong>  to <strong>{{give.dto.program['Name']}}</strong>. <a href="" ng-click="give.service.processChange()" tabindex="-1" class="text-secondary">Change</a></p>
     <hr>
@@ -29,13 +29,13 @@
 	    </div>
 
 	    <div id="existingEmail" growl inline="true" reference="{{give.emailAlreadyRegisteredGrowlDivRef}}" limit-messages="1"></div>
-	    <bank-credit-card-details 
+	    <bank-credit-card-details
         dto='give.dto'
         bank-info-submitted='give.dto.bankinfoSubmitted'
         donor='give.dto.donor'
         email='give.dto.email'
         set-valid-card='setValidCard'
-        set-valid-cvc='setValidCvc' 
+        set-valid-cvc='setValidCvc'
         account-state-name='give.account'>
       </bank-credit-card-details>
 	</ng-form>

@@ -7,14 +7,14 @@
     </button>
   </h2>
   <ng-form name="roomForm"> 
-
     <div class="form-group" ng-class="{'has-error': room.validation.showErrors(roomForm, 'layout')}">
       <label class="required"> Layout </label>
       <select class="form-control"
               name="layout" 
               ng-model="room.currentRoom.layout" 
               ng-options="layout.layoutName for layout in room.layouts track by layout.id"
-              required>
+              required
+              ng-disabled="room.existing()">
         <option value="">-- Choose a Layout --</option>
       </select>
       <ng-messages for="roomForm.layout.$error" ng-if="room.validation.showErrors(roomForm, 'layout')">
@@ -25,8 +25,12 @@
     </div>
 
     <div class="form-group" name="description" ng-model="room.currentRoom.description">
-      <label>Description</label>
-      <textarea class="form-control" name="description" ng-model="room.currentRoom.description"></textarea>
+      <label>Notes</label>
+      <textarea class="form-control"
+                name="description"
+                ng-model="room.currentRoom.description"
+                ng-disabled="room.existing()" >
+      </textarea>
     </div>
 
     <div class="form-group">
@@ -41,8 +45,7 @@
       </label>
     </div>
 
-    <equipment-form 
-                    current-equipment="room.currentRoom.equipment" 
+    <equipment-form current-equipment="room.currentRoom.equipment" 
                     equipment-lookup="room.equipmentLookup"> 
     </equipment-form>
   

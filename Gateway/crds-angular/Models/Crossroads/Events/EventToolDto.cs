@@ -67,37 +67,7 @@ namespace crds_angular.Models.Crossroads.Events
         [JsonProperty(PropertyName = "title")]
         [Required]
         public string Title { get; set; }
-    }
 
-    public class EventRoomDto
-    {
-        public EventRoomDto()
-        {
-            this.Equipment = new List<EventRoomEquipmentDto>();
-        }
-
-        [JsonProperty(PropertyName = "equipment")]
-        public List<EventRoomEquipmentDto> Equipment { get; set; }
-
-        [JsonProperty(PropertyName = "hidden")]
-        public bool Hidden { get; set; }
-
-        [JsonProperty(PropertyName = "layoutId")]
-        public int LayoutId { get; set; }
-
-        [JsonProperty(PropertyName = "notes")]
-        public string Notes { get; set; }
-
-        [JsonProperty(PropertyName = "roomId")]
-        public int RoomId { get; set; }
-    }
-
-    public class EventRoomEquipmentDto
-    {
-        [JsonProperty(PropertyName = "equipmentId")]
-        public int EquipmentId { get; set; }
-
-        [JsonProperty(PropertyName = "quantityRequested")]
-        public int QuantityRequested { get; set; }
+        
     }
 }

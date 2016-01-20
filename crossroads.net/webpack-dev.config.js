@@ -25,7 +25,6 @@ module.exports = {
     profile: './app/profile/profile.module.js',
     main: './app/app.js',
     ang: './app/ang.js',
-    ang2: './app/ang2.js',
     core: ['./node_modules/crds-core'],
     common: ['./app/common/common.module.js'],
   },

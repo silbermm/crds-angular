@@ -27,9 +27,10 @@ AS
 -- Story    Date	    Author            Description	
 -- ------   --------    ----------------  -----------
 -- US1984   01/04/2016  Charlie Retzler   Fixed bug with c2 joins checking status on c rather than c2
+-- DE924    01/13/2016  Charlie Retzler   Limiting columns returned to speed up query
 
 	SELECT
-			cr.*
+			cr.Contact_Relationship_ID, cr.Contact_ID, cr.Relationship_ID, cr.Related_Contact_ID
 		FROM Contact_Relationships cr			
 			INNER JOIN Contact_Relationships cr2
 				ON
@@ -52,7 +53,7 @@ AS
 			END > GETDATE()
 	UNION
 	SELECT
-			cr.*
+			cr.Contact_Relationship_ID, cr.Contact_ID, cr.Relationship_ID, cr.Related_Contact_ID
 		FROM Contact_Relationships cr			
 			INNER JOIN Contact_Relationships cr2
 				ON

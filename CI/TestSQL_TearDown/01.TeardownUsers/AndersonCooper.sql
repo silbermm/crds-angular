@@ -3,19 +3,19 @@ GO
 
 --Get the required data to add to our contact. 
 Declare @contactID as int
-Set @contactID = (select contact_id from contacts where email_address = 'mpcrds+12@gmail.com' and last_name = 'Cooper');
+Set @contactID = (select top 1 contact_id from contacts where email_address = 'mpcrds+12@gmail.com' and last_name = 'Cooper');
 
 Declare @houseHoldID as int
 set @houseHoldID = (select houseHold_ID from contacts where contact_id = @contactID);
 
 Declare @participantID as int
-set @participantID = (select participant_record from contacts where contact_id = @contactID);
+set @participantID = (select participant_id from participants where contact_id = @contactID);
 
 Declare @userAccount as int
-set @userAccount = (select user_account from contacts where contact_id = @contactID);
+set @userAccount = (select user_id from dp_users where contact_id = @contactID);
 
 Declare @donorID as int
-set @donorID = (select donor_record from contacts where contact_id = @contactID);
+set @donorID = (select donor_id from donors where contact_id = @contactID);
 
 --Update old contact record so we can delete it. 
 UPDATE [dbo].Contacts
@@ -118,5 +118,5 @@ delete from dp_user_roles where user_id = (select user_id from dp_users where us
 delete from dp_users where user_email = 'mpcrds+12@gmail.com';
 
 --Delete Anderson's old contact record
-DELETE FROM [dbo].Contacts where email_address = 'mpcrds+12@gmail.com' and last_name = 'Cooper';
+DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where email_address = 'mpcrds+12@gmail.com' and last_name = 'Cooper');
 GO
