@@ -30,8 +30,17 @@ FROM            dbo.Group_Participants AS gp INNER JOIN
 
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Sign_Up_To_Serve' AND Object_ID = Object_ID(N'dbo.Groups'))
+BEGIN
 ALTER TABLE dbo.Groups
 ADD
-	Sign_Up_To_Serve dp_Separator NULL,
+	Sign_Up_To_Serve dp_Separator NULL
+END
+
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Deadline_Passed_Message_ID' AND Object_ID = Object_ID(N'dbo.Groups'))
+BEGIN
+ALTER TABLE dbo.Groups
+ADD
 	Deadline_Passed_Message_ID int NULL
-GO
+END
+

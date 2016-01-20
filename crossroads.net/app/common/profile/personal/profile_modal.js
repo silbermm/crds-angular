@@ -1,4 +1,4 @@
-angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $modal, $log) {
+angular.module('crossroads').controller('ModalCtrl', function ($scope, $modal, $log) {
 
   $scope.items = ['item1', 'item2', 'item3'];
 
@@ -6,7 +6,7 @@ angular.module('crossroads').controller('ModalDemoCtrl', function ($scope, $moda
 
     var modalInstance = $modal.open({
       templateUrl: 'profile_giving_remove_modal',
-      controller: 'ModalInstanceCtrl',
+      controller: 'confirmPassword',
       size: size,
       resolve: {
         items: function () {

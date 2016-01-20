@@ -7,6 +7,7 @@
 
   ProfilePersonalController.$inject = [
     '$rootScope',
+      '$scope',
     '$log',
     '$timeout',
     '$location',
@@ -15,11 +16,14 @@
     'ProfileReferenceData',
     'Profile',
     'Validation',
-    '$sce'
+    '$sce',
+      '$modal',
+      'PasswordService'
   ];
 
   function ProfilePersonalController(
       $rootScope,
+      $scope,
       $log,
       $timeout,
       $location,
@@ -28,7 +32,9 @@
       ProfileReferenceData,
       Profile,
       Validation,
-      $sce) {
+      $sce,
+      $modal,
+      PasswordService) {
 
     var vm = this;
     var attributeTypeIds = require('crds-constants').ATTRIBUTE_TYPE_IDS;
@@ -40,6 +46,7 @@
     vm.convertHomePhone = convertHomePhone;
     vm.convertPhone = convertPhone;
     vm.crossroadsStartDate = new Date(1994, 0, 1);
+    vm.currentPassword = '';
     vm.dateFormat = /^(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.]((19|20)\d\d)$/;
     vm.formatAnniversaryDate = formatAnniversaryDate;
     vm.householdForm = {};
@@ -53,21 +60,31 @@
     vm.loading = true;
     vm.minBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     vm.mstep = 15;
+    vm.oldEmail = '';
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
     vm.openBirthdatePicker = openBirthdatePicker;
     vm.openStartAttendingDatePicker = openStartAttendingDatePicker;
+    vm.password = '';
     vm.passwordPrefix = 'account-page';
     vm.phoneFormat = /^\(?(\d{3})\)?[\s.-]?(\d{3})[\s.-]?(\d{4})$/;
     vm.requireEmail = true;
     vm.requireMobilePhone = angular.isDefined(vm.requireMobilePhone) ? vm.requireMobilePhone : 'false';
+    vm.resetCredentialsEntered = false;
     vm.savePersonal = savePersonal;
+    vm.setOldEmail = setOldEmail;
     vm.showMobilePhoneError = showMobilePhoneError;
+    vm.showPasswordConfirmModal = showPasswordConfirmModal;
     vm.submitted = false;
     vm.today = moment();
     vm.underThirteen = underThirteen;
     vm.validation = Validation;
+    vm.verifyPasswordAttempt = '';
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
+
+    // variables for email and password reset
+    vm.emailSet = false;
+    vm.passwordSet = false;
 
     activate();
 
@@ -99,6 +116,7 @@
           configurePerson();
           setDate();
           underThirteen();
+          setOldEmail();
           vm.viewReady = true;
         }
 
@@ -200,12 +218,39 @@
     }
 
     function savePersonal() {
+
       //force genders field to be dirty
       vm.pform.$submitted = true;
       vm.householdForm.$submitted = true;
 
       $timeout(function() {
         vm.submitted = true;
+
+        if (vm.pform['passwd.passwordForm'] !== undefined) {
+          if (vm.pform['passwd.passwordForm'].password.$touched === true) {
+            var something1 = vm.pform['passwd.passwordForm'];
+            debugger;
+            vm.passwordSet = true;
+          }
+        }
+
+        if (vm.pform['email'] !== undefined) {
+          debugger;
+          if (vm.pform['email'].$touched === true) {
+            var something2 = vm.pform['email'];
+            debugger;
+            vm.emailSet = true;
+          }
+        }
+
+        // if either of these fields are dirty, we need to ask the user for password verification before continuing
+        if (vm.emailSet || vm.passwordSet) {
+          if (vm.resetCredentialsEntered === false) {
+            showPasswordConfirmModal();
+            vm.submitted = true;
+            return;
+          }
+        }
 
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
@@ -220,6 +265,11 @@
           return;
         }
 
+        // set the fields before saving
+        vm.profileData.person.oldPassword = vm.currentPassword;
+        vm.profileData.person.newPassword = vm.password;
+        vm.profileData.person.oldEmail = vm.oldEmail;
+
         vm.profileData.person['State/Region'] = vm.profileData.person.State;
         if (vm.submitFormCallback !== undefined) {
           vm.submitFormCallback({profile: vm.profileData });
@@ -230,6 +280,9 @@
             $log.debug('person save successful');
             if (vm.profileParentForm) {
               vm.profileParentForm.$setPristine();
+
+              // do so we make sure to set the dialog to show
+              vm.resetCredentialsEntered = false;
             }
 
             if (vm.modalInstance !== undefined) {
@@ -243,6 +296,9 @@
           });
         }
       }, 550);
+
+      vm.emailSet = false;
+      vm.passwordSet = false;
     }
 
     function showMobilePhoneError() {
@@ -270,6 +326,48 @@
       return vm.profileData.person.congregationId
         && vm.profileData.person.congregationId != nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS
         && vm.profileData.person.congregationId != nonCrossroadsLocations.NOT_SITE_SPECIFIC;
+    }
+
+    // set the old email address
+    function setOldEmail() {
+      vm.oldEmail = vm.profileData.person.emailAddress;
+    }
+
+    function showPasswordConfirmModal() {
+
+      var modalType = '';
+
+      if (!(vm.emailSet === true) && (vm.passwordSet === false)) {
+        modalType = 'emailOnly';
+      } else if (vm.passwordSet === true) {
+        modalType = 'notEmailOnly';
+      }
+
+      var modalInstance = $modal.open({
+        templateUrl: 'personal/confirmPassword.html',
+        controller: 'ConfirmPasswordCtrl as pwModal',
+        resolve: {
+          modalTypeItem: function() {
+            return modalType;
+          }
+        }
+      });
+
+      modalInstance.result.then(function(currentPassword) {
+
+        vm.currentPassword = currentPassword;
+        var credentials = { username: vm.oldEmail, password: currentPassword };
+
+        PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
+          vm.resetCredentialsEntered = true;
+          vm.savePersonal();
+        }, function(error) {
+
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.saving = false;
+        });
+
+      });
     }
 
   }

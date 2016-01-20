@@ -1,17 +1,30 @@
-(function () {
+(function() {
   'use strict';
-  module.exports = function confirmPassword($modalInstance, $scope, $timeout) {
-    var _this = this;
 
-    _this.ok = ok;
-    _this.cancel = cancel;
+  module.exports = ConfirmPasswordController;
 
-    function ok() {
-      $modalInstance.close();
-    };
+  ConfirmPasswordController.$inject = [
+    '$modalInstance',
+    'modalTypeItem'
+  ];
 
-    function cancel() {
-      $modalInstance.dismiss('cancel');
-    };
-  };
+  function ConfirmPasswordController(
+      $modalInstance,
+      modalTypeItem) {
+
+      var vm = this;
+      vm.ok = ok;
+      vm.cancel = cancel;
+      vm.passwd = '';
+      vm.modalTypeItem = modalTypeItem;
+
+      function ok() {
+        $modalInstance.close(vm.passwd);
+      }
+
+      function cancel() {
+        $modalInstance.dismiss('cancel');
+      }
+
+    }
 })();
