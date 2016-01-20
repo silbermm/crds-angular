@@ -60,6 +60,19 @@
       });
 
       if (_.isEmpty(vm.eventData)) {
+        // var startDate = new Date();
+        // startDate.setMinutes(0);
+        // startDate.setSeconds(0);
+        // var endDate = new Date();
+        // endDate.setMinutes(0);
+        // endDate.setSeconds(0);
+        // endDate.setTime(endDate.getTime() + (1 * 60 * 60 * 1000));
+
+        var startDate = new Date();
+        startDate.setMinutes(0);
+        startDate.setSeconds(0);
+        var endDate = new Date(startDate);
+        endDate.setHours(startDate.getHours() + 1);
         vm.eventData = {
           donationBatch: 0,
           sendReminder: 0,

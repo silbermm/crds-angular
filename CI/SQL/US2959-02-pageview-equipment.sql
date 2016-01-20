@@ -13,7 +13,7 @@ DECLARE @FieldList VARCHAR(1000) = 'Equipment.[Equipment_ID]
     , Room_ID_Table_Building_ID_Table.[Building_ID]
     , Room_ID_Table_Building_ID_Table_Location_ID_Table.[Location_ID]
     ,Equipment.[Quantity_On_Hand]';
-DECLARE @ViewClause VARCHAR(1000) = 'Equipment.[Equipment_ID] IS NOT NULL';
+DECLARE @ViewClause VARCHAR(1000) = 'Equipment.[Equipment_ID] IS NOT NULL AND Equipment.[Bookable] = 1';
 DECLARE @Description VARCHAR(1000) = 'API View';
 
 DELETE FROM [dbo].[dp_Page_Views] WHERE Page_View_ID = @PageViewId;

@@ -50,7 +50,6 @@ namespace MinistryPlatform.Translation.Services
                 {"Equipment_ID", equipmentReservation.EquipmentId},
                 {"Notes", equipmentReservation.Notes},
                 {"Quantity_Requested", equipmentReservation.QuantityRequested},
-                {"Approved", equipmentReservation.Approved},
                 {"Cancelled", equipmentReservation.Cancelled}
             };
 
