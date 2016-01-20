@@ -296,6 +296,9 @@
 
       vm.emailSet = false;
       vm.passwordSet = false;
+      vm.currentPassword = '';
+      vm.profileData.person.oldPassword = '';
+      vm.profileData.person.newPassword = '';
     }
 
     function showMobilePhoneError() {

@@ -39,6 +39,8 @@
 
         vm.saving = false;
       });
+
+      vm.passwd = '';
     }
 
     function cancel() {
