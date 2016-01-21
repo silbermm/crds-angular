@@ -5,10 +5,8 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Security;
-using crds_angular.Services;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
-using LookupService = MinistryPlatform.Translation.Services.LookupService;
 
 namespace crds_angular.Controllers.API
 {
@@ -107,7 +105,10 @@ namespace crds_angular.Controllers.API
         protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);
-            if (obj.GetType() != typeof (DynamicJsonArray)) return null;
+            if (obj.GetType() != typeof (DynamicJsonArray))
+            {
+                return null;
+            }
             dynamic[] array = obj;
             return array;
         }
