@@ -41,7 +41,6 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation, string token)
         {
-            //var token = ApiLogin();
             var equipmentReservationPageId = _configurationWrapper.GetConfigIntValue("EquipmentReservationPageId");
             var equipmentDictionary = new Dictionary<string, object>
             {
