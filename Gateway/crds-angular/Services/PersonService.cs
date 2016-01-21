@@ -45,10 +45,9 @@ namespace crds_angular.Services
             _contactService.UpdateContact(person.ContactId, contactDictionary, householdDictionary, addressDictionary);
             _contactAttributeService.SaveContactAttributes(person.ContactId, person.AttributeTypes, person.SingleAttributes);
 
-            if (person.ParticipantStartDate != null)
-            {
-                Participant participant = _participantService.GetParticipant(person.ContactId);
-                participant.ParticipantStart = person.ParticipantStartDate;
+            Participant participant = _participantService.GetParticipant(person.ContactId);
+            if (participant.AttendanceStart != person.AttendanceStartDate)
+            {                
                 participant.AttendanceStart = person.AttendanceStartDate;
                 // convert to the object with underscores
                 var p = Mapper.Map <MpParticipant>(participant);
