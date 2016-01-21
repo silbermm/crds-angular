@@ -36,16 +36,48 @@ GO
 	DECLARE @West_Side_Coordinator AS INT
 
 	--Albanese, David; dalbanese@crossroads.net
-	SELECT @Oakley_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'dalbanese@crossroads.net'
+	--oak.facilities@crossroads.net 
+	IF (SELECT COUNT(*) FROM dbo.dp_Users WHERE User_Email = 'oak.facilities@crossroads.net') = 0
+		BEGIN
+			SELECT @Oakley_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'dalbanese@crossroads.net'
+		END
+	ELSE
+		BEGIN
+			SELECT @Oakley_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'oak.facilities@crossroads.net'
+		END
 
 	--Gerke, Karen; kgerke@crossroads.net
-	SELECT @Mason_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'kgerke@crossroads.net'
-	 
+	--mas.facilities@crossroads.net
+	IF (SELECT COUNT(*) FROM dbo.dp_Users WHERE User_Email = 'mas.facilities@crossroads.net') = 0
+		BEGIN
+			SELECT @Mason_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'kgerke@crossroads.net'
+		END
+	ELSE
+		BEGIN
+			SELECT @Mason_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'mas.facilities@crossroads.net'
+		END
+
 	-- Levey, Susan; slevey@crossroads.net
-	SELECT @Florence_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'slevey@crossroads.net'
-	
+	-- flo.facilities@crossroads.net 
+	IF (SELECT COUNT(*) FROM dbo.dp_Users WHERE User_Email = 'flo.facilities@crossroads.net') = 0
+		BEGIN
+			SELECT @Florence_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'slevey@crossroads.net'
+		END
+	ELSE
+		BEGIN
+			SELECT @Florence_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'flo.facilities@crossroads.net'
+		END	
+
 	--Rueve, Michele; mrueve@crossroads.net
-	SELECT @West_Side_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'mrueve@crossroads.net'
+	--ws.facilities@crossroads.net 
+	IF (SELECT COUNT(*) FROM dbo.dp_Users WHERE User_Email = 'ws.facilities@crossroads.net') = 0
+		BEGIN
+			SELECT @West_Side_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'mrueve@crossroads.net'
+		END
+	ELSE
+		BEGIN
+			SELECT @West_Side_Coordinator = User_ID  FROM dbo.dp_Users WHERE User_Email = 'ws.facilities@crossroads.net'
+		END	
 	
 
 	--Florence Equipment
