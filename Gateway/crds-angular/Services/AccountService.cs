@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.Entity.Infrastructure;
+using System.Linq;
+using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
 using crds_angular.Models.MP;
 using crds_angular.Services.Interfaces;
 using Crossroads.Utilities.Interfaces;
-using MinistryPlatform.Models;
+using log4net;
 using MinistryPlatform.Translation.Services;
 using MinistryPlatform.Translation.Services.Interfaces;
 
@@ -14,17 +14,24 @@ namespace crds_angular.Services
 {
     public class AccountService : MinistryPlatformBaseService, IAccountService
     {
-        private IConfigurationWrapper _configurationWrapper;
-        private ICommunicationService _communicationService;
-        private IAuthenticationService _authenticationService;
-        private ISubscriptionsService _subscriptionsService;
+        private readonly ILog _logger = LogManager.GetLogger(typeof (AccountService));
 
-        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService, IAuthenticationService authenticationService, ISubscriptionsService subscriptionService)
+        private readonly IConfigurationWrapper _configurationWrapper;
+        private readonly ICommunicationService _communicationService;
+        private readonly IAuthenticationService _authenticationService;
+        private readonly ISubscriptionsService _subscriptionsService;
+        private readonly IMinistryPlatformService _ministryPlatformService;
+        private readonly ILookupService _lookupService;
+
+        public AccountService(IConfigurationWrapper configurationWrapper, ICommunicationService communicationService, IAuthenticationService authenticationService, ISubscriptionsService subscriptionService, IMinistryPlatformService ministryPlatformService, ILookupService lookupService)
         {
-            this._configurationWrapper = configurationWrapper;
-            this._communicationService = communicationService;
-            this._authenticationService = authenticationService;
-            this._subscriptionsService = subscriptionService;
+            _configurationWrapper = configurationWrapper;
+            _communicationService = communicationService;
+            _authenticationService = authenticationService;
+            _subscriptionsService = subscriptionService;
+            _ministryPlatformService = ministryPlatformService;
+            _lookupService = lookupService;
+
         }
         public bool ChangePassword(string token, string newPassword)
         {
@@ -35,7 +42,7 @@ namespace crds_angular.Services
         public bool SaveCommunicationPrefs(string token, AccountInfo accountInfo)
         {
             var contactId = _authenticationService.GetContactId(token);
-            var contact = MinistryPlatformService.GetRecordDict(Convert.ToInt32(ConfigurationManager.AppSettings["MyContact"]), contactId, token);
+            var contact = _ministryPlatformService.GetRecordDict(_configurationWrapper.GetConfigIntValue("MyContact"), contactId, token);
             try
             {                
                 var emailsmsDict = getDictionary(new EmailSMSOptOut
@@ -55,6 +62,8 @@ namespace crds_angular.Services
             }
             catch (Exception e)
             {
+                _logger.Warn(string.Format("Could not set communication preferences for contact {0}", contactId), e);
+                // ReSharper disable once PossibleIntendedRethrow
                 throw e;
             }
         }
@@ -62,7 +71,7 @@ namespace crds_angular.Services
         public AccountInfo getAccountInfo(string token)
         {
             var contactId = _authenticationService.GetContactId(token);
-            CommunicationPreferences contact = _communicationService.GetPreferences(token, contactId);
+            var contact = _communicationService.GetPreferences(token, contactId);
             var accountInfo = new AccountInfo
             {
                 EmailNotifications = contact.Bulk_Email_Opt_Out,
@@ -76,58 +85,48 @@ namespace crds_angular.Services
 
         // TODO  Create a PageIdManager that wraps ConfigurationManager and does the convert for us.
 
-        private static int CreateHouseholdRecord(User newUserData, string token){
-            int recordId;
-
-            Dictionary<string, object> householdDictionary = new Dictionary<string, object>();
+        private int CreateHouseholdRecord(User newUserData, string token){
+            var householdDictionary = new Dictionary<string, object>();
             householdDictionary["Household_Name"] = newUserData.lastName;
-            householdDictionary["Congregation_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Congregation_Default_ID"]);
-            householdDictionary["Household_Source_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Default_Source_ID"]);
+            householdDictionary["Congregation_ID"] = _configurationWrapper.GetConfigIntValue("Congregation_Default_ID");
+            householdDictionary["Household_Source_ID"] = _configurationWrapper.GetConfigIntValue("Household_Default_Source_ID");
 
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Households"]), householdDictionary, token);
+            var recordId = _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("Households"), householdDictionary, token);
 
             return recordId;
         }
 
-        private static int CreateContactRecord(User newUserData, string token, int householdRecordID)
+        private int CreateContactRecord(User newUserData, string token, int householdRecordId)
         {
-            int recordId;
-
-            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
+            var contactDictionary = new Dictionary<string, object>();
             contactDictionary["First_Name"] = newUserData.firstName;
             contactDictionary["Last_Name"] = newUserData.lastName;
             contactDictionary["Email_Address"] = newUserData.email;
             contactDictionary["Company"] = false; // default
             contactDictionary["Display_Name"] = newUserData.lastName + ", " + newUserData.firstName;
             contactDictionary["Nickname"] = newUserData.firstName;
-            contactDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
-            contactDictionary["Household_ID"] = householdRecordID;
+            contactDictionary["Household_Position_ID"] = _configurationWrapper.GetConfigIntValue("Household_Position_Default_ID");
+            contactDictionary["Household_ID"] = householdRecordId;
 
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
-
-            return recordId;
-        }
-
-        private static int CreateContactHouseholdRecord(string token, int householdRecordID, int contactRecordID)
-        {
-            int recordId;
-
-            Dictionary<string, object> contactHouseholdDictionary = new Dictionary<string, object>();
-            contactHouseholdDictionary["Contact_ID"] = contactRecordID;
-            contactHouseholdDictionary["Household_ID"] = householdRecordID;
-            contactHouseholdDictionary["Household_Position_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Position_Default_ID"]);
-            contactHouseholdDictionary["Household_Type_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Household_Type_Default_ID"]);
-
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["ContactHouseholds"]), contactHouseholdDictionary, token);
+            var recordId = _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("Contacts"), contactDictionary, token);
 
             return recordId;
         }
 
-        private static int CreateUserRecord(User newUserData, string token, int contactRecordID)
+        private void CreateContactHouseholdRecord(string token, int householdRecordId, int contactRecordId)
         {
-            int recordId;
+            var contactHouseholdDictionary = new Dictionary<string, object>();
+            contactHouseholdDictionary["Contact_ID"] = contactRecordId;
+            contactHouseholdDictionary["Household_ID"] = householdRecordId;
+            contactHouseholdDictionary["Household_Position_ID"] = _configurationWrapper.GetConfigIntValue("Household_Position_Default_ID");
+            contactHouseholdDictionary["Household_Type_ID"] = _configurationWrapper.GetConfigIntValue("Household_Type_Default_ID");
 
-            Dictionary<string, object> userDictionary = new Dictionary<string, object>();
+            _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("ContactHouseholds"), contactHouseholdDictionary, token);
+        }
+
+        private int CreateUserRecord(User newUserData, string token, int contactRecordId)
+        {
+            var userDictionary = new Dictionary<string, object>();
             userDictionary["First_Name"] = newUserData.firstName;
             userDictionary["Last_Name"] = newUserData.lastName;
             userDictionary["User_Email"] = newUserData.email;
@@ -136,68 +135,69 @@ namespace crds_angular.Services
             userDictionary["Display_Name"] = userDictionary["First_Name"];
             userDictionary["Domain_ID"] = 1;
             userDictionary["User_Name"] = userDictionary["User_Email"];
-            userDictionary["Contact_ID"] = contactRecordID;
+            userDictionary["Contact_ID"] = contactRecordId;
 
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users"]), userDictionary, token, true);
-
-            return recordId;
-        }
-
-        private static int CreateUserRoleSubRecord(string token, int userRecordID)
-        {
-            int recordId;
-
-            Dictionary<string, object> userRoleDictionary = new Dictionary<string, object>();
-            userRoleDictionary["Role_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Role_Default_ID"]);
-            recordId = MinistryPlatformService.CreateSubRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Users_Roles"]),userRecordID, userRoleDictionary, token);
+            var recordId = _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("Users"), userDictionary, token, true);
 
             return recordId;
         }
 
-        private static int CreateParticipantRecord(string token, int contactRecordID)
+        private void CreateUserRoleSubRecord(string token, int userRecordId)
         {
-            int recordId;
+            var userRoleDictionary = new Dictionary<string, object>();
+            userRoleDictionary["Role_ID"] = _configurationWrapper.GetConfigIntValue("Role_Default_ID");
+            _ministryPlatformService.CreateSubRecord(_configurationWrapper.GetConfigIntValue("Users_Roles"),userRecordId, userRoleDictionary, token);
+        }
 
-            Dictionary<string, object> participantDictionary = new Dictionary<string, object>();
-            participantDictionary["Participant_Type_ID"] = Convert.ToInt32(ConfigurationManager.AppSettings["Participant_Type_Default_ID"]);
+        private void CreateParticipantRecord(string token, int contactRecordId)
+        {
+            var participantDictionary = new Dictionary<string, object>();
+            participantDictionary["Participant_Type_ID"] = _configurationWrapper.GetConfigIntValue("Participant_Type_Default_ID");
 
             participantDictionary["Participant_Start_Date"] = DateTime.Now;
-            participantDictionary["Contact_Id"] = contactRecordID;
+            participantDictionary["Contact_Id"] = contactRecordId;
 
-            recordId = MinistryPlatformService.CreateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Participants"]), participantDictionary, token);
-
-            return recordId;
+            _ministryPlatformService.CreateRecord(_configurationWrapper.GetConfigIntValue("Participants"), participantDictionary, token);
         }
         /*
          * Not needed as long as the triggers are in place on Ministry Platform
          */
-        private static void UpdateContactRecord(int contactRecordID, int userRecordID, int participantRecordID, string token)
+        // ReSharper disable once UnusedMember.Local
+        private void UpdateContactRecord(int contactRecordId, int userRecordId, int participantRecordId, string token)
         {
-            Dictionary<string, object> contactDictionary = new Dictionary<string, object>();
-            contactDictionary["Contact_ID"] = contactRecordID;
-            contactDictionary["User_account"] = userRecordID;
-            contactDictionary["Participant_Record"] = participantRecordID;
+            var contactDictionary = new Dictionary<string, object>();
+            contactDictionary["Contact_ID"] = contactRecordId;
+            contactDictionary["User_account"] = userRecordId;
+            contactDictionary["Participant_Record"] = participantRecordId;
 
-            MinistryPlatformService.UpdateRecord(Convert.ToInt32(ConfigurationManager.AppSettings["Contacts"]), contactDictionary, token);
+            _ministryPlatformService.UpdateRecord(_configurationWrapper.GetConfigIntValue("Contacts"), contactDictionary, token);
         }
+
         public Dictionary<string, string>RegisterPerson(User newUserData)
         {
-            var apiUser = this._configurationWrapper.GetEnvironmentVarAsString("API_USER");
-            var apiPassword = this._configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
-            var authData = AuthenticationService.authenticate(apiUser, apiPassword);
+            var apiUser = _configurationWrapper.GetEnvironmentVarAsString("API_USER");
+            var apiPassword = _configurationWrapper.GetEnvironmentVarAsString("API_PASSWORD");
+            var authData = _authenticationService.Authenticate(apiUser, apiPassword);
             var token = authData["token"].ToString();
 
-            int householdRecordID = CreateHouseholdRecord(newUserData,token);
-            int contactRecordID = CreateContactRecord(newUserData,token,householdRecordID);
-            int contactHouseholdRecordID = CreateContactHouseholdRecord(token,householdRecordID,contactRecordID);
-            int userRecordID = CreateUserRecord(newUserData, token, contactRecordID);
-            int userRoleRecordID = CreateUserRoleSubRecord(token, userRecordID);
-            int participantRecordID = CreateParticipantRecord(token, contactRecordID);
+            var exists = _lookupService.EmailSearch(newUserData.email, token);
+            if (exists != null && exists.Any())
+            {
+                throw (new DuplicateUserException(newUserData.email));
+            }
 
-            CreateNewUserSubscriptions(contactRecordID, token);
+            var householdRecordId = CreateHouseholdRecord(newUserData,token);
+            var contactRecordId = CreateContactRecord(newUserData,token,householdRecordId);
+            var userRecordId = CreateUserRecord(newUserData, token, contactRecordId);
+
+            CreateContactHouseholdRecord(token, householdRecordId, contactRecordId);
+            CreateUserRoleSubRecord(token, userRecordId);
+            CreateParticipantRecord(token, contactRecordId);
+
+            CreateNewUserSubscriptions(contactRecordId, token);
 
             // TODO Contingent on cascading delete via contact
-            Dictionary<string, string> returnValues = new Dictionary<string, string>();
+            var returnValues = new Dictionary<string, string>();
             returnValues["firstname"] = newUserData.firstName;
             returnValues["lastname"] = newUserData.lastName;
             returnValues["email"] = newUserData.email;
@@ -207,11 +207,11 @@ namespace crds_angular.Services
 
         private void CreateNewUserSubscriptions(int contactRecordId, string token)
         {
-            Dictionary<string, object> newSubscription = new Dictionary<string, object>();
-            newSubscription["Publication_ID"] = this._configurationWrapper.GetConfigValue("KidsClubPublication");
+            var newSubscription = new Dictionary<string, object>();
+            newSubscription["Publication_ID"] = _configurationWrapper.GetConfigValue("KidsClubPublication");
             newSubscription["Unsubscribed"] = false;
             _subscriptionsService.SetSubscriptions(newSubscription, contactRecordId, token);
-            newSubscription["Publication_ID"] = this._configurationWrapper.GetConfigValue("CrossroadsPublication");
+            newSubscription["Publication_ID"] = _configurationWrapper.GetConfigValue("CrossroadsPublication");
             newSubscription["Unsubscribed"] = false;
             _subscriptionsService.SetSubscriptions(newSubscription, contactRecordId, token);
         }
