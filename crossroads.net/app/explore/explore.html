@@ -314,7 +314,7 @@ $(document).ready(function() {
               <span class="">CHURCH.</span>
             </h2>
             <p class="opening-desc rise10">Crossroads is for anyone who wants to seek God-from those exploring whether or not God even exists, to committed Christ-followers. We present biblical truths and show how they apply to our everyday lives. And we have a lot of fun while doing it.</p>
-            <p class="opening-more rise10">For the longer answer, check out <a href="/about-us-2/our-history">our history</a>, <a href="/about-us-2/what-we-believe">what we believe</a>, <a href="/about-us-2/seven-hills-we-die-on">the seven hills we die on</a> or <a href="/about-us-2/frequent-questions">the FAQ</a>.</p>
+            <p class="opening-more rise10">For the longer answer, check out <a ui-sref="content({link:'/ourhistory'})">our history</a>, <a ui-sref="content({link:'/whatwebelieve'})">what we believe</a>, <a ui-sref="content({link:'/sevenhills'})">the seven hills we die on</a> or <a ui-sref="content({link:'/frequentquestions'})">the FAQ</a>.</p>
           </div><!--/col-sm-6-->
         </div><!--/row-->
       </div><!--/container-->
@@ -362,12 +362,12 @@ $(document).ready(function() {
               <h2 class="map-title rise10 hard-top flush-top ">Crossroads is one church in many locations.</h2>
               <p class="map-desc rise10">Each location is part of the same church, working as one team toward a common vision. Select the site nearest you for service times and directions.</p>
               <p class="map-more">
-                <a class="map-name " href="/locations/mason">Mason</a>
-                <a class="map-name " href="/locations/westside">West Side</a>
-                <a class="map-name " href="/locations/oakley">Oakley</a>
-                <a class="map-name " href="/locations/uptown">Uptown</a>
-                <a class="map-name " href="/locations/florence">Florence</a>
-                <a class="map-name " href="http://live.crossroads.net">Anywhere</a>
+                <a class="map-name" ui-sref="content({link:'/mason'})">Mason</a>
+                <a class="map-name" ui-sref="content({link:'/westside'})">West Side</a>
+                <a class="map-name" ui-sref="content({link:'/oakley'})">Oakley</a>
+                <a class="map-name" ui-sref="content({link:'/uptown'})">Uptown</a>
+                <a class="map-name" ui-sref="content({link:'/florence'})">Florence</a>
+                <a class="map-name" href="http://live.crossroads.net">Anywhere</a>
               </p>
             </div><!--/col-->
           </div><!--/row-->
@@ -395,7 +395,7 @@ $(document).ready(function() {
       <div class="row">
         <div class="col-sm-6 push-top mobile-flush-top">
           <h2 class="kidsclub-title rise10">Oh, and kids love this place.</h2>
-          <p class="kidsclub-desc rise10">We have <a class="link-secondary" href="http://www.crossroadskidsclub.net">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
+          <p class="kidsclub-desc rise10">We have <a class="link-secondary" href="http://www.crossroadskidsclub.net" target="_blank">Kids' Club</a>, which is a fun-learning environment designed just for them. It's free, totally secure and offered during all services.</p>
         </div><!--/col-sm-3-->
       </div><!--/row-->
       <div class="row">
@@ -431,7 +431,7 @@ $(document).ready(function() {
         <div class="row">
           <div class="studentministry-container col-sm-6 col-sm-offset-3">
             <h2 class="studentministry-title flush-bottom rise10">STUDENT MINISTRY</h2>
-            <p class="studentministry-desc rise10"><a href="/next-step/serve/student-ministry/middle-school-ministry">Middle School</a> and <a href="/next-step/serve/student-ministry/high-school">High School</a> students have a place to call their own. Students are challenged and encouraged through relevant teaching and fun events, and opportunities are provided for them to grow as they connect with God and with each other. </p>
+            <p class="studentministry-desc rise10"><a ui-sref="content({link:'/ms'})">Middle School</a> and <a ui-sref="content({link:'/hs'})">High School</a> students have a place to call their own. Students are challenged and encouraged through relevant teaching and fun events, and opportunities are provided for them to grow as they connect with God and with each other. </p>
           </div><!--/studentministry-container-->
         </div><!--/row-->
       </div><!--/container-->
@@ -557,7 +557,7 @@ $(document).ready(function() {
       <div class="row">
         <div class="col-xs-12 col-sm-4 col-sm-offset-2 col-md-5 col-md-offset-1 photos-content-container">
           <h2 class="photos-title rise10">We believe God doesn&rsquo;t just work weekends.</h2>
-          <p class="photos-desc rise10">So we mobilize hundreds of people-sometimes thousands-and we respond to God&rsquo;s call to serve others in our community and around the world. <a href="/next-step/reachout">Learn more about how serving others fixes us</a>.</p>
+          <p class="photos-desc rise10">So we mobilize hundreds of people-sometimes thousands-and we respond to God&rsquo;s call to serve others in our community and around the world. <a ui-sref="content({link:'/reachout'})">Learn more about how serving others fixes us</a>.</p>
         </div><!--/col-->
         <div class="col-xs-12 col-sm-6 photos-container">
           <div class="">
@@ -590,9 +590,9 @@ $(document).ready(function() {
             <div id="meet-container" class="meet-container">
               <h2 class="meet-title rise10">Come on over.</h2>
               <p class="meet-desc rise10">
-                <a href="/locations">Stop by a service this weekend</a> to check out this place for yourself. <br class="hidden-xs visible-sm" />And drink some free coffee, for the love.
+                <a ui-sref="content({link:'/locations'})">Stop by a service this weekend</a> to check out this place for yourself. <br class="hidden-xs visible-sm" />And drink some free coffee, for the love.
               <br />
-                Explore more: <a href="/next-step">Next Steps</a>, <a href="/media">Media</a>, <a href="/give">Give</a>, <a href="event">Events</a> or <a href="/contact-us">Contact Us</a>.
+                Explore more: <a ui-sref="content({link:'/nextstep'})">Next Steps</a>, <a ui-sref="content({link:'/media'})">Media</a>, <a ui-sref="content({link:'/give'})">Give</a>, <a ui-sref="content({link:'/updates'})">Updates</a> or <a ui-sref="content({link:'/contactus'})">Contact Us</a>.
               </p>
               <div class="push-top meet-social rise10">
                 <h5 class="small-heading explore-small-heading pull-left push-half-right">Follow us : </h5>
