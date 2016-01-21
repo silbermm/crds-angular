@@ -24,13 +24,21 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-	DECLARE @INSERTED_EVENT int;
+	DECLARE @INSERTED_EVENT int = 0;
 
-    -- Get ID of inserted event for future use
-	SET @INSERTED_EVENT = (SELECT Event_ID from inserted);
-	
-	-- Call stored procedure
-	Exec [dbo].[crds_Create_Childcare_Event] @INSERTED_EVENT;
+	WHILE(1=1)
+	BEGIN
+		SELECT TOP 1 @INSERTED_EVENT = Event_ID
+		FROM inserted 
+		WHERE Event_ID > @INSERTED_EVENT
+		ORDER BY Event_ID 
+		-- Get ID of inserted event for future use
+		-- SET @INSERTED_EVENT = (SELECT Event_ID from inserted);
+		IF @@ROWCOUNT = 0 BREAK;
+		-- Call stored procedure
+		Exec [dbo].[crds_Create_Childcare_Event] @INSERTED_EVENT;
+
+	END
 
 END
 GO

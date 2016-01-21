@@ -78,7 +78,10 @@
 
       <div class="form-group col-sm-6" ng-if="profile.allowPasswordChange">
         <label for="password">Change Password</label>
-        <password-field passwd="fields.password"
+        <password-field autocomplete="nope"
+                        min-length="8"
+                        passwd-strength="true"
+                        passwd="profile.password"
                         submitted="profile.pform.$submitted"
                         prefix="change"
                         passwd-strength="true">
@@ -100,9 +103,9 @@
                  ng-model='profile.profileData.person.dateOfBirth'
                  is-open='profile.birthdateOpen'
                  show-button-bar='false'
-                 max-date={{profile.minBirthdate}}
+                 max-date={{profile.maxBirthdate}}
                  min-date={{profile.oneHundredFiftyYearsAgo}}
-                 init-date=profile.minBirthdate
+                 init-date=profile.initDate
                  ng-required="true"
                  datepicker-validator
                  required

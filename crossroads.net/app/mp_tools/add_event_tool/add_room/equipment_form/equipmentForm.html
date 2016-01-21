@@ -12,17 +12,23 @@
         <th>Remove</th>
       </thead>
       <tbody> 
-
-        <tr ng-repeat="equip in equipment.currentEquipment">
+        <tr ng-repeat="equip in equipment.currentEquipment" >
           <td>
             <div class="form-group" ng-class="{'has-error': equipment.showFieldError(equipmentForm, equipment.fieldName( 'equipmentChooser', $index) )}">
               <select class="form-control" 
                       name="{{ equipment.fieldName('equipmentChooser', $index) }}" 
                       ng-model="equip.equipment.name"
                       ng-options="e.name for e in equipment.equipmentLookup track by e.id" 
-                      required >
+                      required 
+                      ng-disabled="equipment.existing(equip.equipment)"
+                      unique-equipment >
                       <option value="">-- Choose your equipment --</option>
               </select>
+              <ng-messages for="equipmentForm[equipment.fieldName('equipmentChooser', $index)].$error" ng-if="equipment.showShowFieldError(equipmentForm, equipment.fieldName( 'equipmentChooser', $index) )">
+                <span ng-message="required">
+                  <span dynamic-content="$root.MESSAGES.fieldCanNotBeBlank.content | html"></span>
+                </span>
+              </ng-messages> 
             </div>
           </td>
           <td>
@@ -32,17 +38,24 @@
                      name="{{ equipment.fieldName('equip.quantity', $index) }}" 
                      ng-model="equip.equipment.choosenQuantity" 
                      ng-max="equip.equipment.name.quantity"
-                     ng-min="0"
-                     required>
+                     ng-min="1" required
+                     ng-show="!equipment.isCancelled(equip.equipment)"
+                     ng-disabled="equipment.existing(equip.equipment)">
+              <strong ng-show="equipment.isCancelled(equip.equipment)"> CANCELLED </strong>
             </div>
           </td>
           <td>
-            {{ equip.equipment.name.quantity }} 
+            <span ng-hide="equipment.isCancelled(equip.equipment)"> {{ equip.equipment.name.quantity }}  </span>
           </td>
           <td>
-            <button class="btn btn-standard" ng-click="equipment.remove($index)" >
+            <button class="btn btn-standard" ng-click="equipment.remove($index)" ng-hide="equipment.isCancelled(equip.equipment)">
               <svg viewBox="0 0 32 32" class="icon icon-trash">
                 <use xlink:href="#trash"></use>
+              </svg>
+            </button>
+            <button class="btn btn-danger" ng-click="equipment.undo($index)" ng-show="equipment.isCancelled(equip.equipment)"> 
+              <svg viewBox="0 0 32 32" class="icon icon-ccw">
+                <use xlink:href="#ccw"></use>
               </svg>
             </button>
           </td>

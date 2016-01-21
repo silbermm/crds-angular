@@ -1,6 +1,5 @@
   <ng-form name="eventForm">
 
-    <!-- Event Title -->
     <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'eventTitle')}">
       <label class="required" >Event Title</label>
       <input type="text"
@@ -44,7 +43,8 @@
                   name="congregation"
                   required
                   ng-model="evt.eventData.congregation"
-                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID">
+                  ng-options="congregation.dp_RecordName for congregation in evt.crossroadsLocations track by congregation.dp_RecordID"
+                  ng-change="evt.resetRooms()">
             <option value=''>-- Choose a Site --</option>
           </select>
           <ng-messages for="eventForm.congregation.$error" ng-if="evt.validation.showErrors(eventForm, 'congregation')">
@@ -94,7 +94,9 @@
         </span>
       </ng-messages>
     </div>
-    <div class="row">
+
+    <!-- hiding the minutes for setup/teardown for now... but may bring back at a later date -->
+    <div class="row" ng-show="false">
       <div class="col-md-6">
         <div class="form-group" ng-class="{'has-error': evt.validation.showErrors(eventForm, 'minutesSetup')}">
           <label class="required">Minutes for Setup</label>
@@ -180,6 +182,7 @@
                    ng-model="evt.eventData.endDate"
                    is-open="evt.endDateOpened"
                    ng-required="true"
+                   end-date
                    close-text="Close" />
             <span class="input-group-btn">
               <button type="button"
@@ -195,6 +198,9 @@
             </span>
             <span ng-message="date">
               <span dynamic-content="$root.MESSAGES.invalidData.content | html"></span>
+            </span>
+             <span ng-message="endDate">
+              <span dynamic-content="$root.MESSAGES.endDateTooSmall.content | html"></span>
             </span>
           </ng-messages>
           <timepicker ng-model="evt.eventData.endTime" show-meridian="true">

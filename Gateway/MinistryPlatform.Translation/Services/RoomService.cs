@@ -10,6 +10,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
+
     public class RoomService : BaseService, IRoomService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
@@ -21,9 +22,25 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformService = ministryPlatformService;
         }
 
-        public int CreateRoomReservation(RoomReservationDto roomReservation)
+        public List<RoomReservationDto> GetRoomReservations(int eventId)
         {
             var token = ApiLogin();
+            var search = string.Format(",{0}", eventId);
+            var records = _ministryPlatformService.GetPageViewRecords("GetRoomReservations", token, search);
+
+            return records.Select(record => new RoomReservationDto
+            {
+                Cancelled = record.ToBool("Cancelled"),
+                EventRoomId = record.ToInt("Event_Room_ID"),
+                Hidden = record.ToBool("Hidden"),
+                Notes = record.ToString("Notes"),
+                RoomId = record.ToInt("Room_ID"),
+                RoomLayoutId = record.ToInt("Room_Layout_ID")
+            }).ToList();
+        }
+
+        public int CreateRoomReservation(RoomReservationDto roomReservation, string token)
+        {
             var roomReservationPageId = _configurationWrapper.GetConfigIntValue("RoomReservationPageId");
             var reservationDictionary = new Dictionary<string, object>
             {
@@ -32,7 +49,6 @@ namespace MinistryPlatform.Translation.Services
                 {"Room_Layout_ID", roomReservation.RoomLayoutId},
                 {"Notes", roomReservation.Notes},
                 {"Hidden", roomReservation.Hidden},
-                {"Approved", roomReservation.Approved},
                 {"Cancelled", roomReservation.Cancelled}
             };
 
@@ -43,6 +59,33 @@ namespace MinistryPlatform.Translation.Services
             catch (Exception e)
             {
                 var msg = string.Format("Error creating Room Reservation, roomReservation: {0}", roomReservation);
+                _logger.Error(msg, e);
+                throw (new ApplicationException(msg, e));
+            }
+        }
+
+        public void UpdateRoomReservation(RoomReservationDto roomReservation)
+        {
+            var token = ApiLogin();
+            var roomReservationPageId = _configurationWrapper.GetConfigIntValue("RoomReservationPageId");
+            var reservationDictionary = new Dictionary<string, object>
+            {
+                {"Event_ID", roomReservation.EventId},
+                {"Event_Room_ID", roomReservation.EventRoomId},
+                {"Room_ID", roomReservation.RoomId},
+                {"Room_Layout_ID", roomReservation.RoomLayoutId},
+                {"Notes", roomReservation.Notes},
+                {"Hidden", roomReservation.Hidden},
+                {"Cancelled", roomReservation.Cancelled}
+            };
+
+            try
+            {
+                _ministryPlatformService.UpdateRecord(roomReservationPageId, reservationDictionary, token);
+            }
+            catch (Exception e)
+            {
+                var msg = string.Format("Error updating Room Reservation, roomReservation: {0}", roomReservation);
                 _logger.Error(msg, e);
                 throw (new ApplicationException(msg, e));
             }

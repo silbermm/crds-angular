@@ -31,7 +31,7 @@ DBCC CHECKIDENT (Pledge_Campaigns, reseed, @curr_pledgeCampaign_id);
 
 --Pledge for (t) Test Pledge
 
-SET @donorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+PCHead1@gmail.com'));
+SET @donorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.richard@gmail.com'));
 
 INSERT INTO Pledges
 (Donor_ID, Pledge_Campaign_ID, Pledge_Status_ID, Total_Pledge, Installments_Planned, Installments_Per_Year, First_Installment_Date      , Notes, Domain_ID, Beneficiary, Trip_Leader, Currency, __ExternalPersonID1, __ExternalPersonID2, __ExternalCommitmentID, __ExternalApplicationID, Trip_General_Fund) VALUES
@@ -62,7 +62,7 @@ DBCC CHECKIDENT (Pledge_Campaigns, reseed, @curr_pledgeCampaign_id);
 
 --Pledge for (t) Test Pledge
 
-SET @donorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID = (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+PCHead2@gmail.com'));
+SET @donorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID = (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.mary@gmail.com'));
 
 INSERT INTO Pledges
 (Donor_ID, Pledge_Campaign_ID, Pledge_Status_ID, Total_Pledge, Installments_Planned, Installments_Per_Year, First_Installment_Date      , Notes, Domain_ID, Beneficiary, Trip_Leader, Currency, __ExternalPersonID1, __ExternalPersonID2, __ExternalCommitmentID, __ExternalApplicationID, Trip_General_Fund) VALUES

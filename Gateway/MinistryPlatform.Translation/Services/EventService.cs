@@ -37,9 +37,8 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int CreateEvent(EventReservationDto eventReservationReservation)
+        public int CreateEvent(EventReservationDto eventReservationReservation, string token)
         {
-            var token = ApiLogin();
             var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
 
             var eventDictionary = new Dictionary<string, object>
@@ -57,7 +56,8 @@ namespace MinistryPlatform.Translation.Services
                 {"Reminder_Days_Prior_ID", eventReservationReservation.ReminderDaysId},
                 {"Send_Reminder", eventReservationReservation.SendReminder},
                 {"Event_Start_Date", eventReservationReservation.StartDateTime},
-                {"Event_Title", eventReservationReservation.Title}
+                {"Event_Title", eventReservationReservation.Title},
+                {"Visibility_Level_ID", _configurationWrapper.GetConfigIntValue("EventVisibilityLevel")}
             };
 
             try
@@ -170,6 +170,7 @@ namespace MinistryPlatform.Translation.Services
                 var record = r[0];
                 var e = new Event
                 {
+                    CongregationId = record.ToInt("Congregation_ID"),
                     EventEndDate = record.ToDate("Event_End_Date"),
                     EventId = record.ToInt("Event_ID"),
                     EventStartDate = record.ToDate("Event_Start_Date"),

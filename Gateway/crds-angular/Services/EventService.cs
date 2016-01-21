@@ -72,19 +72,83 @@ namespace crds_angular.Services
             _equipmentService = equipmentService;
         }
 
-        public bool CreateEventReservation(EventToolDto eventTool)
+        public EventToolDto GetEventReservation(int eventId)
         {
             try
             {
-                var eventId = AddEvent(eventTool);
+                var dto = new EventToolDto();
 
-                foreach (var room in eventTool.Rooms)
+                var e = this.GetEvent(eventId);
+                dto.Title = e.EventTitle;
+                dto.CongregationId = e.CongregationId;
+                dto.EndDateTime = e.EventEndDate;
+                dto.StartDateTime = e.EventStartDate;
+
+                var rooms = _roomService.GetRoomReservations(eventId);
+                var roomDto = new List<EventRoomDto>();
+
+                foreach (var room in rooms){
+                
+                    var equipmentDto = new List<EventRoomEquipmentDto>();
+                    var equipment = _equipmentService.GetEquipmentReservations(eventId, room.RoomId);
+                    foreach (var equipmentReservation in equipment)
+                    {
+                        var eq = new EventRoomEquipmentDto();
+                        eq.Cancelled = equipmentReservation.Cancelled;
+                        eq.EquipmentId = equipmentReservation.EquipmentId;
+                        eq.QuantityRequested = equipmentReservation.QuantityRequested;
+                        eq.EquipmentReservationId = equipmentReservation.EventEquipmentId;
+                        equipmentDto.Add(eq);
+                    }
+
+                    var r = new EventRoomDto();
+                    r.Cancelled = room.Cancelled;
+                    r.Equipment = equipmentDto;
+                    r.Hidden = room.Hidden;
+                    r.LayoutId = room.RoomLayoutId;
+                    r.Notes = room.Notes;
+                    r.RoomId = room.RoomId;
+                    r.RoomReservationId = room.EventRoomId;
+
+                    roomDto.Add(r);
+                }
+                dto.Rooms = roomDto;
+
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);   
+            }
+        }
+
+        public bool UpdateEventReservation(EventToolDto eventReservation, int eventId, string token)
+        {
+            try
+            {
+                foreach (var room in eventReservation.Rooms)
                 {
-                    AddRoom(eventId, room);
+                    if (room.RoomReservationId == 0)
+                    {
+                        AddRoom(eventId, room, token);
+                    }
+                    else
+                    {
+                        UpdateRoom(eventId, room);
+                    }
 
                     foreach (var equipment in room.Equipment)
                     {
-                        AddEquipment(equipment, eventId, room);
+                        if (equipment.EquipmentReservationId == 0)
+                        {
+                            AddEquipment(equipment, eventId, room, token);
+                        }
+                        else
+                        {
+                            UpdateEquipment(equipment, eventId, room);
+                        }
                     }
                 }
             }
@@ -97,32 +161,80 @@ namespace crds_angular.Services
             return true;
         }
 
-        private void AddEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
+        public bool CreateEventReservation(EventToolDto eventTool, string token)
+        {
+            try
+            {
+                var eventId = AddEvent(eventTool, token);
+
+                foreach (var room in eventTool.Rooms)
+                {
+                    AddRoom(eventId, room, token);
+
+                    foreach (var equipment in room.Equipment)
+                    {
+                        AddEquipment(equipment, eventId, room, token);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = "Event Service: CreateEventReservation";
+                _logger.Error(msg, ex);
+                throw new Exception(msg, ex);
+            }
+            return true;
+        }
+
+        private void AddEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room, string token)
         {
             var equipmentReservation = new EquipmentReservationDto();
-            equipmentReservation.Approved = false;
             equipmentReservation.Cancelled = false;
             equipmentReservation.EquipmentId = equipment.EquipmentId;
             equipmentReservation.EventId = eventId;
             equipmentReservation.QuantityRequested = equipment.QuantityRequested;
             equipmentReservation.RoomId = room.RoomId;
-            var equipmentReservationId = _equipmentService.CreateEquipmentReservation(equipmentReservation);
+            var equipmentReservationId = _equipmentService.CreateEquipmentReservation(equipmentReservation, token);
         }
 
-        private void AddRoom(int eventId, EventRoomDto room)
+        private void UpdateEquipment(EventRoomEquipmentDto equipment, int eventId, EventRoomDto room)
+        {
+            var equipmentReservation = new EquipmentReservationDto();
+            equipmentReservation.Cancelled = equipment.Cancelled;
+            equipmentReservation.EquipmentId = equipment.EquipmentId;
+            equipmentReservation.EventEquipmentId = equipment.EquipmentReservationId;
+            equipmentReservation.EventId = eventId;
+            equipmentReservation.QuantityRequested = equipment.QuantityRequested;
+            equipmentReservation.RoomId = room.RoomId;
+            _equipmentService.UpdateEquipmentReservation(equipmentReservation);
+        }
+
+        private void AddRoom(int eventId, EventRoomDto room, string token)
         {
             var roomReservation = new RoomReservationDto();
-            roomReservation.Approved = false;
             roomReservation.Cancelled = false;
             roomReservation.EventId = eventId;
             roomReservation.Hidden = room.Hidden;
             roomReservation.Notes = room.Notes;
             roomReservation.RoomId = room.RoomId;
             roomReservation.RoomLayoutId = room.LayoutId;
-            var roomReservationId = _roomService.CreateRoomReservation(roomReservation);
+            var roomReservationId = _roomService.CreateRoomReservation(roomReservation, token);
         }
 
-        private int AddEvent(EventToolDto eventTool)
+        private void UpdateRoom(int eventId, EventRoomDto room)
+        {
+            var roomReservation = new RoomReservationDto();
+            roomReservation.Cancelled = room.Cancelled;
+            roomReservation.EventId = eventId;
+            roomReservation.EventRoomId = room.RoomReservationId;
+            roomReservation.Hidden = room.Hidden;
+            roomReservation.Notes = room.Notes;
+            roomReservation.RoomId = room.RoomId;
+            roomReservation.RoomLayoutId = room.LayoutId;
+            _roomService.UpdateRoomReservation(roomReservation);
+        }
+
+        private int AddEvent(EventToolDto eventTool, string token)
         {
             var eventDto = new EventReservationDto();
             eventDto.CongregationId = eventTool.CongregationId;
@@ -142,7 +254,7 @@ namespace crds_angular.Services
             eventDto.SendReminder = eventTool.SendReminder;
             eventDto.StartDateTime = eventTool.StartDateTime;
             eventDto.Title = eventTool.Title;
-            var eventId = _eventService.CreateEvent(eventDto);
+            var eventId = _eventService.CreateEvent(eventDto, token);
             return eventId;
         }
 
@@ -316,7 +428,7 @@ namespace crds_angular.Services
                 {"Event_Title", evt.name},
                 {"Event_Start_Date", evt.StartDate.ToShortDateString()},
                 {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
-                {"Base_Url", _configurationWrapper.GetConfigValue("BaseUrl")}
+                {"Base_Url", _configurationWrapper.GetConfigValue("BaseMPUrl")}
               
             };
            
