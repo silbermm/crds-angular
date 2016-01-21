@@ -10,6 +10,8 @@ namespace crds_angular.Controllers.API
     {
 
         private readonly IAccountService _accountService;
+        // Do not change this string without also changing the same in the corejs register_controller
+        private const string DUPLICATE_USER_MESSAGE = "Duplicate User";
 
         public UserController(IAccountService accountService)
         {
@@ -25,7 +27,7 @@ namespace crds_angular.Controllers.API
             }
             catch (DuplicateUserException e)
             {
-                var apiError = new ApiErrorDto("Duplicate User", e);
+                var apiError = new ApiErrorDto(DUPLICATE_USER_MESSAGE, e);
                 throw new HttpResponseException(apiError.HttpResponseMessage);                
             }
         }
