@@ -24,9 +24,10 @@ GO
 -- **************************
 -- Change History
 -- **************************
--- Story    Date	    Author   Description	
--- ------   --------    -------  -----------
--- US1984   01/04/2016  Charlie  Merged logic for Person_House_ID into main procedure as a CTE
+-- Story    Date	    Author           Description	
+-- ------   --------    -------          -----------
+-- US1984   01/04/2016  Charlie Retzler  Merged logic for Person_House_ID into main procedure as a CTE
+-- DE979    01/20/2016  Chareli Retzler  Fixed issue where null HS_Graduation_Year was not blanked out properly
 
 ALTER PROCEDURE [dbo].[crds_Echeck_ETL_tblPerson]
 AS
@@ -59,7 +60,7 @@ BEGIN
 			c.First_Name, 
 			c.Nickname,
 			c.Date_of_Birth,
-			COALESCE(c.HS_Graduation_Year, '') AS HS_Graduation_Year,
+			COALESCE(CAST(c.HS_Graduation_Year AS VARCHAR), '') AS HS_Graduation_Year,
 			COALESCE(ch.Person_House_ID, 0) AS Person_House_ID
 		FROM dbo.Contacts c
 			INNER JOIN dbo.vw_crds_Active_Echeck_Contact_Relationships cr 

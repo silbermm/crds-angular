@@ -1,6 +1,6 @@
 #Crossroads.net Serverside Application
 
-The web services supporting the website for crossroads church.
+The web services supporting the website for crossroads connecting to Ministry Platform.
 
 ###Getting Started
 
@@ -17,7 +17,7 @@ Prerequisites: A Windows machine, or Windows VM
 
 
 ##.NET Style
-###Resharper Configuration
+###Resharper Configuration (Provided by https://www.jetbrains.com)
 The team level configuration file is checked into git alongside the .NET solution file, and is named **Crossroads.Resharper.Team.DotSettings**
 The initial version of this file is concentrated on providing a default code formatting and cleanup template.
 To format and cleanup code for the current file using the following steps
