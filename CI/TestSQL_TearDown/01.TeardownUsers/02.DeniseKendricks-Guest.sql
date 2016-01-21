@@ -1,6 +1,8 @@
 USE [MinistryPlatform]
 GO
 
+WHILE EXISTS (SELECT * FROM contacts WHERE email_address = 'mpcrds+20@gmail.com')
+BEGIN
 --Get the required data to add to our contact. 
 Declare @contactID as int
 Set @contactID = (select top 1 contact_id from contacts where email_address = 'mpcrds+20@gmail.com');
@@ -48,6 +50,9 @@ WHERE contact_id = @contactID;
 
 DELETE from [dbo].dp_communication_messages 
 WHERE Communication_ID = @communicationID;
+
+DELETE from [dbo].dp_communication_messages
+WHERE Contact_ID = @contactID;
 
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;
@@ -112,13 +117,12 @@ delete from event_participants where participant_id = @participantID;
 delete from group_participants where participant_id = @participantID;
 
 delete from participants where participant_id = @participantID;
-GO
 
 --Delete userAccount
-delete from dp_user_roles where user_id = (select user_id from dp_users where user_email = 'mpcrds+20@gmail.com');
+delete from dp_user_roles where user_id = (select user_id from dp_users where contact_id = @contactID);
 
-delete from dp_users where user_email = 'mpcrds+20@gmail.com';
+delete from dp_users where contact_id = @contactID;
 
 --Delete Denise's old contact record
-DELETE FROM [dbo].Contacts where contact_id = (select top 1 contact_id from contacts where email_address = 'mpcrds+20@gmail.com');
-GO
+DELETE FROM [dbo].Contacts where contact_id = @contactID;
+END

@@ -91,13 +91,17 @@ DELETE FROM dp_communications WHERE To_Contact in (SELECT Contact_ID FROM contac
 ---delete households
 DELETE FROM Activity_Log where Household_ID = @householdID;
 
-DELETE FROM households WHERE household_name = 'Tremplay';
-
 ---delete address since we hard coded the id in the setup script
+update households set address_id = null where address_id = 100000020;
+
 DELETE FROM Addresses WHERE Address_ID =100000020;
 
 ---delete contact households
 DELETE FROM Contact_Households WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
+
+UPDATE contacts set household_id = null where household_id in (select household_id from households where household_name = 'Tremplay');
+
+DELETE FROM households WHERE household_name = 'Tremplay';
 
 ---delete contact relationships
 DELETE FROM contact_relationships WHERE Contact_ID in (SELECT Contact_ID FROM contacts WHERE email_address like 'mpcrds+tremplay%');
