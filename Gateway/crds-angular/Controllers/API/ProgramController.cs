@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
 using crds_angular.Exceptions.Models;
@@ -27,7 +28,7 @@ namespace crds_angular.Controllers.API
                 try
                 {
                     var programs = _programService.GetAllProgramsForReal(token);
-                    return this.Ok(programs);
+                    return this.Ok(programs.OrderBy(x=>x.Name));
                 }
                 catch (Exception exception)
                 {

@@ -16,13 +16,11 @@ namespace crds_angular.Controllers.API
     {
         private IConfigurationWrapper _configurationWrapper;
         private readonly LookupService _lookupService;
-        //private readonly crds_angular.Services.ILookupService _crdsLookupService;
 
         public LookupController(IConfigurationWrapper configurationWrapper, LookupService lookupService)
         {
             this._configurationWrapper = configurationWrapper;
             _lookupService = lookupService;
-            //_crdsLookupService = crdsLookupService;
         }
 
         [ResponseType(typeof (List<Dictionary<string, object>>))]
@@ -58,9 +56,6 @@ namespace crds_angular.Controllers.API
                         break;
                     case "eventtypes":
                         ret = _lookupService.EventTypes(t);
-
-                        //var list = _crdsLookupService.Lookup(t, "eventtypes");
-                        //return Ok(list);
                         break;
                     case "reminderdays":
                         ret = _lookupService.ReminderDays(t);
