@@ -428,7 +428,7 @@ namespace crds_angular.Services
                 {"Event_Title", evt.name},
                 {"Event_Start_Date", evt.StartDate.ToShortDateString()},
                 {"Event_Start_Time", evt.StartDate.ToShortTimeString()},
-                {"Base_Url", _configurationWrapper.GetConfigValue("BaseUrl")}
+                {"Base_Url", _configurationWrapper.GetConfigValue("BaseMPUrl")}
               
             };
            
