@@ -7,7 +7,7 @@
 
   ProfilePersonalController.$inject = [
     '$rootScope',
-      '$scope',
+    '$scope',
     '$log',
     '$timeout',
     '$location',
@@ -17,8 +17,8 @@
     'Profile',
     'Validation',
     '$sce',
-      '$modal',
-      'PasswordService'
+    '$modal',
+    'PasswordService'
   ];
 
   function ProfilePersonalController(
@@ -184,8 +184,8 @@
         vm.updatedPerson.firstName = vm.profileData.person.firstName;
         vm.updatedPerson.nickName =
             vm.profileData.person.nickName === '' ?
-            vm.profileData.person.firstName :
-            vm.profileData.person.nickName;
+                vm.profileData.person.firstName :
+                vm.profileData.person.nickName;
         vm.updatedPerson.lastName = vm.profileData.person.lastName;
       }
 
@@ -215,8 +215,8 @@
 
     function isDobError() {
       return (vm.pform.birthdate.$touched ||
-        vm.pform.$submitted) &&
-        vm.pform.birthdate.$invalid;
+          vm.pform.$submitted) &&
+          vm.pform.birthdate.$invalid;
     }
 
     function openBirthdatePicker($event) {
@@ -252,12 +252,16 @@
         if (vm.pform['passwd.passwordForm'] !== undefined) {
           if (vm.pform['passwd.passwordForm'].password.$touched && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
             vm.passwordSet = true;
+
+            // set the fields before saving
+            vm.profileData.person.newPassword = vm.password;
           }
         }
 
         if (vm.pform['email'] !== undefined) {
           if (vm.pform['email'].$touched === true) {
             vm.emailSet = true;
+
           }
         }
 
@@ -277,41 +281,48 @@
           return;
         }
 
-        // set the fields before saving
-        vm.profileData.person.oldPassword = vm.currentPassword;
-        vm.profileData.person.newPassword = vm.password;
         vm.profileData.person.oldEmail = vm.oldEmail;
+        vm.profileData.person.oldPassword = vm.currentPassword;
 
         vm.profileData.person['State/Region'] = vm.profileData.person.State;
         if (vm.submitFormCallback !== undefined) {
           vm.submitFormCallback({profile: vm.profileData });
         } else {
           vm.profileData.person.$save(function() {
-            vm.submitted = false;
-            $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
-            $log.debug('person save successful');
-            if (vm.profileParentForm) {
-              vm.profileParentForm.$setPristine();
+                vm.submitted = false;
+                $rootScope.$emit('notify', $rootScope.MESSAGES.profileUpdated);
+                $log.debug('person save successful');
+                if (vm.profileParentForm) {
+                  vm.profileParentForm.$setPristine();
 
-              // do so we make sure to set the dialog to show
-              vm.resetCredentialsEntered = false;
-            }
+                  // do so we make sure to set the dialog to show
+                  vm.resetCredentialsEntered = false;
+                }
 
-            if (vm.modalInstance !== undefined) {
-              vm.closeModal(true);
-            }
+                if (vm.modalInstance !== undefined) {
+                  vm.closeModal(true);
+                }
 
-            vm.password = '';
-            vm.currentPassword = '';
-            vm.profileData.person.oldPassword = '';
-            vm.profileData.person.newPassword = '';
-          },
+                // do this to avoid blanking out the password if it was auto-filled from
+                // the browser
+                if (vm.passwordSet === true) {
+                  vm.password = '';
+                  vm.currentPassword = '';
+                  vm.profileData.person.oldPassword = '';
+                  vm.profileData.person.newPassword = '';
+                }
+                // update the email here, if it was changed
+                if (vm.emailSet === true) {
+                  vm.oldEmail = vm.profileData.person.emailAddress;
+                }
 
-          function() {
-            $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-            $log.debug('person save unsuccessful');
-            vm.submitted = false;
-          });
+              },
+
+              function() {
+                $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+                $log.debug('person save unsuccessful');
+                vm.submitted = false;
+              });
         }
       }, 550);
 
@@ -343,8 +354,8 @@
     function isCrossroadsAttendee() {
       var nonCrossroadsLocations = require('crds-constants').NON_CROSSROADS_LOCATIONS;
       return vm.profileData.person.congregationId &&
-        vm.profileData.person.congregationId !== nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS &&
-        vm.profileData.person.congregationId !== nonCrossroadsLocations.NOT_SITE_SPECIFIC;
+          vm.profileData.person.congregationId !== nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS &&
+          vm.profileData.person.congregationId !== nonCrossroadsLocations.NOT_SITE_SPECIFIC;
     }
 
     // set the old email address
