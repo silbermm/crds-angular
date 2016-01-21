@@ -105,7 +105,10 @@ namespace crds_angular.Controllers.API
         protected static dynamic DecodeJson(string json)
         {
             var obj = System.Web.Helpers.Json.Decode(json);
-            if (obj.GetType() != typeof (DynamicJsonArray)) return null;
+            if (obj.GetType() != typeof (DynamicJsonArray))
+            {
+                return null;
+            }
             dynamic[] array = obj;
             return array;
         }
