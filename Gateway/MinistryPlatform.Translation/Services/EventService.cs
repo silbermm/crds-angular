@@ -37,9 +37,8 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int CreateEvent(EventReservationDto eventReservationReservation)
+        public int CreateEvent(EventReservationDto eventReservationReservation, string token)
         {
-            var token = ApiLogin();
             var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
 
             var eventDictionary = new Dictionary<string, object>

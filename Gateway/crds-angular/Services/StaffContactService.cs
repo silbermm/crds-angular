@@ -16,9 +16,9 @@ namespace crds_angular.Services
             _contactService = contactService;
         }
 
-        public List<PrimaryContactDto> GetStaffContacts(string token)
+        public List<PrimaryContactDto> GetStaffContacts()
         {
-            var mpContacts = _contactService.StaffContacts(token);
+            var mpContacts = _contactService.StaffContacts();
             return mpContacts.Select(mpContact => new PrimaryContactDto
             {
                 ContactId = mpContact.ToInt("Contact_ID"),
