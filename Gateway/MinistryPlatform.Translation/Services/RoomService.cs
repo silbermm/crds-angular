@@ -41,7 +41,6 @@ namespace MinistryPlatform.Translation.Services
 
         public int CreateRoomReservation(RoomReservationDto roomReservation, string token)
         {
-            //var token = ApiLogin();
             var roomReservationPageId = _configurationWrapper.GetConfigIntValue("RoomReservationPageId");
             var reservationDictionary = new Dictionary<string, object>
             {
