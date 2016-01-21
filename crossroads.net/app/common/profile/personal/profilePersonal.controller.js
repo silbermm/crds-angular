@@ -342,7 +342,7 @@
 
       var modalType = '';
 
-      if (!(vm.emailSet === true) && (vm.passwordSet === false)) {
+      if ((vm.emailSet === true) && (vm.passwordSet === false)) {
         modalType = 'emailOnly';
       } else if (vm.passwordSet === true) {
         modalType = 'notEmailOnly';
