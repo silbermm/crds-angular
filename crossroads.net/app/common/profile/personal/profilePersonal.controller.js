@@ -83,6 +83,15 @@
     vm.viewReady = false;
     vm.zipFormat = /^(\d{5}([\-]\d{4})?)$/;
 
+    // TODO: Hack to overcome issue where Bootstrap UI Datepicker picks up the date value as string and can't parse it correctly, so it raises validation error.
+    // After the promises are resolved below setAttendanceStartDateToJSDate() gets called. The previous code set the date to a JS date, but the validation was not
+    // re-firing leaving the field invalid.
+    // This hack temporarily captures the value for attendanceStartDate, sets the models value to a valid date, and when everything is resolved sets the value to the real date
+    var originalAttendanceStartDate = _.get(vm, 'profileData.person.attendanceStartDate');
+    if (originalAttendanceStartDate) {
+      vm.profileData.person.attendanceStartDate = new Date();
+    }
+
     // variables for email and password reset
     vm.emailSet = false;
     vm.passwordSet = false;
@@ -110,16 +119,21 @@
         if (!vm.profileData) {
           Profile.Personal.get(function(data) {
             vm.profileData = { person: data };
-            setDate();
+
+            // TODO: Continuation of hack above to address when we need to lookup a new person
+            originalAttendanceStartDate = _.get(vm, 'profileData.person.attendanceStartDate');
+
+            setAttendanceStartDateToJSDate();
             underThirteen();
             vm.viewReady = true;
           });
         } else {
           configurePerson();
-          setDate();
+          setAttendanceStartDateToJSDate();
           underThirteen();
           setOldEmail();
           vm.viewReady = true;
+
         }
 
       });
@@ -127,9 +141,9 @@
       vm.buttonText = vm.buttonText !== undefined ? vm.buttonText : 'Save';
     }
 
-    function setDate() {
-      if (vm.profileData.person.attendanceStartDate) {
-        vm.profileData.person.attendanceStartDate = new Date(vm.profileData.person.attendanceStartDate);
+    function setAttendanceStartDateToJSDate() {
+      if (originalAttendanceStartDate) {
+        vm.profileData.person.attendanceStartDate = new Date(originalAttendanceStartDate);
       }
     }
 
