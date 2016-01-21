@@ -15,7 +15,7 @@ DECLARE @FieldList VARCHAR(1000) = 'Rooms.[Room_ID]
     , Rooms.[Description]
     , Rooms.[Theater_Capacity]
     , Rooms.[Banquet_Capacity]';
-DECLARE @ViewClause VARCHAR(1000) = 'Rooms.[Room_ID] IS NOT NULL';
+DECLARE @ViewClause VARCHAR(1000) = 'Rooms.[Room_ID] IS NOT NULL AND Rooms.[Bookable] = 1';
 DECLARE @Description VARCHAR(1000) = 'API View';
 
 DELETE FROM [dbo].[dp_Page_Views] WHERE Page_View_ID = @PageViewId;

@@ -81,6 +81,17 @@
         return AddEvent.currentPage;
       }
 
+      function dateTime(dateForDate, dateForTime) {
+        return new Date(
+            dateForDate.getFullYear(),
+            dateForDate.getMonth(),
+            dateForDate.getDate(),
+            dateForTime.getHours(),
+            dateForTime.getMinutes(),
+            dateForTime.getSeconds(),
+            dateForTime.getMilliseconds());
+      }
+
       function isEditMode() {
         return AddEvent.editMode;
       }
@@ -90,7 +101,20 @@
 
         AddEvent.eventData.event = vm.event;
 
+        var start =  dateTime(vm.event.startDate, vm.event.startTime);
+        var end = dateTime(vm.event.endDate, vm.event.endTime);
+
+        if (start.getTime() <= end.getTime()) {
+          // set the endDate Invalid...
+          vm.allData.eventForm.endDate.$error.endDate = true;
+          vm.allData.eventForm.endDate.$valid = false;
+        } else {
+          vm.allData.eventForm.endDate.$error.endDate = false;
+          vm.allData.eventForm.endDate.$valid = true;
+        }
+
         if (vm.allData.eventForm.$valid) {
+
           AddEvent.currentPage = 2;
         } else {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);

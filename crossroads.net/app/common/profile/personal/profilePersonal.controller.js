@@ -58,7 +58,8 @@
     vm.isDobError = isDobError;
     vm.isMeridian = true;
     vm.loading = true;
-    vm.minBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.maxBirthdate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    vm.initDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     vm.mstep = 15;
     vm.oldEmail = '';
     vm.oneHundredFiftyYearsAgo = new Date(now.getFullYear() - 150, now.getMonth(), now.getDate());
@@ -95,7 +96,8 @@
     function activate() {
 
       if (vm.enforceAgeRestriction) {
-        vm.minBirthdate.setFullYear(vm.minBirthdate.getFullYear() - vm.enforceAgeRestriction);
+        vm.maxBirthdate.setFullYear(vm.maxBirthdate.getFullYear() - vm.enforceAgeRestriction);
+        vm.initDate.setFullYear(vm.initDate.getFullYear() - vm.enforceAgeRestriction);
       }
 
       ProfileReferenceData.getInstance().then(function(response) {
@@ -226,19 +228,21 @@
       $timeout(function() {
         vm.submitted = true;
 
+        if (vm.pform.$invalid) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.submitted = false;
+          return;
+        }
+
+        // length 0 check supports if a user starts to change their pw, then decides not to
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          if (vm.pform['passwd.passwordForm'].password.$touched === true) {
-            var something1 = vm.pform['passwd.passwordForm'];
-            debugger;
+          if (vm.pform['passwd.passwordForm'].password.$touched && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
             vm.passwordSet = true;
           }
         }
 
         if (vm.pform['email'] !== undefined) {
-          debugger;
           if (vm.pform['email'].$touched === true) {
-            var something2 = vm.pform['email'];
-            debugger;
             vm.emailSet = true;
           }
         }
@@ -255,12 +259,6 @@
         if (vm.householdForm.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.isHouseholdCollapsed = false;
-          vm.submitted = false;
-          return;
-        }
-
-        if (vm.pform.$invalid) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.submitted = false;
           return;
         }
@@ -288,17 +286,24 @@
             if (vm.modalInstance !== undefined) {
               vm.closeModal(true);
             }
+
+            vm.password = '';
+            vm.currentPassword = '';
+            vm.profileData.person.oldPassword = '';
+            vm.profileData.person.newPassword = '';
           },
 
           function() {
             $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
             $log.debug('person save unsuccessful');
+            vm.submitted = false;
           });
         }
       }, 550);
 
       vm.emailSet = false;
       vm.passwordSet = false;
+
     }
 
     function showMobilePhoneError() {
@@ -323,9 +328,9 @@
 
     function isCrossroadsAttendee() {
       var nonCrossroadsLocations = require('crds-constants').NON_CROSSROADS_LOCATIONS;
-      return vm.profileData.person.congregationId
-        && vm.profileData.person.congregationId != nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS
-        && vm.profileData.person.congregationId != nonCrossroadsLocations.NOT_SITE_SPECIFIC;
+      return vm.profileData.person.congregationId &&
+        vm.profileData.person.congregationId !== nonCrossroadsLocations.I_DO_NOT_ATTEND_CROSSROADS &&
+        vm.profileData.person.congregationId !== nonCrossroadsLocations.NOT_SITE_SPECIFIC;
     }
 
     // set the old email address
@@ -346,26 +351,27 @@
       var modalInstance = $modal.open({
         templateUrl: 'personal/confirmPassword.html',
         controller: 'ConfirmPasswordCtrl as pwModal',
+        backdrop: 'static',
         resolve: {
           modalTypeItem: function() {
             return modalType;
+          },
+
+          email: function() {
+            return vm.oldEmail;
           }
         }
       });
 
       modalInstance.result.then(function(currentPassword) {
 
-        vm.currentPassword = currentPassword;
-        var credentials = { username: vm.oldEmail, password: currentPassword };
-
-        PasswordService.VerifyCredentials.save(credentials).$promise.then(function(response) {
+        if (currentPassword !== undefined) {
+          vm.currentPassword = currentPassword;
           vm.resetCredentialsEntered = true;
           vm.savePersonal();
-        }, function(error) {
-
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          vm.saving = false;
-        });
+        } else {
+          vm.submitted = false;
+        }
 
       });
     }

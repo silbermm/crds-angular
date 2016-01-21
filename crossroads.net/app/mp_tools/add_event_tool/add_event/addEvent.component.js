@@ -60,11 +60,18 @@
       });
 
       if (_.isEmpty(vm.eventData)) {
+        var startDate = new Date();
+        startDate.setMinutes(0);
+        startDate.setSeconds(0);
+        var endDate = new Date(startDate);
+        endDate.setHours(startDate.getHours() + 1);
         vm.eventData = {
           donationBatch: 0,
           sendReminder: 0,
           minutesSetup: 0,
           minutesCleanup: 0,
+          startDate: new Date(),
+          endDate: new Date(),
           startTime: new Date(),
           endTime: new Date()
         };
