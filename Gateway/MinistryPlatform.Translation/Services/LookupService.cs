@@ -1,10 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
+    public interface ILookupServiceImpl
+    {
+        List<Dictionary<string, object>> EventTypes(string token);
+    }
+
+    public class LookupServiceImpl : BaseService, ILookupServiceImpl
+    {
+        private readonly IMinistryPlatformService _ministryPlatformServiceImpl;
+        public LookupServiceImpl(IAuthenticationService authenticationService, IConfigurationWrapper configurationWrapper, IMinistryPlatformService ministryPlatformServiceImpl)
+            : base(authenticationService, configurationWrapper)
+        {
+            _ministryPlatformServiceImpl = ministryPlatformServiceImpl;
+        }
+
+        public List<Dictionary<string, object>> EventTypes(string token)
+        {
+            return _ministryPlatformServiceImpl.GetLookupRecords(AppSettings("EventTypesLookup"), token);
+        }
+    }
     public class LookupService : BaseService
     {
         private readonly IMinistryPlatformService _ministryPlatformServiceImpl;

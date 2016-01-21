@@ -5,8 +5,10 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Web.Http.Results;
 using crds_angular.Security;
+using crds_angular.Services;
 using Crossroads.Utilities.Interfaces;
 using MinistryPlatform.Translation.Services;
+using LookupService = MinistryPlatform.Translation.Services.LookupService;
 
 namespace crds_angular.Controllers.API
 {
@@ -14,11 +16,13 @@ namespace crds_angular.Controllers.API
     {
         private IConfigurationWrapper _configurationWrapper;
         private readonly LookupService _lookupService;
+        private readonly crds_angular.Services.ILookupService _crdsLookupService;
 
-        public LookupController(IConfigurationWrapper configurationWrapper, LookupService lookupService)
+        public LookupController(IConfigurationWrapper configurationWrapper, LookupService lookupService, ILookupService crdsLookupService)
         {
             this._configurationWrapper = configurationWrapper;
             _lookupService = lookupService;
+            _crdsLookupService = crdsLookupService;
         }
 
         [ResponseType(typeof (List<Dictionary<string, object>>))]
@@ -53,7 +57,10 @@ namespace crds_angular.Controllers.API
                         ret = _lookupService.WorkTeams(t);
                         break;
                     case "eventtypes":
-                        ret = _lookupService.EventTypes(t);
+                        //ret = _lookupService.EventTypes(t);
+
+                        var list = _crdsLookupService.Lookup(t, "eventtypes");
+                        return Ok(list);
                         break;
                     case "reminderdays":
                         ret = _lookupService.ReminderDays(t);
