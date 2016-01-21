@@ -131,7 +131,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var mock1 = new Dictionary<string, object>
             {
                 {"Event_ID", 123},
-                {"Location_Name", "Katrina's House"},
+                {"Congregation_Name", "Katrina's House"},
                 {"Event_Start_Date", new DateTime(2014, 3, 4)},
                 {"Event_Title", "Katrina's House Party"},
                 {"Event_End_Date", new DateTime(2014, 4, 4)}
@@ -139,7 +139,7 @@ namespace MinistryPlatform.Translation.Test.Services
             var mock2 = new Dictionary<string, object>
             {
                 {"Event_ID", 456},
-                {"Location_Name", "Andy's House"},
+                {"Congregation_Name", "Andy's House"},
                 {"Event_Start_Date", new DateTime(2014, 4, 4)},
                 {"Event_Title", "Andy's House Party"},
                 {"Event_End_Date", new DateTime(2014, 4, 4)}

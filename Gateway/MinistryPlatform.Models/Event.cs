@@ -8,7 +8,7 @@ namespace MinistryPlatform.Models
         private IList<int> participants = new List<int>();
 
         public int EventId { get; set; }
-        public string EventLocation { get; set; }
+        public string Congregation { get; set; }
         public string EventTitle { get; set; }
         public string EventType { get; set; }
         public DateTime EventStartDate { get; set; }
