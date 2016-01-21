@@ -221,7 +221,7 @@ namespace MinistryPlatform.Translation.Services
             return groupEvents.Select(tmpEvent => new Event
             {
                 EventId = tmpEvent.ToInt("Event_ID"),
-                EventLocation = tmpEvent.ToString("Location_Name"),
+                Congregation = tmpEvent.ToString("Congregation_Name"),
                 EventStartDate = tmpEvent.ToDate("Event_Start_Date"),
                 EventEndDate = tmpEvent.ToDate("Event_End_Date"),
                 EventTitle = tmpEvent.ToString("Event_Title")

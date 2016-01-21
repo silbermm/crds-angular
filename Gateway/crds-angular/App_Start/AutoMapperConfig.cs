@@ -216,7 +216,7 @@ namespace crds_angular.App_Start
             Mapper.CreateMap<MinistryPlatform.Models.Event, Models.Crossroads.Events.Event>()
                 .ForMember(dest => dest.EventId, opts => opts.MapFrom(src => src.EventId))
                 .ForMember(dest => dest.name, opts => opts.MapFrom(src => src.EventTitle))
-                .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.EventLocation))
+                .ForMember(dest => dest.location, opts => opts.MapFrom(src => src.Congregation))
                 .ForMember(dest => dest.time, opts => opts.MapFrom(src => src.EventStartDate.ToString("h:mm")))
                 .ForMember(dest => dest.meridian, opts => opts.MapFrom(src => src.EventStartDate.ToString("tt")))
                 .ForMember(dest => dest.StartDate, opts => opts.MapFrom(src => src.EventStartDate))

@@ -111,7 +111,7 @@ namespace crds_angular.test.Services
                 EndDate = evt.EventEndDate,
                 StartDate = evt.EventStartDate,
                 EventType = evt.EventType,
-                location = evt.EventLocation,
+                location = evt.Congregation,
                 PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
                 PrimaryContactId = evt.PrimaryContact.ContactId
             });

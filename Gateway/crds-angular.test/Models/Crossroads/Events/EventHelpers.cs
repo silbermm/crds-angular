@@ -29,7 +29,7 @@ namespace crds_angular.test.Models.Crossroads.Events
             {
                 EventEndDate = _endDate,
                 EventId = _eventId,
-                EventLocation = _location,
+                Congregation = _location,
                 EventStartDate = _startDate,
                 EventTitle = _title,
                 EventType = "",
