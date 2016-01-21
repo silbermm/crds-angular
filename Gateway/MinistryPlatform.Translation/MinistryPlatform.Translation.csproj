@@ -154,6 +154,7 @@
     <Compile Include="Services\Interfaces\IFormSubmissionService.cs" />
     <Compile Include="Services\Interfaces\IGroupParticipantService.cs" />
     <Compile Include="Services\Interfaces\IGroupService.cs" />
+    <Compile Include="Services\Interfaces\ILookupService.cs" />
     <Compile Include="Services\Interfaces\IMinistryPlatformService.cs" />
     <Compile Include="Services\Interfaces\IOpportunityService.cs" />
     <Compile Include="Services\Interfaces\IParticipantService.cs" />

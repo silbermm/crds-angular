@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using AutoMapper;
+﻿using System.Web.Http;
+using crds_angular.Exceptions;
 using crds_angular.Models.Crossroads;
-using crds_angular.Services;
 using crds_angular.Services.Interfaces;
-using Crossroads.Utilities.Interfaces;
-using Crossroads.Utilities.Services;
-using MinistryPlatform.Translation.Services.Interfaces;
+using crds_angular.Exceptions.Models;
 
 namespace crds_angular.Controllers.API
 {
@@ -17,6 +10,8 @@ namespace crds_angular.Controllers.API
     {
 
         private readonly IAccountService _accountService;
+        // Do not change this string without also changing the same in the corejs register_controller
+        private const string DUPLICATE_USER_MESSAGE = "Duplicate User";
 
         public UserController(IAccountService accountService)
         {
@@ -25,8 +20,16 @@ namespace crds_angular.Controllers.API
 
         public IHttpActionResult Post([FromBody] User user)
         {
-            var returnvalue = _accountService.RegisterPerson(user);
-            return this.Ok(returnvalue);
+            try
+            {
+                var returnvalue = _accountService.RegisterPerson(user);
+                return Ok(returnvalue);
+            }
+            catch (DuplicateUserException e)
+            {
+                var apiError = new ApiErrorDto(DUPLICATE_USER_MESSAGE, e);
+                throw new HttpResponseException(apiError.HttpResponseMessage);                
+            }
         }
     }
 }

@@ -5,7 +5,7 @@ using MinistryPlatform.Translation.Services.Interfaces;
 
 namespace MinistryPlatform.Translation.Services
 {
-    public class LookupService : BaseService
+    public class LookupService : BaseService, ILookupService
     {
         private readonly IMinistryPlatformService _ministryPlatformServiceImpl;
 
@@ -15,7 +15,7 @@ namespace MinistryPlatform.Translation.Services
             _ministryPlatformServiceImpl = ministryPlatformServiceImpl;
         }
 
-        public Dictionary<string, object> EmailSearch(String email, string token)
+        public Dictionary<string, object> EmailSearch(string email, string token)
         {
             return _ministryPlatformServiceImpl.GetLookupRecord(AppSettings("Emails"), email, token);
         }

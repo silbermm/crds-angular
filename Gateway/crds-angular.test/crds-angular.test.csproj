@@ -173,6 +173,7 @@
     <Compile Include="controllers\ServeControllerTest.cs" />
     <Compile Include="controllers\ProgramControllerTest.cs" />
     <Compile Include="controllers\StripeEventControllerTest.cs" />
+    <Compile Include="controllers\UserControllerTest.cs" />
     <Compile Include="DataAccess\EzScanCheckScannerDaoTest.cs" />
     <Compile Include="Models\Crossroads\Events\EventHelpers.cs" />
     <Compile Include="Models\Crossroads\Events\EventMapperTest.cs" />
