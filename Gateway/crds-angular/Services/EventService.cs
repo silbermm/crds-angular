@@ -318,7 +318,7 @@ namespace crds_angular.Services
                 EndDate = evt.EventEndDate,
                 StartDate = evt.EventStartDate,
                 EventType = evt.EventType,
-                location = evt.EventLocation,
+                location = evt.Congregation,
                 PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
                 PrimaryContactId = evt.PrimaryContact.ContactId
             });
@@ -337,7 +337,7 @@ namespace crds_angular.Services
                 EndDate = evt.EventEndDate,
                 StartDate = evt.EventStartDate,
                 EventType = evt.EventType,
-                location = evt.EventLocation,
+                location = evt.Congregation,
                 PrimaryContactEmailAddress = evt.PrimaryContact.EmailAddress,
                 PrimaryContactId = evt.PrimaryContact.ContactId
             });
@@ -522,7 +522,7 @@ namespace crds_angular.Services
                     .Append(new HtmlElement("td", cellAttrs, p.First_Name + " " + p.Last_Name))
                     .Append(new HtmlElement("td", cellAttrs, evnt.EventStartDate.ToShortTimeString()))
                     .Append(new HtmlElement("td", cellAttrs, evnt.EventEndDate.ToShortTimeString()))
-                    .Append(new HtmlElement("td", cellAttrs, evnt.EventLocation));
+                    .Append(new HtmlElement("td", cellAttrs, evnt.Congregation));
             }).ToList();
 
             return new HtmlElement("table", tableAttrs)
