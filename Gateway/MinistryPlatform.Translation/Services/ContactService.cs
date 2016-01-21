@@ -116,8 +116,9 @@ namespace MinistryPlatform.Translation.Services
             return contact;
         }
 
-        public List<Dictionary<string, object>> StaffContacts(string token)
+        public List<Dictionary<string, object>> StaffContacts()
         {
+            var token = ApiLogin();
             var userRoleStaff = _configurationWrapper.GetConfigIntValue("StaffUserRoleId");
             var records = _ministryPlatformService.GetSubpageViewRecords("UserDetails", userRoleStaff, token);
             return records;

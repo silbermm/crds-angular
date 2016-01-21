@@ -25,7 +25,7 @@ namespace crds_angular.Controllers.API
             {
                 try
             {
-                var users = _contactService.GetStaffContacts(t);
+                var users = _contactService.GetStaffContacts();
 
                 return Ok(users);
             }

@@ -5,6 +5,6 @@ namespace crds_angular.Services.Interfaces
 {
     public interface IStaffContactService
     {
-        List<PrimaryContactDto> GetStaffContacts(string token);
+        List<PrimaryContactDto> GetStaffContacts();
     }
 }

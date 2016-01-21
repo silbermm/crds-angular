@@ -4,6 +4,7 @@
 
 <div ng-if="addEvent.allowAccess()">
   <preloader full-screen='true' ng-show="!addEvent.viewReady"> </preloader>
+  <pre>{{addEvent.editMode}}</pre>
 
   <div class="col-md-6 col-md-offset-3" ng-show="addEvent.viewReady">
     <h1>Manage Event <small ng-show="addEvent.currentPage() == 2"> {{addEvent.event.eventTitle}} <small> </h1>

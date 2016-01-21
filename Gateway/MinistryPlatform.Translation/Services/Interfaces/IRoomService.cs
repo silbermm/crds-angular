@@ -6,7 +6,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IRoomService
     {
-        int CreateRoomReservation(RoomReservationDto roomReservation);
+        int CreateRoomReservation(RoomReservationDto roomReservation, string token);
         List<Room> GetRoomsByLocationId(int locationId);
         List<RoomLayout> GetRoomLayouts();
         List<RoomReservationDto> GetRoomReservations(int eventId);

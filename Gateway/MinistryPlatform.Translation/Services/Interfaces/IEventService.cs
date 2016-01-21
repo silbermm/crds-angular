@@ -8,7 +8,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IEventService
     {
-        int CreateEvent(EventReservationDto eventReservationReservation);
+        int CreateEvent(EventReservationDto eventReservationReservation, string token);
         int SafeRegisterParticipant(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0);
         int RegisterParticipantForEvent(int participantId, int eventId, int groupId = 0, int groupParticipantId = 0);
         int UnregisterParticipantForEvent(int participantId, int eventId);
