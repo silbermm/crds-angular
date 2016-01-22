@@ -261,14 +261,16 @@
 
         if (vm.pform['email'] !== undefined) {
           if (vm.pform['email'].$touched === true) {
+            debugger;
             vm.emailSet = true;
-
           }
         }
 
         // if either of these fields are dirty, we need to ask the user for password verification before continuing
         if (vm.emailSet || vm.passwordSet) {
+          debugger;
           if (vm.resetCredentialsEntered === false) {
+            debugger;
             showPasswordConfirmModal();
             vm.submitted = true;
             return;
@@ -312,11 +314,16 @@
                   vm.profileData.person.oldPassword = '';
                   vm.profileData.person.newPassword = '';
                 }
+
                 // update the email here, if it was changed
                 if (vm.emailSet === true) {
                   vm.oldEmail = vm.profileData.person.emailAddress;
                 }
 
+                vm.pform.email.$setPristine();
+                vm.pform.email.$setTouched(false);
+                vm.emailSet = false;
+                vm.passwordSet = false;
               },
 
               function() {
