@@ -110,6 +110,16 @@ DELETE FROM contact_relationships WHERE Contact_ID in (SELECT Contact_ID FROM co
 DELETE FROM Donor_Accounts WHERE Donor_ID = @fatherDonorId;
 DELETE FROM Donor_Accounts WHERE Donor_ID = @motherDonorId;
 
+--delete donation distributions
+delete donation_distributions where donation_id in (select donation_id from donations where donor_id in (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address like 'mpcrds+tremplay%')));
+
+--delete donations
+delete from donations where donor_id in (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address like 'mpcrds+tremplay%'));
+
+--Delete pledges
+delete from pledges where donor_id = @fatherDonorId;
+delete from pledges where donor_id = @motherDonorId;
+
 ---delete donor records
 DELETE FROM Donors WHERE Contact_ID in (SELECT Contact_ID FROM Contacts WHERE Email_Address like 'mpcrds+tremplay%');
 
