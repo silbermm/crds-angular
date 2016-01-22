@@ -63,10 +63,6 @@ INSERT INTO [dbo].dp_user_roles
 
 INSERT INTO [dbo].dp_user_roles 
 (User_ID,Role_ID,Domain_ID) VALUES
-(@userId,67     ,1        );
-
-INSERT INTO [dbo].dp_user_roles 
-(User_ID,Role_ID,Domain_ID) VALUES
 (@userId,73     ,1        );
 
 DECLARE @donor_id as int
