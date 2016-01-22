@@ -54,7 +54,3 @@ GO
 			VALUES
 			('West Side Equipment', @West_Side_Building, 1, 1, 0, 0, 0, 0)
 
-	INSERT INTO dbo.Rooms
-			(Room_Name, Building_ID, Domain_ID, Room_Usage_Type_ID, Bookable, Auto_Approve, Setup_Time, Teardown_Time)
-			VALUES
-			('Uptown Equipment', @Uptown_Building, 1, 1, 0, 0, 0, 0)
