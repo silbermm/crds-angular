@@ -125,6 +125,7 @@
             setAttendanceStartDateToJSDate();
 
             underThirteen();
+            setOldEmail();
             vm.viewReady = true;
           });
         } else {

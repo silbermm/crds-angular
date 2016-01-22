@@ -54,6 +54,10 @@ namespace crds_angular.Services
                 _participantService.UpdateParticipant(getDictionary(p));
             }
 
+            // TODO: It appears we are updating the contact records email address above if the email address is changed
+            // TODO: If the password is invalid we would not run the update on user, and therefore create a data integrity problem
+            // TODO: See About moving the check for new password above or moving the update for user / person into an atomic operation
+            //
             // update the user values if the email and/or password has changed
             if (!(String.IsNullOrEmpty(person.NewPassword)) || (person.EmailAddress != person.OldEmail))
             {
