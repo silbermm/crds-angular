@@ -61,10 +61,6 @@ INSERT INTO [dbo].dp_user_roles
 (User_ID,Role_ID,Domain_ID) VALUES
 (@userId,60     ,1        );
 
-INSERT INTO [dbo].dp_user_roles 
-(User_ID,Role_ID,Domain_ID) VALUES
-(@userId,73     ,1        );
-
 DECLARE @donor_id as int
 set @donor_id = (Select donor_ID from donors where contact_id = @contactID);
 
