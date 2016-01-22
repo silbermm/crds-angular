@@ -171,7 +171,7 @@ SET @motherContactId = @mContactId;
 SET @motherDOB = DATEADD(year, -38, GETDATE());
 
 UPDATE [dbo].Contacts 
-SET Display_Name = 'Tremplay,Mary', Prefix_ID = 2,First_Name = 'Mary',  Middle_Name = null, Last_Name = 'Tremplay', Nickname = 'Richard', Date_of_Birth = @motherDOB , Gender_ID = 2, Marital_Status_ID = 2, Household_ID = @householdId, Household_Position_ID = 1,Participant_Record = @motherParticipantId, Email_Address = 'mpcrds+tremplay.mary@gmail.com', Mobile_Phone = '513-410-3540', Company_Phone = null
+SET Display_Name = 'Tremplay,Mary', Prefix_ID = 2,First_Name = 'Mary',  Middle_Name = null, Last_Name = 'Tremplay', Nickname = 'Mary', Date_of_Birth = @motherDOB , Gender_ID = 2, Marital_Status_ID = 2, Household_ID = @householdId, Household_Position_ID = 1,Participant_Record = @motherParticipantId, Email_Address = 'mpcrds+tremplay.mary@gmail.com', Mobile_Phone = '513-410-3540', Company_Phone = null
 WHERE Contact_ID = @motherContactID;
 
 
