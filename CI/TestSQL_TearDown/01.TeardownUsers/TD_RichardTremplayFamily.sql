@@ -8,8 +8,8 @@ DECLARE @donationId AS INT
 
 ---delete Donations and donation distributions
 
-SET @fatherDonorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.richard@gmail.com'));
-SET @motherDonorId = (SELECT Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.richard@gmail.com'));
+SET @fatherDonorId = (SELECT top 1 Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.richard@gmail.com'));
+SET @motherDonorId = (SELECT top 1 Donor_ID FROM Donors WHERE Contact_ID IN (SELECT Contact_ID FROM Contacts WHERE Email_Address = 'mpcrds+tremplay.richard@gmail.com'));
 
 WHILE EXISTS (SELECT * FROM Donations WHERE Donor_ID = @fatherDonorId)
 BEGIN
