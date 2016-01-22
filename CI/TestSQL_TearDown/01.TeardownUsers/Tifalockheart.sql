@@ -123,5 +123,7 @@ delete from dp_user_roles where user_id = (select user_id from dp_users where us
 delete from dp_users where user_email = 'mpcrds+tifalockhart@gmail.com';
 
 --Delete Tifa's old contact record
+DELETE from contact_attributes where contact_id = @contactID;
+
 DELETE FROM [dbo].Contacts where contact_id = @contactID;
 END

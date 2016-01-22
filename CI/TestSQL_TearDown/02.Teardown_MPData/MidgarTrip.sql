@@ -48,6 +48,8 @@ delete from [dbo].Program_groups where program_id in (Select program_id from pro
 
 delete from [dbo].Groups where Group_id in (select group_id from groups where group_name = @tripName);
 
+delete from GL_Account_Mapping where program_id in (select program_id rom programs where program_name = @tripName);
+
 delete from [dbo].programs where program_name = @tripName;
 
 delete from [dbo].pledge_campaigns where pledge_campaign_id = @pledgeCampaignId;
