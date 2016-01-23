@@ -102,7 +102,8 @@ namespace crds_angular.test.Services
                 ContactId = 12345,
                 DonorId = 67890,
                 ProcessorId = "Processor_ID",
-                RegisteredUser = true
+                RegisteredUser = true,
+                Email = "me@here.com"
             };
 
             var response = _fixture.CreateOrUpdateContactDonor(donor, EncryptedKey, "me@here.com", "stripe_token", DateTime.Now);
@@ -115,6 +116,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donor.DonorId, response.DonorId);
             Assert.AreEqual(donor.ProcessorId, response.ProcessorId);
             Assert.AreEqual(donor.RegisteredUser, response.RegisteredUser);
+            Assert.AreEqual("me@here.com", response.Email);
         }
 
         [Test]
@@ -141,6 +143,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual(stripeCust.id, response.ProcessorId);
             Assert.IsFalse(response.RegisteredUser);
+            Assert.AreEqual("me@here.com", response.Email);
         }
 
         [Test]
@@ -150,6 +153,7 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 0,
+                Email = "me@here.com"
             };
 
             var stripeCust = new StripeCustomer
@@ -171,6 +175,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual(stripeCust.id, response.ProcessorId);
+            Assert.AreEqual("me@here.com", response.Email);
         }
 
         [Test]
@@ -205,6 +210,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual(stripeCust.id, response.ProcessorId);
             Assert.AreEqual(donor.RegisteredUser, response.RegisteredUser);
+            Assert.AreEqual("me@here.com", response.Email);
         }
 
         [Test]
@@ -214,6 +220,7 @@ namespace crds_angular.test.Services
             {
                 ContactId = 12345,
                 DonorId = 456,
+                Email = "me@here.com"
             };
 
             var stripeCust = new StripeCustomer
@@ -235,6 +242,7 @@ namespace crds_angular.test.Services
             Assert.AreEqual(12345, response.ContactId);
             Assert.AreEqual(456, response.DonorId);
             Assert.AreEqual(stripeCust.id, response.ProcessorId);
+            Assert.AreEqual("me@here.com", response.Email);
         }
 
         [Test]
