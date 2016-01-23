@@ -349,6 +349,23 @@
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="ds_Congregations">
+      <Query>
+        <DataSourceName>MPReportsDS</DataSourceName>
+        <CommandText>SELECT Congregation_Name, Location_ID FROM Congregations WHERE Location_ID IN (3,5,6,7,8)</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="Congregation_Name">
+          <DataField>Congregation_Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Location_ID">
+          <DataField>Location_ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportSections>
     <ReportSection>
@@ -1353,7 +1370,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Contact/Layout</Value>
+                                  <Value>Contact/Layout/Placement</Value>
                                   <Style>
                                     <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2149,7 +2166,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2161,7 +2177,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!equip_placement.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -2593,18 +2609,20 @@
     <ReportParameter Name="LocationID">
       <DataType>Integer</DataType>
       <DefaultValue>
-        <Values>
-          <Value>0</Value>
-        </Values>
+        <DataSetReference>
+          <DataSetName>ds_Congregations</DataSetName>
+          <ValueField>Location_ID</ValueField>
+        </DataSetReference>
       </DefaultValue>
-      <Prompt>Location</Prompt>
+      <Prompt>Site</Prompt>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>ds_Location</DataSetName>
+          <DataSetName>ds_Congregations</DataSetName>
           <ValueField>Location_ID</ValueField>
-          <LabelField>Location_Name</LabelField>
+          <LabelField>Congregation_Name</LabelField>
         </DataSetReference>
       </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
     </ReportParameter>
     <ReportParameter Name="BuildingID">
       <DataType>Integer</DataType>
