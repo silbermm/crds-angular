@@ -318,6 +318,9 @@
                   vm.oldEmail = vm.profileData.person.emailAddress;
                 }
 
+                vm.pform.email.$setUntouched();
+                vm.emailSet = false;
+                vm.passwordSet = false;
               },
 
               function() {
