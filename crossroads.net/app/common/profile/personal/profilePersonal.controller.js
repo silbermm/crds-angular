@@ -320,8 +320,7 @@
                   vm.oldEmail = vm.profileData.person.emailAddress;
                 }
 
-                vm.pform.email.$setPristine();
-                vm.pform.email.$setTouched(false);
+                vm.pform.email.$setUntouched();
                 vm.emailSet = false;
                 vm.passwordSet = false;
               },
