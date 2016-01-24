@@ -261,16 +261,13 @@
 
         if (vm.pform['email'] !== undefined) {
           if (vm.pform['email'].$touched === true) {
-            debugger;
             vm.emailSet = true;
           }
         }
 
         // if either of these fields are dirty, we need to ask the user for password verification before continuing
         if (vm.emailSet || vm.passwordSet) {
-          debugger;
           if (vm.resetCredentialsEntered === false) {
-            debugger;
             showPasswordConfirmModal();
             vm.submitted = true;
             return;
