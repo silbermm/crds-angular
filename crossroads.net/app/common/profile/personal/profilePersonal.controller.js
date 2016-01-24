@@ -243,6 +243,13 @@
       $timeout(function() {
         vm.submitted = true;
 
+        if (vm.householdForm.$invalid) {
+          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
+          vm.isHouseholdCollapsed = false;
+          vm.submitted = false;
+          return;
+        }
+
         if (vm.pform.$invalid) {
           $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
           vm.submitted = false;
@@ -251,7 +258,8 @@
 
         // length 0 check supports if a user starts to change their pw, then decides not to
         if (vm.pform['passwd.passwordForm'] !== undefined) {
-          if (vm.pform['passwd.passwordForm'].password.$touched && _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
+          if (vm.pform['passwd.passwordForm'].password.$touched &&
+              _.size(vm.pform['passwd.passwordForm'].password.$modelValue) > 0) {
             vm.passwordSet = true;
 
             // set the fields before saving
@@ -259,8 +267,8 @@
           }
         }
 
-        if (vm.pform['email'] !== undefined) {
-          if (vm.pform['email'].$touched === true) {
+        if (vm.pform.email !== undefined) {
+          if (vm.pform.email.$touched === true) {
             vm.emailSet = true;
           }
         }
@@ -272,13 +280,6 @@
             vm.submitted = true;
             return;
           }
-        }
-
-        if (vm.householdForm.$invalid) {
-          $rootScope.$emit('notify', $rootScope.MESSAGES.generalError);
-          vm.isHouseholdCollapsed = false;
-          vm.submitted = false;
-          return;
         }
 
         vm.profileData.person.oldEmail = vm.oldEmail;
