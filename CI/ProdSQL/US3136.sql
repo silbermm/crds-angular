@@ -41,3 +41,13 @@ INSERT INTO @FinalCountDown
 SELECT *
 FROM @FinalCountDown
 ORDER BY Contact_ID, Attribute_Type_ID;
+
+
+-- uncomment this when you are ready to update everything
+/*
+
+UPDATE [dbo].[Contact_Attributes]
+   SET [End_Date] = GETDATE()
+ WHERE Contact_Attribute_ID IN (SELECT Contact_Attribute_ID FROM @FinalCountDown)
+
+ */
