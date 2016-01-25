@@ -214,11 +214,6 @@
           controller: 'StyleguideCtrl as styleguide',
           templateUrl: 'styleguide/styleguide.html'
         })
-        .state('thedaily', {
-          parent: 'noSideBar',
-          url: '/thedaily',
-          templateUrl: 'thedaily/thedaily.html'
-        })
         .state('go_trip_giving_results', {
           parent: 'noSideBar',
           url: '/go_trip_giving_results',
