@@ -362,9 +362,10 @@ namespace MinistryPlatform.Translation.Services
             var groupName = opp.ToString("Add_to_Group_Text");
             var searchString = ",,,," + opp.ToString("Group_Role_ID");
             var eventTypeId = opp.ToInt("Event_Type_ID");
+            var apiToken = ApiLogin();
             var group = _ministryPlatformService.GetSubpageViewRecords(_groupParticpantsSubPageView,
                                                                        groupId,
-                                                                       token,
+                                                                       apiToken,
                                                                        searchString);
             var participants = new List<GroupParticipant>();
             foreach (var groupParticipant in group)
