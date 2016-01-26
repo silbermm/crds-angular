@@ -51,7 +51,7 @@
       <div class="card-content">
         <div class="card-header">
           <h3 class="flush-bottom text-ellipsis"><a href="{{search.getLink(result.fields)}}">{{result.fields.title}}</a></h3>
-          <a href="{{search.getLink(result.fields)}}" class="search-link text-ellipsis">crossroads.net{{search.getLink(result.fields)}}</a>
+          <a href="{{search.getLink(result.fields)}}" class="search-link text-ellipsis">{{search.getLink(result.fields)}}</a>
         </div>
         <div class="card-body">
           <div class="row">
@@ -60,7 +60,7 @@
             </div>
             <div ng-class="{'col-md-8 col-xs-7 hard-left':result.fields.image_path, 'col-xs-12':!result.fields.image_path}">
               <p ng-if='result.fields.start_date' class="search-media-date flush-bottom">{{result.fields.start_date | date:'MM.dd.yyyy'}} <span ng-if='result.fields.end_date'>- {{result.fields.end_date | date:'MM.dd.yyyy'}}</span></p>
-              <div dynamic-content='(result.fields.description ? result.fields.description : result.fields.content) | htmlToPlainText | truncate : 155'></div>
+              <div ng-bind-html='(result.fields.description ? result.fields.description : result.fields.content) | htmlToPlainText | truncate : 155 '></div>
             </div>
           </div>
         </div>
