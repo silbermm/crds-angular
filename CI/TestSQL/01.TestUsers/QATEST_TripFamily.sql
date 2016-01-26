@@ -347,37 +347,3 @@ INSERT INTO [dbo].Contact_Relationships
 
 SET IDENTITY_INSERT [dbo].[Contact_Relationships] OFF;
 GO
-
---Some Groups for the family so sign up to serve is functional
---Cloud Signs up for KC Florence Nursery!
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                   ,Participant_ID                                                                                 ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) KC Florence Nursery') ,(select Participant_record from contacts where email_address = 'mpcrds+CloudStrife@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
---Tifa signs up for FI Florence Parking and the Nursery!
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                   ,Participant_ID                                                                                  ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) KC Florence Nursery') ,(select Participant_record from contacts where email_address = 'mpcrds+tifalockhart@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                         ,Participant_ID                                                                                  ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select top 1 group_id FROM groups where group_name = '(d) FI Florence Parking') ,(select Participant_record from contacts where email_address = 'mpcrds+tifalockhart@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
---Marlene signs up for  FI florence coffee
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                  ,Participant_ID                                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) FI Florence Coffee') ,(select Participant_record from contacts where email_address = 'mpcrds+marlenewallace@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
---Everyone signs up for Oakley Coffee
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                ,Participant_ID                                                                                 ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where email_address = 'mpcrds+CloudStrife@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                ,Participant_ID                                                                                  ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where email_address = 'mpcrds+tifalockhart@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-
-INSERT INTO [dbo].Group_Participants 
-(Group_ID                                                                ,Participant_ID                                                                                    ,Group_Role_ID,Domain_ID,Start_Date                ,End_Date,Employee_Role,Hours_Per_Week,Notes,__ExternalPersonGroupRoleID,__ExternalGroupRoleID,__CanManageEvents,__CanMANageMembers,__EmailOptOut,__ISAnonymous,__ServiceTimeID,_First_Attendance,_Second_Attendance,_Third_Attendance,_Last_Attendance) VALUES
-((select group_id FROM groups where group_name = '(d) FI Oakley Coffee') ,(select Participant_record from contacts where email_address = 'mpcrds+marlenewallace@gmail.com') ,16           ,1        ,{ts '2015-05-01 00:00:00'},null    ,0            ,null          ,null ,null                       ,null                 ,null             ,null              ,null         ,null         ,null           ,null             ,null              ,null             ,null            );
-GO
