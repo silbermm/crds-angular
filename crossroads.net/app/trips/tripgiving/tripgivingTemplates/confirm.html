@@ -8,7 +8,7 @@
       <a href="" ng-click="tripGiving.giveFlow.goToChange()" tabindex="-1" class="text-secondary">Change</a>
   </div>
       <button ng-click="tripGiving.donationService.confirmDonation()"
-        ng-class="{disabled: tripGiving.dto.processing}"
+        ng-disabled="tripGiving.dto.processing"
         class="btn btn-primary btn-lg btn-block-mobile give-button"
         autofocus>
         <span ng-if="tripGiving.dto.processing">Giving...</span>
