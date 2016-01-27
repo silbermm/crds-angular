@@ -9,7 +9,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_crds_Serving_Participants]'))
-BEGIN
 EXEC dbo.sp_executesql @statement = N'
 
 CREATE VIEW [dbo].[vw_crds_Serving_Participants]
