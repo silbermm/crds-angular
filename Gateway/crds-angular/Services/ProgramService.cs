@@ -16,16 +16,16 @@ namespace crds_angular.Services
             _programService = programService;
         }
 
-        public List<ProgramDTO> GetAllProgramsForReal(string token)
+        public List<ProgramDTO> GetAllProgramsForReal()
         {
-            var programs = _programService.GetAllPrograms(token);
-            return programs == null ? (null) : (programs.Select(Mapper.Map<ProgramDTO>).OrderBy(x => x.Name).ToList());
+            var programs = _programService.GetAllPrograms();
+            return programs == null ? (null) : (Enumerable.OrderBy(programs.Select(Mapper.Map<ProgramDTO>), x => x.Name).ToList());
         }
 
         public List<ProgramDTO> GetOnlineGivingPrograms(int? programType = null)
         {
             var programs = _programService.GetOnlineGivingPrograms(programType);
-            return programs == null ? (null) : (programs.Select(Mapper.Map<ProgramDTO>).ToList());
+            return programs == null ? (null) : (Enumerable.ToList(programs.Select(Mapper.Map<ProgramDTO>)));
         }
 
         public ProgramDTO GetProgramById(int programId)

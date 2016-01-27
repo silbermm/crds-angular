@@ -13,7 +13,7 @@ namespace MinistryPlatform.Translation.Services
     public class EquipmentService : BaseService, IEquipmentService
     {
         private readonly IMinistryPlatformService _ministryPlatformService;
-        private readonly ILog _logger = LogManager.GetLogger(typeof(RoomService));
+        private readonly ILog _logger = LogManager.GetLogger(typeof (RoomService));
 
         public EquipmentService(IMinistryPlatformService ministryPlatformService, IAuthenticationService authenticationService, IConfigurationWrapper configuration)
             : base(authenticationService, configuration)
@@ -39,8 +39,9 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation, string token)
+        public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation)
         {
+            var token = ApiLogin();
             var equipmentReservationPageId = _configurationWrapper.GetConfigIntValue("EquipmentReservationPageId");
             var equipmentDictionary = new Dictionary<string, object>
             {
