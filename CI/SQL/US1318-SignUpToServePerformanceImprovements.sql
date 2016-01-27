@@ -10,6 +10,8 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_crds_Serving_Participants]'))
 BEGIN
+EXEC dbo.sp_executesql @statement = N'
+
 CREATE VIEW [dbo].[vw_crds_Serving_Participants]
 AS
 SELECT        g.Group_ID, gp.Participant_ID, c.Email_Address, c.Display_Name, c.Nickname, c.Last_Name, gp.Domain_ID, g.Group_Name, g.Group_Type_ID, 
@@ -27,4 +29,5 @@ FROM            dbo.Group_Participants AS gp INNER JOIN
                          dbo.Event_Types AS et ON et.Event_Type_ID = o.Event_Type_ID INNER JOIN
                          dbo.Events AS e ON e.Event_Type_ID = et.Event_Type_ID INNER JOIN
                          dbo.Group_Roles AS gr ON gr.Group_Role_ID = o.Group_Role_ID
-END
+'
+GO
