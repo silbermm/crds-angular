@@ -17,7 +17,7 @@ SELECT        g.Group_ID, gp.Participant_ID, c.Email_Address, c.Display_Name, c.
                              (SELECT        TOP (1) Response_Result_ID
                                FROM            dbo.Responses AS r
                                WHERE        (Event_ID = e.Event_ID) AND (Opportunity_ID = o.Opportunity_ID) AND (Participant_ID = gp.Participant_ID)) AS RSVP, c.Contact_ID, gr.Group_Role_ID,
-                         et.Event_Type_ID, et.Event_Type
+                         et.Event_Type_ID, et.Event_Type, gp.Start_Date AS Participant_Start_Date, gp.End_Date AS Participant_End_Date
 FROM            dbo.Group_Participants AS gp INNER JOIN
                          dbo.Contacts AS c ON gp.Participant_ID = c.Participant_Record INNER JOIN
                          dbo.Groups AS g ON gp.Group_ID = g.Group_ID AND g.Group_Type_ID = 9 INNER JOIN
