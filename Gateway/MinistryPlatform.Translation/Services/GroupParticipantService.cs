@@ -109,7 +109,9 @@ namespace MinistryPlatform.Translation.Services
                     FROM MinistryPlatform.dbo.vw_crds_Serving_Participants v 
                     WHERE ( {0} ) 
                     AND Event_Start_Date >= @from 
-                    AND Event_Start_Date <= @to";
+                    AND Event_Start_Date <= @to
+                    AND Event_Start_Date >= Participant_Start_Date
+                    AND (Event_Start_Date <= Participant_End_Date OR Participant_End_Date IS NULL)";
 
             var participantSqlParameters = participants.Select((s, i) => "@participant" + i.ToString()).ToArray();
             var participantParameters =
