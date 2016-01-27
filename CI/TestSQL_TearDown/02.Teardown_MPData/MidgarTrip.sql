@@ -8,6 +8,10 @@ set @tripName = '(t) GO Midgar '+CONVERT(VARCHAR(4), datepart(year, getdate()));
 Declare @pledgeCampaignId as int
 set @pledgeCampaignId = (select top 1 pledge_campaign_id from [dbo].Pledge_Campaigns where Campaign_name = @tripName);
 
+delete from [dbo].form_response_answers where form_response_id in (select form_response_id from form_responses where event_id in (select event_id from event_participants where event_id in (select event_id from events where event_title = @tripName)));
+
+delete from [dbo].form_responses where event_id in (select event_id from event_participants where event_id in (select event_id from events where event_title = @tripName));
+
 delete from [dbo].event_participants where event_id in (select event_id from [dbo].events where event_title = @tripName);
 
 delete from [dbo].event_groups where event_id in (select event_id from [dbo].events where event_title = @tripName);
