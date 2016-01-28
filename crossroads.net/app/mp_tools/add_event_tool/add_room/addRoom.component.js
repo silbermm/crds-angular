@@ -126,7 +126,12 @@
           });
 
           if (alreadyAdded) {
-            alreadyAdded.cancelled = false;
+            if (alreadyAdded.cancelled) {
+              alreadyAdded.cancelled = false;
+            } else {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.allReadyAdded);
+            }
+
             return;
           }
 

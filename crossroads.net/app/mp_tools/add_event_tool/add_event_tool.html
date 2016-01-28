@@ -1,4 +1,4 @@
-<div ng-if="!addEvent.allowAccess()" class="alert alert-danger" role="alert">
+<div ng-if="!addEvent.allowAccess() && addEvent.viewReady" class="alert alert-danger" role="alert">
   <div dynamic-content="$root.MESSAGES.mptool_invalid_access.content | html"></div>
 </div>
 

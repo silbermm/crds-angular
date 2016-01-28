@@ -1,17 +1,17 @@
 <div class="event-room push-ends" class="push-bottom" style="border-bottom: 1px solid #DDD">
-  <h2> {{ room.currentRoom.name }}  
+  <h2> {{ room.currentRoom.name }}
     <button class="btn btn-standard" ng-click="room.remove()">
       <svg viewBox="0 0 32 32" class="icon icon-trash">
         <use xlink:href="#trash"></use>
       </svg>
     </button>
   </h2>
-  <ng-form name="roomForm"> 
+  <ng-form name="roomForm">
     <div class="form-group" ng-class="{'has-error': room.validation.showErrors(roomForm, 'layout')}">
       <label class="required"> Layout </label>
       <select class="form-control"
-              name="layout" 
-              ng-model="room.currentRoom.layout" 
+              name="layout"
+              ng-model="room.currentRoom.layout"
               ng-options="layout.layoutName for layout in room.layouts track by layout.id"
               required
               ng-disabled="room.existing()">
@@ -34,8 +34,8 @@
     </div>
 
     <div class="form-group">
-      <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden"> 
-        Hide from Atrium Monitors 
+      <label> <input type="checkbox" name="hidden" ng-model="room.currentRoom.hidden">
+        Hide from Atrium Monitors
       </label>
       <span popover="Only 1 primary room per event will show on atrium monitors."
             popover-placement="right">
@@ -46,10 +46,9 @@
 
     </div>
 
-    <equipment-form current-equipment="room.currentRoom.equipment" 
-                    equipment-lookup="room.equipmentLookup"> 
+    <equipment-form current-equipment="room.currentRoom.equipment"
+                    equipment-lookup="room.equipmentLookup">
     </equipment-form>
-  
+
   </ng-form>
 </div>
-
