@@ -77,13 +77,8 @@ namespace crds_angular.Services
 
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
-                    var operationId = SendBatch(publication, subscribers);
 
-                    // add the publication and operation id in prep for polling 
-                    if (!String.IsNullOrEmpty(operationId))
-                    {
-                        publicationOperationIds.Add(operationId, publication);
-                    }
+                    SendToMailChimp(publication, subscribers, publicationOperationIds);
                 }
 
                 ProcessSynchronizationResultsWithRetries(publicationOperationIds);
@@ -91,6 +86,24 @@ namespace crds_angular.Services
             finally
             {
                 _refreshTokenTimer.Stop();
+            }
+        }
+
+        private void SendToMailChimp(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers, Dictionary<string, BulkEmailPublication> publicationOperationIds)
+        {
+            var batchSize = 10000;
+            var batches = Math.Ceiling(subscribers.Count/(decimal) batchSize);
+
+            for (int index = 0; index < batches; index++)
+            {
+                var currentBatch = subscribers.Skip(index*batchSize).Take(batchSize);
+                var operationId = SendBatch(publication, currentBatch.ToList());
+
+                // add the publication and operation id in prep for polling 
+                if (!String.IsNullOrEmpty(operationId))
+                {
+                    publicationOperationIds.Add(operationId, publication);
+                }    
             }
         }
 
@@ -117,6 +130,10 @@ namespace crds_angular.Services
                 return null;
             }
 
+            var filename = string.Format("C:\\temp\\SendBatch-{0}-{1}.txt", publication.PublicationId, DateTime.Now.ToString("yy-MM-dd-hh-mm-ss"));
+            System.IO.File.WriteAllText(filename, response.Content);
+
+            // Failed on this call
             var responseValues = DeserializeToDictionary(response.Content);
 
             // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
@@ -295,6 +312,8 @@ namespace crds_angular.Services
         {
             var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(jo);
             var values2 = new Dictionary<string, object>();
+
+            // Failed here
             foreach (KeyValuePair<string, object> d in values)
             {
                 // if (d.Value.GetType().FullName.Contains("Newtonsoft.Json.Linq.JObject"))
@@ -351,6 +370,8 @@ namespace crds_angular.Services
                 }
 
                 var responseContent = response.Content;
+                //var writer = new System.IO.StreamWriter("C:\temp\" + Gui);
+                //responseContent
 
                 var responseContentJson = JObject.Parse(responseContent);
                 List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
