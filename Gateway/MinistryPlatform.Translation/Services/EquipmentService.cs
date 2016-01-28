@@ -39,9 +39,8 @@ namespace MinistryPlatform.Translation.Services
             }).ToList();
         }
 
-        public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation)
+        public int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation, string token)
         {
-            var token = ApiLogin();
             var equipmentReservationPageId = _configurationWrapper.GetConfigIntValue("EquipmentReservationPageId");
             var equipmentDictionary = new Dictionary<string, object>
             {
@@ -65,9 +64,8 @@ namespace MinistryPlatform.Translation.Services
             }
         }
 
-        public void UpdateEquipmentReservation(EquipmentReservationDto equipmentReservation)
+        public void UpdateEquipmentReservation(EquipmentReservationDto equipmentReservation, string token)
         {
-            var token = ApiLogin();
             var equipmentReservationPageId = _configurationWrapper.GetConfigIntValue("EquipmentReservationPageId");
             var equipmentDictionary = new Dictionary<string, object>
             {
