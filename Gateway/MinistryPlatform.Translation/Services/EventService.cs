@@ -37,8 +37,9 @@ namespace MinistryPlatform.Translation.Services
             _groupService = groupService;
         }
 
-        public int CreateEvent(EventReservationDto eventReservationReservation, string token)
+        public int CreateEvent(EventReservationDto eventReservationReservation)
         {
+            var token = ApiLogin();
             var eventPageId = _configurationWrapper.GetConfigIntValue("Events");
 
             var eventDictionary = new Dictionary<string, object>
@@ -290,10 +291,10 @@ namespace MinistryPlatform.Translation.Services
         {
             return _ministryPlatformService.GetPageViewRecords(pageViewId, token, searchString).Select(record => new Event()
             {
-                EventId = (int)record["Event_ID"],
-                EventTitle = (string)record["Event_Title"],
-                EventStartDate = (DateTime)record["Event_Start_Date"],
-                EventEndDate = (DateTime)record["Event_End_Date"],
+                EventId = (int) record["Event_ID"],
+                EventTitle = (string) record["Event_Title"],
+                EventStartDate = (DateTime) record["Event_Start_Date"],
+                EventEndDate = (DateTime) record["Event_End_Date"],
                 EventType = record.ToString("Event_Type"),
                 PrimaryContact = new Contact()
                 {

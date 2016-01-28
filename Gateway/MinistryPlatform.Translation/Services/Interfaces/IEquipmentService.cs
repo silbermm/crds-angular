@@ -6,7 +6,7 @@ namespace MinistryPlatform.Translation.Services.Interfaces
 {
     public interface IEquipmentService
     {
-        int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation, string token);
+        int CreateEquipmentReservation(EquipmentReservationDto equipmentReservation);
         List<Equipment> GetEquipmentByLocationId(int locationId);
         List<EquipmentReservationDto> GetEquipmentReservations(int eventId, int roomId);
         void UpdateEquipmentReservation(EquipmentReservationDto equipmentReservation);

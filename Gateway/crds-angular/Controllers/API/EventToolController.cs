@@ -53,7 +53,7 @@ namespace crds_angular.Controllers.API
                 {
                     try
                     {
-                        _eventService.CreateEventReservation(eventReservation, token);
+                        _eventService.CreateEventReservation(eventReservation);
                         return Ok();
                     }
                     catch (Exception e)
@@ -82,9 +82,9 @@ namespace crds_angular.Controllers.API
                     {
                         if (eventId == 0)
                         {
-                            throw  new ApplicationException("Invalid Event Id");
+                            throw new ApplicationException("Invalid Event Id");
                         }
-                        _eventService.UpdateEventReservation(eventReservation, eventId, token);
+                        _eventService.UpdateEventReservation(eventReservation, eventId);
                         return Ok();
                     }
                     catch (Exception e)
