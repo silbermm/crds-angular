@@ -82,7 +82,7 @@ namespace crds_angular.Controllers.API
                     {
                         if (eventId == 0)
                         {
-                            throw  new ApplicationException("Invalid Event Id");
+                            throw new ApplicationException("Invalid Event Id");
                         }
                         _eventService.UpdateEventReservation(eventReservation, eventId, token);
                         return Ok();

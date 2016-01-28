@@ -7,6 +7,6 @@ namespace crds_angular.Services.Interfaces
     {
         List<ProgramDTO> GetOnlineGivingPrograms(int? programType = null);
         ProgramDTO GetProgramById(int programId);
-        List<ProgramDTO> GetAllProgramsForReal(string token);
+        List<ProgramDTO> GetAllProgramsForReal();
     }
 }

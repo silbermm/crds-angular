@@ -10,6 +10,6 @@ namespace MinistryPlatform.Translation.Services.Interfaces
         List<Room> GetRoomsByLocationId(int locationId);
         List<RoomLayout> GetRoomLayouts();
         List<RoomReservationDto> GetRoomReservations(int eventId);
-        void UpdateRoomReservation(RoomReservationDto roomReservation);
+        void UpdateRoomReservation(RoomReservationDto roomReservation, string token);
     }
 }
