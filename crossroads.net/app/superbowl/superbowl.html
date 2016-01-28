@@ -1,0 +1,28 @@
+Hello!
+
+<script type="text/ng-template" id="styleModalContent.html">
+    <div class="modal-header">
+      <h3 class="modal-title">What&#8217;s your zipcode?</h3>
+    </div>
+    <div class="modal-body">
+      <input type="text" name="myZipcodeInput" id="myZipcodeInput" ng-model='zipcodeinput' class="form-control">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">Continue</button>
+    </div>
+</script>
+
+<div id="divInZipCodeList" name="divInZipCodeList" class="container" style="display: none;">
+  <h2>Hey, You're In My Zipcode :)</h2>
+  <div class="panel panel-default">
+    <div class="panel-body">A Basic Panel</div>
+  </div>
+</div>
+
+<div id="divNotInZipCodeList" name="divNotInZipCodeList" class="container" style="display: none;">
+  <h2>Too Bad, You're Not In My Zipcode :(</h2>
+  <div class="panel panel-default">
+    <div class="panel-body">A Basic Panel<br />
+	<a href="">Click me for another modal - maybe you'll get lucky this time</a></div>
+  </div>
+</div>
