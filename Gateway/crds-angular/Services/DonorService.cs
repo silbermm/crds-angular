@@ -505,7 +505,10 @@ namespace crds_angular.Services
         public List<PledgeDto> GetCapitalCampaignPledgesForAuthenticatedUser(string userToken)
         {
             var pledges = _pledgeService.GetPledgesForAuthUser(userToken, new [] {_capitalCampaignPledgeTypeId});
-            return pledges.Select(Mapper.Map<Pledge, PledgeDto>).ToList();
+            return pledges
+                .Where(o=>o.PledgeStatus == "Active" || o.PledgeStatus == "Completed")
+                .OrderByDescending(o=>o.CampaignStartDate)
+                .Select(Mapper.Map<Pledge, PledgeDto>).ToList();
         } 
 
         private void PopulateStripeInfoOnRecurringGiftSource(DonationSourceDTO donationSource)

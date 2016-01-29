@@ -1079,5 +1079,57 @@ namespace crds_angular.test.Services
             Assert.AreEqual(donor.Email, result.EmailAddress);
             Assert.AreEqual(newSubscription.Id, result.SubscriptionID);
         }
+
+        [Test]
+        public void ShouldGetPledgesInDateOrder()
+        {
+
+            var userAuthToken = "auth";
+
+            var pledgeList = new List<Pledge>
+            {
+                new Pledge(){CampaignName = "Oldest Campaign", PledgeStatus = "Active", CampaignStartDate = DateTime.Parse("1/1/2000")},
+                new Pledge(){CampaignName = "Youngest Campaign", PledgeStatus = "Active", CampaignStartDate = DateTime.Parse("1/1/2016")},
+                new Pledge(){CampaignName = "Middle Campaign", PledgeStatus = "Active",CampaignStartDate = DateTime.Parse("1/1/2010")}
+            }; 
+
+            _pledgeService.Setup(mocked => mocked.GetPledgesForAuthUser(userAuthToken, new System.Int32 [1] )).Returns(pledgeList);
+
+            var pledges = _fixture.GetCapitalCampaignPledgesForAuthenticatedUser(userAuthToken);
+            _pledgeService.VerifyAll();
+
+            Assert.AreEqual(pledges[0].PledgeCampaign, "Youngest Campaign");
+            Assert.AreEqual(pledges[0].CampaignStartDate, "January 1, 2016");
+            Assert.AreEqual(pledges[1].PledgeCampaign, "Middle Campaign");
+            Assert.AreEqual(pledges[1].CampaignStartDate, "January 1, 2010");
+            Assert.AreEqual(pledges[2].PledgeCampaign, "Oldest Campaign");
+            Assert.AreEqual(pledges[2].CampaignStartDate, "January 1, 2000");
+        }
+
+        [Test]
+        public void ShouldGetPledgesThatAreActive()
+        {
+
+            var userAuthToken = "auth";
+
+            var pledgeList = new List<Pledge>
+            {
+                new Pledge(){CampaignName = "Active Campaign", PledgeStatus = "Active", CampaignStartDate = DateTime.Parse("1/1/2016") },
+                new Pledge(){CampaignName = "Completed Campaign", PledgeStatus = "Completed", CampaignStartDate = DateTime.Parse("1/1/2010")},
+                new Pledge(){CampaignName = "Inactive Campaign", PledgeStatus = "Discontinued", CampaignStartDate = DateTime.Parse("1/1/2000")}
+            };
+
+            _pledgeService.Setup(mocked => mocked.GetPledgesForAuthUser(userAuthToken, new System.Int32[1])).Returns(pledgeList);
+
+            var pledges = _fixture.GetCapitalCampaignPledgesForAuthenticatedUser(userAuthToken);
+            _pledgeService.VerifyAll();
+
+            Assert.AreEqual(pledges.Count, 2);
+            Assert.AreEqual(pledges[0].PledgeCampaign, "Active Campaign");
+            Assert.AreEqual(pledges[0].CampaignStartDate, "January 1, 2016");
+            Assert.AreEqual(pledges[1].PledgeCampaign, "Completed Campaign");
+            Assert.AreEqual(pledges[1].CampaignStartDate, "January 1, 2010");
+
+        }
     }
 }
