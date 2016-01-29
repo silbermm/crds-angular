@@ -40,7 +40,11 @@
       }
 
       function existing() {
-        return _.has(vm.currentRoom, 'cancelled');
+        if (_.has(vm.currentRoom, 'cancelled')) {
+          return vm.currentRoom.cancelled;
+        }
+
+        return false;
       }
 
       function isCancelled() {
