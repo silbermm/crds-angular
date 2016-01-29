@@ -165,8 +165,9 @@ namespace crds_angular.Services
 
         private void ProcessSynchronizationResultsWithRetries(Dictionary<BulkEmailPublication, List<string>> publicationOperations)
         {
+            var configurationWaitHours = _configWrapper.GetConfigIntValue("BulkEmailMaximumWaitHours");
             var waitTime = (int) TimeSpan.FromSeconds(10).TotalSeconds;
-            var maximumWaitTime = (int) TimeSpan.FromHours(4).TotalSeconds;
+            var maximumWaitTime = (int) TimeSpan.FromHours(configurationWaitHours).TotalSeconds;
             var maxRetries = maximumWaitTime / waitTime;
             var attempts = 0;
 
