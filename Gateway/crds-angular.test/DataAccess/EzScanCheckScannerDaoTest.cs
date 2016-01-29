@@ -110,6 +110,7 @@ namespace crds_angular.test.DataAccess
         public void TestGetChecksForBatch()
         {
             const int checkId = 1;
+            const int donorId = 5;
             const int exported = 1;
             const string error = null;
             const string accountNumber = "123456789";
@@ -129,26 +130,27 @@ namespace crds_angular.test.DataAccess
             var dataReader = new Mock<IDataReader>();
             dataReader.SetupSequence(mocked => mocked.Read()).Returns(true).Returns(false);
             dataReader.SetupGet(mocked => mocked[0]).Returns(checkId);
-            dataReader.SetupGet(mocked => mocked[1]).Returns(exported);
-            dataReader.SetupGet(mocked => mocked[2]).Returns(error);
-            dataReader.SetupGet(mocked => mocked[3]).Returns(accountNumber);
-            dataReader.SetupGet(mocked => mocked[4]).Returns(amount);
-            dataReader.SetupGet(mocked => mocked[5]).Returns(checkNumber);
-            dataReader.SetupGet(mocked => mocked[6]).Returns(scanDate);
-            dataReader.SetupGet(mocked => mocked[7]).Returns(routingNumber);
-            dataReader.SetupGet(mocked => mocked[8]).Returns(name1);
-            dataReader.SetupGet(mocked => mocked[9]).Returns(checkDate);
-            dataReader.SetupGet(mocked => mocked[10]).Returns(name2);
-            dataReader.SetupGet(mocked => mocked[11]).Returns(addressLine1);
-            dataReader.SetupGet(mocked => mocked[12]).Returns(addressLine2);
-            dataReader.SetupGet(mocked => mocked[13]).Returns(city);
-            dataReader.SetupGet(mocked => mocked[14]).Returns(state);
-            dataReader.SetupGet(mocked => mocked[15]).Returns(postalCode);
+            dataReader.SetupGet(mocked => mocked[1]).Returns(donorId+"");
+            dataReader.SetupGet(mocked => mocked[2]).Returns(exported);
+            dataReader.SetupGet(mocked => mocked[3]).Returns(error);
+            dataReader.SetupGet(mocked => mocked[4]).Returns(accountNumber);
+            dataReader.SetupGet(mocked => mocked[5]).Returns(amount);
+            dataReader.SetupGet(mocked => mocked[6]).Returns(checkNumber);
+            dataReader.SetupGet(mocked => mocked[7]).Returns(scanDate);
+            dataReader.SetupGet(mocked => mocked[8]).Returns(routingNumber);
+            dataReader.SetupGet(mocked => mocked[9]).Returns(name1);
+            dataReader.SetupGet(mocked => mocked[10]).Returns(checkDate);
+            dataReader.SetupGet(mocked => mocked[11]).Returns(name2);
+            dataReader.SetupGet(mocked => mocked[12]).Returns(addressLine1);
+            dataReader.SetupGet(mocked => mocked[13]).Returns(addressLine2);
+            dataReader.SetupGet(mocked => mocked[14]).Returns(city);
+            dataReader.SetupGet(mocked => mocked[15]).Returns(state);
+            dataReader.SetupGet(mocked => mocked[16]).Returns(postalCode);
 
             var dbCommand = new Mock<IDbCommand>();
             dbCommand.Setup(mocked => mocked.Dispose());
             dbCommand.SetupSet(mocked => mocked.CommandType = CommandType.Text).Verifiable();
-            dbCommand.SetupSet(mocked => mocked.CommandText = "SELECT ID, COALESCE(Exported, 0), ErrorMessage, EncryptAccount, Amount, CheckNo, DateScan, EncryptRoute, Payor, DateCheck, Payor2, Address, Address2, City, State, Zip FROM Items WHERE IDBatch = @IDBatch").Verifiable();
+            dbCommand.SetupSet(mocked => mocked.CommandText = "SELECT ID, DonorID, COALESCE(Exported, 0), ErrorMessage, EncryptAccount, Amount, CheckNo, DateScan, EncryptRoute, Payor, DateCheck, Payor2, Address, Address2, City, State, Zip FROM Items WHERE IDBatch = @IDBatch").Verifiable();
             dbCommand.Setup(mocked => mocked.ExecuteReader()).Returns(dataReader.Object);
 
             var idBatchParam = new Mock<IDbDataParameter>();
@@ -178,6 +180,7 @@ namespace crds_angular.test.DataAccess
             Assert.IsTrue(result[0].Exported);
             Assert.AreEqual(error, result[0].Error);
             Assert.AreEqual(checkId, result[0].Id);
+            Assert.AreEqual(donorId, result[0].DonorId);
             Assert.AreEqual(accountNumber, result[0].AccountNumber);
             Assert.AreEqual((decimal)amount, result[0].Amount);
             Assert.AreEqual(checkNumber, result[0].CheckNumber);

@@ -132,7 +132,18 @@ namespace crds_angular.Services
 
         public ContactDonor CreateDonor(CheckScannerCheck checkDetails)
         {
-            var contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
+            ContactDonor contactDonor = null;
+            // If scanned check has a donor id, try to use it to lookup the donor
+            if (checkDetails.DonorId != null && checkDetails.DonorId > 0)
+            {
+                contactDonor = _donorService.GetContactDonorForDonorId(checkDetails.DonorId.Value);
+            }
+
+            // Fallback to lookup by account & routing number if no donor id, or lookup by donor id failed
+            if (contactDonor == null || !contactDonor.ExistingContact)
+            {
+                contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
+            }
 
             if (contactDonor.HasPaymentProcessorRecord)
             {

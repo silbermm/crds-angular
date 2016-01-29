@@ -8,6 +8,8 @@ namespace crds_angular.Models.Crossroads.Stewardship
     {
         [JsonProperty("id")]
         public int Id { get; set; }
+        [JsonProperty("donorId")]
+        public int? DonorId { get; set; }
         [JsonProperty("checkNumber")]
         public string CheckNumber { get; set; }
         [JsonProperty("amount")]

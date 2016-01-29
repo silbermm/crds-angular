@@ -5,7 +5,6 @@ using crds_angular.DataAccess.Interfaces;
 using crds_angular.Models.Crossroads.Stewardship;
 using crds_angular.Services;
 using crds_angular.Services.Interfaces;
-using Crossroads.Utilities;
 using MinistryPlatform.Models;
 using Moq;
 using NUnit.Framework;
@@ -364,6 +363,47 @@ namespace crds_angular.test.Services
         }
 
         [Test]
+        public void TestCreateDonorWithDonorId()
+        {
+            var check = new CheckScannerCheck
+            {
+                Id = 11111,
+                DonorId = 222,
+                AccountNumber = "111",
+                Address = new crds_angular.Models.Crossroads.Stewardship.Address
+                {
+                    Line1 = "1 line 1",
+                    Line2 = "1 line 2",
+                    City = "1 city",
+                    State = "1 state",
+                    PostalCode = "1 postal"
+                },
+                Amount = 1111,
+                CheckDate = DateTime.Now.AddHours(1),
+                CheckNumber = "11111",
+                Name1 = "1 name 1",
+                Name2 = "1 name 2",
+                RoutingNumber = "1010",
+                ScanDate = DateTime.Now.AddHours(2)
+            };
+
+            var contactDonorExisting = new ContactDonor
+            {
+                ContactId = 123,
+                ProcessorId = "111000111",
+                DonorId = 111111,
+                RegisteredUser = true
+            };
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(check.DonorId.Value)).Returns(contactDonorExisting);
+
+            var result = _fixture.CreateDonor(check);
+            _donorService.VerifyAll();
+            Assert.NotNull(result);
+            Assert.AreEqual(contactDonorExisting, result);
+        }
+
+        [Test]
         public void TestCreateForCreateDonor()
         {
             var check = new CheckScannerCheck
@@ -422,6 +462,76 @@ namespace crds_angular.test.Services
                         It.IsAny<DateTime>()))
                 .Returns(contactDonorNew);
             
+            _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
+            _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorNew.Account.ProcessorAccountId, contactDonorNew.ProcessorId));
+
+            var result = _fixture.CreateDonor(check);
+            _donorService.VerifyAll();
+            Assert.NotNull(result);
+            Assert.AreEqual(contactDonorNew, result);
+        }
+
+        [Test]
+        public void TestCreateForCreateDonorWithDonorId()
+        {
+            var check = new CheckScannerCheck
+            {
+                Id = 11111,
+                DonorId = 222,
+                AccountNumber = "P/H+3ccB0ZssORkd+YyJzA==",
+                Address = new crds_angular.Models.Crossroads.Stewardship.Address
+                {
+                    Line1 = "1 line 1",
+                    Line2 = "1 line 2",
+                    City = "1 city",
+                    State = "1 state",
+                    PostalCode = "1 postal"
+                },
+                Amount = 1111,
+                CheckDate = DateTime.Now.AddHours(1),
+                CheckNumber = "11111",
+                Name1 = "1 name 1",
+                Name2 = "1 name 2",
+                RoutingNumber = "TUbiKZ/Vw1l6uyGCYIIUMg==",
+                ScanDate = DateTime.Now.AddHours(2)
+            };
+
+
+            var contactDonorNew = new ContactDonor
+            {
+                ProcessorId = "222000222",
+                DonorId = 222222,
+                RegisteredUser = false,
+                Account = new DonorAccount
+                {
+                    ProcessorAccountId = "py_dgsttety6737hjjhweiu3"
+                }
+            };
+            const string token = "12t4token";
+            const string encryptedKey = "PH/rty1234";
+            const string decrypAcct = "6015268542";
+            const string decryptRout = "042000314";
+
+            _donorService.Setup(mocked => mocked.GetContactDonorForDonorId(check.DonorId.Value)).Returns((ContactDonor)null);
+            _donorService.Setup(mocked => mocked.GetContactDonorForDonorAccount(check.AccountNumber, check.RoutingNumber)).Returns((ContactDonor)null);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(check.AccountNumber)).Returns(decrypAcct);
+            _mpDonorService.Setup(mocked => mocked.DecryptCheckValue(check.RoutingNumber)).Returns(decryptRout);
+            _paymentService.Setup(mocked => mocked.CreateToken(decrypAcct, decryptRout)).Returns(token);
+
+            _donorService.Setup(
+                mocked =>
+                    mocked.CreateOrUpdateContactDonor(
+                        It.Is<ContactDonor>(
+                            o =>
+                                o.Details.DisplayName.Equals(check.Name1) && o.Details.Address.Line1.Equals(check.Address.Line1) && o.Details.Address.Line2.Equals(check.Address.Line2) &&
+                                o.Details.Address.City.Equals(check.Address.City) && o.Details.Address.State.Equals(check.Address.State) && o.Details.Address.PostalCode.Equals(check.Address.PostalCode) &&
+                                o.Account.RoutingNumber.Equals(decryptRout) && o.Account.AccountNumber.Equals(decrypAcct) && o.Account.Type == AccountType.Checking),
+                        It.IsAny<string>(),
+                        string.Empty,
+                        token,
+                        It.IsAny<DateTime>()))
+                .Returns(contactDonorNew);
+
             _mpDonorService.Setup(mocked => mocked.CreateHashedAccountAndRoutingNumber(decrypAcct, decryptRout)).Returns(encryptedKey);
             _mpDonorService.Setup(mocked => mocked.UpdateDonorAccount(encryptedKey, contactDonorNew.Account.ProcessorAccountId, contactDonorNew.ProcessorId));
 
