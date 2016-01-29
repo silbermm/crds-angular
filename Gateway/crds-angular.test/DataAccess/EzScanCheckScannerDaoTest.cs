@@ -130,7 +130,7 @@ namespace crds_angular.test.DataAccess
             var dataReader = new Mock<IDataReader>();
             dataReader.SetupSequence(mocked => mocked.Read()).Returns(true).Returns(false);
             dataReader.SetupGet(mocked => mocked[0]).Returns(checkId);
-            dataReader.SetupGet(mocked => mocked[1]).Returns(donorId);
+            dataReader.SetupGet(mocked => mocked[1]).Returns(donorId+"");
             dataReader.SetupGet(mocked => mocked[2]).Returns(exported);
             dataReader.SetupGet(mocked => mocked[3]).Returns(error);
             dataReader.SetupGet(mocked => mocked[4]).Returns(accountNumber);

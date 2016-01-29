@@ -86,7 +86,7 @@ namespace crds_angular.DataAccess
                         c.Add(new CheckScannerCheck
                         {
                             Id = reader[i++] as int? ?? 0,
-                            DonorId = reader[i++] as int?,
+                            DonorId = ToNullableInt32(reader[i++] as string),
                             Exported = (reader[i++] as int? ?? 0) > 0,
                             Error = reader[i++] as string,
                             AccountNumber = reader[i++] as string,
@@ -119,6 +119,16 @@ namespace crds_angular.DataAccess
                 }
             }
             return (checks);
+        }
+
+        private static int? ToNullableInt32(string s)
+        {
+            int i;
+            if (int.TryParse(s, out i))
+            {
+                return i;
+            }
+            return null;
         }
 
         public CheckScannerBatch UpdateBatchStatus(string batchName, BatchStatus newStatus)

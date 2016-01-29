@@ -140,7 +140,7 @@ namespace crds_angular.Services
             }
 
             // Fallback to lookup by account & routing number if no donor id, or lookup by donor id failed
-            if (contactDonor == null)
+            if (contactDonor == null || !contactDonor.ExistingContact)
             {
                 contactDonor = _donorService.GetContactDonorForDonorAccount(checkDetails.AccountNumber, checkDetails.RoutingNumber) ?? new ContactDonor();
             }

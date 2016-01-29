@@ -389,6 +389,7 @@ namespace crds_angular.test.Services
 
             var contactDonorExisting = new ContactDonor
             {
+                ContactId = 123,
                 ProcessorId = "111000111",
                 DonorId = 111111,
                 RegisteredUser = true
