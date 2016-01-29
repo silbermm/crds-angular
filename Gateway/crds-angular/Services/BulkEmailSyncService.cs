@@ -69,7 +69,7 @@ namespace crds_angular.Services
                 _refreshTokenTimer.Start();
 
                 var publications = _bulkEmailRepository.GetPublications(_token);
-                var publicationOperationIds = new Dictionary<string, BulkEmailPublication>();
+                var publicationOperationIds = new Dictionary<BulkEmailPublication, List<string>>();
 
                 foreach (var publication in publications)
                 {
@@ -77,13 +77,9 @@ namespace crds_angular.Services
 
                     var pageViewIds = _bulkEmailRepository.GetPageViewIds(_token, publication.PublicationId);
                     var subscribers = _bulkEmailRepository.GetSubscribers(_token, publication.PublicationId, pageViewIds);
-                    var operationId = SendBatch(publication, subscribers);
 
-                    // add the publication and operation id in prep for polling 
-                    if (!String.IsNullOrEmpty(operationId))
-                    {
-                        publicationOperationIds.Add(operationId, publication);
-                    }
+                    var operationIds = CreateAndSendBatches(publication, subscribers);
+                    publicationOperationIds.Add(publication, operationIds);
                 }
 
                 ProcessSynchronizationResultsWithRetries(publicationOperationIds);
@@ -94,7 +90,27 @@ namespace crds_angular.Services
             }
         }
 
-        public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        private List<string> CreateAndSendBatches(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers)
+        {            
+            var batchSize = 10000;
+            var batches = Math.Ceiling(subscribers.Count/(decimal) batchSize);
+            var operationIds = new List<string>();
+
+            for (var batchIndex = 0; batchIndex < batches; batchIndex++)
+            {
+                var currentBatch = subscribers.Skip(batchIndex*batchSize).Take(batchSize);
+                var operationId = SendBatch(publication, currentBatch.ToList(), batchIndex);
+                
+                if (!string.IsNullOrEmpty(operationId))
+                {
+                    operationIds.Add(operationId);
+                }
+            }
+
+            return operationIds;
+        }
+
+        public string SendBatch(BulkEmailPublication publication, List<BulkEmailSubscriber> subscribers, int batchIndex)
         {
             var client = GetBulkEmailClient();
 
@@ -113,11 +129,22 @@ namespace crds_angular.Services
             {
                 // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                 // TODO: Should these be exceptions?
-                _logger.Error(string.Format("Failed sending batch for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                _logger.ErrorFormat("Failed sending batch {0} for publication {1} with StatusCode = {2}", batchIndex, publication.PublicationId, response.StatusCode);
                 return null;
             }
 
-            var responseValues = DeserializeToDictionary(response.Content);
+            var content = response.Content;
+            
+            if (String.IsNullOrEmpty(content))
+            {
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                // TODO: Should these be exceptions?
+                // TODO: Add logging code here for failure
+                _logger.ErrorFormat("Bulk email sync failed for batch {0} for publication {1} empty response", batchIndex, publication.PublicationId);
+                return null;
+            }
+
+            var responseValues = DeserializeToDictionary(content);
 
             // this needs to be returned, because we can't guarantee that the operation won't fail after it begins
             if (responseValues["status"].ToString() == "started" || 
@@ -128,18 +155,20 @@ namespace crds_angular.Services
             }
             else
             {
-                // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
+                // This will be addressed is US2861: MP/MailChimp Synch Error Handling
                 // TODO: Should these be exceptions?
                 // TODO: Add logging code here for failure
-                _logger.Error(string.Format("Bulk email sync failed for publication {0} Response detail: {1}", publication.PublicationId, response.Content));
+                _logger.ErrorFormat("Bulk email sync failed for batch {0} publication {1} Response detail: {2}", batchIndex, publication.PublicationId, content);
                 return null;
             }
         }
 
-        private void ProcessSynchronizationResultsWithRetries(Dictionary<string, BulkEmailPublication> publicationOperationIds)
+        private void ProcessSynchronizationResultsWithRetries(Dictionary<BulkEmailPublication, List<string>> publicationOperations)
         {
-            const int secondsToSleep = 5;
-            const int maxRetries = 60*60/secondsToSleep;
+            var configurationWaitHours = _configWrapper.GetConfigIntValue("BulkEmailMaximumWaitHours");
+            var waitTime = (int) TimeSpan.FromSeconds(10).TotalSeconds;
+            var maximumWaitTime = (int) TimeSpan.FromHours(configurationWaitHours).TotalSeconds;
+            var maxRetries = maximumWaitTime / waitTime;
             var attempts = 0;
 
             do
@@ -151,33 +180,58 @@ namespace crds_angular.Services
                     // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                     // TODO: Should these be exceptions?
                     // Probably an infinite loop so stop processing and log error
-                    _logger.Error(string.Format("Failed to LogUpdateStatuses after {0} total retries", attempts));
+                    _logger.ErrorFormat("Failed to LogUpdateStatuses after {0} total retries", attempts);
                     return;
                 }
 
                 // pause to allow the operations to complete -- consider switching this to async
-                Thread.Sleep(secondsToSleep * 1000);
+                Thread.Sleep(waitTime * 1000);
 
-                publicationOperationIds = ProcessSynchronizationResults(publicationOperationIds);
+                // TODO: Think about creating BulkEmailPublicationOperation object and moving away from Dictionary<BulkEmailPublication, List<string>> 
+                publicationOperations = ProcessSynchronizationResults(publicationOperations);
 
-            } while (publicationOperationIds.Any());
+            } while (publicationOperations.Any());
         }
 
-        private Dictionary<string, BulkEmailPublication> ProcessSynchronizationResults(Dictionary<string, BulkEmailPublication> publicationOperationIds)
+        private Dictionary<BulkEmailPublication, List<string>> ProcessSynchronizationResults(Dictionary<BulkEmailPublication, List<string>> publicationOperations)
         {
             var client = GetBulkEmailClient();
 
-            for (int index = publicationOperationIds.Count - 1; index >= 0; index--)
+            for (int index = publicationOperations.Count - 1; index >= 0; index--)
             {
-                var idPair = publicationOperationIds.ElementAt(index);
-                var request = new RestRequest("batches/" + idPair.Key, Method.GET);
+                var idPair = publicationOperations.ElementAt(index);
+                var publication = idPair.Key;
+                var operations = idPair.Value;
+
+                ProcessSynchronizationResultsForPublication(operations, client, publication);
+
+                if (operations.Count == 0)
+                {
+                    // All operations are complete for this publication
+                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
+                    publicationOperations.Remove(publication);
+                }
+            }
+
+            return publicationOperations;
+        }
+
+        private void ProcessSynchronizationResultsForPublication(List<string> operations, RestClient client, BulkEmailPublication publication)
+        {
+            for (var operationIndex = operations.Count - 1; operationIndex >= 0; operationIndex--)
+            {
+                var operationId = operations[operationIndex];
+                var request = new RestRequest("batches/" + operationId, Method.GET);
                 request.AddHeader("Content-Type", "application/json");
 
                 var response = client.Execute(request);
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
-                    _logger.Error(string.Format("StatusCode = {0}", response.StatusCode));
+                    _logger.WarnFormat("Received StatusCode = {0} when querying for status of publication {1} for operation {2}",
+                                       response.StatusCode,
+                                       publication.PublicationId,
+                                       operationId);
                     continue;
                 }
 
@@ -188,38 +242,38 @@ namespace crds_angular.Services
                     continue;
                 }
 
-                 if (responseValues["status"].ToString() == "finished")
-                {                                        
-                    var total = responseValues["total_operations"];                    
+                if (responseValues["status"].ToString() == "finished")
+                {
+                    var total = responseValues["total_operations"];
                     var errors = responseValues["errored_operations"];
 
                     if (errors.ToString() == "0")
                     {
-                        _logger.InfoFormat("Processed {0} total records", total); 
+                        _logger.InfoFormat("Processed {0} total records for publication {1} and operation {2}", total, publication.PublicationId, operationId);
                     }
                     else
                     {
-                        _logger.ErrorFormat("Processed {0} total records with {1} errors", total, errors); 
+                        _logger.ErrorFormat("Processed {0} total records with {1} errors for publication {2} and operation {3}", total, errors, publication.PublicationId, operationId);
                     }
 
                     _logger.Info(response.Content);
 
-                    var publication = idPair.Value;
-                    publication.LastSuccessfulSync = DateTime.Parse(responseValues["completed_at"].ToString());
-                    _bulkEmailRepository.UpdateLastSyncDate(_token, publication);
+                    var completedAt = DateTime.Parse(responseValues["completed_at"].ToString());
+                    if (publication.LastSuccessfulSync <= completedAt)
+                    {
+                        publication.LastSuccessfulSync = completedAt;
+                    }
                 }
                 else
                 {
                     // This will be addressed is US2861: MP/MailChimp Synch Error Handling 
                     // TODO: Should these be exceptions?
                     // TODO: Add logging code here for failure
-                    _logger.ErrorFormat("Bulk email sync failed for publication {0} Response detail: {1}", idPair.Key, response.Content);
+                    _logger.ErrorFormat("Bulk email sync failed for publication {0} and operation {1} Response detail: {2}", publication.PublicationId, operationId, response.Content);
                 }
 
-                publicationOperationIds.Remove(idPair.Key);
+                operations.RemoveAt(operationIndex);
             }
-
-            return publicationOperationIds;
         }
 
         private RestClient GetBulkEmailClient()
@@ -295,6 +349,7 @@ namespace crds_angular.Services
         {
             var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(jo);
             var values2 = new Dictionary<string, object>();
+
             foreach (KeyValuePair<string, object> d in values)
             {
                 // if (d.Value.GetType().FullName.Contains("Newtonsoft.Json.Linq.JObject"))
@@ -339,36 +394,42 @@ namespace crds_angular.Services
 
             try
             {
-
                 var response = client.Execute(request);
 
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     // This will be addressed in US2861: MP/MailChimp Synch Error Handling 
                     // TODO: Should these be exceptions?
-                    _logger.Error(string.Format("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode));
+                    _logger.ErrorFormat("Http failed syncing opts for publication {0} with StatusCode = {1}", publication.PublicationId, response.StatusCode);
                     return;
                 }
 
                 var responseContent = response.Content;
-
                 var responseContentJson = JObject.Parse(responseContent);
                 List<BulkEmailSubscriberOptDTO> subscribersDTOs = JsonConvert.DeserializeObject<List<BulkEmailSubscriberOptDTO>>(responseContentJson["members"].ToString());
-                List<BulkEmailSubscriberOpt> subscribers = new List<BulkEmailSubscriberOpt>();
 
-                foreach (var subscriberDTO in subscribersDTOs)
-                {
-                    subscriberDTO.PublicationID = publication.PublicationId;
-                    subscribers.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));
-
-                    _logger.InfoFormat("Changing subscription status for {0} to {1}", subscriberDTO.EmailAddress, subscriberDTO.Status);
-                }
-
-                _bulkEmailRepository.SetSubscriberSyncs(_token, subscribers);
+                SetStatuses(publication, subscribersDTOs);
             }
             catch (Exception ex)
             {
-                _logger.Error(string.Format("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex));
+                _logger.ErrorFormat("Opt-in sync code failed for publication {0} Detail: {1}", publication.PublicationId, ex);
+            }
+        }
+
+        public void SetStatuses(BulkEmailPublication publication, List<BulkEmailSubscriberOptDTO> subscribersDTOs)
+        {
+            List<BulkEmailSubscriberOpt> subscriberOpts = new List<BulkEmailSubscriberOpt>();
+
+            foreach (var subscriberDTO in subscribersDTOs)
+            {
+                subscriberDTO.PublicationID = publication.PublicationId;
+                subscriberOpts.Add(Mapper.Map<BulkEmailSubscriberOpt>(subscriberDTO));   
+            }
+
+            foreach (var subscriberOpt in subscriberOpts)
+            {
+                _logger.InfoFormat("Changing subscription status for {0} to {1}", subscriberOpt.EmailAddress, subscriberOpt.Status);
+                _bulkEmailRepository.SetSubscriberStatus(_token, subscriberOpt);
             }
         }
     }

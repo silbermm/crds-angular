@@ -126,7 +126,12 @@
           });
 
           if (alreadyAdded) {
-            alreadyAdded.cancelled = false;
+            if (alreadyAdded.cancelled) {
+              alreadyAdded.cancelled = false;
+            } else {
+              $rootScope.$emit('notify', $rootScope.MESSAGES.allReadyAdded);
+            }
+
             return;
           }
 
@@ -149,6 +154,9 @@
             });
           } else {
             currentRoom.cancelled = true;
+            _.each(currentRoom.equipment, function(e) {
+              e.equipment.cancelled = true;
+            });
           }
         },
 
