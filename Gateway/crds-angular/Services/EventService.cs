@@ -396,10 +396,10 @@ namespace crds_angular.Services
                 // build the HTML for the [Childcare] data
                 if (mine.Any())
                 {
-                    mergeData.Add("cmsChildcareEventReminder", _contentBlockService["cmsChildcareEventReminder"].Content);
+                    mergeData["cmsChildcareEventReminder"] = _contentBlockService["cmsChildcareEventReminder"].Content;
                     var childcareString = ChildcareData(mine);
-                    mergeData.Add("Childcare_Children", childcareString);
-                    mergeData.Add("Childcare_Contact", new HtmlElement("span", "If you need to cancel, please email " + childcareEvent.PrimaryContact.EmailAddress).Build());
+                    mergeData["Childcare_Children"] = childcareString;
+                    mergeData["Childcare_Contact"] = new HtmlElement("span", "If you need to cancel, please email " + childcareEvent.PrimaryContact.EmailAddress).Build();
                 }
             }
             var defaultContact = _contactService.GetContactById(AppSetting("DefaultContactEmailId"));
