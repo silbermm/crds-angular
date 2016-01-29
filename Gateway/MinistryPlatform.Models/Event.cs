@@ -22,5 +22,6 @@ namespace MinistryPlatform.Models
         }
 
         public int CongregationId { get; set; }
+        public int ReminderDaysPriorId { get; set; }
     }
 }

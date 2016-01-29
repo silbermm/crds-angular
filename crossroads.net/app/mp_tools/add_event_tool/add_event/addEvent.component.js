@@ -52,11 +52,11 @@
         vm.crossroadsLocations = locations;
 
         // does the current location need to be updated with the name?
-        if (AddEvent.editMode) {
-          vm.eventData.event.congregation = _.find(locations, function(l) {
-            return l.dp_RecordID === vm.eventData.event.congregation.dp_RecordID;
-          });
-        }
+        // if (AddEvent.editMode) {
+        //   vm.eventData.event.congregation = _.find(locations, function(l) {
+        //     return l.dp_RecordID === vm.eventData.event.congregation.dp_RecordID;
+        //   });
+        // }
       });
 
       if (_.isEmpty(vm.eventData)) {

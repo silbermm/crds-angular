@@ -55,7 +55,7 @@
             program: {
               ProgramId: event.programId
             },
-            reminderDays: event.reminderDays,
+            reminderDays: event.reminderDaysId,
             sendReminder: event.sendReminder,
             startTime: new Date(event.startDateTime),
             endTime: new Date(event.endDateTime),

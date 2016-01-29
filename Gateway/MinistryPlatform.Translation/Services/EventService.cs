@@ -181,7 +181,8 @@ namespace MinistryPlatform.Translation.Services
                     {
                         ContactId = record.ToInt("Contact_ID"),
                         EmailAddress = record.ToString("Email_Address")
-                    }
+                    },
+                    ReminderDaysPriorId = record.ToInt("Reminder_Days_Prior_ID")
                 };
 
 

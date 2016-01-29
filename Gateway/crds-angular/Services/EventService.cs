@@ -82,6 +82,7 @@ namespace crds_angular.Services
                 dto.CongregationId = e.CongregationId;
                 dto.EndDateTime = e.EventEndDate;
                 dto.StartDateTime = e.EventStartDate;
+                dto.ReminderDaysId = e.ReminderDaysPriorId;
 
                 var rooms = _roomService.GetRoomReservations(eventId);
                 var roomDto = new List<EventRoomDto>();
