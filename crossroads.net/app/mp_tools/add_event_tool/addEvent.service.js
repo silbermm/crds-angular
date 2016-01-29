@@ -26,7 +26,7 @@
           minutesSetup: eventData.event.minutesSetup,
           minutesTeardown: eventData.event.minutesCleanup,
           programId: eventData.event.program.ProgramId,
-          reminderDaysId: (eventData.event.reminderDays.dp_RecordID > 0) ? eventData.event.reminderDays.dp_RecordID : null,
+          reminderDaysId: (eventData.event.reminderDays > 0) ? eventData.event.reminderDays : null,
           title: eventData.event.eventTitle,
           sendReminder: eventData.event.sendReminder,
           rooms: _.map(eventData.rooms, function(r) { return getRoomDto(r); })
