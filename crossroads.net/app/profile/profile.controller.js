@@ -13,7 +13,8 @@
     'Profile',
     'Lookup',
     'Locations',
-    'PaymentService'];
+    'PaymentService',
+    'STATE_CHANGE_EVENTS'];
 
   function ProfileController(
       $rootScope,
@@ -25,7 +26,8 @@
       Profile,
       Lookup,
       Locations,
-      PaymentService) {
+      PaymentService,
+      STATE_CHANGE_EVENTS) {
 
     var vm = this;
     vm.attributeTypes = AttributeTypes;
@@ -108,6 +110,8 @@
       if (fromState.name === 'profile.personal' && vm.profileParentForm.$dirty) {
         if (!$window.confirm('Are you sure you want to leave this page?')) {
           event.preventDefault();
+          $rootScope.$emit(STATE_CHANGE_EVENTS.clearResolving);
+
           vm.tabs[0].active = true;
           return;
         }

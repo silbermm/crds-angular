@@ -51,6 +51,9 @@ WHERE contact_id = @contactID;
 DELETE from [dbo].dp_communication_messages 
 WHERE Communication_ID = @communicationID;
 
+DELETE from [dbo].dp_communication_messages
+WHERE Contact_ID = @contactID;
+
 Delete from [dbo].dp_Communications
 WHERE Communication_ID = @communicationID;
 
@@ -96,6 +99,10 @@ insert into @donationsTable (donation_id) (select donation_id from donation_dist
 delete from donation_distributions where donation_id in (select donation_id from @donationsTable);
 
 delete from donations where donation_id in (select donation_id from @donationsTable);
+
+delete from donor_accounts where donor_id = @donorID;
+
+delete from recurring_gifts where donor_id = @donorID;
 
 delete from pledges where donor_id = @donorID;
 

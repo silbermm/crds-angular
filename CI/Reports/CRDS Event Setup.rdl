@@ -63,6 +63,10 @@
             <Value>=Parameters!EquipStatus.Value</Value>
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
+          <QueryParameter Name="CongregationID">
+            <Value>=Parameters!CongregationID.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
         </QueryParameters>
         <CommandType>StoredProcedure</CommandType>
         <CommandText>report_CRDS_Event_Setup_List</CommandText>
@@ -302,8 +306,8 @@
           <QueryParameter Name="BuildingID">
             <Value>=Parameters!BuildingID.Value</Value>
           </QueryParameter>
-          <QueryParameter Name="LocationID">
-            <Value>=Parameters!LocationID.Value</Value>
+          <QueryParameter Name="CongregationID">
+            <Value>=Parameters!CongregationID.Value</Value>
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
@@ -345,6 +349,27 @@
         </Field>
         <Field Name="equipment_id">
           <DataField>equipment_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ds_Congregations">
+      <Query>
+        <DataSourceName>MPReportsDS</DataSourceName>
+        <CommandText>SELECT Congregation_Name, Congregation_ID, Location_ID FROM Congregations WHERE Location_ID IN (3,5,6,7,8)</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
+      </Query>
+      <Fields>
+        <Field Name="Congregation_Name">
+          <DataField>Congregation_Name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Location_ID">
+          <DataField>Location_ID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Congregation_ID">
+          <DataField>Congregation_ID</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
       </Fields>
@@ -426,7 +451,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Location</Value>
+                                  <Value>Site</Value>
                                   <Style>
                                     <FontSize>16pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1353,7 +1378,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Contact/Layout</Value>
+                                  <Value>Contact/Layout/Placement</Value>
                                   <Style>
                                     <FontSize>12pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -2149,7 +2174,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2161,7 +2185,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!equip_placement.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                   </Style>
@@ -2590,21 +2614,42 @@
       </DefaultValue>
       <Prompt>End Date</Prompt>
     </ReportParameter>
+    <ReportParameter Name="CongregationID">
+      <DataType>Integer</DataType>
+      <DefaultValue>
+        <DataSetReference>
+          <DataSetName>ds_Congregations</DataSetName>
+          <ValueField>Congregation_ID</ValueField>
+        </DataSetReference>
+      </DefaultValue>
+      <Prompt>Site</Prompt>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>ds_Congregations</DataSetName>
+          <ValueField>Congregation_ID</ValueField>
+          <LabelField>Congregation_Name</LabelField>
+        </DataSetReference>
+      </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
+    </ReportParameter>
     <ReportParameter Name="LocationID">
       <DataType>Integer</DataType>
       <DefaultValue>
-        <Values>
-          <Value>0</Value>
-        </Values>
+        <DataSetReference>
+          <DataSetName>ds_Congregations</DataSetName>
+          <ValueField>Location_ID</ValueField>
+        </DataSetReference>
       </DefaultValue>
-      <Prompt>Location</Prompt>
+      <Prompt>LocationID</Prompt>
+      <Hidden>true</Hidden>
       <ValidValues>
         <DataSetReference>
-          <DataSetName>ds_Location</DataSetName>
+          <DataSetName>ds_Congregations</DataSetName>
           <ValueField>Location_ID</ValueField>
-          <LabelField>Location_Name</LabelField>
+          <LabelField>Location_ID</LabelField>
         </DataSetReference>
       </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
     </ReportParameter>
     <ReportParameter Name="BuildingID">
       <DataType>Integer</DataType>
@@ -2613,7 +2658,8 @@
           <Value>0</Value>
         </Values>
       </DefaultValue>
-      <Prompt>Building</Prompt>
+      <Prompt>BuildingID</Prompt>
+      <Hidden>true</Hidden>
       <ValidValues>
         <DataSetReference>
           <DataSetName>ds_Building</DataSetName>
@@ -2621,13 +2667,15 @@
           <LabelField>Building_Name</LabelField>
         </DataSetReference>
       </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
     </ReportParameter>
     <ReportParameter Name="RoomID">
       <DataType>String</DataType>
       <DefaultValue>
-        <Values>
-          <Value>0</Value>
-        </Values>
+        <DataSetReference>
+          <DataSetName>ds_Room</DataSetName>
+          <ValueField>Room_ID</ValueField>
+        </DataSetReference>
       </DefaultValue>
       <Prompt>Room</Prompt>
       <ValidValues>
@@ -2637,6 +2685,7 @@
           <LabelField>Room_Name</LabelField>
         </DataSetReference>
       </ValidValues>
+      <UsedInQuery>True</UsedInQuery>
     </ReportParameter>
     <ReportParameter Name="RoomStatus">
       <DataType>String</DataType>
