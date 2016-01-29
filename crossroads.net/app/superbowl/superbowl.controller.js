@@ -11,6 +11,7 @@
         controller: ModalInstanceCtrl,
         templateUrl: 'styleModalContent.html',
         backdrop: "static",
+        backdropClass: "blurred-background",
         size: size,
       })
     }
@@ -27,9 +28,9 @@
         console.log(found);
 
         if (found) {
-          $state.go("content", {"link":"/ms"});
+          $state.go("content", {"link":"/super-bowl-of-preaching"});
         } else {
-          $state.go("content", {"link":"/hs"});
+          $state.go("content", {"link":"/super-bowl-streaming"});
         }
       };
     }
