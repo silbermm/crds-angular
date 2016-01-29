@@ -26,6 +26,7 @@ require('../lib/select.css');
 
   require('./signup');
   require('./styleguide');
+  require('./superbowl');
   require('./thedaily');
   require('./explore');
   require('./gotrips');
