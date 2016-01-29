@@ -154,6 +154,9 @@
             });
           } else {
             currentRoom.cancelled = true;
+            _.each(currentRoom.equipment, function(e) {
+              e.equipment.cancelled = true;
+            });
           }
         },
 
