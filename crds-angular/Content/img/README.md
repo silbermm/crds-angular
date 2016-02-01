@@ -1,0 +1,1 @@
+Do not check-in media assets into this repo. We host all assets (images, audio, video, documents, etc) on S3. Please contact webteam@crossroads.net if you need access to our S3 bucket.

@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CD41507E-91AC-4C60-96E2-5CAC25F49A76}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MinistryPlatform.Models</RootNamespace>
+    <AssemblyName>MinistryPlatform.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Integration|AnyCPU'">
+    <OutputPath>bin\Integration\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Demo|AnyCPU'">
+    <OutputPath>bin\Demo\</OutputPath>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Collections" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Address.cs" />
+    <Compile Include="Attribute.cs" />
+    <Compile Include="BulkEmailPublication.cs" />
+    <Compile Include="BulkEmailSubscriber.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="DonationAndDistributionRecord.cs" />
+    <Compile Include="DonorStatement.cs" />
+    <Compile Include="EventParticipant.cs" />
+    <Compile Include="GroupServingResponses.cs" />
+    <Compile Include="Pledge.cs" />
+    <Compile Include="Communication.cs" />
+    <Compile Include="CommunicationPreferences.cs" />
+    <Compile Include="ContactDonor.cs" />
+    <Compile Include="ContactAttribute.cs" />
+    <Compile Include="Deposit.cs" />
+    <Compile Include="DonationBatch.cs" />
+    <Compile Include="DonationDistribution.cs" />
+    <Compile Include="Donation.cs" />
+    <Compile Include="DonationStatus.cs" />
+    <Compile Include="DTO\CreateDonationDistDto.cs" />
+    <Compile Include="DTO\RespondToOpportunityDto.cs" />
+    <Compile Include="DTO\RoleDto.cs" />
+    <Compile Include="FormField.cs" />
+    <Compile Include="FormResponse.cs" />
+    <Compile Include="GroupParticipant.cs" />
+    <Compile Include="GroupServingParticipant.cs" />
+    <Compile Include="GroupSignupRelationships.cs" />
+    <Compile Include="Household.cs" />
+    <Compile Include="HouseholdMember.cs" />
+    <Compile Include="MessageTemplate.cs" />
+    <Compile Include="MinistryPlatformUser.cs" />
+    <Compile Include="MyContact.cs" />
+    <Compile Include="ContactRelationship.cs" />
+    <Compile Include="Event.cs" />
+    <Compile Include="Group.cs" />
+    <Compile Include="Opportunity.cs" />
+    <Compile Include="Participant.cs" />
+    <Compile Include="PledgeCampaign.cs" />
+    <Compile Include="PostalAddress.cs" />
+    <Compile Include="PrivateInvite.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relationship.cs" />
+    <Compile Include="RecurringGift.cs" />
+    <Compile Include="Response.cs" />
+    <Compile Include="GPExportDatum.cs" />
+    <Compile Include="BulkEmailSubscriberOpt.cs" />
+    <Compile Include="TripDistribution.cs" />
+    <Compile Include="TripDocuments.cs" />
+    <Compile Include="TripFormResponse.cs" />
+    <Compile Include="TripParticipant.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
