@@ -1,8 +1,0 @@
-{
-  "preset": "airbnb",
-  "requireTrailingComma": null,
-  "requireDotNotation": "except_snake_case",
-  "safeContextKeyword": "vm",
-  "validateLineBreaks": "CRLF",
-  "requireCamelCaseOrUpperCaseIdentifiers": null 
-}
